@@ -1,0 +1,44 @@
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# Build directories
+build/
+dist/
+
+# OS-specific files
+.DS_Store         # macOS
+Thumbs.db         # Windows
+ehthumbs.db       # Windows thumbnail cache
+Icon?             # macOS icon files
+
+# IDE-specific files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Environment-specific files
+.env.local
+.env.development.local
+.env.test
+.env.production.local
+
+# Coverage reports
+/coverage
+test-results/
+*.lcov           # coverage report files
+
+# Temporary files
+npm-debug.log*
+*.tmp
+*.bak
+
+# Miscellaneous
+*.zip
+*.tgz
+*.tar.gz        # compressed tar files
+*.swp           # swap files (e.g., from vim)
+*.swo           # swap files (e.g., from vim)
