@@ -21,6 +21,7 @@ Icon?             # macOS icon files
 *.sublime-workspace
 
 # Environment-specific files
+.env
 .env.local
 .env.development.local
 .env.test
