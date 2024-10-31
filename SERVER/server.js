@@ -48,14 +48,29 @@ const server = app.listen(PORT, () => {
 
 // Graceful shutdown on SIGINT (Ctrl+C) and SIGTERM
 process.on('SIGINT', () => {
-  server.close(() => {
-      console.log('Server shut down gracefully.');
-      process.exit(0);
-  });
+  console.log('Received SIGINT. Initiating graceful shutdown...');
+  shutdown();
 });
+
 process.on('SIGTERM', () => {
-  server.close(() => {
-      console.log('Server shut down gracefully.');
-      process.exit(0);
-  });
+  console.log('Received SIGTERM. Initiating graceful shutdown...');
+  shutdown();
 });
+
+const shutdown = () => {
+  server.close((err) => {
+      if (err) {
+          console.error('Error while shutting down:', err);
+          process.exit(1); // Exit with failure code
+      }
+      console.log('Closed out remaining connections. Server shut down gracefully.');
+      process.exit(0); // Exit with success code
+  });
+
+  // Set a timeout to force shutdown if it takes too long
+  setTimeout(() => {
+      console.error('Forcing shutdown after timeout.');
+      process.exit(1);
+  }, 10000); // 10 seconds
+};
+
