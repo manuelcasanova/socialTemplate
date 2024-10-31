@@ -2,17 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path'); // Import path module
-const app = express();
+
 const corsOptions = require('./config/corsOptions');
-const PORT = process.env.PORT || 3500;
-const bodyParser = require('body-parser');
-
-
-
 const credentials = require('./middleware/credentials');
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const cookieParser = require('cookie-parser');
+
+const app = express();
+const PORT = process.env.PORT || 3500;
 
 // Middleware configuration
 app.use(credentials); // Handle CORS credentials
@@ -44,6 +42,20 @@ app.all('*', (req, res) => {
 app.use(errorHandler);
 
 // Server listening on the specified port
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`App running on port: ${PORT}.`);
+});
+
+// Graceful shutdown on SIGINT (Ctrl+C) and SIGTERM
+process.on('SIGINT', () => {
+  server.close(() => {
+      console.log('Server shut down gracefully.');
+      process.exit(0);
+  });
+});
+process.on('SIGTERM', () => {
+  server.close(() => {
+      console.log('Server shut down gracefully.');
+      process.exit(0);
+  });
 });
