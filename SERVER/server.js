@@ -1,13 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const path = require('path'); // Import path module
+const path = require('path'); // for constructing the path to the 404.html error page
 
 const corsOptions = require('./config/corsOptions');
 const credentials = require('./middleware/credentials');
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const cookieParser = require('cookie-parser');
+const customJsonParser = require('./middleware/customJsonParser');
 
 const app = express();
 const PORT = process.env.PORT || 3500;
@@ -15,16 +16,37 @@ const PORT = process.env.PORT || 3500;
 // Middleware configuration
 app.use(credentials); // Handle CORS credentials
 app.use(cors(corsOptions)); // Apply CORS middleware with custom options
-app.use(express.json()); // Parse JSON in incoming requests
 app.use(cookieParser()); // Middleware to parse cookies
 app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-encoded data
 app.use(logger); // Custom middleware logger
+app.use(customJsonParser);
 
+
+// Custom middleware for handling JSON parsing errors
+app.use((req, res, next) => {
+    express.json()(req, res, (err) => {
+        if (err) {
+            // Pass the error to the error handling middleware
+            return next(err);
+        }
+        next();
+    });
+});
 
 // Simple /ping endpoint
 app.get('/ping', (req, res) => {
     res.status(200).send('pong! The server is running!');
 });
+
+// Define the /some-endpoint route
+app.post('/some-endpoint', (req, res) => {
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({ error: 'Invalid JSON' });
+    }
+    res.status(200).send('Success!'); 
+});
+
+
 
 // Catch-all route for 404 errors
 app.all('*', (req, res) => {
@@ -40,6 +62,7 @@ app.all('*', (req, res) => {
 
 // Error handling middleware
 app.use(errorHandler);
+
 
 // Server listening on the specified port
 const server = app.listen(PORT, () => {
@@ -74,3 +97,5 @@ const shutdown = () => {
   }, 10000); // 10 seconds
 };
 
+// Mocha can access it directly
+module.exports = server;
