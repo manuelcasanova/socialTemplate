@@ -16,35 +16,65 @@ const PORT = process.env.PORT || 3500;
 // Middleware configuration
 app.use(credentials); // Handle CORS credentials
 app.use(cors(corsOptions)); // Apply CORS middleware with custom options
+
+// Handle CORS preflight requests for specific routes
+app.options('/some-endpoint', cors(corsOptions)); // Explicitly handle preflight request
+
+
 app.use(cookieParser()); // Middleware to parse cookies
 app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-encoded data
+// app.use(express.json({ limit: '2mb' })); // Set JSON body parser limit to 2MB
 app.use(logger); // Custom middleware logger
 app.use(customJsonParser);
 
 
 // Custom middleware for handling JSON parsing errors
 app.use((req, res, next) => {
-    express.json()(req, res, (err) => {
+    express.json({ limit: '2mb' })(req, res, (err) => {
         if (err) {
-            // Pass the error to the error handling middleware
             return next(err);
         }
         next();
     });
 });
 
+
+
 // Simple /ping endpoint
 app.get('/ping', (req, res) => {
     res.status(200).send('pong! The server is running!');
 });
 
-// Define the /some-endpoint route
+
+// Define the /some-endpoint route specifically with type checks
 app.post('/some-endpoint', (req, res) => {
-    if (!req.body || Object.keys(req.body).length === 0) {
-        return res.status(400).json({ error: 'Invalid JSON' });
+    // Check for JSON content type
+    if (req.is('application/json')) {
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).json({ error: 'Invalid JSON' });
+        }
+        return res.status(200).send('Success!');
     }
-    res.status(200).send('Success!'); 
+
+    // Check for URL-encoded content type
+    if (req.is('application/x-www-form-urlencoded')) {
+        return res.status(200).send('Success!');
+    }
+
+    // Return 415 if neither JSON nor URL-encoded content type
+    return res.status(415).json({ error: 'Unsupported Media Type' });
 });
+
+// Catch-all for unsupported methods on /some-endpoint
+app.all('/some-endpoint', (req, res) => {
+    res.set('Allow', 'POST'); // Indicate allowed methods
+    res.status(405).send('Method Not Allowed');
+});
+
+// Comment in for test (comment in test, as well: "Test error handling middleware")
+// app.get('/error', (req, res, next) => {
+//     next(new Error('This is a forced error'));
+// });
 
 
 
