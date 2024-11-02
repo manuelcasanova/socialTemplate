@@ -1,8 +1,10 @@
 # Logs
 *.log
 
-# Dependency directories
+# Dependency 
 node_modules/
+/.pnp
+.pnp.js
 
 # Build directories
 build/
@@ -26,6 +28,7 @@ Icon?             # macOS icon files
 .env.development.local
 .env.test
 .env.production.local
+npm-debug.log*
 
 # Coverage reports
 /coverage
@@ -43,3 +46,6 @@ npm-debug.log*
 *.tar.gz        # compressed tar files
 *.swp           # swap files (e.g., from vim)
 *.swo           # swap files (e.g., from vim)
+
+
+
