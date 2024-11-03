@@ -4,11 +4,13 @@ INSERT INTO roles (role_name) VALUES
 ('Admin'),
 ('SuperAdmin');
 
-INSERT INTO users (username, email, password, is_verified, role_id, is_selected, is_active, profile_picture, location, last_login) VALUES 
-('Manuel_super_admin_user', 'manuel@example.com', 'hashed_password_123', true, 4, true, true, 'admin_pic.jpg', 'Admin City', CURRENT_TIMESTAMP),
-('Laura_admin', 'laura@example.com', 'hashed_password_123', true, 3, true, true, 'admin_pic.jpg', 'Admin City', CURRENT_TIMESTAMP),
-('Aurora_regular_user', 'aurora@example.com', 'hashed_password_456', true, 1, false, true, 'user_pic.jpg', 'User Town', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-('Vanesa_mod_user', 'vanessa@example.com', 'hashed_password_789', true, 2, false, true, 'mod_pic.jpg', 'Moderator City', CURRENT_TIMESTAMP - INTERVAL '2 days');
+INSERT INTO users (username, email, password, is_verified, role_id, is_selected, is_active, is_subscribed, profile_picture, location, last_login) VALUES 
+('Name Super Admin User', 'superadmin@example.com', 'hashed_password_123', true, 4, true, true, true, 'admin_pic.jpg', 'Super Admin City', CURRENT_TIMESTAMP),
+('Name Admin User', 'admin@example.com', 'hashed_password_123', true, 3, true, true, true, 'admin_pic.jpg', 'Admin City', CURRENT_TIMESTAMP),
+('Name Moderator', 'moderator@example.com', 'hashed_password_456', true, 2, false, true, false, 'user_pic.jpg', 'Moderator Town', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+('Name User - Not subscribed', 'user_not_subscribed@example.com', 'hashed_password_789', true, 1, false, true, false, 'mod_pic.jpg', 'User City', CURRENT_TIMESTAMP - INTERVAL '2 days'),
+('Name User - Subscribed', 'user_subscribed@example.com', 'hashed_password_789', true, 1, false, true, true, 'mod_pic.jpg', 'User City', CURRENT_TIMESTAMP - INTERVAL '2 days');
+;
 
 
 INSERT INTO login_history (user_id, login_time) VALUES

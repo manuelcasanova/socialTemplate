@@ -18,6 +18,7 @@ CREATE TABLE users (
   role_id INT REFERENCES roles(role_id) ON DELETE RESTRICT,  -- Prevent deleting roles if users reference them
   is_selected BOOLEAN DEFAULT false,
   is_active BOOLEAN DEFAULT true,
+  is_subscribed BOOLEAN DEFAULT false,
   refresh_token VARCHAR(255),
   profile_picture VARCHAR(255),
   location VARCHAR(255),
