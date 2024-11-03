@@ -22,7 +22,7 @@
   /* Adjust position as needed */
   left: 10px;
   /* Adjust position as needed */
-  z-index: 1001;
+  z-index: 2;
   /* Ensure it's above other elements */
 }
 
@@ -57,7 +57,7 @@
     height: 100%;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
-    z-index: 1000;
+    z-index: 1;
     flex-direction: column;
   }
 

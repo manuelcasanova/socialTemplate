@@ -1,5 +1,13 @@
 import './css/App.css';
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+
+//Components
+
+import Navbar from './components/mainComponents/navBar';
+import Body from './components/mainComponents/body';
+import Footer from './components/mainComponents/footer';
+import Hamburger from './components/mainComponents/hamburger';
 
 function App() {
 
@@ -11,22 +19,14 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <button className="hamburger" onClick={toggleNav}>
-      {isNavOpen ? '✖' : '☰'}
-      </button>
-      <header className={`navbar ${isNavOpen ? 'open' : ''}`}>
-        <nav className={isNavOpen ? 'nav-open' : ''}>
-NAVIGATION BAR
-        </nav>
-      </header>
-      <main className={`body ${isNavOpen ? 'squeezed' : ''}`}>
-BODY
-      </main>
-      <footer className={`footer ${isNavOpen ? 'squeezed' : ''}`}>
-FOOTER
-      </footer>
-    </div>
+    <Router>
+      <div className="app">
+        <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
+        <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} />
+        <Body isNavOpen={isNavOpen} />
+        <Footer isNavOpen={isNavOpen} />
+      </div>
+    </Router>
   );
 }
 
