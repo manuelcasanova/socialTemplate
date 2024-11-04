@@ -2,8 +2,8 @@ import React from 'react';
 
 const Hamburger = ({ isNavOpen, toggleNav }) => {
   return (
-    <button className="hamburger" onClick={toggleNav}>
-      {isNavOpen ? '✖' : '☰'}
+    <button className="hamburger" onMouseEnter={toggleNav} >
+      {isNavOpen ? '' : '☰'}
     </button>
   );
 };
