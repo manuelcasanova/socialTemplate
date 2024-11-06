@@ -14,10 +14,11 @@
   color: var(--color9);
   border: none;
   cursor: pointer;
-  position: fixed;  top: 10px;
+  position: fixed;
+  top: 10px;
   left: 10px;
   z-index: 2;
-
+  display: none;
 }
 
 /* Navbar Styles */
@@ -25,10 +26,30 @@
   width: 100%;
   display: flex;
   align-items: center;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: var(--color1);
-  overflow: hidden; 
-  white-space: nowrap; 
+  z-index: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: transform 0.3s ease-in-out;
+  padding: 10px;
+  height: 60px; /* Adjust height */
+}
+
+/* Navbar open state */
+.navbar.open {
+  transform: translateX(0); /* Move the navbar into view */
+}
+
+.navbar .nav-item {
+  margin-right: 15px;
+}
+
+.navbar .nav-item div {
+  cursor: pointer;
+  color: var(--color9);
 }
 
 .body {
@@ -37,6 +58,14 @@
   align-items: center;
   padding: 1%;
   background-color: var(--color1);
+  transition: margin-left 0.3s ease-in-out;
+  margin-left: 0; /* Default no margin */
+  padding-top: 70px; /* Make space for navbar */
+}
+
+/* Body squeezed when navbar is open */
+.body.squeezed {
+  margin-left: 250px; /* Adjust based on navbar width */
 }
 
 .footer {
@@ -49,44 +78,8 @@
 
 /* Mobile Styles */
 @media (max-width: 580px) {
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: translateX(-100%);
-    z-index: 1;
-    flex-direction: column;
-    background-color: var(--color9);
-  }
 
-  .navbar.open {
-    transform: translateX(0);
-  }
 
-  .nav-open {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;
-  }
-  
-  .nav-open a {
-    width: 100%; 
-    height: 100%; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    text-decoration: none;
-    color: var(--color1);
-  }
-  
-  .nav-open a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
 
   .body {
     flex: 0 0 90%;
@@ -100,51 +93,35 @@
   .hamburger {
     display: block;
   }
+
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    transition: left 0.3s ease-in-out;
+  }
+
+  .navbar.open {
+    left: 0; /* Slide in navbar when open */
+  }
+
+  .body.squeezed {
+    margin-left: 0; /* Do not squeeze body on small screens */
+  }
+
 }
 
 /* Tablet Styles */
 @media (min-width: 581px) and (max-width: 1024px) {
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 20%;
-    transform: translateX(-100%);
-    background-color: var(--color9);
-    /* border-radius: 0px 50px 50px 0px; */
-  }
-
-  .navbar.open {
-    transform: translateX(0);
-  }
-
-  .nav-open {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-  }
-  
-  .nav-open a {
-    width: 100%;
-    height: 100%; 
-    display: flex; 
-    justify-content: center;
-    align-items: center; 
-    text-decoration: none; 
-    color: var(--color1);
-  }
-  
-  .nav-open a:hover {
-    background-color: rgba(255, 255, 255, 0.1); 
-  }
+ 
 
   .body,
   .footer {
     margin-left: 0;
+    transition: margin-left 0.3s ease-in-out; 
   }
 
   .body {
@@ -154,6 +131,7 @@
 
   .footer {
     flex: 0 0 10%;
+    
   }
 
   .body.squeezed,
@@ -164,36 +142,24 @@
   .hamburger {
     display: block;
   }
+
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 25%;
+    transition: left 0.3s ease-in-out;
+  }
+
+  .navbar.open {
+    left: 0;
+  }
 }
 
 /* Desktop Styles */
 @media (min-width: 1025px) {
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 10%;
-    width: 100%;
-  }
-
-  #main-nav {
-    background-color: var(--color1);
-height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }
-
-  #main-nav a {
-    text-decoration: none;
-    color: var(--color0);
-  }
-
-  #main-nav a:hover {
-    font-weight: bold;
-    color: var(--color9);
-  }
+  
 
   .body {
     position: absolute;
@@ -215,5 +181,18 @@ height: 100%;
   .hamburger {
     display: none;
   }
-}
 
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: 60px;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .body.squeezed {
+    margin-left: 250px; /* Adjust content when navbar is open */
+  }
+}
