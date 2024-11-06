@@ -34,22 +34,33 @@
   overflow: hidden;
   white-space: nowrap;
   transition: transform 0.3s ease-in-out;
-  padding: 10px;
   height: 60px; /* Adjust height */
+  background-color: var(--color9);
+  color: var(--color1);
 }
+
+
 
 /* Navbar open state */
 .navbar.open {
   transform: translateX(0); /* Move the navbar into view */
 }
 
-.navbar .nav-item {
-  margin-right: 15px;
+
+.nav-item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ color: var(--color1);
 }
 
-.navbar .nav-item div {
-  cursor: pointer;
-  color: var(--color9);
+.nav-item:hover {
+cursor: pointer;
+font-weight: bold;
+background-color: var(--color1);
+color: var(--color9);
 }
 
 .body {
@@ -102,41 +113,39 @@
     justify-content: space-between; /* Space items vertically if needed */
     align-items: center; /* Center items horizontally */
     transition: left 0.3s ease-in-out;
+   
+   padding: 10% 0% 10% 0%;
   }
 
   .navbar.open {
     left: 0; /* Slide in navbar when open */
   }
 
-  /* Nav items container */
-.nav-item {
-  width: 100%; /* Ensures each nav item takes the full width of the navbar */
-  display: flex;
-  justify-content: center; /* Center content horizontally */
-  padding: 10px 0; /* Add padding for spacing */
-  text-align: center; /* Center text horizontally */
-}
+  .dropdown-title {
+    margin-bottom: 3%;
+  }
 
-.nav-item > div {
-  cursor: pointer; /* Change the cursor to indicate it's clickable */
-  width: 100%; /* Make the clickable area span the full width */
-  padding: 10px 0; /* Optional padding to space out each link */
-  text-align: center; /* Center text */
-  font-weight: bold; /* Make the link text bold for better visibility */
-}
+  .dropdown-wrapper, .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    /* margin-top: 3%; */
+  }
 
-/* Optional styling for the dropdown if used */
-.nav-item.dropdown-wrapper {
-  position: relative;
-}
+  .dropdown-menu button {
+    /* margin: 1%; */
+    padding: 1%;
+    border: none;
+    background-color: var(--color9);
+    color: var(--color1);
+  }
 
-.nav-item .dropdown-menu {
-  display: none;
-}
+  .dropdown-menu button:hover {
+ background-color: var(--color1);
+ color: var(--color9);
+  }
 
-.nav-item:hover .dropdown-menu {
-  display: block;
-}
 
   .body.squeezed {
     margin-left: 0; /* Do not squeeze body on small screens */
@@ -186,41 +195,14 @@
     transition: left 0.3s ease-in-out;
     justify-content: space-between; /* Space items vertically if needed */
     align-items: center; /* Center items horizontally */
+
+    padding: 5%;
   }
 
   .navbar.open {
     left: 0;
   }
 
-  /* Nav items container */
-  .nav-item {
-    width: 100%; /* Ensures each nav item takes the full width of the navbar */
-    display: flex;
-    justify-content: center; /* Center content horizontally */
-    padding: 10px 0; /* Add padding for spacing */
-    text-align: center; /* Center text horizontally */
-  }
-  
-  .nav-item > div {
-    cursor: pointer; /* Change the cursor to indicate it's clickable */
-    width: 100%; /* Make the clickable area span the full width */
-    padding: 10px 0; /* Optional padding to space out each link */
-    text-align: center; /* Center text */
-    font-weight: bold; /* Make the link text bold for better visibility */
-  }
-  
-  /* Optional styling for the dropdown if used */
-  .nav-item.dropdown-wrapper {
-    position: relative;
-  }
-  
-  .nav-item .dropdown-menu {
-    display: none;
-  }
-  
-  .nav-item:hover .dropdown-menu {
-    display: block;
-  }
 
 }
 
@@ -253,11 +235,13 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: auto;
-    height: 60px;
+    width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
+
+    
   }
+
 
   .body.squeezed {
     margin-left: 250px; /* Adjust content when navbar is open */

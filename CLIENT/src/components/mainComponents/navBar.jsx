@@ -10,7 +10,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
   const navigate = useNavigate();
   const [showOptions, setShowOptions] = useState({
-    users: false
+    users: false,
   });
 
   //Toggle navbar
@@ -45,53 +45,65 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
 
   return (
+
+    // Navbar fixed open, for css test purposes
+    // <header className="navbar open" onMouseLeave={() => isNavOpen && toggleNav()}>
+
     <header className={`navbar ${isNavOpen ? 'open' : ''}`}
-    onMouseLeave={() => isNavOpen && toggleNav()}>
-
-<div className="nav-item">
-  <div onClick={() => { handleLinkClick(); window.location.href = '/' }}>HOME</div>
-</div>
-<div className="nav-item">
-  <div onClick={() => { handleLinkClick(); window.location.href = '/about' }}>ABOUT</div>
-</div>
-<div className="nav-item">
-  <div onClick={() => { handleLinkClick(); window.location.href = '/moderator' }}>MODERATOR</div>
-</div>
-<div className="nav-item">
-  <div onClick={() => { handleLinkClick(); window.location.href = '/subscriber' }}>SUBSCRIBER</div>
-</div>
+      // onMouseLeave={() => isNavOpen && toggleNav()}
+      >
 
 
 
-{/* Admin Dropdown */}
-<div
-  className="nav-item dropdown-wrapper"
-  onMouseEnter={() => handleMouseEnter("admin")}
-  onMouseLeave={() => handleMouseLeave("admin")}
->
-  <div className="dropdown-title">
-    <span>ADMIN</span>
-    <span>▼</span>
-  </div>
-  {showOptions.admin && (
-    <div className="dropdown-menu">
-      <button onClick={() => handleSelectOption("/admin/users", "admin")}>Admin users long name</button>
-    </div>
-  )}
-</div>
-
-<div className="nav-item">
-  <div onClick={() => { handleLinkClick(); window.location.href = '/signin' }}>SIGN IN</div>
-</div>
-<div className="nav-item">
-  <div onClick={() => { handleLinkClick(); window.location.href = '/signup' }}>SIGN UP</div>
-</div>
-<div className="nav-item">
-  <div onClick={() => { handleLinkClick(); window.location.href = '/profile' }}>PROFILE</div>
-</div>
 
 
- 
+      <div className="nav-item">
+        <div onClick={() => { handleLinkClick(); window.location.href = '/' }}>HOME</div>
+      </div>
+      <div className="nav-item">
+        <div onClick={() => { handleLinkClick(); window.location.href = '/about' }}>ABOUT</div>
+      </div>
+      <div className="nav-item">
+        <div onClick={() => { handleLinkClick(); window.location.href = '/moderator' }}>MODERATOR</div>
+      </div>
+      <div className="nav-item">
+        <div onClick={() => { handleLinkClick(); window.location.href = '/subscriber' }}>SUBSCRIBER</div>
+      </div>
+
+
+
+      {/* Admin Dropdown */}
+      <div
+        className="nav-item dropdown-wrapper"
+        onMouseEnter={() => handleMouseEnter("admin")}
+        // onMouseLeave={() => handleMouseLeave("admin")}
+      >
+        <div className="dropdown-title">
+          <span>ADMIN</span>
+          <span>▼</span>
+        </div>
+        {showOptions.admin && (
+          <div className="dropdown-menu">
+            <button onClick={() => handleSelectOption("/admin/users", "admin")}>ADMIN USERS LONG NAME</button>
+            <button onClick={() => handleSelectOption("/admin/test", "admin")}>ADMIN TEST</button>
+          </div>
+          
+          
+        )}
+      </div>
+
+      <div className="nav-item">
+        <div onClick={() => { handleLinkClick(); window.location.href = '/signin' }}>SIGN IN</div>
+      </div>
+      <div className="nav-item">
+        <div onClick={() => { handleLinkClick(); window.location.href = '/signup' }}>SIGN UP</div>
+      </div>
+      <div className="nav-item">
+        <div onClick={() => { handleLinkClick(); window.location.href = '/profile' }}>PROFILE</div>
+      </div>
+
+
+
     </header>
   );
 };
