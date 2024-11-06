@@ -9,6 +9,9 @@ import About from '../bodyComponents/About';
 import Moderator from '../bodyComponents/Moderator';
 import Subscriber from '../bodyComponents/Subscriber';
 import Admin from '../bodyComponents/Admin';
+import Signup from '../authComponents/Signup';
+import Profile from '../bodyComponents/Profile';
+import AdminUsers from '../bodyComponents/users/AdminUsers';
 
 const Body = ({ isNavOpen }) => {
   return (
@@ -20,6 +23,9 @@ const Body = ({ isNavOpen }) => {
         <Route path="/moderator" element={<Moderator />} />
         <Route path="/subscriber" element={<Subscriber />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
       </Routes>
     </main>
   );

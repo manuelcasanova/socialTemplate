@@ -2,7 +2,7 @@ import '../../css/Overlay.css'
 
 import { useNavigate } from 'react-router-dom';
 
-export default function Signin () {
+export default function Signup () {
   const navigate = useNavigate();
 
   const handleClose = () => {
@@ -15,7 +15,7 @@ export default function Signin () {
       <button className="close-button" onClick={handleClose}>
           ✖
         </button>
-        Sign In
+        Sign up
         </div>
     </div>
   )
