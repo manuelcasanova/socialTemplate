@@ -64,7 +64,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
 
 {/* Admin Dropdown */}
-{/* <div
+<div
   className="nav-item dropdown-wrapper"
   onMouseEnter={() => handleMouseEnter("admin")}
   onMouseLeave={() => handleMouseLeave("admin")}
@@ -78,11 +78,8 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
       <button onClick={() => handleSelectOption("/admin/users", "admin")}>Admin users long name</button>
     </div>
   )}
-</div> */}
-
-<div className="nav-item">
-  <div onClick={() => { handleLinkClick(); window.location.href = '/admin' }}>ADMIN</div>
 </div>
+
 <div className="nav-item">
   <div onClick={() => { handleLinkClick(); window.location.href = '/signin' }}>SIGN IN</div>
 </div>
