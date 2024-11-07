@@ -13,13 +13,14 @@
   background: none;
   color: var(--color9); /* Default color (when navbar is closed) */
   border: none;
-  cursor: default;
+  cursor: pointer;
   position: fixed;
   top: 10px;
   left: 10px;
   z-index: 6;
   display: block; /* Ensure the button is visible */
 }
+
 
 /* When the navbar is open, change color */
 .hamburger.open {

@@ -1,10 +1,8 @@
-import React from 'react';
-
 const Hamburger = ({ isNavOpen, toggleNav }) => {
   return (
     <button
-      className={`hamburger ${isNavOpen ? 'open' : 'closed'}`} // Dynamically apply the 'open' or 'closed' class
-      onMouseEnter={toggleNav} // Trigger toggleNav on click
+      className={`hamburger ${isNavOpen ? 'open' : 'closed'}`}
+      onClick={toggleNav} // Only toggle nav on click
     >
       ☰
     </button>
