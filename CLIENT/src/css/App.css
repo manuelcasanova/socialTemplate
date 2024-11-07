@@ -67,6 +67,10 @@
   font-weight: bold;
 }
 
+.dropdown {
+
+}
+
 .subitem {
   cursor: pointer;
   height: auto;
@@ -147,7 +151,7 @@
   }
 
   .nav-item {
-    /* padding: 5% 0% 5% 0%; */
+   margin-top: 5%;
   }
 
   .hamburger {
