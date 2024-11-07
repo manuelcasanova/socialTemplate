@@ -24,8 +24,6 @@
 /* Navbar Styles */
 
 
-
-
 /* Navbar open state */
 .navbar.open {
   transform: translateX(0);
@@ -35,8 +33,9 @@
 
 .nav-item {
   cursor: pointer;
-  height: 100%;
+  height: auto;
   width: 100%;
+  min-height: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -53,6 +52,7 @@
 
 .body {
   display: flex;
+  flex: 0 0 90%;
   justify-content: center;
   align-items: center;
   padding: 1%;
@@ -60,18 +60,21 @@
   transition: margin-left 0.3s ease-in-out;
   margin-left: 0;
   /* Default no margin */
-  padding-top: 70px;
+  /* padding-top: 70px; */
   /* Make space for navbar */
+  overflow-y: auto; /* Allow body to scroll normally */
 }
 
 /* Body squeezed when navbar is open */
 .body.squeezed {
   margin-left: 250px;
   /* Adjust based on navbar width */
+  overflow: hidden; /* Disable body scroll while navbar is open */
 }
 
 .footer {
   display: flex;
+  flex: 0 0 10%;
   justify-content: center;
   align-items: center;
   padding: 1%;
@@ -80,121 +83,64 @@
 
 /* Mobile Styles */
 @media (max-width: 580px) {
-
-  .body {
-    flex: 0 0 90%;
-    margin: 0;
-  }
-
-  .footer {
-    flex: 0 0 10%;
-  }
-
-  .hamburger {
-    display: block;
-  }
-
   .navbar {
-    
-    display: flex;
-    background-color: var(--color1);
-    z-index: 1;
-    overflow: hidden;
-    white-space: nowrap;
-    background-color: var(--color9);
-    color: var(--color1);
-
-
-
+    width: 100%; 
     position: fixed;
     top: 0;
     left: -100%;
-    height: 100%;
-    width: 100%;
+    z-index: 1000;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    transition: left 0.3s ease-in-out;
-    /* padding: 10% 0% 10% 0%; */
-    justify-content: space-between; 
+    min-height: 100vh; 
+    height: 100%;
+    overflow-y: auto; 
+    background-color: var(--color9);
+    white-space: nowrap; 
   }
 
   .navbar.open {
-    left: 0;
-    /* Slide in navbar when open */
+    left: 0; 
   }
 
-
+  .hamburger {
+    display: block; 
+  }
 
   
-
-  .body.squeezed {
-    margin-left: 0;
-    /* Do not squeeze body on small screens */
-  }
 
 }
 
 /* Tablet Styles */
 @media (min-width: 581px) and (max-width: 1024px) {
-
-
-  .body,
-  .footer {
-    margin-left: 0;
-    transition: margin-left 0.3s ease-in-out;
-  }
-
-  .body {
-    flex: 0 0 90%;
-    margin: 0;
-  }
-
-  .footer {
-    flex: 0 0 10%;
-
-  }
-
-  .body.squeezed {
-    margin-left: 20%;
-  }
-
-  .footer.squeezed {
-    margin-left: 0%;
-  }
-
-  .hamburger {
-    display: block;
-  }
-
   .navbar {
-   
-    display: flex;
-    align-items: center;
-    z-index: 1;
-    overflow: hidden;
-    white-space: nowrap;
-    background-color: var(--color9);
-    color: var(--color1);
-
-
+    width: 25%; 
     position: fixed;
-    flex-direction: column;
     top: 0;
     left: -100%;
+    z-index: 1000;
+    flex-direction: column;
+    min-height: 90vh; 
     height: 90%;
-    width: 25%;
-    transition: left 0.3s ease-in-out;
-    justify-content: space-between;
-    align-items: center;
-    /* padding: 5% 0% 5% 0%; */
+    overflow-y: auto; 
+    background-color: var(--color9);
+    white-space: nowrap; 
+
   }
 
   .navbar.open {
-    left: 0;
+    left: 0; 
   }
 
+  .body.squeezed {
+    margin-left: 25%; 
+  }
 
+  .footer.squeezed {
+    margin-left: 0; 
+  }
+
+  .hamburger {
+    display: block; 
+  }
 }
 
 /* Desktop Styles */
@@ -230,7 +176,7 @@
    
     background-color: var(--color1);
     z-index: 1;
-    overflow: hidden;
+    overflow-y: auto;
     white-space: nowrap;
     transition: transform 0.3s ease-in-out;
     height: 60px;

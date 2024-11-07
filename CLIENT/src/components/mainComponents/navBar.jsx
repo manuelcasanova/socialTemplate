@@ -34,6 +34,12 @@ const [showAdmin, setShowAdmin] = useState(false)
 {showAdmin && (<>
   <div className='nav-item'>SUBADMIN</div>
 <div className='nav-item'>SUBADMIN</div>
+<div className='nav-item'>SUBADMIN</div>
+<div className='nav-item'>SUBADMIN</div>
+<div className='nav-item'>SUBADMIN</div>
+<div className='nav-item'>SUBADMIN</div>
+<div className='nav-item'>SUBADMIN</div>
+<div className='nav-item'>SUBADMIN</div>
 </>
 )}
 <div className='nav-item' onClick={() => handleLinkClick()}>LINK</div>
