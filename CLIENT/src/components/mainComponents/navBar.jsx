@@ -49,7 +49,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
     <header className={`navbar ${isNavOpen ? 'open' : ''}`}>
       {/* Static Navigation Items */}
       {navItems.map((item) => (
-        <div className="nav-item" key={item.route}>
+        <div className="nav-item" key={item.route} onClick={() => handleLinkClickAndNavigate(item.route)}>
           {/* If the item has a dropdown, show the dropdown */}
           {item.hasDropdown ? (
             <div>
@@ -73,7 +73,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
               )}
             </div>
           ) : (
-            <div onClick={() => handleLinkClickAndNavigate(item.route)}>
+            <div>
               {item.label}
             </div>
           )}
