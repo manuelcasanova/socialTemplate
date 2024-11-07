@@ -22,23 +22,7 @@
 }
 
 /* Navbar Styles */
-.navbar {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: var(--color1);
-  z-index: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: transform 0.3s ease-in-out;
-  height: 60px;
-  /* Adjust height */
-  background-color: var(--color9);
-  color: var(--color1);
-}
+
 
 
 
@@ -111,6 +95,17 @@
   }
 
   .navbar {
+    
+    display: flex;
+    background-color: var(--color1);
+    z-index: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: var(--color9);
+    color: var(--color1);
+
+
+
     position: fixed;
     top: 0;
     left: -100%;
@@ -173,6 +168,16 @@
   }
 
   .navbar {
+   
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: var(--color9);
+    color: var(--color1);
+
+
     position: fixed;
     flex-direction: column;
     top: 0;
@@ -218,6 +223,22 @@
   }
 
   .navbar {
+ 
+  
+    align-items: center;
+    
+   
+    background-color: var(--color1);
+    z-index: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: transform 0.3s ease-in-out;
+    height: 60px;
+    /* Adjust height */
+    background-color: var(--color9);
+    color: var(--color1);
+
+
     position: fixed;
     top: 0;
     left: 0;

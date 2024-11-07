@@ -7,6 +7,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
 
   const navigate = useNavigate();
+const [showAdmin, setShowAdmin] = useState(false)
 
 
   //Toggle navbar
@@ -19,15 +20,24 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
 
   return (
-    <header className={`navbar ${isNavOpen ? 'open' : ''}`}>
+<header 
+  className={`navbar ${isNavOpen ? 'open' : ''}`} 
+  onMouseLeave={handleLinkClick}  
+>
 
-<div className='nav-item'>LINK</div>
-<div className='nav-item'>LINK</div>
-<div className='nav-item'>LINK</div>
-<div className='nav-item'>LINK</div>
-<div className='nav-item'>LINK</div>
-<div className='nav-item'>LINK</div>
-<div className='nav-item'>LINK</div>
+
+<div className='nav-item' onClick={() => handleLinkClick()}>LINK</div>
+<div className='nav-item' onClick={() => handleLinkClick()}>LINK</div>
+<div className='nav-item' onClick={() => handleLinkClick()}>LINK</div>
+<div className='nav-item' onClick={() => handleLinkClick()}>LINK</div>
+<div className='nav-item' onClick={() => setShowAdmin(prev => !prev)}>ADMIN</div>
+{showAdmin && (<>
+  <div className='nav-item'>SUBADMIN</div>
+<div className='nav-item'>SUBADMIN</div>
+</>
+)}
+<div className='nav-item' onClick={() => handleLinkClick()}>LINK</div>
+<div className='nav-item' onClick={() => handleLinkClick()}>LINK</div>
 
     </header>
   );
