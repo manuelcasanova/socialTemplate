@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 
 //Components
@@ -13,9 +14,21 @@ import Signup from '../authComponents/Signup';
 import Profile from '../bodyComponents/Profile';
 import AdminUsers from '../bodyComponents/users/AdminUsers';
 
+
+
 const Body = ({ isNavOpen }) => {
+
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Update screenWidth on window resize
+    useEffect(() => {
+      const handleResize = () => setScreenWidth(window.innerWidth);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
   return (
-    <main className={`body ${isNavOpen ? 'squeezed' : ''}`}>
+    <main className={`body ${isNavOpen && screenWidth < 1025 ? 'squeezed' : ''}`}>
       <Routes>
         <Route path="/signin" element={<Signin />} />
         <Route path="/" element={<Home />} />
