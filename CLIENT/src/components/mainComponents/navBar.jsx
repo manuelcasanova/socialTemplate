@@ -1,109 +1,84 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-
-//Styling
-import '../../css/NavbarDropdown.css'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ isNavOpen, toggleNav }) => {
-
-
   const navigate = useNavigate();
   const [showOptions, setShowOptions] = useState({
-    users: false,
+    admin: false,
+    moderator: false,
+    subscriber: false,
   });
 
-  //Toggle navbar
+  // Function to handle click and toggle navbar state
   const handleLinkClick = () => {
     if (isNavOpen) {
       toggleNav();
     }
-  }
-
-  //Show navbar dropdown menu
-  const handleMouseEnter = (category) => {
-    setShowOptions({ ...showOptions, [category]: true });
-    // Hide other dropdowns
-    Object.keys(showOptions).forEach((key) => {
-      if (key !== category) {
-        setShowOptions((prev) => ({ ...prev, [key]: false }));
-      }
-    });
   };
 
-  //Select from dropdown menu
-  const handleSelectOption = (route, category) => {
-    navigate(route);
-    setShowOptions({ ...showOptions, [category]: false });
+  // Toggle dropdown visibility
+  const toggleDropdown = (category) => {
+    setShowOptions((prevOptions) => ({
+      ...prevOptions,
+      [category]: !prevOptions[category],
+    }));
   };
 
-  //Hide navbar dropdown menu
-  const handleMouseLeave = (category) => {
-    setShowOptions({ ...showOptions, [category]: false });
+  // Handle navigation and close the dropdown (if applicable)
+  const handleLinkClickAndNavigate = (route) => {
+    handleLinkClick(); // Optional: Close navbar or perform any action
+    navigate(route); // Navigate to the selected route
   };
 
+  // Navigation items (with admin before profile)
+  const navItems = [
+    { label: "HOME", route: "/" },
+    { label: "ABOUT", route: "/about" },
+    { label: "MODERATOR", route: "/moderator" },
+    { label: "SUBSCRIBER", route: "/subscriber" },
+    
+    // ADMIN dropdown here before PROFILE
+    { label: "ADMIN", route: "/admin", hasDropdown: true },
 
+    { label: "PROFILE", route: "/profile" },
+    { label: "SIGN IN", route: "/signin" },
+    { label: "SIGN UP", route: "/signup" },
+  ];
 
   return (
-
-    // Navbar fixed open, for css test purposes
-    // <header className="navbar open" onMouseLeave={() => isNavOpen && toggleNav()}>
-
-    <header className={`navbar ${isNavOpen ? 'open' : ''}`}
-      // onMouseLeave={() => isNavOpen && toggleNav()}
-      >
-
-
-
-
-
-      <div className="nav-item">
-        <div onClick={() => { handleLinkClick(); window.location.href = '/' }}>HOME</div>
-      </div>
-      <div className="nav-item">
-        <div onClick={() => { handleLinkClick(); window.location.href = '/about' }}>ABOUT</div>
-      </div>
-      <div className="nav-item">
-        <div onClick={() => { handleLinkClick(); window.location.href = '/moderator' }}>MODERATOR</div>
-      </div>
-      <div className="nav-item">
-        <div onClick={() => { handleLinkClick(); window.location.href = '/subscriber' }}>SUBSCRIBER</div>
-      </div>
-
-
-
-      {/* Admin Dropdown */}
-      <div
-        className="nav-item dropdown-wrapper"
-        onMouseEnter={() => handleMouseEnter("admin")}
-        // onMouseLeave={() => handleMouseLeave("admin")}
-      >
-        <div className="dropdown-title">
-          <span>ADMIN</span>
-          <span>▼</span>
+    <header className={`navbar ${isNavOpen ? 'open' : ''}`}>
+      {/* Static Navigation Items */}
+      {navItems.map((item) => (
+        <div className="nav-item" key={item.route}>
+          {/* If the item has a dropdown, show the dropdown */}
+          {item.hasDropdown ? (
+            <div>
+              <button
+                aria-label="Toggle Admin dropdown"
+                aria-expanded={showOptions.admin ? 'true' : 'false'}
+                onClick={() => toggleDropdown("admin")}
+                className="dropdown-toggle"
+              >
+                {item.label}
+              </button>
+              {showOptions.admin && (
+                <div className="dropdown-menu">
+                  <button onClick={() => handleLinkClickAndNavigate("/admin/dashboard")}>
+                    Dashboard
+                  </button>
+                  <button onClick={() => handleLinkClickAndNavigate("/admin/users")}>
+                    Manage Users
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div onClick={() => handleLinkClickAndNavigate(item.route)}>
+              {item.label}
+            </div>
+          )}
         </div>
-        {showOptions.admin && (
-          <div className="dropdown-menu">
-            <button onClick={() => handleSelectOption("/admin/users", "admin")}>ADMIN USERS LONG NAME</button>
-            <button onClick={() => handleSelectOption("/admin/test", "admin")}>ADMIN TEST</button>
-          </div>
-          
-          
-        )}
-      </div>
-
-      <div className="nav-item">
-        <div onClick={() => { handleLinkClick(); window.location.href = '/signin' }}>SIGN IN</div>
-      </div>
-      <div className="nav-item">
-        <div onClick={() => { handleLinkClick(); window.location.href = '/signup' }}>SIGN UP</div>
-      </div>
-      <div className="nav-item">
-        <div onClick={() => { handleLinkClick(); window.location.href = '/profile' }}>PROFILE</div>
-      </div>
-
-
-
+      ))}
     </header>
   );
 };
