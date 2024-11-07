@@ -23,7 +23,7 @@ html, body {
   --color3: green;
   --color4: blue;       
   --color5: yellow;  
-  --color6: lightgrey;   /* Subtle backgrounds, disabled elements */
+  --color6: #e3d9c8;   /* Subtle backgrounds, disabled elements */
   --color7: darkgrey;    
   --color8: #f5f5f5;     /* Light neutral for backgrounds */
   --color9: #fc4c02;

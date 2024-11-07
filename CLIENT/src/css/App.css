@@ -11,15 +11,28 @@
 .hamburger {
   font-size: 20px;
   background: none;
-  color: var(--color9);
+  color: var(--color9); /* Default color (when navbar is closed) */
   border: none;
-  cursor: pointer;
+  cursor: default;
   position: fixed;
   top: 10px;
   left: 10px;
-  z-index: 2;
-  display: none;
+  z-index: 6;
+  display: block; /* Ensure the button is visible */
 }
+
+/* When the navbar is open, change color */
+.hamburger.open {
+  color: var(--color1); /* Color when navbar is open */
+  z-index: 6;
+}
+
+/* When the navbar is closed, revert to color9 */
+.hamburger.closed {
+  color: var(--color9); /* Color when navbar is closed */
+}
+
+
 
 /* Navbar Styles */
 
@@ -34,19 +47,48 @@
 .nav-item {
   cursor: pointer;
   height: auto;
-  width: 100%;
-  min-height: 50px;
+  /* min-height: 100px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-    }
-  
-    .nav-item:hover {
-  background-color: var(--color1);
+  padding: 5% 0% 5% 0%;
+  color: var(--color1);
+}
+
+.nav-item:first-child {
+  margin-top: 0; /* removes margin-top for the first nav item */
+}
+
+
+.nav-item:hover {
+  background-color: var(--color6);
   color: var(--color9);
-    }
-  
+  font-weight: bold;
+}
+
+.subitem {
+  cursor: pointer;
+  height: auto;
+  /* min-height: 100px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5% 0% 5% 0%;
+  color: var(--color1);
+}
+
+.subitem:first-child {
+  margin-top: 0; /* removes margin-top for the first nav item */
+}
+
+
+.subitem:hover {
+  background-color: var(--color6);
+  color: var(--color9);
+  font-weight: bold;
+}
 
 
 
@@ -62,14 +104,16 @@
   /* Default no margin */
   /* padding-top: 70px; */
   /* Make space for navbar */
-  overflow-y: auto; /* Allow body to scroll normally */
+  overflow-y: auto;
+  /* Allow body to scroll normally */
 }
 
 /* Body squeezed when navbar is open */
 .body.squeezed {
   margin-left: 250px;
   /* Adjust based on navbar width */
-  overflow: hidden; /* Disable body scroll while navbar is open */
+  overflow: hidden;
+  /* Disable body scroll while navbar is open */
 }
 
 .footer {
@@ -84,62 +128,73 @@
 /* Mobile Styles */
 @media (max-width: 580px) {
   .navbar {
-    width: 100%; 
+    width: 100%;
     position: fixed;
     top: 0;
     left: -100%;
-    z-index: 1000;
+    z-index: 4;
     flex-direction: column;
-    min-height: 100vh; 
+    min-height: 100vh;
     height: 100%;
-    overflow-y: auto; 
+    overflow-y: auto;
     background-color: var(--color9);
-    white-space: nowrap; 
+    white-space: nowrap;
   }
 
   .navbar.open {
-    left: 0; 
+    left: 0;
+    padding-top: 5em; /*To leave space to show hamburger*/
+  }
+
+  .nav-item {
+    /* padding: 5% 0% 5% 0%; */
   }
 
   .hamburger {
-    display: block; 
+    display: block;
   }
 
-  
+
 
 }
 
 /* Tablet Styles */
 @media (min-width: 581px) and (max-width: 1024px) {
   .navbar {
-    width: 25%; 
+    width: 25%;
     position: fixed;
     top: 0;
     left: -100%;
-    z-index: 1000;
+    z-index: 4;
     flex-direction: column;
-    min-height: 90vh; 
+    min-height: 90vh;
     height: 90%;
-    overflow-y: auto; 
+    overflow-y: auto;
     background-color: var(--color9);
-    white-space: nowrap; 
+    white-space: nowrap;
 
   }
 
   .navbar.open {
-    left: 0; 
+    left: 0;
+    padding-top: 5em; /*To leave space to show hamburger*/
+  }
+
+  .nav-item {
+    /* padding: 15% 0% 15% 0%; */
+    margin-top: 15%;
   }
 
   .body.squeezed {
-    margin-left: 25%; 
+    margin-left: 25%;
   }
 
   .footer.squeezed {
-    margin-left: 0; 
+    margin-left: 0;
   }
 
   .hamburger {
-    display: block; 
+    display: block;
   }
 }
 
@@ -169,13 +224,13 @@
   }
 
   .navbar {
- 
-  
+
+
     align-items: center;
-    
-   
+
+
     background-color: var(--color1);
-    z-index: 1;
+    z-index: 4;
     overflow-y: auto;
     white-space: nowrap;
     transition: transform 0.3s ease-in-out;
