@@ -48,26 +48,31 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
       <div className='nav-item' onClick={() => handleNavigate('/moderator')}>MODERATOR</div>
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>SUBSCRIBER</div>
 
-      <div className='nav-item' onClick={() => toggleSection('admin')}>ADMIN
-        {showSections.admin ? '▲' : '▼'}
-      </div>
-      {showSections.admin && (
-        <div className='dropdown'>
-          <div className='subitem' onClick={() => handleNavigate('/admin/users')}>ADMIN USERS</div>
+      <div className='nav-item-with-dropdown'>
+        <div className='nav-item' onClick={() => toggleSection('admin')}>ADMIN
+          {showSections.admin ? '▲' : '▼'}
         </div>
-      )}
-
+        {showSections.admin && (
+          <div className='dropdown'>
+            <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
+          </div>
+        )}
+      </div>
 
       <div className='nav-item' onClick={() => handleNavigate('/about')}>LINK</div>
+
+
+      <div className='nav-item-with-dropdown'>
       <div className='nav-item' onClick={() => toggleSection('profile')}>PROFILE
         {showSections.profile ? '▲' : '▼'}
       </div>
       {showSections.profile && (
         <>
-          <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>MY ACCOUNT</div>
-          <div className='subitem'>LOGOUT</div>
+          <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>My account</div>
+          <div className='subitem'>Logout</div>
         </>
       )}
+        </div>
 
     </header>
   );
