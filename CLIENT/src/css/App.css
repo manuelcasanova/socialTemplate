@@ -107,6 +107,32 @@
   font-weight: bold;
 }
 
+/* Ensure the container has position relative and a fixed size */
+.profile-image-container {
+  position: relative;
+ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 3%;
+}
+
+/* Style the profile image */
+.profile-image {
+ 
+  object-fit: cover; 
+  border-radius: 50%;
+  cursor: pointer;  
+  transition: transform 0.3s ease; 
+}
+
+
+.profile-image:hover {
+  transform: scale(1.1); 
+  filter: brightness(1.3);
+}
+
 
 
 .body {
@@ -159,7 +185,7 @@
     left: 0;
     padding-top: 3em;
     /*To leave space to show hamburger*/       
-
+padding-bottom: 2em;
   }
 
   .nav-item {
@@ -200,6 +226,7 @@
     left: 0;
     padding-top: 3em;
     /*To leave space to show hamburger*/
+    padding-bottom: 2em;
   }
 
   .nav-item, .nav-item-with-dropdown  {

@@ -1,3 +1,5 @@
+import ProfileImage from "./ProfileImage"
+
 export default function Profile ({toggleSection, showSections, handleNavigate}) {
 
 
@@ -5,8 +7,9 @@ export default function Profile ({toggleSection, showSections, handleNavigate}) 
   return (
     
     <div className='nav-item-with-dropdown'>
-    <div className='nav-item profile-item' onClick={() => toggleSection('profile')}>PROFILE
-      {showSections.profile ? '▲' : '▼'}
+    <div className='nav-item-logo' onClick={() => toggleSection('profile')}>
+      <ProfileImage/>
+      {/* {showSections.profile ? '▲' : '▼'} */}
     </div>
     {showSections.profile && (
       <>

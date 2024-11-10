@@ -37,7 +37,7 @@ const Body = ({ isNavOpen }) => {
         <Route path="/subscriber" element={<Subscriber />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/myaccount" element={<Profile />} />
         <Route path="/admin/users" element={<AdminUsers />} />
       </Routes>
     </main>
