@@ -26,8 +26,11 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
     if (isNavOpen && window.innerWidth <= 580) {
       toggleNav(); // Close the navbar when a link is clicked in mobile view
     }
-  };
 
+        // Close dropdowns whenever navigating
+        setShowSections({ admin: false, profile: false });
+    
+  };
 
   // Toggle individual dropdown sections and close others
   const toggleSection = (section) => {
@@ -39,8 +42,12 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
   };
 
 
+
+
   return (
-    <header className={`navbar ${isNavOpen ? 'open' : ''}`}>
+    <header className={`navbar ${isNavOpen ? 'open' : ''}`}
+    onMouseLeave={toggleSection}
+    >
 
 
       <div className='nav-item' onClick={() => handleNavigate('/')}>HOME</div>
@@ -53,9 +60,9 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
           {showSections.admin ? '▲' : '▼'}
         </div>
         {showSections.admin && (
-          <div className='dropdown'>
+          <>
             <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
-          </div>
+          </>
         )}
       </div>
 
@@ -67,7 +74,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
         {showSections.profile ? '▲' : '▼'}
       </div>
       {showSections.profile && (
-        <>
+          <>
           <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>My account</div>
           <div className='subitem'>Logout</div>
         </>
