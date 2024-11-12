@@ -29,8 +29,6 @@ app.use(logger); // Custom middleware logger
 app.use(customJsonParser);
 
 
-const { getAllUsers } = require('./controllers/usersController');
-
 // Custom middleware for handling JSON parsing errors
 app.use((req, res, next) => {
     express.json({ limit: '2mb' })(req, res, (err) => {
@@ -48,7 +46,18 @@ app.get('/ping', (req, res) => {
     res.status(200).send('pong! The server is running!');
 });
 
-app.get('/users', getAllUsers);
+
+
+app.use('/signup', require('../SERVER/routes/auth/signup'));
+
+
+// app.use(verifyJWT);
+
+
+app.use('/users', require('./routes/api/users'));
+
+
+
 
 // Define the /some-endpoint route specifically with type checks
 app.post('/some-endpoint', (req, res) => {

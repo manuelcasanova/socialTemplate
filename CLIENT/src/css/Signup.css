@@ -1,0 +1,105 @@
+
+.signup-title {
+  display: flex;
+  justify-content: center;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.centered-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-form label {
+  margin-top: 0.5em;
+}
+
+.signup-form input {
+  margin-bottom: 0.5em;
+}
+
+.signup-form p {
+  margin-bottom: 2em;
+}
+
+.valid {
+  color: var(--color3);
+  margin-left: 0.25rem;
+}
+
+.invalid {
+  color: var(--color2);
+  margin-left: 0.25rem;
+}
+
+.errmsg {
+  background-color: var(--color11);
+  color: var(--color2);
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--color0);
+  color: var(--color1);
+  padding: 0.25rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.instructions>svg {
+  margin-right: 0.25rem;
+}
+
+.offscreen {
+  display: none;
+}
+
+.hide {
+  display: none;
+}
+
+.have-an-account {
+  margin-top: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-success {
+  text-align: center;
+  color: var(--color1);
+  padding: 2em;
+  background-color: var(--color7);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.success-message h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.success-message p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.success-message a {
+  font-weight: bold;
+  color: var(--color1);
+}
+
+.success-message a:hover {
+  text-decoration: underline;
+}

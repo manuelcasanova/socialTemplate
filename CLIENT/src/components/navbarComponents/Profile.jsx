@@ -14,6 +14,8 @@ export default function Profile ({toggleSection, showSections, handleNavigate}) 
     {showSections.profile && (
       <>
         <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>My account</div>
+        <div className='subitem' onClick={() => handleNavigate('/signin')}>Sign in</div>
+        <div className='subitem' onClick={() => handleNavigate('/signup')}>Sign up</div>
         <div className='subitem'>Logout</div>
       </>
     )}

@@ -2,7 +2,7 @@ const allowedOrigins = require('./allowedOrigins');
 
 const corsOptions = {
     origin: (origin, callback) => {
-        console.log('Origin:', origin); // Log the origin to see if the request is coming through
+        // console.log('Origin:', origin);
         if (allowedOrigins.includes(origin) || !origin) {
             callback(null, true);
         } else {

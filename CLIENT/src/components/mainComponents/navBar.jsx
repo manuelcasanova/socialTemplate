@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 //Components
@@ -64,11 +64,10 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
   };
 
 
-
-
   return (
     <header className={`navbar ${isNavOpen ? 'open' : ''}`}
       onMouseLeave={toggleSection}
+       data-testid="navbar"
     >
 
       {isLargeScreen && (
@@ -79,13 +78,13 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
         <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} />
       )}
 
-      <div className='nav-item' onClick={() => handleNavigate('/')}>HOME</div>
-      <div className='nav-item' onClick={() => handleNavigate('/about')}>ABOUT</div>
-      <div className='nav-item' onClick={() => handleNavigate('/moderator')}>MODERATOR</div>
-      <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>SUBSCRIBER</div>
+      <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
+      <div className='nav-item' onClick={() => handleNavigate('/about')}>About</div>
+      <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
+      <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
 
       <div className='nav-item-with-dropdown'>
-        <div className='nav-item' onClick={() => toggleSection('admin')}>ADMIN
+        <div className='nav-item' onClick={() => toggleSection('admin')}>Admin
           {showSections.admin ? '▲' : '▼'}
         </div>
         {showSections.admin && (
@@ -96,7 +95,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
       </div>
 
       {!isLargeScreen && (
-        <div className='nav-item'>LOGOUT</div>
+        <div className='nav-item'>Logout</div>
       )}
 
       {isLargeScreen && (
