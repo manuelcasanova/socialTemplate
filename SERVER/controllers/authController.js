@@ -26,68 +26,66 @@ const handleLogin = async (req, res) => {
     }
 
     // Verify the password
-    bcrypt.compare(pwd, foundEmail[0].password, (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: "Server error" });
-      }
+    const result = await bcrypt.compare(pwd, foundEmail[0].password);
+    
+    if (result === true) {
+      // Fetch the user's roles via the user_roles table
+      const rolesResult = await pool.query(`
+        SELECT r.role_name 
+        FROM roles r
+        JOIN user_roles ur ON ur.role_id = r.role_id
+        WHERE ur.user_id = $1`, 
+        [foundEmail[0].user_id]
+      );
 
-      if (result === true) {
-        // Fetch the user's roles via the user_roles table
-        pool.query(`
-          SELECT r.role_name 
-          FROM roles r
-          JOIN user_roles ur ON ur.role_id = r.role_id
-          WHERE ur.user_id = $1`, 
-          [foundEmail[0].user_id], 
-          (err, result) => {
-            if (err) {
-              return res.status(500).json({ error: "Error fetching roles" });
-            }
+      const roles = rolesResult.rows.map(role => role.role_name);
 
-            const roles = result.rows.map(role => role.role_name);
+      // Create JWT access token
+      const accessToken = jwt.sign(
+        {
+          "UserInfo": {
+            "email": foundEmail[0].email,
+            "roles": roles,
+            "userId": foundEmail[0].user_id
+          }
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '20m' } // In production, a few minutes
+      );
 
-            // Create JWT access token
-            const accessToken = jwt.sign(
-              {
-                "UserInfo": {
-                  "email": foundEmail[0].email,
-                  "roles": roles,
-                  "userId": foundEmail[0].user_id
-                }
-              },
-              process.env.ACCESS_TOKEN_SECRET,
-              { expiresIn: '20m' } // In production, a few minutes
-            );
+      // Create a refresh token
+      const refreshToken = jwt.sign(
+        { "username": foundEmail[0].username },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: '1h' }
+      );
 
-            // Create a refresh token
-            const refreshToken = jwt.sign(
-              { "username": foundEmail[0].username },
-              process.env.REFRESH_TOKEN_SECRET,
-              { expiresIn: '1h' }
-            );
+      // Save the refresh token in the user's record
+      await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
 
-            // Save the refresh token in the user's record
-            pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
+      // Insert login history record
+      const insertHistoryQuery = 'INSERT INTO login_history (user_id, login_time) VALUES ($1, CURRENT_TIMESTAMP AT TIME ZONE \'UTC\')';
 
-            // Send the refresh token as a cookie (HTTP only)
-            res.cookie('jwt', refreshToken, {
-              httpOnly: true, 
-              sameSite: "None",
-              secure: true,
-              maxAge: 24 * 60 * 60 * 1000 // 1 day
-            });
+      await pool.query(insertHistoryQuery, [foundEmail[0].user_id]);
 
-            // Send back user data and access token
-            res.json({ 
-              userId: foundEmail[0].user_id, 
-              roles, 
-              accessToken 
-            });
-          });
-      } else {
-        return res.status(401).json({ error: "Incorrect password" });
-      }
-    });
+      // Send the refresh token as a cookie (HTTP only)
+      res.cookie('jwt', refreshToken, {
+        httpOnly: true, 
+        sameSite: "None",
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+      });
+
+      // Send back user data and access token
+      res.json({ 
+        userId: foundEmail[0].user_id, 
+        roles, 
+        accessToken 
+      });
+
+    } else {
+      return res.status(401).json({ error: "Incorrect password" });
+    }
 
   } catch (error) {
     console.error(error);
