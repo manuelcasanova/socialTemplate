@@ -17,10 +17,8 @@ CREATE TABLE users (
   password_reset_token VARCHAR(255),  -- for password reset functionality
   password_reset_expires TIMESTAMP,    -- when the reset token expires
   is_verified BOOLEAN DEFAULT false,  -- for email/phone verification
-  role_id INT REFERENCES roles(role_id) ON DELETE RESTRICT,  -- Prevent deleting roles if users reference them
   is_selected BOOLEAN DEFAULT false,
   is_active BOOLEAN DEFAULT true,
-  is_subscribed BOOLEAN DEFAULT false,
   refresh_token VARCHAR(255),
   profile_picture VARCHAR(255),
   location VARCHAR(255),

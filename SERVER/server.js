@@ -51,6 +51,7 @@ app.get('/ping', (req, res) => {
 app.use('/signup', require('../SERVER/routes/auth/signup'));
 app.use('/signin', require('../SERVER/routes/auth/signin'));
 app.use('/refresh', require('../SERVER/routes/auth/refresh'));
+app.use('/logout', require('../SERVER/routes/auth/logout'));
 
 
 // app.use('/signin', (req, res, next) => {

@@ -5,27 +5,21 @@ const jwt = require('jsonwebtoken');
 const handleLogin = async (req, res) => {
   const { pwd, email } = req.body;
 
-//req.body OK: { email: 'admin@example.com', pwd: 'Password1!', trustDevice: true }
-// console.log("req.body", req.body)
-  
+  // Check if both email and password are provided
   if (!pwd || !email) {
     return res.status(400).json({ 'message': 'Email and password are required.' });
   }
 
   try {
-    // Query the database to fetch the user along with their role
+    // Query the database to fetch the user based on email
     const data = await pool.query(`
-      SELECT u.user_id, u.username, u.email, u.password, u.role_id, r.role_name 
+      SELECT u.user_id, u.username, u.email, u.password 
       FROM users u
-      LEFT JOIN roles r ON u.role_id = r.role_id
       WHERE u.email = $1`, 
       [email]
     );
     
     const foundEmail = data.rows;
-
-//OK!
-// console.log("foundEmail", foundEmail)
 
     if (foundEmail.length === 0) {
       return res.status(400).json({ error: "No user registered" });
@@ -38,59 +32,58 @@ const handleLogin = async (req, res) => {
       }
 
       if (result === true) {
-        // Fetch the user's roles
-        const roles = foundEmail[0].role_name ? [foundEmail[0].role_name] : []; // Assuming only one role per user
-
-      // OK!
-      // console.log("roles", roles)
-
-        // Create JWT access token
-        const accessToken = jwt.sign(
-          {
-            "UserInfo": {
-              "email": foundEmail[0].email,
-              "roles": roles,
-              "userId": foundEmail[0].user_id
+        // Fetch the user's roles via the user_roles table
+        pool.query(`
+          SELECT r.role_name 
+          FROM roles r
+          JOIN user_roles ur ON ur.role_id = r.role_id
+          WHERE ur.user_id = $1`, 
+          [foundEmail[0].user_id], 
+          (err, result) => {
+            if (err) {
+              return res.status(500).json({ error: "Error fetching roles" });
             }
-          },
-          process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: '20m' } // In production, a few minutes.
-        );
 
-        // OK!
-        // console.log("access Token", accessToken)
+            const roles = result.rows.map(role => role.role_name);
 
-        // Create a refresh token
-        const refreshToken = jwt.sign(
-          { "username": foundEmail[0].username },
-          process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: '1h' }
-        );
+            // Create JWT access token
+            const accessToken = jwt.sign(
+              {
+                "UserInfo": {
+                  "email": foundEmail[0].email,
+                  "roles": roles,
+                  "userId": foundEmail[0].user_id
+                }
+              },
+              process.env.ACCESS_TOKEN_SECRET,
+              { expiresIn: '20m' } // In production, a few minutes
+            );
 
-        // Save the refresh token in the user's record
-        pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
+            // Create a refresh token
+            const refreshToken = jwt.sign(
+              { "username": foundEmail[0].username },
+              process.env.REFRESH_TOKEN_SECRET,
+              { expiresIn: '1h' }
+            );
 
-        // Send the refresh token as a cookie (HTTP only)
-        res.cookie('jwt', refreshToken, {
-          httpOnly: true, 
-          sameSite: "None",
-          secure: true,
-          maxAge: 24 * 60 * 60 * 1000 // 1 day
-        });
+            // Save the refresh token in the user's record
+            pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
 
-              // OK!
-        // console.log("res.json", {  
-        //   userId: foundEmail[0].user_id, 
-        //   roles, 
-        //   accessToken })
+            // Send the refresh token as a cookie (HTTP only)
+            res.cookie('jwt', refreshToken, {
+              httpOnly: true, 
+              sameSite: "None",
+              secure: true,
+              maxAge: 24 * 60 * 60 * 1000 // 1 day
+            });
 
-  
-        res.json({ 
-          userId: foundEmail[0].user_id, 
-          roles, 
-          accessToken 
-        });
-
+            // Send back user data and access token
+            res.json({ 
+              userId: foundEmail[0].user_id, 
+              roles, 
+              accessToken 
+            });
+          });
       } else {
         return res.status(401).json({ error: "Incorrect password" });
       }

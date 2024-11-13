@@ -1,7 +1,7 @@
 import '../../css/Overlay.css';
 import '../../css/Signup.css';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Make sure to import useLocation
 import { useRef, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,7 @@ import useAuth from '../../hooks/useAuth'; // Import the custom hook for authent
 export default function SignIn() {
   const navigate = useNavigate();
   const { handleLogin } = useAuth(); // Get handleLogin function from the custom hook
+  const location = useLocation(); // Use useLocation to access location state
 
   const regexPatterns = {
     email: /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/
@@ -102,8 +103,11 @@ export default function SignIn() {
       setSuccess(true);
       setFormData({ email: '', pwd: '', trustDevice: false });
 
-      // Redirect to the user's profile page or dashboard after successful login
-      navigate('/profile/myaccount');
+      // Get the "from" path from location state (if exists), or default to home
+      const from = location.state?.from?.pathname || "/"; // Get the 'from' path if available in location state
+
+      // Redirect to the previous page (or home if no previous page)
+      navigate(from, { replace: true });
     } catch (err) {
       const status = err?.response?.status;
       setErrMsg(

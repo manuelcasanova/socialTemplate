@@ -6,8 +6,24 @@ import { useState, useEffect } from 'react';
 import Profile from '../navbarComponents/Profile';
 import Logo from '../navbarComponents/Logo';
 
+import useLogout from '../../hooks/useLogout';
+import useAuth from '../../hooks/useAuth';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; 
+
 
 const Navbar = ({ isNavOpen, toggleNav }) => {
+  
+  const {auth} = useAuth();
+
+  const logout = useLogout();
+
+  const signOut = async () => {
+    await logout();
+    navigate('/');
+  }
+
   const navigate = useNavigate();
   const [showSections, setShowSections] = useState({
     admin: false,
@@ -94,9 +110,12 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
         )}
       </div>
 
-      {!isLargeScreen && (
-        <div className='nav-item'>Logout</div>
+      {!isLargeScreen && auth.isAuthenticated && (
+              <div className="nav-item" onClick={signOut}>
+              <FontAwesomeIcon icon={faSignOutAlt} />
+            </div>
       )}
+
 
       {isLargeScreen && (
         <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} />

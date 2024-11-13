@@ -54,7 +54,8 @@ export default function Signup() {
       name: regexPatterns.username.test(formData.user),
       email: regexPatterns.email.test(formData.email),
       pwd: regexPatterns.password.test(formData.pwd),
-      match: formData.pwd === formData.matchPwd
+     // Validate match only if both pwd and matchPwd are non-empty
+    match: formData.pwd && formData.matchPwd ? formData.pwd === formData.matchPwd : false
     };
 
     // If validity state is different, update it

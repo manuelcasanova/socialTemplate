@@ -1,8 +1,22 @@
 import ProfileImage from "./ProfileImage"
+import useLogout from "../../hooks/useLogout";
+import { useNavigate } from 'react-router-dom'
+import useAuth from "../../hooks/useAuth";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; 
 
 export default function Profile ({toggleSection, showSections, handleNavigate}) {
 
+  const {auth} = useAuth();
 
+  const logout = useLogout();
+  const navigate = useNavigate();
+
+  const signOut = async () => {
+    await logout();
+    navigate('/');
+  }
   
   return (
     
@@ -14,9 +28,16 @@ export default function Profile ({toggleSection, showSections, handleNavigate}) 
     {showSections.profile && (
       <>
         <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>My account</div>
+        {!auth.isAuthenticated && 
+        <>
         <div className='subitem' onClick={() => handleNavigate('/signin')}>Sign in</div>
-        <div className='subitem' onClick={() => handleNavigate('/signup')}>Sign up</div>
-        <div className='subitem'>Logout</div>
+        </>
+}
+        {auth.isAuthenticated && 
+      <div className="subitem" onClick={signOut}>
+      <FontAwesomeIcon icon={faSignOutAlt} />
+    </div>
+      }
       </>
     )}
   </div>

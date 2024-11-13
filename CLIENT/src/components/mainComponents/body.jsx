@@ -44,14 +44,14 @@ const Body = ({ isNavOpen }) => {
         <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
           <Route path="/moderator" element={<Moderator />} />
         </Route>
-        <Route element={<RequireAuth allowedRoles={['User', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+        <Route element={<RequireAuth allowedRoles={['User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
           <Route path="/subscriber" element={<Subscriber />} />
         </Route>
         <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
           <Route path="/admin" element={<Admin />} />
         </Route>
 
-        <Route element={<RequireAuth allowedRoles={['User', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+        <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
           <Route path="/profile/myaccount" element={<Profile />} />
         </Route>
 
