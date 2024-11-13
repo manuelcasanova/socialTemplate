@@ -70,7 +70,7 @@
 }
 
 .have-an-account {
-  margin-top: 2em;
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -102,4 +102,8 @@
 
 .success-message a:hover {
   text-decoration: underline;
+}
+
+.trust-device {
+  margin: 1em 0em 1em 0em;
 }

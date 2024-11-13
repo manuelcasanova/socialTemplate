@@ -13,32 +13,52 @@ import Admin from '../bodyComponents/Admin';
 import Signup from '../authComponents/Signup';
 import Profile from '../bodyComponents/Profile';
 import AdminUsers from '../bodyComponents/users/AdminUsers';
+import Unauthorized from '../authComponents/Unauthorized';
 
-
+import RequireAuth from '../authComponents/RequireAuth';
 
 const Body = ({ isNavOpen }) => {
 
+
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-    // Update screenWidth on window resize
-    useEffect(() => {
-      const handleResize = () => setScreenWidth(window.innerWidth);
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }, []);
+  // Update screenWidth on window resize
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <main className={`body ${isNavOpen && screenWidth < 1025 ? 'squeezed' : ''}`}>
       <Routes>
+
+        {/* Public routes */}
         <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/moderator" element={<Moderator />} />
-        <Route path="/subscriber" element={<Subscriber />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/profile/myaccount" element={<Profile />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
+        {/* Protected Routes */}
+        <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
+          <Route path="/moderator" element={<Moderator />} />
+        </Route>
+        <Route element={<RequireAuth allowedRoles={['User', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+          <Route path="/subscriber" element={<Subscriber />} />
+        </Route>
+        <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+          <Route path="/admin" element={<Admin />} />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={['User', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+          <Route path="/profile/myaccount" element={<Profile />} />
+        </Route>
+
+        {/* Admin-specific routes */}
+        <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+          <Route path="/admin/users" element={<AdminUsers />} />
+        </Route>
       </Routes>
     </main>
   );

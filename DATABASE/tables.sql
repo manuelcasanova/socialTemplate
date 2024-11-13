@@ -1,10 +1,12 @@
 DROP TABLE IF EXISTS login_history CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
+DROP TABLE IF EXISTS user_roles CASCADE;
 
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
-  role_name VARCHAR(50) UNIQUE NOT NULL  -- e.g., 'Admin', 'User', 'Moderator'
+  role_name VARCHAR(50) UNIQUE NOT NULL,
+  parent_role_id INT REFERENCES roles(role_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE users (
@@ -24,6 +26,13 @@ CREATE TABLE users (
   location VARCHAR(255),
   last_login TIMESTAMP
 );
+
+CREATE TABLE user_roles (
+  user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  role_id INT REFERENCES roles(role_id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, role_id)
+);
+
 
 CREATE TABLE login_history (
   id SERIAL PRIMARY KEY,
