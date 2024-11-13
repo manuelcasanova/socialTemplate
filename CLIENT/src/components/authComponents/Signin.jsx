@@ -9,6 +9,8 @@ import axios from './../../api/axios.js';
 import { Link } from "react-router-dom";
 import useAuth from '../../hooks/useAuth'; // Import the custom hook for authentication
 
+import MockSignIn from './MockSignIn.js'; // Import the MockSignIn component
+
 export default function SignIn() {
   const navigate = useNavigate();
   const { handleLogin } = useAuth(); // Get handleLogin function from the custom hook
@@ -19,8 +21,8 @@ export default function SignIn() {
   };
 
   const [formData, setFormData] = useState({
-    email: 'admin@example.com',
-    pwd: 'Password1!',
+    email: '',
+    pwd: '',
     trustDevice: false
   });
 
@@ -155,8 +157,21 @@ export default function SignIn() {
     return messages[id];
   };
 
+  // Handle the form data received from the MockSignIn component
+  const handleMockSignInData = (email, password) => {
+    setFormData({
+      email,
+      pwd: password,
+      trustDevice: formData.trustDevice // Retain trustDevice value if already checked
+    });
+  };
+
   return (
     <div className="overlay-component">
+
+      <MockSignIn onUserSelect={handleMockSignInData} />   {/* Remove in production */}
+    
+
       <button className="close-button" onClick={handleClose}>✖</button>
       {success ? (
         <section className='signup-success'>
