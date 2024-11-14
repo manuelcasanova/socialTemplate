@@ -5,14 +5,22 @@ const useRefreshToken = () => {
     const { setAuth } = useAuth();
 
     const refresh = async () => {
+
+        console.log('Refreshing access token...');
+
         try {
             // Make the API request to refresh the token
             const response = await axios.get('/refresh', {
                 withCredentials: true,
             });
 
+            console.log('Received response from /refresh:', response);
+
             // Check if the response contains the necessary data
             if (response?.data?.accessToken && response?.data?.roles) {
+
+                console.log('Access token and roles found:', response.data); 
+
                 setAuth((prev) => ({
                     ...prev,  // Spread previous auth state to keep other info intact
                     roles: response.data.roles,  // Update roles
@@ -22,6 +30,7 @@ const useRefreshToken = () => {
                 return response.data.accessToken;
             } else {
                 // If no valid data in response, handle appropriately
+                console.error('Failed to retrieve access token and roles:', response); // Log if the data is invalid
                 throw new Error('Failed to retrieve access token and roles.');
             }
         } catch (error) {

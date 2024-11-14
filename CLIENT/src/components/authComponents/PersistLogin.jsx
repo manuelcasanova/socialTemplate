@@ -8,50 +8,65 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
     const refresh = useRefreshToken();
-    const { auth } = useAuth();
+    const { auth, setAuth } = useAuth();
     const [persist] = useLocalStorage('persist', false);
+
+    console.log("auth in Persistlogin", auth)
 
     useEffect(() => {
         let isMounted = true;
 
         const verifyRefreshToken = async () => {
             try {
-                // await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                await refresh();
+                // Ensure the token is refreshed if necessary
+                const newAccessToken = await refresh();
+                if (newAccessToken) {
+                    // Set the refreshed token in auth state
+                    setAuth((prevAuth) => ({
+                        ...prevAuth,
+                        accessToken: newAccessToken,
+                    }));
+                }
+            } catch (err) {
+                console.error("Token refresh failed", err);
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false); // Set loading to false once refresh attempt is done
+                }
             }
-            catch (err) {
-                console.error(err);
-            }
-            finally {
-                isMounted && setIsLoading(false);
-            }
+        };
+
+        // Logs for debugging
+        // console.log("PersistLogin component is rendered or re-rendered");
+        console.log("auth in PersistLogin", auth);
+        console.log("persist in PersistLogin", persist);
+
+        // If no access token and persist flag is true, attempt to refresh the token
+        if (!auth?.accessToken && persist) {
+          console.log("try to refresh the token")
+            verifyRefreshToken();  // Try to refresh the token
+        } else {
+            setIsLoading(false);  // If no refresh needed, just set loading to false
         }
 
-        // persist added here AFTER tutorial video
-        // Avoids unwanted call to verifyRefreshToken
-        !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
-
-        return () => isMounted = false;
-    }, [])
-
-    useEffect(() => {
-        //console.log(`isLoading: ${isLoading}`)
-        //console.log(`aT: ${JSON.stringify(auth?.accessToken)}`)
-    }, [isLoading])
+        return () => isMounted = false; // Cleanup
+    }, [auth, persist, refresh, setAuth]);
 
     return (
         <>
-            {!persist
-                ? <Outlet />
-                : isLoading
-                    ?
+            {/* Conditional rendering */}
+            {!persist ? (
+                <Outlet />
+            ) : (
+                isLoading ? (
                     <p>Loading...</p>
-                    // <LoadingSpinner />
-                    : <Outlet />
-            }
+                    // <LoadingSpinner /> can be used here if you want a spinner
+                ) : (
+                    <Outlet />
+                )
+            )}
         </>
-    )
-}
+    );
+};
 
-export default PersistLogin
+export default PersistLogin;
