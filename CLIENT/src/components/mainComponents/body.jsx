@@ -14,6 +14,7 @@ import Signup from '../authComponents/Signup';
 import Profile from '../bodyComponents/Profile';
 import AdminUsers from '../bodyComponents/users/AdminUsers';
 import Unauthorized from '../authComponents/Unauthorized';
+import PersistLogin from '../authComponents/PersistLogin';
 
 import RequireAuth from '../authComponents/RequireAuth';
 
@@ -41,6 +42,7 @@ const Body = ({ isNavOpen }) => {
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Protected Routes */}
+        <Route element={<PersistLogin />}>
         <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
           <Route path="/moderator" element={<Moderator />} />
         </Route>
@@ -58,6 +60,7 @@ const Body = ({ isNavOpen }) => {
         {/* Admin-specific routes */}
         <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
           <Route path="/admin/users" element={<AdminUsers />} />
+        </Route>
         </Route>
       </Routes>
     </main>

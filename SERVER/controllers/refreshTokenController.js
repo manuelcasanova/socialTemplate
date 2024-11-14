@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
 
 const handleRefreshToken = async (req, res) => {
+
   const cookies = req.cookies;
   
   // Check if refresh token exists in the cookies
@@ -13,7 +14,7 @@ const handleRefreshToken = async (req, res) => {
 
   try {
     // Check if the refresh token exists in the database
-    const data = await pool.query('SELECT * FROM users WHERE refreshtoken = $1', [refreshToken]);
+    const data = await pool.query('SELECT * FROM users WHERE refresh_token = $1', [refreshToken]);
     const foundUser = data.rows;
 
     // If no user is found with the refresh token, return a 403 Forbidden status

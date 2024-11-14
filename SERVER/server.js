@@ -53,6 +53,11 @@ app.use('/signin', require('../SERVER/routes/auth/signin'));
 app.use('/refresh', require('../SERVER/routes/auth/refresh'));
 app.use('/logout', require('../SERVER/routes/auth/logout'));
 
+// app.use('/refresh', (req, res, next) => {
+//     console.log("req. body", req.body);  // This should log the JSON data sent from the frontend
+//     next();
+//   });
+
 
 // app.use('/signin', (req, res, next) => {
 //     console.log("req. body", req.body);  // This should log the JSON data sent from the frontend
