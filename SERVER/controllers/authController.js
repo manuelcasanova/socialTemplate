@@ -12,6 +12,9 @@ const handleLogin = async (req, res) => {
   try {
     const data = await pool.query('SELECT * FROM users WHERE email = $1', [trimmedEmail]);
     const foundEmail = data.rows;
+
+    // console.log("foundEmail", foundEmail)
+
     if (foundEmail.length === 0) {
       return res.status(400).json({ error: "No user registered" });
     } else {

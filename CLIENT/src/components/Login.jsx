@@ -18,9 +18,13 @@ const Login = () => {
     const errRef = useRef();
 
     const [user, resetUser, /*userAttribs*/] = useInput('user', '')
-    const [email, resetEmail, emailAttribs] = useInput('email', '')
-    let trimmedEmail = email.trim().toLowerCase();
+
+
+
     const [pwd, setPwd] = useState('');
+    const [email, setEmail] = useState('');
+    let trimmedEmail = email.trim().toLowerCase();
+    // console.log("trimmedEmail", trimmedEmail)
     const [errMsg, setErrMsg] = useState('');
     const [check, toggleCheck] = useToggle('persist', false);
 
@@ -31,6 +35,8 @@ const Login = () => {
     useEffect(() => {
         setErrMsg('');
     }, [user, pwd])
+
+    const handleClose = () => navigate('/');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,7 +49,7 @@ const Login = () => {
                     withCredentials: true
                 }
             );
-             console.log("response data", response.data)
+            //  console.log("response data", response.data)
             const accessToken = response?.data?.accessToken;
             const userId = response?.data?.userId;
             const roles = response?.data?.roles;
@@ -52,7 +58,7 @@ const Login = () => {
 
             setAuth({ userId, user, email, roles, accessToken });
             resetUser();
-            resetEmail();
+            // resetEmail();
             setPwd('');
             navigate('/', { replace: true });
         } catch (err) {
@@ -70,63 +76,68 @@ const Login = () => {
     }
 
     return (
-
-        <section>
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-            <div className="level-title">Sign In</div>
-            <form onSubmit={handleSubmit}>
-                {/* <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    ref={userRef}
-                    autoComplete="off"
-                    {...userAttribs}
-                    required
-                /> */}
-
-<label htmlFor="email">Email:</label>
-                <input
-                    type="text"
-                    id="email"
-                    ref={userRef}
-                    autoComplete="off"
-                    {...emailAttribs}
-                    // required
-                />
-
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    onChange={(e) => setPwd(e.target.value)}
-                    value={pwd}
-                    required
-                />
-                <button>Sign In</button>
-                <div className="persistCheck">
-                    <input
-                        type="checkbox"
-                        id="persist"
-                        onChange={toggleCheck}
-                        checked={check}
-                    />
-                    <label htmlFor="persist">Trust This Device</label>
-                </div>
-            </form>
-            <p>
-                Need an Account?<br />
-                <span className="line">
-                    <Link to="/register">Sign Up</Link>
-                </span>
-            </p>
-            <p>
-                Forgot password?<br />
-                <span className="line">
-                    <Link to="/resetpassword">Reset</Link>
-                </span>
-            </p>
+        <div className="overlay-component">
+    <button className="close-button" onClick={handleClose}>✖</button>
+        <section className="centered-section">
+          <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+          <div className="signup-title">Sign In</div>
+          <form className="signup-form" onSubmit={handleSubmit}>
+            {/* Email Input */}
+            <label htmlFor="email">
+              Email:
+              {/* FontAwesome Icons for validation could be added here */}
+            </label>
+            <input
+              type="text"
+              id="email"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
+            />
+  
+            {/* Password Input */}
+            <label htmlFor="password">
+              Password:
+              {/* FontAwesome Icons for validation could be added here */}
+            </label>
+            <input
+              type="password"
+              id="password"
+              onChange={(e) => setPwd(e.target.value)}
+              value={pwd}
+              required
+            />
+            
+            {/* Submit Button */}
+            <button>Sign In</button>
+  
+            {/* "Trust This Device" Checkbox */}
+            <div className="trust-device">
+              <input
+                type="checkbox"
+                id="persist"
+                onChange={toggleCheck}
+                checked={check}
+              />
+              <label htmlFor="persist">Trust This Device</label>
+            </div>
+          </form>
+          <p className='have-an-account'>
+            Need an Account?<br />
+            <span className="line">
+              <Link to="/register">Sign Up</Link>
+            </span>
+          </p>
+          <p className='have-an-account'>
+            Forgot password?<br />
+            <span className="line">
+              <Link to="/resetpassword">Reset</Link>
+            </span>
+          </p>
         </section>
+      </div>
 
     )
 }
