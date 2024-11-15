@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 //Components
 
 import Home from '../bodyComponents/Home';
-import About from '../bodyComponents/About';
+import User from '../bodyComponents/User';
 import Moderator from '../bodyComponents/Moderator';
 import Subscriber from '../bodyComponents/Subscriber';
 import Admin from '../bodyComponents/Admin';
@@ -38,11 +38,14 @@ const Body = ({ isNavOpen }) => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Protected Routes */}
         <Route element={<PersistLogin />}>
+        <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="/user" element={<User />} />
+          </Route>
           <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route path="/moderator" element={<Moderator />} />
           </Route>

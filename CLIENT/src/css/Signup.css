@@ -107,3 +107,50 @@
 .trust-device {
   margin: 1em 0em 1em 0em;
 }
+
+.trust-device input {
+ margin-right: 0.5em;
+}
+
+/* Sign Up, Sign In, Reset buttons */
+.line a {
+  color: var(--color1);
+}
+
+.button-auth {
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  background-color: #1E90FF; /* DodgerBlue background */
+  color: white; /* White text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button-auth:hover {
+  background-color: #1C86EE; /* Slightly darker blue */
+  transform: translateY(-2px);
+}
+
+.button-auth:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(30, 144, 255, 0.7); /* Blue focus ring */
+}
+
+.button-auth:active {
+  background-color: #1874CD; /* Even darker blue */
+  transform: translateY(0);
+}
+
+.button-auth:disabled {
+  background-color: #555; /* Neutral gray for disabled state */
+  cursor: not-allowed;
+  opacity: 0.6;
+}

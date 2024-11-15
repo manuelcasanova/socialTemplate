@@ -172,7 +172,7 @@ export default function Signup() {
             {renderInput("email", "Email", "text", "email")}
             {renderInput("pwd", "Password", "password", "pwd")}
             {renderInput("matchPwd", "Confirm Password", "password", "match")}
-            <button disabled={!Object.values(validity).every(Boolean)}>Sign Up</button>
+            <button className='button-auth' disabled={!Object.values(validity).every(Boolean)}>Sign Up</button>
           </form>
           <p className='have-an-account'>Already have an account?<br /><span className="line"><Link to="/signin">Sign In</Link></span></p>
         </section>

@@ -95,7 +95,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
       )}
 
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
-      <div className='nav-item' onClick={() => handleNavigate('/about')}>About</div>
+      <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
       <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
 

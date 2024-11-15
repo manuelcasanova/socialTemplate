@@ -111,7 +111,7 @@ const Signin = () => {
             />
             
             {/* Submit Button */}
-            <button>Sign In</button>
+            <button className='button-auth'>Sign In</button>
   
             {/* "Trust This Device" Checkbox */}
             <div className="trust-device">
@@ -127,7 +127,7 @@ const Signin = () => {
           <p className='have-an-account'>
             Need an Account?<br />
             <span className="line">
-              <Link to="/register">Sign Up</Link>
+              <Link to="/signup">Sign Up</Link>
             </span>
           </p>
           <p className='have-an-account'>

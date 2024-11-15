@@ -55,16 +55,6 @@ app.use('/auth', require('./routes/auth/auth'));
 app.use('/refresh', require('./routes/auth/refresh'));
 app.use('/logout', require('./routes/auth/logout'))
 
-// app.use('/refresh', (req, res, next) => {
-//     console.log("req. body /refresh", req.body);  // This should log the JSON data sent from the frontend
-//     next();
-//   });
-
-
-// app.use('/signin', (req, res, next) => {
-//      . body", req.body);  // This should log the JSON data sent from the frontend
-//     next();
-//   });
 
 // app.use(verifyJWT);
 
