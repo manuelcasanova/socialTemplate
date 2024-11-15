@@ -49,9 +49,11 @@ app.get('/ping', (req, res) => {
 
 
 app.use('/signup', require('../SERVER/routes/auth/signup'));
-app.use('/signin', require('../SERVER/routes/auth/signin'));
-app.use('/refresh', require('../SERVER/routes/auth/refresh'));
-app.use('/logout', require('../SERVER/routes/auth/logout'));
+
+
+app.use('/auth', require('./routes/auth'));
+app.use('/refresh', require('./routes/refresh'));
+app.use('/logout', require('./routes/logout'))
 
 // app.use('/refresh', (req, res, next) => {
 //     console.log("req. body", req.body);  // This should log the JSON data sent from the frontend

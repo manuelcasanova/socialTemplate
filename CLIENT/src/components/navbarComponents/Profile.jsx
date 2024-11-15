@@ -28,12 +28,12 @@ export default function Profile ({toggleSection, showSections, handleNavigate}) 
     {showSections.profile && (
       <>
         <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>My account</div>
-        {!auth.isAuthenticated && 
+        {Object.keys(auth).length === 0 && 
         <>
-        <div className='subitem' onClick={() => handleNavigate('/signin')}>Sign in</div>
+        <div className='subitem' onClick={() => handleNavigate('/login')}>Sign in</div>
         </>
 }
-        {auth.isAuthenticated && 
+        {Object.keys(auth).length > 0 && 
       <div className="subitem" onClick={signOut}>
       <FontAwesomeIcon icon={faSignOutAlt} />
     </div>

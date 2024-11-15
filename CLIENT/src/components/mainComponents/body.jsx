@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 
 //Components
-import Signin from '../authComponents/Signin'
+
 import Home from '../bodyComponents/Home';
 import About from '../bodyComponents/About';
 import Moderator from '../bodyComponents/Moderator';
@@ -14,9 +14,11 @@ import Signup from '../authComponents/Signup';
 import Profile from '../bodyComponents/Profile';
 import AdminUsers from '../bodyComponents/users/AdminUsers';
 import Unauthorized from '../authComponents/Unauthorized';
-import PersistLogin from '../authComponents/PersistLogin';
+import Login from '../Login'
+import PersistLogin from '../PersistLogin';
 
-import RequireAuth from '../authComponents/RequireAuth';
+
+import RequireAuth from '../RequireAuth';
 
 const Body = ({ isNavOpen }) => {
 
@@ -35,7 +37,7 @@ const Body = ({ isNavOpen }) => {
       <Routes>
 
         {/* Public routes */}
-        <Route path="/signin" element={<Signin />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -43,24 +45,25 @@ const Body = ({ isNavOpen }) => {
 
         {/* Protected Routes */}
         <Route element={<PersistLogin />}>
-        <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
-          <Route path="/moderator" element={<Moderator />} />
-        </Route>
-        <Route element={<RequireAuth allowedRoles={['User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-          <Route path="/subscriber" element={<Subscriber />} />
-        </Route>
-        <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-          <Route path="/admin" element={<Admin />} />
-        </Route>
+          <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="/moderator" element={<Moderator />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="/subscriber" element={<Subscriber />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
 
-        <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-          <Route path="/profile/myaccount" element={<Profile />} />
-        </Route>
 
-        {/* Admin-specific routes */}
-        <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-          <Route path="/admin/users" element={<AdminUsers />} />
-        </Route>
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="/profile/myaccount" element={<Profile />} />
+          </Route>
+
+          {/* Admin-specific routes */}
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+            <Route path="/admin/users" element={<AdminUsers />} />
+          </Route>
         </Route>
       </Routes>
     </main>

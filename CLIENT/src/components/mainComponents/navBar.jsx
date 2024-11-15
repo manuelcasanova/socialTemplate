@@ -110,7 +110,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
         )}
       </div>
 
-      {!isLargeScreen && auth.isAuthenticated && (
+      {!isLargeScreen && Object.keys(auth).length > 0 && (
               <div className="nav-item" onClick={signOut}>
               <FontAwesomeIcon icon={faSignOutAlt} />
             </div>

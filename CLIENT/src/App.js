@@ -9,8 +9,6 @@ import Body from './components/mainComponents/body';
 import Footer from './components/mainComponents/footer';
 import Hamburger from './components/mainComponents/hamburger';
 
-
-
 function App() {
 
 
@@ -22,14 +20,14 @@ function App() {
   };
 
   return (
-    <Router>
+
       <div className="app">
         <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
         <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} />
         <Body isNavOpen={isNavOpen} />
         <Footer isNavOpen={isNavOpen} />
       </div>
-    </Router>
+
   );
 }
 
