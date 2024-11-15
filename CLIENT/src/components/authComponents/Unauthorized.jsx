@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import '../../css/Unauthorized.css'
 
 const Unauthorized = () => {
     const navigate = useNavigate();
@@ -6,12 +7,12 @@ const Unauthorized = () => {
     const goBack = () => navigate(-1);
 
     return (
-        <section>
-            <div>Unauthorized</div>
+        <section className="unauthorized">
+            <div className="unauthorized-title">Unauthorized</div>
             <br />
             <p>You do not have access to the requested page.</p>
             <div>
-                <button onClick={goBack}>Go Back</button>
+                <button className="unauthorized-go-back" onClick={goBack}>Go Back</button>
             </div>
         </section>
     )
