@@ -11,12 +11,18 @@ const handleRefreshToken = async (req, res) => {
     // First, check if the refresh token exists in the database
     const data = await pool.query('SELECT * FROM users WHERE refresh_token = $1', [refreshToken]);
     const foundUser = data.rows;
+    
+
 
 // console.log("data", data.rows)
 
     if (foundUser.length === 0) {
       return res.sendStatus(403); // Forbidden if no user is found with the refresh token
     }
+
+// console.log("foundUser", foundUser)
+const userId = foundUser[0].user_id;
+// console.log("foundUser userID", userId)
 
     // Now verify the refresh token using JWT
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
@@ -40,19 +46,22 @@ const handleRefreshToken = async (req, res) => {
 
       // console.log("roles", roles)
 
+
       // Create the access token with roles included
       const accessToken = jwt.sign(
         {
           "UserInfo": {
             "username": decoded.username,
             "roles": roles
+            // ,
+            // "userId": data.rows.user_id
           }
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '20m' } // Long expiration time in production
       );
 
-      res.json({ roles, accessToken });
+      res.json({ roles, accessToken, userId });
     });
 
   } catch (error) {

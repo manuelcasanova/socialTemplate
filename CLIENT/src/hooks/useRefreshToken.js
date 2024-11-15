@@ -10,12 +10,12 @@ const useRefreshToken = () => {
         });
 
         setAuth(prev => {
-            //console.log(JSON.stringify(prev));
-            console.log("reda in useRefT", response.data);
+
             return {
                 ...prev,
                 roles: response.data.roles,
-                accessToken: response.data.accessToken
+                accessToken: response.data.accessToken,
+                userId: response.data.userId
             }
         });
         return response.data.accessToken;

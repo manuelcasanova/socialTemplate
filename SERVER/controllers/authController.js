@@ -7,7 +7,7 @@ const handleLogin = async (req, res) => {
   const { pwd, trimmedEmail } = req.body;
   if (!pwd || !trimmedEmail) return res.status(400).json({ 'message': 'Email and password are required.' });
 
-  console.log("req.body", req.body)
+  // console.log("req.body", req.body)
 
   try {
     const data = await pool.query('SELECT * FROM users WHERE email = $1', [trimmedEmail]);
