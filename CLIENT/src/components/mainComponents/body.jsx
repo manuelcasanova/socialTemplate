@@ -14,11 +14,9 @@ import Signup from '../authComponents/Signup';
 import Profile from '../bodyComponents/Profile';
 import AdminUsers from '../bodyComponents/users/AdminUsers';
 import Unauthorized from '../authComponents/Unauthorized';
-import Login from '../Login'
-import PersistLogin from '../PersistLogin';
-
-
-import RequireAuth from '../RequireAuth';
+import Signin from '../authComponents/Signin'
+import PersistLogin from '../authComponents/PersistLogin';
+import RequireAuth from '../authComponents/RequireAuth';
 
 const Body = ({ isNavOpen }) => {
 
@@ -37,7 +35,7 @@ const Body = ({ isNavOpen }) => {
       <Routes>
 
         {/* Public routes */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />

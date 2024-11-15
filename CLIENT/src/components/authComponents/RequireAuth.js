@@ -1,5 +1,5 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { jwtDecode } from 'jwt-decode';
 
 const RequireAuth = ({ allowedRoles }) => {
@@ -17,7 +17,7 @@ const RequireAuth = ({ allowedRoles }) => {
             ? <Outlet />
             : auth?.accessToken //changed from user to accessToken to persist login after refresh
                 ? <Navigate to="/unauthorized" state={{ from: location }} replace />
-                : <Navigate to="/login" state={{ from: location }} replace />
+                : <Navigate to="/signin" state={{ from: location }} replace />
     );
 }
 

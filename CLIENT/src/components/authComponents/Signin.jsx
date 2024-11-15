@@ -1,13 +1,13 @@
 import { useRef, useState, useEffect } from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import useInput from '../hooks/useInput';
-import useToggle from '../hooks/useToggle';
+import useInput from '../../hooks/useInput';
+import useToggle from '../../hooks/useToggle';
 
-import axios from '../api/axios';
-const LOGIN_URL = '/auth';
+import axios from '../../api/axios';
+const SIGNIN_URL = '/auth';
 
-const Login = () => {
+const Signin = () => {
     const { setAuth } = useAuth();
 // console.log("setAUth", setAuth)
     const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(LOGIN_URL,
+            const response = await axios.post(SIGNIN_URL,
                 JSON.stringify({ user, pwd, trimmedEmail }),
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -60,7 +60,7 @@ const Login = () => {
             resetUser();
             // resetEmail();
             setPwd('');
-            navigate('/', { replace: true });
+            navigate(from, { replace: true });
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -142,4 +142,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Signin
