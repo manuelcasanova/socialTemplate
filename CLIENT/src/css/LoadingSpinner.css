@@ -1,0 +1,24 @@
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Full height if needed */
+}
+
+.spinner__circle {
+  width: 40px; /* Adjust size as needed */
+  height: 40px;
+  border: 4px solid transparent; /* Makes the circle hollow */
+  border-top: 4px solid #3498db; /* Visible segment (change color as needed) */
+  border-radius: 50%;
+  animation: spin 1s linear infinite; /* Rotates the circle */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

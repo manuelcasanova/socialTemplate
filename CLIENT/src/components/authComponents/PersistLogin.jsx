@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import useRefreshToken from '../../hooks/useRefreshToken';
 import useAuth from '../../hooks/useAuth';
 import useLocalStorage from "../../hooks/useLocalStorage";
-// import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../loadingSpinner/LoadingSpinner";
 
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -46,8 +46,7 @@ const PersistLogin = () => {
                 ? <Outlet />
                 : isLoading
                     ?
-                    <p>Loading...</p>
-                    // <LoadingSpinner />
+                    <LoadingSpinner />
                     : <Outlet />
             }
         </>
