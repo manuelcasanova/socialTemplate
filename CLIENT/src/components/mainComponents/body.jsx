@@ -17,6 +17,7 @@ import Unauthorized from '../authComponents/Unauthorized';
 import Signin from '../authComponents/Signin'
 import PersistLogin from '../authComponents/PersistLogin';
 import RequireAuth from '../authComponents/RequireAuth';
+import ResetPassword from '../authComponents/ResetPassword';
 
 const Body = ({ isNavOpen }) => {
 
@@ -38,6 +39,8 @@ const Body = ({ isNavOpen }) => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Home />} />
+        <Route path="resetpassword" element={<ResetPassword/>}/>
+        
 
         <Route path="/unauthorized" element={<Unauthorized />} />
 

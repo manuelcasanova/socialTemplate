@@ -54,6 +54,7 @@ app.use('/signup', require('./routes/auth/signup'));
 app.use('/auth', require('./routes/auth/auth'));
 app.use('/refresh', require('./routes/auth/refresh'));
 app.use('/logout', require('./routes/auth/logout'))
+app.use('/forgot-password', require('./routes/auth/forgot-password'));
 
 
 // app.use(verifyJWT);
@@ -94,6 +95,12 @@ app.all('/some-endpoint', (req, res) => {
 //     next(new Error('This is a forced error'));
 // });
 
+
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
+
+// Set the views directory (optional, defaults to "views" in your root directory)
+app.set('views', path.join(__dirname, 'views'));
 
 // Catch-all route for 404 errors
 app.all('*', (req, res) => {
