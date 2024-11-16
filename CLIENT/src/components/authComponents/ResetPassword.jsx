@@ -28,12 +28,23 @@ export default function ResetPassword() {
   }, [email])
 
   useEffect(() => {
-    msgRef.current.focus()
-  }, [msg])
-
+    if (msg && msgRef.current) {
+      msgRef.current.focus();
+    }
+  }, [msg]);
+  
   useEffect(() => {
-    emailRef.current.focus();
-  }, [])
+    if (errMsg && errRef.current) {
+      errRef.current.focus();
+    }
+  }, [errMsg]);
+  
+  useEffect(() => {
+    if (emailRef.current) {
+      emailRef.current.focus();
+    }
+  }, []);
+  
 
 
   const handleSubmit = async (e) => {
@@ -41,7 +52,7 @@ export default function ResetPassword() {
 
     setIsSubmitting(true);
 
-    setTimeout(async () => {
+    // setTimeout(async () => {
       try {
         await axiosPrivate.post(`/forgot-password`,
           JSON.stringify({ email }),
@@ -53,7 +64,9 @@ export default function ResetPassword() {
         // console.log(response.statusText)
 
         setMsg('Email sent, check your inbox or spam')
-        msgRef.current.focus();
+        if (msgRef.current) {
+          msgRef.current.focus();
+        }
 
       } catch (err) {
         console.log(err)
@@ -67,12 +80,14 @@ export default function ResetPassword() {
         } else {
           setErrMsg('Attempt Failed');
         }
-        errRef.current.focus();
+        if (errRef.current) {
+          errRef.current.focus();
+        }
       } finally {
         setIsSubmitting(false); // End submitting, hide the spinner
       }
 
-    }, 5000)
+    // }, 5000);
   }
 
 
