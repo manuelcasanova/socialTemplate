@@ -1,8 +1,5 @@
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://localhost:3000',
-  'http://localhost:3500'
-];
+require('dotenv').config();
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
 
 module.exports = allowedOrigins;
-
