@@ -63,7 +63,7 @@ export default function ResetPassword() {
         )
         // console.log(response.statusText)
 
-        setMsg('Email sent, check your inbox or spam')
+        setMsg("An email containing password reset instructions has been sent. Please check your inbox or spam folder. It may take a few minutes.")
         if (msgRef.current) {
           msgRef.current.focus();
         }

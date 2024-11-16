@@ -1,43 +1,169 @@
 <!DOCTYPE html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script>
-      var status = '<%- JSON.stringify(status) %>';
-      console.log("status", status)
-      if (JSON.parse(status) == "verified") {
-        if (confirm("Redirect to login")) {
-          window.location.href = "http://localhost:3000";
+    <title>Password Reset</title>
+    <style>
+      /* Base reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+      }
+
+      .forgot-password {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        background-color: #f5f5f5;
+        color: #333;
+        padding: 20px;
+      }
+
+      .reset-password-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      h3 {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      input[type="password"] {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        width: 80%;
+      }
+
+      input[type="submit"] {
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+        width: 80%;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #025aa5;
+      }
+
+      input[type="submit"]:focus {
+        outline: none;
+        box-shadow: 0 0 4px 2px rgba(2, 117, 216, 0.5);
+      }
+
+      p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+        line-height: 1.5;
+        color: #333;
+      }
+
+      .errmsg {
+        color: red;
+        font-size: 1rem;
+        margin-top: 10px;
+      }
+
+      .scsmsg {
+        color: green;
+        font-size: 1rem;
+        margin-top: 10px;
+      }
+
+      .offscreen {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        overflow: hidden;
+      }
+    </style>
+    <script>
+      function handlePasswordReset(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const password = document.getElementById("password").value;
+        const msg = document.getElementById("msg");
+        const errMsg = document.getElementById("errMsg");
+
+        // Add password validation logic here (example: check if password is valid)
+        if (password.length < 8) {
+          errMsg.textContent = "Password must be at least 8 characters long.";
+          errMsg.classList.remove("offscreen");
+          return;
         }
+
+        // Assume password reset is successful
+        errMsg.classList.add("offscreen");
+        msg.textContent = "Password reset successful! You will be redirected shortly.";
+        msg.classList.remove("offscreen");
+
+        // Show pop-up message
+        alert("Password reset successful!");
+
+        // Redirect after 3 seconds
+        setTimeout(() => {
+          window.location.href = "/signin"; 
+        }, 3000);
       }
     </script>
   </head>
   <body>
-    <h2>Reset password for <%= email%></h2>
-    <form action="" method="post">
-      <input
-        type="password"
-        name="password"
-        id="password"
-        placeholder="password"
-      /><br />
-      <!-- <input
-        type="password"
-        name="confirm-password"
-        id="confirm-password"
-        placeholder="confirm-password"
-      /> -->
-      <p>8 to 24 characters. 
-        <br/>
-        Must include uppercase and lowecase letters, a number and a special character.
-        <br/> 
-        The allowed special characters are ! @ # $</p>
-      <input type="submit" value="submit" />
-    </form>
+    <section class="forgot-password">
+      <div class="reset-password-container">
+        <h3>Reset password for <%= email %></h3>
+        <form action="" method="post" onsubmit="handlePasswordReset(event)">
+          <p id="errMsg" class="offscreen"></p>
+          <p id="msg" class="offscreen"></p>
+
+          <div>
+            <input type="password" name="password" id="password" placeholder="Enter password" required />
+          </div>
+          <p>
+            8 to 24 characters.<br />
+            Must include uppercase and lowercase letters, a number, and a special character.<br />
+            The allowed special characters are ! @ # $
+          </p>
+          <div>
+            <input type="submit" value="Submit" class="button-reset-password" />
+          </div>
+        </form>
+      </div>
+    </section>
   </body>
 </html>

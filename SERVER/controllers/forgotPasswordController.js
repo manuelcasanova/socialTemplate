@@ -48,7 +48,30 @@ const handlePost = async (req, res) => {
         from: process.env.RESET_EMAIL,
         to: email,
         subject: 'PASSWORD RESET FULLSTACK TEMPLATE',
-        text: `This link is valid for 15 minutes. Follow the instructions to enter a valid password: ${link} `
+        // text: `This link is valid for 15 minutes. Follow the instructions to enter a valid password: ${link} `
+        // HTML content for email styling
+  html: `
+  <html>
+    <body style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f4f4f4;">
+      <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #007bff;">Password Reset Request for FULL STACK TEMPLATE</h2>
+        <p style="font-size: 16px;">Hello,</p>
+        <p style="font-size: 16px;">You requested a password reset. Please follow the link below to reset your password:</p>
+        <p style="font-size: 16px; font-weight: bold;">
+          <a href="${link}" style="color: #007bff; text-decoration: none;">Reset Your Password</a>
+        </p>
+        <p style="font-size: 14px; color: #666;">
+          This link is valid for 15 minutes. After this time, you will need to request a new password reset.
+        </p>
+        <p style="font-size: 14px; color: #666;">
+          If you didn't request a password reset, please ignore this email.
+        </p>
+        <footer style="margin-top: 20px; font-size: 12px; color: #999;">
+          <p>Thank you! </p>
+        </footer>
+      </div>
+    </body>
+  </html>`
       };
 
       // console.log("mail options", mailOptions)
