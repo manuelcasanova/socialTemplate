@@ -19,6 +19,7 @@ import PersistLogin from '../authComponents/PersistLogin';
 import RequireAuth from '../authComponents/RequireAuth';
 import ResetPassword from '../authComponents/ResetPassword';
 
+
 const Body = ({ isNavOpen }) => {
 
 

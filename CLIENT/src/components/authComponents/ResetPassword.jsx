@@ -1,142 +1,110 @@
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from "react-router-dom";
-
-import '../../css/ForgotPassword.css'
-
-import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 
 export default function ResetPassword() {
 
   const [email, setEmail] = useState()
-  const [errMsg, setErrMsg] = useState('');
-  const [msg, setMsg] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const axiosPrivate = useAxiosPrivate()
+const axiosPrivate = useAxiosPrivate()
 
-  const emailRef = useRef();
-  const errRef = useRef();
-  const msgRef = useRef();
-  const navigate = useNavigate();
+const emailRef = useRef();
+const errRef = useRef();
+const msgRef = useRef();
 
+const [errMsg, setErrMsg] = useState('');
+const [msg, setMsg] = useState('');
 
+useEffect(() => {
+  setErrMsg('');
+  setMsg('');
+}, [email])
 
-  useEffect(() => {
-    setErrMsg('');
-    setMsg('');
-  }, [email])
+useEffect(()=> {
+  msgRef.current.focus()
+}, [msg])
 
-  useEffect(() => {
-    if (msg && msgRef.current) {
-      msgRef.current.focus();
-    }
-  }, [msg]);
-  
-  useEffect(() => {
-    if (errMsg && errRef.current) {
-      errRef.current.focus();
-    }
-  }, [errMsg]);
-  
-  useEffect(() => {
-    if (emailRef.current) {
-      emailRef.current.focus();
-    }
-  }, []);
-  
+useEffect(() => {
+  emailRef.current.focus();
+}, [])
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setIsSubmitting(true);
+    try {
+      // const response = 
+      await axiosPrivate.post(`/forgot-password`,
+        JSON.stringify({ email }),
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      )
+          // console.log(response.statusText)
 
-    // setTimeout(async () => {
-      try {
-        const response = await axiosPrivate.post(`/forgot-password`, 
-          JSON.stringify({ email }),
-          {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
+          setMsg('Email sent, check your inbox or spam')
+          msgRef.current.focus();
+
+        } catch (err) {
+          console.log(err)
+          // Always learned !err but not sure what's the sense behind. 
+          if (!err?.response) {
+              setErrMsg('No Server Response');
+          } else if (err.response?.status === 403) {
+              setErrMsg('This email was not found in our database');
+          } else if (err.response?.status === 401) {
+              setErrMsg('Unauthorized');
+          } else {
+              setErrMsg('Attempt Failed');
           }
-        );
-    
-        // Only show success message if the response is 200 OK
-        if (response.status === 200) {
-          setMsg("An email containing password reset instructions has been sent. Please check your inbox or spam folder.");
-          if (msgRef.current) {
-            msgRef.current.focus(); // Focus on the success message for accessibility
-          }
-        }
+           errRef.current.focus();
+         }
+    }
 
-      } catch (err) {
-        console.log(err)
-        // Always learned !err but not sure what's the sense behind. 
-        if (!err?.response) {
-          setErrMsg('No Server Response');
-        } else if (err.response?.status === 403) {
-          setErrMsg('This email was not found in our database');
-        } else if (err.response?.status === 401) {
-          setErrMsg('Unauthorized');
-        } else {
-          setErrMsg('Attempt Failed');
-        }
-        if (errRef.current) {
-          errRef.current.focus();
-        }
-      } finally {
-        setIsSubmitting(false); // End submitting, hide the spinner
-      }
-
-    // }, 5000);
-  }
-
-
-  const goBack = () => navigate(-1);
 
   return (
-    <section className='forgot-password'>
+    <section>
 
-
-      <form onSubmit={handleSubmit}>
-        <h3>Forgot password</h3>
+    
+      <form
+        onSubmit={handleSubmit}
+      >
+        <h3
+        className='text-align-center'
+        >Forgot password</h3>
 
         <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-        <p
-          ref={msgRef}
-          className={msg ? "scsmsg" : "offscreen"}
-          // className="errmsg" 
-          aria-live="assertive">{msg}</p>
+        <p 
+        ref={msgRef} 
+        className={msg ? "scsmsg" : "offscreen"} 
+        // className="errmsg" 
+        aria-live="assertive">{msg}</p>
 
-        <div>
+        <div className='text-align-center'>
+          <label>
+            {/* Email address */}
+          </label>
           <input type='email'
+            className='--background-grey --wider'
             placeholder="Enter email"
             ref={emailRef}
-            onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
-        <div>
-          {isSubmitting ? (
-            <>
-            <LoadingSpinner />
-            <p>Please wait, it might take up to 1 minute...</p>
-            </>
-          ) : (
-            <button type='submit' className="button-reset-password">
-              Submit
-            </button>
-          )}
+        <div className="text-align-center">
+          <button 
+          type='submit' 
+          className="button-black"
+          >
+            Submit
+          </button>
         </div>
-
-        <p>
-          <a href='/signup'>Sign up</a>
+        <p className="text-align-center">
+          <a href='/register'>Sign up</a>
         </p>
 
-        <button className="go-back" onClick={goBack}>Go Back</button>
-
       </form>
-    </section>
-  )
-}
+      </section>
+    )
+  }
