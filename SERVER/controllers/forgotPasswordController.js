@@ -9,91 +9,69 @@ const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
 const handlePost = async (req, res) => {
   const { email } = req.body;
-  // console.log("req body", req.body) //OK
-  // try {
+  // Get user data from DB
+  const data = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  const oldUser = data.rows;
 
-    const data = await pool.query('SELECT * FROM users WHERE email = $1', [email])
-    const oldUser = data.rows;
-    // console.log("oldUSer", oldUser) //OK
-// console.log(typeof oldUser)
-    // const oldUser = await User.findOne({email: email}).exec();
+  if (oldUser.length === 0) {
+    return res.sendStatus(403); // User not found
+  } else {
+    const secret = process.env.ACCESS_TOKEN_SECRET + oldUser[0].password;
+    const token = jwt.sign({ email: oldUser[0].email, id: oldUser[0].user_id }, secret, { expiresIn: '15m' });
+    const link = `${BASE_URL}/forgot-password/${oldUser[0].user_id}/${token}`;
 
-    if (oldUser.length === 0) {
-      // return res.json({status: "User does not exist"});
-      return res.sendStatus(403)
-      //  console.log("Does not exist")
-    } else {
-   
+    let transporter = nodemailer.createTransport({
+      host: process.env.RESET_EMAIL_CLIENT,
+      port: process.env.RESET_EMAIL_PORT,
+      auth: {
+        user: process.env.RESET_EMAIL,
+        pass: process.env.RESET_EMAIL_PASSWORD
+      },
+      secure: process.env.RESET_EMAIL_PORT === "465", 
+    });
 
-      const secret = process.env.ACCESS_TOKEN_SECRET + oldUser[0].password;
-      const token = jwt.sign({ email: oldUser[0].email, id: oldUser[0].user_id }, secret, { expiresIn: '15m' });
-      const link = `${BASE_URL}/forgot-password/${oldUser[0].user_id}/${token}`;
-  
-      // console.log("link", link)
-  
-      let transporter = nodemailer.createTransport({
-        // service: 'gmail',
-        host: process.env.RESET_EMAIL_CLIENT,
-        port: process.env.RESET_EMAIL_PORT,
-        auth: {
-          user: process.env.RESET_EMAIL,
-          pass: process.env.RESET_EMAIL_PASSWORD
-        },
-  secure: process.env.RESET_EMAIL_PORT === "465", 
-      });
+    let mailOptions = {
+      from: process.env.RESET_EMAIL,
+      to: email,
+      subject: 'PASSWORD RESET FULLSTACK TEMPLATE',
+      html: `
+        <html>
+          <body style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f4f4f4;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+              <h2 style="color: #007bff;">Password Reset Request for FULL STACK TEMPLATE</h2>
+              <p style="font-size: 16px;">Hello,</p>
+              <p style="font-size: 16px;">You requested a password reset. Please follow the link below to reset your password:</p>
+              <p style="font-size: 16px; font-weight: bold;">
+                <a href="${link}" style="color: #007bff; text-decoration: none;">Reset Your Password</a>
+              </p>
+              <p style="font-size: 14px; color: #666;">
+                This link is valid for 15 minutes. After this time, you will need to request a new password reset.
+              </p>
+              <p style="font-size: 14px; color: #666;">
+                If you didn't request a password reset, please ignore this email.
+              </p>
+              <footer style="margin-top: 20px; font-size: 12px; color: #999;">
+                <p>Thank you!</p>
+              </footer>
+            </div>
+          </body>
+        </html>`
+    };
 
-      // console.log("transporter", transporter)
-  
-      let mailOptions = {
-        from: process.env.RESET_EMAIL,
-        to: email,
-        subject: 'PASSWORD RESET FULLSTACK TEMPLATE',
-        // text: `This link is valid for 15 minutes. Follow the instructions to enter a valid password: ${link} `
-        // HTML content for email styling
-  html: `
-  <html>
-    <body style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f4f4f4;">
-      <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <h2 style="color: #007bff;">Password Reset Request for FULL STACK TEMPLATE</h2>
-        <p style="font-size: 16px;">Hello,</p>
-        <p style="font-size: 16px;">You requested a password reset. Please follow the link below to reset your password:</p>
-        <p style="font-size: 16px; font-weight: bold;">
-          <a href="${link}" style="color: #007bff; text-decoration: none;">Reset Your Password</a>
-        </p>
-        <p style="font-size: 14px; color: #666;">
-          This link is valid for 15 minutes. After this time, you will need to request a new password reset.
-        </p>
-        <p style="font-size: 14px; color: #666;">
-          If you didn't request a password reset, please ignore this email.
-        </p>
-        <footer style="margin-top: 20px; font-size: 12px; color: #999;">
-          <p>Thank you! </p>
-        </footer>
-      </div>
-    </body>
-  </html>`
-      };
+    try {
+      // Await the email sending process
+      await transporter.sendMail(mailOptions);
+      console.log('Email sent: 250 OK');
 
-      // console.log("mail options", mailOptions)
-  
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-
-       res.json()
-
+      // Once the email is sent, send the response back to the client
+      return res.status(200).json({ status: 'Password reset email sent successfully' });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      return res.status(500).json({ status: 'Failed to send email', error: error.message });
     }
+  }
+};
 
-    // console.log(link)
-
-  // } catch (err) {
-  //   console.log(err);
-  // }
-}
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
@@ -147,25 +125,25 @@ const handleGet = async (req, res) => {
   const { id, token } = req.params;
 
 
-try {
-  const data = await pool.query('SELECT * FROM users WHERE user_id = $1', [id])
-  const oldUser = data.rows;
-  if (!oldUser) {
-    return res.json({ status: 'This email is not in our database' })
-  }
-
-  const secret = process.env.ACCESS_TOKEN_SECRET + oldUser[0].password;
   try {
-    const verifyJWT = jwt.verify(token, secret)
-    res.render("index", { email: verifyJWT.email, status: "Not verified" })
-  } catch (err) {
-    console.log(err)
-    // res.send("Not verified")
-  }
+    const data = await pool.query('SELECT * FROM users WHERE user_id = $1', [id])
+    const oldUser = data.rows;
+    if (!oldUser) {
+      return res.json({ status: 'This email is not in our database' })
+    }
 
-} catch (error) {
-  console.log(error)
-}
+    const secret = process.env.ACCESS_TOKEN_SECRET + oldUser[0].password;
+    try {
+      const verifyJWT = jwt.verify(token, secret)
+      res.render("index", { email: verifyJWT.email, status: "Not verified" })
+    } catch (err) {
+      console.log(err)
+      // res.send("Not verified")
+    }
+
+  } catch (error) {
+    console.log(error)
+  }
 
 
 

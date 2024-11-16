@@ -54,18 +54,20 @@ export default function ResetPassword() {
 
     // setTimeout(async () => {
       try {
-        await axiosPrivate.post(`/forgot-password`,
+        const response = await axiosPrivate.post(`/forgot-password`, 
           JSON.stringify({ email }),
           {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
           }
-        )
-        // console.log(response.statusText)
-
-        setMsg("An email containing password reset instructions has been sent. Please check your inbox or spam folder. It may take a few minutes.")
-        if (msgRef.current) {
-          msgRef.current.focus();
+        );
+    
+        // Only show success message if the response is 200 OK
+        if (response.status === 200) {
+          setMsg("An email containing password reset instructions has been sent. Please check your inbox or spam folder.");
+          if (msgRef.current) {
+            msgRef.current.focus(); // Focus on the success message for accessibility
+          }
         }
 
       } catch (err) {
@@ -117,7 +119,10 @@ export default function ResetPassword() {
 
         <div>
           {isSubmitting ? (
+            <>
             <LoadingSpinner />
+            <p>Please wait, it might take up to 1 minute...</p>
+            </>
           ) : (
             <button type='submit' className="button-reset-password">
               Submit
