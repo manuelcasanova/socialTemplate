@@ -19,9 +19,9 @@ export default function Signup() {
 
   const [formData, setFormData] = useState({
     user: '',
-    email: '',
-    pwd: '',
-    matchPwd: ''
+    email: '@example.com',
+    pwd: 'Password1!',
+    matchPwd: 'Password1!'
   });
 
   const [validity, setValidity] = useState({
@@ -40,13 +40,19 @@ export default function Signup() {
 
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const userRef = useRef();
   const errRef = useRef();
 
   useEffect(() => {
-    userRef.current.focus();
-  }, []);
+    if (!success && userRef.current) {
+        userRef.current.focus();
+    }
+}, [success]);
+
 
   useEffect(() => {
     // Check validity after formData changes
@@ -88,10 +94,13 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!Object.values(validity).every(Boolean)) {
       setErrMsg("Invalid Entry");
       return;
     }
+    setIsSubmitting(true); // Disable the button
+    setLoading(true); // Start the spinner
     try {
       await axios.post(
         '/signup',
@@ -101,8 +110,10 @@ export default function Signup() {
           withCredentials: true
         }
       );
+      setTimeout(() => {
       setSuccess(true);
       setFormData({ user: '', email: '', pwd: '', matchPwd: '' });
+    }, 5000); 
     } catch (err) {
       const status = err?.response?.status;
       setErrMsg(
@@ -111,7 +122,12 @@ export default function Signup() {
             'No Server Response'
       );
       errRef.current.focus();
-    }
+    } finally {
+      setTimeout(() => {
+          setLoading(false); // Stop the spinner
+          setIsSubmitting(false); // Re-enable the button
+      }, 5000); // Ensure this matches the delay for success logic
+  }
   };
 
   const handleClose = () => navigate('/');
@@ -173,7 +189,15 @@ export default function Signup() {
             {renderInput("email", "Email", "text", "email")}
             {renderInput("pwd", "Password", "password", "pwd")}
             {renderInput("matchPwd", "Confirm Password", "password", "match")}
-            <button className='button-auth' disabled={!Object.values(validity).every(Boolean)}>Sign Up</button>
+            <button className='button-auth' disabled={!Object.values(validity).every(Boolean) || isSubmitting}>
+                  {loading ? (
+        <div className="spinner">
+            <div className="spinner__circle"></div>
+        </div>
+    ) : (
+        "Sign Up"
+    )}
+            </button>
           </form>
     
 

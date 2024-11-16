@@ -142,6 +142,12 @@
   transition: all 0.3s ease;
 }
 
+.button-auth:disabled {
+  pointer-events: none;
+  opacity: 0.6; /* Optional: visually indicate it's disabled */
+  cursor: not-allowed; /* Optional: change cursor to indicate it's not clickable */
+}
+
 .button-auth:hover {
   background-color: #1C86EE; /* Slightly darker blue */
   transform: translateY(-2px);
