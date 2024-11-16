@@ -4,16 +4,15 @@ const jwt = require('jsonwebtoken');
 
 
 const handleLogin = async (req, res) => {
-  const { pwd, trimmedEmail } = req.body;
-  if (!pwd || !trimmedEmail) return res.status(400).json({ 'message': 'Email and password are required.' });
+  const { pwd, email } = req.body;
 
-  // console.log("req.body", req.body)
+  if (!pwd || !email) return res.status(400).json({ 'message': 'Email and password are required.' });
+
 
   try {
-    const data = await pool.query('SELECT * FROM users WHERE email = $1', [trimmedEmail]);
+    const data = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     const foundEmail = data.rows;
 
-    // console.log("foundEmail", foundEmail)
 
     if (foundEmail.length === 0) {
       return res.status(400).json({ error: "No user registered" });
@@ -47,7 +46,7 @@ const handleLogin = async (req, res) => {
           );
 
           // Save refreshToken with current user
-          await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, trimmedEmail]);
+          await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
 
           // Set the refresh token as a secure HTTP-only cookie
           res.cookie('jwt', refreshToken, {
