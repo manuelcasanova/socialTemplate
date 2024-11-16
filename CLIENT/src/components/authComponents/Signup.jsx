@@ -124,6 +124,7 @@ export default function Signup() {
         <FontAwesomeIcon icon={faTimes} className={!validity[validation] && formData[id] ? "invalid" : "hide"} />
       </label>
       <input
+          className='input-field'
         type={type}
         id={id}
         ref={id === 'user' ? userRef : null}
@@ -174,7 +175,15 @@ export default function Signup() {
             {renderInput("matchPwd", "Confirm Password", "password", "match")}
             <button className='button-auth' disabled={!Object.values(validity).every(Boolean)}>Sign Up</button>
           </form>
-          <p className='have-an-account'>Already have an account?<br /><span className="line"><Link to="/signin">Sign In</Link></span></p>
+    
+
+          <p className='have-an-account'>
+            <p>Already have an account?</p>
+            <p><Link to="/signin">Sign In</Link></p>
+          </p>
+
+
+
         </section>
       )}
     </div>

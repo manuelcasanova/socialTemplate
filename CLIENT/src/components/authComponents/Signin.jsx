@@ -21,8 +21,8 @@ const Signin = () => {
 
 
 
-    const [pwd, setPwd] = useState('');
-    const [email, setEmail] = useState('');
+    const [pwd, setPwd] = useState('Password1!');
+    const [email, setEmail] = useState('@example.com');
     let trimmedEmail = email.trim().toLowerCase();
     // console.log("trimmedEmail", trimmedEmail)
     const [errMsg, setErrMsg] = useState('');
@@ -88,6 +88,7 @@ const Signin = () => {
               {/* FontAwesome Icons for validation could be added here */}
             </label>
             <input
+            className='input-field'
               type="text"
               id="email"
               ref={userRef}
@@ -103,6 +104,7 @@ const Signin = () => {
               {/* FontAwesome Icons for validation could be added here */}
             </label>
             <input
+                className='input-field'
               type="password"
               id="password"
               onChange={(e) => setPwd(e.target.value)}
@@ -125,16 +127,16 @@ const Signin = () => {
             </div>
           </form>
           <p className='have-an-account'>
-            Need an Account?<br />
-            <span className="line">
+            <p>Need an Account?</p>
+            <p>
               <Link to="/signup">Sign Up</Link>
-            </span>
+            </p>
           </p>
           <p className='have-an-account'>
             Forgot password?<br />
-            <span className="line">
+            <p>
               <Link to="/resetpassword">Reset</Link>
-            </span>
+            </p>
           </p>
         </section>
       </div>

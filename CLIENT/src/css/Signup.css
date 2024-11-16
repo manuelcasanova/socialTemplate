@@ -22,7 +22,11 @@
 }
 
 .signup-form input {
-  margin-bottom: 0.5em;
+  margin: 0.5em 0em 0.5em 0em;
+}
+
+.input-field {
+  height: 2.5em;
 }
 
 .signup-form p {
@@ -72,8 +76,12 @@
 .have-an-account {
   margin-top: 1em;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+}
+
+.have-an-account p {
+  margin: 0.2em;
 }
 
 .signup-success {
@@ -113,8 +121,8 @@
 }
 
 /* Sign Up, Sign In, Reset buttons */
-.line a {
-  color: var(--color1);
+.have-an-account a {
+  color: var(--color1); 
 }
 
 .button-auth {
@@ -153,4 +161,15 @@
   background-color: #555; /* Neutral gray for disabled state */
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+@media (max-width: 300px) {
+.have-an-account {
+  flex-direction: column;
+}
+
+.line a {
+  margin-left: 0em;
+}
+
 }
