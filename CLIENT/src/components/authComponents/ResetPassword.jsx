@@ -8,7 +8,6 @@ import { useState, useEffect, useRef } from 'react';
 export default function ResetPassword() {
 
   const [email, setEmail] = useState()
-
   const axiosPrivate = useAxiosPrivate()
 
   const emailRef = useRef();
@@ -35,7 +34,6 @@ export default function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Reset messages before making the request
     setErrMsg('');
     setMsg('');
     setLoading(true);
@@ -76,47 +74,64 @@ export default function ResetPassword() {
 
 
   return (
-    <section className='section-reset'>
+<section className="section-reset">
+  <form onSubmit={handleSubmit} className="form-reset">
+    <h3>Forgot password</h3>
 
-
-      <form
-        onSubmit={handleSubmit}
-        className='form-reset'
+    {msg ? (
+      // Success State: Show title and success message only
+      <p
+        ref={msgRef}
+        className="scsmsg"
+        aria-live="assertive"
       >
-        <h3
-
-        >Forgot password</h3>
-
-        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+        {msg}
+      </p>
+    ) : (
+      // Default State: Show input, submit button, and sign-up link
+      <>
         <p
-          ref={msgRef}
-          className={msg ? "scsmsg" : "offscreen"}
-          // className="errmsg" 
-          aria-live="assertive">{msg}</p>
-
-        <div>
-          <label>
-            {/* Email address */}
-          </label>
-          <input type='email'
-            placeholder="Enter email"
-            ref={emailRef}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div>
-          {loading ? (
-            <LoadingSpinner />
-          ) : (
-            <button type='submit' className="button-reset">Submit</button>
-          )}
-        </div>
-        <p>
-          <a href='/signup'>Sign up</a>
+          ref={errRef}
+          className={errMsg ? "errmsg" : "offscreen"}
+          aria-live="assertive"
+        >
+          {errMsg}
         </p>
+        {loading ? (
+          <div>
+            <p style={{ marginBottom: '1em' }}>Please, wait. It may take up to a minute.</p>
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <>
+            <div>
+              <label>
+                {/* Email address */}
+              </label>
+              <input
+                type="email"
+                placeholder="Enter email"
+                ref={emailRef}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div>
+              <button type="submit" className="button-reset">
+                Submit
+              </button>
+            </div>
+            <p className="p-reset">
+              <a className="a-reset" href="/signup">
+                Sign up
+              </a>
+            </p>
+          </>
+        )}
+      </>
+    )}
+  </form>
+</section>
 
-      </form>
-    </section>
+
   )
 }
