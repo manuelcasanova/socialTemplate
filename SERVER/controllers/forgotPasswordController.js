@@ -9,14 +9,14 @@ const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
 const handlePost = async (req, res) => {
   const { email } = req.body;
-  // try {
+  try {
 
     const data = await pool.query('SELECT * FROM users WHERE email = $1', [email])
     const oldUser = data.rows;
-// console.log(typeof oldUser)
+    // console.log(typeof oldUser)
     // const oldUser = await User.findOne({email: email}).exec();
 
-// console.log("oldUser", oldUser)
+    // console.log("oldUser", oldUser)
 
     if (oldUser.length === 0) {
       // return res.json({status: "User does not exist"});
@@ -25,10 +25,10 @@ const handlePost = async (req, res) => {
     } else {
 
       const secret = process.env.ACCESS_TOKEN_SECRET + oldUser[0].password;
-      const token = jwt.sign({ email: oldUser[0].email, id: oldUser[0].useruser_id}, secret, { expiresIn: '15m' });
+      const token = jwt.sign({ email: oldUser[0].email, id: oldUser[0].useruser_id }, secret, { expiresIn: '15m' });
       const link = `${BASE_URL}/forgot-password/${oldUser[0].user_id}/${token}`;
-  
-// console.log("link", link)
+
+      // console.log("link", link)
 
       let transporter = nodemailer.createTransport({
         // service: 'gmail',
@@ -39,37 +39,36 @@ const handlePost = async (req, res) => {
           pass: process.env.RESET_EMAIL_PASSWORD
         }
       });
-  
+
       let mailOptions = {
         from: process.env.RESET_EMAIL,
         to: email,
         subject: 'PASSWORD RESET FULLSTACK TEMPLATE',
         text: `This link is valid for 15 minutes. Follow the instructions to enter a valid password: ${link} `
       };
-  
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
+
+      // Make sendMail async to wait for completion
+      await new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            reject(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+            resolve();
+          }
+        });
       });
 
-       res.json()
-
+      return res.status(200).json({
+        status: 'An email with instructions to reset your password has been sent. Please check your inbox or spam folder'
+      });
     }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ status: 'Something went wrong, please try again' });
+  }
+};
 
-    
-
-
-    
-
-    // console.log(link)
-
-  // } catch (err) {
-  //   console.log(err);
-  // }
-}
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
@@ -123,25 +122,25 @@ const handleGet = async (req, res) => {
   const { id, token } = req.params;
 
 
-try {
-  const data = await pool.query('SELECT * FROM users WHERE user_id = $1', [id])
-  const oldUser = data.rows;
-  if (!oldUser) {
-    return res.json({ status: 'This email is not in our database' })
-  }
-
-  const secret = process.env.ACCESS_TOKEN_SECRET + oldUser[0].password;
   try {
-    const verifyJWT = jwt.verify(token, secret)
-    res.render("index", { email: verifyJWT.email, status: "Not verified" })
-  } catch (err) {
-    console.log(err)
-    // res.send("Not verified")
-  }
+    const data = await pool.query('SELECT * FROM users WHERE user_id = $1', [id])
+    const oldUser = data.rows;
+    if (!oldUser) {
+      return res.json({ status: 'This email is not in our database' })
+    }
 
-} catch (error) {
-  console.log(error)
-}
+    const secret = process.env.ACCESS_TOKEN_SECRET + oldUser[0].password;
+    try {
+      const verifyJWT = jwt.verify(token, secret)
+      res.render("index", { email: verifyJWT.email, status: "Not verified" })
+    } catch (err) {
+      console.log(err)
+      // res.send("Not verified")
+    }
+
+  } catch (error) {
+    console.log(error)
+  }
 
 
 

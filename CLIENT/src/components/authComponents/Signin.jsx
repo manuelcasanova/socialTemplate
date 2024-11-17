@@ -4,9 +4,11 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useInput from '../../hooks/useInput';
 import useToggle from '../../hooks/useToggle';
 import axios from '../../api/axios';
+import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 
 const SIGNIN_URL = '/auth';
-const DEFAULT_EMAIL = '@example.com';
+// const DEFAULT_EMAIL = '@example.com';
+const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
 const DEFAULT_PASSWORD = 'Password1!';
 
 const Signin = () => {
@@ -23,6 +25,7 @@ const Signin = () => {
     const [email, setEmail] = useState(DEFAULT_EMAIL);
     const [errMsg, setErrMsg] = useState('');
     const [check, toggleCheck] = useToggle('persist', false);
+    const [isLoading, setIsLoading] = useState(false); 
 
     useEffect(() => {
         userRef.current.focus();
@@ -51,6 +54,7 @@ const Signin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true); 
         try {
             const response = await authenticateUser();
             const { accessToken, userId, roles } = response?.data || {};
@@ -60,6 +64,8 @@ const Signin = () => {
             navigate(from, { replace: true });
         } catch (err) {
             handleError(err);
+        } finally {
+            setIsLoading(false);  // Set loading state to false after submission is complete
         }
     };
 
@@ -92,7 +98,9 @@ const Signin = () => {
                         value={pwd}
                         required
                     />
-                    <button className="button-auth">Sign In</button>
+                     <button className="button-auth" disabled={isLoading}>
+                        {isLoading ? <LoadingSpinner /> : 'Sign In'}
+                    </button>
                     <div className="trust-device">
                         <input type="checkbox" id="persist" onChange={toggleCheck} checked={check} />
                         <label htmlFor="persist">Trust This Device</label>
