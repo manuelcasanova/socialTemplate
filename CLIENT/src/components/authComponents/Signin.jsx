@@ -7,8 +7,7 @@ import axios from '../../api/axios';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 
 const SIGNIN_URL = '/auth';
-// const DEFAULT_EMAIL = '@example.com';
-const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
+const DEFAULT_EMAIL = '@example.com';
 const DEFAULT_PASSWORD = 'Password1!';
 
 const Signin = () => {

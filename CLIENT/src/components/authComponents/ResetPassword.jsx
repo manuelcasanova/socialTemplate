@@ -112,7 +112,7 @@ export default function ResetPassword() {
                 type="email"
                 placeholder="Enter email"
                 ref={emailRef}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.toLowerCase())}
               />
             </div>
             <div>

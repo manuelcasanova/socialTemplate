@@ -105,6 +105,10 @@ const handlePost = async (req, res) => {
                   background-color: var(--color13, lightblue);
                   color: var(--color9, darkblue);
                 }
+                .email-body a {
+                  margin: 5px 0 10px 0;
+                }
+                     
               </style>
             </head>
             <body>
@@ -132,7 +136,7 @@ const handlePost = async (req, res) => {
           </html>
         `
       };
-      
+
 
       // Make sendMail async to wait for completion
       await new Promise((resolve, reject) => {
