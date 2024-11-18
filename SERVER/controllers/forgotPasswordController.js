@@ -140,7 +140,7 @@ const handlePost = async (req, res) => {
           if (error) {
             reject(error);
           } else {
-            console.log('Email sent: ' + info.response);
+            // console.log('Email sent: ' + info.response);
             resolve();
           }
         });
