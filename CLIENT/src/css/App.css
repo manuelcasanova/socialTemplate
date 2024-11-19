@@ -153,12 +153,12 @@
   flex: 0 0 90%;
   justify-content: center;
   align-items: center;
-  padding: 1%;
   background-color: var(--color1);
   transition: margin-left 0.3s ease-in-out;
   margin-left: 0;
   overflow-y: auto;
   /* Allow body to scroll normally */
+  box-sizing: border-box;
 }
 
 /* Body squeezed when navbar is open */
@@ -174,7 +174,6 @@
   flex: 0 0 10%;
   justify-content: center;
   align-items: center;
-  padding: 1%;
   background-color: var(--color6);
 }
 

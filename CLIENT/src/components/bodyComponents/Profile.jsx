@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import useAuth from "../../../src/hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import '../../css/Profile.css'
-
+import '../../css/Profile.css';
+import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 
 const profilePictureExists = async (userId) => {
   const imageUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
@@ -20,26 +20,41 @@ const profilePictureExists = async (userId) => {
 export default function Profile() {
   const { auth } = useAuth();
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
-  const [imageExists, setImageExists] = useState(true); // Default to true, check if image exists on load
-  
+  const [imageExists, setImageExists] = useState(true);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [editMode, setEditMode] = useState(null); // Tracks what the user is editing
+
   const userId = auth.userId || "Guest";
-  const userEmail = auth.email || "example@example.com"; // Fake email for demonstration
+  const userEmail = auth.email || "example@example.com";
 
   useEffect(() => {
     const checkImage = async () => {
       const exists = await profilePictureExists(userId);
-      setImageExists(exists); // Update the state based on the result
+      setImageExists(exists);
     };
-    
     checkImage();
   }, [userId]);
 
-  // Profile picture URL dynamically based on userId
   const profilePictureUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
 
   const handlePictureClick = () => {
     setIsPictureModalVisible(true);
   };
+
+  const handleDeleteClick = () => {
+    setShowConfirmDelete(true);
+  };
+
+  const handleConfirmDelete = () => {
+    console.log("Account deleted");
+    // Here, you can call your API to handle account deletion
+  };
+
+  const placeholderText = {
+    username: "Enter new username",
+    email: "Enter new email",
+    password: "Enter new password",
+  }[editMode]; // No default, so input will be hidden if null
 
   return (
     <div className="profile-container">
@@ -51,7 +66,6 @@ export default function Profile() {
           ) : (
             <FontAwesomeIcon icon={faUser} size="6x" />
           )}
-          <span>Change Picture</span>
         </div>
         {isPictureModalVisible && (
           <div className="picture-modal">
@@ -65,9 +79,56 @@ export default function Profile() {
         </div>
       </div>
       <div className="profile-actions">
-        <button>Edit Username</button>
-        <button>Edit Password</button>
-        <button>Delete Account</button>
+        <button 
+          className="profile-actions-button" 
+          onClick={() => setEditMode("username")}
+        >
+          Edit Username
+        </button>
+        <button 
+          className="profile-actions-button" 
+          onClick={() => setEditMode("email")}
+        >
+          Edit Email
+        </button>
+        <button 
+          className="profile-actions-button" 
+          onClick={() => setEditMode("password")}
+        >
+          Edit Password
+        </button>
+        {!showConfirmDelete ? (
+          <button 
+            className="profile-actions-button button-delete-account" 
+            onClick={handleDeleteClick}
+          >
+            Delete Account
+          </button>
+        ) : (
+          <div className="delete-confirmation">
+            <button 
+              className="button-cancel-delete" 
+              onClick={() => setShowConfirmDelete(false)}
+            >
+              Cancel
+            </button>
+            <button 
+              className="button-confirm-delete" 
+              onClick={handleConfirmDelete}
+            >
+              Confirm Delete
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="update-input">
+        {editMode && ( // Conditionally render the input and button
+          <>
+            <input placeholder={placeholderText}></input>
+            <button>Update</button>
+          </>
+        )}
+        {/* <LoadingSpinner /> */}
       </div>
     </div>
   );

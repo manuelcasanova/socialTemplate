@@ -1,94 +1,130 @@
 .profile-container {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: #f4f4f4;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+
+  padding: 1em;
+  justify-content: center;
+  align-items: center;
+
+  max-height: 100%; /* Prevent it from overflowing the parent */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  box-sizing: border-box; /* Include padding and border in the height */
 }
 
-h2 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 1em;
+.profile-container h2 {
+  margin: 0.5em 0; /* Ensure consistent spacing around the title */
 }
 
 .profile-details {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1em;
+  width: 100%; /* Make the section fit within the container */
 }
 
 .profile-picture {
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 1em; /* Add space below the profile picture */
 }
 
 .profile-picture img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.profile-picture .faUser {
-  font-size: 6rem;
-  color: #007bff; /* Color for the user icon */
-  border-radius: 50%;
-  background-color: #e9ecef; /* Light background for the icon */
-  padding: 20px;
-}
-
-.profile-picture span {
-  display: block;
-  margin-top: 10px;
-  color: #007bff;
-  cursor: pointer;
+  max-width: 100px;
+  border-radius: 50%; /* Optional: make the picture circular */
 }
 
 .profile-info {
-  margin-top: 20px;
-  text-align: center;
+  text-align: center; /* Center the text */
 }
 
 .profile-info p {
-  margin: 5px 0;
-  font-size: 16px;
+  margin: 0.5em 0; /* Add spacing between info items */
 }
 
 .profile-actions {
   display: flex;
-  justify-content: space-around;
-  margin-top: 30px;
+  flex-wrap: wrap; /* Allow buttons to wrap if there's not enough space */
+  justify-content: center; /* Center the buttons */
+  gap: 0.5em; /* Add space between buttons */
+  width: 100%;
 }
 
-.profile-actions button {
-  background-color: #007bff;
-  color: white;
+.profile-actions-button {
+  padding: 0.5em 1em; /* Add space around the button text */
+  background-color: var(--color9); /* Use var(--color9) for buttons */
+  color: var(--color1);
   border: none;
-  padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.profile-actions button:hover {
-  background-color: #0056b3;
-}
-
-.picture-modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-.picture-modal input {
-  margin: 10px 0;
+.profile-actions-button:hover {
+  background-color: var(--color13); /* Change to var(--color11) on hover */
+}
+
+.button-delete-account {
+  background-color: var(--color2); /* Different color for delete button */
+}
+
+.button-delete-account:hover {
+  background-color: var(--color11); /* Different color for delete button */
+}
+
+.delete-confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.button-confirm-delete, .button-cancel-delete {
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color1);
+}
+
+
+.button-confirm-delete {
+  background-color: var(--color2); /* Use var(--color2) for confirm delete */
+}
+.button-cancel-delete {
+  background-color: var(--color9); /* Use var(--color2) for confirm delete */
+}
+
+.button-confirm-delete:hover{
+  background-color: var(--color11); /* Use var(--color2) for confirm delete */
+}
+.button-cancel-delete:hover{
+  background-color: var(--color13); /* Use var(--color2) for confirm delete */
+}
+
+.update-input {
+  display: flex;
+  justify-content: center;
+  gap: 0.5em;
+  padding-top: 1em;
+  width: 100%;
+}
+
+.update-input input {
+  flex: 1;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.update-input button {
+  padding: 0.5em 1em;
+  background-color: var(--color9); /* Use var(--color9) for update buttons */
+  color: var(--color1);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.update-input button:hover {
+  background-color: var(--color13); /* Change to var(--color11) on hover */
 }
