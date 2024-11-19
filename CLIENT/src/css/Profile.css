@@ -1,18 +1,17 @@
 .profile-container {
   display: flex;
   flex-direction: column;
-
   padding: 1em;
+  background-color: var(--color13);
+  border-radius: 8px;
   justify-content: center;
   align-items: center;
-
-  max-height: 100%; /* Prevent it from overflowing the parent */
-  overflow-y: auto; /* Enable vertical scrolling if content overflows */
-  box-sizing: border-box; /* Include padding and border in the height */
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .profile-container h2 {
-  margin: 0.5em 0; /* Ensure consistent spacing around the title */
 }
 
 .profile-details {
@@ -20,37 +19,47 @@
   flex-direction: column;
   align-items: center;
   padding: 1em;
-  width: 100%; /* Make the section fit within the container */
+  width: 100%;
 }
 
 .profile-picture {
-  margin-bottom: 1em; /* Add space below the profile picture */
+  margin-bottom: 1em;
 }
 
 .profile-picture img {
   max-width: 100px;
-  border-radius: 50%; /* Optional: make the picture circular */
+  border-radius: 50%;
+}
+
+.picture-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  padding: 1em;
+  border-radius: 8px;
 }
 
 .profile-info {
-  text-align: center; /* Center the text */
+  text-align: center;
 }
 
 .profile-info p {
-  margin: 0.5em 0; /* Add spacing between info items */
+  margin: 0.5em 0;
 }
 
 .profile-actions {
   display: flex;
-  flex-wrap: wrap; /* Allow buttons to wrap if there's not enough space */
-  justify-content: center; /* Center the buttons */
-  gap: 0.5em; /* Add space between buttons */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5em;
   width: 100%;
 }
 
 .profile-actions-button {
-  padding: 0.5em 1em; /* Add space around the button text */
-  background-color: var(--color9); /* Use var(--color9) for buttons */
+  padding: 0.5em 1em;
+  background-color: var(--color9);
   color: var(--color1);
   border: none;
   border-radius: 4px;
@@ -60,15 +69,15 @@
 }
 
 .profile-actions-button:hover {
-  background-color: var(--color13); /* Change to var(--color11) on hover */
+  background-color: var(--color13);
 }
 
 .button-delete-account {
-  background-color: var(--color2); /* Different color for delete button */
+  background-color: var(--color2);
 }
 
 .button-delete-account:hover {
-  background-color: var(--color11); /* Different color for delete button */
+  background-color: var(--color11);
 }
 
 .delete-confirmation {
@@ -86,19 +95,20 @@
   color: var(--color1);
 }
 
-
 .button-confirm-delete {
-  background-color: var(--color2); /* Use var(--color2) for confirm delete */
-}
-.button-cancel-delete {
-  background-color: var(--color9); /* Use var(--color2) for confirm delete */
+  background-color: var(--color2);
 }
 
-.button-confirm-delete:hover{
-  background-color: var(--color11); /* Use var(--color2) for confirm delete */
+.button-cancel-delete {
+  background-color: var(--color9);
 }
-.button-cancel-delete:hover{
-  background-color: var(--color13); /* Use var(--color2) for confirm delete */
+
+.button-confirm-delete:hover {
+  background-color: var(--color11);
+}
+
+.button-cancel-delete:hover {
+  background-color: var(--color13);
 }
 
 .update-input {
@@ -118,7 +128,7 @@
 
 .update-input button {
   padding: 0.5em 1em;
-  background-color: var(--color9); /* Use var(--color9) for update buttons */
+  background-color: var(--color9);
   color: var(--color1);
   border: none;
   border-radius: 4px;
@@ -126,5 +136,17 @@
 }
 
 .update-input button:hover {
-  background-color: var(--color13); /* Change to var(--color11) on hover */
+  background-color: var(--color13);
+}
+
+@media (max-width: 580px) {
+
+.update-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5em;
+  padding-top: 1em;
+  width: 100%;
+}
 }

@@ -10,11 +10,38 @@ const profilePictureExists = async (userId) => {
 
   try {
     const response = await fetch(imageUrl, { method: 'HEAD' });
-    return response.ok; // If status code is 200, the image exists
+    return response.ok;
   } catch (error) {
     console.error("Error checking image existence:", error);
-    return false; // Return false if there's an error (e.g., network error)
+    return false;
   }
+};
+
+const validateInput = (editMode, value, confirmPwd = "") => {
+  let regex, errorMessage;
+
+  if (editMode === "username") {
+    regex = /^[a-zA-Z][a-zA-Z0-9_-]{3,23}$/;
+    errorMessage = "4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.";
+  } else if (editMode === "email") {
+    regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    errorMessage = "Must be a valid email address. Special characters allowed: . - _";
+  } else if (editMode === "password") {
+    regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,24}$/;
+    errorMessage = "8 to 24 characters. Must include uppercase and lowercase letters, a number, and a special character. Allowed: !@#$%^&*.";
+  } else if (editMode === "matchPwd") {
+    if (value !== confirmPwd) {
+      errorMessage = "Passwords must match.";
+    } else {
+      return { valid: true };
+    }
+  }
+
+  if (regex && !regex.test(value)) {
+    return { valid: false, message: errorMessage };
+  }
+
+  return { valid: true };
 };
 
 export default function Profile() {
@@ -22,7 +49,11 @@ export default function Profile() {
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
   const [imageExists, setImageExists] = useState(true);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  const [editMode, setEditMode] = useState(null); // Tracks what the user is editing
+  const [editMode, setEditMode] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const [confirmPwd, setConfirmPwd] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const userId = auth.userId || "Guest";
   const userEmail = auth.email || "example@example.com";
@@ -47,14 +78,57 @@ export default function Profile() {
 
   const handleConfirmDelete = () => {
     console.log("Account deleted");
-    // Here, you can call your API to handle account deletion
   };
 
   const placeholderText = {
     username: "Enter new username",
     email: "Enter new email",
     password: "Enter new password",
-  }[editMode]; // No default, so input will be hidden if null
+    matchPwd: "Confirm new password",
+  }[editMode];
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    setError(""); // Reset error message when input changes
+  };
+
+  const handleConfirmPwdChange = (e) => {
+    setConfirmPwd(e.target.value);
+  };
+
+  const handleUpdate = async () => {
+    const validation = validateInput(editMode, inputValue, confirmPwd);
+
+    if (!validation.valid) {
+      setError(validation.message);
+      return;
+    }
+
+    setIsLoading(true);
+
+    const payload = {
+      userId,
+      [editMode]: inputValue,
+    };
+
+    setTimeout(() => {
+      const simulatedResponse = {
+        success: true,
+        message: 'Update successful',
+      };
+
+      if (simulatedResponse.success) {
+        console.log('Update successful');
+        setInputValue('');
+        setConfirmPwd('');
+        setEditMode(null);
+      } else {
+        console.error('Update failed:', simulatedResponse.message);
+      }
+
+      setIsLoading(false);
+    }, 2000);
+  };
 
   return (
     <div className="profile-container">
@@ -122,13 +196,26 @@ export default function Profile() {
         )}
       </div>
       <div className="update-input">
-        {editMode && ( // Conditionally render the input and button
+        {!isLoading && editMode && (
           <>
-            <input placeholder={placeholderText}></input>
-            <button>Update</button>
+            <input 
+              placeholder={placeholderText} 
+              value={inputValue} 
+              onChange={handleInputChange} 
+            />
+            {editMode === "password" || editMode === "matchPwd" ? (
+              <input
+                type="password"
+                placeholder="Confirm new password"
+                value={confirmPwd}
+                onChange={handleConfirmPwdChange}
+              />
+            ) : null}
+            <button onClick={handleUpdate}>Update</button>
           </>
         )}
-        {/* <LoadingSpinner /> */}
+        {error && <div className="instructions">{error}</div>}
+        {isLoading && <LoadingSpinner />}
       </div>
     </div>
   );
