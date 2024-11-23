@@ -150,16 +150,16 @@
 
 .body {
   display: flex;
-  flex: 0 0 90%;
+  flex: 0 0 90%; /* Adjust height to 80% of the parent */
   justify-content: center;
   align-items: center;
   background-color: var(--color1);
   transition: margin-left 0.3s ease-in-out;
-  margin-left: 0;
-  overflow-y: auto;
-  /* Allow body to scroll normally */
+
+  overflow-y: auto; /* Allow body to scroll normally */
   box-sizing: border-box;
-  padding: 1em;
+
+  border: 3px dotted pink;
 }
 
 /* Body squeezed when navbar is open */
@@ -269,9 +269,7 @@ padding-bottom: 2em;
 
 @media (max-width: 1024px) {
   .body {
-    flex: 1;
-    height: calc(100vh - 10%); /* 10% footer */
-    overflow-y: auto; /* Allow scrolling if content overflows */
+
   }
 }
 
@@ -286,12 +284,7 @@ padding-bottom: 2em;
 
   /* Body should take up the remaining space, minus the footer height */
   .body {
-    flex: 1;
-    
-    padding-bottom: 10vh;
-    overflow-y: auto;  /* Allow scrolling if content overflows */
-    box-sizing: border-box;
-
+flex: 0 0 80%
   }
 
 /* Navbar: 10% height of the viewport */

@@ -1,6 +1,17 @@
-export default function User () {
+import '../../css/User.css'
 
+export default function User() {
   return (
-<h2>All registered users have access to this page</h2>
-  )
+    <div className="level1">
+      level 1
+      <div className="level2">
+        Level 2
+      </div>
+      <div className="level2">
+        <div className="level3">
+          Level 3
+        </div>
+      </div>
+    </div>
+  );
 }
