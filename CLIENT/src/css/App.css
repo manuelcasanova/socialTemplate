@@ -1,7 +1,9 @@
 .app {
-  display: flex;
-  flex-direction: column;
+  margin: 0;
+  padding: 0;
   height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Hamburger Menu */
@@ -146,8 +148,8 @@
 
 
 .body {
+
   display: flex;
-  flex: 0 0 90%; /* Adjust height to 80% of the parent */
   justify-content: center;
   align-items: center;
   background-color: var(--color1);
@@ -157,6 +159,14 @@
   box-sizing: border-box;
 
   /* border: 3px dotted pink; */
+
+  position: fixed;
+  top: 10%;
+  bottom: 10%;
+  left: 0;
+  width: 100%; 
+
+
 }
 
 /* Body squeezed when navbar is open */
@@ -167,13 +177,16 @@
   /* Disable body scroll while navbar is open */
 }
 
-.footer {
-  display: flex;
-  flex: 0 0 10%;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--color6);
-}
+  /* Fixed footer at the bottom of the screen */
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 10%;  /* Fixed height for footer */
+    width: 100%;  /* Full width of the viewport */
+    background-color: var(--color6);
+    z-index: 3;  /* Ensure f  ooter is above content */
+  }
 
 /* Mobile Styles */
 @media (max-width: 580px) {
@@ -215,6 +228,14 @@ padding-bottom: 2em;
   max-height: 4.5em;
    }
 
+   .body {
+   position: fixed;
+   top: 0;
+   bottom: 10%;
+   left: 0;
+   width: 100%; 
+   border: 5px dotted blue;
+  }
 
 }
 
@@ -262,6 +283,15 @@ padding-bottom: 2em;
   .profile-image {
     max-height: 6em;
      }
+
+     .body {
+      position: fixed;
+      top: 0;
+      bottom: 10%;
+      left: 0;
+      width: 100%; 
+      border: 5px dotted green;
+     }
 }
 
 @media (max-width: 1024px) {
@@ -281,7 +311,8 @@ padding-bottom: 2em;
 
   /* Body should take up the remaining space, minus the footer height */
   .body {
-flex: 0 0 80%
+border: 5px dotted red;
+
   }
 
 /* Navbar: 10% height of the viewport */
@@ -335,16 +366,7 @@ flex: 0 0 80%
     background-color: var(--color9);
   }
 
-  /* Fixed footer at the bottom of the screen */
-  .footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    height: 10%;  /* Fixed height for footer */
-    width: 100%;  /* Full width of the viewport */
-    background-color: var(--color6);
-    z-index: 3;  /* Ensure f  ooter is above content */
-  }
+
 
   .hamburger {
     display: none;
