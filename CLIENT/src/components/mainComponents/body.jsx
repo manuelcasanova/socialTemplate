@@ -37,8 +37,8 @@ const Body = ({ isNavOpen }) => {
       <Routes>
 
         {/* Public routes */}
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} />} />
+        <Route path="/signup" element={<Signup isNavOpen={isNavOpen} />} />
         <Route path="/" element={<Home />} />
         <Route path="resetpassword" element={<ResetPassword/>}/>
         

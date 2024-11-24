@@ -10,7 +10,8 @@ const SIGNIN_URL = '/auth';
 const DEFAULT_EMAIL = '@example.com';
 const DEFAULT_PASSWORD = 'Password1!';
 
-const Signin = () => {
+const Signin = ({ isNavOpen }) => {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -24,7 +25,7 @@ const Signin = () => {
     const [email, setEmail] = useState(DEFAULT_EMAIL);
     const [errMsg, setErrMsg] = useState('');
     const [check, toggleCheck] = useToggle('persist', false);
-    const [isLoading, setIsLoading] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -53,7 +54,7 @@ const Signin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsLoading(true); 
+        setIsLoading(true);
         try {
             const response = await authenticateUser();
             const { accessToken, userId, roles } = response?.data || {};
@@ -71,7 +72,7 @@ const Signin = () => {
     const handleClose = () => navigate('/');
 
     return (
-        <div className="overlay-component">
+        <div className={`overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
             <button className="close-button" onClick={handleClose}>✖</button>
             <section className="centered-section">
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
@@ -97,7 +98,7 @@ const Signin = () => {
                         value={pwd}
                         required
                     />
-                     <button className="button-auth" disabled={isLoading}>
+                    <button className="button-auth" disabled={isLoading}>
                         {isLoading ? <LoadingSpinner /> : 'Sign In'}
                     </button>
                     <div className="trust-device">

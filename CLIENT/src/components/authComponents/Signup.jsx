@@ -8,7 +8,8 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import axios from './../../api/axios.js';
 import { Link } from "react-router-dom";
 
-export default function Signup() {
+export default function Signup({isNavOpen}) {
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
 
   const regexPatterns = {
@@ -170,7 +171,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="overlay-component">
+    <div className={`overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
       <button className="close-button" onClick={handleClose}>✖</button>
       {success ? (
         <section className='signup-success'>

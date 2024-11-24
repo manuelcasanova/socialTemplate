@@ -1,4 +1,3 @@
-
 .unauthorized {
   display: flex;
   flex-direction: column;
@@ -7,7 +6,7 @@
   height: 100%;
   width: 100%;
   background-color: var(--color8);  
-  color:  var(--color0);
+  color: var(--color0);
   text-align: center;
   padding: 20px;
   box-sizing: border-box;
@@ -26,6 +25,7 @@
   line-height: 1.5;
 }
 
+/* Back Button Styles */
 .unauthorized-go-back {
   padding: 10px 20px;
   font-size: 1rem;
@@ -35,14 +35,19 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .unauthorized-go-back:hover {
-  background-color: #025aa5; 
+  background-color: #025aa5; /* Darker blue */
+  transform: scale(1.05); /* Subtle zoom effect */
 }
 
 .unauthorized-go-back:focus {
   outline: none;
   box-shadow: 0 0 4px 2px rgba(2, 117, 216, 0.5);
+}
+
+.unauthorized-go-back:active {
+  transform: scale(0.95); /* Slight shrink effect for click feedback */
 }

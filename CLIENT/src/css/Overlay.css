@@ -1,43 +1,49 @@
-/* Css for components that overlay the entire vieport, covering the navigation bar and the footer */
-
+/* Css for components that overlay the entire viewport, covering the navigation bar and the footer */
 .overlay-component {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--color13);
   z-index: 7;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--color13);
   color: white;
+}
+
+.overlay-squeezed {
+  margin-left: 25%;
+  width: calc(100% - 25%);
+  overflow: hidden;
+  height: calc(100% - 10%);
+  margin-bottom: 10%;
 }
 
 .centered-section {
   width: 100%;
   max-width: 350px;
-  background-color: var(--color9);
+  margin: 1em;
+  padding: 2em;
   display: flex;
   flex-direction: column;
-  justify-content: center; 
-  align-items: center; 
-  padding: 2em;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color9);
   border-radius: 5%;
-  margin: 1em;
 }
 
-
 .close-button {
-  background: none;
-  border: none;
-  color: var(--color1);
-  font-size: 24px;
-  cursor: pointer;
   position: absolute;
   top: 10px;
   right: 10px;
   padding: 5px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: var(--color1);
+  cursor: pointer;
   transition: color 0.3s, transform 0.2s ease-in-out;
 }
 
@@ -46,3 +52,9 @@
   transform: scale(1.1); /* Subtle zoom effect */
 }
 
+@media (max-width: 580px) {
+  .overlay-component {
+    height: calc(100% - 10%);
+    margin-bottom: 0%;
+  }
+}

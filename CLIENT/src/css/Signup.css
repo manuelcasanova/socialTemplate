@@ -1,20 +1,14 @@
-
+/* Signup Title */
 .signup-title {
   display: flex;
   justify-content: center;
 }
 
+/* Signup Form */
 .signup-form {
   display: flex;
   flex-direction: column;
   width: 100%;
-}
-
-.centered-section {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .signup-form label {
@@ -22,7 +16,7 @@
 }
 
 .signup-form input {
-  margin: 0.5em 0em 0.5em 0em;
+  margin: 0.5em 0;
 }
 
 .input-field {
@@ -33,6 +27,15 @@
   margin-bottom: 2em;
 }
 
+/* Centered Section */
+.centered-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Validation Styles */
 .valid {
   color: var(--color3);
   margin-left: 0.25rem;
@@ -43,6 +46,7 @@
   margin-left: 0.25rem;
 }
 
+/* Error Messages */
 .errmsg {
   background-color: var(--color11);
   color: var(--color2);
@@ -51,6 +55,7 @@
   margin-bottom: 0.5rem;
 }
 
+/* Instructions */
 .instructions {
   font-size: 0.75rem;
   border-radius: 0.5rem;
@@ -61,18 +66,17 @@
   bottom: -10px;
 }
 
-.instructions>svg {
+.instructions > svg {
   margin-right: 0.25rem;
 }
 
-.offscreen {
-  display: none;
-}
-
+/* Hidden Elements */
+.offscreen,
 .hide {
   display: none;
 }
 
+/* Account Information */
 .have-an-account {
   margin-top: 1em;
   display: flex;
@@ -84,6 +88,11 @@
   margin: 0.2em;
 }
 
+.have-an-account a {
+  color: var(--color1);
+}
+
+/* Signup Success */
 .signup-success {
   text-align: center;
   color: var(--color1);
@@ -112,50 +121,38 @@
   text-decoration: underline;
 }
 
+/* Trust Device */
 .trust-device {
-  margin: 1em 0em 1em 0em;
+  margin: 1em 0;
 }
 
 .trust-device input {
- margin-right: 0.5em;
+  margin-right: 0.5em;
 }
 
-/* Sign Up, Sign In, Reset buttons */
-.have-an-account a {
-  color: var(--color1); 
-}
-
+/* Authentication Buttons */
 .button-auth {
   width: 50%;
-  margin: 0 auto;
-  display: block;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin: 1em auto;
   padding: 10px 20px;
   font-size: 16px;
   text-align: center;
-  background-color: #1E90FF; /* DodgerBlue background */
-  color: white; /* White text */
+  background-color: #1E90FF; /* DodgerBlue */
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.button-auth:disabled {
-  pointer-events: none;
-  opacity: 0.6; /* Optional: visually indicate it's disabled */
-  cursor: not-allowed; /* Optional: change cursor to indicate it's not clickable */
-}
-
 .button-auth:hover {
-  background-color: #1C86EE; /* Slightly darker blue */
+  background-color: #1C86EE; /* Darker blue */
   transform: translateY(-2px);
 }
 
 .button-auth:focus {
   outline: none;
-  box-shadow: 0 0 5px rgba(30, 144, 255, 0.7); /* Blue focus ring */
+  box-shadow: 0 0 5px rgba(30, 144, 255, 0.7);
 }
 
 .button-auth:active {
@@ -164,18 +161,18 @@
 }
 
 .button-auth:disabled {
-  background-color: #555; /* Neutral gray for disabled state */
+  background-color: #555; /* Gray for disabled state */
   cursor: not-allowed;
   opacity: 0.6;
 }
 
+/* Responsive Styles */
 @media (max-width: 300px) {
-.have-an-account {
-  flex-direction: column;
-}
+  .have-an-account {
+    flex-direction: column;
+  }
 
-.line a {
-  margin-left: 0em;
-}
-
+  .line a {
+    margin-left: 0;
+  }
 }

@@ -30,6 +30,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
     profile: false,
   });
 
+
   const [isLargeScreen, setIsLargeScreen] = useState(false);
 
   // Effect to detect window size
@@ -73,6 +74,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
   // Toggle individual dropdown sections and close others
   const toggleSection = (section) => {
     setShowSections((prevState) => ({
+      
       // Close all other sections, only toggle the clicked one
       admin: section === 'admin' ? !prevState.admin : false,
       profile: section === 'profile' ? !prevState.profile : false,
@@ -82,7 +84,6 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
   return (
     <header className={`navbar ${isNavOpen ? 'open' : ''}`}
-      onMouseLeave={toggleSection}
        data-testid="navbar"
     >
 
