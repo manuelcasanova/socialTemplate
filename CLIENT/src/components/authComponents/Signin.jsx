@@ -12,6 +12,14 @@ const DEFAULT_PASSWORD = 'Password1!';
 
 const Signin = ({ isNavOpen }) => {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+      // Update screenWidth on window resize
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
     const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();

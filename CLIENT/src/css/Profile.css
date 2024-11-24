@@ -1,10 +1,10 @@
 .profile-container {
 
-/* For children of body I've noticed that if height: 100% and justify-content: center, on very short screens, content overflows.
+  /* For children of body I've noticed that if height: 100% and justify-content: center, on very short screens, content overflows.
 Using margin-top, margin-bottom: auto, it's fixed
  */
 
-   width: 100%;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -13,28 +13,26 @@ Using margin-top, margin-bottom: auto, it's fixed
   transition: margin-left 0.3s ease-in-out;
   overflow-y: auto;
   margin-top: auto;
-  margin-bottom: auto; 
-border: 6px solid purple;
+  margin-bottom: auto;
+  border: 6px solid purple;
 
-padding: 1em 0em 1em 0em;
-} 
-
-
-
-.profile-details {
-
+  padding: 1em 0em 1em 0em;
 }
+
+
+
+.profile-details {}
 
 .profile-picture {
 
 
-   position: relative;
- 
+  position: relative;
+
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  padding: 3%; 
+  padding: 3%;
 
 
 
@@ -42,38 +40,28 @@ padding: 1em 0em 1em 0em;
 
 .profile-picture img {
 
-  object-fit: cover; 
+  object-fit: cover;
   border-radius: 50%;
-  cursor: pointer;  
-  transition: transform 0.3s ease; 
-  max-width: 150px; 
-  max-height: 150px; 
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  max-width: 150px;
+  max-height: 150px;
 }
 
 
 .picture-modal {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.profile-actions {
+.profile-actions {}
 
-}
+.profile-actions-button {}
 
-.profile-actions-button {
+.update-input {}
 
-}
+.update-input input {}
 
-.update-input {
-
-}
-
-.update-input input {
-
-}
-
-.update-input button {
-
-}
+.update-input button {}
