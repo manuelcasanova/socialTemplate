@@ -17,7 +17,7 @@ export default function Signup({isNavOpen}) {
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
     }, []);
-    
+
   const navigate = useNavigate();
 
   const regexPatterns = {
@@ -210,10 +210,10 @@ export default function Signup({isNavOpen}) {
           </form>
     
 
-          <p className='have-an-account'>
+          <div className='have-an-account'>
             <p>Already have an account?</p>
             <p><Link to="/signin">Sign In</Link></p>
-          </p>
+          </div>
 
 
 
