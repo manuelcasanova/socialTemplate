@@ -8,15 +8,8 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import axios from './../../api/axios.js';
 import { Link } from "react-router-dom";
 
-export default function Signup({isNavOpen}) {
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+export default function Signup({isNavOpen, screenWidth}) {
 
-    // Update screenWidth on window resize
-    useEffect(() => {
-      const handleResize = () => setScreenWidth(window.innerWidth);
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
   const navigate = useNavigate();
 

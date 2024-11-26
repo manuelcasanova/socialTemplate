@@ -20,25 +20,16 @@ import RequireAuth from '../authComponents/RequireAuth';
 import ResetPassword from '../authComponents/ResetPassword';
 
 
-const Body = ({ isNavOpen }) => {
+const Body = ({ isNavOpen, screenWidth }) => {
 
-
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-  // Update screenWidth on window resize
-  useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   return (
     <main className={`body ${isNavOpen && screenWidth < 1025 ? 'squeezed' : ''}`}>
       <Routes>
 
         {/* Public routes */}
-        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} />} />
-        <Route path="/signup" element={<Signup isNavOpen={isNavOpen} />} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+        <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth}  />} />
         <Route path="/" element={<Home />} />
         <Route path="resetpassword" element={<ResetPassword/>}/>
         

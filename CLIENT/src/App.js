@@ -1,5 +1,5 @@
 import './css/App.css';
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 //Components
@@ -10,6 +10,15 @@ import Footer from './components/mainComponents/footer';
 import Hamburger from './components/mainComponents/hamburger';
 
 function App() {
+
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  // Update screenWidth on window resize
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
 
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -24,7 +33,7 @@ function App() {
       <div className="app">
         <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
         <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} />
-        <Body isNavOpen={isNavOpen} />
+        <Body isNavOpen={isNavOpen} screenWidth={screenWidth} />
         <Footer isNavOpen={isNavOpen} />
       </div>
 

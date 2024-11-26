@@ -131,6 +131,7 @@ export default function Profile() {
   };
 
   return (
+    
     <div className="profile-container">
       <h2>{userId}</h2>
       <div className="profile-details">
