@@ -72,7 +72,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const handleClose = () => navigate('/');
 
     return (
-        <div className={`overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
+        <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
             <button className="close-button" onClick={handleClose}>✖</button>
             <section className="centered-section">
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>

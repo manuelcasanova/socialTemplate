@@ -156,6 +156,96 @@
   z-index: 3;
 }
 
+/* Button red */
+
+.button-red {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-red:hover {
+  background-color: darkred;
+  transform: scale(1.05);
+}
+
+.button-red:active {
+  background-color: firebrick;
+  transform: scale(1);
+}
+
+.button-red:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+}
+
+/* Green button */
+
+.button-green {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-green:hover {
+  background-color: darkgreen;
+  transform: scale(1.05);
+}
+
+.button-green:active {
+  background-color: forestgreen;
+  transform: scale(1);
+}
+
+.button-green:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
+}
+
+/* Blue button */
+
+.button-white {
+  background-color: transparent;
+  color: black;
+  border: 1px solid black;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-white:hover {
+  background-color: lightblue;
+  transform: scale(1.05);
+  border: none;
+  color: white;
+}
+
+.button-white:active {
+  background-color: royalblue;
+  transform: scale(1);
+}
+
+.button-white:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 255, 0.7);
+}
+
+
 /* Mobile Styles */
 @media (max-width: 580px) {
   .navbar {

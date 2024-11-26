@@ -21,7 +21,9 @@ Using margin-top, margin-bottom: auto, it's fixed
 
 
 
-.profile-details {}
+.profile-details {
+  margin: 2em 0 2em 0;
+}
 
 .profile-picture {
 
@@ -56,12 +58,83 @@ Using margin-top, margin-bottom: auto, it's fixed
   justify-content: center;
 }
 
-.profile-actions {}
+.profile-actions {
+  margin: 2em 0em 2em 0em;
+ text-align: center;
+}
 
-.profile-actions-button {}
+.profile-actions-button {
+margin: 0em 0.5em 0em 0.5em;
+padding: 1em;
+}
 
-.update-input {}
+.update-input {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
 
-.update-input input {}
+.update-input > * {
+margin-bottom: 1em;
+}
 
-.update-input button {}
+.update-input input {
+  padding: 1em;
+}
+
+.update-input button {
+
+}
+
+.delete-confirmation {
+  margin: 1em;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+
+
+}
+
+.delete-confirmation > * {
+   margin-bottom: 1em;
+}
+
+.delete-confirmation p {
+  padding: 1em;
+  color: red;
+  font-weight: bolder;
+  font-size: larger;
+}
+
+.delete-confirmation button {
+padding: 1em;
+  width: 30%;
+}
+
+@media (max-width: 580px) {
+  .profile-actions {
+    margin: 2em 0em 2em 0em;
+    display: flex;
+  flex-direction: column;
+  
+  }
+  
+  .profile-actions-button {
+  margin-bottom: 1em;
+  }
+  
+}
+
+@media (min-width: 581px) and (max-width: 1024px) {
+  .profile-actions {
+    margin: 2em 0em 2em 0em;
+  
+  
+  }
+  
+  .profile-actions-button {
+  
+  }
+  
+}

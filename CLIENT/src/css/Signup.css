@@ -2,6 +2,7 @@
 .signup-title {
   display: flex;
   justify-content: center;
+  color: var(--color1); 
 }
 
 /* Signup Form */
@@ -124,6 +125,7 @@
 /* Trust Device */
 .trust-device {
   margin: 1em 0;
+  color: var(--color1);
 }
 
 .trust-device input {

@@ -73,7 +73,11 @@ export default function Profile() {
   };
 
   const handleDeleteClick = () => {
-    setShowConfirmDelete(true);
+    if (showConfirmDelete) {
+      setShowConfirmDelete(false);
+    } else {
+      setShowConfirmDelete(true);
+    }
   };
 
   const handleConfirmDelete = () => {
@@ -130,8 +134,18 @@ export default function Profile() {
     }, 2000);
   };
 
+  const handleEditButtonClick = (type) => {
+    if (editMode === type) {
+      setEditMode(null);
+    } else {
+      setShowConfirmDelete(false); 
+      setEditMode(type);
+    }
+  };
+
+
   return (
-    
+    <div className="body-overlay-component">
     <div className="profile-container">
       <h2>{userId}</h2>
       <div className="profile-details">
@@ -155,49 +169,50 @@ export default function Profile() {
       </div>
       <div className="profile-actions">
         <button 
-          className="profile-actions-button" 
-          onClick={() => setEditMode("username")}
+          className="profile-actions-button button-white" 
+          onClick={() => handleEditButtonClick("username")}
         >
           Edit Username
         </button>
         <button 
-          className="profile-actions-button" 
-          onClick={() => setEditMode("email")}
+          className="profile-actions-button button-white" 
+          onClick={() => handleEditButtonClick("email")}
         >
           Edit Email
         </button>
         <button 
-          className="profile-actions-button" 
-          onClick={() => setEditMode("password")}
+          className="profile-actions-button button-white" 
+          onClick={() => handleEditButtonClick("password")}
         >
           Edit Password
         </button>
-        {!showConfirmDelete ? (
+    
           <button 
-            className="profile-actions-button button-delete-account" 
+            className="profile-actions-button button-red" 
             onClick={handleDeleteClick}
           >
             Delete Account
           </button>
-        ) : (
+      {showConfirmDelete && 
           <div className="delete-confirmation">
+            <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
             <button 
-              className="button-cancel-delete" 
+              className="button-cancel-delete button-white" 
               onClick={() => setShowConfirmDelete(false)}
             >
-              Cancel
+              Keep account
             </button>
             <button 
-              className="button-confirm-delete" 
+              className="button-confirm-delete button-red" 
               onClick={handleConfirmDelete}
             >
-              Confirm Delete
+              Delete account
             </button>
           </div>
-        )}
+        }
       </div>
       <div className="update-input">
-        {!isLoading && editMode && (
+        {!isLoading && editMode && !showConfirmDelete && (
           <>
             <input 
               placeholder={placeholderText} 
@@ -212,12 +227,13 @@ export default function Profile() {
                 onChange={handleConfirmPwdChange}
               />
             ) : null}
-            <button onClick={handleUpdate}>Update</button>
+            <button onClick={handleUpdate} className="button-white">Update</button>
           </>
         )}
         {error && <div className="instructions">{error}</div>}
         {isLoading && <LoadingSpinner />}
       </div>
+    </div>
     </div>
   );
 }

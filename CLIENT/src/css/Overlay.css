@@ -1,5 +1,22 @@
 /* Base styles for components that overlay the entire viewport, covering the navigation bar and the footer */
-.overlay-component {
+
+.viewport-overlay-component {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  background-color: red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 7;
+}
+
+
+/* Base styles for components that overlay the entire body */
+
+.body-overlay-component {
   position: fixed;
   top: 10%;
   bottom: 10%;
@@ -9,8 +26,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color13);
-  color: white;
+  background-color: var(--color1);
+  color: black;
   overflow-y: auto;
   box-sizing: border-box;
   padding: 1em;
@@ -63,14 +80,14 @@
 
 /* Media queries for responsive design */
 @media (max-width: 580px) {
-  .overlay-component {
+  .body-overlay-component {
     height: calc(100% - 10%);
     margin-bottom: 0%;
   }
 }
 
 @media (max-width: 1024px) {
-  .overlay-component {
+  .body-overlay-component {
     top: 0%;
   }
 }

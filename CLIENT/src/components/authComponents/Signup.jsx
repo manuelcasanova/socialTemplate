@@ -172,7 +172,7 @@ export default function Signup({isNavOpen, screenWidth}) {
   };
 
   return (
-    <div className={`overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
+    <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
       <button className="close-button" onClick={handleClose}>✖</button>
       {success ? (
         <section className='signup-success'>
