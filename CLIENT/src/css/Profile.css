@@ -58,14 +58,40 @@ Using margin-top, margin-bottom: auto, it's fixed
   justify-content: center;
 }
 
+.picture-modal > * {
+  margin-bottom: 1em;
+}
+
+.picture-modal input {
+  margin-bottom: 1em;
+}
+
+.picture-modal input[type="file"] {
+  display: none; /* Hide the native file input */
+}
+
+.custom-file-label:hover {
+  background-color: #0056b3;
+}
+
+.file-name {
+  font-size: 0.9rem;
+  color: #555;
+}
+
 .profile-actions {
-  margin: 2em 0em 2em 0em;
   text-align: center;
 }
 
 .profile-actions-button {
   margin: 0em 0.5em 1em 0.5em;
   padding: 1em;
+}
+
+.profile-info p{
+  padding-top: 1em;
+  text-align: left;
+  font-size: x-large;
 }
 
 .update-input {
@@ -94,8 +120,6 @@ Using margin-top, margin-bottom: auto, it's fixed
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
-
 }
 
 .delete-confirmation>* {

@@ -67,7 +67,7 @@ export default function Profile() {
   const [isInputValid, setIsInputValid] = useState(false);
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-
+  const [fileName, setFileName] = useState("");
 
   const userId = auth.userId || "Guest";
   const userEmail = auth.email || "example@example.com";
@@ -112,11 +112,11 @@ export default function Profile() {
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
-  
+
     if (editMode === "password") {
       const regexValidation = validateInput("password", value);
       const matchValidation = validateInput("matchPwd", value, confirmPwd);
-  
+
       setIsInputValid(regexValidation.valid && matchValidation.valid);
       setError(regexValidation.valid ? matchValidation.message : regexValidation.message);
     } else if (editMode) {
@@ -125,18 +125,18 @@ export default function Profile() {
       setError(validation.valid ? "" : validation.message);
     }
   };
-  
+
   const handleConfirmPwdChange = (e) => {
     const value = e.target.value;
     setConfirmPwd(value);
-  
+
     if (editMode === "password") {
       const matchValidation = validateInput("matchPwd", inputValue, value);
       setIsInputValid(matchValidation.valid);
       setError(matchValidation.valid ? "" : matchValidation.message);
     }
   };
-  
+
 
   const handleUpdate = async () => {
     const validation = validateInput(editMode, inputValue, confirmPwd);
@@ -207,27 +207,41 @@ export default function Profile() {
           </div>
           {isPictureModalVisible && (
             <div className="picture-modal">
-              <h3>Change your profile picture</h3>
-              <input type="file" />
-              <button onClick={() => setIsPictureModalVisible(false)}>Close</button>
-            </div>
+  <h3>Change your profile picture</h3>
+
+  {/* Hidden file input */}
+  <input
+    type="file"
+    id="profile-picture-input"
+    onChange={(e) => setFileName(e.target.files[0]?.name || "No file chosen")}
+  />
+
+  {/* Custom label for file input */}
+  <label className="button-white" htmlFor="profile-picture-input">
+    Choose File
+  </label>
+
+  {/* Text for chosen file */}
+  <span className="file-name">{fileName || "No file chosen"}</span>
+
+  <button className="button-red" onClick={() => setIsPictureModalVisible(false)}>x</button>
+</div>
+
           )}
-          <div className="profile-info">
-            <p><strong>Email:</strong> {userEmail}</p>
-          </div>
+
         </div>
         <div className="profile-actions">
           <button
             className="profile-actions-button button-white"
             onClick={() => handleEditButtonClick("username")}
-            disabled={editMode === "username" && !isInputValid} // Disable if regex fails
+            // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
           >
             Edit Username
           </button>
           <button
             className="profile-actions-button button-white"
             onClick={() => handleEditButtonClick("email")}
-            disabled={editMode === "email" && !isInputValid} // Disable if regex fails
+            // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
           >
             Edit Email
           </button>
@@ -263,73 +277,77 @@ export default function Profile() {
           }
         </div>
         <div className="update-input">
-  {!isLoading && editMode && !showConfirmDelete && (
-    <>
-      {/* For editing username or email */}
-      {(editMode === "username" || editMode === "email") && (
-        <div className="edit-input-container">
-          <input
-            type="text"
-            placeholder={placeholderText} // Dynamic placeholder
-            value={inputValue}
-            onChange={handleInputChange}
-          />
+          {!isLoading && editMode && !showConfirmDelete && (
+            <>
+              {(editMode === "email") && <div className="profile-info">
+                <p>{userEmail}</p>
+              </div>}
+
+              {/* For editing username or email */}
+              {(editMode === "username" || editMode === "email") && (
+                <div className="edit-input-container">
+                  <input
+                    type="text"
+                    placeholder={placeholderText} // Dynamic placeholder
+                    value={inputValue}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              )}
+
+              {/* For password edit mode */}
+              {editMode === "password" && (
+                <>
+                  {/* Enter new password field with visibility toggle */}
+                  <div className="password-container">
+                    <input
+                      type={isNewPasswordVisible ? "text" : "password"}
+                      placeholder={placeholderText}
+                      value={inputValue}
+                      onChange={handleInputChange}
+                    />
+                    <FontAwesomeIcon
+                      icon={isNewPasswordVisible ? faEyeSlash : faEye}
+                      onClick={toggleNewPasswordVisibility}
+                      className="toggle-password-icon"
+                    />
+                  </div>
+
+                  {/* Confirm new password field with visibility toggle */}
+                  <div className="password-container">
+                    <input
+                      type={isConfirmPasswordVisible ? "text" : "password"}
+                      placeholder="Confirm new password"
+                      value={confirmPwd}
+                      onChange={handleConfirmPwdChange}
+                    />
+                    <FontAwesomeIcon
+                      icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
+                      onClick={toggleConfirmPasswordVisibility}
+                      className="toggle-password-icon"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Error message */}
+              {error && <div className="profile-input-instructions">{error}</div>}
+
+              {/* Update button */}
+              <button
+                onClick={handleUpdate}
+                className="button-white"
+                disabled={!isInputValid || inputValue.trim() === ""}
+              >
+                Update
+              </button>
+
+
+            </>
+          )}
+
+          {isLoading && <LoadingSpinner />}
         </div>
-      )}
-
-      {/* For password edit mode */}
-      {editMode === "password" && (
-        <>
-          {/* Enter new password field with visibility toggle */}
-          <div className="password-container">
-            <input
-              type={isNewPasswordVisible ? "text" : "password"}
-              placeholder={placeholderText}
-              value={inputValue}
-              onChange={handleInputChange}
-            />
-            <FontAwesomeIcon
-              icon={isNewPasswordVisible ? faEyeSlash : faEye}
-              onClick={toggleNewPasswordVisibility}
-              className="toggle-password-icon"
-            />
-          </div>
-
-          {/* Confirm new password field with visibility toggle */}
-          <div className="password-container">
-            <input
-              type={isConfirmPasswordVisible ? "text" : "password"}
-              placeholder="Confirm new password"
-              value={confirmPwd}
-              onChange={handleConfirmPwdChange}
-            />
-            <FontAwesomeIcon
-              icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
-              onClick={toggleConfirmPasswordVisibility}
-              className="toggle-password-icon"
-            />
-          </div>
-        </>
-      )}
-
-      {/* Error message */}
-      {error && <div className="profile-input-instructions">{error}</div>}
-
-      {/* Update button */}
-      <button
-  onClick={handleUpdate}
-  className="button-white"
-  disabled={!isInputValid || inputValue.trim() === ""}
->
-  Update
-</button>
-
-
-    </>
-  )}
-
-  {isLoading && <LoadingSpinner />}
-</div>
 
 
       </div>
