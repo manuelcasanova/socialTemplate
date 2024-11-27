@@ -246,6 +246,14 @@
 }
 
 
+.button-white:disabled {
+  background-color: #f0f0f0;
+  color: #a9a9a9;
+  border-color: #dcdcdc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 /* Mobile Styles */
 @media (max-width: 580px) {
   .navbar {

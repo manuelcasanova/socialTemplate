@@ -114,6 +114,56 @@ Using margin-top, margin-bottom: auto, it's fixed
   max-width: 150px;
 }
 
+.profile-input-instructions {
+  background-color: var(--color0);
+  color: var(--color1);
+  padding: 0.5em;
+  border-radius: 5px;
+}
+
+/* Container for the password input and toggle icon */
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Password input field styling */
+.password-container input {
+  width: 100%;
+  padding: 10px 40px 10px 10px; /* Add space for the icon */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.password-container input:focus {
+  border-color: #007bff; /* Highlight color on focus */
+}
+
+/* Toggle password visibility icon */
+.toggle-password-icon {
+  position: absolute;
+  right: 10px; /* Aligns icon to the right */
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.toggle-password-icon:hover {
+  color: #007bff; /* Highlight icon on hover */
+}
+
+.edit-input-container input {
+width: 100%;
+
+}
+
 @media (max-width: 580px) {
   .profile-actions {
     margin: 2em 0em 2em 0em;
