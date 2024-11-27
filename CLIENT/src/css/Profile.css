@@ -14,7 +14,7 @@ Using margin-top, margin-bottom: auto, it's fixed
   overflow-y: auto;
   margin-top: auto;
   margin-bottom: auto;
-  border: 6px solid purple;
+  /* border: 6px solid purple; */
 
   padding: 1em 0em 1em 0em;
 }
@@ -60,22 +60,24 @@ Using margin-top, margin-bottom: auto, it's fixed
 
 .profile-actions {
   margin: 2em 0em 2em 0em;
- text-align: center;
+  text-align: center;
 }
 
 .profile-actions-button {
-margin: 0em 0.5em 0em 0.5em;
-padding: 1em;
+  margin: 0em 0.5em 1em 0.5em;
+  padding: 1em;
 }
 
 .update-input {
   width: 50%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-.update-input > * {
-margin-bottom: 1em;
+.update-input>* {
+  margin-bottom: 1em;
+  width: 100%;
 }
 
 .update-input input {
@@ -83,21 +85,21 @@ margin-bottom: 1em;
 }
 
 .update-input button {
-
+  max-width: 100px;
 }
 
 .delete-confirmation {
   margin: 1em;
-display: flex;
-justify-content: center;
-align-items: center;
-flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
 
 }
 
-.delete-confirmation > * {
-   margin-bottom: 1em;
+.delete-confirmation>* {
+  margin-bottom: 1em;
 }
 
 .delete-confirmation p {
@@ -108,33 +110,31 @@ flex-direction: column;
 }
 
 .delete-confirmation button {
-padding: 1em;
-  width: 30%;
+  padding: 1em;
+  max-width: 150px;
 }
 
 @media (max-width: 580px) {
   .profile-actions {
     margin: 2em 0em 2em 0em;
     display: flex;
-  flex-direction: column;
-  
+    flex-direction: column;
+
   }
-  
+
   .profile-actions-button {
-  margin-bottom: 1em;
+    margin-bottom: 1em;
   }
-  
+
 }
 
 @media (min-width: 581px) and (max-width: 1024px) {
   .profile-actions {
     margin: 2em 0em 2em 0em;
-  
-  
+
+
   }
-  
-  .profile-actions-button {
-  
-  }
-  
+
+  .profile-actions-button {}
+
 }

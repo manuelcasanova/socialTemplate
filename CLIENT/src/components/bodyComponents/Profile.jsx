@@ -69,10 +69,14 @@ export default function Profile() {
   const profilePictureUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
 
   const handlePictureClick = () => {
+    setError(""); // Hide any error message
+    setInputValue(""); 
+    setConfirmPwd(""); 
     setIsPictureModalVisible(true);
   };
 
   const handleDeleteClick = () => {
+    setError(""); // Hide any error message
     if (showConfirmDelete) {
       setShowConfirmDelete(false);
     } else {
@@ -92,12 +96,31 @@ export default function Profile() {
   }[editMode];
 
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-    setError(""); // Reset error message when input changes
+    const value = e.target.value;
+    setInputValue(value);
+  
+    if (value === "") {
+      setError(""); // Clear error if input is blank
+    } else {
+      const validation = validateInput(editMode, value, confirmPwd);
+      if (!validation.valid) {
+        setError(validation.message); // Show error if validation fails
+      } else {
+        setError(""); // Clear error if validation passes
+      }
+    }
   };
 
   const handleConfirmPwdChange = (e) => {
-    setConfirmPwd(e.target.value);
+    const value = e.target.value;
+    setConfirmPwd(value);
+  
+    const validation = validateInput("matchPwd", value, inputValue);
+    if (!validation.valid) {
+      setError(validation.message);
+    } else {
+      setError("");
+    }
   };
 
   const handleUpdate = async () => {
@@ -135,6 +158,9 @@ export default function Profile() {
   };
 
   const handleEditButtonClick = (type) => {
+    setError(""); 
+    setInputValue(""); 
+    setConfirmPwd(""); 
     if (editMode === type) {
       setEditMode(null);
     } else {
@@ -197,13 +223,13 @@ export default function Profile() {
           <div className="delete-confirmation">
             <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
             <button 
-              className="button-cancel-delete button-white" 
+              className="button-white" 
               onClick={() => setShowConfirmDelete(false)}
             >
               Keep account
             </button>
             <button 
-              className="button-confirm-delete button-red" 
+              className="button-red" 
               onClick={handleConfirmDelete}
             >
               Delete account
@@ -227,7 +253,17 @@ export default function Profile() {
                 onChange={handleConfirmPwdChange}
               />
             ) : null}
-            <button onClick={handleUpdate} className="button-white">Update</button>
+            <button
+  onClick={() => {
+    handleUpdate();
+    setInputValue(''); // Ensure input is reset after clicking
+    setConfirmPwd(''); // Reset confirm password field
+  }}
+  className="button-white"
+  disabled={!inputValue || error} // Disable if input is blank or there’s an error
+>
+  Update
+</button>
           </>
         )}
         {error && <div className="instructions">{error}</div>}
