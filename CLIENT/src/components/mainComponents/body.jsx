@@ -53,7 +53,7 @@ const Body = ({ isNavOpen, screenWidth }) => {
 
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="/profile/myaccount" element={<Profile />} />
+            <Route path="/profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
           </Route>
 
           {/* Admin-specific routes */}

@@ -54,7 +54,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
   return { valid: true };
 };
 
-export default function Profile() {
+export default function Profile({ isNavOpen, screenWidth }) {
   const { auth } = useAuth();
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
   const [imageExists, setImageExists] = useState(true);
@@ -194,7 +194,7 @@ export default function Profile() {
 
 
   return (
-    <div className="body-overlay-component">
+<div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
       <div className="profile-container">
         <h2>{userId}</h2>
         <div className="profile-details">
