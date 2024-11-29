@@ -30,12 +30,33 @@ function App() {
 
   return (
 
-      <div className="app">
-        <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
+    <div className="app">
+
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav}/>
+
+      <button className={`hamburger ${isNavOpen ? 'hamburger-open' : ''}`} onClick={toggleNav}>
+          &#9776; {/* Hamburger icon */}
+        </button>
+
+      <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
+        <div className="body">
+          <div>Body</div>
+          <div>Body</div>
+          <div>Body</div>
+          <div>Body</div>
+          <div>Body</div>
+          <div>Body</div>
+          <div>Body</div>
+          <div>Body</div>
+          <div>Body Last</div>
+        </div>
+        <div className="footer">Footer</div>
+      </div>
+      {/* <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
         <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} />
         <Body isNavOpen={isNavOpen} screenWidth={screenWidth} />
-        <Footer isNavOpen={isNavOpen} />
-      </div>
+        <Footer isNavOpen={isNavOpen} /> */}
+    </div>
 
   );
 }

@@ -83,9 +83,10 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
 
   return (
-    <header className={`navbar ${isNavOpen ? 'open' : ''}`}
-       data-testid="navbar"
-    >
+
+
+<div className={`navbar ${isNavOpen ? 'navbar-open' : ''}`} data-testid="navbar">
+
 
       {isLargeScreen && (
         <Logo handleNavigate={handleNavigate}/>
@@ -125,7 +126,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
 
 
-    </header>
+    </div>
   );
 };
 
