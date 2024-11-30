@@ -12,7 +12,6 @@ router.route('/')
     router.route('/:user_id')
     .get((req, res) => {
       const { user_id } = req.params;
-      console.log("Received request for user ID:", user_id);
       usersController.getUserById(req, res);
     });
 

@@ -56,7 +56,7 @@ function App() {
 {/* Public routes */}
 <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
 <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth}  />} />
-<Route path="/" element={<Home />} />
+<Route path="/" element={<Home isNavOpen={isNavOpen}/>} />
 <Route path="resetpassword" element={<ResetPassword/>}/>
 
 
@@ -68,13 +68,13 @@ function App() {
     <Route path="/user" element={<User isNavOpen={isNavOpen}/>} />
   </Route>
   <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
-    <Route path="/moderator" element={<Moderator />} />
+    <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
   </Route>
   <Route element={<RequireAuth allowedRoles={['User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-    <Route path="/subscriber" element={<Subscriber />} />
+    <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
   </Route>
   <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-    <Route path="/admin" element={<Admin />} />
+    <Route path="/admin" element={<Admin isNavOpen={isNavOpen} />} />
   </Route>
 
 

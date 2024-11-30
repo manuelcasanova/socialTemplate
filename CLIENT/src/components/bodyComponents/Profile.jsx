@@ -6,6 +6,9 @@ import '../../css/Profile.css';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Footer from "../mainComponents/footer";
 
+import useUserApi from "../../util/userApi";
+
+
 const profilePictureExists = async (userId) => {
 
   const imageUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
@@ -69,9 +72,9 @@ export default function Profile({ isNavOpen, screenWidth }) {
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [fileName, setFileName] = useState("");
-
+  const { userData } = useUserApi(auth.userId || "Guest");  
+  
   const userId = auth.userId || "Guest";
-  const userEmail = auth.email || "example@example.com";
 
   useEffect(() => {
     const checkImage = async () => {
@@ -80,6 +83,7 @@ export default function Profile({ isNavOpen, screenWidth }) {
     };
     checkImage();
   }, [userId]);
+
 
   const profilePictureUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
 
@@ -137,7 +141,6 @@ export default function Profile({ isNavOpen, screenWidth }) {
       setError(matchValidation.valid ? "" : matchValidation.message);
     }
   };
-
 
   const handleUpdate = async () => {
     const validation = validateInput(editMode, inputValue, confirmPwd);
@@ -197,7 +200,7 @@ export default function Profile({ isNavOpen, screenWidth }) {
   return (
     <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
       <div className="body profile-container">
-        <h2>{userId}</h2>
+        <h2>{userData?.username || "Guest"}</h2>
         <div className="profile-details">
           <div className="profile-picture" onClick={handlePictureClick}>
             {imageExists ? (
@@ -281,7 +284,7 @@ export default function Profile({ isNavOpen, screenWidth }) {
           {!isLoading && editMode && !showConfirmDelete && (
             <>
               {(editMode === "email") && <div className="profile-info">
-                <p>{userEmail}</p>
+                <p>{userData?.email || "Guest"}</p>
               </div>}
 
               {/* For editing username or email */}
