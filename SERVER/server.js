@@ -9,6 +9,7 @@ const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const cookieParser = require('cookie-parser');
 const customJsonParser = require('./middleware/customJsonParser');
+const verifyJWT = require('./middleware/verifyJWT')
 
 const app = express();
 const PORT = process.env.PORT || 3500;
@@ -60,7 +61,7 @@ app.use('/logout', require('./routes/auth/logout'))
 app.use('/forgot-password', require('./routes/auth/forgot-password'));
 
 
-// app.use(verifyJWT);
+app.use(verifyJWT);
 
 
 app.use('/users', require('./routes/api/users'));
