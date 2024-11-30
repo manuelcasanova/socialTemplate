@@ -155,9 +155,13 @@ export default function Signup({isNavOpen, screenWidth}) {
         onFocus={() => handleFocusChange(id, true)}
         onBlur={() => handleFocusChange(id, false)}
       />
-      <p id={`${id}note`} className={focused[id] && !validity[validation] ? "instructions" : "offscreen"}>
-        <FontAwesomeIcon icon={faInfoCircle} />{getValidationMessage(id)}
-      </p>
+<p 
+  id={`${id}note`} 
+  className={focused[id] && !validity[validation] && formData[id] !== "" ? "instructions" : "offscreen"}
+>
+  <FontAwesomeIcon icon={faInfoCircle} />
+  {getValidationMessage(id)}
+</p>
     </>
   );
 

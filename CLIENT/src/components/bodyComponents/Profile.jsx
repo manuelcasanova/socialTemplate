@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import '../../css/Profile.css';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
+import Footer from "../mainComponents/footer";
 
 const profilePictureExists = async (userId) => {
 
@@ -194,8 +195,8 @@ export default function Profile({ isNavOpen, screenWidth }) {
 
 
   return (
-<div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
-      <div className="profile-container">
+    <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
+      <div className="body profile-container">
         <h2>{userId}</h2>
         <div className="profile-details">
           <div className="profile-picture" onClick={handlePictureClick}>
@@ -349,8 +350,9 @@ export default function Profile({ isNavOpen, screenWidth }) {
           {isLoading && <LoadingSpinner />}
         </div>
 
-
+        
       </div>
+      <Footer />
     </div>
   );
 }

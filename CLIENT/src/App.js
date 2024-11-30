@@ -1,13 +1,27 @@
 import './css/App.css';
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 //Components
 
 import Navbar from './components/mainComponents/navBar';
-import Body from './components/mainComponents/body';
-import Footer from './components/mainComponents/footer';
 import Hamburger from './components/mainComponents/hamburger';
+
+import Home from './components/bodyComponents/Home';
+import User from './components/bodyComponents/User';
+import Moderator from './components/bodyComponents/Moderator';
+import Subscriber from './components/bodyComponents/Subscriber';
+import Admin from './components/bodyComponents/Admin';
+import Signin from './components/authComponents/Signin';
+import Signup from './components/authComponents/Signup';
+import Profile from './components/bodyComponents/Profile';
+import AdminUsers from './components/bodyComponents/users/AdminUsers';
+import Unauthorized from './components/authComponents/Unauthorized';
+import PersistLogin from './components/authComponents/PersistLogin';
+import RequireAuth from './components/authComponents/RequireAuth';
+import ResetPassword from './components/authComponents/ResetPassword';
+
+
 
 function App() {
 
@@ -34,28 +48,48 @@ function App() {
 
       <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav}/>
 
-      <button className={`hamburger ${isNavOpen ? 'hamburger-open' : ''}`} onClick={toggleNav}>
-          &#9776; {/* Hamburger icon */}
-        </button>
+      <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
-      <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
-        <div className="body">
-          <div>Body</div>
-          <div>Body</div>
-          <div>Body</div>
-          <div>Body</div>
-          <div>Body</div>
-          <div>Body</div>
-          <div>Body</div>
-          <div>Body</div>
-          <div>Body Last</div>
-        </div>
-        <div className="footer">Footer</div>
-      </div>
-      {/* <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
-        <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} />
-        <Body isNavOpen={isNavOpen} screenWidth={screenWidth} />
-        <Footer isNavOpen={isNavOpen} /> */}
+
+      <Routes>
+
+{/* Public routes */}
+<Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+<Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth}  />} />
+<Route path="/" element={<Home />} />
+<Route path="resetpassword" element={<ResetPassword/>}/>
+
+
+<Route path="/unauthorized" element={<Unauthorized />} />
+
+{/* Protected Routes */}
+<Route element={<PersistLogin />}>
+<Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+    <Route path="/user" element={<User isNavOpen={isNavOpen}/>} />
+  </Route>
+  <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
+    <Route path="/moderator" element={<Moderator />} />
+  </Route>
+  <Route element={<RequireAuth allowedRoles={['User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+    <Route path="/subscriber" element={<Subscriber />} />
+  </Route>
+  <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+    <Route path="/admin" element={<Admin />} />
+  </Route>
+
+
+  <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+    <Route path="/profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+  </Route>
+
+  {/* Admin-specific routes */}
+  <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+    <Route path="/admin/users" element={<AdminUsers />} />
+  </Route>
+</Route>
+</Routes>
+
+
     </div>
 
   );

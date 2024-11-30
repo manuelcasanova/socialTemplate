@@ -1,6 +1,14 @@
-export default function Home () {
+import Footer from "../mainComponents/footer"
+
+export default function Moderator({ isNavOpen }) {
 
   return (
-<h2>This page is public</h2>
+    <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
+      <div className="body">
+      <h2>This page is public</h2>
+      </div>
+<Footer />
+    </div>
+    
   )
 }

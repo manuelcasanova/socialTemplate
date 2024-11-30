@@ -1,38 +1,28 @@
 .app {
-  /* width: 100%;
-  height: 100%;
+  width: 100%;
+  height: 100vh;
   margin: 0;
   padding: 0;
-  box-sizing: border-box; */
-
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 100vh;
 }
 
 /* Hamburger Menu */
 .hamburger {
-  /* 
-  display: block;
-  */
-
-  position: absolute;
+  position: fixed;
   top: 0.5rem;
-  /* Slight margin from top */
   left: 1rem;
-  /* Slight margin from left */
+  z-index: 1001;
   background: none;
   border: none;
-  font-size: 2rem;
   color: var(--color9);
+  font-size: 2rem;
   cursor: pointer;
-  z-index: 1001;
-  /* Make sure it stays on top of other content */
+  
 }
 
 .hamburger-open {
-    /* 
-  z-index: 6; */
   color: var(--color1);
 }
 
@@ -41,14 +31,13 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1000;
   width: 100%;
   height: 10vh;
   background-color: var(--color9);
   color: white;
   display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  z-index: 1000;
+  align-items: center;  
 }
 
 
@@ -92,7 +81,7 @@
   justify-content: center;
   align-items: center;
   height: auto;
-  padding: 5% 0% 5% 0%;
+  padding: 15% 0% 15% 0%;
   color: var(--color1);
   cursor: pointer;
 }
@@ -144,29 +133,6 @@
 }
 
 /* Body */
-.body {
-  /* position: fixed;
-  top: 10%;
-  bottom: 10%;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--color1);
-  transition: margin-left 0.3s ease-in-out;
-  overflow-y: auto;
-  box-sizing: border-box; */
-}
-
-.body.squeezed {
-  /* margin-left: 250px;
-  width: calc(100% - 250px);
-  overflow: hidden; */
-}
-
-
-
 /* Body and footer container takes up 90% of the remaining height */
 .body-footer {
   flex: 1;
@@ -179,23 +145,21 @@
 
 /* Body section can have scrollable content */
 .body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-grow: 1;
   /* Ensures this grows to take available space */
   overflow-y: auto;
   /* Enables scrolling if content exceeds the body height */
   padding: 1rem;
   background-color: #f4f4f4;
-  /* Light background for the body */
 }
 
 /* Footer should stay at the bottom unless content exceeds the viewport */
 .footer {
-
-
-
-  height: 10%;
+  padding: 1em;
   background-color: var(--color6);
-
   color: white;
   text-align: center;
   display: flex;
@@ -307,28 +271,24 @@
 
 /* Mobile Styles */
 @media (max-width: 580px) {
-  .navbar {
-  
-  }
+  .navbar {}
 
   .navbar {
     width: 0%;
-    /* Full width */
     height: 100%;
-    /* 10% of the viewport height */
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    justify-content: center;
-      /* white-space: nowrap; */
   }
 
   .navbar-open {
     width: 100%;
-    /* Full width */
     height: 100%;
-    /* 10% of the viewport height */
+    padding-top: 3em;
+    padding-bottom: 2em;
   }
+
+
 
   .body-footer {
     margin-top: 0vh;
@@ -340,11 +300,6 @@
     display: none;
   }
 
-  .navbar.open {
-    /* left: 0;
-    padding-top: 3em;
-    padding-bottom: 2em; */
-  }
 
   .nav-item {
     margin-top: 5%;
@@ -361,32 +316,14 @@
   .profile-image {
     max-height: 4.5em;
   }
-
-  .body {
-    /* position: fixed;
-    top: 0;
-    bottom: 10%;
-    left: 0;
-    width: 100%; */
-  }
 }
 
 /* Tablet Styles */
 @media (min-width: 581px) and (max-width: 1024px) {
-  .navbar {
-    /* 
- 
-    z-index: 4;
-
-   
-    white-space: nowrap; */
-  }
 
   .navbar {
     width: 0%;
-    /* Full width */
     height: 100%;
-    /* 10% of the viewport height */
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -394,16 +331,9 @@
 
   .navbar-open {
     width: 25%;
-
     height: 100%;
-  
     padding-top: 3em;
     padding-bottom: 2em;
-  }
-
-  .navbar.open {
-    /* left: 0;
-    */
   }
 
   .nav-item,
@@ -411,29 +341,8 @@
     margin-top: 10%;
   }
 
-  .body.squeezed {
-    /* margin-left: 25%;
-    width: calc(100% - 25%); */
-  }
-
-  .footer.squeezed {
-    /* margin-left: 0; */
-  }
-
-  .hamburger {
-    /* display: block; */
-  }
-
   .profile-image {
     max-height: 6em;
-  }
-
-  .body {
-    /* position: fixed;
-    top: 0;
-    bottom: 10%;
-    left: 0;
-    width: 100%; */
   }
 
   .body-footer {
@@ -455,28 +364,8 @@
   }
 }
 
-@media (max-width: 1024px) {
-  .body {}
-}
-
 /* Desktop Styles */
 @media (min-width: 1025px) {
-  .app {
-    /* display: flex;
-    flex-direction: column;
-    height: 100vh; */
-    /* App takes full viewport height */
-  }
-
-  .body {}
-
-  .navbar {
-    /* height: 10vh;
-    display: flex;
-    flex-direction: row;
-    z-index: 4;
-    background-color: var(--color9); */
-  }
 
   .nav-item {
     flex: 1;
@@ -521,8 +410,4 @@
     display: none;
   }
 
-  .body.squeezed {
-    /* margin-left: 250px; */
-    /* Adjust content when navbar is open */
-  }
 }

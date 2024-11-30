@@ -1,6 +1,15 @@
-export default function AdminUsers () {
+import Footer from "../../mainComponents/footer"
+
+export default function AdminUsers({ isNavOpen }) {
 
   return (
-<h2>Admin users</h2>
+    <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
+      <div className="body">
+      <h2>Admin users</h2>
+      </div>
+<Footer />
+    </div>
+    
   )
 }
+
