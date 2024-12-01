@@ -1,5 +1,5 @@
 import useAxiosPrivate from '../hooks/useAxiosPrivate'; 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const useUserApi = (userId) => {
   const axiosPrivate = useAxiosPrivate(); 
@@ -20,13 +20,17 @@ const useUserApi = (userId) => {
     }
   };
 
+  const refetchUserData = useCallback(() => {
+    getUserById();  // Manually trigger the data fetch
+  }, [getUserById]);
+
   useEffect(() => {
     if (userId) {
       getUserById();
     }
   }, [userId]); // This will trigger the effect when userId changes
 
-  return { getUserById, userData };
+  return { getUserById, userData, refetchUserData };
 };
 
 export default useUserApi;

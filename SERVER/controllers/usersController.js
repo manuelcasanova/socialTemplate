@@ -31,9 +31,55 @@ const getUserById = async (req, res) => {
     }
 };
 
+// Function to update user details
+const updateUser = async (req, res) => {
+    const { username, email, password, userId } = req.body; // Destructure fields from the request body
+
+    // Validate input fields
+    if (!username && !email && !password) {
+        return res.status(400).json({ error: 'At least one field (username, email, password) is required to update.' });
+    }
+
+    try {
+        // Update user details based on which fields are provided
+        let query = 'UPDATE users SET ';
+        let values = [];
+        let setValues = [];
+
+        if (username) {
+            setValues.push(`username = $${setValues.length + 1}`);
+            values.push(username);
+        }
+        if (email) {
+            setValues.push(`email = $${setValues.length + 1}`);
+            values.push(email);
+        }
+        if (password) {
+            setValues.push(`password = $${setValues.length + 1}`);
+            values.push(password);
+        }
+
+        query += setValues.join(', ') + ' WHERE user_id = $' + (setValues.length + 1);
+        values.push(userId); // Add the user_id for the WHERE clause
+
+        const result = await pool.query(query, values);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'User not found or no changes made' });
+        }
+
+        res.status(200).json({ success: true, message: 'User updated successfully' });
+
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 
 
 module.exports = {
     getAllUsers,
-    getUserById
+    getUserById,
+    updateUser
 };

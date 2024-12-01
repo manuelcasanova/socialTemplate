@@ -7,6 +7,7 @@ import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Footer from "../mainComponents/footer";
 
 import useUserApi from "../../util/userApi";
+import { axiosPrivate } from "../../api/axios";
 
 
 const profilePictureExists = async (userId) => {
@@ -72,7 +73,9 @@ export default function Profile({ isNavOpen, screenWidth }) {
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [fileName, setFileName] = useState("");
-  const { userData } = useUserApi(auth.userId || "Guest");  
+  const { userData, refetchUserData  } = useUserApi(auth.userId || "Guest");  
+
+  // console.log("userData", userData)
   
   const userId = auth.userId || "Guest";
 
@@ -144,37 +147,46 @@ export default function Profile({ isNavOpen, screenWidth }) {
 
   const handleUpdate = async () => {
     const validation = validateInput(editMode, inputValue, confirmPwd);
-
+  
     if (!validation.valid) {
       setError(validation.message);
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     const payload = {
-      userId,
-      [editMode]: inputValue,
+      userId, // The logged-in user's ID
+      [editMode]: inputValue, // The field being updated (username, email, or password)
     };
-
-    setTimeout(() => {
-      const simulatedResponse = {
-        success: true,
-        message: 'Update successful',
-      };
-
-      if (simulatedResponse.success) {
-        console.log('Update successful');
+  
+    try {
+      const response = await axiosPrivate.put('/users/update', payload);
+      if (response?.data?.success) {
         setInputValue('');
         setConfirmPwd('');
         setEditMode(null);
-      } else {
-        console.error('Update failed:', simulatedResponse.message);
-      }
+        setError(''); // Reset error if the update is successful
+  
+        // Refresh the user data after a successful update
+        refetchUserData();  // This should trigger a rerender if the userData changes
 
+      } else {
+        setError(response?.data?.message || 'Update failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      setError('An error occurred while updating. Please try again later.');
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
+  
+  
+  
+  
+  
+  
 
   const handleEditButtonClick = (type) => {
     setError("");
