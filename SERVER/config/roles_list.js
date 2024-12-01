@@ -1,0 +1,9 @@
+const ROLES_LIST = {
+  USER_NOT_SUBSCRIBED: 1,
+  USER_SUBSCRIBED: 2,
+  MODERATOR: 3,
+  ADMIN: 4,
+  SUPER_ADMIN: 5, 
+};
+  
+  module.exports = ROLES_LIST
