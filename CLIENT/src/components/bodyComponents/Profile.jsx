@@ -59,7 +59,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
   return { valid: true };
 };
 
-export default function Profile({ isNavOpen, screenWidth }) {
+export default function Profile({ isNavOpen }) {
   const { auth } = useAuth();
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
   const [imageExists, setImageExists] = useState(true);

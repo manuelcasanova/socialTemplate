@@ -57,10 +57,10 @@ function App() {
 <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
 <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth}  />} />
 <Route path="/" element={<Home isNavOpen={isNavOpen}/>} />
-<Route path="resetpassword" element={<ResetPassword/>}/>
+<Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen}/>}/>
 
 
-<Route path="/unauthorized" element={<Unauthorized />} />
+<Route path="/unauthorized" element={<Unauthorized isNavOpen={isNavOpen} />} />
 
 {/* Protected Routes */}
 <Route element={<PersistLogin />}>

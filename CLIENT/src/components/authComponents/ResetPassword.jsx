@@ -5,7 +5,7 @@ import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import { useState, useEffect, useRef } from 'react';
 
 
-export default function ResetPassword() {
+export default function ResetPassword({isNavOpen}) {
 
   const [email, setEmail] = useState()
   const axiosPrivate = useAxiosPrivate()
@@ -74,6 +74,7 @@ export default function ResetPassword() {
 
 
   return (
+    <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
 <section className="section-reset">
   <form onSubmit={handleSubmit} className="form-reset">
     <h3>Forgot password</h3>
@@ -131,6 +132,7 @@ export default function ResetPassword() {
     )}
   </form>
 </section>
+</div>
 
 
   )
