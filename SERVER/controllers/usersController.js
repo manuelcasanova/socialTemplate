@@ -1,4 +1,5 @@
 const pool = require('../config/db'); 
+const bcrypt = require('bcrypt');
 
 // Function to get all users
 const getAllUsers = async (req, res) => {
@@ -55,8 +56,10 @@ const updateUser = async (req, res) => {
             values.push(email);
         }
         if (password) {
+            // Encrypt the password before updating
+            const hashedPassword = await bcrypt.hash(password, 10);
             setValues.push(`password = $${setValues.length + 1}`);
-            values.push(password);
+            values.push(hashedPassword);
         }
 
         query += setValues.join(', ') + ' WHERE user_id = $' + (setValues.length + 1);
