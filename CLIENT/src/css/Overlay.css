@@ -54,7 +54,6 @@
 .overlay-squeezed {
   margin-left: 25%;
   width: calc(100% - 25%);
-  overflow: hidden;
   height: calc(100% - 10%);
   margin-bottom: 10%;
 }
@@ -84,10 +83,5 @@
     height: calc(100% - 10%);
     margin-bottom: 0%;
   }
-}
 
-@media (max-width: 1024px) {
-  .body-overlay-component {
-    top: 0%;
-  }
 }

@@ -84,7 +84,7 @@ function App() {
 
   {/* Admin-specific routes */}
   <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-    <Route path="/admin/users" element={<AdminUsers />} />
+    <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen}/>} />
   </Route>
 </Route>
 </Routes>
