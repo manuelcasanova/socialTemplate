@@ -3,6 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import { jwtDecode } from 'jwt-decode';
 
 const RequireAuth = ({ allowedRoles }) => {
+
     const { auth } = useAuth();
     const location = useLocation();
 
