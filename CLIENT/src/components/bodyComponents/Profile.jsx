@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useAuth from "../../../src/hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -74,6 +74,15 @@ export default function Profile({ isNavOpen }) {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [fileName, setFileName] = useState("");
   const { userData, refetchUserData  } = useUserApi(auth.userId || "Guest");  
+
+  const inputRef = useRef(null); 
+
+useEffect(() => {
+  // Focus the input when the editMode changes
+  if (inputRef.current) {
+    inputRef.current.focus();
+  }
+}, [editMode]);
 
   // console.log("userData", userData)
   
@@ -182,7 +191,11 @@ export default function Profile({ isNavOpen }) {
     }
   };
   
-  
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleUpdate(); // Trigger handleUpdate when Enter is pressed
+    }
+  };
   
   
   
@@ -303,10 +316,12 @@ export default function Profile({ isNavOpen }) {
               {(editMode === "username" || editMode === "email") && (
                 <div className="edit-input-container">
                   <input
+                   ref={inputRef} 
                     type="text"
                     placeholder={placeholderText} // Dynamic placeholder
                     value={inputValue}
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               )}
@@ -317,6 +332,7 @@ export default function Profile({ isNavOpen }) {
                   {/* Enter new password field with visibility toggle */}
                   <div className="password-container">
                     <input
+                       ref={inputRef} 
                       type={isNewPasswordVisible ? "text" : "password"}
                       placeholder={placeholderText}
                       value={inputValue}

@@ -1,6 +1,3 @@
-const ROLES_LIST = require('../config/roles_list');
-const { all } = require('../routes/api/users');
-
 const verifyRoles = (...allowedRoles) => {
   return (req, res, next) => {
     const userRoles = req.roles;
