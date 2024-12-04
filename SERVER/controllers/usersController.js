@@ -1,5 +1,7 @@
-const pool = require('../config/db'); 
+const pool = require('../config/db');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
+const path = require('path');
 
 // Function to get all users
 const getAllUsers = async (req, res) => {
@@ -24,7 +26,7 @@ const getUserById = async (req, res) => {
             // If no user is found, return a 404 status
             return res.status(404).json({ error: 'User not found' });
         }
-        
+
         res.status(200).json(result.rows[0]); // Respond with the user data
     } catch (error) {
         console.error('Error retrieving user:', error);
@@ -81,11 +83,10 @@ const updateUser = async (req, res) => {
 
 // Function to delete user account
 const deleteUser = async (req, res) => {
-
-    const { userId} = req.params; // Extract user_id from request parameters
+    const { userId } = req.params; // Extract user_id from request parameters
 
     try {
-        // Execute the DELETE query to remove the user from the 'users' table
+        // Step 1: Delete the user from the 'users' table
         const result = await pool.query(
             'DELETE FROM users WHERE user_id = $1 RETURNING *',
             [userId]
@@ -96,14 +97,40 @@ const deleteUser = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Return a success message if the user was successfully deleted
-        res.status(200).json({ success: true, message: 'User successfully deleted', user: result.rows[0] });
+        // Step 2: Delete the user's profile picture file (if it exists)
+        const profilePicturePath = path.join(__dirname, '..', 'media', 'profile_pictures', userId, 'profilePicture.jpg');
+
+        if (fs.existsSync(profilePicturePath)) {
+            fs.unlink(profilePicturePath, (err) => {
+                if (err) {
+                    console.error('Error deleting profile picture:', err);
+                } else {
+                    console.log('Profile picture deleted successfully');
+                }
+            });
+        }
+
+        // Step 3: Delete the user's folder using fs.rm (to avoid deprecation warning)
+        const userFolderPath = path.join(__dirname, '..', 'media', 'profile_pictures', userId);
+
+        // Use fs.rm() instead of fs.rmdir() to handle folder deletion correctly
+        fs.rm(userFolderPath, { recursive: true, force: true }, (err) => {
+            if (err) {
+                console.error('Error deleting user folder:', err);
+            } else {
+                console.log('User folder deleted successfully');
+            }
+        });
+
+        // Step 4: Send a success response
+        res.status(200).json({ success: true, message: 'User successfully deleted, and associated files removed', user: result.rows[0] });
 
     } catch (error) {
         console.error('Error deleting user:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 
 
