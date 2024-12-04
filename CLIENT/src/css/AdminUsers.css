@@ -1,6 +1,6 @@
 .admin-users {
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .users-container {
@@ -40,6 +40,35 @@ button:hover {
 
 .user-details {
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Consistent spacing between child elements */
+  text-align: left;
+}
+
+.user-details p {
+  margin: 0;
+  font-size: 1em;
+  text-align: start;
+}
+
+.user-details ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-details li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1em;
+}
+
+.user-details .checkbox {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  accent-color: #007bff; /* Matches button color */
 }
 
 .error-message {

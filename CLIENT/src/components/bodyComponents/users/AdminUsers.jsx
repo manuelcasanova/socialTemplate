@@ -7,6 +7,7 @@ export default function AdminUsers({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
+  const [expandedUserId, setExpandedUserId] = useState(null); // Tracks the currently expanded user
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -23,13 +24,7 @@ export default function AdminUsers({ isNavOpen }) {
   }, [axiosPrivate]);
 
   const handleViewMore = (userId) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.user_id === userId
-          ? { ...user, isExpanded: !user.isExpanded }
-          : user
-      )
-    );
+    setExpandedUserId((prevId) => (prevId === userId ? null : userId));
   };
 
   return (
@@ -39,40 +34,50 @@ export default function AdminUsers({ isNavOpen }) {
         {error && <p className="error-message">{error}</p>}
         <div className="users-container">
           {users.length > 0 ? (
-            users.map((user) => (
-              <div className="user-row" key={user.user_id}>
-                <div className="user-info">
-                  <p>{user.username} - {user.email}</p>
-                  <button onClick={() => handleViewMore(user.user_id)}>
-                    {user.isExpanded ? "Show Less" : "View More"}
-                  </button>
-                </div>
+            users.map((user) =>
+              expandedUserId === null || expandedUserId === user.user_id ? (
+                <div className="user-row" key={user.user_id}>
+                  <div className="user-info">
+                    <p>{user.username} - {user.email}</p>
+                    <button onClick={() => handleViewMore(user.user_id)}>
+                      {expandedUserId === user.user_id ? "-" : "+"}
+                    </button>
+                  </div>
 
-                {user.isExpanded && (
-                  <div className="user-details">
-                    <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
-                    <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
-                    <p><strong>Location:</strong> {user.location}</p>
-                    <h4>Roles</h4>
-                    <ul>
-                      {user.roles.map((role, index) => (
-                        <li key={index}>{role}</li>
-                      ))}
-                    </ul>
-                    <h4>Login History</h4>
-                    {user.login_history.length > 0 ? (
+                  {expandedUserId === user.user_id && (
+                    <div className="user-details">
+                      <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
+                      <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
+                      <p><strong>Location:</strong> {user.location}</p>
+                      <h4>Roles</h4>
                       <ul>
-                        {user.login_history.map((entry, index) => (
-                          <li key={index}>{entry}</li>
+                        {user.roles.map((role, index) => (
+                          <li key={index}>
+                            <input
+                              type="checkbox"
+                              className="checkbox"
+                              defaultChecked
+                              disabled
+                            />
+                            {role}
+                          </li>
                         ))}
                       </ul>
-                    ) : (
-                      <p>No login history available</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))
+                      <h4>Login History</h4>
+                      {user.login_history.length > 0 ? (
+                        <ul>
+                          {user.login_history.map((entry, index) => (
+                            <li key={index}>{entry}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No login history available</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : null
+            )
           ) : (
             <p>No users found</p>
           )}
