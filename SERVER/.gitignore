@@ -38,4 +38,4 @@ logs/
 *.tgz
 
 # Media folder
-/server/media
+/SERVER/media
