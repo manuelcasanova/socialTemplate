@@ -188,6 +188,14 @@ width: 100%;
 
 }
 
+.profile-delete-success-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: green;
+}
+
 @media (max-width: 580px) {
   .profile-actions {
     margin: 2em 0em 2em 0em;

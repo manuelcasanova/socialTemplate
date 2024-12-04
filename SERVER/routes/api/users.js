@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const usersController = require('../../controllers/usersController');
-const fetchRoles = require('../../config/fetchRoles'); 
+const fetchRoles = require('../../config/fetchRoles');
 const verifyRoles = require('../../middleware/verifyRoles');
 
 router.route('/')
@@ -9,9 +9,9 @@ router.route('/')
     async (req, res, next) => {
       try {
         const rolesList = await fetchRoles();
-        verifyRoles(rolesList.find(role => role === 'ADMIN'))(req, res, next); 
+        verifyRoles(rolesList.find(role => role === 'ADMIN'))(req, res, next);
       } catch (err) {
-        next(err); 
+        next(err);
       }
     },
     usersController.getAllUsers
@@ -22,9 +22,9 @@ router.route('/:user_id')
     async (req, res, next) => {
       try {
         const rolesList = await fetchRoles();
-        verifyRoles(...rolesList)(req, res, next); 
+        verifyRoles(...rolesList)(req, res, next);
       } catch (err) {
-        next(err); 
+        next(err);
       }
     },
     (req, res) => {
@@ -38,13 +38,29 @@ router.route('/update')
   .put(
     async (req, res, next) => {
       try {
-        const rolesList = await fetchRoles(); 
-        verifyRoles(...rolesList)(req, res, next); 
+        const rolesList = await fetchRoles();
+        verifyRoles(...rolesList)(req, res, next);
       } catch (err) {
         next(err);
       }
     },
     usersController.updateUser
   );
+
+  //Delete user account
+  router.route('/delete/:userId')
+  .delete(
+    async (req, res, next) => {
+      try {
+        // Fetch roles and verify them
+        const rolesList = await fetchRoles();
+        verifyRoles(...rolesList)(req, res, next);
+      } catch (err) {
+        next(err); // Handle errors during role verification
+      }
+    },
+    usersController.deleteUser // Controller function to handle user deletion
+  );
+
 
 module.exports = router;

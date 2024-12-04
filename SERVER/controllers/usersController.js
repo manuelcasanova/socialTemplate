@@ -79,10 +79,38 @@ const updateUser = async (req, res) => {
     }
 };
 
+// Function to delete user account
+const deleteUser = async (req, res) => {
+
+    const { userId} = req.params; // Extract user_id from request parameters
+
+    try {
+        // Execute the DELETE query to remove the user from the 'users' table
+        const result = await pool.query(
+            'DELETE FROM users WHERE user_id = $1 RETURNING *',
+            [userId]
+        );
+
+        if (result.rows.length === 0) {
+            // If no rows were returned, the user was not found
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Return a success message if the user was successfully deleted
+        res.status(200).json({ success: true, message: 'User successfully deleted', user: result.rows[0] });
+
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
 
 
 module.exports = {
     getAllUsers,
     getUserById,
-    updateUser
+    updateUser,
+    deleteUser
 };

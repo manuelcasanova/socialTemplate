@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import useAuth from "../../../src/hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -73,19 +74,21 @@ export default function Profile({ isNavOpen }) {
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [fileName, setFileName] = useState("");
-  const { userData, refetchUserData  } = useUserApi(auth.userId || "Guest");  
+  const { userData, refetchUserData } = useUserApi(auth.userId || "Guest");
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
-  const inputRef = useRef(null); 
+  const inputRef = useRef(null);
 
-useEffect(() => {
-  // Focus the input when the editMode changes
-  if (inputRef.current) {
-    inputRef.current.focus();
-  }
-}, [editMode]);
+  useEffect(() => {
+    // Focus the input when the editMode changes
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editMode]);
 
   // console.log("userData", userData)
-  
+
   const userId = auth.userId || "Guest";
 
   useEffect(() => {
@@ -115,9 +118,32 @@ useEffect(() => {
     }
   };
 
-  const handleConfirmDelete = () => {
-    console.log("Account deleted");
+  const handleConfirmDelete = async () => {
+    setIsLoading(true); // Show the loading spinner
+
+    try {
+      // Make the DELETE request to the server
+      const response = await axiosPrivate.delete(`/users/delete/${userId}`, {
+      });
+
+      if (response?.data?.success) {
+        setSuccessMessage('Account deleted successfully. Redirecting to sign-in page...');
+
+        // Wait for 2 seconds and then navigate to /signin
+        setTimeout(() => {
+          navigate('/signin');
+        }, 2000);
+      } else {
+        setError(response?.data?.message || 'Account deletion failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error deleting account:', err);
+      setError('An error occurred while deleting the account. Please try again later.');
+    } finally {
+      setIsLoading(false); // Hide the loading spinner
+    }
   };
+
 
   const placeholderText = {
     username: "Enter new username",
@@ -156,19 +182,19 @@ useEffect(() => {
 
   const handleUpdate = async () => {
     const validation = validateInput(editMode, inputValue, confirmPwd);
-  
+
     if (!validation.valid) {
       setError(validation.message);
       return;
     }
-  
+
     setIsLoading(true);
-  
+
     const payload = {
       userId, // The logged-in user's ID
       [editMode]: inputValue, // The field being updated (username, email, or password)
     };
-  
+
     try {
       const response = await axiosPrivate.put('/users/update', payload);
       if (response?.data?.success) {
@@ -176,7 +202,7 @@ useEffect(() => {
         setConfirmPwd('');
         setEditMode(null);
         setError(''); // Reset error if the update is successful
-  
+
         // Refresh the user data after a successful update
         refetchUserData();  // This should trigger a rerender if the userData changes
 
@@ -190,16 +216,16 @@ useEffect(() => {
       setIsLoading(false);
     }
   };
-  
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleUpdate(); // Trigger handleUpdate when Enter is pressed
     }
   };
-  
-  
-  
-  
+
+
+
+
 
   const handleEditButtonClick = (type) => {
     setError("");
@@ -224,6 +250,7 @@ useEffect(() => {
 
   return (
     <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
+      {!successMessage && 
       <div className="body profile-container">
         <h2>{userData?.username || "Guest"}</h2>
         <div className="profile-details">
@@ -236,25 +263,25 @@ useEffect(() => {
           </div>
           {isPictureModalVisible && (
             <div className="picture-modal">
-  <h3>Change your profile picture</h3>
+              <h3>Change your profile picture</h3>
 
-  {/* Hidden file input */}
-  <input
-    type="file"
-    id="profile-picture-input"
-    onChange={(e) => setFileName(e.target.files[0]?.name || "No file chosen")}
-  />
+              {/* Hidden file input */}
+              <input
+                type="file"
+                id="profile-picture-input"
+                onChange={(e) => setFileName(e.target.files[0]?.name || "No file chosen")}
+              />
 
-  {/* Custom label for file input */}
-  <label className="button-white" htmlFor="profile-picture-input">
-    Choose File
-  </label>
+              {/* Custom label for file input */}
+              <label className="button-white" htmlFor="profile-picture-input">
+                Choose File
+              </label>
 
-  {/* Text for chosen file */}
-  <span className="file-name">{fileName || "No file chosen"}</span>
+              {/* Text for chosen file */}
+              <span className="file-name">{fileName || "No file chosen"}</span>
 
-  <button className="button-red" onClick={() => setIsPictureModalVisible(false)}>x</button>
-</div>
+              <button className="button-red" onClick={() => setIsPictureModalVisible(false)}>x</button>
+            </div>
 
           )}
 
@@ -263,14 +290,14 @@ useEffect(() => {
           <button
             className="profile-actions-button button-white"
             onClick={() => handleEditButtonClick("username")}
-            // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
+          // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
           >
             Edit Username
           </button>
           <button
             className="profile-actions-button button-white"
             onClick={() => handleEditButtonClick("email")}
-            // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
+          // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
           >
             Edit Email
           </button>
@@ -316,7 +343,7 @@ useEffect(() => {
               {(editMode === "username" || editMode === "email") && (
                 <div className="edit-input-container">
                   <input
-                   ref={inputRef} 
+                    ref={inputRef}
                     type="text"
                     placeholder={placeholderText} // Dynamic placeholder
                     value={inputValue}
@@ -332,7 +359,7 @@ useEffect(() => {
                   {/* Enter new password field with visibility toggle */}
                   <div className="password-container">
                     <input
-                       ref={inputRef} 
+                      ref={inputRef}
                       type={isNewPasswordVisible ? "text" : "password"}
                       placeholder={placeholderText}
                       value={inputValue}
@@ -379,10 +406,15 @@ useEffect(() => {
           )}
 
           {isLoading && <LoadingSpinner />}
+
         </div>
 
-        
+      
+
       </div>
+    }
+      {successMessage && <div className="profile-delete-success-message">{successMessage}</div>}
+
       <Footer />
     </div>
   );

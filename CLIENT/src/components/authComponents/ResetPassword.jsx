@@ -75,7 +75,7 @@ export default function ResetPassword({isNavOpen}) {
 
   return (
     <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
-<section className="section-reset">
+<section className="body section-reset">
   <form onSubmit={handleSubmit} className="form-reset">
     <h3>Forgot password</h3>
 
