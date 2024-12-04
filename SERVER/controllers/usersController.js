@@ -6,7 +6,25 @@ const path = require('path');
 // Function to get all users
 const getAllUsers = async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM users');
+        const result = await pool.query(`SELECT 
+                u.user_id, 
+                u.username, 
+                u.email, 
+                u.is_active, 
+                u.is_verified, 
+                u.location, 
+                COALESCE(array_agg(DISTINCT r.role_name) FILTER (WHERE r.role_name IS NOT NULL), '{}') AS roles,
+                COALESCE(array_agg(DISTINCT lh.login_time) FILTER (WHERE lh.login_time IS NOT NULL), '{}') AS login_history
+            FROM 
+                users u
+            LEFT JOIN 
+                user_roles ur ON u.user_id = ur.user_id
+            LEFT JOIN 
+                roles r ON ur.role_id = r.role_id
+            LEFT JOIN 
+                login_history lh ON u.user_id = lh.user_id
+            GROUP BY 
+                u.user_id, u.username, u.email, u.is_active, u.is_verified, u.location;`);
         res.status(200).json(result.rows);
     } catch (error) {
         console.error('Error retrieving users:', error);

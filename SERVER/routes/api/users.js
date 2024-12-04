@@ -28,7 +28,7 @@ router.route('/')
     async (req, res, next) => {
       try {
         const rolesList = await fetchRoles();
-        verifyRoles(rolesList.find(role => role === 'ADMIN'))(req, res, next);
+        verifyRoles(rolesList.find(role => role === 'Admin'))(req, res, next);
       } catch (err) {
         next(err);
       }
