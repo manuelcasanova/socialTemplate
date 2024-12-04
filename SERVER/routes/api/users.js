@@ -3,6 +3,25 @@ const router = express.Router();
 const usersController = require('../../controllers/usersController');
 const fetchRoles = require('../../config/fetchRoles');
 const verifyRoles = require('../../middleware/verifyRoles');
+const multer = require('multer');
+
+// Set up multer for file upload
+const upload = multer({
+  dest: 'tmp/', // Temporary storage location
+  limits: {
+    fileSize: 5 * 1024 * 1024, // Limit file size to 5MB
+  },
+  fileFilter: (req, file, cb) => {
+    // Only allow image files
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('File is not an image'), false);
+    }
+    cb(null, true);
+  },
+});
+
+router.route('/upload-profile-picture/:userId')
+  .post(upload.single('profilePicture'), usersController.uploadProfilePicture);
 
 router.route('/')
   .get(

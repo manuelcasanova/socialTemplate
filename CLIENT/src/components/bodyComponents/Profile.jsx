@@ -74,8 +74,11 @@ export default function Profile({ isNavOpen }) {
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null);
   const { userData, refetchUserData } = useUserApi(auth.userId || "Guest");
   const [successMessage, setSuccessMessage] = useState('');
+  const [profilePictureKey, setProfilePictureKey] = useState(0);
+
   const navigate = useNavigate();
 
   const inputRef = useRef(null);
@@ -107,6 +110,8 @@ export default function Profile({ isNavOpen }) {
     setInputValue("");
     setConfirmPwd("");
     setIsPictureModalVisible(true);
+    setFileName("");  // Clear filename if user clicks to update
+    setFile(null);     // Reset file if the modal is opened
   };
 
   const handleDeleteClick = () => {
@@ -117,6 +122,46 @@ export default function Profile({ isNavOpen }) {
       setShowConfirmDelete(true);
     }
   };
+
+// Handle file selection and trigger upload automatically
+const handleFileChange = async (e) => {
+  const selectedFile = e.target.files[0];
+  if (selectedFile) {
+    setFile(selectedFile);
+    setFileName(selectedFile.name || "No file chosen");
+
+    // Automatically upload the file
+    const formData = new FormData();
+    formData.append('profilePicture', selectedFile);
+
+    try {
+      const response = await axiosPrivate.post(`/users/upload-profile-picture/${userId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response?.data?.success) {
+        setIsPictureModalVisible(false);
+        setImageExists(true); // Assume the picture upload was successful
+        setProfilePictureKey((prevKey) => prevKey + 1);
+      } else {
+        console.error("Error uploading profile picture:", response?.data?.message);
+      }
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+    }
+  }
+};
+
+  // Handle the modal close button
+  const handleCloseModal = () => {
+    setIsPictureModalVisible(false);
+    setFileName("");  // Reset filename if modal is closed without uploading
+    setFile(null);     // Reset file if modal is closed
+  };
+
+
 
   const handleConfirmDelete = async () => {
     setIsLoading(true); // Show the loading spinner
@@ -250,169 +295,174 @@ export default function Profile({ isNavOpen }) {
 
   return (
     <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
-      {!successMessage && 
-      <div className="body profile-container">
-        <h2>{userData?.username || "Guest"}</h2>
-        <div className="profile-details">
-          <div className="profile-picture" onClick={handlePictureClick}>
-            {imageExists ? (
-              <img src={profilePictureUrl} alt="Profile" />
-            ) : (
-              <FontAwesomeIcon icon={faUser} size="6x" />
-            )}
-          </div>
-          {isPictureModalVisible && (
-            <div className="picture-modal">
-              <h3>Change your profile picture</h3>
-
-              {/* Hidden file input */}
-              <input
-                type="file"
-                id="profile-picture-input"
-                onChange={(e) => setFileName(e.target.files[0]?.name || "No file chosen")}
-              />
-
-              {/* Custom label for file input */}
-              <label className="button-white" htmlFor="profile-picture-input">
-                Choose File
-              </label>
-
-              {/* Text for chosen file */}
-              <span className="file-name">{fileName || "No file chosen"}</span>
-
-              <button className="button-red" onClick={() => setIsPictureModalVisible(false)}>x</button>
-            </div>
-
-          )}
-
-        </div>
-        <div className="profile-actions">
-          <button
-            className="profile-actions-button button-white"
-            onClick={() => handleEditButtonClick("username")}
-          // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
-          >
-            Edit Username
-          </button>
-          <button
-            className="profile-actions-button button-white"
-            onClick={() => handleEditButtonClick("email")}
-          // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
-          >
-            Edit Email
-          </button>
-          <button
-            className="profile-actions-button button-white"
-            onClick={() => handleEditButtonClick("password")}
-          >
-            Edit Password
-          </button>
-
-          <button
-            className="profile-actions-button button-red"
-            onClick={handleDeleteClick}
-          >
-            Delete Account
-          </button>
-          {showConfirmDelete &&
-            <div className="delete-confirmation">
-              <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
-              <button
-                className="button-white"
-                onClick={() => setShowConfirmDelete(false)}
-              >
-                Keep account
-              </button>
-              <button
-                className="button-red"
-                onClick={handleConfirmDelete}
-              >
-                Delete account
-              </button>
-            </div>
-          }
-        </div>
-        <div className="update-input">
-          {!isLoading && editMode && !showConfirmDelete && (
-            <>
-              {(editMode === "email") && <div className="profile-info">
-                <p>{userData?.email || "Guest"}</p>
-              </div>}
-
-              {/* For editing username or email */}
-              {(editMode === "username" || editMode === "email") && (
-                <div className="edit-input-container">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    placeholder={placeholderText} // Dynamic placeholder
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
+      {!successMessage &&
+        <div className="body profile-container">
+          <h2>{userData?.username || "Guest"}</h2>
+          <div className="profile-details">
+            <div className="profile-picture" onClick={handlePictureClick}>
+              {imageExists ? (
+                    <img 
+                    src={`${profilePictureUrl}?key=${profilePictureKey}`} 
+                    alt="Profile" 
                   />
-                </div>
+              ) : (
+                <FontAwesomeIcon icon={faUser} size="6x" />
               )}
+            </div>
+            {isPictureModalVisible && (
+              <div className="picture-modal">
+                <h3>Change your profile picture</h3>
 
-              {/* For password edit mode */}
-              {editMode === "password" && (
-                <>
-                  {/* Enter new password field with visibility toggle */}
-                  <div className="password-container">
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  id="profile-picture-input"
+                  onChange={handleFileChange}
+                />
+
+                {/* Custom label for file input */}
+                <label className="button-white" htmlFor="profile-picture-input">
+                  Choose File
+                </label>
+
+                {/* Text for chosen file */}
+                <span className="file-name">{fileName || "No file chosen"}</span>
+
+                <button className="button-red" onClick={handleCloseModal}>x</button>
+
+
+              </div>
+
+            )}
+
+          </div>
+          <div className="profile-actions">
+            <button
+              className="profile-actions-button button-white"
+              onClick={() => handleEditButtonClick("username")}
+            // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
+            >
+              Edit Username
+            </button>
+            <button
+              className="profile-actions-button button-white"
+              onClick={() => handleEditButtonClick("email")}
+            // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
+            >
+              Edit Email
+            </button>
+            <button
+              className="profile-actions-button button-white"
+              onClick={() => handleEditButtonClick("password")}
+            >
+              Edit Password
+            </button>
+
+            <button
+              className="profile-actions-button button-red"
+              onClick={handleDeleteClick}
+            >
+              Delete Account
+            </button>
+            {showConfirmDelete &&
+              <div className="delete-confirmation">
+                <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+                <button
+                  className="button-white"
+                  onClick={() => setShowConfirmDelete(false)}
+                >
+                  Keep account
+                </button>
+                <button
+                  className="button-red"
+                  onClick={handleConfirmDelete}
+                >
+                  Delete account
+                </button>
+              </div>
+            }
+          </div>
+          <div className="update-input">
+            {!isLoading && editMode && !showConfirmDelete && (
+              <>
+                {(editMode === "email") && <div className="profile-info">
+                  <p>{userData?.email || "Guest"}</p>
+                </div>}
+
+                {/* For editing username or email */}
+                {(editMode === "username" || editMode === "email") && (
+                  <div className="edit-input-container">
                     <input
                       ref={inputRef}
-                      type={isNewPasswordVisible ? "text" : "password"}
-                      placeholder={placeholderText}
+                      type="text"
+                      placeholder={placeholderText} // Dynamic placeholder
                       value={inputValue}
                       onChange={handleInputChange}
-                    />
-                    <FontAwesomeIcon
-                      icon={isNewPasswordVisible ? faEyeSlash : faEye}
-                      onClick={toggleNewPasswordVisibility}
-                      className="toggle-password-icon"
+                      onKeyDown={handleKeyDown}
                     />
                   </div>
+                )}
 
-                  {/* Confirm new password field with visibility toggle */}
-                  <div className="password-container">
-                    <input
-                      type={isConfirmPasswordVisible ? "text" : "password"}
-                      placeholder="Confirm new password"
-                      value={confirmPwd}
-                      onChange={handleConfirmPwdChange}
-                    />
-                    <FontAwesomeIcon
-                      icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
-                      onClick={toggleConfirmPasswordVisibility}
-                      className="toggle-password-icon"
-                    />
-                  </div>
-                </>
-              )}
+                {/* For password edit mode */}
+                {editMode === "password" && (
+                  <>
+                    {/* Enter new password field with visibility toggle */}
+                    <div className="password-container">
+                      <input
+                        ref={inputRef}
+                        type={isNewPasswordVisible ? "text" : "password"}
+                        placeholder={placeholderText}
+                        value={inputValue}
+                        onChange={handleInputChange}
+                      />
+                      <FontAwesomeIcon
+                        icon={isNewPasswordVisible ? faEyeSlash : faEye}
+                        onClick={toggleNewPasswordVisibility}
+                        className="toggle-password-icon"
+                      />
+                    </div>
 
-              {/* Error message */}
-              {error && <div className="profile-input-instructions">{error}</div>}
+                    {/* Confirm new password field with visibility toggle */}
+                    <div className="password-container">
+                      <input
+                        type={isConfirmPasswordVisible ? "text" : "password"}
+                        placeholder="Confirm new password"
+                        value={confirmPwd}
+                        onChange={handleConfirmPwdChange}
+                      />
+                      <FontAwesomeIcon
+                        icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
+                        onClick={toggleConfirmPasswordVisibility}
+                        className="toggle-password-icon"
+                      />
+                    </div>
+                  </>
+                )}
 
-              {/* Update button */}
-              <button
-                onClick={handleUpdate}
-                className="button-white"
-                disabled={!isInputValid || inputValue.trim() === ""}
-              >
-                Update
-              </button>
+                {/* Error message */}
+                {error && <div className="profile-input-instructions">{error}</div>}
+
+                {/* Update button */}
+                <button
+                  onClick={handleUpdate}
+                  className="button-white"
+                  disabled={!isInputValid || inputValue.trim() === ""}
+                >
+                  Update
+                </button>
 
 
-            </>
-          )}
+              </>
+            )}
 
-          {isLoading && <LoadingSpinner />}
+            {isLoading && <LoadingSpinner />}
+
+          </div>
+
+
 
         </div>
-
-      
-
-      </div>
-    }
+      }
       {successMessage && <div className="profile-delete-success-message">{successMessage}</div>}
 
       <Footer />

@@ -132,12 +132,48 @@ const deleteUser = async (req, res) => {
 };
 
 
-
+// Function to upload a profile picture
+const uploadProfilePicture = async (req, res) => {
+    const { userId } = req.params;
+  
+    // Check if file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+  
+    const file = req.file;
+  
+    try {
+      // Ensure the user folder exists (for storing the profile picture)
+      const userFolderPath = path.join(__dirname, '..', 'media', 'profile_pictures', userId);
+  
+      if (!fs.existsSync(userFolderPath)) {
+        fs.mkdirSync(userFolderPath, { recursive: true });
+      }
+  
+      // Path where the profile picture will be stored
+      const profilePicturePath = path.join(userFolderPath, 'profilePicture.jpg');
+  
+      // Rename the file and move it to the desired location
+      fs.renameSync(file.path, profilePicturePath);
+  
+  
+      res.status(200).json({
+        success: true,
+        message: 'Profile picture uploaded successfully',
+        file: profilePicturePath,
+      });
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
 
 
 module.exports = {
     getAllUsers,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    uploadProfilePicture
 };

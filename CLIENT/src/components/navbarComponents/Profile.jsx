@@ -6,7 +6,7 @@ import useAuth from "../../hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; 
 
-export default function Profile ({toggleSection, showSections, handleNavigate}) {
+export default function Profile ({toggleSection, showSections, handleNavigate, profilePictureUpdateKey}) {
 
   const {auth} = useAuth();
 
@@ -22,7 +22,7 @@ export default function Profile ({toggleSection, showSections, handleNavigate}) 
     
     <div className='nav-item-with-dropdown'>
     <div className='nav-item-logo' onClick={() => toggleSection('profile')}>
-      <ProfileImage/>
+      <ProfileImage profilePictureUpdateKey={profilePictureUpdateKey}/>
       {/* {showSections.profile ? '▲' : '▼'} */}
     </div>
     {showSections.profile && (
