@@ -25,7 +25,7 @@ export default function ProfileImage({profilePictureKey, setProfilePictureKey}) 
           setImageExists(false);
         });
     }
-  }, [userId]);
+  }, [userId, profilePictureKey]);
 
   // Construct the URL for the profile picture
   const profilePictureUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;

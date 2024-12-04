@@ -38,7 +38,6 @@ function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [profilePictureKey, setProfilePictureKey] = useState(0);
 
-
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
   };

@@ -105,7 +105,7 @@ const deleteUser = async (req, res) => {
                 if (err) {
                     console.error('Error deleting profile picture:', err);
                 } else {
-                    console.log('Profile picture deleted successfully');
+                    // console.log('Profile picture deleted successfully');
                 }
             });
         }
@@ -118,7 +118,7 @@ const deleteUser = async (req, res) => {
             if (err) {
                 console.error('Error deleting user folder:', err);
             } else {
-                console.log('User folder deleted successfully');
+                // console.log('User folder deleted successfully');
             }
         });
 

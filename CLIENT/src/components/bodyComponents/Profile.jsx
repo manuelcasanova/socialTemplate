@@ -305,6 +305,7 @@ const handleFileChange = async (e) => {
         <div className="body profile-container">
           <h2>{userData?.username || "Guest"}</h2>
           <div className="profile-details">
+            {!isPictureModalVisible && 
             <div className="profile-picture" onClick={handlePictureClick}>
               {imageExists ? (
                     <img 
@@ -315,6 +316,7 @@ const handleFileChange = async (e) => {
                 <FontAwesomeIcon icon={faUser} size="6x" />
               )}
             </div>
+            }
             {isPictureModalVisible && (
               <div className="picture-modal">
                 <h3>Change your profile picture</h3>
