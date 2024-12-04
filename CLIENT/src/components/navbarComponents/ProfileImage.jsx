@@ -3,7 +3,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { useContext, useState, useEffect } from "react";
 import AuthContext from '../../context/AuthProvider';
 
-export default function ProfileImage() {
+export default function ProfileImage({profilePictureKey, setProfilePictureKey}) {
   const { auth } = useContext(AuthContext);
   const userId = auth.userId;
   const [imageExists, setImageExists] = useState(false);
@@ -11,9 +11,9 @@ export default function ProfileImage() {
   // Check if the profile picture exists
   useEffect(() => {
     if (userId) {
-      const profileImageUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
+      const profilePictureUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
 
-      fetch(profileImageUrl)
+      fetch(profilePictureUrl)
         .then((response) => {
           if (response.ok) {
             setImageExists(true);
@@ -28,12 +28,12 @@ export default function ProfileImage() {
   }, [userId]);
 
   // Construct the URL for the profile picture
-  const profileImageUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
+  const profilePictureUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
 
   return (
     <div className='profile-image-container'>
       {userId && imageExists ? (
-        <img className='profile-image' src={profileImageUrl} alt="Profile" />
+        <img className='profile-image'     src={`${profilePictureUrl}?key=${profilePictureKey}`}  alt="Profile" />
       ) : (
         <FontAwesomeIcon className='profile-image-default' icon={faUser} />
       )}

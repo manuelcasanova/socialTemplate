@@ -36,7 +36,7 @@ Using margin-top, margin-bottom: auto, it's fixed
   overflow: hidden;
   padding: 3%;
 
-
+  cursor: pointer;
 
 }
 
@@ -48,6 +48,7 @@ Using margin-top, margin-bottom: auto, it's fixed
   transition: transform 0.3s ease;
   max-width: 150px;
   max-height: 150px;
+
 }
 
 

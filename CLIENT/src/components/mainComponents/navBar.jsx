@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; 
 
 
-const Navbar = ({ isNavOpen, toggleNav }) => {
+const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey }) => {
   
   const {auth} = useAuth();
 
@@ -93,7 +93,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
       )}
 
       {!isLargeScreen && (
-        <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} />
+        <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
       )}
 
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
@@ -120,7 +120,7 @@ const Navbar = ({ isNavOpen, toggleNav }) => {
 
 
       {isLargeScreen && (
-        <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} />
+        <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
       )}
 
 

@@ -36,6 +36,7 @@ function App() {
 
 
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [profilePictureKey, setProfilePictureKey] = useState(0);
 
 
   const toggleNav = () => {
@@ -46,7 +47,7 @@ function App() {
 
     <div className="app">
 
-      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav}/>
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey}/>
 
       <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
@@ -79,7 +80,7 @@ function App() {
 
 
   <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-    <Route path="/profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+    <Route path="/profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey}/>} />
   </Route>
 
   {/* Admin-specific routes */}

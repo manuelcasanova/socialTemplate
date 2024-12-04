@@ -9,6 +9,7 @@ import Footer from "../mainComponents/footer";
 
 import useUserApi from "../../util/userApi";
 import { axiosPrivate } from "../../api/axios";
+import useLogout from "../../hooks/useLogout"
 
 
 const profilePictureExists = async (userId) => {
@@ -60,7 +61,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
   return { valid: true };
 };
 
-export default function Profile({ isNavOpen }) {
+export default function Profile({ isNavOpen, profilePictureKey, setProfilePictureKey }) {
   const { auth } = useAuth();
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
   const [imageExists, setImageExists] = useState(true);
@@ -77,9 +78,14 @@ export default function Profile({ isNavOpen }) {
   const [file, setFile] = useState(null);
   const { userData, refetchUserData } = useUserApi(auth.userId || "Guest");
   const [successMessage, setSuccessMessage] = useState('');
-  const [profilePictureKey, setProfilePictureKey] = useState(0);
+  const logout = useLogout();
 
   const navigate = useNavigate();
+
+  const signOut = async () => {
+    await logout();
+    navigate('/');
+  }
 
   const inputRef = useRef(null);
 
@@ -176,7 +182,7 @@ const handleFileChange = async (e) => {
 
         // Wait for 2 seconds and then navigate to /signin
         setTimeout(() => {
-          navigate('/signin');
+          signOut()
         }, 2000);
       } else {
         setError(response?.data?.message || 'Account deletion failed. Please try again.');
