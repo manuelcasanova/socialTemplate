@@ -1,26 +1,35 @@
 import Footer from "../../mainComponents/footer";
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import '../../../css/AdminUsers.css'
+import '../../../css/AdminUsers.css';
 
 export default function AdminUsers({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]); // All roles from the database
   const [error, setError] = useState(null);
-  const [expandedUserId, setExpandedUserId] = useState(null); // Tracks the currently expanded user
+  const [expandedUserId, setExpandedUserId] = useState(null);
+
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchUsersAndRoles = async () => {
       try {
-        const response = await axiosPrivate.get("/users/");
-        setUsers(response.data);
+        // Fetch users and roles
+        const [usersResponse, rolesResponse] = await Promise.all([
+          axiosPrivate.get(`/users/`),
+          axiosPrivate.get(`/roles/`) // Fetch roles via the server route
+        ]);
+
+        setUsers(usersResponse.data); // Set user data
+        setRoles(rolesResponse.data); // Set roles from the server
+        console.log(roles, users)
       } catch (err) {
-        setError("Failed to fetch users");
+        setError("Failed to fetch data");
         console.error(err);
       }
     };
 
-    fetchUsers();
+    fetchUsersAndRoles();
   }, [axiosPrivate]);
 
   const handleViewMore = (userId) => {
@@ -38,7 +47,7 @@ export default function AdminUsers({ isNavOpen }) {
               expandedUserId === null || expandedUserId === user.user_id ? (
                 <div className="user-row" key={user.user_id}>
                   <div className="user-info">
-                    <p>{user.username} - {user.email}</p>
+                    <p>{`${user.username} - ${user.email}`}</p>
                     <button onClick={() => handleViewMore(user.user_id)}>
                       {expandedUserId === user.user_id ? "-" : "+"}
                     </button>
@@ -51,12 +60,12 @@ export default function AdminUsers({ isNavOpen }) {
                       <p><strong>Location:</strong> {user.location}</p>
                       <h4>Roles</h4>
                       <ul>
-                        {user.roles.map((role, index) => (
+                        {roles.map((role, index) => (
                           <li key={index}>
                             <input
                               type="checkbox"
                               className="checkbox"
-                              defaultChecked
+                              defaultChecked={user.roles.includes(role)}
                               disabled
                             />
                             {role}

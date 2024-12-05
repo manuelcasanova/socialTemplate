@@ -65,6 +65,7 @@ app.use(verifyJWT);
 
 
 app.use('/users', require('./routes/api/users'));
+app.use('/roles', require('./routes/api/roles'));
 
 
 
