@@ -1,6 +1,8 @@
 .admin-users {
   display: flex;
   flex-direction: column;
+  justify-content: start;
+  padding-top: 3em;
 }
 
 .users-container {
@@ -75,4 +77,22 @@ button:hover {
 .error-message {
   color: red;
   font-weight: bold;
+}
+
+.admin-profile-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 3%;
+}
+
+.admin-profile-image {
+  width: 20%;
+  height: 20%;
+  object-fit: cover;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }

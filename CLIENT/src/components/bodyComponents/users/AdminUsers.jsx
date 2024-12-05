@@ -2,6 +2,10 @@ import Footer from "../../mainComponents/footer";
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import '../../../css/AdminUsers.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons'; // Add any other icons you need
+
+
 
 export default function AdminUsers({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
@@ -54,7 +58,26 @@ export default function AdminUsers({ isNavOpen }) {
                   </div>
 
                   {expandedUserId === user.user_id && (
-                    <div className="user-details">
+
+<div className="user-details">
+<div className="admin-profile-image-container">
+  <img
+    src={`http://localhost:3500/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+    alt={`${user.username}'s profile image`}
+    className="admin-profile-image"
+    onError={(e) => {
+      e.target.style.display = "none";  // Hide broken image
+      // You could also show the fallback icon in the next line if needed
+      e.target.nextSibling.style.display = "inline-block";  // Show icon
+    }}
+  />
+  {/* Display FontAwesome icon if image is not found */}
+  <FontAwesomeIcon
+    icon={faUser}
+    className="admin-profile-image"
+    style={{ display: 'none' }}  // Initially hidden
+  />
+</div>
                       <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
                       <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
                       <p><strong>Location:</strong> {user.location}</p>

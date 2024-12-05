@@ -32,6 +32,15 @@ app.use(customJsonParser);
 // Serve static files from the 'media' folder
 app.use('/media', express.static(path.join(__dirname, 'media')));
 
+// app.use('/media', (req, res, next) => {
+//     console.log(`Serving file: ${req.path}`);
+//     res.on('finish', () => {
+//       console.log(`Response headers:`, res.getHeaders());
+//     });
+//     next();
+//   }, express.static(path.join(__dirname, 'media')));
+  
+
 
 // Custom middleware for handling JSON parsing errors
 app.use((req, res, next) => {
