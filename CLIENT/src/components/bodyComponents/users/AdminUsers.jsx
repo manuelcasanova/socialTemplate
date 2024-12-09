@@ -25,7 +25,7 @@ export default function AdminUsers({ isNavOpen }) {
 
         setUsers(usersResponse.data); // Set user data
         setRoles(rolesResponse.data); // Set roles from the server
-       
+
       } catch (err) {
         setError("Failed to fetch data");
         console.error(err);
@@ -50,7 +50,7 @@ export default function AdminUsers({ isNavOpen }) {
               expandedUserId === null || expandedUserId === user.user_id ? (
                 <div className="user-row" key={user.user_id}>
                   <div className="user-info">
-                    <p>{`${user.username} - ${user.email}`}</p>
+                  {expandedUserId !== user.user_id && <p>{`${user.username}`}</p>}
                     <button onClick={() => handleViewMore(user.user_id)}>
                       {expandedUserId === user.user_id ? "-" : "+"}
                     </button>
@@ -58,25 +58,27 @@ export default function AdminUsers({ isNavOpen }) {
 
                   {expandedUserId === user.user_id && (
 
-<div className="user-details">
-<div className="admin-profile-image-container">
-  <img
-    src={`http://localhost:3500/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-    alt={`${user.username}'s profile image`}
-    className="admin-profile-image"
-    onError={(e) => {
-      e.target.style.display = "none";  // Hide broken image
-      // You could also show the fallback icon in the next line if needed
-      e.target.nextSibling.style.display = "inline-block";  // Show icon
-    }}
-  />
-  {/* Display FontAwesome icon if image is not found */}
-  <FontAwesomeIcon
-    icon={faUser}
-    className="admin-profile-image"
-    style={{ display: 'none' }}  // Initially hidden
-  />
-</div>
+                    <div className="user-details">
+                      <div className="admin-profile-image-container">
+                        <img
+                          src={`http://localhost:3500/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                          alt={`${user.username}'s profile image`}
+                          className="admin-profile-image"
+                          onError={(e) => {
+                            e.target.style.display = "none";  // Hide broken image
+                            // You could also show the fallback icon in the next line if needed
+                            e.target.nextSibling.style.display = "inline-block";  // Show icon
+                          }}
+                        />
+                        {/* Display FontAwesome icon if image is not found */}
+                        <FontAwesomeIcon
+                          icon={faUser}
+                          className="admin-profile-image"
+                          style={{ display: 'none' }}  // Initially hidden
+                        />
+                      </div>
+                      <p><strong>Username:</strong> {user.username}</p>
+                      <p><strong>E-mail:</strong> {user.email}</p>
                       <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
                       <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
                       <p><strong>Location:</strong> {user.location}</p>
@@ -96,26 +98,26 @@ export default function AdminUsers({ isNavOpen }) {
                       </ul>
                       <h4>Last login</h4>
                       {user.login_history.length > 0 ? (
-  <ul>
-<li>
-  {(() => {
-    const lastLogin = new Date(user.login_history[user.login_history.length - 1]);
-    return lastLogin.toLocaleString('en-US', {
-      weekday: 'long',  // Full name of the weekday (e.g., "Monday")
-      month: 'long',    // Full name of the month (e.g., "December")
-      day: 'numeric',   // Day of the month (e.g., "9")
-      year: 'numeric',  // Full year (e.g., "2024")
-      hour: '2-digit',  // Hour in 12-hour format (e.g., "5")
-      minute: '2-digit',// Minutes (e.g., "42")
-      hour12: true      // Use 12-hour clock with AM/PM
-    });
-  })()}
-</li>
+                        <ul>
+                          <li>
+                            {(() => {
+                              const lastLogin = new Date(user.login_history[user.login_history.length - 1]);
+                              return lastLogin.toLocaleString('en-US', {
+                                weekday: 'long',  // Full name of the weekday (e.g., "Monday")
+                                month: 'long',    // Full name of the month (e.g., "December")
+                                day: 'numeric',   // Day of the month (e.g., "9")
+                                year: 'numeric',  // Full year (e.g., "2024")
+                                hour: '2-digit',  // Hour in 12-hour format (e.g., "5")
+                                minute: '2-digit',// Minutes (e.g., "42")
+                                hour12: true      // Use 12-hour clock with AM/PM
+                              });
+                            })()}
+                          </li>
 
-  </ul>
-) : (
-  <p>No login history available</p>
-)}
+                        </ul>
+                      ) : (
+                        <p>No login history available</p>
+                      )}
 
                     </div>
                   )}
