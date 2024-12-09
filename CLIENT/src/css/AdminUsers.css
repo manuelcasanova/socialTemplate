@@ -86,13 +86,16 @@ button:hover {
   align-items: center;
   overflow: hidden;
   padding: 3%;
+  border-radius: 50%; 
+  
 }
 
 .admin-profile-image {
-  width: 20%;
-  height: 20%;
+
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 50%;
-  cursor: pointer;
   transition: transform 0.3s ease;
+  margin: 0 auto;
 }
