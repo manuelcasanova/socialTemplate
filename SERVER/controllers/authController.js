@@ -23,15 +23,23 @@ const handleLogin = async (req, res) => {
         } else if (result === true) {
           // Grab the userId and roles
           const userId = foundEmail[0].user_id;
-          
+
           // Get user roles from the user_roles and roles tables
           const roleData = await pool.query(
             'SELECT r.role_name FROM roles r ' +
             'JOIN user_roles ur ON ur.role_id = r.role_id ' +
             'WHERE ur.user_id = $1', [userId]
           );
-          
+
           const roles = roleData.rows.map(role => role.role_name);
+
+
+          // Insert login history with UTC time (ISO format)
+          await pool.query(
+            'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',
+            [userId, new Date().toISOString()]  // Should store UTC time
+          );
+
 
           // Create JWTs
           const accessToken = jwt.sign(

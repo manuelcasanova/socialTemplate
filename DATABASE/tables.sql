@@ -26,8 +26,8 @@ CREATE TABLE users (
 
 CREATE TABLE login_history (
   id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES users(user_id) ON DELETE CASCADE,  -- Remove login history when user is deleted
-  login_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP  -- Store UTC time with timezone support
+  user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  login_time TIMESTAMPTZ 
 );
 
 CREATE TABLE user_roles (

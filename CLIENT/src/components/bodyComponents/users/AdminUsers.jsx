@@ -14,7 +14,6 @@ export default function AdminUsers({ isNavOpen }) {
   const [error, setError] = useState(null);
   const [expandedUserId, setExpandedUserId] = useState(null);
 
-
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
       try {
@@ -26,7 +25,7 @@ export default function AdminUsers({ isNavOpen }) {
 
         setUsers(usersResponse.data); // Set user data
         setRoles(rolesResponse.data); // Set roles from the server
-        console.log(roles, users)
+       
       } catch (err) {
         setError("Failed to fetch data");
         console.error(err);
@@ -95,16 +94,29 @@ export default function AdminUsers({ isNavOpen }) {
                           </li>
                         ))}
                       </ul>
-                      <h4>Login History</h4>
+                      <h4>Last login</h4>
                       {user.login_history.length > 0 ? (
-                        <ul>
-                          {user.login_history.map((entry, index) => (
-                            <li key={index}>{entry}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p>No login history available</p>
-                      )}
+  <ul>
+<li>
+  {(() => {
+    const lastLogin = new Date(user.login_history[user.login_history.length - 1]);
+    return lastLogin.toLocaleString('en-US', {
+      weekday: 'long',  // Full name of the weekday (e.g., "Monday")
+      month: 'long',    // Full name of the month (e.g., "December")
+      day: 'numeric',   // Day of the month (e.g., "9")
+      year: 'numeric',  // Full year (e.g., "2024")
+      hour: '2-digit',  // Hour in 12-hour format (e.g., "5")
+      minute: '2-digit',// Minutes (e.g., "42")
+      hour12: true      // Use 12-hour clock with AM/PM
+    });
+  })()}
+</li>
+
+  </ul>
+) : (
+  <p>No login history available</p>
+)}
+
                     </div>
                   )}
                 </div>
