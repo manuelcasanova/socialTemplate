@@ -190,13 +190,16 @@ const uploadProfilePicture = async (req, res) => {
   //Update roles (done by admin)
 
   const updateRoles = async (req, res) => {
-    console.log("req.params.user_id", req.params.user_id)
-    console.log("req.user.user_id", req.user.user_id)
+    // console.log("req.params.user_id", req.params.user_id)
+
 
     const userId = parseInt(req.params.user_id); // Extract the user ID from the request parameters
     const { roles } = req.body; // Get the roles array from the request body (assumed to be an array of role names)
-    const loggedInUserId = req.user.user_id; // Assuming the logged-in user's ID is in req.user (e.g., set by a middleware)
+    const loggedInUserId = 2; 
   
+console.log("req.params", req.params)
+console.log("res.body", req.body)
+
     try {
       // Step 1: Fetch the logged-in user's data from the database
       const loggedInUserResult = await pool.query(

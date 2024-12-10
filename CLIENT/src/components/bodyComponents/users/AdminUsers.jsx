@@ -13,7 +13,6 @@ export default function AdminUsers({ isNavOpen }) {
   const [roles, setRoles] = useState([]); // All roles from the database
   const [error, setError] = useState(null);
   const [expandedUserId, setExpandedUserId] = useState(null);
-  const [adminUserId, setAdminUserId] = useState(null);
 
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
@@ -42,23 +41,21 @@ export default function AdminUsers({ isNavOpen }) {
 
   const handleRoleChange = async (user, role, checked) => {
     try {
-      // Simulate backend update (this will eventually be an API call)
-      const updateRoles = async () => {
-        try {
-          await axiosPrivate.put(`/users/${user.user_id}/roles`, {
-            roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
-            adminUserId,  // Include admin user ID to authorize action
-          });
-          // Optionally, update local state here if needed after the API call
-        } catch (error) {
-          console.error("Error updating roles", error);
-          setError("Failed to update roles");
-        }
-      };
+      await axiosPrivate.put(`/users/${user.user_id}/roles`, {
+        roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
+      });
 
-      updateRoles(); // Call the function to simulate the update
+      setUsers((prevUsers) =>
+        prevUsers.map((u) =>
+          u.user_id === user.user_id
+            ? { ...u, roles: checked ? [...u.roles, role] : u.roles.filter((r) => r !== role) }
+            : u
+        )
+      );
+
     } catch (error) {
-      console.error(error);
+      console.error("Error updating roles", error);
+      setError("Failed to update roles");
     }
   };
 
