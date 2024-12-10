@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import '../../../css/AdminUsers.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons'; // Add any other icons you need
+import { faUser } from '@fortawesome/free-solid-svg-icons'; 
+import useAuth from "../../../hooks/useAuth";
 
 
 
@@ -12,7 +13,9 @@ export default function AdminUsers({ isNavOpen }) {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]); // All roles from the database
   const [error, setError] = useState(null);
-  const [expandedUserId, setExpandedUserId] = useState(null);
+  const [expandedUserId, setExpandedUserId] = useState(null); 
+  const {auth} = useAuth();
+const loggedInUser = auth.userId
 
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
@@ -43,6 +46,7 @@ export default function AdminUsers({ isNavOpen }) {
     try {
       await axiosPrivate.put(`/users/${user.user_id}/roles`, {
         roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
+        loggedInUser
       });
 
       setUsers((prevUsers) =>

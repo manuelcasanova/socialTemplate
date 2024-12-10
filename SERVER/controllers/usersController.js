@@ -190,23 +190,16 @@ const uploadProfilePicture = async (req, res) => {
   //Update roles (done by admin)
 
   const updateRoles = async (req, res) => {
-    // console.log("req.params.user_id", req.params.user_id)
-
 
     const userId = parseInt(req.params.user_id); // Extract the user ID from the request parameters
-    const { roles } = req.body; // Get the roles array from the request body (assumed to be an array of role names)
-    const loggedInUserId = 2; 
-  
-console.log("req.params", req.params)
-console.log("res.body", req.body)
+    const { roles, loggedInUser } = req.body;
 
     try {
       // Step 1: Fetch the logged-in user's data from the database
       const loggedInUserResult = await pool.query(
         'SELECT * FROM users WHERE user_id = $1', 
-        [loggedInUserId]
+        [loggedInUser]
       );
-      const loggedInUser = loggedInUserResult.rows[0];
   
       if (!loggedInUser) {
         return res.status(404).json({ error: 'Logged-in user not found' });
@@ -215,7 +208,7 @@ console.log("res.body", req.body)
       // Step 2: Check if the logged-in user is an admin or superadmin
       const loggedInUserRolesResult = await pool.query(
         'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
-        [loggedInUserId]
+        [loggedInUser]
       );
       const loggedInUserRoles = loggedInUserRolesResult.rows.map(row => row.role_name);
   
