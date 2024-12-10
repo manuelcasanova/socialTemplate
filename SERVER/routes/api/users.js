@@ -81,5 +81,20 @@ router.route('/update')
     usersController.deleteUser // Controller function to handle user deletion
   );
 
+  //Update roles (by admin)
+  router.route('/:user_id/roles')
+  .put(
+    async (req, res, next) => {
+      try {
+        const rolesList = await fetchRoles();
+        verifyRoles(...rolesList)(req, res, next); // Make sure the user is authorized (admin check)
+      } catch (err) {
+        next(err);
+      }
+    },
+    usersController.updateRoles // This will call your controller to update roles
+  );
+
+
 
 module.exports = router;

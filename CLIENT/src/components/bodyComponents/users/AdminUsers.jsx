@@ -13,6 +13,7 @@ export default function AdminUsers({ isNavOpen }) {
   const [roles, setRoles] = useState([]); // All roles from the database
   const [error, setError] = useState(null);
   const [expandedUserId, setExpandedUserId] = useState(null);
+  const [adminUserId, setAdminUserId] = useState(null);
 
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
@@ -37,6 +38,28 @@ export default function AdminUsers({ isNavOpen }) {
 
   const handleViewMore = (userId) => {
     setExpandedUserId((prevId) => (prevId === userId ? null : userId));
+  };
+
+  const handleRoleChange = async (user, role, checked) => {
+    try {
+      // Simulate backend update (this will eventually be an API call)
+      const updateRoles = async () => {
+        try {
+          await axiosPrivate.put(`/users/${user.user_id}/roles`, {
+            roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
+            adminUserId,  // Include admin user ID to authorize action
+          });
+          // Optionally, update local state here if needed after the API call
+        } catch (error) {
+          console.error("Error updating roles", error);
+          setError("Failed to update roles");
+        }
+      };
+
+      updateRoles(); // Call the function to simulate the update
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -84,13 +107,15 @@ export default function AdminUsers({ isNavOpen }) {
                       <p><strong>Location:</strong> {user.location}</p>
                       <h4>Roles</h4>
                       <ul>
-                        {roles.map((role, index) => (
+                      {roles.map((role, index) => (
                           <li key={index}>
                             <input
                               type="checkbox"
                               className="checkbox"
-                              defaultChecked={user.roles.includes(role)}
-                              disabled
+                              checked={user.roles.includes(role)}
+                              onChange={(e) =>
+                                handleRoleChange(user, role, e.target.checked) // Pass the full user object here
+                              }
                             />
                             {role}
                           </li>

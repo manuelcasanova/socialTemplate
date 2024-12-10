@@ -187,11 +187,83 @@ const uploadProfilePicture = async (req, res) => {
     }
   };
 
+  //Update roles (done by admin)
+
+  const updateRoles = async (req, res) => {
+    console.log("req.params.user_id", req.params.user_id)
+    console.log("req.user.user_id", req.user.user_id)
+
+    const userId = parseInt(req.params.user_id); // Extract the user ID from the request parameters
+    const { roles } = req.body; // Get the roles array from the request body (assumed to be an array of role names)
+    const loggedInUserId = req.user.user_id; // Assuming the logged-in user's ID is in req.user (e.g., set by a middleware)
+  
+    try {
+      // Step 1: Fetch the logged-in user's data from the database
+      const loggedInUserResult = await pool.query(
+        'SELECT * FROM users WHERE user_id = $1', 
+        [loggedInUserId]
+      );
+      const loggedInUser = loggedInUserResult.rows[0];
+  
+      if (!loggedInUser) {
+        return res.status(404).json({ error: 'Logged-in user not found' });
+      }
+  
+      // Step 2: Check if the logged-in user is an admin or superadmin
+      const loggedInUserRolesResult = await pool.query(
+        'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+        [loggedInUserId]
+      );
+      const loggedInUserRoles = loggedInUserRolesResult.rows.map(row => row.role_name);
+  
+      if (!loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdmin')) {
+        return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can update roles' });
+      }
+  
+      // Step 3: Fetch the user to update from the database
+      const userResult = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+      const user = userResult.rows[0];
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Step 4: Fetch all roles from the roles table to validate the role names
+      const availableRolesResult = await pool.query('SELECT * FROM roles');
+      const availableRoles = availableRolesResult.rows.map(role => role.role_name); // Get all role names
+  
+      // Step 5: Validate the roles provided by the admin
+      const invalidRoles = roles.filter(role => !availableRoles.includes(role));
+      if (invalidRoles.length > 0) {
+        return res.status(400).json({ error: `Invalid roles: ${invalidRoles.join(', ')}` });
+      }
+  
+      // Step 6: Remove existing roles from the user
+      await pool.query('DELETE FROM user_roles WHERE user_id = $1', [userId]);
+  
+      // Step 7: Assign new roles to the user
+      const rolePromises = roles.map(role => {
+        return pool.query(
+          'INSERT INTO user_roles (user_id, role_id) SELECT $1, role_id FROM roles WHERE role_name = $2',
+          [userId, role]
+        );
+      });
+      await Promise.all(rolePromises); // Execute all role insertions
+  
+      res.status(200).json({ message: 'Roles updated successfully' });
+    } catch (error) {
+      console.error('Error updating roles:', error);
+      res.status(500).json({ error: 'Failed to update roles' });
+    }
+  };
+  
+
 
 module.exports = {
     getAllUsers,
     getUserById,
     updateUser,
     deleteUser,
-    uploadProfilePicture
+    uploadProfilePicture,
+    updateRoles
 };
