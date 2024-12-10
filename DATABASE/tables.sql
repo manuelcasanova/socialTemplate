@@ -33,5 +33,7 @@ CREATE TABLE login_history (
 CREATE TABLE user_roles (
   user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
   role_id INT REFERENCES roles(role_id) ON DELETE CASCADE,
-  PRIMARY KEY (user_id, role_id)
+  assigned_by_user_id INT,
+  PRIMARY KEY (user_id, role_id),
+  CONSTRAINT fk_assigned_by_user FOREIGN KEY (assigned_by_user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
