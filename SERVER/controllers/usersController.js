@@ -246,49 +246,73 @@ const updateRoles = async (req, res) => {
             return res.status(400).json({ error: `Invalid roles: ${invalidRoles.join(', ')}` });
         }
 
-        // Step 8: Prevent Admins from assigning or revoking "SuperAdmin"
+        // Step 8: Prevent Admins from assigning "SuperAdmin"
         if (roles.includes('SuperAdmin')) {
             if (!loggedInUserRoles.includes('SuperAdmin')) {
                 return res.status(403).json({ error: 'Only SuperAdmin can assign SuperAdmin role' });
             }
         }
 
-// Step 9: Prevent Admins from revoking "SuperAdmin" role
-const userCurrentRolesResult = await pool.query(
-    'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
-    [userId]
-);
-const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
+        // Step 9: Prevent Admins from revoking "SuperAdmin" role
+        const userCurrentRolesResult = await pool.query(
+            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+            [userId]
+        );
+        const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
 
-if (userCurrentRoles.includes('SuperAdmin') && !roles.includes('SuperAdmin')) {
-    // Check who assigned the "SuperAdmin" role to prevent revocation by anyone else
-    const assignedByResult = await pool.query(
-        `SELECT assigned_by_user_id
+        if (userCurrentRoles.includes('SuperAdmin') && !roles.includes('SuperAdmin')) {
+            // Check who assigned the "SuperAdmin" role to prevent revocation by anyone else
+            const assignedByResult = await pool.query(
+                `SELECT assigned_by_user_id
         FROM user_roles
         INNER JOIN roles ON user_roles.role_id = roles.role_id
         WHERE user_roles.user_id = $1 AND roles.role_name = 'SuperAdmin'`,
-        [userId]
-    );
+                [userId]
+            );
 
-    const assignedByUser = assignedByResult.rows[0]?.assigned_by_user_id;
+            const assignedByUser = assignedByResult.rows[0]?.assigned_by_user_id;
 
-    // 1. Prevent self-revocation (SuperAdmin cannot revoke their own SuperAdmin role)
-    if (loggedInUser === userId) {
-        return res.status(403).json({ error: 'You cannot revoke your own SuperAdmin role' });
-    }
+            // 1. Prevent self-revocation (SuperAdmin cannot revoke their own SuperAdmin role)
+            if (loggedInUser === userId) {
+                return res.status(403).json({ error: 'You cannot revoke your own SuperAdmin role' });
+            }
 
-    // 2. Prevent revocation by someone who did not assign the SuperAdmin role
-    if (assignedByUser !== loggedInUser) {
-        return res.status(403).json({ error: 'Only the user who granted the SuperAdmin role can revoke it' });
-    }
-}
+            // 2. Prevent revocation by someone who did not assign the SuperAdmin role
+            if (assignedByUser !== loggedInUser) {
+                return res.status(403).json({ error: 'Only the user who granted the SuperAdmin role can revoke it' });
+            }
+        }
 
 
 
-        // Step 10: Remove existing roles from the user
+        // Step 10: Prevent Admins from revoking their own Admin role
+        if (loggedInUserRoles.includes('Admin') && !roles.includes('Admin')) {
+            // Check if the logged-in user is trying to revoke their own Admin role
+            if (loggedInUser === userId) {
+                return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
+            }
+
+            // Check if the logged-in Admin user was the one who granted the Admin role
+            const adminAssignedByResult = await pool.query(
+                `SELECT assigned_by_user_id
+                        FROM user_roles
+                        INNER JOIN roles ON user_roles.role_id = roles.role_id
+                        WHERE user_roles.user_id = $1 AND roles.role_name = 'Admin'`,
+                [userId]
+            );
+
+            const adminAssignedByUser = adminAssignedByResult.rows[0]?.assigned_by_user_id;
+
+            if (adminAssignedByUser !== loggedInUser) {
+                return res.status(403).json({ error: 'You can only revoke the Admin role you granted to others' });
+            }
+        }
+
+
+        // Step 11: Remove existing roles from the user
         await pool.query('DELETE FROM user_roles WHERE user_id = $1', [userId]);
 
-        // Step 11: Assign new roles to the user, including the tracking of who assigned the role
+        // Step 12: Assign new roles to the user, including the tracking of who assigned the role
         const rolePromises = roles.map(role => {
             return pool.query(
                 'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',

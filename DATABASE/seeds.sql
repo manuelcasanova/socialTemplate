@@ -16,11 +16,11 @@ INSERT INTO users (username, email, password, is_verified, is_selected, is_activ
 ;
 
 INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
-  (1, 1, 1),
+  (1, 1, NULL),
   (1, 5, 1),
  
   (2, 1, NULL), 
-  (2, 4, NULL), 
+  (2, 4, 2), 
 
   (3, 1, NULL),
   (3, 3, NULL), 
