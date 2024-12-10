@@ -23,17 +23,27 @@ const upload = multer({
 router.route('/upload-profile-picture/:userId')
   .post(upload.single('profilePicture'), usersController.uploadProfilePicture);
 
-router.route('/')
+  router.route('/')
   .get(
     async (req, res, next) => {
       try {
         const rolesList = await fetchRoles();
-        verifyRoles(rolesList.find(role => role === 'Admin'))(req, res, next);
+
+        // Check if either Admin or SuperAdmin role exists in the list
+        const requiredRoles = ['Admin', 'SuperAdmin'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can access this' });
+        }
+
+        // Pass the roles to verifyRoles middleware
+        verifyRoles('Admin', 'SuperAdmin')(req, res, next);
       } catch (err) {
         next(err);
       }
     },
-    usersController.getAllUsers
+    usersController.getAllUsers 
   );
 
 router.route('/:user_id')
@@ -66,8 +76,8 @@ router.route('/update')
     usersController.updateUser
   );
 
-  //Delete user account
-  router.route('/delete/:userId')
+//Delete user account
+router.route('/delete/:userId')
   .delete(
     async (req, res, next) => {
       try {
@@ -81,8 +91,8 @@ router.route('/update')
     usersController.deleteUser // Controller function to handle user deletion
   );
 
-  //Update roles (by admin)
-  router.route('/:user_id/roles')
+//Update roles (by admin)
+router.route('/:user_id/roles')
   .put(
     async (req, res, next) => {
       try {

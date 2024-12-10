@@ -64,13 +64,13 @@ function App() {
 
 {/* Protected Routes */}
 <Route element={<PersistLogin />}>
-<Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+<Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed']} />}>
     <Route path="/user" element={<User isNavOpen={isNavOpen}/>} />
   </Route>
-  <Route element={<RequireAuth allowedRoles={['Moderator', 'Admin', 'SuperAdmin']} />}>
+  <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
     <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
   </Route>
-  <Route element={<RequireAuth allowedRoles={['User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+  <Route element={<RequireAuth allowedRoles={['User_subscribed']} />}>
     <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
   </Route>
   <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
