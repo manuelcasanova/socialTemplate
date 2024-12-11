@@ -142,6 +142,11 @@
   flex-direction: column;
   margin-top: 10vh;
   /* Push the body down so it starts below the fixed navbar */
+
+  overflow-x: hidden;
+
+
+
 }
 
 /* Body section can have scrollable content */

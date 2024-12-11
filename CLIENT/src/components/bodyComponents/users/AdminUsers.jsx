@@ -74,7 +74,7 @@ const loggedInUser = auth.userId
               expandedUserId === null || expandedUserId === user.user_id ? (
                 <div className="user-row" key={user.user_id}>
                   <div className="user-info">
-                  {expandedUserId !== user.user_id && <p>{`${user.username}`}</p>}
+                  {expandedUserId !== user.user_id && <p>{`${user.username} `}</p>}
                     <button onClick={() => handleViewMore(user.user_id)}>
                       {expandedUserId === user.user_id ? "-" : "+"}
                     </button>
