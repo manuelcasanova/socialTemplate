@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS login_history CASCADE;
 DROP TABLE IF EXISTS user_roles CASCADE;
+DROP TABLE IF EXISTS role_change_logs;
 
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
@@ -36,4 +37,14 @@ CREATE TABLE user_roles (
   assigned_by_user_id INT,
   PRIMARY KEY (user_id, role_id),
   CONSTRAINT fk_assigned_by_user FOREIGN KEY (assigned_by_user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE role_change_logs (
+    id SERIAL PRIMARY KEY,
+    user_that_modified INT NOT NULL,  -- ID of the user who made the change
+    user_modified INT NOT NULL,       -- ID of the user whose role was changed
+    role VARCHAR(255) NOT NULL,       -- Role that was changed
+    timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of the action
+    FOREIGN KEY (user_that_modified) REFERENCES users(user_id),
+    FOREIGN KEY (user_modified) REFERENCES users(user_id)
 );

@@ -283,6 +283,9 @@ const updateRoles = async (req, res) => {
             }
         }
 
+        // Step 9b: Determine which roles need to be added and removed
+        const rolesToAdd = roles.filter(role => !userCurrentRoles.includes(role)); // Roles that are being added
+        const rolesToRemove = userCurrentRoles.filter(role => !roles.includes(role)); // Roles that are being removed
 
 
         // Step 10: Prevent Admins from revoking their own Admin role
@@ -320,6 +323,32 @@ const updateRoles = async (req, res) => {
             );
         });
         await Promise.all(rolePromises); // Execute all role insertions
+
+        // Step 13: Log role changes in role_change_logs
+        const roleChangeLogsPromises = [];
+
+        // Log roles that were added
+        rolesToAdd.forEach(role => {
+            roleChangeLogsPromises.push(
+                pool.query(
+                    'INSERT INTO role_change_logs (user_that_modified, user_modified, role) VALUES ($1, $2, $3)',
+                    [loggedInUser, userId, role]
+                )
+            );
+        });
+
+        // Log roles that were removed
+        rolesToRemove.forEach(role => {
+            roleChangeLogsPromises.push(
+                pool.query(
+                    'INSERT INTO role_change_logs (user_that_modified, user_modified, role) VALUES ($1, $2, $3)',
+                    [loggedInUser, userId, role]
+                )
+            );
+        });
+
+        // Execute all log insertions
+        await Promise.all(roleChangeLogsPromises);
 
         res.status(200).json({ message: 'Roles updated successfully' });
     } catch (error) {
