@@ -236,6 +236,8 @@ if (loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdm
     );
     const userRoles = userRolesResult.rows.map(row => row.role_name);
 
+// console.log("userRoles", userRoles, "loggedInUser", loggedInUser, "userId", userId)
+
     // If both loggedInUser and the user being modified are Admins, prevent the modification
     if (userRoles.includes('Admin') && loggedInUser !== userId) {
         return res.status(403).json({
