@@ -59,7 +59,7 @@ const loggedInUser = auth.userId
 
     } catch (error) {
       console.error("Error updating roles", error);
-      setError("Failed to update roles");
+      setError(`${error.response.data.error}`);
     }
   };
 
@@ -114,9 +114,10 @@ const loggedInUser = auth.userId
                               type="checkbox"
                               className="checkbox"
                               checked={user.roles.includes(role)}
-                              onChange={(e) =>
-                                handleRoleChange(user, role, e.target.checked) // Pass the full user object here
-                              }
+                              onChange={(e) => {
+                                setError("");  // Clear any previous error when the checkbox is clicked
+                                handleRoleChange(user, role, e.target.checked); // Pass the full user object here
+                              }}
                             />
                             {role}
                           </li>
