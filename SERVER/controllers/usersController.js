@@ -288,28 +288,33 @@ const updateRoles = async (req, res) => {
         const rolesToRemove = userCurrentRoles.filter(role => !roles.includes(role)); // Roles that are being removed
 
 
-        // Step 10: Prevent Admins from revoking their own Admin role
-        if (loggedInUserRoles.includes('Admin') && !roles.includes('Admin')) {
-            // Check if the logged-in user is trying to revoke their own Admin role
-            if (loggedInUser === userId) {
-                return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
-            }
-
-            // Check if the logged-in Admin user was the one who granted the Admin role
-            const adminAssignedByResult = await pool.query(
-                `SELECT assigned_by_user_id
-                        FROM user_roles
-                        INNER JOIN roles ON user_roles.role_id = roles.role_id
-                        WHERE user_roles.user_id = $1 AND roles.role_name = 'Admin'`,
-                [userId]
-            );
-
-            const adminAssignedByUser = adminAssignedByResult.rows[0]?.assigned_by_user_id;
-
-            if (adminAssignedByUser !== loggedInUser) {
-                return res.status(403).json({ error: 'You can only revoke the Admin role you granted to others' });
-            }
+// Step 10: Prevent Admins from revoking their own Admin role
+if (loggedInUserRoles.includes('Admin')) {
+    // Check if we are attempting to revoke (not add) the Admin role
+    if (userCurrentRoles.includes('Admin') && !roles.includes('Admin')) {
+        // Prevent the logged-in user from revoking their own Admin role
+        if (loggedInUser === userId) {
+            return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
         }
+
+        // Check if the logged-in Admin user was the one who granted the Admin role
+        const adminAssignedByResult = await pool.query(
+            `SELECT assigned_by_user_id
+                FROM user_roles
+                INNER JOIN roles ON user_roles.role_id = roles.role_id
+                WHERE user_roles.user_id = $1 AND roles.role_name = 'Admin'`,
+            [userId]
+        );
+
+        const adminAssignedByUser = adminAssignedByResult.rows[0]?.assigned_by_user_id;
+
+        if (adminAssignedByUser !== loggedInUser) {
+            return res.status(403).json({ error: 'You can only revoke the Admin role you granted to others' });
+        }
+    }
+}
+
+
 
 
         // Step 11: Remove existing roles from the user
@@ -325,7 +330,7 @@ const updateRoles = async (req, res) => {
         await Promise.all(rolePromises); // Execute all role insertions
 
 // Step 13: Log role changes in role_change_logs
-const roleChangeLogsPromises = [];
+const roleChangeLogsPromises = [];  // Initialize the array to hold log promises
 
 // Log roles that were added (assigned)
 rolesToAdd.forEach(role => {
@@ -348,11 +353,8 @@ rolesToRemove.forEach(role => {
 });
 
 // Execute all log insertions
-await Promise.all(roleChangeLogsPromises);
+await Promise.all(roleChangeLogsPromises);  // Wait for all logs to be inserted
 
-
-        // Execute all log insertions
-        await Promise.all(roleChangeLogsPromises);
 
         res.status(200).json({ message: 'Roles updated successfully' });
     } catch (error) {
