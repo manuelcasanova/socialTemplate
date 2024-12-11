@@ -324,28 +324,32 @@ const updateRoles = async (req, res) => {
         });
         await Promise.all(rolePromises); // Execute all role insertions
 
-        // Step 13: Log role changes in role_change_logs
-        const roleChangeLogsPromises = [];
+// Step 13: Log role changes in role_change_logs
+const roleChangeLogsPromises = [];
 
-        // Log roles that were added
-        rolesToAdd.forEach(role => {
-            roleChangeLogsPromises.push(
-                pool.query(
-                    'INSERT INTO role_change_logs (user_that_modified, user_modified, role) VALUES ($1, $2, $3)',
-                    [loggedInUser, userId, role]
-                )
-            );
-        });
+// Log roles that were added (assigned)
+rolesToAdd.forEach(role => {
+    roleChangeLogsPromises.push(
+        pool.query(
+            'INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) VALUES ($1, $2, $3, $4)',
+            [loggedInUser, userId, role, 'assigned'] // Add 'assigned' as the action type
+        )
+    );
+});
 
-        // Log roles that were removed
-        rolesToRemove.forEach(role => {
-            roleChangeLogsPromises.push(
-                pool.query(
-                    'INSERT INTO role_change_logs (user_that_modified, user_modified, role) VALUES ($1, $2, $3)',
-                    [loggedInUser, userId, role]
-                )
-            );
-        });
+// Log roles that were removed (unassigned)
+rolesToRemove.forEach(role => {
+    roleChangeLogsPromises.push(
+        pool.query(
+            'INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) VALUES ($1, $2, $3, $4)',
+            [loggedInUser, userId, role, 'unassigned'] // Add 'unassigned' as the action type
+        )
+    );
+});
+
+// Execute all log insertions
+await Promise.all(roleChangeLogsPromises);
+
 
         // Execute all log insertions
         await Promise.all(roleChangeLogsPromises);

@@ -46,5 +46,6 @@ CREATE TABLE role_change_logs (
     role VARCHAR(255) NOT NULL,       -- Role that was changed
     timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of the action
     FOREIGN KEY (user_that_modified) REFERENCES users(user_id),
-    FOREIGN KEY (user_modified) REFERENCES users(user_id)
+    FOREIGN KEY (user_modified) REFERENCES users(user_id),
+    action_type VARCHAR(20) CHECK (action_type IN ('assigned', 'unassigned')) NOT NULL
 );
