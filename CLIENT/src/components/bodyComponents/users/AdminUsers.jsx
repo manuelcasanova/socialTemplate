@@ -30,7 +30,7 @@ const loggedInUser = auth.userId
         setRoles(rolesResponse.data); // Set roles from the server
 
       } catch (err) {
-        setError("Failed to fetch data");
+        setError(`Failed to fetch data: ${err.response.data.message}`);
         console.error(err);
       }
     };
