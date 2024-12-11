@@ -10,12 +10,12 @@ import useLogout from '../../hooks/useLogout';
 import useAuth from '../../hooks/useAuth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; 
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 
 const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey }) => {
-  
-  const {auth} = useAuth();
+
+  const { auth } = useAuth();
 
   const logout = useLogout();
 
@@ -74,7 +74,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
   // Toggle individual dropdown sections and close others
   const toggleSection = (section) => {
     setShowSections((prevState) => ({
-      
+
       // Close all other sections, only toggle the clicked one
       admin: section === 'admin' ? !prevState.admin : false,
       profile: section === 'profile' ? !prevState.profile : false,
@@ -85,11 +85,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
   return (
 
 
-<div className={`navbar ${isNavOpen ? 'navbar-open' : ''}`} data-testid="navbar">
+    <div className={`navbar ${isNavOpen ? 'navbar-open' : ''}`} data-testid="navbar">
 
 
       {isLargeScreen && (
-        <Logo handleNavigate={handleNavigate}/>
+        <Logo handleNavigate={handleNavigate} />
       )}
 
       {!isLargeScreen && (
@@ -108,14 +108,19 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
         {showSections.admin && (
           <>
             <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
+            {auth.roles && auth.roles.includes('SuperAdmin') && (
+              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
+                Role change log
+              </div>
+            )}
           </>
         )}
       </div>
 
       {!isLargeScreen && Object.keys(auth).length > 0 && (
-              <div className="nav-item" onClick={signOut}>
-              <FontAwesomeIcon icon={faSignOutAlt} />
-            </div>
+        <div className="nav-item" onClick={signOut}>
+          <FontAwesomeIcon icon={faSignOutAlt} />
+        </div>
       )}
 
 

@@ -20,6 +20,7 @@ import Unauthorized from './components/authComponents/Unauthorized';
 import PersistLogin from './components/authComponents/PersistLogin';
 import RequireAuth from './components/authComponents/RequireAuth';
 import ResetPassword from './components/authComponents/ResetPassword';
+import RoleChangeLog from './components/bodyComponents/users/RoleChangeLog';
 
 
 
@@ -86,6 +87,11 @@ function App() {
   <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
     <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']}/>} />
   </Route>
+
+  <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
+    <Route path="/admin/superadmin/rolechangelog" element={<RoleChangeLog isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']}/>} />
+  </Route>
+
 </Route>
 </Routes>
 
