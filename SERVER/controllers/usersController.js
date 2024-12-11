@@ -228,13 +228,22 @@ const updateRoles = async (req, res) => {
             return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can update roles' });
         }
 
-        // Step 5: Fetch the user to update from the database
-        const userResult = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
-        const user = userResult.rows[0];
+// Step 5: Check if logged-in user is an Admin and is trying to modify another Admin
+if (loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdmin')) {
+    const userRolesResult = await pool.query(
+        'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+        [userId]
+    );
+    const userRoles = userRolesResult.rows.map(row => row.role_name);
 
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
+    // If both loggedInUser and the user being modified are Admins, prevent the modification
+    if (userRoles.includes('Admin') && loggedInUser !== userId) {
+        return res.status(403).json({
+            error: 'Admins cannot modify other Admins\' roles'
+        });
+    }
+}
+
 
         // Step 6: Fetch all roles from the roles table to validate the role names
         const availableRolesResult = await pool.query('SELECT * FROM roles');
@@ -308,10 +317,22 @@ if (loggedInUserRoles.includes('Admin')) {
 
         const adminAssignedByUser = adminAssignedByResult.rows[0]?.assigned_by_user_id;
 
-        if (adminAssignedByUser !== loggedInUser) {
-            return res.status(403).json({ error: 'You can only revoke the Admin role you granted to others' });
-        }
     }
+}
+
+// Allow SuperAdmins to revoke Admin roles freely
+if (loggedInUserRoles.includes('SuperAdmin')) {
+    // No restriction for SuperAdmins revoking Admin roles
+    // If logged-in user is a SuperAdmin, allow them to revoke the Admin role freely
+    const adminAssignedByResult = await pool.query(
+        `SELECT assigned_by_user_id
+            FROM user_roles
+            INNER JOIN roles ON user_roles.role_id = roles.role_id
+            WHERE user_roles.user_id = $1 AND roles.role_name = 'Admin'`,
+        [userId]
+    );
+
+    // No need to check if they assigned it, since SuperAdmins can revoke Admin roles freely
 }
 
 
