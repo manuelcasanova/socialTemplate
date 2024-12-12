@@ -2,9 +2,9 @@ import Footer from "../../mainComponents/footer";
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
+import { fetchUsersAndRoles } from "../../../util/fetchUsersAndRoles";
 
 export default function RoleChangeLog({ isNavOpen }) {
-
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]); // All roles from the database
@@ -12,25 +12,21 @@ export default function RoleChangeLog({ isNavOpen }) {
   const { auth } = useAuth();
   const loggedInUser = auth.userId
 
+  console.log("users", users, "roles", roles)
+
   useEffect(() => {
-    const fetchUsersAndRoles = async () => {
+    const loadData = async () => {
       try {
-        // Fetch users and roles
-        const [usersResponse, rolesResponse] = await Promise.all([
-          axiosPrivate.get(`/users/`),
-          axiosPrivate.get(`/roles/`) // Fetch roles via the server route
-        ]);
-
-        setUsers(usersResponse.data); // Set user data
-        setRoles(rolesResponse.data); // Set roles from the server
-
+        const { users, roles } = await fetchUsersAndRoles(axiosPrivate); // Pass axiosPrivate here
+        setUsers(users); // Set user data
+        setRoles(roles); // Set roles from the server
       } catch (err) {
-        setError(`Failed to fetch data: ${err.response.data.message}`);
+        setError(err.message); // Catch and show error from utility function
         console.error(err);
       }
     };
 
-    fetchUsersAndRoles();
+    loadData();
   }, [axiosPrivate]);
 
   return (
