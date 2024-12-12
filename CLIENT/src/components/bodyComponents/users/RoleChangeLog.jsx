@@ -5,6 +5,8 @@ import useAuth from "../../../hooks/useAuth";
 import { fetchUsersAndRoles } from "../../../util/fetchUsersAndRoles";
 import { fetchRoleChangeLogs } from "../../../util/fetchRoleModificationLogs";
 
+import '../../../css/RoleChangeLog.css'
+
 export default function RoleChangeLog({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState([]);
@@ -13,8 +15,6 @@ export default function RoleChangeLog({ isNavOpen }) {
   const [error, setError] = useState(null);
   const { auth } = useAuth();
   const loggedInUser = auth.userId
-
-  console.log("logs", logs)
 
   useEffect(() => {
     const loadData = async () => {
@@ -46,20 +46,21 @@ export default function RoleChangeLog({ isNavOpen }) {
           <table>
             <thead>
               <tr>
-                <th>User ID</th>
-                <th>Admin that modified</th>
+
+                <th>Modifier</th>
                 <th>Action performed</th>
                 <th>Role</th>
+                <th>Recipient</th>
                 <th>Timestamp</th>
               </tr>
             </thead>
             <tbody>
               {logs.map((log) => (
                 <tr key={log.id}>
-                  <td>{log.user_modified}</td>
                   <td>{log.user_that_modified}</td>
                   <td>{log.action_type}</td>
                   <td>{log.role}</td>
+                  <td>{log.user_modified}</td>
                   <td>{new Date(log.timestamp).toLocaleString()}</td>
                 </tr>
               ))}

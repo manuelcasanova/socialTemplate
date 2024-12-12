@@ -1,0 +1,10 @@
+.admin-users table {
+    padding: 1em;
+    text-align: center;
+}
+
+.admin-users th, .admin-users td {
+padding: 0em 0.1em;
+border-bottom: 1px solid black;
+}
+
