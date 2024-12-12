@@ -228,23 +228,22 @@ const updateRoles = async (req, res) => {
             return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can update roles' });
         }
 
-// Step 5: Check if logged-in user is an Admin and is trying to modify another Admin
-if (loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdmin')) {
-    const userRolesResult = await pool.query(
-        'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
-        [userId]
-    );
-    const userRoles = userRolesResult.rows.map(row => row.role_name);
+        // Step 5: Check if logged-in user is an Admin and is trying to modify another Admin
+        if (loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdmin')) {
+            const userRolesResult = await pool.query(
+                'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+                [userId]
+            );
+            const userRoles = userRolesResult.rows.map(row => row.role_name);
 
-// console.log("userRoles", userRoles, "loggedInUser", loggedInUser, "userId", userId)
 
-    // If both loggedInUser and the user being modified are Admins, prevent the modification
-    if (userRoles.includes('Admin') && loggedInUser !== userId) {
-        return res.status(403).json({
-            error: 'Admins cannot modify other Admins\' roles'
-        });
-    }
-}
+            // If both loggedInUser and the user being modified are Admins, prevent the modification
+            if (userRoles.includes('Admin') && loggedInUser !== userId) {
+                return res.status(403).json({
+                    error: 'Admins cannot modify other Admins\' roles'
+                });
+            }
+        }
 
 
         // Step 6: Fetch all roles from the roles table to validate the role names
@@ -264,7 +263,19 @@ if (loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdm
             }
         }
 
-        // Step 9: Prevent Admins from revoking "SuperAdmin" role
+
+        // Step 9: Prevent Admins from assigning "Admin" role to others (but allow self-modification)
+        if (roles.includes('Admin')) {
+            // Allow the logged-in user to modify their own roles
+            if (loggedInUser !== userId) {
+                if (!loggedInUserRoles.includes('SuperAdmin')) {
+                    return res.status(403).json({ error: 'Only SuperAdmin can assign Admin role to others' });
+                }
+            }
+        }
+
+
+        // Step 10: Prevent Admins from revoking "SuperAdmin" role
         const userCurrentRolesResult = await pool.query(
             'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
             [userId]
@@ -294,56 +305,56 @@ if (loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdm
             }
         }
 
-        // Step 9b: Determine which roles need to be added and removed
+        // Step 11: Determine which roles need to be added and removed
         const rolesToAdd = roles.filter(role => !userCurrentRoles.includes(role)); // Roles that are being added
         const rolesToRemove = userCurrentRoles.filter(role => !roles.includes(role)); // Roles that are being removed
 
 
-// Step 10: Prevent Admins from revoking their own Admin role
-if (loggedInUserRoles.includes('Admin')) {
-    // Check if we are attempting to revoke (not add) the Admin role
-    if (userCurrentRoles.includes('Admin') && !roles.includes('Admin')) {
-        // Prevent the logged-in user from revoking their own Admin role
-        if (loggedInUser === userId) {
-            return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
-        }
+        // Step 12: Prevent Admins from revoking their own Admin role
+        if (loggedInUserRoles.includes('Admin')) {
+            // Check if we are attempting to revoke (not add) the Admin role
+            if (userCurrentRoles.includes('Admin') && !roles.includes('Admin')) {
+                // Prevent the logged-in user from revoking their own Admin role
+                if (loggedInUser === userId) {
+                    return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
+                }
 
-        // Check if the logged-in Admin user was the one who granted the Admin role
-        const adminAssignedByResult = await pool.query(
-            `SELECT assigned_by_user_id
+                // Check if the logged-in Admin user was the one who granted the Admin role
+                const adminAssignedByResult = await pool.query(
+                    `SELECT assigned_by_user_id
                 FROM user_roles
                 INNER JOIN roles ON user_roles.role_id = roles.role_id
                 WHERE user_roles.user_id = $1 AND roles.role_name = 'Admin'`,
-            [userId]
-        );
+                    [userId]
+                );
 
-        const adminAssignedByUser = adminAssignedByResult.rows[0]?.assigned_by_user_id;
+                const adminAssignedByUser = adminAssignedByResult.rows[0]?.assigned_by_user_id;
 
-    }
-}
+            }
+        }
 
-// Allow SuperAdmins to revoke Admin roles freely
-if (loggedInUserRoles.includes('SuperAdmin')) {
-    // No restriction for SuperAdmins revoking Admin roles
-    // If logged-in user is a SuperAdmin, allow them to revoke the Admin role freely
-    const adminAssignedByResult = await pool.query(
-        `SELECT assigned_by_user_id
+        // Allow SuperAdmins to revoke Admin roles freely
+        if (loggedInUserRoles.includes('SuperAdmin')) {
+            // No restriction for SuperAdmins revoking Admin roles
+            // If logged-in user is a SuperAdmin, allow them to revoke the Admin role freely
+            const adminAssignedByResult = await pool.query(
+                `SELECT assigned_by_user_id
             FROM user_roles
             INNER JOIN roles ON user_roles.role_id = roles.role_id
             WHERE user_roles.user_id = $1 AND roles.role_name = 'Admin'`,
-        [userId]
-    );
+                [userId]
+            );
 
-    // No need to check if they assigned it, since SuperAdmins can revoke Admin roles freely
-}
-
-
+            // No need to check if they assigned it, since SuperAdmins can revoke Admin roles freely
+        }
 
 
-        // Step 11: Remove existing roles from the user
+
+
+        // Step 13: Remove existing roles from the user
         await pool.query('DELETE FROM user_roles WHERE user_id = $1', [userId]);
 
-        // Step 12: Assign new roles to the user, including the tracking of who assigned the role
+        // Step 14: Assign new roles to the user, including the tracking of who assigned the role
         const rolePromises = roles.map(role => {
             return pool.query(
                 'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',
@@ -352,31 +363,31 @@ if (loggedInUserRoles.includes('SuperAdmin')) {
         });
         await Promise.all(rolePromises); // Execute all role insertions
 
-// Step 13: Log role changes in role_change_logs
-const roleChangeLogsPromises = [];  // Initialize the array to hold log promises
+        // Step 15: Log role changes in role_change_logs
+        const roleChangeLogsPromises = [];  // Initialize the array to hold log promises
 
-// Log roles that were added (assigned)
-rolesToAdd.forEach(role => {
-    roleChangeLogsPromises.push(
-        pool.query(
-            'INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) VALUES ($1, $2, $3, $4)',
-            [loggedInUser, userId, role, 'assigned'] // Add 'assigned' as the action type
-        )
-    );
-});
+        // Log roles that were added (assigned)
+        rolesToAdd.forEach(role => {
+            roleChangeLogsPromises.push(
+                pool.query(
+                    'INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) VALUES ($1, $2, $3, $4)',
+                    [loggedInUser, userId, role, 'assigned'] // Add 'assigned' as the action type
+                )
+            );
+        });
 
-// Log roles that were removed (unassigned)
-rolesToRemove.forEach(role => {
-    roleChangeLogsPromises.push(
-        pool.query(
-            'INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) VALUES ($1, $2, $3, $4)',
-            [loggedInUser, userId, role, 'unassigned'] // Add 'unassigned' as the action type
-        )
-    );
-});
+        // Log roles that were removed (unassigned)
+        rolesToRemove.forEach(role => {
+            roleChangeLogsPromises.push(
+                pool.query(
+                    'INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) VALUES ($1, $2, $3, $4)',
+                    [loggedInUser, userId, role, 'unassigned'] // Add 'unassigned' as the action type
+                )
+            );
+        });
 
-// Execute all log insertions
-await Promise.all(roleChangeLogsPromises);  // Wait for all logs to be inserted
+        // Execute all log insertions
+        await Promise.all(roleChangeLogsPromises);  // Wait for all logs to be inserted
 
 
         res.status(200).json({ message: 'Roles updated successfully' });
