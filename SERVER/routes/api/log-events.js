@@ -10,7 +10,7 @@ router.route('/role-modification/logs')
     async (req, res, next) => {
       try {
         const rolesList = await fetchRoles();
-        verifyRoles(...rolesList)(req, res, next); // Make sure the user is authorized (admin check)
+        verifyRoles('SuperAdmin')(req, res, next); 
       } catch (err) {
         next(err);
       }
