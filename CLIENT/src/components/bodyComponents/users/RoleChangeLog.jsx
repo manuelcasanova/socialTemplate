@@ -35,6 +35,12 @@ export default function RoleChangeLog({ isNavOpen }) {
     loadData();
   }, [axiosPrivate]);
 
+    // Function to get the name of the modifier based on user ID
+    const getUserNameById = (userId) => {
+      const user = users.find((user) => user.user_id === userId);  // Find the user object with the given ID
+      return user ? user.username : 'Unknown';  // Return the user's name or 'Unknown' if not found
+    };
+
   return (
     <div className={`body-footer ${isNavOpen ? "body-footer-squeezed" : ""}`}>
       <div className="body admin-users">
@@ -47,10 +53,12 @@ export default function RoleChangeLog({ isNavOpen }) {
             <thead>
               <tr>
 
-                <th>Modifier</th>
+                <th>Modifier ID</th>
+                <th>Name</th>
                 <th>Action performed</th>
                 <th>Role</th>
-                <th>Recipient</th>
+                <th>Recipient ID</th>
+                <th>Name</th>
                 <th>Timestamp</th>
               </tr>
             </thead>
@@ -58,9 +66,11 @@ export default function RoleChangeLog({ isNavOpen }) {
               {logs.map((log) => (
                 <tr key={log.id}>
                   <td>{log.user_that_modified}</td>
+                  <td>{getUserNameById(log.user_that_modified)}</td>
                   <td>{log.action_type}</td>
                   <td>{log.role}</td>
                   <td>{log.user_modified}</td>
+                  <td>{getUserNameById(log.user_modified)}</td>
                   <td>{new Date(log.timestamp).toLocaleString()}</td>
                 </tr>
               ))}
