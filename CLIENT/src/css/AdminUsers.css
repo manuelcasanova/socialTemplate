@@ -20,7 +20,7 @@
   overflow-x: hidden; /* Prevent horizontal overflow */
 
   margin: auto; /* Vertically and horizontally center child elements */
-  margin-top: 10vh;
+  margin-top: 5em;
   width: 100%;  /* Full width */
   height: 100%; /* Full height */
 }

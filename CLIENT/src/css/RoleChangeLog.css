@@ -7,9 +7,16 @@
 
 
 .table-wrapper {
-    margin-top: 2em;  /* Add margin to give space for the header */
+    margin-top: 5em;  /* Add margin to give space for the header */
     overflow-x: auto;  /* Enable horizontal scrolling for the table */
     padding-right: 10px;  /* Add padding to the right to avoid scroll bar cutting off content */
+  }
+
+  .table-wrapper thead {
+ position: sticky;
+    top: 0;              
+    background-color: #f4f4f4; 
+    z-index: 1;        
   }
 
 .admin-users h2 {
