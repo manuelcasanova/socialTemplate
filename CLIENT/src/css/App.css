@@ -153,13 +153,14 @@
 .body {
   display: flex;
   justify-content: center;
-  align-items: center;
   flex-grow: 1;
   /* Ensures this grows to take available space */
   overflow-y: auto;
   /* Enables scrolling if content exceeds the body height */
   padding: 1rem;
   background-color: #f4f4f4;
+
+  
 }
 
 /* Footer should stay at the bottom unless content exceeds the viewport */

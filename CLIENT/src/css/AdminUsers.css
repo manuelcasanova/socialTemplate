@@ -6,7 +6,11 @@
   width: 100%;
   max-width: 100vw; /* Ensure it doesn’t exceed viewport width */
   box-sizing: border-box;
-  
+}
+
+.admin-users h2 {
+ text-align: center;
+ margin: 1em 0em 2em 0em;
 }
 
 .users-container {
@@ -14,6 +18,10 @@
   max-width: 500px; /* Ensure it doesn't exceed screen width */
   box-sizing: border-box; /* Ensure padding doesn't push it out */
   overflow-x: hidden; /* Prevent horizontal overflow */
+
+  margin: auto; /* Vertically and horizontally center child elements */
+  width: 100%;  /* Full width */
+  height: 100%; /* Full height */
 }
 
 .user-row {
