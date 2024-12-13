@@ -49,6 +49,7 @@ export default function RoleChangeLog({ isNavOpen }) {
 
 
         {logs.length > 0 ? (
+          <div className="table-wrapper">
           <table>
             <thead>
               <tr>
@@ -76,6 +77,7 @@ export default function RoleChangeLog({ isNavOpen }) {
               ))}
             </tbody>
           </table>
+          </div>
         ) : (
           <p>No role change logs found.</p>
         )}

@@ -1,6 +1,26 @@
 .admin-users {
     overflow-x: auto;  /* Allow horizontal scrolling on smaller screens */
+
+    position: relative;
+    padding-top: 20px; /* Give some space to make room for the centered header */
 }
+
+
+.table-wrapper {
+    margin-top: 2em;  /* Add margin to give space for the header */
+    overflow-x: auto;  /* Enable horizontal scrolling for the table */
+    padding-right: 10px;  /* Add padding to the right to avoid scroll bar cutting off content */
+  }
+
+.admin-users h2 {
+    text-align: center;  /* Center the h2 */
+    position: absolute;  /* Fix it at the top of the container */
+    top: 1em;
+    left: 50%;
+    transform: translateX(-50%);  /* Center it horizontally */
+    z-index: 1;  /* Ensure it is on top of the table */
+    width: 100%;  /* Make sure it's full width */
+  } 
 
 .admin-users table {
     width: 100%;
@@ -30,3 +50,21 @@
         padding: 0.5em; /* Slightly increase padding for better readability */
     }
 }
+
+
+/* For screens larger than 1025px (large screens) */
+@media (min-width: 1025px) {
+    /* Add space for the navbar by adjusting margin/padding */
+    .admin-users {
+ 
+    }
+  
+    .admin-users h2 {
+
+    }
+  
+    .table-wrapper {
+
+    }
+  }
+  
