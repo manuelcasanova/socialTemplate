@@ -1,10 +1,32 @@
+.admin-users {
+    overflow-x: auto;  /* Allow horizontal scrolling on smaller screens */
+}
+
 .admin-users table {
+    width: 100%;
+    min-width: 600px; /* Ensure the table has enough width to scroll if necessary */
     padding: 1em;
     text-align: center;
+    border-collapse: collapse; /* Ensure borders are not doubled */
 }
 
 .admin-users th, .admin-users td {
-padding: 0em 0.1em;
-border-bottom: 1px solid black;
+    padding: 0.5em; /* Adjust padding for better spacing */
+    border-bottom: 1px solid black;
 }
 
+@media (max-width: 580px) {
+    .admin-users {
+        overflow-x: auto;  /* Allow horizontal scrolling on smaller screens */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile */
+    }
+
+    .admin-users table {
+        width: auto; /* Allow table to shrink or grow depending on content */
+        min-width: 600px; /* Prevent the table from shrinking too much */
+    }
+
+    .admin-users th, .admin-users td {
+        padding: 0.5em; /* Slightly increase padding for better readability */
+    }
+}
