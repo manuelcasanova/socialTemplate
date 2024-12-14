@@ -35,11 +35,11 @@ export default function RoleChangeLog({ isNavOpen }) {
     loadData();
   }, [axiosPrivate]);
 
-    // Function to get the name of the modifier based on user ID
-    const getUserNameById = (userId) => {
-      const user = users.find((user) => user.user_id === userId);  // Find the user object with the given ID
-      return user ? user.username : 'Unknown';  // Return the user's name or 'Unknown' if not found
-    };
+  // Function to get the name of the modifier based on user ID
+  const getUserNameById = (userId) => {
+    const user = users.find((user) => user.user_id === userId);  // Find the user object with the given ID
+    return user ? user.username : 'Unknown';  // Return the user's name or 'Unknown' if not found
+  };
 
   return (
     <div className={`body-footer ${isNavOpen ? "body-footer-squeezed" : ""}`}>
@@ -50,33 +50,39 @@ export default function RoleChangeLog({ isNavOpen }) {
 
         {logs.length > 0 ? (
           <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
+            <table>
+              <thead>
+                <tr>
 
-                <th>Modifier ID</th>
-                <th>Name</th>
-                <th>Action performed</th>
-                <th>Role</th>
-                <th>Recipient ID</th>
-                <th>Name</th>
-                <th>Timestamp</th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.map((log) => (
-                <tr key={log.id}>
-                  <td>{log.user_that_modified}</td>
-                  <td>{getUserNameById(log.user_that_modified)}</td>
-                  <td>{log.action_type}</td>
-                  <td>{log.role}</td>
-                  <td>{log.user_modified}</td>
-                  <td>{getUserNameById(log.user_modified)}</td>
-                  <td>{new Date(log.timestamp).toLocaleString()}</td>
+                  <th>Modifier</th>
+                  <th>Action performed</th>
+                  <th>Role</th>
+                  <th>Recipient</th>
+                  <th>Timestamp (DD/MM/YYYY)</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {logs.map((log) => (
+                  <tr key={log.id}>
+                    <td>{getUserNameById(log.user_that_modified)} (Id: {log.user_that_modified})</td>
+                    <td>{log.action_type}</td>
+                    <td>{log.role}</td>
+                    <td>{getUserNameById(log.user_modified)} (Id: {log.user_modified})</td>
+                    <td>{new Date(log.timestamp).toLocaleString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: false,  // Optional: Use 24-hour format
+                    })}</td>
+
+
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : (
           <p>No role change logs found.</p>
