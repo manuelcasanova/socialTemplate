@@ -2,12 +2,37 @@ const bcrypt = require('bcrypt');
 const pool = require('../config/db');
 const { response } = require('express');
 
+const usernameRegex = /^[A-z][A-z0-9-_]{3,23}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/;
+const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+
 const handleNewUser = async (req, res) => {
-    const { user, pwd, email, role } = req.body;
+    let { user, pwd, email, role } = req.body;
 
     if (!user || !pwd || !email) {
         return res.status(400).json({ 'message': 'Username, email, and password are required.' });
     }
+
+    // Validate username, password, and email using regex
+    if (!usernameRegex.test(user)) {
+        return res.status(400).json({ 'message': 'Invalid username. It must be 4-24 characters long, start with a letter, and can include letters, numbers, dashes, or underscores.' });
+    }
+
+    if (!passwordRegex.test(pwd)) {
+        return res.status(400).json({ 'message': 'Invalid password. It must be 8-24 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.' });
+    }
+
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ 'message': 'Invalid email format.' });
+    }
+
+    if (!user || !pwd || !email) {
+        return res.status(400).json({ 'message': 'Username, email, and password are required.' });
+    }
+
+    // Normalize username (capitalize the first letter and lowercase the rest)
+    user = user.charAt(0).toUpperCase() + user.slice(1).toLowerCase();
+
 
     // Default role if not provided (if the role is user_subscribed, for example)
     const userRole = role || 'user_not_subscribed'; // Default role can be 'user_not_subscribed'

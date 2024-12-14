@@ -8,7 +8,7 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import axios from './../../api/axios.js';
 import { Link } from "react-router-dom";
 
-export default function Signup({isNavOpen, screenWidth}) {
+export default function Signup({ isNavOpen, screenWidth }) {
 
 
   const navigate = useNavigate();
@@ -18,6 +18,14 @@ export default function Signup({isNavOpen, screenWidth}) {
     password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/,
     email: /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/
   };
+
+  // Allow any characters (zero or more). For backend protection testing.
+  //   const regexPatterns = {
+  //     username: /^.*$/,  
+  //     password: /^.*$/,  
+  //     email: /^.*$/       
+  // };
+
 
   const [formData, setFormData] = useState({
     user: '',
@@ -49,11 +57,12 @@ export default function Signup({isNavOpen, screenWidth}) {
   const userRef = useRef();
   const errRef = useRef();
 
+
   useEffect(() => {
     if (!success && userRef.current) {
-        userRef.current.focus();
+      userRef.current.focus();
     }
-}, [success]);
+  }, [success]);
 
 
   useEffect(() => {
@@ -62,8 +71,8 @@ export default function Signup({isNavOpen, screenWidth}) {
       name: regexPatterns.username.test(formData.user),
       email: regexPatterns.email.test(formData.email),
       pwd: regexPatterns.password.test(formData.pwd),
-     // Validate match only if both pwd and matchPwd are non-empty
-    match: formData.pwd && formData.matchPwd ? formData.pwd === formData.matchPwd : false
+      // Validate match only if both pwd and matchPwd are non-empty
+      match: formData.pwd && formData.matchPwd ? formData.pwd === formData.matchPwd : false
     };
 
     // If validity state is different, update it
@@ -81,9 +90,18 @@ export default function Signup({isNavOpen, screenWidth}) {
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
+
+    // Function to capitalize the first letter of each word and lowercase the rest
+    const capitalizeFirstLetter = (str) => {
+      return str
+        .split(' ') // Split by spaces
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize first letter of each word
+        .join(' '); // Join them back together
+    };
+
     setFormData((prev) => ({
       ...prev,
-      [id]: id === 'email' ? value.toLowerCase() : value
+      [id]: id === 'email' ? value.toLowerCase() : (id === 'user' ? capitalizeFirstLetter(value) : value)
     }));
   };
 
@@ -112,24 +130,24 @@ export default function Signup({isNavOpen, screenWidth}) {
           withCredentials: true
         }
       );
-      setTimeout(() => {
+      // setTimeout(() => {
       setSuccess(true);
       setFormData({ user: '', email: '', pwd: '', matchPwd: '' });
-    }, 5000); 
+      // }, 5000); 
     } catch (err) {
       const status = err?.response?.status;
       setErrMsg(
         status === 409 ? 'Username or Email Taken' :
-          status ? 'Registration Failed' :
+          status ? `${err.response.data.message}` :
             'No Server Response'
       );
       errRef.current.focus();
     } finally {
-      setTimeout(() => {
-          setLoading(false); // Stop the spinner
-          setIsSubmitting(false); // Re-enable the button
-      }, 5000); // Ensure this matches the delay for success logic
-  }
+      // setTimeout(() => {
+      setLoading(false); // Stop the spinner
+      setIsSubmitting(false); // Re-enable the button
+      // }, 5000); // Ensure this matches the delay for success logic
+    }
   };
 
   const handleClose = () => navigate('/');
@@ -142,7 +160,7 @@ export default function Signup({isNavOpen, screenWidth}) {
         <FontAwesomeIcon icon={faTimes} className={!validity[validation] && formData[id] ? "invalid" : "hide"} />
       </label>
       <input
-          className='input-field'
+        className='input-field'
         type={type}
         id={id}
         ref={id === 'user' ? userRef : null}
@@ -155,13 +173,13 @@ export default function Signup({isNavOpen, screenWidth}) {
         onFocus={() => handleFocusChange(id, true)}
         onBlur={() => handleFocusChange(id, false)}
       />
-<p 
-  id={`${id}note`} 
-  className={focused[id] && !validity[validation] && formData[id] !== "" ? "instructions" : "offscreen"}
->
-  <FontAwesomeIcon icon={faInfoCircle} />
-  {getValidationMessage(id)}
-</p>
+      <p
+        id={`${id}note`}
+        className={focused[id] && !validity[validation] && formData[id] !== "" ? "instructions" : "offscreen"}
+      >
+        <FontAwesomeIcon icon={faInfoCircle} />
+        {getValidationMessage(id)}
+      </p>
     </>
   );
 
@@ -196,16 +214,16 @@ export default function Signup({isNavOpen, screenWidth}) {
             {renderInput("pwd", "Password", "password", "pwd")}
             {renderInput("matchPwd", "Confirm Password", "password", "match")}
             <button className='button-auth' disabled={!Object.values(validity).every(Boolean) || isSubmitting}>
-                  {loading ? (
-        <div className="spinner">
-            <div className="spinner__circle"></div>
-        </div>
-    ) : (
-        "Sign Up"
-    )}
+              {loading ? (
+                <div className="spinner">
+                  <div className="spinner__circle"></div>
+                </div>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </form>
-    
+
 
           <div className='have-an-account'>
             <p>Already have an account?</p>
