@@ -66,7 +66,6 @@ const Signin = ({ isNavOpen, screenWidth }) => {
         setIsLoading(true);
         try {
             const response = await authenticateUser();
-            console.log("handleSUbmit await authenticateUser response", response)
             const { accessToken, userId, roles } = response?.data || {};
             setAuth({ userId, user, email, roles, accessToken });
             resetUser();
@@ -81,23 +80,45 @@ const Signin = ({ isNavOpen, screenWidth }) => {
 
     const handleClose = () => navigate('/');
 
+    const handleResendVerification = async () => {
+        setIsLoading(true);
+        try {
+            const response = await axios.post('/auth/resend-verification-email', { 
+                email: email.trim().toLowerCase(), 
+            });
+            // You can show a success message here if needed
+            setErrMsg('Verification email resent successfully!');
+        } catch (error) {
+            // Handle error (e.g., invalid user, email mismatch, etc.)
+            setErrMsg('Failed to resend verification email.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
             <button className="close-button" onClick={handleClose}>✖</button>
             <section className="centered-section">
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                {!isVerified && (
+            
+            <button
+            className="button-auth button-resend-verification"
+            onClick={handleResendVerification}
+            disabled={isLoading}
+        >
+            {isLoading ? <LoadingSpinner /> : 'Resend Verification Email'}
+        </button>
+     
+    )}
+
                 
                 <div className="signup-title">Sign In</div>
 
 
                 <form className="signup-form" onSubmit={handleSubmit}>
-                {!isVerified && (
-            
-                        <button className='button-auth button-resend-verification' onClick={() => console.log("Implement resend verification logic")}>
-                            Resend Verification Email
-                        </button>
-                 
-                )}
+
                     <label htmlFor="email">Email:</label>
                     <input
                         className="input-field"

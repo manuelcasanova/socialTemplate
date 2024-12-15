@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const pool = require('../config/db');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const { REMOTE_CLIENT_APP, RESET_EMAIL_CLIENT, RESET_EMAIL_PORT, RESET_EMAIL, RESET_EMAIL_PASSWORD, ACCESS_TOKEN_SECRET } = process.env;
 
 
 const handleLogin = async (req, res) => {
@@ -83,4 +85,80 @@ const handleLogin = async (req, res) => {
   }
 };
 
-module.exports = { handleLogin };
+
+const resendVerificationEmail = async (req, res) => {
+    const { email } = req.body;
+
+    console.log("Resend verification email request for:", email);
+
+    const client = await pool.connect();  // Get a client from the pool
+
+    try {
+        // Query the database to find the user
+        const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
+        const user = result.rows[0];
+
+        if (!user) {
+            return res.status(400).json({ error: 'User not found or email mismatch' });
+        }
+
+        // Check if the user is already verified (optional)
+        if (user.is_verified) {
+            return res.status(400).json({ error: 'User already verified' });
+        }
+
+        // Generate the verification token
+        const secret = ACCESS_TOKEN_SECRET + user.password;  // Use a secure secret, possibly hashed password
+        const token = jwt.sign({ email, userId: user.user_id }, secret, { expiresIn: '1h' });
+
+        const verificationLink = `${REMOTE_CLIENT_APP}/verify-email/${user.user_id}/${token}`;
+
+        // Create email transporter
+        let transporter = nodemailer.createTransport({
+            host: RESET_EMAIL_CLIENT,
+            port: RESET_EMAIL_PORT,
+            auth: {
+                user: RESET_EMAIL,
+                pass: RESET_EMAIL_PASSWORD
+            }
+        });
+
+        // Email content
+        let mailOptions = {
+            from: RESET_EMAIL,
+            to: email,
+            subject: 'Email Verification',
+            html: `
+                <html lang="en">
+                    <body>
+                        <h3>Welcome to our platform, ${user.username}!</h3>
+                        <p>Thank you for registering. Please click the button below to confirm your email address:</p>
+                        <a href="${verificationLink}" style="background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px;">Verify Email</a>
+                    </body>
+                </html>
+            `
+        };
+
+        // Send the email
+        await new Promise((resolve, reject) => {
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(info);
+                }
+            });
+        });
+
+        // Send success response
+        res.status(200).json({ message: 'Verification email resent successfully!' });
+    } catch (err) {
+        console.error('Error while resending verification email:', err);
+        res.status(500).json({ error: 'Failed to resend verification email' });
+    } finally {
+        client.release();  // Release the client back to the pool
+    }
+};
+
+
+module.exports = { handleLogin, resendVerificationEmail };
