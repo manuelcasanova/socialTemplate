@@ -24,6 +24,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const [pwd, setPwd] = useState(DEFAULT_PASSWORD);
     const [email, setEmail] = useState(DEFAULT_EMAIL);
     const [errMsg, setErrMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState(''); 
     const [check, toggleCheck] = useToggle('persist', false);
     const [isLoading, setIsLoading] = useState(false);
     const [isVerified, setIsVerified] = useState(true);
@@ -87,10 +88,12 @@ const Signin = ({ isNavOpen, screenWidth }) => {
                 email: email.trim().toLowerCase(), 
             });
             // You can show a success message here if needed
-            setErrMsg('Verification email resent successfully!');
+            setSuccessMsg('Verification email resent successfully!');
+            setErrMsg('');
         } catch (error) {
             // Handle error (e.g., invalid user, email mismatch, etc.)
             setErrMsg('Failed to resend verification email.');
+            setSuccessMsg('');
         } finally {
             setIsLoading(false);
         }
@@ -100,7 +103,13 @@ const Signin = ({ isNavOpen, screenWidth }) => {
         <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
             <button className="close-button" onClick={handleClose}>✖</button>
             <section className="centered-section">
-                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+            <p ref={errRef} className={successMsg ? "success-msg" : "offscreen"} aria-live="assertive">
+        {successMsg}
+    </p>
+    {/* Display error message with existing styling */}
+    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+        {errMsg}
+    </p>
                 {!isVerified && (
             
             <button
