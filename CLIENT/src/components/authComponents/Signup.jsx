@@ -201,12 +201,10 @@ export default function Signup({ isNavOpen, screenWidth }) {
       <button className="close-button" onClick={handleClose}>✖</button>
       {success ? (
         <section className='signup-success'>
-          <div className="success-message">
-            <h2>You're All Set!</h2>
-            <p>Awesome, your account has been successfully created!</p>
-            <p>Check your inbox for a verification email and click the link to activate your account.</p>
-            <p>If you don’t see the email, be sure to check your spam folder.</p>
-          </div>
+<div className="success-message">
+  <h2>All Set!</h2>
+  <p>Check your inbox (or spam) to verify your account.</p>
+</div>
         </section>
       ) : (
         <section className="centered-section">

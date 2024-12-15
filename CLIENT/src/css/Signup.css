@@ -103,9 +103,9 @@
 /* Signup Success */
 .signup-success {
   text-align: center;
-  color: var(--color1);
+  color: var(--color0);
   padding: 2em;
-  background-color: var(--color9);
+  /* background-color: var(--color3); */
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -113,17 +113,18 @@
 .success-message h2 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
+
 }
 
 .success-message p {
   font-size: 1rem;
   margin-bottom: 1rem;
-  color: var(--color1);
+  color: var(--color0);
 }
 
 .success-message a {
   font-weight: bold;
-  color: var(--color1);
+  color: var(--color0);
 }
 
 .success-message a:hover {
@@ -132,7 +133,7 @@
 
 .success-message-green {
   background-color: var(--color3);
-  color: var(--color1);
+  color: var(--color0);
   font-weight: bold;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
