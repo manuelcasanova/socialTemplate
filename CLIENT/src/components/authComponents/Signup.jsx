@@ -122,7 +122,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
     setIsSubmitting(true); // Disable the button
     setLoading(true); // Start the spinner
     try {
-      await axios.post(
+      const response = await axios.post(
         '/signup',
         JSON.stringify(formData),
         {
@@ -130,10 +130,13 @@ export default function Signup({ isNavOpen, screenWidth }) {
           withCredentials: true
         }
       );
-      // setTimeout(() => {
-      setSuccess(true);
-      setFormData({ user: '', email: '', pwd: '', matchPwd: '' });
-      // }, 5000); 
+
+      // Check if the response has a success message indicating the email has been sent
+      if (response.data.success) {
+        setSuccess(true); // Set success only after email is sent
+        setFormData({ user: '', email: '', pwd: '', matchPwd: '' });
+      }
+
     } catch (err) {
       const status = err?.response?.status;
       setErrMsg(
@@ -199,9 +202,10 @@ export default function Signup({ isNavOpen, screenWidth }) {
       {success ? (
         <section className='signup-success'>
           <div className="success-message">
-            <h2>You're all set!</h2>
-            <p>Congratulations, your account has been successfully created.</p>
-            <p>Ready to get started? <Link to="/signin">Sign in</Link> to your new account.</p>
+            <h2>You're All Set!</h2>
+            <p>Awesome, your account has been successfully created!</p>
+            <p>Check your inbox for a verification email and click the link to activate your account.</p>
+            <p>If you don’t see the email, be sure to check your spam folder.</p>
           </div>
         </section>
       ) : (

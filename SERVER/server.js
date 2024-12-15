@@ -68,6 +68,8 @@ app.use('/auth', require('./routes/auth/auth'));
 app.use('/refresh', require('./routes/auth/refresh'));
 app.use('/logout', require('./routes/auth/logout'))
 app.use('/forgot-password', require('./routes/auth/forgot-password'));
+app.use('/verify-email', require('./routes/auth/verify-email'));
+
 
 
 app.use(verifyJWT);

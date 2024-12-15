@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt');
 const pool = require('../config/db');
+const jwt = require('jsonwebtoken');
+let nodemailer = require('nodemailer');
 const { response } = require('express');
+
+const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
 const usernameRegex = /^[A-z][A-z0-9-_]{3,23}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/;
@@ -50,7 +54,7 @@ const handleNewUser = async (req, res) => {
         }
 
         // Insert the new user into the 'users' table
-        const insertUserQuery = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING user_id';
+        const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified) VALUES ($1, $2, $3, false) RETURNING user_id';
         const userInsertResult = await pool.query(insertUserQuery, [user, email, hashedPwd]);
 
         // Get the user_id of the newly inserted user
@@ -67,8 +71,56 @@ const handleNewUser = async (req, res) => {
         // Wait for all the role assignments to be executed
         await Promise.all(roleQueries);
 
-        // Respond with success
-        res.status(201).json({ 'success': `New user ${user} created with roles: ${roleAssignments.join(', ')}.` });
+        // Generate a verification token
+        const secret = process.env.ACCESS_TOKEN_SECRET + hashedPwd;
+        const token = jwt.sign({ email, user_id: newUserId }, secret, { expiresIn: '1h' });
+        const verificationLink = `${BASE_URL}/verify-email/${newUserId}/${token}`;
+
+        // Send verification email
+        let transporter = nodemailer.createTransport({
+            host: process.env.RESET_EMAIL_CLIENT,
+            port: process.env.RESET_EMAIL_PORT,
+            auth: {
+                user: process.env.RESET_EMAIL,
+                pass: process.env.RESET_EMAIL_PASSWORD
+            }
+        });
+
+        let mailOptions = {
+            from: process.env.RESET_EMAIL,
+            to: email,
+            subject: 'Email Verification',
+            html: `
+                    <html lang="en">
+                      <head>
+                        <meta charset="UTF-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <title>Email Verification</title>
+                      </head>
+                      <body>
+                        <h3>Welcome to our platform, ${user}!</h3>
+                        <p>Thank you for registering. Please click the button below to confirm your email address:</p>
+                        <a href="${verificationLink}" style="background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px;">Verify Email</a>
+                      </body>
+                    </html>
+                    `
+        };
+
+        await new Promise((resolve, reject) => {
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(info);
+                }
+            });
+        });
+
+        // Return success message to the client
+        res.status(201).json({
+            success: 'User created successfully. Please check your email for the verification link.'
+        });
+
     } catch (err) {
         console.log(err);
         res.status(500).json({ 'message': 'Internal server error' });
