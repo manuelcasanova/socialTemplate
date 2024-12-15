@@ -89,8 +89,6 @@ const handleLogin = async (req, res) => {
 const resendVerificationEmail = async (req, res) => {
     const { email } = req.body;
 
-    console.log("Resend verification email request for:", email);
-
     const client = await pool.connect();  // Get a client from the pool
 
     try {
@@ -125,19 +123,95 @@ const resendVerificationEmail = async (req, res) => {
 
         // Email content
         let mailOptions = {
-            from: RESET_EMAIL,
-            to: email,
-            subject: 'Email Verification',
-            html: `
-                <html lang="en">
-                    <body>
-                        <h3>Welcome to our platform, ${user.username}!</h3>
-                        <p>Thank you for registering. Please click the button below to confirm your email address:</p>
-                        <a href="${verificationLink}" style="background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px;">Verify Email</a>
-                    </body>
-                </html>
-            `
-        };
+          from: RESET_EMAIL,
+          to: email,
+          subject: 'Email Verification - Fullstack Template',
+          html: `
+          <!DOCTYPE html>
+          <html lang="en">
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                  <title>Email Verification</title>
+                  <style>
+                      body {
+                          font-family: Arial, sans-serif;
+                          margin: 0;
+                          padding: 0;
+                          background-color: #f5f5f5;
+                          color: #333;
+                      }
+                      .email-container {
+                          max-width: 600px;
+                          margin: 20px auto;
+                          background-color: var(--color13, lightblue);
+                          border-radius: 8px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                      }
+                      .email-header {
+                          background-color: var(--color9, darkblue);
+                          color: var(--color1, white);
+                          padding: 20px;
+                          text-align: center;
+                          font-size: 24px;
+                      }
+                      .email-body {
+                          padding: 20px;
+                          background-color: var(--color1, white);
+                      }
+                      .email-body p {
+                          font-size: 16px;
+                          line-height: 1.5;
+                          color: #333;
+                      }
+                      .verify-link {
+                          display: inline-block;
+                          margin-top: 20px;
+                          padding: 12px 25px;
+                          font-size: 16px;
+                          color: var(--color1, white);
+                          background-color: var(--color9, darkblue);
+                          text-decoration: none;
+                          border-radius: 4px;
+                          transition: background-color 0.3s ease;
+                          text-align: center;
+                      }
+                      .verify-link:hover {
+                          background-color: var(--color13, lightblue);
+                          color: var(--color9, darkblue);
+                      }
+                      .email-body a {
+                          margin: 5px 0 10px 0;
+                      }
+                  </style>
+              </head>
+              <body>
+                  <div class="email-container">
+                      <div class="email-header">
+                          Email Verification - Fullstack Template
+                      </div>
+                      <div class="email-body">
+                          <p>
+                              Hi ${user.username},
+                          </p>
+                          <p>
+                              Thank you for registering with us! To complete your registration, please verify your email address by clicking the button below.
+                          </p>
+                          <a href="${verificationLink}" class="verify-link">Verify Email</a>
+                          <p>
+                              If you did not create an account with us, please ignore this email. Your email is safe.
+                          </p>
+                          <p>
+                              Thank you!
+                          </p>
+                      </div>
+                  </div>
+              </body>
+          </html>
+          `
+      };
+      
 
         // Send the email
         await new Promise((resolve, reject) => {

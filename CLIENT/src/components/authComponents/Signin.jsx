@@ -5,6 +5,7 @@ import useInput from '../../hooks/useInput';
 import useToggle from '../../hooks/useToggle';
 import axios from '../../api/axios';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
+import '../../css/Signup.css'
 
 const SIGNIN_URL = '/auth';
 const DEFAULT_EMAIL = '@example.com';
@@ -103,7 +104,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
         <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
             <button className="close-button" onClick={handleClose}>✖</button>
             <section className="centered-section">
-            <p ref={errRef} className={successMsg ? "success-msg" : "offscreen"} aria-live="assertive">
+            <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
         {successMsg}
     </p>
     {/* Display error message with existing styling */}

@@ -130,6 +130,15 @@
   text-decoration: underline;
 }
 
+.success-message-green {
+  background-color: var(--color3);
+  color: var(--color1);
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+}
+
 /* Trust Device */
 .trust-device {
   margin: 1em 0;

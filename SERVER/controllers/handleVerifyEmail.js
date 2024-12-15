@@ -21,13 +21,12 @@ const handleVerifyEmail = async (req, res) => {
             // If token is valid, set is_verified to true
             await pool.query('UPDATE users SET is_verified = true WHERE user_id = $1', [user_id]);
 
-            // Respond with success
-            res.status(200).json({ 'message': 'Email verified successfully. You can now log in.' });
+            // Render the success page with status 'verified'
+            res.render('emailVerified', { status: 'verified' });
         });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ 'message': 'Internal server error' });
+        return res.render('emailVerified', { status: 'failed' });  // Internal error, render failure
     }
 };
-
 module.exports = { handleVerifyEmail };
