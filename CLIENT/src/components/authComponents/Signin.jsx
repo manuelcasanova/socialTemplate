@@ -30,7 +30,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const [isVerified, setIsVerified] = useState(true);
 
     useEffect(() => {
-        userRef.current.focus();
+        userRef.current?.focus();
     }, []);
 
     useEffect(() => {

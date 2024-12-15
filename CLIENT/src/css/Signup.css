@@ -25,6 +25,12 @@
   height: 2.5em;
 }
 
+.input-field:focus {
+  outline: none;
+  border-color: #1E90FF; /* Make border color change smooth */
+  box-shadow: none; /* Remove unnecessary box-shadow to avoid layout shift */
+}
+
 .signup-form p {
   margin-bottom: 2em;
 }
@@ -146,7 +152,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .button-auth:hover {
