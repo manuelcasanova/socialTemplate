@@ -43,14 +43,18 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     };
 
     const handleError = (err) => {
-        const messages = {
-            400: 'Username or password are wrong or missing',
-            401: 'Unauthorized',
-        };
-        const errorMessage = err.response ? messages[err.response.status] || 'Login Failed' : 'No Server Response';
-        setErrMsg(errorMessage);
+
+        const errorMessage = err?.response?.data?.error || 'Login Failed';
+
+        if (!err?.response?.data?.error) {
+            setErrMsg('No Server Response');
+        } else {
+            setErrMsg(errorMessage);
+        }
+
         errRef.current.focus();
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
