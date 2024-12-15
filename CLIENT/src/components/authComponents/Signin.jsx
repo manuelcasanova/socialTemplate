@@ -26,6 +26,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const [errMsg, setErrMsg] = useState('');
     const [check, toggleCheck] = useToggle('persist', false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isVerified, setIsVerified] = useState(true);
 
     useEffect(() => {
         userRef.current.focus();
@@ -43,13 +44,17 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     };
 
     const handleError = (err) => {
-
         const errorMessage = err?.response?.data?.error || 'Login Failed';
 
-        if (!err?.response?.data?.error) {
-            setErrMsg('No Server Response');
-        } else {
+        if (err?.response?.data?.error) {
             setErrMsg(errorMessage);
+
+            // If the error message is related to email verification, set isVerified to false
+            if (errorMessage === "Please verify your email before logging in. Check your spam folder") {
+                setIsVerified(false);
+            }
+        } else {
+            setErrMsg('No Server Response');
         }
 
         errRef.current.focus();
@@ -61,6 +66,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
         setIsLoading(true);
         try {
             const response = await authenticateUser();
+            console.log("handleSUbmit await authenticateUser response", response)
             const { accessToken, userId, roles } = response?.data || {};
             setAuth({ userId, user, email, roles, accessToken });
             resetUser();
@@ -80,8 +86,18 @@ const Signin = ({ isNavOpen, screenWidth }) => {
             <button className="close-button" onClick={handleClose}>✖</button>
             <section className="centered-section">
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                
                 <div className="signup-title">Sign In</div>
+
+
                 <form className="signup-form" onSubmit={handleSubmit}>
+                {!isVerified && (
+            
+                        <button className='button-auth button-resend-verification' onClick={() => console.log("Implement resend verification logic")}>
+                            Resend Verification Email
+                        </button>
+                 
+                )}
                     <label htmlFor="email">Email:</label>
                     <input
                         className="input-field"
@@ -110,6 +126,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
                         <label htmlFor="persist">Trust This Device</label>
                     </div>
                 </form>
+
                 <div className="have-an-account">
                     <p>Need an Account?</p>
                     <Link to="/signup">Sign Up</Link>

@@ -170,6 +170,13 @@
   opacity: 0.6;
 }
 
+/* Resend verification email  */
+
+/* Authentication Buttons */
+.button-resend-verification {
+width: 100%;
+}
+
 /* Responsive Styles */
 @media (max-width: 300px) {
   .have-an-account {

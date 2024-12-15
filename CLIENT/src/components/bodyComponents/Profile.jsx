@@ -178,7 +178,7 @@ const handleFileChange = async (e) => {
       });
 
       if (response?.data?.success) {
-        setSuccessMessage('Account deleted successfully. Redirecting to sign-in page...');
+        setSuccessMessage('Account deleted successfully. Redirecting to home page...');
 
         // Wait for 2 seconds and then navigate to /signin
         setTimeout(() => {
