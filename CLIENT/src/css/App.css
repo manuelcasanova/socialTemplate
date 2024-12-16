@@ -166,7 +166,7 @@
 /* Footer should stay at the bottom unless content exceeds the viewport */
 .footer {
   padding: 1em;
-  background-color: var(--color6);
+  background-color: var(--color9);
   color: white;
   text-align: center;
   display: flex;

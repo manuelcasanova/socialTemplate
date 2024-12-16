@@ -4,9 +4,14 @@ const fs = require('fs');
 const path = require('path');
 
 // Function to get all users
+
 const getAllUsers = async (req, res) => {
     try {
-        const result = await pool.query(`SELECT 
+        const { username, email, role, is_active, user_id } = req.query;
+
+        // Start the base query
+        let query = `
+            SELECT 
                 u.user_id, 
                 u.username, 
                 u.email, 
@@ -23,14 +28,49 @@ const getAllUsers = async (req, res) => {
                 roles r ON ur.role_id = r.role_id
             LEFT JOIN 
                 login_history lh ON u.user_id = lh.user_id
+            WHERE
+                1=1
+        `; // 1=1 is a way to make the WHERE clause always true, so filters can be added conditionally
+
+        const params = [];
+
+        // Add filters to the query based on the req.query parameters
+        if (username) {
+            query += ` AND u.username ILIKE $${params.length + 1}`;
+            params.push(`%${username}%`);  // Use ILIKE for case-insensitive matching
+        }
+        if (email) {
+            query += ` AND u.email ILIKE $${params.length + 1}`;
+            params.push(`%${email}%`);
+        }
+        if (role) {
+            query += ` AND r.role_name = $${params.length + 1}`;
+            params.push(role);
+        }
+        if (is_active !== undefined) {
+            query += ` AND u.is_active = $${params.length + 1}`;
+            params.push(is_active === 'true');  // Convert to boolean
+        }
+        if (user_id) {
+            query += ` AND u.user_id = $${params.length + 1}`;
+            params.push(user_id);
+        }
+
+        // Add the GROUP BY and execute the query
+        query += `
             GROUP BY 
-                u.user_id, u.username, u.email, u.is_active, u.is_verified, u.location;`);
+                u.user_id, u.username, u.email, u.is_active, u.is_verified, u.location;
+        `;
+
+        const result = await pool.query(query, params);
+
         res.status(200).json(result.rows);
     } catch (error) {
         console.error('Error retrieving users:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 const getUserById = async (req, res) => {
     const { user_id } = req.params; // Extract user_id from request parameters

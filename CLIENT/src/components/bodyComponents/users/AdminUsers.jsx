@@ -5,14 +5,16 @@ import '../../../css/AdminUsers.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons'; 
 import useAuth from "../../../hooks/useAuth";
+import FilterAdminUsers from "./FilterAdminUsers";
 
 
 
 export default function AdminUsers({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState([]); // All roles from the database
+  const [roles, setRoles] = useState([]);
   const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({}); 
   const [expandedUserId, setExpandedUserId] = useState(null); 
   const {auth} = useAuth();
 const loggedInUser = auth.userId
@@ -22,7 +24,7 @@ const loggedInUser = auth.userId
       try {
         // Fetch users and roles
         const [usersResponse, rolesResponse] = await Promise.all([
-          axiosPrivate.get(`/users/`),
+          axiosPrivate.get(`/users/`, { params: filters }),
           axiosPrivate.get(`/roles/`) // Fetch roles via the server route
         ]);
 
@@ -36,7 +38,7 @@ const loggedInUser = auth.userId
     };
 
     fetchUsersAndRoles();
-  }, [axiosPrivate]);
+  }, [axiosPrivate, filters]);
 
   const handleViewMore = (userId) => {
     setExpandedUserId((prevId) => (prevId === userId ? null : userId));
@@ -69,6 +71,10 @@ const loggedInUser = auth.userId
         <h2>Admin Users</h2>
         {error && <p className="error-message">{error}</p>}
         <div className="users-container">
+        <FilterAdminUsers 
+  roles={roles} 
+  setFilters={setFilters} 
+/>
           {users.length > 0 ? (
             users.map((user) =>
               expandedUserId === null || expandedUserId === user.user_id ? (

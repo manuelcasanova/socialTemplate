@@ -121,3 +121,8 @@ button:hover {
   margin: 0 auto;
 }
 
+/* Styling for Filter */
+
+.filter-admin-users {
+  background-color: pink;
+}
