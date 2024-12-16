@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
+import '../../../css/FilterAdminUsers.css'
+
 
 export default function FilterAdminUsers({ roles, setFilters }) {
   const [username, setUsername] = useState("");
@@ -6,6 +10,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
   const [isActive, setIsActive] = useState(""); // Active status filter
   const [userId, setUserId] = useState(""); // ID filter
   const [email, setEmail] = useState(""); // Email filter
+  const [isVisible, setIsVisible] = useState(true);
 
   // Function to update filters whenever any filter value changes
   const handleFilterChange = () => {
@@ -24,47 +29,60 @@ export default function FilterAdminUsers({ roles, setFilters }) {
   }, [username, role, isActive, userId, email]); // Dependencies for triggering filter change
 
   return (
-    <div className="filter-container">
-      {/* Username filter */}
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      
-      {/* ID filter */}
-      <input
-        type="text"
-        placeholder="User ID"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-      />
-      
-      {/* Email filter */}
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      
-      {/* Role filter */}
-      <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="">All Roles</option>
-        {roles.map((r, idx) => (
-          <option key={idx} value={r}>
-            {r}
-          </option>
-        ))}
-      </select>
-      
-      {/* Active status filter */}
-      <select value={isActive} onChange={(e) => setIsActive(e.target.value)}>
-        <option value="">All Statuses</option>
-        <option value="true">Active</option>
-        <option value="false">Inactive</option>
-      </select>
-    </div>
+
+    <div className="filter-wrapper">
+
+      <button
+        className="filter-toggle"
+        onClick={() => setIsVisible(prevState => !prevState)}
+      >
+        <FontAwesomeIcon icon={isVisible ? faTimes : faFilter} />
+      </button>
+
+      {isVisible && (
+        <div className="filter-container">
+          {/* Username filter */}
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+
+          {/* ID filter */}
+          <input
+            type="text"
+            placeholder="User ID"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+          />
+
+          {/* Email filter */}
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          {/* Role filter */}
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="">All Roles</option>
+            {roles.map((r, idx) => (
+              <option key={idx} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+
+          {/* Active status filter */}
+          <select value={isActive} onChange={(e) => setIsActive(e.target.value)}>
+            <option value="">All Statuses</option>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+      )}
+    </div>  
   );
 }
