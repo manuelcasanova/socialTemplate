@@ -19,6 +19,11 @@ export default function AdminUsers({ isNavOpen }) {
   const {auth} = useAuth();
 const loggedInUser = auth.userId
 
+  // Reset the error message whenever filters change
+  useEffect(() => {
+    setError(null); // Clear error when filters change
+  }, [filters]);
+
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
       try {
@@ -32,7 +37,7 @@ const loggedInUser = auth.userId
         setRoles(rolesResponse.data); // Set roles from the server
 
       } catch (err) {
-        setError(`Failed to fetch data: ${err.response.data.message}`);
+        setError(`Failed to fetch data: ${err.response.data.error}`);
         console.error(err);
       }
     };

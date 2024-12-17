@@ -8,6 +8,18 @@ const path = require('path');
 const getAllUsers = async (req, res) => {
     try {
         const { username, email, role, is_active, user_id } = req.query;
+        
+
+        // Validate and sanitize user_id (should be a positive integer)
+        if (user_id && isNaN(user_id)) {
+            return res.status(400).json({ error: 'Invalid user_id format' });
+        }
+
+        // Validate is_active (should be 'true' or 'false')
+        if (is_active && !['true', 'false'].includes(is_active)) {
+            return res.status(400).json({ error: 'Invalid is_active value. Expected "true" or "false".' });
+        }
+
 
         // Start the base query
         let query = `
