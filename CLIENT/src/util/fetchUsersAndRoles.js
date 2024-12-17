@@ -1,7 +1,8 @@
-export const fetchUsersAndRoles = async (axiosPrivate) => {
+export const fetchUsersAndRoles = async (axiosPrivate, filters) => {
+
   try {
     const [usersResponse, rolesResponse] = await Promise.all([
-      axiosPrivate.get(`/users/`),
+      axiosPrivate.get(`/users/`, { params: filters }),
       axiosPrivate.get(`/roles/`)
     ]);
 

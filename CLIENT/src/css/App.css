@@ -126,6 +126,8 @@
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.3s ease;
+  width: 65px;
+  height: 65px;
 }
 
 .profile-image:hover {

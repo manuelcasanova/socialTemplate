@@ -19,23 +19,35 @@ export default function RoleChangeLog({ isNavOpen }) {
   const loggedInUser = auth.userId
 
   useEffect(() => {
+    setError(null);  // Reset the error message
+  
     const loadData = async () => {
       try {
         const { users, roles } = await fetchUsersAndRoles(axiosPrivate);
         setUsers(users);
         setRoles(roles);
-
-        const logsData = await fetchRoleChangeLogs(axiosPrivate);
-        setLogs(logsData);
-
+  
+        const logsData = await fetchRoleChangeLogs(axiosPrivate, filters);
+  
+        // Handle empty logs or error message
+        if (logsData && Array.isArray(logsData)) {
+          if (logsData.length === 0) {
+            setError('No role change logs found');
+          }
+          setLogs(logsData); // Set the logs
+        } else {
+          setLogs([]); // Set empty logs if error or unexpected data
+          setError('No role change logs found');
+        }
       } catch (err) {
         setError(err.message); // Catch and show error from utility function
         console.error(err);
       }
     };
-
+  
     loadData();
-  }, [axiosPrivate]);
+  }, [axiosPrivate, filters]);
+  
 
   // Function to get the name of the modifier based on user ID
   const getUserNameById = (userId) => {
@@ -47,7 +59,9 @@ export default function RoleChangeLog({ isNavOpen }) {
     <div className={`body-footer ${isNavOpen ? "body-footer-squeezed" : ""}`}>
       <div className="body admin-users">
         <h2>User role change log</h2>
-        {error && <p className="error-message">{error}</p>}
+        {error && error !== "No role change logs found" && (
+  <p className="error-message">{error}</p>
+)}
 
 
         {/* Filter Component */}
@@ -69,10 +83,10 @@ export default function RoleChangeLog({ isNavOpen }) {
               <tbody>
                 {logs.map((log) => (
                   <tr key={log.id}>
-                    <td>{getUserNameById(log.user_that_modified)} (Id: {log.user_that_modified})</td>
+                    <td>{getUserNameById(log.modifier_id)} (Id: {log.modifier_id})</td>
                     <td>{log.action_type}</td>
                     <td>{log.role}</td>
-                    <td>{getUserNameById(log.user_modified)} (Id: {log.user_modified})</td>
+                    <td>{getUserNameById(log.recipient_id)} (Id: {log.recipient_id})</td>
                     <td>{new Date(log.timestamp).toLocaleString('en-GB', {
                       day: '2-digit',
                       month: '2-digit',

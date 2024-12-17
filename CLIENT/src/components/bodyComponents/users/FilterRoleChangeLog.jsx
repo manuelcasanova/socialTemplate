@@ -13,6 +13,7 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
   const [isRoleOpen, setIsRoleOpen] = useState(false);
   const [isActionTypeOpen, setIsActionTypeOpen] = useState(false);
 
+
   // Refs to track dropdowns
   const roleDropdownRef = useRef(null);
   const actionTypeDropdownRef = useRef(null);
