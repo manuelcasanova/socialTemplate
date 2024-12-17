@@ -4,6 +4,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 import { fetchUsersAndRoles } from "../../../util/fetchUsersAndRoles";
 import { fetchRoleChangeLogs } from "../../../util/fetchRoleModificationLogs";
+import FilterRoleChangeLog from "./FilterRoleChangeLog";
 
 import '../../../css/RoleChangeLog.css'
 
@@ -12,6 +13,7 @@ export default function RoleChangeLog({ isNavOpen }) {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [logs, setLogs] = useState([]);
+  const [filters, setFilters] = useState({});
   const [error, setError] = useState(null);
   const { auth } = useAuth();
   const loggedInUser = auth.userId
@@ -47,6 +49,9 @@ export default function RoleChangeLog({ isNavOpen }) {
         <h2>User role change log</h2>
         {error && <p className="error-message">{error}</p>}
 
+
+        {/* Filter Component */}
+        <FilterRoleChangeLog roles={roles} setFilters={setFilters} />
 
         {logs.length > 0 ? (
           <div className="table-wrapper">
