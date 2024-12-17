@@ -1,6 +1,6 @@
 .filter-wrapper {
-    position: relative;
-    margin-top: 2em;
+
+    margin-top: 0.5em;
     margin-bottom: 1em;
     display: flex;
   }
@@ -27,12 +27,17 @@
     display: flex;
     flex-wrap: wrap;
     gap: 2px;
-    padding-left: 16px;
+    padding-left: 5px;
     /* background-color: #f9f9f9; */
     border-radius: 8px;
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     width: 100%;
   }
+
+   .filter-container > * {
+    flex-grow: 1; 
+    min-width: 0; 
+  } 
   
   .filter-container input,
   .filter-container select {
@@ -40,9 +45,10 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 200px;
-    min-width: 160px;
+    /* width: 200px; */
+    /* min-width: 100px; */
     box-sizing: border-box;
+    max-width: 33%;
   }
   
   .filter-container input {
@@ -66,16 +72,33 @@
   .filter-container select {
     margin-top: 0;
   }
+
+  .filter-container-input-userid {
+    max-width: 10% !important;
+    min-width: 100px;
+  }
+
+  .filter-container-input-username {
+
+  }
+
+  .filter-container-input-email {
+
+  }
+
+  .filter-container-select {
+/* max-width: 200px; */
+  }
   
-  @media (max-width: 768px) {
-    .filter-container {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
+  @media (max-width: 580px) {
     .filter-container input,
     .filter-container select {
-      width: 100%;
+      max-width: 100%;
     }
+
+    .filter-container-input-userid {
+      max-width: 100% !important;
+    }
+  
   }
   

@@ -7,7 +7,7 @@
 
 
 .table-wrapper {
-    margin-top: 5em;  /* Add margin to give space for the header */
+    margin-top: 1em;  /* Add margin to give space for the header */
     overflow-x: auto;  /* Enable horizontal scrolling for the table */
     padding-right: 10px;  /* Add padding to the right to avoid scroll bar cutting off content */
   }
@@ -21,10 +21,10 @@
 
 .admin-users h2 {
     text-align: center;  /* Center the h2 */
-    position: absolute;  /* Fix it at the top of the container */
+    /* position: absolute;   */
     top: 1em;
     left: 50%;
-    transform: translateX(-50%);  /* Center it horizontally */
+    /* transform: translateX(-50%);   */
     z-index: 1;  /* Ensure it is on top of the table */
     width: 100%;  /* Make sure it's full width */
   } 

@@ -45,6 +45,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
           {/* ID filter */}
           <input
             type="text"
+            className="filter-container-input-userid"
             placeholder="User ID"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
@@ -53,6 +54,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
           {/* Username filter */}
           <input
             type="text"
+            className="filter-container-input-username"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -61,13 +63,14 @@ export default function FilterAdminUsers({ roles, setFilters }) {
           {/* Email filter */}
           <input
             type="email"
+            className="filter-container-input-email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           {/* Role filter */}
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
+          <select className="filter-container-select" value={role} onChange={(e) => setRole(e.target.value)}>
             <option value="">All Roles</option>
             {roles.map((r, idx) => (
               <option key={idx} value={r}>
@@ -77,7 +80,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
           </select>
 
           {/* Active status filter */}
-          <select value={isActive} onChange={(e) => setIsActive(e.target.value)}>
+          <select className="filter-container-select" value={isActive} onChange={(e) => setIsActive(e.target.value)}>
             <option value="">All Statuses</option>
             <option value="true">Active</option>
             <option value="false">Inactive</option>
