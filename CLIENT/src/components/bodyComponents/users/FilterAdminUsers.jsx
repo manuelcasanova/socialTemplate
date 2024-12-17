@@ -10,7 +10,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
   const [isActive, setIsActive] = useState(""); // Active status filter
   const [userId, setUserId] = useState(""); // ID filter
   const [email, setEmail] = useState(""); // Email filter
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   // Function to update filters whenever any filter value changes
   const handleFilterChange = () => {
@@ -41,13 +41,6 @@ export default function FilterAdminUsers({ roles, setFilters }) {
 
       {isVisible && (
         <div className="filter-container">
-          {/* Username filter */}
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
 
           {/* ID filter */}
           <input
@@ -55,6 +48,14 @@ export default function FilterAdminUsers({ roles, setFilters }) {
             placeholder="User ID"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
+          />
+
+          {/* Username filter */}
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           {/* Email filter */}

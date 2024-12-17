@@ -70,11 +70,11 @@ const loggedInUser = auth.userId
       <div className="body admin-users">
         <h2>Admin Users</h2>
         {error && <p className="error-message">{error}</p>}
-        <div className="users-container">
         <FilterAdminUsers 
   roles={roles} 
   setFilters={setFilters} 
 />
+        <div className="users-container">
           {users.length > 0 ? (
             users.map((user) =>
               expandedUserId === null || expandedUserId === user.user_id ? (

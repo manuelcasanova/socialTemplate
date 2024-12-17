@@ -10,7 +10,8 @@
 
 .admin-users h2 {
  text-align: center;
- margin: 1em 0em 2em 0em;
+ /* margin: 1em 0em 1em 0em; */
+width: 90%;
 }
 
 .users-container {
@@ -20,7 +21,7 @@
   overflow-x: hidden; /* Prevent horizontal overflow */
 
   margin: auto; /* Vertically and horizontally center child elements */
-  margin-top: 5em;
+  /* margin-top: 1em; */
   width: 100%;  /* Full width */
   height: 100%; /* Full height */
 }
