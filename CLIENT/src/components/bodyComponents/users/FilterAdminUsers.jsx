@@ -28,6 +28,24 @@ export default function FilterAdminUsers({ roles, setFilters }) {
     handleFilterChange();
   }, [username, role, isActive, userId, email]); // Dependencies for triggering filter change
 
+  // Handle username change with validation
+  const handleUsernameChange = (e) => {
+    const input = e.target.value;
+    const validUsername = input.replace(/[^a-zA-Z0-9-_^\s]/g, ''); // Remove invalid characters
+    setUsername(validUsername);
+  };
+
+    // Handle userId change with validation
+    const handleUserIdChange = (e) => {
+      const input = e.target.value;
+      // Ensure input is a valid positive integer (greater than 0)
+      if (/^[0-9]*$/.test(input) && (input === "" || parseInt(input) > 0)) {
+        setUserId(input);
+      } else if (input === "") {
+        setUserId(""); // Allow empty input
+      }
+    };
+
   return (
 
     <div className="filter-wrapper">
@@ -44,11 +62,11 @@ export default function FilterAdminUsers({ roles, setFilters }) {
 
           {/* ID filter */}
           <input
-            type="text"
+            type="number"
             className="filter-container-input-userid"
             placeholder="User ID"
             value={userId}
-            onChange={(e) => setUserId(e.target.value)}
+            onChange={handleUserIdChange} 
           />
 
           {/* Username filter */}
@@ -57,7 +75,9 @@ export default function FilterAdminUsers({ roles, setFilters }) {
             className="filter-container-input-username"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={handleUsernameChange} 
+            pattern="[a-zA-Z0-9-_^\s]+" // Optional, prevents invalid submission
+            title="Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
           />
 
           {/* Email filter */}
