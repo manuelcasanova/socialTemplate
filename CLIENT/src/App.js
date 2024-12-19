@@ -21,6 +21,7 @@ import PersistLogin from './components/authComponents/PersistLogin';
 import RequireAuth from './components/authComponents/RequireAuth';
 import ResetPassword from './components/authComponents/ResetPassword';
 import RoleChangeLog from './components/bodyComponents/users/RoleChangeLog';
+import SubscribeForm from './components/bodyComponents/SubscribeForm';
 
 
 
@@ -74,6 +75,7 @@ function App() {
   <Route element={<RequireAuth allowedRoles={['User_subscribed']} />}>
     <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
   </Route>
+  <Route path="/subscribe" element={<SubscribeForm isNavOpen={isNavOpen} />} />
   <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
     <Route path="/admin" element={<Admin isNavOpen={isNavOpen} />} />
   </Route>

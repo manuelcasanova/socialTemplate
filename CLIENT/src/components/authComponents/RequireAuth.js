@@ -12,12 +12,18 @@ const RequireAuth = ({ allowedRoles }) => {
     : undefined
 
     const roles = decoded?.UserInfo?.roles || []
+    
 
     return (
         roles.find(role => allowedRoles?.includes(role))
             ? <Outlet />
-            : auth?.accessToken //changed from user to accessToken to persist login after refresh
-                ? <Navigate to="/unauthorized" state={{ from: location }} replace />
+            : auth?.accessToken
+            ? (
+                // If they are not subscribed, redirect to subscription page
+                allowedRoles.includes('User_subscribed') 
+                    ? <Navigate to="/subscribe" state={{ from: location }} replace />
+                    : <Navigate to="/unauthorized" state={{ from: location }} replace />
+            )
                 : <Navigate to="/signin" state={{ from: location }} replace />
     );
 }
