@@ -1,0 +1,51 @@
+.subscription-container {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+}
+
+.subscription-status {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.status {
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.subscribed {
+  color: green;
+  background-color: #e7f9e7;
+}
+
+.not-subscribed {
+  color: red;
+  background-color: #f9e7e7;
+}
+
+.payment-section {
+  margin-top: 20px;
+}
+
+.subscribe-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.subscribe-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}

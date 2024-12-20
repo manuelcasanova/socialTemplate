@@ -89,25 +89,64 @@ const getAllUsers = async (req, res) => {
 };
 
 
+// const getUserById = async (req, res) => {
+//     const { user_id } = req.params; // Extract user_id from request parameters
+//     try {
+//         const result = await pool.query(
+//             'SELECT username, email FROM users WHERE user_id = $1',
+//             [user_id]
+//         );
+
+//         if (result.rows.length === 0) {
+//             // If no user is found, return a 404 status
+//             return res.status(404).json({ error: 'User not found' });
+//         }
+
+//         res.status(200).json(result.rows[0]); // Respond with the user data
+//     } catch (error) {
+//         console.error('Error retrieving user:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// };
+
 const getUserById = async (req, res) => {
     const { user_id } = req.params; // Extract user_id from request parameters
     try {
-        const result = await pool.query(
+        // Query to get user details (username, email)
+        const userResult = await pool.query(
             'SELECT username, email FROM users WHERE user_id = $1',
             [user_id]
         );
 
-        if (result.rows.length === 0) {
+        if (userResult.rows.length === 0) {
             // If no user is found, return a 404 status
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.status(200).json(result.rows[0]); // Respond with the user data
+        // Query to get user roles, including whether the user is subscribed
+        const rolesResult = await pool.query(
+            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+            [user_id]
+        );
+
+        const roles = rolesResult.rows.map(row => row.role_name);
+
+        // Check if the user has the 'user_subscribed' role
+        const isSubscribed = roles.includes('user_subscribed');
+
+        // Construct the response
+        const user = userResult.rows[0];
+        user.roles = roles;
+        user.isSubscribed = isSubscribed; // Add subscription status
+
+        // Return the user data along with subscription status
+        res.status(200).json(user);
     } catch (error) {
         console.error('Error retrieving user:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 // Function to update user details
 const updateUser = async (req, res) => {
@@ -454,6 +493,81 @@ const updateRoles = async (req, res) => {
     }
 };
 
+//Subscribe user after payment confirmation
+const subscribeUser = async (req, res) => {
+    const { userId, paymentDetails } = req.body;
+    console.log("req.body", req.body)
+
+    try {
+        // Step 1: Validate the user's payment (You would integrate with a payment gateway here)
+        const paymentSuccess = await processPayment(paymentDetails);
+        if (!paymentSuccess) {
+            return res.status(400).json({ error: 'Payment failed' });
+        }
+
+        // Step 2: Fetch the user and check if they already have the "Subscribed" role
+        const userResult = await pool.query(
+            'SELECT * FROM users WHERE user_id = $1',
+            [userId]
+        );
+
+        if (!userResult.rows.length) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const userRolesResult = await pool.query(
+            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+            [userId]
+        );
+
+        const userRoles = userRolesResult.rows.map(row => row.role_name);
+
+        // Step 3: If the user doesn't already have the "Subscribed" role, assign it
+        if (!userRoles.includes('User_subscribed')) {
+            await pool.query(
+                'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',
+                [userId, userId, 'User_subscribed']
+            );
+
+            // Log the role change
+            await pool.query(
+                'INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) VALUES ($1, $2, $3, $4)',
+                [userId, userId, 'User_subscribed', 'assigned']
+            );
+
+            return res.status(200).json({ message: 'Subscription successful and role updated' });
+        } else {
+            return res.status(400).json({ error: 'User is already subscribed' });
+        }
+    } catch (error) {
+        console.error('Error during subscription:', error);
+        res.status(500).json({ error: 'Subscription failed' });
+    }
+};
+
+//Fake processPayment function, always succeeds
+const processPayment = async ({ amount, currency }) => {
+    try {
+        // Simulate some logic for processing the payment
+        console.log(`Processing payment of ${amount} ${currency}...`);
+
+        // Fake success: In a real scenario, this would interact with a payment gateway
+        if (amount <= 0 || !currency) {
+            throw new Error('Invalid payment details');
+        }
+
+        // Simulate a delay to mimic real payment processing
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        console.log(`Payment of ${amount} ${currency} processed successfully!`);
+
+        return true;
+    } catch (error) {
+        console.error('Error during payment processing:', error);
+        return false;
+    }
+};
+
 
 
 
@@ -463,5 +577,6 @@ module.exports = {
     updateUser,
     deleteUser,
     uploadProfilePicture,
-    updateRoles
+    updateRoles,
+    subscribeUser
 };
