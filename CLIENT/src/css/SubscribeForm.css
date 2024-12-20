@@ -25,6 +25,25 @@
   background-color: #f9e7e7;
 }
 
+.credit-card-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.credit-card-form label {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.credit-card-form input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
 .payment-section {
   margin-top: 20px;
 }
