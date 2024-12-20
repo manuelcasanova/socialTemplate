@@ -105,6 +105,20 @@ router.route('/:user_id/roles')
     usersController.updateRoles // This will call your controller to update roles
   );
 
+  router.route('/subscribe')
+  .post(
+      async (req, res, next) => {
+        try {
+          // Fetch roles and verify them
+          const rolesList = await fetchRoles();
+          verifyRoles(...rolesList)(req, res, next);
+        } catch (err) {
+          next(err); 
+        }
+      },
+    usersController.subscribeUser
+  );
+
 
 
 module.exports = router;
