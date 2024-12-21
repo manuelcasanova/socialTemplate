@@ -1,70 +1,119 @@
+
 .subscription-container {
-  text-align: center;
-  margin-top: 50px;
+  width: 100%; /* Full width of its parent (subscription-wrapper) */
+  max-width: 800px; /* Optional: limit the max width */
   padding: 20px;
+  margin: auto;
+
 }
 
-.subscription-status {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-
-.status {
-  font-weight: bold;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.subscribed {
-  color: green;
-  background-color: #e7f9e7;
-}
-
-.not-subscribed {
-  color: red;
-  background-color: #f9e7e7;
-}
-
-.credit-card-form {
+.subscription-cards {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.credit-card-form label {
-  margin: 10px 0;
-  font-size: 14px;
+.subscription-card {
+  width: 48%;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
-.credit-card-form input {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 5px;
+.subscription-card .subscribe-button {
+  display: block;      
+  margin-left: auto;    
+  margin-right: auto;  
+  margin-top: 20px;    
 }
 
-.payment-section {
+.subscription-card.not-subscribed {
+  background-color: #f9f9f9;
+}
+
+.subscription-card.subscribed {
+  background-color: #e0ffe0;
+}
+
+button.subscribe-button {
   margin-top: 20px;
-}
-
-.subscribe-button {
+  padding: 10px 20px;
   background-color: #4CAF50;
   color: white;
-  padding: 15px 32px;
-  text-align: center;
-  font-size: 16px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  border-radius: 5px;
 }
 
-.subscribe-button:disabled {
+button.subscribe-button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
-.error-message {
-  color: red;
+.credit-card-form {
+  position: relative;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.credit-card-form .subscribe-button {
+  display: block;      
+  margin-left: auto;    
+  margin-right: auto;  
+  margin-top: 20px;    
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #e74c3c;
+}
+
+.credit-card-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.credit-card-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.error-message, .success-message {
   margin-top: 10px;
+  color: #e74c3c;
+}
+
+.success-message {
+  color: #2ecc71;
+}
+
+@media (max-width: 580px) {
+
+  .subscription-cards {
+    flex-direction: column; 
+    align-items: center;
+  }
+
+  .subscription-card {
+    width: 100%; 
+    max-width: 500px;
+    margin-bottom: 20px; 
+  }
 }

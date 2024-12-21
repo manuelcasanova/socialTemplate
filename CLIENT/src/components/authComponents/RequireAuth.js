@@ -13,6 +13,7 @@ const RequireAuth = ({ allowedRoles }) => {
 
     const roles = decoded?.UserInfo?.roles || []
     
+    console.log("roles", roles)
 
     return (
         roles.find(role => allowedRoles?.includes(role))
