@@ -78,7 +78,7 @@ router.route('/update')
 
 //Delete user account
 router.route('/delete/:userId')
-  .delete(
+  .put(
     async (req, res, next) => {
       try {
         // Fetch roles and verify them
@@ -88,7 +88,7 @@ router.route('/delete/:userId')
         next(err); // Handle errors during role verification
       }
     },
-    usersController.deleteUser // Controller function to handle user deletion
+    usersController.softDeleteUser // Controller function to handle user deletion
   );
 
 //Update roles (by admin)

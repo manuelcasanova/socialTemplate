@@ -174,7 +174,7 @@ const handleFileChange = async (e) => {
 
     try {
       // Make the DELETE request to the server
-      const response = await axiosPrivate.delete(`/users/delete/${userId}`, {
+      const response = await axiosPrivate.put(`/users/delete/${userId}`, {
       });
 
       if (response?.data?.success) {
@@ -188,6 +188,7 @@ const handleFileChange = async (e) => {
         setError(response?.data?.message || 'Account deletion failed. Please try again.');
       }
     } catch (err) {
+      console.log("err", err)
       console.error('Error deleting account:', err);
       setError('An error occurred while deleting the account. Please try again later.');
     } finally {

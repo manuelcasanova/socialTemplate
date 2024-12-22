@@ -196,18 +196,38 @@ const updateUser = async (req, res) => {
 };
 
 // Function to delete user account
-const deleteUser = async (req, res) => {
+const softDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
 
     try {
-        // Step 1: Delete the user from the 'users' table
-        const result = await pool.query(
-            'DELETE FROM users WHERE user_id = $1 RETURNING *',
+        // Step 1: Fetch the current user's email
+        const userResult = await pool.query(
+            'SELECT email FROM users WHERE user_id = $1',
             [userId]
         );
 
-        if (result.rows.length === 0) {
-            // If no rows were returned, the user was not found
+        if (userResult.rows.length === 0) {
+            // If no user found, return 404
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Get the current email
+        const currentEmail = userResult.rows[0].email;
+
+        const timestamp = Date.now();
+
+        // Create the new email by prepending 'inactive-' to the current email
+        const updatedEmail = `inactive-${timestamp}-${currentEmail}`;
+
+        // Step 2: Update the user's status to inactive (set is_active to false)
+        // and change the email
+        const updateResult = await pool.query(
+            'UPDATE users SET is_active = false, is_verified = false, email = $1 WHERE user_id = $2 RETURNING *',
+            [updatedEmail, userId]
+        );
+
+        if (updateResult.rows.length === 0) {
+            // If no rows were updated, return 404
             return res.status(404).json({ error: 'User not found' });
         }
 
@@ -237,7 +257,7 @@ const deleteUser = async (req, res) => {
         });
 
         // Step 4: Send a success response
-        res.status(200).json({ success: true, message: 'User successfully deleted, and associated files removed', user: result.rows[0] });
+        res.status(200).json({ success: true, message: 'User successfully deleted, and associated files removed', user: updateResult.rows[0] });
 
     } catch (error) {
         console.error('Error deleting user:', error);
@@ -575,7 +595,7 @@ module.exports = {
     getAllUsers,
     getUserById,
     updateUser,
-    deleteUser,
+    softDeleteUser,
     uploadProfilePicture,
     updateRoles,
     subscribeUser
