@@ -6,7 +6,7 @@ import '../../../css/FilterAdminUsers.css'
 export default function FilterAdminUsers({ roles, setFilters }) {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState(""); // Role filter
-  const [isActive, setIsActive] = useState(""); // Active status filter
+  const [isActive, setIsActive] = useState(true); // Active status filter
   const [userId, setUserId] = useState(""); // ID filter
   const [email, setEmail] = useState(""); // Email filter
   const [isVisible, setIsVisible] = useState(false);
@@ -22,7 +22,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
     setFilters({
       username,
       role,
-      is_active: isActive === "" ? undefined : isActive, // Handle undefined when no filter is set
+      is_active: isActive, 
       user_id: userId || undefined, // Set filter if userId is not empty
       email: email || undefined // Set filter if email is not empty
     });
@@ -30,6 +30,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
 
   // Trigger the filter change whenever any input is updated
   useEffect(() => {
+    // console.log("Applying Filters:", { username, role, isActive, userId, email });
     handleFilterChange();
   }, [username, role, isActive, userId, email]); // Dependencies for triggering filter change
 
@@ -92,6 +93,13 @@ export default function FilterAdminUsers({ roles, setFilters }) {
     };
   }, []);
 
+    // Ensure isActive is set to true initially
+    useEffect(() => {
+      if (isActive === undefined) {
+        setIsActive(true);
+      }
+    }, [])
+
   return (
     <div className="filter-wrapper">
       <button
@@ -143,7 +151,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
               className="filter-container-select"
               onClick={toggleActiveStatusDropdown} // Use the toggle function
             >
-              {isActive === "" ? "All Statuses" : isActive === "true" ? "Active" : "Inactive"}
+              {isActive === true ? "Active" : isActive === false ? "Inactive" : "All Statuses"}
             </div>
             {isActiveOpen && (
               <div className="custom-dropdown-menu">
@@ -151,7 +159,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
                 <div
                   className="custom-dropdown-option"
                   onClick={() => {
-                    setIsActive(""); // Reset the status filter
+                    setIsActive(undefined); // Reset the status filter
                     setIsActiveOpen(false); // Close the dropdown
                   }}
                 >
@@ -161,7 +169,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
                 <div
                   className="custom-dropdown-option"
                   onClick={() => {
-                    setIsActive("true");
+                    setIsActive(true);
                     setIsActiveOpen(false);
                   }}
                 >
@@ -170,7 +178,7 @@ export default function FilterAdminUsers({ roles, setFilters }) {
                 <div
                   className="custom-dropdown-option"
                   onClick={() => {
-                    setIsActive("false");
+                    setIsActive(false);
                     setIsActiveOpen(false);
                   }}
                 >

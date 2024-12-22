@@ -36,6 +36,7 @@ width: 90%;
 }
 
 .user-info {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,6 +57,15 @@ width: 90%;
   padding: 5px 10px;
   cursor: pointer;
   font-size: 1em;
+}
+
+.user-info-expanded {
+  position: fixed; /* Fix the button to the viewport */
+  top: 20px; /* Adjust vertical position as needed */
+  right: 20px; /* Push to the right of the parent container */
+  z-index: 1000; /* Ensure it stays above other content */
+  width: auto; /* Let the width be as wide as the content inside */
+  padding: 10px; /* Optional: adjust padding for your button */
 }
 
 button:hover {
