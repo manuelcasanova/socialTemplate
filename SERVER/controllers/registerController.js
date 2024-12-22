@@ -30,13 +30,8 @@ const handleNewUser = async (req, res) => {
         return res.status(400).json({ 'message': 'Invalid email format.' });
     }
 
-    if (!user || !pwd || !email) {
-        return res.status(400).json({ 'message': 'Username, email, and password are required.' });
-    }
-
     // Normalize username (capitalize the first letter and lowercase the rest)
     user = user.charAt(0).toUpperCase() + user.slice(1).toLowerCase();
-
 
     // Default role if not provided (if the role is user_subscribed, for example)
     const userRole = role || 'user_not_subscribed'; // Default role can be 'user_not_subscribed'
@@ -45,7 +40,25 @@ const handleNewUser = async (req, res) => {
         // Encrypt the password
         const hashedPwd = await bcrypt.hash(pwd, 10);
 
-        // Check if the username or email already exists
+        // Step 1: Check for inactive email (soft-deleted account)
+        const checkSoftDeleteQuery = 'SELECT * FROM users WHERE email LIKE $1 AND is_active = false';
+        
+        // Query to match emails that are soft deleted (inactive) with a timestamp
+        const softDeletedResult = await pool.query(checkSoftDeleteQuery, [`inactive-%${email}`]);
+
+        if (softDeletedResult.rows.length > 0) {
+            // Email exists as soft-deleted user
+            const userToReactivate = softDeletedResult.rows[0];
+            
+            // Optionally: Ask the user if they want to restore the old account
+            return res.status(400).json({
+                message: 'An account with this email was previously deleted. Would you like to restore your old account or create a new one?',
+                action: 'restore', // Indicating that the user can restore their old account
+                userId: userToReactivate.user_id
+            });
+        }
+
+        // Step 2: Check if the email is already associated with an active user
         const duplicateCheckQuery = 'SELECT * FROM users WHERE username = $1 OR email = $2 AND is_active = true';
         const result = await pool.query(duplicateCheckQuery, [user, email]);
 
@@ -53,7 +66,7 @@ const handleNewUser = async (req, res) => {
             return res.status(409).json({ 'message': 'User with that username or email already exists.' });
         }
 
-        // Insert the new user into the 'users' table
+        // Step 3: If no soft-deleted account, proceed with creating a new user
         const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified) VALUES ($1, $2, $3, false) RETURNING user_id';
         const userInsertResult = await pool.query(insertUserQuery, [user, email, hashedPwd]);
 
@@ -98,56 +111,7 @@ const handleNewUser = async (req, res) => {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                     <title>Email Verification</title>
                     <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 0;
-                            padding: 0;
-                            background-color: #f5f5f5;
-                            color: #333;
-                        }
-                        .email-container {
-                            max-width: 600px;
-                            margin: 20px auto;
-                            background-color: var(--color13, lightblue);
-                            border-radius: 8px;
-                            overflow: hidden;
-                            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-                        }
-                        .email-header {
-                            background-color: var(--color9, darkblue);
-                            color: var(--color1, white);
-                            padding: 20px;
-                            text-align: center;
-                            font-size: 24px;
-                        }
-                        .email-body {
-                            padding: 20px;
-                            background-color: var(--color1, white);
-                        }
-                        .email-body p {
-                            font-size: 16px;
-                            line-height: 1.5;
-                            color: #333;
-                        }
-                        .verify-link {
-                            display: inline-block;
-                            margin-top: 20px;
-                            padding: 12px 25px;
-                            font-size: 16px;
-                            color: var(--color1, white);
-                            background-color: var(--color9, darkblue);
-                            text-decoration: none;
-                            border-radius: 4px;
-                            transition: background-color 0.3s ease;
-                            text-align: center;
-                        }
-                        .verify-link:hover {
-                            background-color: var(--color13, lightblue);
-                            color: var(--color9, darkblue);
-                        }
-                        .email-body a {
-                            margin: 5px 0 10px 0;
-                        }
+                        /* Style for the email */
                     </style>
                 </head>
                 <body>
@@ -197,6 +161,7 @@ const handleNewUser = async (req, res) => {
     }
 };
 
+
 // Function to return the role_ids for a given role
 const getRoleAssignments = (role) => {
     const roleAssignments = {
@@ -210,6 +175,9 @@ const getRoleAssignments = (role) => {
     // Return the role ids based on the given role
     return roleAssignments[role] || [1]; // Default to 'user_not_subscribed' if no match found
 };
+
+
+
 
 
 module.exports = { handleNewUser };

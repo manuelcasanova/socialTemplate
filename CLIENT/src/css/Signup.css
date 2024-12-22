@@ -6,7 +6,7 @@
 }
 
 /* Signup Form */
-.signup-form {
+.signup-form, .restore-action {
   display: flex;
   flex-direction: column;
   width: 100%;

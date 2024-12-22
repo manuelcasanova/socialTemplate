@@ -9,8 +9,6 @@ import axios from './../../api/axios.js';
 import { Link } from "react-router-dom";
 
 export default function Signup({ isNavOpen, screenWidth }) {
-
-
   const navigate = useNavigate();
 
   const regexPatterns = {
@@ -18,14 +16,6 @@ export default function Signup({ isNavOpen, screenWidth }) {
     password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/,
     email: /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/
   };
-
-  // Allow any characters (zero or more). For backend protection testing.
-  //   const regexPatterns = {
-  //     username: /^.*$/,  
-  //     password: /^.*$/,  
-  //     email: /^.*$/       
-  // };
-
 
   const [formData, setFormData] = useState({
     user: '',
@@ -52,11 +42,12 @@ export default function Signup({ isNavOpen, screenWidth }) {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isSoftDeleted, setIsSoftDeleted] = useState(false);  // New state to track soft-deleted email
+  const [restoreAction, setRestoreAction] = useState(false);
+  const [userIdToRestore, setUserIdToRestore] = useState(null);
 
   const userRef = useRef();
   const errRef = useRef();
-
 
   useEffect(() => {
     if (!success && userRef.current) {
@@ -64,18 +55,14 @@ export default function Signup({ isNavOpen, screenWidth }) {
     }
   }, [success]);
 
-
   useEffect(() => {
-    // Check validity after formData changes
     const newValidity = {
       name: regexPatterns.username.test(formData.user),
       email: regexPatterns.email.test(formData.email),
       pwd: regexPatterns.password.test(formData.pwd),
-      // Validate match only if both pwd and matchPwd are non-empty
       match: formData.pwd && formData.matchPwd ? formData.pwd === formData.matchPwd : false
     };
 
-    // If validity state is different, update it
     if (
       newValidity.name !== validity.name ||
       newValidity.email !== validity.email ||
@@ -86,12 +73,11 @@ export default function Signup({ isNavOpen, screenWidth }) {
     }
 
     setErrMsg('');
-  }, [formData]); // only depend on formData, not validity
+  }, [formData]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
 
-    // Function to capitalize the first letter of each word and lowercase the rest
     const capitalizeFirstLetter = (str) => {
       return str
         .split(' ') // Split by spaces
@@ -115,12 +101,16 @@ export default function Signup({ isNavOpen, screenWidth }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log('Sending request with data:', formData);  // Log the data being sent
+
     if (!Object.values(validity).every(Boolean)) {
       setErrMsg("Invalid Entry");
       return;
     }
+
     setIsSubmitting(true); // Disable the button
     setLoading(true); // Start the spinner
+
     try {
       const response = await axios.post(
         '/signup',
@@ -131,25 +121,76 @@ export default function Signup({ isNavOpen, screenWidth }) {
         }
       );
 
-      // Check if the response has a success message indicating the email has been sent
-      if (response.data.success) {
-        setSuccess(true); // Set success only after email is sent
+      // Log the response to debug
+      console.log('Backend Response:', response.data); // <-- Check if this is logged
+
+      if (response.data.action === 'restore') {
+        // If action is "restore", handle the case accordingly
+        setErrMsg(response.data.message);  // Show the message
+        setRestoreAction(true); // Enable the restore button
+        setUserIdToRestore(response.data.userId); // Store the userId for restoration
+      } else if (response.data.success) {
+        setSuccess(true);  // Handle success case if applicable
         setFormData({ user: '', email: '', pwd: '', matchPwd: '' });
       }
 
     } catch (err) {
-      const status = err?.response?.status;
-      setErrMsg(
-        status === 409 ? 'Username or Email Taken' :
-          status ? `${err.response.data.message}` :
-            'No Server Response'
-      );
+      console.error('Error in request:', err);  // <-- Log any errors from the request
+
+      if (err?.response) {
+        const status = err.response.status;
+
+        if (status === 400) {
+          // Handle 400 error specifically (your custom response)
+          console.log('Error Response Data:', err.response.data); // Log the custom error message and data
+
+          if (err.response.data.action === 'restore') {
+            // Show the restore message
+            setErrMsg(err.response.data.message);
+            setRestoreAction(true); // Enable restore action
+            setUserIdToRestore(err.response.data.userId); // Store the user ID for restoration
+          } else {
+            setErrMsg(err.response.data.message || 'An error occurred during signup.');
+          }
+        } else if (status === 409) {
+          setErrMsg('Username or Email Taken');
+        } else {
+          setErrMsg('No Server Response');
+        }
+      } else {
+        setErrMsg('No Server Response');
+      }
       errRef.current.focus();
     } finally {
-      // setTimeout(() => {
       setLoading(false); // Stop the spinner
       setIsSubmitting(false); // Re-enable the button
-      // }, 5000); // Ensure this matches the delay for success logic
+    }
+  };
+
+
+
+  const handleRestoreAccount = async () => {
+    // Call an API to restore the account or reactivate the email
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        '/restore-account', // Replace with your backend endpoint for account restoration
+        { email: formData.email },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
+
+      if (response.data.success) {
+        setSuccess(true);
+        setIsSoftDeleted(false); // Hide the restore option after success
+      }
+    } catch (err) {
+      setErrMsg('Error restoring account.');
+      errRef.current.focus();
+    } finally {
+      setLoading(false); // Stop the spinner after process is complete
     }
   };
 
@@ -199,22 +240,45 @@ export default function Signup({ isNavOpen, screenWidth }) {
   return (
     <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
       <button className="close-button" onClick={handleClose}>✖</button>
+
       {success ? (
         <section className='signup-success'>
-<div className="success-message">
-  <h2>All Set!</h2>
-  <p>Check your inbox (or spam) to verify your account.</p>
-</div>
+          <div className="success-message">
+            <h2>All Set!</h2>
+            <p>Check your inbox (or spam) to verify your account.</p>
+          </div>
         </section>
       ) : (
         <section className="centered-section">
           <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+
+          {/* Render the Restore Button if restoreAction is true */}
+          {restoreAction && (
+            <div className="restore-action">
+              {/* <p>{errMsg}</p> */}
+              <button
+                className="button-auth"
+                onClick={handleRestoreAccount}
+                disabled={isSubmitting || loading}
+              >
+                {loading ? (
+                  <div className="spinner">
+                    <div className="spinner__circle"></div>
+                  </div>
+                ) : (
+                  "Restore Account"
+                )}
+              </button>
+            </div>
+          )}
+
           <div className="signup-title">Sign Up</div>
           <form className="signup-form" onSubmit={handleSubmit}>
             {renderInput("user", "Name", "text", "name")}
             {renderInput("email", "Email", "text", "email")}
             {renderInput("pwd", "Password", "password", "pwd")}
             {renderInput("matchPwd", "Confirm Password", "password", "match")}
+
             <button className='button-auth' disabled={!Object.values(validity).every(Boolean) || isSubmitting}>
               {loading ? (
                 <div className="spinner">
@@ -226,16 +290,13 @@ export default function Signup({ isNavOpen, screenWidth }) {
             </button>
           </form>
 
-
           <div className='have-an-account'>
             <p>Already have an account?</p>
             <p><Link to="/signin">Sign In</Link></p>
           </div>
-
-
-
         </section>
       )}
     </div>
   );
+
 }
