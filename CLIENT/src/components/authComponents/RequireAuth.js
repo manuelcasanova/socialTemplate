@@ -11,9 +11,11 @@ const RequireAuth = ({ allowedRoles }) => {
     ? jwtDecode(auth.accessToken)
     : undefined
 
-    const roles = decoded?.UserInfo?.roles || []
-    
-    console.log("roles", roles)
+
+//This checks if the roles exist in the auth context first. If not, it falls back to the decoded JWT token. If neither is available, it defaults to an empty array. It solves the update of roles when a user subscribe so they can navigate to /Subscriber
+
+    const roles = auth?.roles || decoded?.UserInfo?.roles || []
+    // const roles = decoded?.UserInfo?.roles || []
 
     return (
         roles.find(role => allowedRoles?.includes(role))

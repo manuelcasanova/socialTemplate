@@ -160,6 +160,7 @@
   overflow-y: auto;
   /* Enables scrolling if content exceeds the body height */
   padding: 1rem;
+  padding-top: 3em;
   background-color: #f4f4f4;
 
   

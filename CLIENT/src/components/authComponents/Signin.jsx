@@ -8,7 +8,7 @@ import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import '../../css/Signup.css'
 
 const SIGNIN_URL = '/auth';
-const DEFAULT_EMAIL = 'user_not_subscribed@example.com';
+const DEFAULT_EMAIL = '@example.com';
 const DEFAULT_PASSWORD = 'Password1!';
 
 const Signin = ({ isNavOpen, screenWidth }) => {
