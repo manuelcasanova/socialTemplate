@@ -1,28 +1,21 @@
 .profile-container {
 
-  /* For children of body I've noticed that if height: 100% and justify-content: center, on very short screens, content overflows.
-Using margin-top, margin-bottom: auto, it's fixed
- */
-
-  width: 100%;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: var(--color1);
-  transition: margin-left 0.3s ease-in-out;
-  overflow-y: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-  /* border: 6px solid purple; */
-
-  padding: 1em 0em 1em 0em;
+  justify-content: start;
+  text-align: center;
+  padding-top: 3em;
+  width: 100%;
+  max-width: 100vw; /* Ensure it doesn’t exceed viewport width */
+  box-sizing: border-box;
 }
 
 
 
 .profile-details {
   margin: 2em 0 2em 0;
+  display: flex;
+  justify-content: center;
 }
 
 .profile-picture {
