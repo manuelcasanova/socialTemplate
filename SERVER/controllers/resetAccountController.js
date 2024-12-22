@@ -17,14 +17,12 @@ const handleReset = async (req, res) => {
       const findUserQuery = 'SELECT * FROM users WHERE email LIKE $1';
       const result = await pool.query(findUserQuery, [`inactive-%${email}`]); // Match the email with 'inactive-TIMESTAMP-email@example.com'
 
-      console.log(result.rows);
-
       if (result.rows.length === 0) {
           return res.status(404).json({ message: 'User not found or the account is not in a deleted state.' });
       }
 
       // Restore the user by updating the `is_active` flag and removing the `inactive-<timestamp>-` prefix
-      const user = result.rows[0];
+      const user = result.rows[result.rows.length - 1]; //Instead of result.rows[0], the last one, in case the account was deleted multiple times, to get the latest.
       const originalEmail = user.email.replace(/^inactive-\d{13}-/, ''); // Remove the 'inactive-<timestamp>-' part
 
       // Update the user account to restore it
@@ -36,10 +34,8 @@ const handleReset = async (req, res) => {
       `;
       const restoredUser = await pool.query(restoreUserQuery, [originalEmail, user.email]);  // Use 'user.email' here as it's the one with the timestamp
 
-
       if (restoredUser.rows.length > 0) {
-        const restoredUserDetails = restoredUser.rows[0];
-        console.log('User restored:', restoredUserDetails);
+        const restoredUserDetails = restoredUser.rows[0]; //Would be the last one if more than one with the same email
 
         // Step 2: Generate a verification token for the restored user
         const secret = process.env.ACCESS_TOKEN_SECRET + restoredUserDetails.password;

@@ -98,10 +98,8 @@ export default function Signup({ isNavOpen, screenWidth }) {
     }));
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log('Sending request with data:', formData);  // Log the data being sent
 
     if (!Object.values(validity).every(Boolean)) {
       setErrMsg("Invalid Entry");
@@ -125,10 +123,10 @@ export default function Signup({ isNavOpen, screenWidth }) {
       console.log('Backend Response:', response.data); // <-- Check if this is logged
 
       if (response.data.action === 'restore') {
-        // If action is "restore", handle the case accordingly
-        setErrMsg(response.data.message);  // Show the message
-        setRestoreAction(true); // Enable the restore button
-        setUserIdToRestore(response.data.userId); // Store the userId for restoration
+        // Allow user to either restore or create a new account
+        setErrMsg(response.data.message);
+        setRestoreAction(true);
+        setUserIdToRestore(response.data.userId);
       } else if (response.data.success) {
         setSuccess(true);  // Handle success case if applicable
         setFormData({ user: '', email: '', pwd: '', matchPwd: '' });
@@ -145,7 +143,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
           console.log('Error Response Data:', err.response.data); // Log the custom error message and data
 
           if (err.response.data.action === 'restore') {
-            // Show the restore message
+            // Allow user to either restore or proceed with new account creation
             setErrMsg(err.response.data.message);
             setRestoreAction(true); // Enable restore action
             setUserIdToRestore(err.response.data.userId); // Store the user ID for restoration
@@ -168,6 +166,14 @@ export default function Signup({ isNavOpen, screenWidth }) {
   };
 
 
+const handleIgnoreRestoreAccount = () => {
+  setRestoreAction(false)
+  setFormData((prev) => ({
+    ...prev,
+    restoreAction
+  }));
+
+}
 
   const handleRestoreAccount = async () => {
     // Call an API to restore the account or reactivate the email
@@ -269,6 +275,10 @@ export default function Signup({ isNavOpen, screenWidth }) {
                   "Restore Account"
                 )}
               </button>
+              <button 
+              className="button-auth"
+              onClick={handleIgnoreRestoreAccount}
+              >Create a New Account</button>
             </div>
           )}
 

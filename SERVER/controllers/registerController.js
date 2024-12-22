@@ -10,8 +10,10 @@ const usernameRegex = /^[A-z][A-z0-9-_]{3,23}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/;
 const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
+let forceCreateNew = false;
+
 const handleNewUser = async (req, res) => {
-    let { user, pwd, email, role } = req.body;
+    let { user, pwd, email, role, restoreAction } = req.body;
 
     if (!user || !pwd || !email) {
         return res.status(400).json({ 'message': 'Username, email, and password are required.' });
@@ -40,30 +42,38 @@ const handleNewUser = async (req, res) => {
         // Encrypt the password
         const hashedPwd = await bcrypt.hash(pwd, 10);
 
-        // Step 1: Check for inactive email (soft-deleted account)
-        const checkSoftDeleteQuery = 'SELECT * FROM users WHERE email LIKE $1 AND is_active = false';
-        
-        // Query to match emails that are soft deleted (inactive) with a timestamp
-        const softDeletedResult = await pool.query(checkSoftDeleteQuery, [`inactive-%${email}`]);
 
-        if (softDeletedResult.rows.length > 0) {
-            // Email exists as soft-deleted user
-            const userToReactivate = softDeletedResult.rows[0];
-            
-            // Optionally: Ask the user if they want to restore the old account
-            return res.status(400).json({
-                message: 'An account with this email was previously deleted. Would you like to restore your old account or create a new one?',
-                action: 'restore', // Indicating that the user can restore their old account
-                userId: userToReactivate.user_id
-            });
-        }
 
-        // Step 2: Check if the email is already associated with an active user
+        // Step 1: Check if the email is already associated with an active user
         const duplicateCheckQuery = 'SELECT * FROM users WHERE username = $1 OR email = $2 AND is_active = true';
         const result = await pool.query(duplicateCheckQuery, [user, email]);
 
         if (result.rows.length > 0) {
             return res.status(409).json({ 'message': 'User with that username or email already exists.' });
+        }
+
+
+        if (!restoreAction) {
+        // Step 2: Check for inactive email (soft-deleted account)
+        const checkSoftDeleteQuery = 'SELECT * FROM users WHERE email LIKE $1 AND is_active = false';
+
+
+        // Check for soft-deleted email, but skip it if 'forceCreateNew' is set to true
+
+            // Query to match emails that are soft deleted (inactive) with a timestamp
+            const softDeletedResult = await pool.query(checkSoftDeleteQuery, [`inactive-%${email}`]);
+
+            if (softDeletedResult.rows.length > 0) {
+                // Email exists as soft-deleted user
+                const userToReactivate = softDeletedResult.rows[0];
+
+                // Optionally: Ask the user if they want to restore the old account
+                return res.status(400).json({
+                    message: 'An account with this email was previously deleted. Would you like to restore your old account or create a new one?',
+                    action: 'restore', // Indicating that the user can restore their old account
+                    userId: userToReactivate.user_id
+                });
+            }
         }
 
         // Step 3: If no soft-deleted account, proceed with creating a new user
