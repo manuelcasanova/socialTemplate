@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS login_history CASCADE;
 DROP TABLE IF EXISTS user_roles CASCADE;
 DROP TABLE IF EXISTS role_change_logs;
+DROP TABLE IF EXISTS subscriptions;
 
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
@@ -48,4 +49,14 @@ CREATE TABLE role_change_logs (
     FOREIGN KEY (user_that_modified) REFERENCES users(user_id),
     FOREIGN KEY (user_modified) REFERENCES users(user_id),
     action_type VARCHAR(20) CHECK (action_type IN ('assigned', 'unassigned')) NOT NULL
+);
+
+CREATE TABLE subscriptions (
+  subscription_id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  start_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, 
+  renewal_due_date TIMESTAMPTZ NOT NULL,           
+  is_active BOOLEAN DEFAULT true,                  
+  created_by_user_id INT,                          
+  FOREIGN KEY (created_by_user_id) REFERENCES users(user_id) ON DELETE SET NULL
 );

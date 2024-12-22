@@ -60,12 +60,12 @@ width: 90%;
 }
 
 .user-info-expanded {
-  position: fixed; /* Fix the button to the viewport */
-  top: 20px; /* Adjust vertical position as needed */
-  right: 20px; /* Push to the right of the parent container */
-  z-index: 1000; /* Ensure it stays above other content */
-  width: auto; /* Let the width be as wide as the content inside */
-  padding: 10px; /* Optional: adjust padding for your button */
+  position: fixed; 
+  top: 80px; 
+  right: 20px;
+  z-index: 1000;
+  width: auto; 
+  padding: 10px; 
 }
 
 button:hover {

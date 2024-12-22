@@ -502,6 +502,22 @@ const updateRoles = async (req, res) => {
             );
         });
 
+        // Step 16: Update the subscription status if the "User_subscribed" role is removed
+        if (rolesToRemove.includes('User_subscribed')) {
+            await pool.query(
+                'UPDATE subscriptions SET is_active = false WHERE user_id = $1',
+                [userId]
+            );
+        }
+
+        // Step 17: Update the subscription status if the "User_subscribed" role is removed
+        if (rolesToAdd.includes('User_subscribed')) {
+            await pool.query(
+                'UPDATE subscriptions SET is_active = true WHERE user_id = $1',
+                [userId]
+            );
+        }
+
         // Execute all log insertions
         await Promise.all(roleChangeLogsPromises);  // Wait for all logs to be inserted
 
@@ -516,7 +532,7 @@ const updateRoles = async (req, res) => {
 //Subscribe user after payment confirmation
 const subscribeUser = async (req, res) => {
     const { userId, paymentDetails } = req.body;
-    console.log("req.body", req.body)
+    // console.log("req.body", req.body)
 
     try {
         // Step 1: Validate the user's payment (You would integrate with a payment gateway here)
@@ -555,6 +571,17 @@ const subscribeUser = async (req, res) => {
                 [userId, userId, 'User_subscribed', 'assigned']
             );
 
+            // Step 4: Add subscription details to the subscriptions table
+            const renewalDueDate = new Date();
+            // Set subscription duration to 1 year and 1 week
+            renewalDueDate.setFullYear(renewalDueDate.getFullYear() + 1); // Add 1 year
+            renewalDueDate.setDate(renewalDueDate.getDate() + 7); // Add 7 days (1 week)
+
+            await pool.query(
+                'INSERT INTO subscriptions (user_id, renewal_due_date, created_by_user_id) VALUES ($1, $2, $3)',
+                [userId, renewalDueDate, userId]
+            );
+
             return res.status(200).json({ message: 'Subscription successful and role updated' });
         } else {
             return res.status(400).json({ error: 'User is already subscribed' });
@@ -569,7 +596,7 @@ const subscribeUser = async (req, res) => {
 const processPayment = async ({ amount, currency }) => {
     try {
         // Simulate some logic for processing the payment
-        console.log(`Processing payment of ${amount} ${currency}...`);
+        // console.log(`Processing payment of ${amount} ${currency}...`);
 
         // Fake success: In a real scenario, this would interact with a payment gateway
         if (amount <= 0 || !currency) {
@@ -579,7 +606,7 @@ const processPayment = async ({ amount, currency }) => {
         // Simulate a delay to mimic real payment processing
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        console.log(`Payment of ${amount} ${currency} processed successfully!`);
+        // console.log(`Payment of ${amount} ${currency} processed successfully!`);
 
         return true;
     } catch (error) {
