@@ -57,6 +57,6 @@ CREATE TABLE subscriptions (
   start_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, 
   renewal_due_date TIMESTAMPTZ NOT NULL,           
   is_active BOOLEAN DEFAULT true,                  
-  created_by_user_id INT,                          
+  created_by_user_id INT,                        
   FOREIGN KEY (created_by_user_id) REFERENCES users(user_id) ON DELETE SET NULL
 );

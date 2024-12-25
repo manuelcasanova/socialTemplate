@@ -529,21 +529,52 @@ const updateRoles = async (req, res) => {
     }
 };
 
-//Subscribe user after payment confirmation
-const subscribeUser = async (req, res) => {
-    const { userId, paymentDetails } = req.body;
-    // console.log("req.body", req.body)
+//Get subscription status
+
+const getSubscriptionStatus = async (req, res) => {
+    const userId = req.params.user_id;
 
     try {
-        // Step 1: Validate the user's payment (You would integrate with a payment gateway here)
-        const paymentSuccess = await processPayment(paymentDetails);
-        if (!paymentSuccess) {
-            return res.status(400).json({ error: 'Payment failed' });
+        const result = await pool.query(
+            'SELECT is_active, renewal_due_date FROM subscriptions WHERE user_id = $1',
+            [userId]
+        );
+
+
+        if (result.rows.length === 0) {
+            console.log("Subscription not found");
+            return res.status(200).json(false);
         }
 
-        // Step 2: Fetch the user and check if they already have the "Subscribed" role
+        res.status(200).json(true);
+    } catch (error) {
+        console.error('Error fetching subscription status:', error);
+        res.status(500).json({ error: 'Error fetching subscription status' });
+    }
+}
+
+//Subscribe user after payment confirmation
+// Subscribe user after payment confirmation
+const subscribeUser = async (req, res) => {
+    const { userId, paymentDetails } = req.body;
+
+    try {
+        // Step 1: Validate the payment
+        const paymentSuccess = await processPayment(paymentDetails);
+        if (!paymentSuccess) {
+            return res.status(400).json({ error: 'Payment validation failed' });
+        }
+
+        // Step 2: Fetch user and subscription details
         const userResult = await pool.query(
-            'SELECT * FROM users WHERE user_id = $1',
+            `SELECT u.user_id, 
+                    (SELECT COUNT(*) > 0 FROM user_roles ur 
+                     INNER JOIN roles r ON ur.role_id = r.role_id 
+                     WHERE ur.user_id = u.user_id AND r.role_name = 'User_subscribed') AS has_role,
+                    (SELECT is_active FROM subscriptions s 
+                     WHERE s.user_id = u.user_id 
+                     ORDER BY s.start_date DESC LIMIT 1) AS subscription_active
+             FROM users u WHERE u.user_id = $1`,
             [userId]
         );
 
@@ -551,46 +582,59 @@ const subscribeUser = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        const userRolesResult = await pool.query(
-            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
-            [userId]
-        );
+        const { has_role, subscription_active } = userResult.rows[0];
 
-        const userRoles = userRolesResult.rows.map(row => row.role_name);
+        // Check if the user already has an active subscription
+        if (has_role && subscription_active) {
+            return res.status(400).json({ error: 'User is already subscribed and has an active subscription' });
+        }
 
-        // Step 3: If the user doesn't already have the "Subscribed" role, assign it
-        if (!userRoles.includes('User_subscribed')) {
+        // Step 3: Assign "User_subscribed" role if not already assigned
+        if (!has_role) {
             await pool.query(
-                'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',
+                `INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) 
+                 SELECT $1, role_id, $2 
+                 FROM roles WHERE role_name = $3`,
                 [userId, userId, 'User_subscribed']
             );
 
-            // Log the role change
+            // Log role assignment
             await pool.query(
-                'INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) VALUES ($1, $2, $3, $4)',
+                `INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type) 
+                 VALUES ($1, $2, $3, $4)`,
                 [userId, userId, 'User_subscribed', 'assigned']
             );
-
-            // Step 4: Add subscription details to the subscriptions table
-            const renewalDueDate = new Date();
-            // Set subscription duration to 1 year and 1 week
-            renewalDueDate.setFullYear(renewalDueDate.getFullYear() + 1); // Add 1 year
-            renewalDueDate.setDate(renewalDueDate.getDate() + 7); // Add 7 days (1 week)
-
-            await pool.query(
-                'INSERT INTO subscriptions (user_id, renewal_due_date, created_by_user_id) VALUES ($1, $2, $3)',
-                [userId, renewalDueDate, userId]
-            );
-
-            return res.status(200).json({ message: 'Subscription successful and role updated' });
-        } else {
-            return res.status(400).json({ error: 'User is already subscribed' });
         }
+
+        // Step 4: Add or update subscription details
+        const renewalDueDate = new Date();
+        renewalDueDate.setFullYear(renewalDueDate.getFullYear() + 1); // Add 1 year
+        renewalDueDate.setDate(renewalDueDate.getDate() + 7); // Add 7 days
+
+        if (subscription_active !== null) {
+            // Update existing subscription
+            await pool.query(
+                `UPDATE subscriptions 
+                 SET renewal_due_date = $1, is_active = true, created_by_user_id = $2 
+                 WHERE user_id = $3`,
+                [renewalDueDate, userId, userId]
+            );
+        } else {
+            // Add a new subscription
+            await pool.query(
+                `INSERT INTO subscriptions (user_id, renewal_due_date, created_by_user_id, is_active) 
+                 VALUES ($1, $2, $3, $4)`,
+                [userId, renewalDueDate, userId, true]
+            );
+        }
+
+        return res.status(200).json({ message: 'Subscription successfully updated' });
     } catch (error) {
-        console.error('Error during subscription:', error);
-        res.status(500).json({ error: 'Subscription failed' });
+        console.error('Error during subscription:', error.message);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 //Fake processPayment function, always succeeds
 const processPayment = async ({ amount, currency }) => {
@@ -625,5 +669,6 @@ module.exports = {
     softDeleteUser,
     uploadProfilePicture,
     updateRoles,
-    subscribeUser
+    subscribeUser,
+    getSubscriptionStatus
 };

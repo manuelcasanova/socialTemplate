@@ -62,6 +62,36 @@ router.route('/:user_id')
     }
   );
 
+
+  router.route('/subscriptions/status/:user_id')
+  .get(
+    async (req, res, next) => {
+      try {
+        // Log the request path and parameters
+        console.log("Received request for subscription status:", req.params);  // Logs { user_id: 'someUserId' }
+        
+        // Fetch roles and verify them
+        const rolesList = await fetchRoles();
+        console.log("Roles List:", rolesList);  // Log the rolesList to see what roles are being fetched
+
+        verifyRoles(...rolesList)(req, res, next);
+      } catch (err) {
+        console.error("Error during role verification:", err);  // Log any errors during role verification
+        next(err);
+      }
+    },
+    (req, res) => {
+      const { user_id } = req.params;
+      console.log("User ID from URL params:", user_id);  // Log user_id extracted from the URL
+
+      // Call your controller to get the subscription status
+      usersController.getSubscriptionStatus(req, res);
+    }
+  );
+
+
+
+
 // Update user information (any logged-in user can update their own info)
 router.route('/update')
   .put(

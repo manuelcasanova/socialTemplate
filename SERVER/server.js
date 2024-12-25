@@ -75,8 +75,15 @@ app.use('/resend-verification-email', require('./routes/auth/auth'));
 
 app.use(verifyJWT);
 
-
-app.use('/users', require('./routes/api/users'));
+// Log every request to the /users route
+app.use('/users', (req, res, next) => {
+    // console.log("Request is hitting /users route:", req.originalUrl); // Log the URL
+    next(); // Continue to the next middleware or route handler
+  });
+  
+  // Now, define your routes
+  app.use('/users', require('./routes/api/users'));
+  
 app.use('/roles', require('./routes/api/roles'));
 app.use('/log-events', require('./routes/api/log-events'));
 
