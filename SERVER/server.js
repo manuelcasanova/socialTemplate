@@ -14,6 +14,7 @@ const verifyJWT = require('./middleware/verifyJWT')
 const app = express();
 const PORT = process.env.PORT || 3500;
 const pool = require('./config/db')
+const scheduleSubscriptionUpdates = require('./routes/subscriptionScheduler')
 
 // Middleware configuration
 app.use(credentials); // Handle CORS credentials
@@ -59,7 +60,8 @@ app.get('/ping', (req, res) => {
     res.status(200).send('pong! The server is running!');
 });
 
-
+//Triggers at midnight every day to update subscription status to is_active false if due_date is in the past.
+scheduleSubscriptionUpdates();
 
 app.use('/signup', require('./routes/auth/signup'));
 
