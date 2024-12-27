@@ -637,9 +637,9 @@ const subscribeUser = async (req, res) => {
             // Update existing subscription
             await pool.query(
                 `UPDATE subscriptions 
-                 SET renewal_due_date = $1, is_active = true, created_by_user_id = $2 
+                 SET start_date = $4, renewal_due_date = $1, is_active = true, created_by_user_id = $2 
                  WHERE user_id = $3`,
-                [renewalDueDate, userId, userId]
+                [renewalDueDate, userId, userId, new Date()]
             );
         } else {
             // Add a new subscription
