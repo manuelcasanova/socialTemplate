@@ -534,6 +534,8 @@ const updateRoles = async (req, res) => {
 const getSubscriptionStatus = async (req, res) => {
     const userId = req.params.user_id;
 
+    const today = new Date();
+
     try {
         const result = await pool.query(
             'SELECT is_active, renewal_due_date FROM subscriptions WHERE user_id = $1',
@@ -546,7 +548,24 @@ const getSubscriptionStatus = async (req, res) => {
             return res.status(200).json(false);
         }
 
-        res.status(200).json(true);
+        if (result.rows.length > 0) {
+            const renewalDueDate = result.rows[0].renewal_due_date
+
+            console.log("today", today)
+            console.log("renewal due date", renewalDueDate)
+            console.log("true or false", today < renewalDueDate)
+
+
+            if (today < renewalDueDate) {
+                console.log("today is before renewal Due Date")
+                return res.status(200).json(true);
+            } else {
+                console.log("today is after renewal Due Date. Subscription expired")
+                return res.status(200).json(false);
+            }
+        }
+
+
     } catch (error) {
         console.error('Error fetching subscription status:', error);
         res.status(500).json({ error: 'Error fetching subscription status' });
@@ -571,7 +590,8 @@ const subscribeUser = async (req, res) => {
                     (SELECT COUNT(*) > 0 FROM user_roles ur 
                      INNER JOIN roles r ON ur.role_id = r.role_id 
                      WHERE ur.user_id = u.user_id AND r.role_name = 'User_subscribed') AS has_role,
-                    (SELECT is_active FROM subscriptions s 
+                    (SELECT is_active AND renewal_due_date > CURRENT_DATE 
+                    FROM subscriptions s 
                      WHERE s.user_id = u.user_id 
                      ORDER BY s.start_date DESC LIMIT 1) AS subscription_active
              FROM users u WHERE u.user_id = $1`,
@@ -581,6 +601,8 @@ const subscribeUser = async (req, res) => {
         if (!userResult.rows.length) {
             return res.status(404).json({ error: 'User not found' });
         }
+
+        console.log("userResultrows0", userResult.rows[0])
 
         const { has_role, subscription_active } = userResult.rows[0];
 

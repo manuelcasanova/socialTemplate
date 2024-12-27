@@ -68,11 +68,11 @@ router.route('/:user_id')
     async (req, res, next) => {
       try {
         // Log the request path and parameters
-        console.log("Received request for subscription status:", req.params);  // Logs { user_id: 'someUserId' }
+        // console.log("Received request for subscription status:", req.params);  // Logs { user_id: 'someUserId' }
         
         // Fetch roles and verify them
         const rolesList = await fetchRoles();
-        console.log("Roles List:", rolesList);  // Log the rolesList to see what roles are being fetched
+        // console.log("Roles List:", rolesList);  // Log the rolesList to see what roles are being fetched
 
         verifyRoles(...rolesList)(req, res, next);
       } catch (err) {
@@ -82,7 +82,7 @@ router.route('/:user_id')
     },
     (req, res) => {
       const { user_id } = req.params;
-      console.log("User ID from URL params:", user_id);  // Log user_id extracted from the URL
+      // console.log("User ID from URL params:", user_id);  // Log user_id extracted from the URL
 
       // Call your controller to get the subscription status
       usersController.getSubscriptionStatus(req, res);
