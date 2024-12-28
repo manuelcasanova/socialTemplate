@@ -3,6 +3,7 @@ import { useLocation, Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import LoadingSpinner from "../loadingSpinner/LoadingSpinner";
 
 export default function Subscriber({ isNavOpen }) {
   const { auth } = useAuth();
@@ -11,7 +12,7 @@ export default function Subscriber({ isNavOpen }) {
 
   const [isSubscribed, setIsSubscribed] = useState(null);
 
-// console.log("isSubscribed", isSubscribed)
+  // console.log("isSubscribed", isSubscribed)
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,7 +29,8 @@ export default function Subscriber({ isNavOpen }) {
       console.error("Error retrieving subscription status:", error);
       setError("Failed to retrieve subscription status. Please try again later.");
     } finally {
-      setLoading(false);
+      setLoading(false)
+
     }
   };
 
@@ -36,12 +38,19 @@ export default function Subscriber({ isNavOpen }) {
     if (userId) {
       getSubscriptionStatus();
     } else {
-      setLoading(false); // Prevent infinite loading if user isn't logged in
+      setLoading(false);
+      // Prevent infinite loading if user isn't logged in
     }
   }, [userId, axiosPrivate]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
+        <div className="body">
+          <LoadingSpinner />
+        </div>
+      </div>
+    )
   }
 
   if (error) {

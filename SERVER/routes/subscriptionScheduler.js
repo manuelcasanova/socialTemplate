@@ -10,7 +10,7 @@ const scheduleSubscriptionUpdates = () => {
         SET is_active = false
         WHERE renewal_due_date < NOW() AND is_active = true;
       `);
-      console.log(`${result.rowCount} subscriptions updated`);
+      // console.log(`${result.rowCount} subscriptions updated`);
     } catch (error) {
       console.error('Error updating subscriptions:', error);
     }

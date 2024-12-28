@@ -544,23 +544,23 @@ const getSubscriptionStatus = async (req, res) => {
 
 
         if (result.rows.length === 0) {
-            console.log("Subscription not found");
+            // console.log("Subscription not found");
             return res.status(200).json(false);
         }
 
         if (result.rows.length > 0) {
             const renewalDueDate = result.rows[0].renewal_due_date
 
-            console.log("today", today)
-            console.log("renewal due date", renewalDueDate)
-            console.log("true or false", today < renewalDueDate)
+            // console.log("today", today)
+            // console.log("renewal due date", renewalDueDate)
+            // console.log("true or false", today < renewalDueDate)
 
 
             if (today < renewalDueDate) {
-                console.log("today is before renewal Due Date")
+                // console.log("today is before renewal Due Date")
                 return res.status(200).json(true);
             } else {
-                console.log("today is after renewal Due Date. Subscription expired")
+                // console.log("today is after renewal Due Date. Subscription expired")
                 return res.status(200).json(false);
             }
         }
@@ -602,7 +602,7 @@ const subscribeUser = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        console.log("userResultrows0", userResult.rows[0])
+        // console.log("userResultrows0", userResult.rows[0])
 
         const { has_role, subscription_active } = userResult.rows[0];
 
