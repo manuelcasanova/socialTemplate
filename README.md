@@ -27,12 +27,20 @@ Admin permissions:
 Admins can assign and revoke roles for Moderator, Subscribed, and NotSubscribed users.
 Admins cannot assign or revoke the SuperAdmin or Admin roles. Only SuperAdmins can manage Admin roles.
 
+Whenever a role is assigned or revoked, a log is created detailing who performed the modification, to whom it was applied, the type of modification (assignment or revocation), and the timestamp. This log is accessible to superadmins in the admin section of the app. Typically, only admins and superadmins can modify roles, with one exception: when a user subscribes to the app. After the payment is processed, the "User_subscribed" role is automatically added on behalf of the user, and this is recorded in the log accordingly.
+
   *** Protected routes ***
 
 The system includes protected routes, and roles are not hierarchical. This means that:
 
 A user with the Admin role does not automatically have access to routes assigned to lower roles like Moderator or Subscribed.
 For access to protected routes associated with these roles, the user must have the specific role assigned to them in addition to their Admin privileges.
+
+  *** Subscriptions ***
+
+Users may subscribe to gain access to specific routes. The "User_subscribed" role is assigned to all subscribed users and serves to bypass the RequireAuth middleware. However, additional safeguards are in place. A user may retain the "User_subscribed" role even if their subscription has expired or become inactive. In such cases, access to these routes is denied through mechanisms outside of RequireAuth.
+
+Administrators also have the authority to revoke a user's subscription status. While revoking an active subscription—especially one a user has paid for—may seem unfair, this capability is necessary to address situations such as policy violations or fraudulent activity. To ensure accountability, all role changes, including subscription revocations, are logged as previously described.
 
   *** Profile Management ***
 
@@ -41,6 +49,14 @@ Users have the ability to manage their profiles, including:
 Modifying their username, email, and password.
 Uploading or updating their profile picture.
 Deleting their account entirely.
+
+  *** Deleting an account ***
+
+Users can delete their accounts, but the process involves a soft deletion. When an account is deleted, its status is set to inactive, and the email is modified to inactive-TIMESTAMP-email@email.com. If the user attempts to sign up again with the same email address, they will see a prompt offering two options:
+
+Restore the Previous Account: This will reactivate their old account (including its original ID and all associated records).
+Create a New Account: This will create a completely new account with a fresh ID and no connection to the previous records.
+Currently, admins and superadmins cannot delete user accounts. However, they can revoke the "User_subscribed" role, which limits the user’s access to public pages only.
 
 *** ENVIRONMENTAL VARIABLES ***
 
