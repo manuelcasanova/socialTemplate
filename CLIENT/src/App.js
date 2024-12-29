@@ -22,6 +22,7 @@ import RequireAuth from './components/authComponents/RequireAuth';
 import ResetPassword from './components/authComponents/ResetPassword';
 import RoleChangeLog from './components/bodyComponents/users/RoleChangeLog';
 import SubscribeForm from './components/bodyComponents/SubscribeForm';
+import LoginHistory from './components/bodyComponents/users/LoginHistory';
 
 
 
@@ -92,6 +93,10 @@ function App() {
 
   <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
     <Route path="/admin/superadmin/rolechangelog" element={<RoleChangeLog isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']}/>} />
+  </Route>
+
+  <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
+    <Route path="/admin/superadmin/loginhistory" element={<LoginHistory isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']}/>} />
   </Route>
 
 </Route>

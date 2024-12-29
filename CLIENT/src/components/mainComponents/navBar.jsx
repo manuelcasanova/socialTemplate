@@ -113,6 +113,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
                 Role change log
               </div>
             )}
+            {auth.roles && auth.roles.includes('SuperAdmin') && (
+              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
+                Login history
+              </div>
+            )}
           </>
         )}
       </div>
