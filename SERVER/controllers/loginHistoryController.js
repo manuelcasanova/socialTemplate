@@ -3,8 +3,7 @@ const pool = require('../config/db')
 // Controller to get all login history
 const getLoginHistory = async (req, res) => {
   try {
-    const { user_id, username } = req.query;
-
+    const { user_id, username, email } = req.query;
     // Get login history
     let query = `
       SELECT 
@@ -34,6 +33,11 @@ const getLoginHistory = async (req, res) => {
     if (username) {
       query += ` AND u.username ILIKE $${queryParams.length + 1}`;
       queryParams.push(`%${username}%`);
+    }
+
+    if (email) {
+      query += ` AND u.email ILIKE $${queryParams.length + 1}`;
+      queryParams.push(`%${email}%`);
     }
 
     // Add ORDER BY clause to sort by login time (descending order)

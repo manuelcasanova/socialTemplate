@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 import { fetchLoginHistory } from "../../../util/fetchLoginHistory";
-// import FilterLoginHistory
+import FilterLoginHistory from "./FilterLoginHistory";
 
 import '../../../css/RoleChangeLog.css'
 
@@ -20,7 +20,7 @@ export default function LoginHistory({ isNavOpen }) {
 
     const loadData = async () => {
       try {
-        const loginData = await fetchLoginHistory(axiosPrivate);
+        const loginData = await fetchLoginHistory(axiosPrivate, filters);
 
         if (loginData && Array.isArray(loginData)) {
           if (loginData.length === 0) {
@@ -51,8 +51,7 @@ export default function LoginHistory({ isNavOpen }) {
         )}
 
 
-        {/* Filter Component */}
-        {/* <FilterLoginHistory roles={roles} setFilters={setFilters} /> */}
+        <FilterLoginHistory setFilters={setFilters} />
 
         {loginHistory.length > 0 ? (
           <div className="table-wrapper">
