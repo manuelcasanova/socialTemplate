@@ -30,6 +30,21 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
     });
   };
 
+    // Handle the visibility toggle and clear filters when the panel is closed
+    const handleToggleFilter = () => {
+      if (isVisible) {
+        // Clear the filters when the panel is closing
+        setModifier("");
+        setRecipient("");
+        setModifierId("");
+        setRecipientId("");
+        setRole("");
+        setActionType("");
+      }
+      // Toggle the visibility
+      setIsVisible(prevState => !prevState);
+    };
+
   // Trigger the filter change whenever any input is updated
   useEffect(() => {
     handleFilterChange();
@@ -87,7 +102,7 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
     <div className="filter-wrapper">
       <button
         className="filter-toggle"
-        onClick={() => setIsVisible(prevState => !prevState)}
+        onClick={handleToggleFilter}
       >
         <FontAwesomeIcon icon={isVisible ? faTimes : faFilter} />
       </button>

@@ -26,6 +26,22 @@ export default function FilterLoginHistory({ setFilters }) {
     });
   };
 
+  // Handle the visibility toggle and clear filters when the panel is closed
+  const handleToggleFilter = () => {
+    if (isVisible) {
+      // Clear the filters when the panel is closing
+      setUsername("");
+      setUserId("");
+      setEmail("");
+      setFromDate("");
+      setToDate("");
+      setFromTime("");
+      setToTime("");
+    }
+    // Toggle the visibility
+    setIsVisible(prevState => !prevState);
+  };
+
   useEffect(() => {
     handleFilterChange();
   }, [username, userId, email, fromDate, toDate, fromTime, toTime]);
@@ -60,7 +76,7 @@ export default function FilterLoginHistory({ setFilters }) {
     <div className="filter-wrapper">
       <button
         className="filter-toggle"
-        onClick={() => setIsVisible(prevState => !prevState)}
+        onClick={handleToggleFilter}
       >
         <FontAwesomeIcon icon={isVisible ? faTimes : faFilter} />
       </button>
