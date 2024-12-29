@@ -4,24 +4,31 @@ import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 import '../../../css/FilterAdminUsers.css';
 
 export default function FilterLoginHistory({ setFilters }) {
-  const [username, setUsername] = useState("");  // Username filter
-  const [userId, setUserId] = useState("");      // User ID filter
-  const [email, setEmail] = useState("");        // Email filter
+  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
+  const [email, setEmail] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [fromTime, setFromTime] = useState("");
+  const [toTime, setToTime] = useState("");
   const [isVisible, setIsVisible] = useState(false); // Visibility toggle
-  const [isActiveOpen, setIsActiveOpen] = useState(false); // Dropdown toggle for status filter
 
   // Handle the filter change whenever any input is updated
   const handleFilterChange = () => {
     setFilters({
       username,
-      user_id: userId || undefined, // Set filter if userId is not empty
-      email: email || undefined      // Set filter if email is not empty
+      user_id: userId || undefined,
+      email: email || undefined,
+      from_date: fromDate || undefined,
+      to_date: toDate || undefined,
+      from_time: fromTime || undefined,
+      to_time: toTime || undefined
     });
   };
 
   useEffect(() => {
     handleFilterChange();
-  }, [username, userId, email]); // Dependencies for triggering filter change
+  }, [username, userId, email, fromDate, toDate, fromTime, toTime]);
 
   // Handle username change with validation
   const handleUsernameChange = (e) => {
@@ -88,6 +95,39 @@ export default function FilterLoginHistory({ setFilters }) {
             value={email}
             onChange={handleEmailChange}
           />
+
+          {/* From Date filter */}
+          <input
+            type="date"
+            className="filter-container-input-date"
+            value={fromDate}
+            onChange={(e) => setFromDate(e.target.value)}
+          />
+
+          {/* To Date filter */}
+          <input
+            type="date"
+            className="filter-container-input-date"
+            value={toDate}
+            onChange={(e) => setToDate(e.target.value)}
+          />
+
+          {/* From Time filter */}
+          <input
+            type="time"
+            className="filter-container-input-time"
+            value={fromTime}
+            onChange={(e) => setFromTime(e.target.value)}
+          />
+
+          {/* To Time filter */}
+          <input
+            type="time"
+            className="filter-container-input-time"
+            value={toTime}
+            onChange={(e) => setToTime(e.target.value)}
+          />
+
         </div>
       )}
     </div>
