@@ -518,6 +518,14 @@ const updateRoles = async (req, res) => {
             );
         }
 
+        // Step 18: Insert into the subscriptions table when the "User_subscribed" role is assigned
+        if (rolesToAdd.includes('User_subscribed')) {
+            await pool.query(
+                'INSERT INTO subscriptions (user_id, start_date, renewal_due_date, is_active, created_by_user_id) VALUES ($1, NOW(), NOW() + INTERVAL \'1 year 7 days\', true, $2)',
+                [userId, loggedInUser]
+            );
+        }
+
         // Execute all log insertions
         await Promise.all(roleChangeLogsPromises);  // Wait for all logs to be inserted
 

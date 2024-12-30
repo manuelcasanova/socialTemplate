@@ -17,17 +17,26 @@ Admin: A role with significant permissions, but limited in terms of managing Sup
 Moderator: A role typically used for managing content or user interactions, but with fewer privileges than Admins.
 Subscribed: A role for users who are subscribed (e.g., via a paid option).
 NotSubscribed: A role for registered users who have not subscribed.
+
 SuperAdmin permissions:
 
 SuperAdmins can grant or revoke any role, including Admin, Moderator, Subscribed, and NotSubscribed.
 SuperAdmins cannot revoke their own SuperAdmin role.
 A SuperAdmin can only revoke the SuperAdmin role if they were the one who assigned it; they cannot revoke it if another SuperAdmin granted the role.
+
 Admin permissions:
 
 Admins can assign and revoke roles for Moderator, Subscribed, and NotSubscribed users.
 Admins cannot assign or revoke the SuperAdmin or Admin roles. Only SuperAdmins can manage Admin roles.
 
-Whenever a role is assigned or revoked, a log is created detailing who performed the modification, to whom it was applied, the type of modification (assignment or revocation), and the timestamp. This log is accessible to superadmins in the admin section of the app. Typically, only admins and superadmins can modify roles, with one exception: when a user subscribes to the app. After the payment is processed, the "User_subscribed" role is automatically added on behalf of the user, and this is recorded in the log accordingly.
+  *** Role Logs ***
+
+Whenever a role is assigned or revoked, a log is created detailing who performed the modification, to whom it was applied, the type of modification (assignment or revocation), and the timestamp. This log is accessible to SuperAdmins in the admin section of the app. Typically, only Admins and SuperAdmins can modify roles, with one exception: when a user subscribes to the app. After the payment is processed, the "User_subscribed" role is automatically added on behalf of the user, and this is recorded in the log accordingly.
+
+ *** Other Logs ***
+
+SuperAdmins have the ability to view the login history for all users. They can filter the history based on user ID, username, email, date, and time.
+
 
   *** Protected routes ***
 
@@ -38,7 +47,7 @@ For access to protected routes associated with these roles, the user must have t
 
   *** Subscriptions ***
 
-Users may subscribe to gain access to specific routes. The "User_subscribed" role is assigned to all subscribed users and serves to bypass the RequireAuth middleware. However, additional safeguards are in place. A user may retain the "User_subscribed" role even if their subscription has expired or become inactive. In such cases, access to these routes is denied through mechanisms outside of RequireAuth.
+Users may subscribe to gain access to specific routes. The "User_subscribed" role is assigned to all subscribed users and serves to bypass the RequireAuth middleware. However, additional safeguards are in place. A user may temporarily (see "Scheduled Subscription Updates" on this README.md file for details) retain the "User_subscribed" role even if their subscription has expired or become inactive. In such cases, access to these routes is denied through mechanisms outside of RequireAuth.
 
 Administrators also have the authority to revoke a user's subscription status. While revoking an active subscription—especially one a user has paid for—may seem unfair, this capability is necessary to address situations such as policy violations or fraudulent activity. To ensure accountability, all role changes, including subscription revocations, are logged as previously described.
 
@@ -56,7 +65,11 @@ Users can delete their accounts, but the process involves a soft deletion. When 
 
 Restore the Previous Account: This will reactivate their old account (including its original ID and all associated records).
 Create a New Account: This will create a completely new account with a fresh ID and no connection to the previous records.
-Currently, admins and superadmins cannot delete user accounts. However, they can revoke the "User_subscribed" role, which limits the user’s access to public pages only.
+Currently, Admins and SuperAdmins cannot delete user accounts. However, they can revoke the "User_subscribed" role, which limits the user’s access to public pages only.
+
+*** Scheduled Subscription Updates ***
+
+To manage user subscriptions, the system automatically checks the status of subscriptions once every 24 hours. If a user's subscription has expired (based on their renewal date), their subscription is marked as inactive. Additionally, the "User_subscribed" role is removed from users whose subscriptions are no longer active. This ensures that only active subscribers retain access to certain features.
 
 *** ENVIRONMENTAL VARIABLES ***
 

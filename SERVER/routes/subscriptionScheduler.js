@@ -18,11 +18,19 @@ const scheduleSubscriptionUpdates = () => {
          AND user_id IN (
          SELECT user_id
          FROM subscriptions
-         WHERE is_active = false AND renewal_due_date < NOW()
-        );
+         WHERE is_active = false OR renewal_due_date < NOW()
+      );
       `);
+
+      const removeInactiveSubscriptions = await pool.query(`
+        DELETE FROM subscriptions
+        WHERE is_active = false OR renewal_due_date < NOW()
+      `);
+
+
       console.log(`${updateSubscriptions.rowCount} subscriptions updated at ${Date.now()}`);
       console.log(`${removeUserSubscribedRole.rowCount} roles removed at ${Date.now()}`);
+      console.log(`${removeInactiveSubscriptions.rowCount} roles removed at ${Date.now()}`);
     } catch (error) {
       console.error('Error updating subscriptions:', error);
     }
