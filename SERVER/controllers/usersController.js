@@ -150,7 +150,7 @@ const getUserById = async (req, res) => {
 
 // Function to update user details
 const updateUser = async (req, res) => {
-    const { username, email, password, userId } = req.body; // Destructure fields from the request body
+    let { username, email, password, userId } = req.body; // Destructure fields from the request body
 
     // Validate input fields
     if (!username && !email && !password) {
@@ -164,6 +164,7 @@ const updateUser = async (req, res) => {
         let setValues = [];
 
         if (username) {
+            username = username.charAt(0).toUpperCase() + username.slice(1); 
             setValues.push(`username = $${setValues.length + 1}`);
             values.push(username);
         }
