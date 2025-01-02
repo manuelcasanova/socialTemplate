@@ -121,7 +121,56 @@ const handleNewUser = async (req, res) => {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                     <title>Email Verification</title>
                     <style>
-                        /* Style for the email */
+                                              body {
+                          font-family: Arial, sans-serif;
+                          margin: 0;
+                          padding: 0;
+                          background-color: #f5f5f5;
+                          color: #333;
+                      }
+                      .email-container {
+                          max-width: 600px;
+                          margin: 20px auto;
+                          background-color: var(--color13, lightblue);
+                          border-radius: 8px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                      }
+                      .email-header {
+                          background-color: var(--color9, darkblue);
+                          color: var(--color1, white);
+                          padding: 20px;
+                          text-align: center;
+                          font-size: 24px;
+                      }
+                      .email-body {
+                          padding: 20px;
+                          background-color: var(--color1, white);
+                      }
+                      .email-body p {
+                          font-size: 16px;
+                          line-height: 1.5;
+                          color: #333;
+                      }
+                      .verify-link {
+                          display: inline-block;
+                          margin-top: 20px;
+                          padding: 12px 25px;
+                          font-size: 16px;
+                          color: var(--color1, white);
+                          background-color: var(--color9, darkblue);
+                          text-decoration: none;
+                          border-radius: 4px;
+                          transition: background-color 0.3s ease;
+                          text-align: center;
+                      }
+                      .verify-link:hover {
+                          background-color: var(--color13, lightblue);
+                          color: var(--color9, darkblue);
+                      }
+                      .email-body a {
+                          margin: 5px 0 10px 0;
+                      }
                     </style>
                 </head>
                 <body>

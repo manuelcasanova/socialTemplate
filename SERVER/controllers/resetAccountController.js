@@ -62,22 +62,88 @@ const handleReset = async (req, res) => {
             subject: 'Email Verification - Fullstack Template',
             html: `
             <!DOCTYPE html>
-            <html lang="en">
-                <head>
-                    <meta charset="UTF-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                    <title>Email Verification</title>
-                </head>
-                <body>
-                    <div class="email-container">
-                        <h2>Email Verification</h2>
-                        <p>Hello ${restoredUserDetails.username},</p>
-                        <p>Your account has been successfully restored! To complete the restoration process, please verify your email address by clicking the button below:</p>
-                        <a href="${verificationLink}" style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">Verify Email</a>
-                        <p>If you did not request this, please ignore this email.</p>
-                    </div>
-                </body>
-            </html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Email Verification</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;
+                color: #333;
+            }
+            .email-container {
+                max-width: 600px;
+                margin: 20px auto;
+                background-color: var(--color13, lightblue);
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            }
+            .email-header {
+                background-color: var(--color9, darkblue);
+                color: var(--color1, white);
+                padding: 20px;
+                text-align: center;
+                font-size: 24px;
+            }
+            .email-body {
+                padding: 20px;
+                background-color: var(--color1, white);
+            }
+            .email-body p {
+                font-size: 16px;
+                line-height: 1.5;
+                color: #333;
+            }
+            .verify-link {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 12px 25px;
+                font-size: 16px;
+                color: var(--color1, white);
+                background-color: var(--color9, darkblue);
+                text-decoration: none;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+                text-align: center;
+            }
+            .verify-link:hover {
+                background-color: var(--color13, lightblue);
+                color: var(--color9, darkblue);
+            }
+            .email-body a {
+                margin: 5px 0 10px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="email-header">
+                Email Verification - Account Restoration
+            </div>
+            <div class="email-body">
+                <p>
+                    Hello ${restoredUserDetails.username},
+                </p>
+                <p>
+                    Your account has been successfully restored! To complete the restoration process, please verify your email address by clicking the button below:
+                </p>
+                <a href="${verificationLink}" class="verify-link">Verify Email</a>
+                <p>
+                    If you did not request this, please ignore this email. Your account is safe.
+                </p>
+                <p>
+                    Thank you!
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
+
             `
         };
 
