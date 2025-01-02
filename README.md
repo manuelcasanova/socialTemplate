@@ -61,10 +61,12 @@ Deleting their account entirely.
 
   *** Deleting an account ***
 
-Users can delete their accounts, but the process involves a soft deletion. When an account is deleted, its status is set to inactive, and the email is modified to inactive-TIMESTAMP-email@email.com. If the user attempts to sign up again with the same email address, they will see a prompt offering two options:
+Users can delete their accounts, but the process involves a soft deletion. When an account is deleted, its status is set to inactive, the email is modified to inactive-TIMESTAMP-email@email.com and the username is modified to inactive-TIMESTAMP-username. If the user attempts to sign up again with the same email address, they will see a prompt offering two options:
 
 Restore the Previous Account: This will reactivate their old account (including its original ID and all associated records).
+
 Create a New Account: This will create a completely new account with a fresh ID and no connection to the previous records.
+
 Currently, Admins and SuperAdmins cannot delete user accounts. However, they can revoke the "User_subscribed" role, which limits the user’s access to public pages only.
 
 *** Scheduled Subscription Updates ***

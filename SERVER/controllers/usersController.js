@@ -200,9 +200,9 @@ const softDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
 
     try {
-        // Step 1: Fetch the current user's email
+        // Step 1: Fetch the current user's email, username
         const userResult = await pool.query(
-            'SELECT email FROM users WHERE user_id = $1',
+            'SELECT email, username FROM users WHERE user_id = $1',
             [userId]
         );
 
@@ -211,19 +211,22 @@ const softDeleteUser = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Get the current email
+        // Get the current email, username
         const currentEmail = userResult.rows[0].email;
+        const currentUsername = userResult.rows[0].username;
 
         const timestamp = Date.now();
 
-        // Create the new email by prepending 'inactive-' to the current email
+        // Create the new email, username by prepending 'inactive-' to the current email, username
         const updatedEmail = `inactive-${timestamp}-${currentEmail}`;
+
+        const updatedUsername = `inactive-${timestamp}-${currentUsername}`;
 
         // Step 2: Update the user's status to inactive (set is_active to false)
         // and change the email
         const updateResult = await pool.query(
-            'UPDATE users SET is_active = false, is_verified = false, email = $1 WHERE user_id = $2 RETURNING *',
-            [updatedEmail, userId]
+            'UPDATE users SET is_active = false, is_verified = false, email = $1, username = $2 WHERE user_id = $3 RETURNING *',
+            [updatedEmail, updatedUsername, userId]
         );
 
         if (updateResult.rows.length === 0) {

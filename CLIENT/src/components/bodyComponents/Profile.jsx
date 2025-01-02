@@ -129,36 +129,36 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     }
   };
 
-// Handle file selection and trigger upload automatically
-const handleFileChange = async (e) => {
-  const selectedFile = e.target.files[0];
-  if (selectedFile) {
-    setFile(selectedFile);
-    setFileName(selectedFile.name || "No file chosen");
+  // Handle file selection and trigger upload automatically
+  const handleFileChange = async (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.name || "No file chosen");
 
-    // Automatically upload the file
-    const formData = new FormData();
-    formData.append('profilePicture', selectedFile);
+      // Automatically upload the file
+      const formData = new FormData();
+      formData.append('profilePicture', selectedFile);
 
-    try {
-      const response = await axiosPrivate.post(`/users/upload-profile-picture/${userId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      try {
+        const response = await axiosPrivate.post(`/users/upload-profile-picture/${userId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
 
-      if (response?.data?.success) {
-        setIsPictureModalVisible(false);
-        setImageExists(true); // Assume the picture upload was successful
-        setProfilePictureKey((prevKey) => prevKey + 1);
-      } else {
-        console.error("Error uploading profile picture:", response?.data?.message);
+        if (response?.data?.success) {
+          setIsPictureModalVisible(false);
+          setImageExists(true); // Assume the picture upload was successful
+          setProfilePictureKey((prevKey) => prevKey + 1);
+        } else {
+          console.error("Error uploading profile picture:", response?.data?.message);
+        }
+      } catch (error) {
+        console.error("Error uploading profile picture:", error);
       }
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
     }
-  }
-};
+  };
 
   // Handle the modal close button
   const handleCloseModal = () => {
@@ -205,7 +205,14 @@ const handleFileChange = async (e) => {
   }[editMode];
 
   const handleInputChange = (e) => {
-    const value = e.target.value;
+    let value = e.target.value;
+
+    // Force first letter of username to be capitalized
+    if (editMode === "username") {
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+
     setInputValue(value);
 
     if (editMode === "password") {
@@ -306,17 +313,17 @@ const handleFileChange = async (e) => {
         <div className="body profile-container">
           <h2>{userData?.username || "Guest"}</h2>
           <div className="profile-details">
-            {!isPictureModalVisible && 
-            <div className="profile-picture" onClick={handlePictureClick}>
-              {imageExists ? (
-                    <img 
-                    src={`${profilePictureUrl}?key=${profilePictureKey}`} 
-                    alt="Profile" 
+            {!isPictureModalVisible &&
+              <div className="profile-picture" onClick={handlePictureClick}>
+                {imageExists ? (
+                  <img
+                    src={`${profilePictureUrl}?key=${profilePictureKey}`}
+                    alt="Profile"
                   />
-              ) : (
-                <FontAwesomeIcon icon={faUser} size="6x" />
-              )}
-            </div>
+                ) : (
+                  <FontAwesomeIcon icon={faUser} size="6x" />
+                )}
+              </div>
             }
             {isPictureModalVisible && (
               <div className="picture-modal">

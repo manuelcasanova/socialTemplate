@@ -25,14 +25,18 @@ const handleReset = async (req, res) => {
       const user = result.rows[result.rows.length - 1]; //Instead of result.rows[0], the last one, in case the account was deleted multiple times, to get the latest.
       const originalEmail = user.email.replace(/^inactive-\d{13}-/, ''); // Remove the 'inactive-<timestamp>-' part
 
+      const originalUsername = user.username.replace(/^inactive-\d{13}-/, '');
+
       // Update the user account to restore it
       const restoreUserQuery = `
           UPDATE users 
-          SET email = $1, is_active = true 
-          WHERE email = $2  
+          SET email = $1,
+          username = $2,
+          is_active = true 
+          WHERE email = $3 
           RETURNING *;
       `;
-      const restoredUser = await pool.query(restoreUserQuery, [originalEmail, user.email]);  // Use 'user.email' here as it's the one with the timestamp
+      const restoredUser = await pool.query(restoreUserQuery, [originalEmail, originalUsername, user.email]);  // Use 'user.email' here as it's the one with the timestamp
 
       if (restoredUser.rows.length > 0) {
         const restoredUserDetails = restoredUser.rows[0]; //Would be the last one if more than one with the same email
@@ -127,7 +131,7 @@ const handleReset = async (req, res) => {
             </div>
             <div class="email-body">
                 <p>
-                    Hello ${restoredUserDetails.username},
+                    Hello,
                 </p>
                 <p>
                     Your account has been successfully restored! To complete the restoration process, please verify your email address by clicking the button below:
