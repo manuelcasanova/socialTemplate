@@ -23,6 +23,7 @@ import ResetPassword from './components/authComponents/ResetPassword';
 import RoleChangeLog from './components/bodyComponents/users/RoleChangeLog';
 import SubscribeForm from './components/bodyComponents/SubscribeForm';
 import LoginHistory from './components/bodyComponents/users/LoginHistory';
+import NotFound from './components/bodyComponents/NotFound';
 
 
 
@@ -49,58 +50,59 @@ function App() {
 
     <div className="app">
 
-      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey}/>
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
 
       <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
 
       <Routes>
 
-{/* Public routes */}
-<Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-<Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth}  />} />
-<Route path="/" element={<Home isNavOpen={isNavOpen}/>} />
-<Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen}/>}/>
+        {/* Public routes */}
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+        <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+        <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
+        <Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
 
 
-<Route path="/unauthorized" element={<Unauthorized isNavOpen={isNavOpen} />} />
+        <Route path="/unauthorized" element={<Unauthorized isNavOpen={isNavOpen} />} />
 
-{/* Protected Routes */}
-<Route element={<PersistLogin />}>
-<Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed']} />}>
-    <Route path="/user" element={<User isNavOpen={isNavOpen}/>} />
-  </Route>
-  <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-    <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
-  </Route>
-  <Route element={<RequireAuth allowedRoles={['User_subscribed']} />}>
-    <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
-  </Route>
-  <Route path="/subscribe" element={<SubscribeForm isNavOpen={isNavOpen} />} />
-  <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-    <Route path="/admin" element={<Admin isNavOpen={isNavOpen} />} />
-  </Route>
+        {/* Protected Routes */}
+        <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed']} />}>
+            <Route path="/user" element={<User isNavOpen={isNavOpen} />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+            <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['User_subscribed']} />}>
+            <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
+          </Route>
+          <Route path="/subscribe" element={<SubscribeForm isNavOpen={isNavOpen} />} />
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+            <Route path="/admin" element={<Admin isNavOpen={isNavOpen} />} />
+          </Route>
 
 
-  <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-    <Route path="/profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey}/>} />
-  </Route>
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="/profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />} />
+          </Route>
 
-  {/* Admin-specific routes */}
-  <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-    <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']}/>} />
-  </Route>
+          {/* Admin-specific routes */}
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+            <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} />} />
+          </Route>
 
-  <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
-    <Route path="/admin/superadmin/rolechangelog" element={<RoleChangeLog isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']}/>} />
-  </Route>
+          <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
+            <Route path="/admin/superadmin/rolechangelog" element={<RoleChangeLog isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
+          </Route>
 
-  <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
-    <Route path="/admin/superadmin/loginhistory" element={<LoginHistory isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']}/>} />
-  </Route>
+          <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
+            <Route path="/admin/superadmin/loginhistory" element={<LoginHistory isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
+          </Route>
 
-</Route>
-</Routes>
+        </Route>
+        <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
+      </Routes>
 
 
     </div>
