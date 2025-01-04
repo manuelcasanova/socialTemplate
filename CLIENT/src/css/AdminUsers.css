@@ -38,7 +38,8 @@ width: 90%;
 .user-info {
   position: relative;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+justify-content: flex-start;
   align-items: center;
   width: 100%; /* Ensure no overflow here */
 }
@@ -57,15 +58,11 @@ width: 90%;
   padding: 5px 10px;
   cursor: pointer;
   font-size: 1em;
+  margin-left: auto;
 }
 
 .user-info-expanded {
-  position: fixed; 
-  top: 80px; 
-  right: 20px;
-  z-index: 1000;
-  width: auto; 
-  padding: 10px; 
+
 }
 
 button:hover {
