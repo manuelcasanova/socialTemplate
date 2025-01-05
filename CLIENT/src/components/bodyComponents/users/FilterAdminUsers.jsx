@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 import '../../../css/FilterAdminUsers.css'
+import { resolvePath } from "react-router-dom";
 
-export default function FilterAdminUsers({ roles, setFilters }) {
+export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId }) {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState(""); // Role filter
   const [isActive, setIsActive] = useState(true); // Active status filter
@@ -22,25 +23,31 @@ export default function FilterAdminUsers({ roles, setFilters }) {
     setFilters({
       username,
       role,
-      is_active: isActive, 
+      is_active: isActive,
       user_id: userId || undefined, // Set filter if userId is not empty
       email: email || undefined // Set filter if email is not empty
     });
   };
 
-      // Handle the visibility toggle and clear filters when the panel is closed
-      const handleToggleFilter = () => {
-        if (isVisible) {
-          // Clear the filters when the panel is closing
-          setUsername("");
-          setRole("");
-          setUserId("");
-          setEmail("");
-          setIsActive(true);
-        }
-        // Toggle the visibility
-        setIsVisible(prevState => !prevState);
-      };
+  const toggleVisibility = () => {
+        setExpandedUserId(null);
+        setIsVisible(prevState => !prevState)
+   
+  };
+
+  // Handle the visibility toggle and clear filters when the panel is closed
+  const handleToggleFilter = () => {
+    if (isVisible) {
+      // Clear the filters when the panel is closing
+      setUsername("");
+      setRole("");
+      setUserId("");
+      setEmail("");
+      setIsActive(true);
+    }
+    // Toggle the visibility
+    toggleVisibility()
+  };
 
   // Trigger the filter change whenever any input is updated
   useEffect(() => {
@@ -66,13 +73,13 @@ export default function FilterAdminUsers({ roles, setFilters }) {
     }
   };
 
-    // Email validation for allowed characters (letters, numbers, @, ., -, _)
-    const handleEmailChange = (e) => {
-      const input = e.target.value;
-      // Only allow letters, numbers, @, ., -, _
-      const validEmail = input.replace(/[^a-zA-Z0-9@.\-_]/g, ''); // Remove invalid characters
-      setEmail(validEmail);
-    };
+  // Email validation for allowed characters (letters, numbers, @, ., -, _)
+  const handleEmailChange = (e) => {
+    const input = e.target.value;
+    // Only allow letters, numbers, @, ., -, _
+    const validEmail = input.replace(/[^a-zA-Z0-9@.\-_]/g, ''); // Remove invalid characters
+    setEmail(validEmail);
+  };
 
   // Toggle role dropdown, closing active status dropdown
   const toggleRoleDropdown = () => {
@@ -107,12 +114,12 @@ export default function FilterAdminUsers({ roles, setFilters }) {
     };
   }, []);
 
-    // Ensure isActive is set to true initially
-    useEffect(() => {
-      if (isActive === undefined) {
-        setIsActive(true);
-      }
-    }, [])
+  // Ensure isActive is set to true initially
+  useEffect(() => {
+    if (isActive === undefined) {
+      setIsActive(true);
+    }
+  }, [])
 
   return (
     <div className="filter-wrapper">
@@ -202,8 +209,8 @@ export default function FilterAdminUsers({ roles, setFilters }) {
             )}
           </div>
 
-{/* Role filter (custom dropdown) */}
-<div
+          {/* Role filter (custom dropdown) */}
+          <div
             className="custom-dropdown"
             ref={roleDropdownRef} // Reference to role dropdown
             onMouseLeave={() => setIsRoleOpen(false)} // Close on hover out

@@ -78,6 +78,7 @@ const loggedInUser = auth.userId
         <FilterAdminUsers 
   roles={roles} 
   setFilters={setFilters} 
+  setExpandedUserId={setExpandedUserId}
 />
         <div className="users-container">
           {users.length > 0 ? (
