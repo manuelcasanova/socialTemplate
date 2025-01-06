@@ -45,6 +45,11 @@ button.subscribe-button {
   cursor: pointer;
 }
 
+.subscribe-button:hover {
+  background-color: darkgreen;
+  transform: scale(1.05);
+}
+
 button.subscribe-button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;

@@ -45,6 +45,19 @@ The system includes protected routes, and roles are not hierarchical. This means
 A user with the Admin role does not automatically have access to routes assigned to lower roles like Moderator or Subscribed.
 For access to protected routes associated with these roles, the user must have the specific role assigned to them in addition to their Admin privileges.
 
+
+*** Registration ***
+
+Users can register by providing a unique username, email, and password. Upon successful registration, the account is created with an "inactive" status, and a verification email is sent to the provided address to activate the account. This helps prevent unauthorized registrations.
+
+Passwords are encrypted before being stored, and the app developers do not have access to the plain text password.
+
+If the user doesn't receive the email, accidentally deletes it, or the activation window expires, they can request a new verification email from the sign-in page.
+
+*** Password Recovery ***
+
+If the user forgets their password, they can easily recover it by requesting a password reset email.
+
   *** Subscriptions ***
 
 Users may subscribe to gain access to specific routes. The "User_subscribed" role is assigned to all subscribed users and serves to bypass the RequireAuth middleware. However, additional safeguards are in place. A user may temporarily (see "Scheduled Subscription Updates" on this README.md file for details) retain the "User_subscribed" role even if their subscription has expired or become inactive. In such cases, access to these routes is denied through mechanisms outside of RequireAuth.

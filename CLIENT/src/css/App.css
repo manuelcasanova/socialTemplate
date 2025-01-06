@@ -255,10 +255,10 @@
 }
 
 .button-white:hover {
-  background-color: lightblue;
+  background-color: darkgrey;
   transform: scale(1.05);
   border: none;
-  color: white;
+  color: black;
 }
 
 .button-white:active {
