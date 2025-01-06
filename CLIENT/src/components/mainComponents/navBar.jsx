@@ -98,9 +98,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
 
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
+      {auth.roles && auth.roles.includes('Moderator') &&
       <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
+}
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
 
+      {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) && 
       <div className='nav-item-with-dropdown'>
         <div className='nav-item' onClick={() => toggleSection('admin')}>Admin
           {showSections.admin ? '▲' : '▼'}
@@ -120,7 +123,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
             )}
           </>
         )}
+      
       </div>
+}
 
       {!isLargeScreen && Object.keys(auth).length > 0 && (
         <div className="nav-item" onClick={signOut}>
