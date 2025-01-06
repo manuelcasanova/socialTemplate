@@ -9,7 +9,7 @@ import '../../css/Signup.css'
 
 const SIGNIN_URL = '/auth';
 const DEFAULT_EMAIL = '@example.com';
-const DEFAULT_PASSWORD = 'Password1!';
+const DEFAULT_PASSWORD = 'Password1!';  // Hardcoded default password for development
 
 const Signin = ({ isNavOpen, screenWidth }) => {
 
@@ -22,13 +22,21 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const errRef = useRef();
 
     const [user, resetUser] = useInput('user', '');
-    const [pwd, setPwd] = useState(DEFAULT_PASSWORD);
     const [email, setEmail] = useState(DEFAULT_EMAIL);
     const [errMsg, setErrMsg] = useState('');
-    const [successMsg, setSuccessMsg] = useState(''); 
+    const [successMsg, setSuccessMsg] = useState('');
     const [check, toggleCheck] = useToggle('persist', false);
     const [isLoading, setIsLoading] = useState(false);
     const [isVerified, setIsVerified] = useState(true);
+
+    // Password ref to access password value directly without state
+    const passwordRef = useRef();
+
+    useEffect(() => {
+        if (process.env.NODE_ENV === 'development' && passwordRef.current) {
+            passwordRef.current.value = DEFAULT_PASSWORD;  // Set the default password
+        }
+    }, []);
 
     useEffect(() => {
         userRef.current?.focus();
@@ -36,10 +44,10 @@ const Signin = ({ isNavOpen, screenWidth }) => {
 
     useEffect(() => {
         setErrMsg('');
-    }, [user, pwd]);
+    }, [user, email]);
 
     const authenticateUser = async () => {
-        return axios.post(SIGNIN_URL, JSON.stringify({ user, pwd, email: email.trim().toLowerCase() }), {
+        return axios.post(SIGNIN_URL, JSON.stringify({ user, pwd: passwordRef.current.value, email: email.trim().toLowerCase() }), {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
         });
@@ -66,12 +74,16 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+
+        // Get password value from ref, without storing it in state
+        const password = passwordRef.current.value;
+
         try {
-            const response = await authenticateUser();
+            const response = await authenticateUser(password);
             const { accessToken, userId, roles } = response?.data || {};
             setAuth({ userId, user, email, roles, accessToken });
             resetUser();
-            setPwd('');
+            passwordRef.current.value = '';
             navigate(from, { replace: true });
         } catch (err) {
             handleError(err);
@@ -85,8 +97,8 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const handleResendVerification = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.post('/auth/resend-verification-email', { 
-                email: email.trim().toLowerCase(), 
+            const response = await axios.post('/auth/resend-verification-email', {
+                email: email.trim().toLowerCase(),
             });
             // You can show a success message here if needed
             setSuccessMsg('Verification email resent successfully!');
@@ -104,26 +116,26 @@ const Signin = ({ isNavOpen, screenWidth }) => {
         <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
             <button className="close-button" onClick={handleClose}>✖</button>
             <section className="centered-section">
-            <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
-        {successMsg}
-    </p>
-    {/* Display error message with existing styling */}
-    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
-        {errMsg}
-    </p>
+                <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
+                    {successMsg}
+                </p>
+                {/* Display error message with existing styling */}
+                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                    {errMsg}
+                </p>
                 {!isVerified && (
-            
-            <button
-            className="button-auth button-resend-verification"
-            onClick={handleResendVerification}
-            disabled={isLoading}
-        >
-            {isLoading ? <LoadingSpinner /> : 'Resend Verification Email'}
-        </button>
-     
-    )}
 
-                
+                    <button
+                        className="button-auth button-resend-verification"
+                        onClick={handleResendVerification}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <LoadingSpinner /> : 'Resend Verification Email'}
+                    </button>
+
+                )}
+
+
                 <div className="signup-title">Sign In</div>
 
 
@@ -145,8 +157,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
                         className="input-field"
                         type="password"
                         id="password"
-                        onChange={(e) => setPwd(e.target.value)}
-                        value={pwd}
+                        ref={passwordRef}
                         required
                     />
                     <button className="button-auth" disabled={isLoading}>
