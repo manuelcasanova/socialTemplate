@@ -46,9 +46,19 @@ const Signin = ({ isNavOpen, screenWidth }) => {
         setErrMsg('');
     }, [user, email]);
 
+    // Function to get CSRF token from cookies
+    const getCsrfToken = () => {
+        return document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrf_token='))
+            ?.split('=')[1];
+    };
+
+
     const authenticateUser = async () => {
+        const csrfToken = getCsrfToken();  // Get CSRF token from cookies
         return axios.post(SIGNIN_URL, JSON.stringify({ user, pwd: passwordRef.current.value, email: email.trim().toLowerCase() }), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken, },
             withCredentials: true,
         });
     };
@@ -97,8 +107,14 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const handleResendVerification = async () => {
         setIsLoading(true);
         try {
+            const csrfToken = getCsrfToken();
             const response = await axios.post('/auth/resend-verification-email', {
                 email: email.trim().toLowerCase(),
+            }, {
+                headers: {
+                    'X-CSRF-Token': csrfToken,  // Include CSRF token in the request headers
+                },
+                withCredentials: true,
             });
             // You can show a success message here if needed
             setSuccessMsg('Verification email resent successfully!');
