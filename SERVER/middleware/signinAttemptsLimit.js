@@ -1,7 +1,8 @@
 const rateLimit = require('express-rate-limit');
 
 const signinAttemptsLimit = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  // windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 10 * 1000, // 10 seconds
   max: 5, // limit each IP to 5 requests per windowMs
   message: 'Too many login attempts, please try again later.', // Default message
   handler: (req, res, next) => {

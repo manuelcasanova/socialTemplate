@@ -16,6 +16,17 @@ const PORT = process.env.PORT || 3500;
 const pool = require('./config/db')
 const scheduleSubscriptionUpdates = require('./routes/subscriptionScheduler')
 
+
+// Middleware for production: Redirect HTTP to HTTPS
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            return res.redirect(`https://${req.headers.host}${req.url}`);
+        }
+        next();
+    });
+}
+
 // Middleware configuration
 app.use(credentials); // Handle CORS credentials
 app.use(cors(corsOptions)); // Apply CORS middleware with custom options
