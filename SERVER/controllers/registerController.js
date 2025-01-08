@@ -3,6 +3,7 @@ const pool = require('../config/db');
 const jwt = require('jsonwebtoken');
 let nodemailer = require('nodemailer');
 const { response } = require('express');
+const validateEmailConfig = require('../middleware/validateEnv')
 
 const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
@@ -13,6 +14,7 @@ const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 let forceCreateNew = false;
 
 const handleNewUser = async (req, res) => {
+    validateEmailConfig(); 
     let { user, pwd, email, role, restoreAction } = req.body;
 
     if (!user || !pwd || !email) {

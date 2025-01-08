@@ -3,9 +3,12 @@ const pool = require('../config/db');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const { REMOTE_CLIENT_APP, RESET_EMAIL_CLIENT, RESET_EMAIL_PORT, RESET_EMAIL, RESET_EMAIL_PASSWORD, ACCESS_TOKEN_SECRET } = process.env;
+const validateEmailConfig = require('../middleware/validateEnv')
 
 
 const handleLogin = async (req, res) => {
+    validateEmailConfig(); 
+    
   const { pwd, email } = req.body;
 
   if (!pwd || !email) return res.status(400).json({ 'message': 'Email and password are required.' });

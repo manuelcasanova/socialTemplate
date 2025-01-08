@@ -1,11 +1,13 @@
 const pool = require('../config/db');
 const jwt = require('jsonwebtoken');
 let nodemailer = require('nodemailer');
+const validateEmailConfig = require('../middleware/validateEnv')
 
 const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
 // Function to handle user account restoration
 const handleReset = async (req, res) => {
+    validateEmailConfig(); 
   const { email } = req.body;  // Expecting the email in the body of the request
 
   if (!email) {
