@@ -121,7 +121,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
             setErrMsg('');
         } catch (error) {
             // Handle error (e.g., invalid user, email mismatch, etc.)
-            setErrMsg('Failed to resend verification email.');
+            setErrMsg('Failed to resend verification email. Try again in 15 minutes');
             setSuccessMsg('');
         } finally {
             setIsLoading(false);

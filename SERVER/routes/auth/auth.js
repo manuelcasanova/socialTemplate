@@ -4,6 +4,6 @@ const authController = require('../../controllers/authController');
 const { signinAttemptsLimit } = require('../../middleware/signinAttemptsLimit')
 
 router.post('/', signinAttemptsLimit, authController.handleLogin);
-router.post('/resend-verification-email', authController.resendVerificationEmail);
+router.post('/resend-verification-email', signinAttemptsLimit, authController.resendVerificationEmail);
 
 module.exports = router;
