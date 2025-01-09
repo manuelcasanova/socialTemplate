@@ -4,9 +4,11 @@
   justify-content: start;
   padding-top: 3em;
   width: 100%;
-  max-width: 100vw; /* Ensure it doesn’t exceed viewport width */
+  max-width: 100vw; 
   box-sizing: border-box;
+  margin: auto;
 }
+
 
 .admin-users h2 {
  text-align: center;

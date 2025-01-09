@@ -475,13 +475,13 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
           </div>
 
-
+          <Footer />
 
         </div>
       }
       {successMessage && <div className="profile-delete-success-message">{successMessage}</div>}
 
-      <Footer />
+
     </div>
   );
 }

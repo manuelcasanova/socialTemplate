@@ -20,15 +20,15 @@ export default function RoleChangeLog({ isNavOpen }) {
 
   useEffect(() => {
     setError(null);  // Reset the error message
-  
+
     const loadData = async () => {
       try {
         const { users, roles } = await fetchUsersAndRoles(axiosPrivate);
         setUsers(users);
         setRoles(roles);
-  
+
         const logsData = await fetchRoleChangeLogs(axiosPrivate, filters);
-  
+
         // Handle empty logs or error message
         if (logsData && Array.isArray(logsData)) {
           if (logsData.length === 0) {
@@ -44,10 +44,10 @@ export default function RoleChangeLog({ isNavOpen }) {
         console.error(err);
       }
     };
-  
+
     loadData();
   }, [axiosPrivate, filters]);
-  
+
 
   // Function to get the name of the modifier based on user ID
   const getUserNameById = (userId) => {
@@ -60,8 +60,8 @@ export default function RoleChangeLog({ isNavOpen }) {
       <div className="body admin-users">
         <h2>User role change log</h2>
         {error && error !== "No role change logs found" && (
-  <p className="error-message">{error}</p>
-)}
+          <p className="error-message">{error}</p>
+        )}
 
 
         {/* Filter Component */}

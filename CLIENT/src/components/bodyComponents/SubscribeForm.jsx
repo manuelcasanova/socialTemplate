@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAuth from '../../hooks/useAuth';
+import Footer from '../mainComponents/footer';
 
 import '../../css/SubscribeForm.css'
 
@@ -268,6 +269,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                         </div>
                     )}
                 </div>
+                <Footer />
             </div>
         </div>
     );

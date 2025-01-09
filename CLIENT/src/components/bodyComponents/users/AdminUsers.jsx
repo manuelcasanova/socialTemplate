@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import '../../../css/AdminUsers.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons'; 
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import useAuth from "../../../hooks/useAuth";
 import FilterAdminUsers from "./FilterAdminUsers";
 
@@ -14,10 +14,10 @@ export default function AdminUsers({ isNavOpen }) {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({}); 
-  const [expandedUserId, setExpandedUserId] = useState(null); 
-  const {auth} = useAuth();
-const loggedInUser = auth.userId
+  const [filters, setFilters] = useState({});
+  const [expandedUserId, setExpandedUserId] = useState(null);
+  const { auth } = useAuth();
+  const loggedInUser = auth.userId
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -75,21 +75,21 @@ const loggedInUser = auth.userId
       <div className="body admin-users">
         <h2>Admin Users</h2>
         {error && <p className="error-message">{error}</p>}
-        <FilterAdminUsers 
-  roles={roles} 
-  setFilters={setFilters} 
-  setExpandedUserId={setExpandedUserId}
-/>
+        <FilterAdminUsers
+          roles={roles}
+          setFilters={setFilters}
+          setExpandedUserId={setExpandedUserId}
+        />
         <div className="users-container">
           {users.length > 0 ? (
             users.map((user) =>
               expandedUserId === null || expandedUserId === user.user_id ? (
                 <div className="user-row" key={user.user_id}>
                   <div className="user-info">
-                  {expandedUserId !== user.user_id && <p>{`${user.username} `}</p>}
+                    {expandedUserId !== user.user_id && <p>{`${user.username} `}</p>}
                     <button onClick={() => handleViewMore(user.user_id)}
                       className={expandedUserId === user.user_id ? "user-info-expanded" : ""}
-                      >
+                    >
                       {expandedUserId === user.user_id ? "-" : "+"}
                     </button>
                   </div>
@@ -122,7 +122,7 @@ const loggedInUser = auth.userId
                       <p><strong>Location:</strong> {user.location}</p>
                       <h4>Roles</h4>
                       <ul>
-                      {roles.map((role, index) => (
+                        {roles.map((role, index) => (
                           <li key={index}>
                             <input
                               type="checkbox"

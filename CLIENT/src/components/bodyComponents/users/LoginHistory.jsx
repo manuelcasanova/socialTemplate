@@ -26,9 +26,9 @@ export default function LoginHistory({ isNavOpen }) {
           if (loginData.length === 0) {
             setError('No login history found');
           }
-          setLoginHistory(loginData); 
+          setLoginHistory(loginData);
         } else {
-          setLoginHistory([]); 
+          setLoginHistory([]);
           setError('No login history found');
         }
       } catch (err) {
@@ -59,7 +59,7 @@ export default function LoginHistory({ isNavOpen }) {
               <thead>
                 <tr>
 
-                <th>User ID</th>
+                  <th>User ID</th>
                   <th>Username</th>
                   <th>E-mail</th>
                   <th>Login Time</th>
@@ -67,7 +67,7 @@ export default function LoginHistory({ isNavOpen }) {
               </thead>
               <tbody>
                 {loginHistory.map((login) => (
-                    <tr key={`${login.login_time}-${login.user_id}`}>
+                  <tr key={`${login.login_time}-${login.user_id}`}>
                     <td>{login.user_id}</td>
                     <td>{login.username}</td>
                     <td>{login.email}</td>
@@ -90,9 +90,9 @@ export default function LoginHistory({ isNavOpen }) {
         ) : (
           <p>No login history found.</p>
         )}
-
+ <Footer />
       </div>
-      <Footer />
+     
     </div>
   )
 }
