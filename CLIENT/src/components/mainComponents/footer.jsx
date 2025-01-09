@@ -1,8 +1,9 @@
 import React from 'react';
 
-const Footer = () => {
+const Footer = ({ isNavOpen }) => {
   return (
-    <footer className="footer">
+
+    <footer className={`footer ${isNavOpen ? "footer-squeezed" : ""}`}>
       Footer
     </footer>
   );

@@ -24,7 +24,7 @@ import RoleChangeLog from './components/bodyComponents/users/RoleChangeLog';
 import SubscribeForm from './components/bodyComponents/SubscribeForm';
 import LoginHistory from './components/bodyComponents/users/LoginHistory';
 import NotFound from './components/bodyComponents/NotFound';
-
+import Footer from './components/mainComponents/footer';
 
 
 function App() {
@@ -103,7 +103,7 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
       </Routes>
-
+<Footer isNavOpen={isNavOpen} />
 
     </div>
 

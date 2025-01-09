@@ -269,7 +269,6 @@ const SubscribeForm = ({ isNavOpen }) => {
                         </div>
                     )}
                 </div>
-                <Footer />
             </div>
         </div>
     );

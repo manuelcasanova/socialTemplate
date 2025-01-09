@@ -108,7 +108,7 @@ export default function RoleChangeLog({ isNavOpen }) {
         )}
 
       </div>
-      <Footer />
+
     </div>
   )
 }

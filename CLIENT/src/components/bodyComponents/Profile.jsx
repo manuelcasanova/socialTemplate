@@ -475,7 +475,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
           </div>
 
-          <Footer />
+
 
         </div>
       }

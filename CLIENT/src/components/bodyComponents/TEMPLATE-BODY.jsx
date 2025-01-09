@@ -1,4 +1,4 @@
-import Footer from "../mainComponents/footer"
+
 
 export default function NAME({ isNavOpen }) {
 
@@ -7,7 +7,6 @@ export default function NAME({ isNavOpen }) {
       <div className="body">
         <h2>TEMPLATE</h2>
       </div>
-<Footer />
     </div>
     
   )

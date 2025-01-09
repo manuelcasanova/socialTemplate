@@ -6,7 +6,6 @@ export default function Moderator({ isNavOpen }) {
     <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
       <div className="body">
       <h2>This page is public</h2>
-      <Footer />
       </div>
 
     </div>

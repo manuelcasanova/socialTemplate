@@ -7,7 +7,6 @@ export default function Moderator({ isNavOpen }) {
       <div className="body">
       <h2>All moderator users have access to this page</h2>
       </div>
-<Footer />
     </div>
     
   )

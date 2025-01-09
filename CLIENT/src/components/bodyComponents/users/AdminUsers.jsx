@@ -170,7 +170,6 @@ export default function AdminUsers({ isNavOpen }) {
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

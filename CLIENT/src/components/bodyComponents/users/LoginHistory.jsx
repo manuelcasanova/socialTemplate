@@ -90,7 +90,6 @@ export default function LoginHistory({ isNavOpen }) {
         ) : (
           <p>No login history found.</p>
         )}
- <Footer />
       </div>
      
     </div>

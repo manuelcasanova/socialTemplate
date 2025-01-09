@@ -66,7 +66,6 @@ export default function Subscriber({ isNavOpen }) {
       <div className="body">
         <h2>All subscribed users have access to this page</h2>
       </div>
-      <Footer />
     </div>
   );
 }

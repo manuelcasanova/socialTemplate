@@ -7,7 +7,6 @@ export default function Admin({ isNavOpen }) {
       <div className="body">
       <h2>All admins have access to this page</h2>
       </div>
-<Footer />
     </div>
     
   )
