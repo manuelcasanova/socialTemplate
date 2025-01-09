@@ -1,17 +1,3 @@
-/* Base styles for components that overlay the entire viewport, covering the navigation bar and the footer */
-
-.viewport-overlay-component {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  width: 100vw;
-  box-sizing: border-box;
-  background-color: red;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  z-index: 7;
-}
 
 
 /* Base styles for components that overlay the entire body */
@@ -41,7 +27,7 @@
   flex-direction: column;
   align-items: center;
   background-color: var(--color9);
-  margin: 1em;
+  margin: auto;
   padding: 2em;
   display: flex;
   overflow-y: auto;

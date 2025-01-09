@@ -244,7 +244,8 @@ const handleIgnoreRestoreAccount = () => {
   };
 
   return (
-    <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
+    <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
+      <div className='centered-container'>
       <button className="close-button" onClick={handleClose}>✖</button>
 
       {success ? (
@@ -306,6 +307,7 @@ const handleIgnoreRestoreAccount = () => {
           </div>
         </section>
       )}
+      </div>
     </div>
   );
 

@@ -146,6 +146,17 @@
   display: flex;
   flex-direction: column;
   margin-top: 10vh; /* Pushes content below the navbar */
+
+  
+}
+
+.container-inside-body {
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  height: 100vh;
 }
 
 /* Body section can have scrollable content */
@@ -294,7 +305,7 @@
 
 
   .body {
-    margin-top: 0vh;
+    /* margin-top: 0vh; */
 
 
   }

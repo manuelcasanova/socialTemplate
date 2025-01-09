@@ -129,72 +129,75 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     };
 
     return (
-        <div className={`body-overlay-component ${isNavOpen && screenWidth < 1025 ? 'overlay-squeezed' : ''}`}>
-            <button className="close-button" onClick={handleClose}>✖</button>
-            <section className="centered-section">
-                <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
-                    {successMsg}
-                </p>
-                {/* Display error message with existing styling */}
-                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
-                    {errMsg}
-                </p>
-                {!isVerified && (
+        <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
+            <div className='centered-container'>
+                <button className="close-button" onClick={handleClose}>✖</button>
+                <section className="centered-section">
+                    <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
+                        {successMsg}
+                    </p>
+                    {/* Display error message with existing styling */}
+                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                        {errMsg}
+                    </p>
+                    {!isVerified && (
 
-                    <button
-                        className="button-auth button-resend-verification"
-                        onClick={handleResendVerification}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? <LoadingSpinner /> : 'Resend Verification Email'}
-                    </button>
+                        <button
+                            className="button-auth button-resend-verification"
+                            onClick={handleResendVerification}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? <LoadingSpinner /> : 'Resend Verification Email'}
+                        </button>
 
-                )}
-
-
-                <div className="signup-title">Sign In</div>
+                    )}
 
 
-                <form className="signup-form" onSubmit={handleSubmit}>
+                    <div className="signup-title">Sign In</div>
 
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        className="input-field"
-                        type="text"
-                        id="email"
-                        ref={userRef}
-                        autoComplete="off"
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
-                        required
-                    />
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        className="input-field"
-                        type="password"
-                        id="password"
-                        ref={passwordRef}
-                        required
-                    />
-                    <button className="button-auth" disabled={isLoading}>
-                        {isLoading ? <LoadingSpinner /> : 'Sign In'}
-                    </button>
-                    <div className="trust-device">
-                        <input type="checkbox" id="persist" onChange={toggleCheck} checked={check} />
-                        <label htmlFor="persist">Trust This Device</label>
+
+                    <form className="signup-form" onSubmit={handleSubmit}>
+
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            className="input-field"
+                            type="text"
+                            id="email"
+                            ref={userRef}
+                            autoComplete="off"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                            required
+                        />
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            className="input-field"
+                            type="password"
+                            id="password"
+                            ref={passwordRef}
+                            required
+                        />
+                        <button className="button-auth" disabled={isLoading}>
+                            {isLoading ? <LoadingSpinner /> : 'Sign In'}
+                        </button>
+                        <div className="trust-device">
+                            <input type="checkbox" id="persist" onChange={toggleCheck} checked={check} />
+                            <label htmlFor="persist">Trust This Device</label>
+                        </div>
+                    </form>
+
+                    <div className="have-an-account">
+                        <p>Need an Account?</p>
+                        <Link to="/signup">Sign Up</Link>
                     </div>
-                </form>
+                    <div className="have-an-account">
+                        <p>Forgot password?</p>
+                        <Link to="/resetpassword">Reset</Link>
+                    </div>
+                </section>
+            </div>
+        </div >
 
-                <div className="have-an-account">
-                    <p>Need an Account?</p>
-                    <Link to="/signup">Sign Up</Link>
-                </div>
-                <div className="have-an-account">
-                    <p>Forgot password?</p>
-                    <Link to="/resetpassword">Reset</Link>
-                </div>
-            </section>
-        </div>
     );
 };
 
