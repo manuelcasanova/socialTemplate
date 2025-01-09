@@ -145,8 +145,7 @@ const SubscribeForm = ({ isNavOpen }) => {
 
 
     return (
-        <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
-            <div className="body">
+        <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
                 <div className="subscription-container">
                     <div className="subscription-cards">
                         {/* Left Card: Non-Subscribed Features */}
@@ -269,7 +268,6 @@ const SubscribeForm = ({ isNavOpen }) => {
                         </div>
                     )}
                 </div>
-            </div>
         </div>
     );
 };

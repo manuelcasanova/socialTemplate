@@ -56,8 +56,8 @@ export default function RoleChangeLog({ isNavOpen }) {
   };
 
   return (
-    <div className={`body-footer ${isNavOpen ? "body-footer-squeezed" : ""}`}>
-      <div className="body admin-users">
+    <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
+      <div className="admin-users">
         <h2>User role change log</h2>
         {error && error !== "No role change logs found" && (
           <p className="error-message">{error}</p>

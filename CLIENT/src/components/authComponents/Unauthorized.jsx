@@ -7,7 +7,7 @@ const Unauthorized = ({ isNavOpen }) => {
     const goBack = () => navigate(-1);
 
     return (
-        <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
+        <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
             <div className="unauthorized">
                 <div className="unauthorized-title">Unauthorized</div>
                 <br />

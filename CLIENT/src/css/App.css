@@ -31,7 +31,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 10;
   width: 100%;
   height: 10vh;
   background-color: var(--color9);
@@ -142,24 +142,23 @@
 /* Body and footer container takes up 90% of the remaining height */
 
 
-.body-footer {
+.body {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full viewport height */
   margin-top: 10vh; /* Pushes content below the navbar */
 }
 
 /* Body section can have scrollable content */
 
-.body {
+/* .body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-y: auto; 
   padding: 1rem;
   background-color: #f4f4f4;
   text-align: center;
-}
+} */
 
 /* Footer should stay at the bottom unless content exceeds the viewport */
  .footer {
@@ -294,13 +293,13 @@
 
 
 
-  .body-footer {
+  .body {
     margin-top: 0vh;
 
 
   }
 
-  .body-footer-squeezed {
+  .body-squeezed {
     display: none;
   }
 
@@ -358,7 +357,7 @@
     max-height: 6em;
   }
 
-  .body-footer {
+  .body {
     flex: 1;
     /* Takes up remaining space */
     display: flex;
@@ -367,7 +366,7 @@
     margin-top: 0vh;
   }
 
-  .body-footer-squeezed {
+  .body-squeezed {
     flex: 1;
     /* Takes up remaining space */
     display: flex;

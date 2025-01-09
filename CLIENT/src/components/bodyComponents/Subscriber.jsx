@@ -45,10 +45,10 @@ export default function Subscriber({ isNavOpen }) {
 
   if (loading) {
     return (
-      <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
-        <div className="body">
+      <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
+
           <LoadingSpinner />
-        </div>
+
       </div>
     )
   }
@@ -62,10 +62,8 @@ export default function Subscriber({ isNavOpen }) {
   }
 
   return (
-    <div className={`body-footer ${isNavOpen ? 'body-footer-squeezed' : ''}`}>
-      <div className="body">
+    <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
         <h2>All subscribed users have access to this page</h2>
       </div>
-    </div>
   );
 }

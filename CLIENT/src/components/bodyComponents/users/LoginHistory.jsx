@@ -43,8 +43,8 @@ export default function LoginHistory({ isNavOpen }) {
 
 
   return (
-    <div className={`body-footer ${isNavOpen ? "body-footer-squeezed" : ""}`}>
-      <div className="body admin-users">
+    <div className={`body ${isNavOpen ? "body-squeezed" : ""}`}>
+      <div className="admin-users">
         <h2>Login History</h2>
         {error && (
           <p className="error-message">{error}</p>
