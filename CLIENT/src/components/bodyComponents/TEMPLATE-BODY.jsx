@@ -1,6 +1,6 @@
 
 
-export default function NAME({ isNavOpen }) {
+export default function TEMPLATE({ isNavOpen }) {
 
   return (
     <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>

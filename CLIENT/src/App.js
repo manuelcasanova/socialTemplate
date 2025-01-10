@@ -25,6 +25,7 @@ import SubscribeForm from './components/bodyComponents/SubscribeForm';
 import LoginHistory from './components/bodyComponents/users/LoginHistory';
 import NotFound from './components/bodyComponents/NotFound';
 import Footer from './components/mainComponents/footer';
+import TEMPLATE from './components/bodyComponents/TEMPLATE-BODY';
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
       <Routes>
 
         {/* Public routes */}
+        <Route path="/template" element={<TEMPLATE isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
