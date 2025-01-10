@@ -308,7 +308,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
 
   return (
-    <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
+    <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       {!successMessage &&
         <div className="profile-container">
           <h2>{userData?.username || "Guest"}</h2>

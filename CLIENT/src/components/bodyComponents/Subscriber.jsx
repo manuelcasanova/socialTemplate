@@ -45,7 +45,7 @@ export default function Subscriber({ isNavOpen }) {
 
   if (loading) {
     return (
-      <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
+      <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
 
           <LoadingSpinner />
 
@@ -62,7 +62,7 @@ export default function Subscriber({ isNavOpen }) {
   }
 
   return (
-    <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
+    <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
         <h2>All subscribed users have access to this page</h2>
       </div>
   );

@@ -145,7 +145,7 @@ const SubscribeForm = ({ isNavOpen }) => {
 
 
     return (
-        <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
+        <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
                 <div className="subscription-container">
                     <div className="subscription-cards">
                         {/* Left Card: Non-Subscribed Features */}

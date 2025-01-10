@@ -1,8 +1,8 @@
 const Hamburger = ({ isNavOpen, toggleNav }) => {
   return (
-    <button className={`hamburger ${isNavOpen ? 'hamburger-open' : ''}`} onClick={toggleNav}>
-      ☰
-    </button>
+      <button className={`hamburger ${isNavOpen ? 'hamburger-open' : ''}`} onClick={toggleNav}>
+        ☰
+      </button>
   );
 };
 

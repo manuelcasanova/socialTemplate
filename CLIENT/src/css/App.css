@@ -9,10 +9,11 @@
 }
 
 /* Hamburger Menu */
+
+
 .hamburger {
   position: fixed;
-  top: 0.5rem;
-  left: 1rem;
+  left: 0.5rem;
   z-index: 1001;
   background: none;
   border: none;
@@ -139,14 +140,21 @@
 }
 
 .body {
+  /* padding: 1em; */
   display: flex;
   flex-direction: column;
-  margin-top: 10vh;
-  /* Pushes content below the navbar */
   flex: 1;
   display: flex;
   flex-direction: column;
   margin-left: 0%;
+}
+
+.body-squeezed {
+  padding: 1em;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10vh;
 }
 
 .container-inside-body {
@@ -271,7 +279,6 @@
 
 /* Mobile Styles */
 @media (max-width: 580px) {
-  .navbar {}
 
   .navbar {
     width: 0%;
@@ -288,6 +295,10 @@
     padding-bottom: 2em;
   }
 
+.body {
+  padding: 1em;
+  padding-left: 2.5em;
+}
 
   .body-squeezed {
     display: none;
@@ -343,7 +354,7 @@
   .nav-item-with-dropdown {
     width: 100%;
   }
-
+  
   .profile-image {
     max-height: 6em;
   }
@@ -351,13 +362,11 @@
   .body {
     margin-left: 0%;
     margin-top: 0vh;
+    padding: 1em;
+    padding-left: 2.5em;
   }
 
   .body-squeezed {
-    flex: 1;
-    /* Takes up remaining space */
-    display: flex;
-    flex-direction: column;
     margin-left: 25%;
     margin-top: 0vh;
   }
@@ -365,10 +374,16 @@
   .footer-squeezed {
     margin-left: 25%;
   }
+
 }
 
 /* Desktop Styles */
 @media (min-width: 1025px) {
+
+.body {
+  margin-top: 10vh;
+  padding: 1em;
+}
 
   .nav-item {
     flex: 1;

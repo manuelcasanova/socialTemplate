@@ -71,7 +71,7 @@ export default function AdminUsers({ isNavOpen }) {
   };
 
   return (
-    <div className={`body ${isNavOpen ? 'body-squeezed' : ''}`}>
+    <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
         <h2>Admin Users</h2>
         {error && <p className="error-message">{error}</p>}
