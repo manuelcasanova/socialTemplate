@@ -88,27 +88,6 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-
-// const getUserById = async (req, res) => {
-//     const { user_id } = req.params; // Extract user_id from request parameters
-//     try {
-//         const result = await pool.query(
-//             'SELECT username, email FROM users WHERE user_id = $1',
-//             [user_id]
-//         );
-
-//         if (result.rows.length === 0) {
-//             // If no user is found, return a 404 status
-//             return res.status(404).json({ error: 'User not found' });
-//         }
-
-//         res.status(200).json(result.rows[0]); // Respond with the user data
-//     } catch (error) {
-//         console.error('Error retrieving user:', error);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// };
-
 const getUserById = async (req, res) => {
     const { user_id } = req.params; // Extract user_id from request parameters
     try {
@@ -307,7 +286,7 @@ const uploadProfilePicture = async (req, res) => {
     }
 };
 
-//Update roles (done by admin)
+//Update roles (done by admin or superadmin)
 
 const updateRoles = async (req, res) => {
     const userId = parseInt(req.params.user_id); // Extract the user ID from the request parameters
@@ -335,15 +314,29 @@ const updateRoles = async (req, res) => {
             [loggedInUser]
         );
 
+        // Step 4: Get the users current roles 
+
+        const userCurrentRolesResult = await pool.query(
+            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+            [userId]
+        );
+        const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
+
+
+        // Step 5: Determine which roles need to be added and removed
+        const rolesToAdd = roles.filter(role => !userCurrentRoles.includes(role));
+        const rolesToRemove = userCurrentRoles.filter(role => !roles.includes(role));
+
         const loggedInUserRoles = loggedInUserRolesResult.rows.map(row => row.role_name);
+
+        // Step 6: Prevent non admins/superadmins modifying roles
+
 
         if (!loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdmin')) {
             return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can update roles' });
         }
 
-        // Step 4: 
-
-        // Step 5: Check if logged-in user is an Admin and is trying to modify another Admin
+        // Step 7: Check if logged-in user is an Admin and is trying to modify another Admin
         if (loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdmin')) {
             const userRolesResult = await pool.query(
                 'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
@@ -361,17 +354,21 @@ const updateRoles = async (req, res) => {
         }
 
 
-        // Step 6: Fetch all roles from the roles table to validate the role names
+        // Step 8: Fetch all roles from the roles table to validate the role names
         const availableRolesResult = await pool.query('SELECT * FROM roles');
         const availableRoles = availableRolesResult.rows.map(role => role.role_name); // Get all role names
 
-        // Step 7: Validate the roles provided by the admin
+        // Step 9: Validate the roles provided by the admin
         const invalidRoles = roles.filter(role => !availableRoles.includes(role));
         if (invalidRoles.length > 0) {
-            return res.status(400).json({ error: `Invalid roles: ${invalidRoles.join(', ')}` });
+            return res.status(400).json({
+                error:
+                    `Invalid roles: ${invalidRoles.join(', ')}`
+            });
         }
 
-        // Step 8: Prevent Admins from assigning "SuperAdmin"
+
+        // Step 10: Prevent Admins from assigning "SuperAdmin"
         if (roles.includes('SuperAdmin')) {
             if (!loggedInUserRoles.includes('SuperAdmin')) {
                 return res.status(403).json({ error: 'Only SuperAdmin can assign SuperAdmin role' });
@@ -379,7 +376,7 @@ const updateRoles = async (req, res) => {
         }
 
 
-        // Step 9: Prevent Admins from assigning "Admin" role to others (but allow self-modification of roles, except admin)
+        // Step 11: Prevent Admins from assigning "Admin" role to others (but allow self-modification of roles, except admin)
         if (roles.includes('Admin')) {
             // Allow the logged-in user to modify their own roles
             if (loggedInUser !== userId) {
@@ -390,16 +387,11 @@ const updateRoles = async (req, res) => {
         }
 
 
-        // Step 10: Prevent Admins from revoking or unassigning "SuperAdmin" role
-
-        const userCurrentRolesResult = await pool.query(
-            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
-            [userId]
-        );
-        const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
-        
+        // Step 12: Superadmins can assign or revoke superadmin only to users's they assigned the role in the first place. They cannot revoke their own SuperAdmin role.
 
         if (userCurrentRoles.includes('SuperAdmin')) {
+
+
             // Fetch who assigned the SuperAdmin role
             const assignedByResult = await pool.query(
                 `SELECT assigned_by_user_id
@@ -408,31 +400,29 @@ const updateRoles = async (req, res) => {
                  WHERE user_roles.user_id = $1 AND roles.role_name = 'SuperAdmin'`,
                 [userId]
             );
-        
+
             const assignedByUser = assignedByResult.rows[0]?.assigned_by_user_id;
-        
+
             // Prevent self-revocation of SuperAdmin role
             if (loggedInUser === userId) {
-                return res.status(403).json({ error: 'You cannot revoke your own SuperAdmin role' });
+                if (rolesToAdd.includes('SuperAdmin') || rolesToRemove.includes('SuperAdmin')) {
+                    return res.status(403).json({ error: 'You cannot revoke your own SuperAdmin role' });
+                }
             }
-        
+
             // Allow only the user who assigned the SuperAdmin role to revoke it
             if (assignedByUser !== loggedInUser) {
-                console.log("roles", roles)
                 return res.status(403).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
             }
         }
-        
-
-        // Step 11: Determine which roles need to be added and removed
-        const rolesToAdd = roles.filter(role => !userCurrentRoles.includes(role)); // Roles that are being added
-        const rolesToRemove = userCurrentRoles.filter(role => !roles.includes(role)); // Roles that are being removed
 
 
-        // Step 12: Prevent Admins from revoking their own Admin role
+
+
+        // Step 13: Prevent Admins from revoking their own Admin role
         if (loggedInUserRoles.includes('Admin')) {
             // Check if we are attempting to revoke (not add) the Admin role
-            if (userCurrentRoles.includes('Admin') && !roles.includes('Admin')) {
+            if (userCurrentRoles.includes('Admin') && !userCurrentRoles.includes('SuperAdmin') && !roles.includes('Admin')) {
                 // Prevent the logged-in user from revoking their own Admin role
                 if (loggedInUser === userId) {
                     return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
@@ -456,9 +446,7 @@ const updateRoles = async (req, res) => {
         }
 
 
-
-
-        // Step 13: Remove existing roles from the user
+        // Step 14: Remove existing roles from the user
         await pool.query('DELETE FROM user_roles WHERE user_id = $1', [userId]);
 
         // Revalidate after removal
@@ -471,12 +459,12 @@ const updateRoles = async (req, res) => {
 
         const remainingUserRoles = remainingUserRolesResult.rows.map(row => row.role_name);
 
-        // Prevent logged-in user from creating a loophole for SuperAdmin
+        // Step 15: Prevent logged-in user from creating a loophole for SuperAdmin
         if (remainingUserRoles.includes('SuperAdmin') && !loggedInUserRoles.includes('SuperAdmin')) {
             return res.status(403).json({ error: 'SuperAdmin role modifications require SuperAdmin privileges' });
         }
 
-        // Step 14: Assign new roles to the user, including the tracking of who assigned the role
+        // Step 16: Assign new roles to the user, including the tracking of who assigned the role
         const rolePromises = roles.map(role => {
             return pool.query(
                 'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',
@@ -499,7 +487,7 @@ const updateRoles = async (req, res) => {
             return res.status(403).json({ error: 'Only a SuperAdmin can assign or retain the SuperAdmin role' });
         }
 
-        // Step 15: Log role changes in role_change_logs
+        // Step 17: Log role changes in role_change_logs
         const roleChangeLogsPromises = [];  // Initialize the array to hold log promises
 
         // Log roles that were added (assigned)
@@ -522,7 +510,7 @@ const updateRoles = async (req, res) => {
             );
         });
 
-        // Step 16: Update the subscription status if the "User_subscribed" role is removed
+        // Step 18: Update the subscription status if the "User_subscribed" role is removed
         if (rolesToRemove.includes('User_subscribed')) {
             await pool.query(
                 'UPDATE subscriptions SET is_active = false WHERE user_id = $1',
@@ -530,7 +518,7 @@ const updateRoles = async (req, res) => {
             );
         }
 
-        // Step 17: Update the subscription status if the "User_subscribed" role is removed
+        // Step 19: Update the subscription status if the "User_subscribed" role is removed
         if (rolesToAdd.includes('User_subscribed')) {
             await pool.query(
                 'UPDATE subscriptions SET is_active = true WHERE user_id = $1',
@@ -538,7 +526,7 @@ const updateRoles = async (req, res) => {
             );
         }
 
-        // Step 18: Insert into the subscriptions table when the "User_subscribed" role is assigned
+        // Step 20: Insert into the subscriptions table when the "User_subscribed" role is assigned
         if (rolesToAdd.includes('User_subscribed')) {
             await pool.query(
                 'INSERT INTO subscriptions (user_id, start_date, renewal_due_date, is_active, created_by_user_id) VALUES ($1, NOW(), NOW() + INTERVAL \'1 year 7 days\', true, $2)',
@@ -546,7 +534,7 @@ const updateRoles = async (req, res) => {
             );
         }
 
-        // Execute all log insertions
+        // Step 21: Execute all log insertions
         await Promise.all(roleChangeLogsPromises);  // Wait for all logs to be inserted
 
 
