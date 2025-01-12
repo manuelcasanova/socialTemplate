@@ -179,6 +179,10 @@
   margin-top: auto;
 }
 
+.footer-container {
+  flex-direction: column;
+}
+
 /* Button red */
 
 .button-red {

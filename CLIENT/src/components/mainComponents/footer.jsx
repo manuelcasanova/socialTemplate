@@ -4,7 +4,15 @@ const Footer = ({ isNavOpen }) => {
   return (
 
     <footer className={`footer ${isNavOpen ? "footer-squeezed" : ""}`}>
-      Footer
+      <div className='footer-container'>
+        <div>Footer</div>
+        <div>Footer</div>
+        <div>Footer</div>
+        <div>Footer</div>
+        <div>Footer</div>
+        <div>Footer</div>
+        <div>Footer</div>
+      </div>
     </footer>
   );
 };
