@@ -45,9 +45,18 @@
 /* Centered Section */
 .centered-section {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  box-sizing: border-box;
+  max-width: 350px;
+  flex-direction: column;
   align-items: center;
+  background-color: var(--color9);
+  margin: auto;
+  padding: 2em;
+  display: flex;
+  overflow-y: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 5%;
 }
 
 /* Validation Styles */

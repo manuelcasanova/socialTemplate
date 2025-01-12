@@ -201,7 +201,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                                 onClick={handleClosePaymentForm}
                                 aria-label="Close"
                             >
-                                &times; {/* Unicode for the "×" symbol */}
+                                ✖
                             </button>
 
                             <form>

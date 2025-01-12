@@ -1,4 +1,3 @@
-import '../../css/Overlay.css';
 import '../../css/Signup.css';
 
 import { useNavigate } from 'react-router-dom';

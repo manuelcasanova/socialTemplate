@@ -75,15 +75,18 @@ button.subscribe-button:disabled {
   position: absolute;
   top: 10px;
   right: 10px;
+  padding: 5px;
   background: none;
   border: none;
   font-size: 24px;
-  color: #333;
+  color: var(--color0);
   cursor: pointer;
+  transition: color 0.3s, transform 0.2s ease-in-out;
 }
 
 .close-button:hover {
-  color: #e74c3c;
+  color: var(--color1);
+  transform: scale(1.1); /* Subtle zoom effect */
 }
 
 .credit-card-form label {
