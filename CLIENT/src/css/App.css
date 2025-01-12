@@ -180,7 +180,7 @@
 }
 
 .footer-container {
-  flex-direction: column;
+  flex-direction: column  ;
 }
 
 /* Button red */
