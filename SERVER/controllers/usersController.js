@@ -131,6 +131,10 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
     let { username, email, password, userId } = req.body; // Destructure fields from the request body
 
+    if (userId === 1) {
+        return res.status(400).json({ error: 'For test purposes, this account cannot be modified.' });
+    }
+
     // Validate input fields
     if (!username && !email && !password) {
         return res.status(400).json({ error: 'At least one field (username, email, password) is required to update.' });
@@ -180,6 +184,11 @@ const softDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
 
     try {
+
+        if (userId === "1") {
+            return res.status(400).json({ error: 'For test purposes, this account cannot be modified.' });
+        }
+
         // Step 1: Fetch the current user's email, username
         const userResult = await pool.query(
             'SELECT email, username FROM users WHERE user_id = $1',
@@ -588,7 +597,6 @@ const getSubscriptionStatus = async (req, res) => {
     }
 }
 
-//Subscribe user after payment confirmation
 // Subscribe user after payment confirmation
 const subscribeUser = async (req, res) => {
     const { userId, paymentDetails } = req.body;

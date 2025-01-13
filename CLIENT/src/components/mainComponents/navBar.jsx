@@ -21,7 +21,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
 
   const signOut = async () => {
     await logout();
-    navigate('/');
+    navigate('/template');
   }
 
   const navigate = useNavigate();
@@ -96,12 +96,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
         <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
       )}
 
-      <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
-      <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
+      <div className='nav-item' onClick={() => handleNavigate('/template')}>Home</div>
+      <div className='nav-item' onClick={() => handleNavigate('/template/user')}>User</div>
       {auth.roles && auth.roles.includes('Moderator') &&
-      <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
+      <div className='nav-item' onClick={() => handleNavigate('/template/moderator')}>Moderator</div>
 }
-      <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
+      <div className='nav-item' onClick={() => handleNavigate('/template/subscriber')}>Subscriber</div>
 
       {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) && 
       <div className='nav-item-with-dropdown'>
@@ -110,14 +110,14 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
         </div>
         {showSections.admin && (
           <>
-            <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
+            <div className='subitem' onClick={() => handleNavigate('/template/admin/users')}>Admin users</div>
             {auth.roles && auth.roles.includes('SuperAdmin') && (
-              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
+              <div className="subitem" onClick={() => handleNavigate('/template/admin/superadmin/rolechangelog')}>
                 Role change log
               </div>
             )}
             {auth.roles && auth.roles.includes('SuperAdmin') && (
-              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
+              <div className="subitem" onClick={() => handleNavigate('/template/admin/superadmin/loginhistory')}>
                 Login history
               </div>
             )}

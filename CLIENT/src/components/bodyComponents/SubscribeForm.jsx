@@ -94,7 +94,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                 setIsSubscribed(true);
                 setSuccessMessage('Subscription successful!');
                 setShowPaymentForm(false);
-                navigate('/subscriber');
+                navigate('/template/subscriber');
             } else {
                 setErrorMessage('Payment failed. Please try again.');
             }

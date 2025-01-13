@@ -15,7 +15,7 @@ export default function Profile ({toggleSection, showSections, handleNavigate, p
 
   const signOut = async () => {
     await logout();
-    navigate('/');
+    navigate('/template');
   }
   
   return (
@@ -27,10 +27,10 @@ export default function Profile ({toggleSection, showSections, handleNavigate, p
     </div>
     {showSections.profile && (
       <>
-        <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>My account</div>
+        <div className='subitem' onClick={() => handleNavigate('/template/profile/myaccount')}>My account</div>
         {Object.keys(auth).length === 0 && 
         <>
-        <div className='subitem' onClick={() => handleNavigate('/signin')}>Sign in</div>
+        <div className='subitem' onClick={() => handleNavigate('template/signin')}>Sign in</div>
         </>
 }
         {Object.keys(auth).length > 0 && 

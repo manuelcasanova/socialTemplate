@@ -63,6 +63,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
 
 export default function Profile({ isNavOpen, profilePictureKey, setProfilePictureKey }) {
   const { auth } = useAuth();
+  const isTestSuperAdmin = auth.userId === 1;
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
   const [imageExists, setImageExists] = useState(true);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -84,7 +85,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
   const signOut = async () => {
     await logout();
-    navigate('/');
+    navigate('/template');
   }
 
   const inputRef = useRef(null);
@@ -112,12 +113,14 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const profilePictureUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
 
   const handlePictureClick = () => {
+    if (!isTestSuperAdmin) {
     setError(""); // Hide any error message
     setInputValue("");
     setConfirmPwd("");
     setIsPictureModalVisible(true);
     setFileName("");  // Clear filename if user clicks to update
     setFile(null);     // Reset file if the modal is opened
+    }
   };
 
   const handleDeleteClick = () => {
@@ -325,7 +328,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 )}
               </div>
             }
-            {isPictureModalVisible && (
+            
+            {isPictureModalVisible && !isTestSuperAdmin && (
               <div className="picture-modal">
                 <h3>Change your profile picture</h3>
 
@@ -352,6 +356,11 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
             )}
 
           </div>
+
+          {isTestSuperAdmin && (<div>For test purposes, this account cannot be modified or deleted</div>)}
+
+          {!isTestSuperAdmin && (
+
           <div className="profile-actions">
             <button
               className="profile-actions-button button-white"
@@ -398,6 +407,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
               </div>
             }
           </div>
+          )}
+          {!isTestSuperAdmin && (
           <div className="update-input">
             {!isLoading && editMode && !showConfirmDelete && (
               <>
@@ -474,6 +485,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
             {isLoading && <LoadingSpinner />}
 
           </div>
+          )}
+
 
 
 

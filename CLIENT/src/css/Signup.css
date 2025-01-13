@@ -1,12 +1,3 @@
-.centered-container {
-  padding: 2em;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 /* Signup Title */
 .signup-title {
   display: flex;
@@ -112,6 +103,9 @@
 
 .have-an-account p {
   margin: 0.2em;
+  font-size: 14px;
+  text-align: center;
+  color: #888;
 }
 
 .have-an-account a {

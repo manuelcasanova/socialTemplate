@@ -16,7 +16,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/template";
 
     const userRef = useRef();
     const errRef = useRef();
@@ -102,7 +102,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
         }
     };
 
-    const handleClose = () => navigate('/');
+    const handleClose = () => navigate('/template');
 
     const handleResendVerification = async () => {
         setIsLoading(true);
@@ -130,7 +130,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
 
     return (
         <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
-            <div className='centered-container'>
+            <div className='centered-section'>
                 <button className="close-button" onClick={handleClose}>✖</button>
                 <section className="centered-section">
                     <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
@@ -188,11 +188,11 @@ const Signin = ({ isNavOpen, screenWidth }) => {
 
                     <div className="have-an-account">
                         <p>Need an Account?</p>
-                        <Link to="/signup">Sign Up</Link>
+                        <Link to="/template/signup">Sign Up</Link>
                     </div>
                     <div className="have-an-account">
                         <p>Forgot password?</p>
-                        <Link to="/resetpassword">Reset</Link>
+                        <Link to="/template/resetpassword">Reset</Link>
                     </div>
                 </section>
             </div>

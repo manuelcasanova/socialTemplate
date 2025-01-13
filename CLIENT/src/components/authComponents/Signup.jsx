@@ -199,7 +199,7 @@ const handleIgnoreRestoreAccount = () => {
     }
   };
 
-  const handleClose = () => navigate('/');
+  const handleClose = () => navigate('/template');
 
   const renderInput = (id, label, type, validation) => (
     <>
@@ -244,7 +244,7 @@ const handleIgnoreRestoreAccount = () => {
 
   return (
     <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
-      <div className='centered-container'>
+      <div className='centered-section'>
       <button className="close-button" onClick={handleClose}>✖</button>
 
       {success ? (
@@ -302,7 +302,7 @@ const handleIgnoreRestoreAccount = () => {
 
           <div className='have-an-account'>
             <p>Already have an account?</p>
-            <p><Link to="/signin">Sign In</Link></p>
+            <p><Link to="/template/signin">Sign In</Link></p>
           </div>
         </section>
       )}
