@@ -244,7 +244,7 @@ const handleIgnoreRestoreAccount = () => {
 
   return (
     <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
-      <div className='centered-section'>
+      <div className='centered-section transparent'>
       <button className="close-button" onClick={handleClose}>✖</button>
 
       {success ? (
