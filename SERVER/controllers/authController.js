@@ -20,7 +20,7 @@ const handleLogin = async (req, res) => {
 
 
     if (foundEmail.length === 0) {
-      return res.status(400).json({ error: "No user registered" });
+      return res.status(400).json({ error: "Wrong email or password" });
     }
 
     // Check if the user is verified
@@ -77,7 +77,7 @@ const handleLogin = async (req, res) => {
         res.json({ userId, roles, accessToken });
 
       } else {
-        res.status(401).json({ error: "Enter correct password" });
+        res.status(401).json({ error: "Wrong email or password" });
       }
     });
 

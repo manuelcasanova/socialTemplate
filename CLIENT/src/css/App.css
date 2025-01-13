@@ -145,8 +145,8 @@
   flex-direction: column;
   flex: 1;
   display: flex;
-  flex-direction: column;
   margin-left: 0%;
+  align-items: center;
 }
 
 .body-squeezed {
@@ -309,7 +309,7 @@
 
 .hamburger-container {
   width: 100%;
-  background-color: #ececec ;
+  background-color: var(--color1) ;
   position: fixed;  
   z-index: 1000;
 }
