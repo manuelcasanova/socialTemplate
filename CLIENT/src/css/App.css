@@ -399,8 +399,13 @@
 @media (min-width: 1025px) {
 
 .body {
-  margin-top: 10vh;
+  margin-top: 40px;
   padding: 1em;
+  
+}
+
+.navbar {
+  height: 40px;
 }
 
   .nav-item {
