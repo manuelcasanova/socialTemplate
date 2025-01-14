@@ -414,9 +414,10 @@ const updateRoles = async (req, res) => {
             }
 
             // Allow only the user who assigned the SuperAdmin role to revoke it
-            if (assignedByUser !== loggedInUser) {
+            if (assignedByUser !== loggedInUser && loggedInUser !== userId) {
                 return res.status(403).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
             }
+
         }
 
 
