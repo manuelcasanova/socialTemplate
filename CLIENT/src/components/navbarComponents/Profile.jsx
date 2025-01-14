@@ -30,7 +30,7 @@ export default function Profile ({toggleSection, showSections, handleNavigate, p
         <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>My account</div>
         {Object.keys(auth).length === 0 && 
         <>
-        <div className='subitem' onClick={() => handleNavigate('template/signin')}>Sign in</div>
+        <div className='subitem' onClick={() => handleNavigate('/signin')}>Sign in</div>
         </>
 }
         {Object.keys(auth).length > 0 && 
