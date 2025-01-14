@@ -16,7 +16,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
     const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/template";
+    const from = location.state?.from?.pathname || "/";
 
     const userRef = useRef();
     const errRef = useRef();
@@ -102,7 +102,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
         }
     };
 
-    const handleClose = () => navigate('/template');
+    const handleClose = () => navigate('/');
 
     const handleResendVerification = async () => {
         setIsLoading(true);
@@ -188,11 +188,11 @@ const Signin = ({ isNavOpen, screenWidth }) => {
 
                     <div className="have-an-account">
                         <p>Need an Account?</p>
-                        <Link to="/template/signup">Sign Up</Link>
+                        <Link to="/signup">Sign Up</Link>
                     </div>
                     <div className="have-an-account">
                         <p>Forgot password?</p>
-                        <Link to="/template/resetpassword">Reset</Link>
+                        <Link to="/resetpassword">Reset</Link>
                     </div>
                 </section>
             </div>

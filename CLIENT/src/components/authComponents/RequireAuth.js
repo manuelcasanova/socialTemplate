@@ -24,10 +24,10 @@ const RequireAuth = ({ allowedRoles }) => {
             ? (
                 // If they are not subscribed, redirect to subscription page
                 allowedRoles.includes('User_subscribed') 
-                    ? <Navigate to="/template/subscribe" state={{ from: location }} replace />
-                    : <Navigate to="/template/unauthorized" state={{ from: location }} replace />
+                    ? <Navigate to="/subscribe" state={{ from: location }} replace />
+                    : <Navigate to="/unauthorized" state={{ from: location }} replace />
             )
-                : <Navigate to="/template/signin" state={{ from: location }} replace />
+                : <Navigate to="/signin" state={{ from: location }} replace />
     );
 }
 

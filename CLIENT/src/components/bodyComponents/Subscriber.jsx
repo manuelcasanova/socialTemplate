@@ -58,7 +58,7 @@ export default function Subscriber({ isNavOpen }) {
   }
 
   if (isSubscribed === false) {
-    return <Navigate to="/template/subscribe" state={{ from: location }} replace />;
+    return <Navigate to="/subscribe" state={{ from: location }} replace />;
   }
 
   return (

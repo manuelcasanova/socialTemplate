@@ -60,46 +60,46 @@ function App() {
 
         {/* Public routes */}
         <Route path="/bodytemplate" element={<TEMPLATE isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-        <Route path="/template/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-        <Route path="/template/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-        <Route path="/template" element={<Home isNavOpen={isNavOpen} />} />
-        <Route path="template/resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+        <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+        <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
+        <Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
 
 
-        <Route path="/template/unauthorized" element={<Unauthorized isNavOpen={isNavOpen} />} />
+        <Route path="/unauthorized" element={<Unauthorized isNavOpen={isNavOpen} />} />
 
         {/* Protected Routes */}
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed']} />}>
-            <Route path="/template/user" element={<User isNavOpen={isNavOpen} />} />
+            <Route path="/user" element={<User isNavOpen={isNavOpen} />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-            <Route path="/template/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
+            <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_subscribed']} />}>
-            <Route path="/template/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
+            <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
           </Route>
-          <Route path="/template/subscribe" element={<SubscribeForm isNavOpen={isNavOpen} />} />
+          <Route path="/subscribe" element={<SubscribeForm isNavOpen={isNavOpen} />} />
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-            <Route path="/template/admin" element={<Admin isNavOpen={isNavOpen} />} />
+            <Route path="/admin" element={<Admin isNavOpen={isNavOpen} />} />
           </Route>
 
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="template/profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />} />
+            <Route path="profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />} />
           </Route>
 
           {/* Admin-specific routes */}
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-            <Route path="/template/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} />} />
+            <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
-            <Route path="/template/admin/superadmin/rolechangelog" element={<RoleChangeLog isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
+            <Route path="/admin/superadmin/rolechangelog" element={<RoleChangeLog isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
-            <Route path="/template/admin/superadmin/loginhistory" element={<LoginHistory isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
+            <Route path="/admin/superadmin/loginhistory" element={<LoginHistory isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
           </Route>
 
         </Route>

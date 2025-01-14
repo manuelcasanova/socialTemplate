@@ -30,7 +30,7 @@ export default function Home({ isNavOpen }) {
           <div className="interaction-box">
             <h3>How to get started:</h3>
             <ul>
-              <li><strong>Sign Up:</strong> <Link to="/template/signup">Create an account</Link> to get started.</li>
+              <li><strong>Sign Up:</strong> <Link to="/signup">Create an account</Link> to get started.</li>
               <li><strong>Sign In:</strong> Log in to access your account and dashboard. Visit the "User" section to explore more features.</li>
               <li><strong>Explore scenarios:</strong>
                 <ul>

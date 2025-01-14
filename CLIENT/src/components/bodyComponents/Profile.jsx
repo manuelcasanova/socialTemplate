@@ -85,7 +85,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
   const signOut = async () => {
     await logout();
-    navigate('/template');
+    navigate('/');
   }
 
   const inputRef = useRef(null);

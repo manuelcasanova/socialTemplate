@@ -199,7 +199,7 @@ const handleIgnoreRestoreAccount = () => {
     }
   };
 
-  const handleClose = () => navigate('/template');
+  const handleClose = () => navigate('/');
 
   const renderInput = (id, label, type, validation) => (
     <>
@@ -302,7 +302,7 @@ const handleIgnoreRestoreAccount = () => {
 
           <div className='have-an-account'>
             <p>Already have an account?</p>
-            <p><Link to="/template/signin">Sign In</Link></p>
+            <p><Link to="/signin">Sign In</Link></p>
           </div>
         </section>
       )}
