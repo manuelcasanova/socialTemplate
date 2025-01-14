@@ -154,6 +154,9 @@ const updateUser = async (req, res) => {
         if (email) {
             setValues.push(`email = $${setValues.length + 1}`);
             values.push(email);
+
+            setValues.push(`is_verified = $${setValues.length + 1}`);
+            values.push(false);
         }
         if (password) {
             // Encrypt the password before updating
