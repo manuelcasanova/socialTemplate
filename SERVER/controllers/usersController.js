@@ -422,7 +422,7 @@ const updateRoles = async (req, res) => {
 
 
 
-
+/*
         // Step 13: Prevent Admins from revoking their own Admin role
         if (loggedInUserRoles.includes('Admin')) {
             // Check if we are attempting to revoke (not add) the Admin role
@@ -434,6 +434,16 @@ const updateRoles = async (req, res) => {
 
             }
         }
+            */
+
+        // Step 13: Prevent non-SuperAdmins from revoking their own Admin role
+if (rolesToRemove.includes('Admin') && loggedInUser === userId) {
+    // Check if logged-in user is not a SuperAdmin
+    if (!loggedInUserRoles.includes('SuperAdmin')) {
+        return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
+    }
+}
+
 
         // Allow SuperAdmins to revoke Admin roles freely
         if (loggedInUserRoles.includes('SuperAdmin')) {
@@ -449,7 +459,7 @@ const updateRoles = async (req, res) => {
 
         }
 
-
+/*
         // Step 14: Remove existing roles from the user
         await pool.query('DELETE FROM user_roles WHERE user_id = $1', [userId]);
 
@@ -462,11 +472,28 @@ const updateRoles = async (req, res) => {
         );
 
         const remainingUserRoles = remainingUserRolesResult.rows.map(row => row.role_name);
+*/
+
+// Step 14: Remove existing roles from the user (only the roles that need to be removed)
+if (rolesToRemove.length > 0) {
+    const deletePromises = rolesToRemove.map(role => {
+        return pool.query(
+            'DELETE FROM user_roles WHERE user_id = $1 AND role_id = (SELECT role_id FROM roles WHERE role_name = $2)',
+            [userId, role]
+        );
+    });
+
+    // Execute all deletions for roles that need to be removed
+    await Promise.all(deletePromises);
+}
+
 
         // Step 15: Prevent logged-in user from creating a loophole for SuperAdmin
-        if (remainingUserRoles.includes('SuperAdmin') && !loggedInUserRoles.includes('SuperAdmin')) {
-            return res.status(403).json({ error: 'SuperAdmin role modifications require SuperAdmin privileges' });
-        }
+        // if (remainingUserRoles.includes('SuperAdmin') && !loggedInUserRoles.includes('SuperAdmin')) {
+        //     return res.status(403).json({ error: 'SuperAdmin role modifications require SuperAdmin privileges' });
+        // }
+
+        /*
 
         // Step 16: Assign new roles to the user, including the tracking of who assigned the role
         const rolePromises = roles.map(role => {
@@ -476,6 +503,23 @@ const updateRoles = async (req, res) => {
             );
         });
         await Promise.all(rolePromises); // Execute all role insertions
+
+*/
+
+// Step 16: Assign new roles to the user, including the tracking of who assigned the role
+const rolePromises = rolesToAdd.map(role => {
+    return pool.query(
+        'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) ' +
+        'SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',
+        [userId, loggedInUser, role]
+    );
+});
+
+// Execute all role insertions (only for the new roles)
+await Promise.all(rolePromises);
+
+
+
 
         // Revalidate after insertion
         const updatedUserRolesResult = await pool.query(
