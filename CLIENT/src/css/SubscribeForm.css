@@ -1,10 +1,9 @@
 
 .subscription-container {
-  width: 100%; /* Full width of its parent (subscription-wrapper) */
-  max-width: 800px; /* Optional: limit the max width */
+  width: 100%;
+  max-width: 800px;
   padding: 20px;
   margin: auto;
-
 }
 
 .subscription-cards {

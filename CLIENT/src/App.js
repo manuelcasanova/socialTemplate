@@ -59,7 +59,7 @@ function App() {
       <Routes>
 
         {/* Public routes */}
-        <Route path="/template" element={<TEMPLATE isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+        <Route path="/bodytemplate" element={<TEMPLATE isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
@@ -86,7 +86,7 @@ function App() {
 
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="/profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />} />
+            <Route path="profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />} />
           </Route>
 
           {/* Admin-specific routes */}

@@ -157,15 +157,6 @@
   margin-top: 10vh;
 }
 
-.container-inside-body {
-  background-color: red;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1em;
-  height: 100vh;
-}
-
 .footer {
   padding: 1em;
   background-color: var(--color9);

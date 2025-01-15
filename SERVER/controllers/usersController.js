@@ -131,6 +131,10 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
     let { username, email, password, userId } = req.body; // Destructure fields from the request body
 
+    if (userId === 1) {
+        return res.status(400).json({ error: 'For test purposes, this account cannot be modified.' });
+    }
+
     // Validate input fields
     if (!username && !email && !password) {
         return res.status(400).json({ error: 'At least one field (username, email, password) is required to update.' });
@@ -183,6 +187,11 @@ const softDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
 
     try {
+
+        if (userId === "1") {
+            return res.status(400).json({ error: 'For test purposes, this account cannot be modified.' });
+        }
+
         // Step 1: Fetch the current user's email, username
         const userResult = await pool.query(
             'SELECT email, username FROM users WHERE user_id = $1',
@@ -413,7 +422,7 @@ const updateRoles = async (req, res) => {
                 }
             }
 
-            // Allow only the user who assigned the SuperAdmin role to revoke it
+            // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.
             if (assignedByUser !== loggedInUser && loggedInUser !== userId) {
                 return res.status(403).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
             }
@@ -422,27 +431,14 @@ const updateRoles = async (req, res) => {
 
 
 
-/*
-        // Step 13: Prevent Admins from revoking their own Admin role
-        if (loggedInUserRoles.includes('Admin')) {
-            // Check if we are attempting to revoke (not add) the Admin role
-            if (userCurrentRoles.includes('Admin') && !userCurrentRoles.includes('SuperAdmin') && !roles.includes('Admin')) {
-                // Prevent the logged-in user from revoking their own Admin role
-                if (loggedInUser === userId) {
-                    return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
-                }
-
-            }
-        }
-            */
 
         // Step 13: Prevent non-SuperAdmins from revoking their own Admin role
-if (rolesToRemove.includes('Admin') && loggedInUser === userId) {
-    // Check if logged-in user is not a SuperAdmin
-    if (!loggedInUserRoles.includes('SuperAdmin')) {
-        return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
-    }
-}
+        if (rolesToRemove.includes('Admin') && loggedInUser === userId) {
+            // Check if logged-in user is not a SuperAdmin
+            if (!loggedInUserRoles.includes('SuperAdmin')) {
+                return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
+            }
+        }
 
 
         // Allow SuperAdmins to revoke Admin roles freely
@@ -459,66 +455,31 @@ if (rolesToRemove.includes('Admin') && loggedInUser === userId) {
 
         }
 
-/*
-        // Step 14: Remove existing roles from the user
-        await pool.query('DELETE FROM user_roles WHERE user_id = $1', [userId]);
 
-        // Revalidate after removal
-        const remainingUserRolesResult = await pool.query(
-            `SELECT role_name FROM user_roles
-     INNER JOIN roles ON user_roles.role_id = roles.role_id
-     WHERE user_roles.user_id = $1`,
-            [userId]
-        );
+        // Step 14: Remove existing roles from the user (only the roles that need to be removed)
+        if (rolesToRemove.length > 0) {
+            const deletePromises = rolesToRemove.map(role => {
+                return pool.query(
+                    'DELETE FROM user_roles WHERE user_id = $1 AND role_id = (SELECT role_id FROM roles WHERE role_name = $2)',
+                    [userId, role]
+                );
+            });
 
-        const remainingUserRoles = remainingUserRolesResult.rows.map(row => row.role_name);
-*/
-
-// Step 14: Remove existing roles from the user (only the roles that need to be removed)
-if (rolesToRemove.length > 0) {
-    const deletePromises = rolesToRemove.map(role => {
-        return pool.query(
-            'DELETE FROM user_roles WHERE user_id = $1 AND role_id = (SELECT role_id FROM roles WHERE role_name = $2)',
-            [userId, role]
-        );
-    });
-
-    // Execute all deletions for roles that need to be removed
-    await Promise.all(deletePromises);
-}
-
-
-        // Step 15: Prevent logged-in user from creating a loophole for SuperAdmin
-        // if (remainingUserRoles.includes('SuperAdmin') && !loggedInUserRoles.includes('SuperAdmin')) {
-        //     return res.status(403).json({ error: 'SuperAdmin role modifications require SuperAdmin privileges' });
-        // }
-
-        /*
+            // Execute all deletions for roles that need to be removed
+            await Promise.all(deletePromises);
+        }
 
         // Step 16: Assign new roles to the user, including the tracking of who assigned the role
-        const rolePromises = roles.map(role => {
+        const rolePromises = rolesToAdd.map(role => {
             return pool.query(
-                'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',
+                'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) ' +
+                'SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',
                 [userId, loggedInUser, role]
             );
         });
-        await Promise.all(rolePromises); // Execute all role insertions
 
-*/
-
-// Step 16: Assign new roles to the user, including the tracking of who assigned the role
-const rolePromises = rolesToAdd.map(role => {
-    return pool.query(
-        'INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) ' +
-        'SELECT $1, role_id, $2 FROM roles WHERE role_name = $3',
-        [userId, loggedInUser, role]
-    );
-});
-
-// Execute all role insertions (only for the new roles)
-await Promise.all(rolePromises);
-
-
+        // Execute all role insertions (only for the new roles)
+        await Promise.all(rolePromises);
 
 
         // Revalidate after insertion
@@ -636,7 +597,6 @@ const getSubscriptionStatus = async (req, res) => {
     }
 }
 
-//Subscribe user after payment confirmation
 // Subscribe user after payment confirmation
 const subscribeUser = async (req, res) => {
     const { userId, paymentDetails } = req.body;

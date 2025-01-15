@@ -130,7 +130,7 @@ const Signin = ({ isNavOpen, screenWidth }) => {
 
     return (
         <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
-            <div className='centered-container'>
+            <div className='centered-section'>
                 <button className="close-button" onClick={handleClose}>✖</button>
                 <section className="centered-section">
                     <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">

@@ -47,7 +47,7 @@ export default function Subscriber({ isNavOpen }) {
     return (
       <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
 
-          <LoadingSpinner />
+        <LoadingSpinner />
 
       </div>
     )
@@ -63,7 +63,30 @@ export default function Subscriber({ isNavOpen }) {
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-        <h2>All subscribed users have access to this page</h2>
+
+      <div className="centered-container">
+        <h3>Awesome! You're now a subscribed user!</h3>
+        <h2>This page is private. Only subscribed users can access it.</h2>
+        <h4>Your subscription will remain active for one year and seven days, unless it is revoked by an Admin.</h4>
+
+        <div className="interaction-box">
+          <h3>Would you like to keep exploring the app?</h3>
+          <ul>
+            <li><strong>Sign In as a Super Administrator:</strong> Log in with the email "superadmin@example.com" and password "Password1!".</li>
+            <li><strong>Check out the super admin features:</strong>
+              <ul>
+                <li>- Modify user roles in the 'Admin Users' section and use the filter to search by username or ID.</li>
+                <li>- View the login history and audit logs to track changes to user roles.</li>
+                <li>- Find your user and update its roles, such as becoming a moderator, administrator, or superadministrator.</li>
+                <li>- As a superadministrator, attempt to revoke your own SuperAdmin role or modify another SuperAdmin's roles.</li>
+
+              </ul>
+            </li>
+          </ul>
+        </div>
+
       </div>
+    </div>
+
   );
 }

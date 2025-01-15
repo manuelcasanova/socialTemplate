@@ -6,12 +6,6 @@ const Footer = ({ isNavOpen }) => {
     <footer className={`footer ${isNavOpen ? "footer-squeezed" : ""}`}>
       <div className='footer-container'>
         <div>Footer</div>
-        <div>Footer</div>
-        <div>Footer</div>
-        <div>Footer</div>
-        <div>Footer</div>
-        <div>Footer</div>
-        <div>Footer</div>
       </div>
     </footer>
   );
