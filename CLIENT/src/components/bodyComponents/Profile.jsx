@@ -51,6 +51,16 @@ const validateInput = (editMode, value, confirmPwd = "") => {
       return { valid: false, message: regexValidation.message };
     }
     return { valid: true };
+  } else if (editMode === "matchEmail") { //NEW
+    if (value !== confirmPwd) { //NEW
+      errorMessage = "Emails must match."; //NEW
+      return { valid: false, message: errorMessage }; //NEW
+    }
+    const regexValidation = validateInput("email", value); //NEW
+    if (!regexValidation.valid) { //NEW
+      return { valid: false, message: regexValidation.message }; //NEW
+    } //NEW
+    return { valid: true }; //NEW
   }
 
 
@@ -70,6 +80,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const [editMode, setEditMode] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [isInputValid, setIsInputValid] = useState(false);
@@ -114,12 +125,13 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
   const handlePictureClick = () => {
     if (!isTestSuperAdmin) {
-    setError(""); // Hide any error message
-    setInputValue("");
-    setConfirmPwd("");
-    setIsPictureModalVisible(true);
-    setFileName("");  // Clear filename if user clicks to update
-    setFile(null);     // Reset file if the modal is opened
+      setError(""); // Hide any error message
+      setInputValue("");
+      setConfirmPwd("");
+      setConfirmEmail("");
+      setIsPictureModalVisible(true);
+      setFileName("");  // Clear filename if user clicks to update
+      setFile(null);     // Reset file if the modal is opened
     }
   };
 
@@ -224,11 +236,29 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
       setIsInputValid(regexValidation.valid && matchValidation.valid);
       setError(regexValidation.valid ? matchValidation.message : regexValidation.message);
-    } else if (editMode) {
+    } else if (editMode === "email") { //NEW
+      const emailValidation = validateInput("email", value); //NEW
+      const matchEmailValidation = validateInput("matchEmail", value, confirmEmail); //NEW
+
+      setIsInputValid(emailValidation.valid && matchEmailValidation.valid); //NEW
+      setError(emailValidation.valid ? matchEmailValidation.message : emailValidation.message); //NEW
+    }
+
+
+    else if (editMode) {
       const validation = validateInput(editMode, value);
       setIsInputValid(validation.valid);
       setError(validation.valid ? "" : validation.message);
     }
+  };
+
+  const handleConfirmEmailChange = (e) => { //NEW
+    const value = e.target.value; //NEW
+    setConfirmEmail(value); //NEW
+
+    const matchEmailValidation = validateInput("matchEmail", inputValue, value); //NEW
+    setIsInputValid(matchEmailValidation.valid); //NEW
+    setError(matchEmailValidation.message); //NEW
   };
 
   const handleConfirmPwdChange = (e) => {
@@ -328,7 +358,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 )}
               </div>
             }
-            
+
             {isPictureModalVisible && !isTestSuperAdmin && (
               <div className="picture-modal">
                 <h3>Change your profile picture</h3>
@@ -361,130 +391,149 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
           {!isTestSuperAdmin && (
 
-          <div className="profile-actions">
-            <button
-              className="profile-actions-button button-white"
-              onClick={() => handleEditButtonClick("username")}
-            // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
-            >
-              Edit Username
-            </button>
-            <button
-              className="profile-actions-button button-white"
-              onClick={() => handleEditButtonClick("email")}
-            // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
-            >
-              Edit Email
-            </button>
-            <button
-              className="profile-actions-button button-white"
-              onClick={() => handleEditButtonClick("password")}
-            >
-              Edit Password
-            </button>
+            <div className="profile-actions">
+              <button
+                className="profile-actions-button button-white"
+                onClick={() => handleEditButtonClick("username")}
+              // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
+              >
+                Edit Username
+              </button>
+              <button
+                className="profile-actions-button button-white"
+                onClick={() => handleEditButtonClick("email")}
+              // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
+              >
+                Edit Email
+              </button>
+              <button
+                className="profile-actions-button button-white"
+                onClick={() => handleEditButtonClick("password")}
+              >
+                Edit Password
+              </button>
 
-            <button
-              className="profile-actions-button button-red"
-              onClick={handleDeleteClick}
-            >
-              Delete Account
-            </button>
-            {showConfirmDelete &&
-              <div className="delete-confirmation">
-                <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
-                <button
-                  className="button-white"
-                  onClick={() => setShowConfirmDelete(false)}
-                >
-                  Keep account
-                </button>
-                <button
-                  className="button-red"
-                  onClick={handleConfirmDelete}
-                >
-                  Delete account
-                </button>
-              </div>
-            }
-          </div>
+              <button
+                className="profile-actions-button button-red"
+                onClick={handleDeleteClick}
+              >
+                Delete Account
+              </button>
+              {showConfirmDelete &&
+                <div className="delete-confirmation">
+                  <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+                  <button
+                    className="button-white"
+                    onClick={() => setShowConfirmDelete(false)}
+                  >
+                    Keep account
+                  </button>
+                  <button
+                    className="button-red"
+                    onClick={handleConfirmDelete}
+                  >
+                    Delete account
+                  </button>
+                </div>
+              }
+            </div>
           )}
           {!isTestSuperAdmin && (
-          <div className="update-input">
-            {!isLoading && editMode && !showConfirmDelete && (
-              <>
-                {(editMode === "email") && <div className="profile-info">
-                  <p>{userData?.email || "Guest"}</p>
-                </div>}
+            <div className="update-input">
+              {!isLoading && editMode && !showConfirmDelete && (
+                <>
+                  {(editMode === "email") && <div className="profile-info">
+                    <p>{userData?.email || "Guest"}</p>
+                  </div>}
 
-                {/* For editing username or email */}
-                {(editMode === "username" || editMode === "email") && (
-                  <div className="edit-input-container">
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      placeholder={placeholderText} // Dynamic placeholder
-                      value={inputValue}
-                      onChange={handleInputChange}
-                      onKeyDown={handleKeyDown}
-                    />
-                  </div>
-                )}
-
-                {/* For password edit mode */}
-                {editMode === "password" && (
-                  <>
-                    {/* Enter new password field with visibility toggle */}
-                    <div className="password-container">
+                  {/* For editing username */}
+                  {(editMode === "username") && (
+                    <div className="edit-input-container">
                       <input
                         ref={inputRef}
-                        type={isNewPasswordVisible ? "text" : "password"}
-                        placeholder={placeholderText}
+                        type="text"
+                        placeholder={placeholderText} // Dynamic placeholder
                         value={inputValue}
                         onChange={handleInputChange}
-                      />
-                      <FontAwesomeIcon
-                        icon={isNewPasswordVisible ? faEyeSlash : faEye}
-                        onClick={toggleNewPasswordVisibility}
-                        className="toggle-password-icon"
+                        onKeyDown={handleKeyDown}
                       />
                     </div>
+                  )}
 
-                    {/* Confirm new password field with visibility toggle */}
-                    <div className="password-container">
+                  {editMode === "email" && (
+                    <>
                       <input
-                        type={isConfirmPasswordVisible ? "text" : "password"}
-                        placeholder="Confirm new password"
-                        value={confirmPwd}
-                        onChange={handleConfirmPwdChange}
+                        ref={inputRef}
+                        type="email"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        placeholder={placeholderText}
                       />
-                      <FontAwesomeIcon
-                        icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
-                        onClick={toggleConfirmPasswordVisibility}
-                        className="toggle-password-icon"
+                      <input
+                        type="email" //NEW
+                        value={confirmEmail} //NEW
+                        onChange={handleConfirmEmailChange} //NEW
+                        placeholder="Confirm new email" //NEW
                       />
-                    </div>
-                  </>
-                )}
+                      {error && <div className="error-message">{error}</div>}
+                    </>
+                  )}
 
-                {/* Error message */}
-                {error && <div className="profile-input-instructions">{error}</div>}
+                  {/* For password edit mode */}
+                  {editMode === "password" && (
+                    <>
+                      {/* Enter new password field with visibility toggle */}
+                      <div className="password-container">
+                        <input
+                          ref={inputRef}
+                          type={isNewPasswordVisible ? "text" : "password"}
+                          placeholder={placeholderText}
+                          value={inputValue}
+                          onChange={handleInputChange}
+                        />
+                        <FontAwesomeIcon
+                          icon={isNewPasswordVisible ? faEyeSlash : faEye}
+                          onClick={toggleNewPasswordVisibility}
+                          className="toggle-password-icon"
+                        />
+                      </div>
 
-                {/* Update button */}
-                <button
-                  onClick={handleUpdate}
-                  className="button-white"
-                  disabled={!isInputValid || inputValue.trim() === ""}
-                >
-                  Update
-                </button>
+                      {/* Confirm new password field with visibility toggle */}
+                      <div className="password-container">
+                        <input
+                          type={isConfirmPasswordVisible ? "text" : "password"}
+                          placeholder="Confirm new password"
+                          value={confirmPwd}
+                          onChange={handleConfirmPwdChange}
+                        />
+                        <FontAwesomeIcon
+                          icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
+                          onClick={toggleConfirmPasswordVisibility}
+                          className="toggle-password-icon"
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {/* Error message */}
+                  {error && <div className="profile-input-instructions">{error}</div>}
+
+                  {/* Update button */}
+                  <button
+                    onClick={handleUpdate}
+                    className="button-white"
+                    disabled={!isInputValid || inputValue.trim() === ""}
+                  >
+                    Update
+                  </button>
 
 
-              </>
-            )}
+                </>
+              )}
 
-            {isLoading && <LoadingSpinner />}
+              {isLoading && <LoadingSpinner />}
 
-          </div>
+            </div>
           )}
 
 
