@@ -141,13 +141,27 @@ const updateUser = async (req, res) => {
     }
 
     try {
+
+        if (username) {
+            const checkUsernameQuery = 'SELECT * FROM users WHERE username = $1';
+            const checkUsernameResult = await pool.query(checkUsernameQuery, [username]);
+
+            // If the username exists and is not for the current user (i.e., userId), return an error
+            if (checkUsernameResult.rowCount > 0 && checkUsernameResult.rows[0].user_id !== userId) {
+                return res.status(400).json({ error: 'Username already exists.' });
+            }
+
+            // Capitalize the username if it’s provided
+            username = username.charAt(0).toUpperCase() + username.slice(1);
+        }
+
+
         // Update user details based on which fields are provided
         let query = 'UPDATE users SET ';
         let values = [];
         let setValues = [];
 
         if (username) {
-            username = username.charAt(0).toUpperCase() + username.slice(1);
             setValues.push(`username = $${setValues.length + 1}`);
             values.push(username);
         }

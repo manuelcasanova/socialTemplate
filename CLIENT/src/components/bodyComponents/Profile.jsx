@@ -272,8 +272,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
         setError(response?.data?.message || 'Update failed. Please try again.');
       }
     } catch (err) {
-      console.error('Error updating profile:', err);
-      setError('An error occurred while updating. Please try again later.');
+      console.error('Error updating profile:', err.response.data.error);
+      setError(`Error updating profile: ${err.response.data.error}`);
     } finally {
       setIsLoading(false);
     }
