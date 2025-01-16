@@ -51,16 +51,16 @@ const validateInput = (editMode, value, confirmPwd = "") => {
       return { valid: false, message: regexValidation.message };
     }
     return { valid: true };
-  } else if (editMode === "matchEmail") { //NEW
-    if (value !== confirmPwd) { //NEW
-      errorMessage = "Emails must match."; //NEW
-      return { valid: false, message: errorMessage }; //NEW
+  } else if (editMode === "matchEmail") { 
+    if (value !== confirmPwd) { 
+      errorMessage = "Emails must match."; 
+      return { valid: false, message: errorMessage }; 
     }
-    const regexValidation = validateInput("email", value); //NEW
-    if (!regexValidation.valid) { //NEW
-      return { valid: false, message: regexValidation.message }; //NEW
-    } //NEW
-    return { valid: true }; //NEW
+    const regexValidation = validateInput("email", value); 
+    if (!regexValidation.valid) { 
+      return { valid: false, message: regexValidation.message }; 
+    } 
+    return { valid: true }; 
   }
 
 
@@ -236,12 +236,12 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
       setIsInputValid(regexValidation.valid && matchValidation.valid);
       setError(regexValidation.valid ? matchValidation.message : regexValidation.message);
-    } else if (editMode === "email") { //NEW
-      const emailValidation = validateInput("email", value); //NEW
-      const matchEmailValidation = validateInput("matchEmail", value, confirmEmail); //NEW
+    } else if (editMode === "email") { 
+      const emailValidation = validateInput("email", value); 
+      const matchEmailValidation = validateInput("matchEmail", value, confirmEmail); 
 
-      setIsInputValid(emailValidation.valid && matchEmailValidation.valid); //NEW
-      setError(emailValidation.valid ? matchEmailValidation.message : emailValidation.message); //NEW
+      setIsInputValid(emailValidation.valid && matchEmailValidation.valid); 
+      setError(emailValidation.valid ? matchEmailValidation.message : emailValidation.message); 
     }
 
 
@@ -252,13 +252,13 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     }
   };
 
-  const handleConfirmEmailChange = (e) => { //NEW
-    const value = e.target.value; //NEW
-    setConfirmEmail(value); //NEW
+  const handleConfirmEmailChange = (e) => { 
+    const value = e.target.value; 
+    setConfirmEmail(value); 
 
-    const matchEmailValidation = validateInput("matchEmail", inputValue, value); //NEW
-    setIsInputValid(matchEmailValidation.valid); //NEW
-    setError(matchEmailValidation.message); //NEW
+    const matchEmailValidation = validateInput("matchEmail", inputValue, value); 
+    setIsInputValid(matchEmailValidation.valid); 
+    setError(matchEmailValidation.message); 
   };
 
   const handleConfirmPwdChange = (e) => {
@@ -470,12 +470,11 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                         placeholder={placeholderText}
                       />
                       <input
-                        type="email" //NEW
-                        value={confirmEmail} //NEW
-                        onChange={handleConfirmEmailChange} //NEW
-                        placeholder="Confirm new email" //NEW
+                        type="email" 
+                        value={confirmEmail} 
+                        onChange={handleConfirmEmailChange} 
+                        placeholder="Confirm new email" 
                       />
-                      {error && <div className="error-message">{error}</div>}
                     </>
                   )}
 
