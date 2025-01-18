@@ -140,22 +140,34 @@ const updateUser = async (req, res) => {
         return res.status(400).json({ error: 'At least one field (username, email, password) is required to update.' });
     }
 
-    try {
+    if (username) {
 
-        if (username) {
-            const checkUsernameQuery = 'SELECT * FROM users WHERE username = $1';
-            const checkUsernameResult = await pool.query(checkUsernameQuery, [username]);
+        // Capitalize the username if it’s provided
+        username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
 
-            // If the username exists and is not for the current user (i.e., userId), return an error
-            if (checkUsernameResult.rowCount > 0 && checkUsernameResult.rows[0].user_id !== userId) {
-                return res.status(400).json({ error: 'Username already exists.' });
-            }
+        const checkUsernameQuery = 'SELECT * FROM users WHERE username = $1';
+        const checkUsernameResult = await pool.query(checkUsernameQuery, [username]);
 
-            // Capitalize the username if it’s provided
-            username = username.charAt(0).toUpperCase() + username.slice(1);
+        // If the username exists and is not for the current user (i.e., userId), return an error
+        if (checkUsernameResult.rowCount > 0 && checkUsernameResult.rows[0].user_id !== userId) {
+            return res.status(400).json({ error: 'Username already exists.' });
         }
+    }
+
+    if (email) {
+
+        const checkEmailQuery = 'SELECT * FROM users WHERE email = $1';
+        const checkEmailResult = await pool.query(checkEmailQuery, [email]);
+
+        // If the email exists and is not for the current user (i.e., userId), return an error
+        if (checkEmailResult.rowCount > 0 && checkEmailResult.rows[0].user_id !== userId) {
+            return res.status(400).json({ error: 'Email already exists.' });
+        }
+    }
 
 
+
+    try {
         // Update user details based on which fields are provided
         let query = 'UPDATE users SET ';
         let values = [];
