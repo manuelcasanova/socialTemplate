@@ -135,7 +135,7 @@ const getUserById = async (req, res) => {
 
 // Function to update user details
 const updateUser = async (req, res) => {
-    validateEmailConfig(); 
+    validateEmailConfig();
     let { username, email, password, userId } = req.body; // Destructure fields from the request body
 
     if (userId === 1) {
@@ -155,7 +155,7 @@ const updateUser = async (req, res) => {
         if (!usernameRegex.test(username)) {
             return res.status(400).json({ 'message': 'Invalid username. It must be 4-24 characters long, start with a letter, and can include letters, numbers, dashes, or underscores.' });
         }
-    
+
 
         const checkUsernameQuery = 'SELECT * FROM users WHERE username = $1';
         const checkUsernameResult = await pool.query(checkUsernameQuery, [username]);
@@ -171,12 +171,12 @@ const updateUser = async (req, res) => {
             return res.status(400).json({ 'message': 'Invalid password. It must be 8-24 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.' });
         }
     }
-    
+
 
     if (email) {
 
 
-    
+
         if (!emailRegex.test(email)) {
             return res.status(400).json({ 'message': 'Invalid email format.' });
         }
@@ -634,7 +634,10 @@ const getSubscriptionStatus = async (req, res) => {
 
             if (today < renewalDueDate) {
                 // console.log("today is before renewal Due Date")
-                return res.status(200).json(true);
+                return res.status(200).json({
+                    isActive: true,
+                    renewalDueDate
+                });
             } else {
                 // console.log("today is after renewal Due Date. Subscription expired")
                 return res.status(200).json(false);

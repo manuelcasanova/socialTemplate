@@ -11,8 +11,7 @@ export default function Subscriber({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
 
   const [isSubscribed, setIsSubscribed] = useState(null);
-
-  // console.log("isSubscribed", isSubscribed)
+  const [renewalDueDate, setRenewalDueDate] = useState(null)
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,8 +22,8 @@ export default function Subscriber({ isNavOpen }) {
     try {
       setLoading(true);
       const response = await axiosPrivate.get(`/users/subscriptions/status/${userId}`);
-      // console.log("response data frontend", response.data)
-      setIsSubscribed(response.data);
+      setIsSubscribed(response.data.isActive);
+      setRenewalDueDate(response.data.renewalDueDate)
     } catch (error) {
       console.error("Error retrieving subscription status:", error);
       setError("Failed to retrieve subscription status. Please try again later.");
@@ -42,6 +41,15 @@ export default function Subscriber({ isNavOpen }) {
       // Prevent infinite loading if user isn't logged in
     }
   }, [userId, axiosPrivate]);
+
+    // Calculate days remaining until renewal
+    const calculateDaysRemaining = (renewalDate) => {
+      const currentDate = new Date();
+      const renewalDateObj = new Date(renewalDate);
+      const timeDifference = renewalDateObj - currentDate;
+      const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      return daysRemaining;
+    };
 
   if (loading) {
     return (
@@ -61,13 +69,20 @@ export default function Subscriber({ isNavOpen }) {
     return <Navigate to="/subscribe" state={{ from: location }} replace />;
   }
 
+  const daysRemaining = renewalDueDate ? calculateDaysRemaining(renewalDueDate) : null;
+
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
 
       <div className="centered-container">
         <h3>Awesome! You're now a subscribed user!</h3>
         <h2>This page is private. Only subscribed users can access it.</h2>
-        <h4>Your subscription will remain active for one year and seven days, unless it is revoked by an Admin.</h4>
+        {daysRemaining !== null ? (
+          <h4>Your subscription will remain active for {daysRemaining} more {daysRemaining === 1 ? 'day' : 'days'} unless revoked by an Administrator.</h4>
+        ) : (
+          <h4>Subscription renewal date is unavailable.</h4>
+        )}
 
         <div className="interaction-box">
           <h3>Would you like to keep exploring the app?</h3>
