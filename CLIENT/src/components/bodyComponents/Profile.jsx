@@ -29,7 +29,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
   let regex, errorMessage;
 
   if (editMode === "username") {
-    regex = /^[a-zA-Z][a-zA-Z0-9_-]{1,23}$/;
+    regex = /^[a-zA-Z][a-zA-Z0-9_-]{3,23}$/;
     errorMessage = "4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.";
   } else if (editMode === "email") {
     regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

@@ -14,7 +14,7 @@ const validateEmailConfig = () => {
       process.exit(1); // Exit process with failure
     }
   });
-  console.log("All required environment variables are set.");
+  // console.log("All required environment variables are set.");
 };
 
 module.exports = validateEmailConfig;

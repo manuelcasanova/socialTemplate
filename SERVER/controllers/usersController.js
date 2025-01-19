@@ -2,6 +2,12 @@ const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path');
+const validateEmailConfig = require('../middleware/validateEnv')
+
+const usernameRegex = /^[A-z][A-z0-9-_]{5,23}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/;
+const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+
 
 // Function to get all users
 
@@ -129,6 +135,7 @@ const getUserById = async (req, res) => {
 
 // Function to update user details
 const updateUser = async (req, res) => {
+    validateEmailConfig(); 
     let { username, email, password, userId } = req.body; // Destructure fields from the request body
 
     if (userId === 1) {
@@ -145,6 +152,11 @@ const updateUser = async (req, res) => {
         // Capitalize the username if it’s provided
         username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
 
+        if (!usernameRegex.test(username)) {
+            return res.status(400).json({ 'message': 'Invalid username. It must be 4-24 characters long, start with a letter, and can include letters, numbers, dashes, or underscores.' });
+        }
+    
+
         const checkUsernameQuery = 'SELECT * FROM users WHERE username = $1';
         const checkUsernameResult = await pool.query(checkUsernameQuery, [username]);
 
@@ -154,7 +166,20 @@ const updateUser = async (req, res) => {
         }
     }
 
+    if (password) {
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({ 'message': 'Invalid password. It must be 8-24 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.' });
+        }
+    }
+    
+
     if (email) {
+
+
+    
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ 'message': 'Invalid email format.' });
+        }
 
         const checkEmailQuery = 'SELECT * FROM users WHERE email = $1';
         const checkEmailResult = await pool.query(checkEmailQuery, [email]);
