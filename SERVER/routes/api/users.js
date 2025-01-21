@@ -106,8 +106,8 @@ router.route('/update')
     usersController.updateUser
   );
 
-//Delete user account
-router.route('/delete/:userId')
+//Soft delete user account 
+router.route('/softdelete/:userId')
   .put(
     async (req, res, next) => {
       try {
@@ -120,6 +120,22 @@ router.route('/delete/:userId')
     },
     usersController.softDeleteUser // Controller function to handle user deletion
   );
+
+
+  //Hard delete user account
+  router.route('/harddelete/:userId')
+  .delete(
+    async (req, res, next) => {
+      try {
+        const rolesList = await fetchRoles();  
+        verifyRoles(...rolesList)(req, res, next); 
+      } catch (err) {
+        next(err);  
+      }
+    },
+    usersController.hardDeleteUser // Controller function to handle user deletion
+  );
+
 
 //Update roles (by admin)
 router.route('/:user_id/roles')

@@ -312,6 +312,25 @@ const softDeleteUser = async (req, res) => {
 };
 
 
+const hardDeleteUser = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { loggedInUser } = req.body;  
+  
+      console.log('Attempting to hard delete user with ID:', userId);
+      console.log('Logged in user:', loggedInUser);
+  
+      // Simulating the hard delete process
+      console.log(`User with ID ${userId} would be hard deleted here.`);
+  
+      // Send a success response
+      res.status(200).json({ message: `User ${userId} successfully hard deleted.` });
+    } catch (error) {
+      console.error('Error during user hard deletion:', error);
+      res.status(500).json({ error: 'An error occurred while attempting to delete the user.' });
+    }
+  };
+
 // Function to upload a profile picture
 const uploadProfilePicture = async (req, res) => {
     const { userId } = req.params;
@@ -770,5 +789,6 @@ module.exports = {
     uploadProfilePicture,
     updateRoles,
     subscribeUser,
-    getSubscriptionStatus
+    getSubscriptionStatus,
+    hardDeleteUser
 };

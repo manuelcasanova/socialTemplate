@@ -79,18 +79,37 @@ export default function AdminUsers({ isNavOpen }) {
     }
   };
 
+  // const handleDeleteUser = async (userId, loggedInUser) => {
+  //   try {
+
+  //     console.log('User ID:', userId);
+  //     console.log('Logged In User:', loggedInUser);
+  
+  //   } catch (error) {
+  //     console.error("Error deleting user", error);
+  //     setError(`${error.response?.data?.error || 'An error occurred'}`);
+  //   }
+  // };
+
   const handleDeleteUser = async (userId, loggedInUser) => {
     try {
-
       console.log('User ID:', userId);
       console.log('Logged In User:', loggedInUser);
+  
+      const response = await axiosPrivate.delete(`/harddelete/${userId}`, {
+        data: { loggedInUser },
+      });
+  
+  
+      console.log('User deleted successfully!');
+
+      setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== userId));
   
     } catch (error) {
       console.error("Error deleting user", error);
       setError(`${error.response?.data?.error || 'An error occurred'}`);
     }
   };
-  
 
 
   return (
