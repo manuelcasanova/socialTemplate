@@ -189,7 +189,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
     try {
       // Make the DELETE request to the server
-      const response = await axiosPrivate.put(`/users/delete/${userId}`, {
+      const response = await axiosPrivate.put(`/users/softdelete/${userId}`, {
       });
 
       if (response?.data?.success) {
@@ -423,7 +423,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
               </button>
               {showConfirmDelete &&
                 <div className="delete-confirmation">
-                  <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+                  <p>Are you sure you want to delete your account?</p>
                   <button
                     className="button-white"
                     onClick={() => setShowConfirmDelete(false)}

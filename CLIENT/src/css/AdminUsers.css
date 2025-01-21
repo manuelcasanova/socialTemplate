@@ -136,3 +136,9 @@ button:hover {
 .filter-admin-users {
   background-color: pink;
 }
+
+/* Delete user button container */
+.delete-user {
+  display: flex;
+  justify-content: center;
+}

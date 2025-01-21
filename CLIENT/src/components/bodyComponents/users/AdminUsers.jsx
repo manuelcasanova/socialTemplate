@@ -16,6 +16,7 @@ export default function AdminUsers({ isNavOpen }) {
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({});
   const [expandedUserId, setExpandedUserId] = useState(null);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const { auth } = useAuth();
   const loggedInUser = auth.userId
 
@@ -23,6 +24,10 @@ export default function AdminUsers({ isNavOpen }) {
   useEffect(() => {
     setError(null); // Clear error when filters change
   }, [filters]);
+
+  useEffect(() => {
+    console.log("use effect called upon users refresh cause deleted")
+  }, [users]);
 
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
@@ -49,6 +54,10 @@ export default function AdminUsers({ isNavOpen }) {
     setExpandedUserId((prevId) => (prevId === userId ? null : userId));
   };
 
+  const handleShowDelete = () => {
+    setShowConfirmDelete(prev => !prev)
+  }
+
   const handleRoleChange = async (user, role, checked) => {
     try {
       await axiosPrivate.put(`/users/${user.user_id}/roles`, {
@@ -69,6 +78,20 @@ export default function AdminUsers({ isNavOpen }) {
       setError(`${error.response.data.error}`);
     }
   };
+
+  const handleDeleteUser = async (userId, loggedInUser) => {
+    try {
+
+      console.log('User ID:', userId);
+      console.log('Logged In User:', loggedInUser);
+  
+    } catch (error) {
+      console.error("Error deleting user", error);
+      setError(`${error.response?.data?.error || 'An error occurred'}`);
+    }
+  };
+  
+
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
@@ -159,6 +182,30 @@ export default function AdminUsers({ isNavOpen }) {
                       ) : (
                         <p>No login history available</p>
                       )}
+
+                      {
+                        !showConfirmDelete && (
+                          <div className="delete-user">
+                            <button
+                              className="button-red"
+                              onClick={handleShowDelete}
+                            >Delete user</button>
+                          </div>
+                        )
+                      }
+
+                      {
+                        showConfirmDelete && (
+                          <div className="delete-confirmation">
+                            <p>Are you sure you want to delete this user? This action is permanent and cannot be undone.</p>
+                            <button className="button-white" onClick={handleShowDelete}>x</button>
+                            <button
+                              className="button-red"
+                              onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
+                            >Confirm delete</button>
+                          </div>
+                        )
+                      }
 
                     </div>
                   )}
