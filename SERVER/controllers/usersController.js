@@ -327,6 +327,21 @@ const hardDeleteUser = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
+
+        //         const loggedInUserRolesResult = await pool.query(
+        //             'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+        //             [loggedInUser]
+        //         );
+
+        // console.log("loggedInUserRolesResult", loggedInUserRolesResult.rows)
+
+        const userToDeleteRoles = await pool.query(
+            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+            [Number(userId)]
+        );
+
+        const userToDeleteRoleNames = userToDeleteRoles.rows.map(row => row.role_name);
+
         //Check if the logged-in user has the required role (Admin or SuperAdmin)
 
         const userCurrentRolesResult = await pool.query(
@@ -335,6 +350,7 @@ const hardDeleteUser = async (req, res) => {
         );
         const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
 
+        // console.log("userCurrentRoles", userCurrentRoles)
 
         if (
             !userCurrentRoles.includes('Admin') &&
@@ -343,11 +359,15 @@ const hardDeleteUser = async (req, res) => {
         }
 
         // Permission denied if Deleter and Deletee are the same user.
-        if ( Number(userId) === loggedInUser ) {
-            return res.status(403).json({ error: 'Permission denied: You cannot delete your own account here. Do it from "My account"'});
+        if (Number(userId) === loggedInUser) {
+            return res.status(403).json({ error: 'Permission denied: You cannot delete your own account here. Do it from "My account"' });
         }
 
-        // Permission denied if Deleter is an Admin and Deletee is a Superadmin.
+        // Permission denied if Deleter is not a SuperAdmin and Deletee is a Superadmin.
+        if (userToDeleteRoleNames.includes('SuperAdmin') && !userCurrentRoles.includes('SuperAdmin')) {
+            return res.status(403).json({ error: 'Permission denied: Only a SuperAdmin can delete a SuperAdmin.' });
+        }
+        
 
         // Permission denied if Deleter is a Superadmin and Deletee is also a Superadmin, unless the Deleter granted Superadmin status to the Deletee.
 
