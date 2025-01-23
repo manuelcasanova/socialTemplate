@@ -96,7 +96,7 @@ export default function AdminUsers({ isNavOpen }) {
       console.log('User ID:', userId);
       console.log('Logged In User:', loggedInUser);
   
-      const response = await axiosPrivate.delete(`/harddelete/${userId}`, {
+      const response = await axiosPrivate.delete(`/users/harddelete/${userId}`, {
         data: { loggedInUser },
       });
   
