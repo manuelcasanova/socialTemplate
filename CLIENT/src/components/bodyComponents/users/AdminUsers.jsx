@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import useAuth from "../../../hooks/useAuth";
 import FilterAdminUsers from "./FilterAdminUsers";
+import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 
 
@@ -17,6 +18,7 @@ export default function AdminUsers({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const [expandedUserId, setExpandedUserId] = useState(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { auth } = useAuth();
   const loggedInUser = auth.userId
 
@@ -88,23 +90,36 @@ export default function AdminUsers({ isNavOpen }) {
   // };
 
   const handleDeleteUser = async (userId, loggedInUser) => {
+    setIsLoading(true)
     try {
 
-      const response = await axiosPrivate.delete(`/users/harddelete/${userId}`, {
-        data: { loggedInUser },
-      });
 
-      // Forget any expanded user details and re-render the list normally." This resolves the issue where the list would remain empty after deleting a user. UI doesn't look for the expanded details of a non-existing user. 
-      setExpandedUserId(null)
-
-      setShowConfirmDelete(false)
-
-      setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== userId));
+      setTimeout(async () => {
+        try {
 
 
+          setError(null)
+          const response = await axiosPrivate.delete(`/users/harddelete/${userId}`, {
+            data: { loggedInUser },
+          });
+
+          // Forget any expanded user details and re-render the list normally." This resolves the issue where the list would remain empty after deleting a user. UI doesn't look for the expanded details of a non-existing user. 
+          setExpandedUserId(null)
+
+          setShowConfirmDelete(false)
+
+          setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== userId));
+
+        } catch (error) {
+          console.error("Error deleting user", error);
+          setError(`${error.response?.data?.error || 'An error occurred'}`);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 1000);
     } catch (error) {
-      console.error("Error deleting user", error);
-      setError(`${error.response?.data?.error || 'An error occurred'}`);
+      console.error("Error initiating delete action", error);
+      setIsLoading(false); // Stop loading if something goes wrong before timeout
     }
   };
 
@@ -217,8 +232,10 @@ export default function AdminUsers({ isNavOpen }) {
                             <button className="button-white" onClick={handleShowDelete}>x</button>
                             <button
                               className="button-red"
+                              disabled={isLoading}
                               onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
-                            >Confirm delete</button>
+                            >{isLoading ? <LoadingSpinner /> : 'Confirm delete'}</button>
+
                           </div>
                         )
                       }
