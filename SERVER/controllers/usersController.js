@@ -312,52 +312,53 @@ const softDeleteUser = async (req, res) => {
 };
 
 
-// const hardDeleteUser = async (req, res) => {
-//     try {
-//       const { userId } = req.params;
-//       const { loggedInUser } = req.body;  
-  
-//       console.log('Attempting to hard delete user with ID:', userId);
-//       console.log('Logged in user:', loggedInUser);
-  
-//       // Simulating the hard delete process
-//       console.log(`User with ID ${userId} would be hard deleted here.`);
-  
-//       // Send a success response
-//       res.status(200).json({ message: `User ${userId} successfully hard deleted.` });
-//     } catch (error) {
-//       console.error('Error during user hard deletion:', error);
-//       res.status(500).json({ error: 'An error occurred while attempting to delete the user.' });
-//     }
-//   };
-
-
 const hardDeleteUser = async (req, res) => {
-  try {
-    const { userId } = req.params; // Get user ID from the URL parameter
-    const { loggedInUser } = req.body; // Get logged-in user's ID from the body
+    try {
+        const { userId } = req.params; // Get user ID from the URL parameter
+        const { loggedInUser } = req.body; // Get logged-in user's ID from the body
 
-    // console.log('Attempting to hard delete user with ID:', userId);
-    // console.log('Logged in user:', loggedInUser);
+        // console.log('Attempting to hard delete user with ID:', userId);
+        // console.log('Logged in user:', loggedInUser);
 
-    // Check if the user exists
-    const userResult = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+        // Check if the user exists
+        const userResult = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
 
-    if (userResult.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        //Check if the logged-in user has the required role (Admin or SuperAdmin)
+        const loggedInUserRolesResult = await pool.query(
+            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+            [loggedInUser]
+        );
+
+        //Get the users current roles 
+
+        const userCurrentRolesResult = await pool.query(
+            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
+            [loggedInUser]
+        );
+        const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
+
+
+        if (
+            !userCurrentRoles.includes('Admin') &&
+            !userCurrentRoles.includes('SuperAdmin')) {
+            return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can hard delete a user' });
+        }
+
+        // Perform the hard delete (delete user from the database)
+        await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
+
+        // console.log(`User with ID ${userId} successfully hard deleted.`);
+
+        // Send a success response
+        res.status(200).json({ message: `User ${userId} successfully hard deleted.` });
+    } catch (error) {
+        console.error('Error during user hard deletion:', error);
+        res.status(500).json({ error: 'An error occurred while attempting to delete the user.' });
     }
-
-    // Perform the hard delete (delete user from the database)
-    await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
-
-    // console.log(`User with ID ${userId} successfully hard deleted.`);
-
-    // Send a success response
-    res.status(200).json({ message: `User ${userId} successfully hard deleted.` });
-  } catch (error) {
-    console.error('Error during user hard deletion:', error);
-    res.status(500).json({ error: 'An error occurred while attempting to delete the user.' });
-  }
 };
 
 
