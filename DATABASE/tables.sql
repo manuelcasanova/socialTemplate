@@ -42,12 +42,12 @@ CREATE TABLE user_roles (
 
 CREATE TABLE role_change_logs (
     id SERIAL PRIMARY KEY,
-    user_that_modified INT NOT NULL,  -- ID of the user who made the change
-    user_modified INT NOT NULL,       -- ID of the user whose role was changed
+    user_that_modified INT, 
+    user_modified INT,       -- ID of the user whose role was changed
     role VARCHAR(255) NOT NULL,       -- Role that was changed
     timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of the action
-    FOREIGN KEY (user_that_modified) REFERENCES users(user_id),
-    FOREIGN KEY (user_modified) REFERENCES users(user_id),
+    FOREIGN KEY (user_that_modified) REFERENCES users(user_id) ON DELETE SET NULL,
+    FOREIGN KEY (user_modified) REFERENCES users(user_id) ON DELETE SET NULL,
     action_type VARCHAR(20) CHECK (action_type IN ('assigned', 'unassigned')) NOT NULL
 );
 

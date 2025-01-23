@@ -328,12 +328,6 @@ const hardDeleteUser = async (req, res) => {
         }
 
         //Check if the logged-in user has the required role (Admin or SuperAdmin)
-        const loggedInUserRolesResult = await pool.query(
-            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
-            [loggedInUser]
-        );
-
-        //Get the users current roles 
 
         const userCurrentRolesResult = await pool.query(
             'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
@@ -347,6 +341,17 @@ const hardDeleteUser = async (req, res) => {
             !userCurrentRoles.includes('SuperAdmin')) {
             return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can hard delete a user' });
         }
+
+        // Permission denied if Deleter and Deletee are the same user.
+        if ( Number(userId) === loggedInUser ) {
+            return res.status(403).json({ error: 'Permission denied: You cannot delete your own account here. Do it from "My account"'});
+        }
+
+        // Permission denied if Deleter is an Admin and Deletee is a Superadmin.
+
+        // Permission denied if Deleter is a Superadmin and Deletee is also a Superadmin, unless the Deleter granted Superadmin status to the Deletee.
+
+
 
         // Perform the hard delete (delete user from the database)
         await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
