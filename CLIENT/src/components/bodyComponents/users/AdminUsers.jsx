@@ -26,10 +26,6 @@ export default function AdminUsers({ isNavOpen }) {
   }, [filters]);
 
   useEffect(() => {
-    console.log("use effect called upon users refresh cause deleted")
-  }, [users]);
-
-  useEffect(() => {
     const fetchUsersAndRoles = async () => {
       try {
         // Fetch users and roles
@@ -84,7 +80,7 @@ export default function AdminUsers({ isNavOpen }) {
 
   //     console.log('User ID:', userId);
   //     console.log('Logged In User:', loggedInUser);
-  
+
   //   } catch (error) {
   //     console.error("Error deleting user", error);
   //     setError(`${error.response?.data?.error || 'An error occurred'}`);
@@ -93,18 +89,19 @@ export default function AdminUsers({ isNavOpen }) {
 
   const handleDeleteUser = async (userId, loggedInUser) => {
     try {
-      console.log('User ID:', userId);
-      console.log('Logged In User:', loggedInUser);
-  
+
       const response = await axiosPrivate.delete(`/users/harddelete/${userId}`, {
         data: { loggedInUser },
       });
-  
-  
-      console.log('User deleted successfully!');
+
+      // Forget any expanded user details and re-render the list normally." This resolves the issue where the list would remain empty after deleting a user. UI doesn't look for the expanded details of a non-existing user. 
+      setExpandedUserId(null)
+
+      setShowConfirmDelete(false)
 
       setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== userId));
-  
+
+
     } catch (error) {
       console.error("Error deleting user", error);
       setError(`${error.response?.data?.error || 'An error occurred'}`);
