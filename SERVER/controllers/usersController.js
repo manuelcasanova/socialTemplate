@@ -138,6 +138,7 @@ const updateUser = async (req, res) => {
     validateEmailConfig();
     let { username, email, password, userId } = req.body; // Destructure fields from the request body
 
+    //Remove for production of a real application. Keep for testing.
     if (userId === 1) {
         return res.status(400).json({ error: 'For test purposes, this account cannot be modified.' });
     }
@@ -240,7 +241,7 @@ const softDeleteUser = async (req, res) => {
     try {
 
         if (userId === "1") {
-            return res.status(400).json({ error: 'For test purposes, this account cannot be modified.' });
+            return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.'});
         }
 
         // Step 1: Fetch the current user's email, username
@@ -312,13 +313,11 @@ const softDeleteUser = async (req, res) => {
 };
 
 
+//If using this function, the user is removed from the database. It will affect logs, role assignation, etc. So it is not recommended. We suggest using the adminVersionSoftDeleteUser function below.
 const hardDeleteUser = async (req, res) => {
     try {
         const { userId } = req.params; // Get user ID from the URL parameter
         const { loggedInUser } = req.body; // Get logged-in user's ID from the body
-
-        // console.log('Attempting to hard delete user with ID:', userId);
-        // console.log('Logged in user:', loggedInUser);
 
         // Check if the user exists
         const userResult = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
@@ -326,14 +325,6 @@ const hardDeleteUser = async (req, res) => {
         if (userResult.rows.length === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
-
-
-        //         const loggedInUserRolesResult = await pool.query(
-        //             'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
-        //             [loggedInUser]
-        //         );
-
-        // console.log("loggedInUserRolesResult", loggedInUserRolesResult.rows)
 
         const userToDeleteRoles = await pool.query(
             'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
@@ -368,7 +359,6 @@ const hardDeleteUser = async (req, res) => {
             return res.status(403).json({ error: 'Permission denied: Only a SuperAdmin can delete a SuperAdmin.' });
         }
 
-
         // Permission denied if Deleter is a Superadmin and Deletee is also a Superadmin, unless the Deleter granted Superadmin status to the Deletee.
         // Fetch who assigned the SuperAdmin role
         const assignedByResult = await pool.query(
@@ -381,8 +371,9 @@ const hardDeleteUser = async (req, res) => {
 
         const assignedByUser = assignedByResult.rows[0]?.assigned_by_user_id;
 
-        // Allow only the user who assigned the SuperAdmin role to delete the account of another SuperAdmin.
-        if (assignedByUser !== loggedInUser) {
+        // Allow only the user who assigned the SuperAdmin role to delete the account of another SuperAdmin. The SuperAdmin with userId === 1 can as well. This ensures there is always someone with the ability to do so.
+        if (assignedByUser !== loggedInUser && loggedInUser !== 1
+        ) {
             return res.status(403).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
         }
 
@@ -400,6 +391,19 @@ const hardDeleteUser = async (req, res) => {
     }
 };
 
+
+const adminVersionSoftDeleteUser = async (req, res) => {
+    try {
+
+        //UDPATE:
+        // username to: "Deleted User"
+        // email adress to: "ADMIN-DELETED-email with first letter ***** last letter @domain.com-Timestamp"
+
+    } catch (error) {
+        console.error('Error during user hard deletion:', error);
+        res.status(500).json({ error: 'An error occurred while attempting to delete the user.' });
+    }
+}
 
 // Function to upload a profile picture
 const uploadProfilePicture = async (req, res) => {
@@ -563,7 +567,7 @@ const updateRoles = async (req, res) => {
             }
 
             // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.
-            if (assignedByUser !== loggedInUser && loggedInUser !== userId) {
+            if (assignedByUser !== loggedInUser && loggedInUser !== userId && loggedInUser !== 1) {
                 return res.status(403).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
             }
 

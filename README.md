@@ -22,7 +22,7 @@ SuperAdmin permissions:
 
 SuperAdmins can grant or revoke any role, including Admin, Moderator, Subscribed, and NotSubscribed.
 SuperAdmins cannot revoke their own SuperAdmin role.
-A SuperAdmin can only revoke the SuperAdmin role if they were the one who assigned it; they cannot revoke it if another SuperAdmin granted the role.
+A SuperAdmin can only revoke the SuperAdmin role if they were the one who assigned it. They cannot revoke it if another SuperAdmin granted the role. The only exception is the SuperAdmin with userId 1, ensuring that there is always someone with the authority to make this change.
 
 Admin permissions:
 
