@@ -367,10 +367,24 @@ const hardDeleteUser = async (req, res) => {
         if (userToDeleteRoleNames.includes('SuperAdmin') && !userCurrentRoles.includes('SuperAdmin')) {
             return res.status(403).json({ error: 'Permission denied: Only a SuperAdmin can delete a SuperAdmin.' });
         }
-        
+
 
         // Permission denied if Deleter is a Superadmin and Deletee is also a Superadmin, unless the Deleter granted Superadmin status to the Deletee.
+        // Fetch who assigned the SuperAdmin role
+        const assignedByResult = await pool.query(
+            `SELECT assigned_by_user_id
+                 FROM user_roles
+                 INNER JOIN roles ON user_roles.role_id = roles.role_id
+                 WHERE user_roles.user_id = $1 AND roles.role_name = 'SuperAdmin'`,
+            [userId]
+        );
 
+        const assignedByUser = assignedByResult.rows[0]?.assigned_by_user_id;
+
+        // Allow only the user who assigned the SuperAdmin role to delete the account of another SuperAdmin.
+        if (assignedByUser !== loggedInUser) {
+            return res.status(403).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
+        }
 
 
         // Perform the hard delete (delete user from the database)
