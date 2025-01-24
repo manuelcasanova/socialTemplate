@@ -72,7 +72,7 @@ Modifying their username, email, and password.
 Uploading or updating their profile picture.
 Deleting their account entirely.
 
-  *** Deleting an account ***
+  *** Deleting an account - Soft Deletion (User) ***
 
 Users can delete their accounts, but the process involves a soft deletion. When an account is deleted, its status is set to inactive, the email is modified to inactive-TIMESTAMP-email@email.com and the username is modified to inactive-TIMESTAMP-username. If the user attempts to sign up again with the same email address, they will see a prompt offering two options:
 
@@ -81,6 +81,12 @@ Restore the Previous Account: This will reactivate their old account (including 
 Create a New Account: This will create a completely new account with a fresh ID and no connection to the previous records.
 
 Currently, Admins and SuperAdmins cannot delete user accounts. However, they can revoke the "User_subscribed" role, which limits the user’s access to public pages only.
+
+*** Deleting an account – "Hard" Deletion (Anonymized, Not Fully Removed) by Administrator ***
+
+Administrators, including SuperAdmins, may need to perform a hard deletion of an account, either upon request from the user or as part of compliance with privacy laws. In certain jurisdictions, laws may require the app to offer users the ability to delete their accounts.
+
+While we comply with these privacy regulations, we may still need to retain logs for record-keeping and auditing purposes. To ensure compliance, these logs will be anonymized, with personal information such as names and emails replaced with non-identifiable data.
 
 *** Scheduled Subscription Updates ***
 
