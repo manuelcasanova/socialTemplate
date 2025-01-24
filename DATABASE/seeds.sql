@@ -17,13 +17,18 @@ INSERT INTO users (username, email, password, is_verified, is_selected, is_activ
   ('Moderator', 'moderator@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'moderator_pic.jpg', 'Moderator Town'),
   ('User1', 'user1@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, false, true, 'user1_pic.jpg', 'User City'),
   ('User2', 'user2@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, false, true, 'user2_pic.jpg', 'Userville'),
-  ('User3', 'user3@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, false, true, 'user3_pic.jpg', 'Userplace'),
-  ('InactiveUser', 'inactiveuser@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, false, false, 'inactive_pic.jpg', 'Inactiveland');
+  ('User3', 'user3@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, false, true, 'user3_pic.jpg', 'Userplace');
+  
 
 
 INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
   (1, 1, 1),
-  (1, 5, 1);  
+  (1, 5, 1),
+  (2, 4, 1),
+  (3, 3, 1),
+  (4, 1, 1),
+  (5, 1, 1),
+  (6, 1, 1);  
 
 
 -- For testing expired subscription:

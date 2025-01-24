@@ -128,12 +128,13 @@ router.route('/softdelete/:userId')
     async (req, res, next) => {
       try {
         const rolesList = await fetchRoles();  
-        verifyRoles(...rolesList)(req, res, next); 
+        verifyRoles('Admin', 'SuperAdmin')(req, res, next); 
       } catch (err) {
         next(err);  
       }
     },
-    usersController.hardDeleteUser // Controller function to handle user deletion
+    // usersController.hardDeleteUser
+    usersController.adminVersionSoftDeleteUser 
   );
 
 

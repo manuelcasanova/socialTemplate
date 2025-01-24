@@ -241,7 +241,7 @@ const softDeleteUser = async (req, res) => {
     try {
 
         if (userId === "1") {
-            return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.'});
+            return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
         }
 
         // Step 1: Fetch the current user's email, username
@@ -393,17 +393,87 @@ const hardDeleteUser = async (req, res) => {
 
 
 const adminVersionSoftDeleteUser = async (req, res) => {
+    const { userId } = req.params; // Extract user_id from request parameters
+
     try {
 
-        //UDPATE:
-        // username to: "Deleted User"
-        // email adress to: "ADMIN-DELETED-email with first letter ***** last letter @domain.com-Timestamp"
+        if (userId === "1") {
+            return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
+        }
+
+        // Step 1: Fetch the current user's email, username
+        const userResult = await pool.query(
+            'SELECT email, username FROM users WHERE user_id = $1',
+            [userId]
+        );
+
+        if (userResult.rows.length === 0) {
+            // If no user found, return 404
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Get the current email, username
+        const currentEmail = userResult.rows[0].email;
+        const currentUsername = userResult.rows[0].username;
+
+        const timestamp = Date.now();
+
+        // Create the new email
+        const [localPart, domain] = currentEmail.split('@');
+        const firstLetter = localPart.charAt(0);
+        const lastLetter = localPart.charAt(localPart.length - 1);
+        const maskedLocalPart = firstLetter + '*'.repeat(localPart.length - 2) + lastLetter;
+        const updatedEmail = `deleted-${timestamp}-${maskedLocalPart}@${domain}`;
+
+        const updatedUsername = `Deleted User`;
+
+        // Step 2: Update the user's status to inactive (set is_active to false)
+        // and change the email
+        const updateResult = await pool.query(
+            'UPDATE users SET is_active = false, is_verified = false, email = $1, username = $2 WHERE user_id = $3 RETURNING *',
+            [updatedEmail, updatedUsername, userId]
+        );
+
+        if (updateResult.rows.length === 0) {
+            // If no rows were updated, return 404
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Step 2: Delete the user's profile picture file (if it exists)
+        const profilePicturePath = path.join(__dirname, '..', 'media', 'profile_pictures', userId, 'profilePicture.jpg');
+
+        if (fs.existsSync(profilePicturePath)) {
+            fs.unlink(profilePicturePath, (err) => {
+                if (err) {
+                    console.error('Error deleting profile picture:', err);
+                } else {
+                    // console.log('Profile picture deleted successfully');
+                }
+            });
+        }
+
+        // Step 3: Delete the user's folder using fs.rm (to avoid deprecation warning)
+        const userFolderPath = path.join(__dirname, '..', 'media', 'profile_pictures', userId);
+
+        // Use fs.rm() instead of fs.rmdir() to handle folder deletion correctly
+        fs.rm(userFolderPath, { recursive: true, force: true }, (err) => {
+            if (err) {
+                console.error('Error deleting user folder:', err);
+            } else {
+                // console.log('User folder deleted successfully');
+            }
+        });
+
+        // Step 4: Send a success response
+        res.status(200).json({ success: true, message: 'User successfully deleted, and associated files removed', user: updateResult.rows[0] });
 
     } catch (error) {
-        console.error('Error during user hard deletion:', error);
-        res.status(500).json({ error: 'An error occurred while attempting to delete the user.' });
+        console.error('Error deleting user:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
+
+
 
 // Function to upload a profile picture
 const uploadProfilePicture = async (req, res) => {
@@ -864,5 +934,6 @@ module.exports = {
     updateRoles,
     subscribeUser,
     getSubscriptionStatus,
-    hardDeleteUser
+    // hardDeleteUser,
+    adminVersionSoftDeleteUser
 };
