@@ -339,6 +339,7 @@ const hardDeleteUser = async (req, res) => {
             'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
             [loggedInUser]
         );
+
         const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
 
         // console.log("userCurrentRoles", userCurrentRoles)
@@ -371,33 +372,28 @@ const hardDeleteUser = async (req, res) => {
 
         const assignedByUser = assignedByResult.rows[0]?.assigned_by_user_id;
 
-<<<<<<< Updated upstream
-        // Allow only the user who assigned the SuperAdmin role to delete the account of another SuperAdmin. The SuperAdmin with userId === 1 can as well. This ensures there is always someone with the ability to do so.
-        if (assignedByUser !== loggedInUser && loggedInUser !== 1
-        ) {
-            return res.status(403).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
-=======
+
         // Allow only the user who assigned the SuperAdmin role to delete the account of another SuperAdmin.
         if (userToDeleteRoleNames.includes('SuperAdmin') && userCurrentRoles.includes('SuperAdmin')) {
-            if (assignedByUser !== loggedInUser) {
+            if (assignedByUser !== loggedInUser && loggedInUser !== 1
+            ) {
                 return res.status(403).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
             }
->>>>>>> Stashed changes
+
+            // Perform the hard delete (delete user from the database)
+            await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
+
+            // console.log(`User with ID ${userId} successfully hard deleted.`);
+
+            // Send a success response
+            res.status(200).json({ message: `User ${userId} successfully hard deleted.` });
         }
 
-        // Perform the hard delete (delete user from the database)
-        await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
-
-        // console.log(`User with ID ${userId} successfully hard deleted.`);
-
-        // Send a success response
-        res.status(200).json({ message: `User ${userId} successfully hard deleted.` });
     } catch (error) {
         console.error('Error during user hard deletion:', error);
         res.status(500).json({ error: 'An error occurred while attempting to delete the user.' });
     }
-};
-
+}
 
 const adminVersionSoftDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
