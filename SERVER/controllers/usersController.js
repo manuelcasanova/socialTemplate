@@ -371,12 +371,19 @@ const hardDeleteUser = async (req, res) => {
 
         const assignedByUser = assignedByResult.rows[0]?.assigned_by_user_id;
 
+<<<<<<< Updated upstream
         // Allow only the user who assigned the SuperAdmin role to delete the account of another SuperAdmin. The SuperAdmin with userId === 1 can as well. This ensures there is always someone with the ability to do so.
         if (assignedByUser !== loggedInUser && loggedInUser !== 1
         ) {
             return res.status(403).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
+=======
+        // Allow only the user who assigned the SuperAdmin role to delete the account of another SuperAdmin.
+        if (userToDeleteRoleNames.includes('SuperAdmin') && userCurrentRoles.includes('SuperAdmin')) {
+            if (assignedByUser !== loggedInUser) {
+                return res.status(403).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
+            }
+>>>>>>> Stashed changes
         }
-
 
         // Perform the hard delete (delete user from the database)
         await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
