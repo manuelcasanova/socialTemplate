@@ -426,7 +426,12 @@ const adminVersionSoftDeleteUser = async (req, res) => {
         const firstLetter = localPart.charAt(0);
         const lastLetter = localPart.charAt(localPart.length - 1);
         const maskedLocalPart = firstLetter + '*'.repeat(localPart.length - 2) + lastLetter;
-        const updatedEmail = `deleted-${timestamp}-${maskedLocalPart}@${domain}`;
+        // const updatedEmail = `deleted-${timestamp}-${maskedLocalPart}@${domain}`;
+
+        const updatedEmail = currentEmail.startsWith('deleted-')
+            ? currentEmail
+            : `deleted-${timestamp}-${maskedLocalPart}@${domain}`;
+
 
         const updatedUsername = `Deleted User`;
 
