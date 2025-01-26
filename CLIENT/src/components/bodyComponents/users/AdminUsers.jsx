@@ -140,7 +140,9 @@ export default function AdminUsers({ isNavOpen }) {
               expandedUserId === null || expandedUserId === user.user_id ? (
                 <div className="user-row" key={user.user_id}>
                   <div className="user-info">
-                    {expandedUserId !== user.user_id && <p>{`${user.username} `}</p>}
+                    {expandedUserId !== user.user_id && <p>
+  {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+</p>}
                     <button onClick={() => handleViewMore(user.user_id)}
                       className={expandedUserId === user.user_id ? "user-info-expanded" : ""}
                     >
@@ -154,7 +156,8 @@ export default function AdminUsers({ isNavOpen }) {
                       <div className="admin-profile-image-container">
                         <img
                           src={`http://localhost:3500/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-                          alt={`${user.username}'s profile image`}
+                          alt={user.username.startsWith('inactive') ? 'Inactive User profile image' : `${user.username}'s profile image`}
+
                           className="admin-profile-image"
                           onError={(e) => {
                             e.target.style.display = "none";  // Hide broken image
@@ -169,7 +172,9 @@ export default function AdminUsers({ isNavOpen }) {
                           style={{ display: 'none' }}  // Initially hidden
                         />
                       </div>
-                      <p><strong>Username:</strong> {user.username}</p>
+                      <p>
+  <strong>Username:</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+</p>
                       <p><strong>E-mail:</strong> {user.email}</p>
                       <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
                       <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>

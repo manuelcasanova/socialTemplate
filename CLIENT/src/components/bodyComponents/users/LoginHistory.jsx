@@ -69,7 +69,7 @@ export default function LoginHistory({ isNavOpen }) {
                 {loginHistory.map((login) => (
                   <tr key={`${login.login_time}-${login.user_id}`}>
                     <td>{login.user_id}</td>
-                    <td>{login.username}</td>
+                    <td>     {login.username.startsWith('inactive') ? 'Inactive User' : login.username}</td>
                     <td>{login.email}</td>
                     <td>{new Date(login.login_time).toLocaleString('en-GB', {
                       day: '2-digit',
@@ -91,7 +91,7 @@ export default function LoginHistory({ isNavOpen }) {
           <p>No login history found.</p>
         )}
       </div>
-     
+
     </div>
   )
 }

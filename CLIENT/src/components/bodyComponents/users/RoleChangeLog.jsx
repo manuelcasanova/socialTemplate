@@ -83,7 +83,10 @@ export default function RoleChangeLog({ isNavOpen }) {
               <tbody>
                 {logs.map((log) => (
                   <tr key={log.id}>
-                    <td>{getUserNameById(log.modifier_id)} (Id: {log.modifier_id})</td>
+                    <td> {getUserNameById(log.modifier_id).startsWith('inactive')
+                      ? 'Inactive User '
+                      : `${getUserNameById(log.modifier_id)} `}
+                      (Id: {log.modifier_id})</td>
                     <td>{log.action_type}</td>
                     <td>{log.role}</td>
                     <td>{getUserNameById(log.recipient_id)} (Id: {log.recipient_id})</td>
