@@ -219,8 +219,10 @@ export default function AdminUsers({ isNavOpen }) {
                         <p>No login history available</p>
                       )}
 
+
+
                       {
-                        !showConfirmDelete && (
+                        !showConfirmDelete && !user.email.startsWith('deleted-') && (
                           <div className="delete-user">
                             <button
                               className="button-red"
@@ -231,7 +233,7 @@ export default function AdminUsers({ isNavOpen }) {
                       }
 
                       {
-                        showConfirmDelete && (
+                        showConfirmDelete && !user.email.startsWith('deleted-') && (               
                           <div className="delete-confirmation">
                             <p>Are you sure you want to delete this user? This action is permanent and cannot be undone.</p>
                             <button className="button-white" onClick={handleShowDelete}>x</button>
