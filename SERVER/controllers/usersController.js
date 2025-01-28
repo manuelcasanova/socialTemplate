@@ -241,7 +241,7 @@ const softDeleteUser = async (req, res) => {
     try {
 
         if (userId === "1") {
-            return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
+            return res.status(400).json({ error: 'This account cannot be deleted, as it ensures at least one SuperAdmin remains.' });
         }
 
         // Step 1: Fetch the current user's email, username

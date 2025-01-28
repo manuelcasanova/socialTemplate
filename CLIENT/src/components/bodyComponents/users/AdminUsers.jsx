@@ -21,6 +21,7 @@ export default function AdminUsers({ isNavOpen }) {
   const [isLoading, setIsLoading] = useState(false);
   const { auth } = useAuth();
   const loggedInUser = auth.userId
+  const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -141,8 +142,8 @@ export default function AdminUsers({ isNavOpen }) {
                 <div className="user-row" key={user.user_id}>
                   <div className="user-info">
                     {expandedUserId !== user.user_id && <p>
-  {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
-</p>}
+                      {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                    </p>}
                     <button onClick={() => handleViewMore(user.user_id)}
                       className={expandedUserId === user.user_id ? "user-info-expanded" : ""}
                     >
@@ -155,7 +156,7 @@ export default function AdminUsers({ isNavOpen }) {
                     <div className="user-details">
                       <div className="admin-profile-image-container">
                         <img
-                          src={`http://localhost:3500/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                          src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                           alt={user.username.startsWith('inactive') ? 'Inactive User profile image' : `${user.username}'s profile image`}
 
                           className="admin-profile-image"
@@ -173,12 +174,11 @@ export default function AdminUsers({ isNavOpen }) {
                         />
                       </div>
                       <p>
-  <strong>Username:</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
-</p>
+                        <strong>Username:</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                      </p>
                       <p><strong>E-mail:</strong> {user.email}</p>
-                      <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
                       <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
-                      <p><strong>Location:</strong> {user.location}</p>
+                      <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
                       <h4>Roles</h4>
                       <ul>
                         {roles.map((role, index) => (
@@ -233,7 +233,7 @@ export default function AdminUsers({ isNavOpen }) {
                       }
 
                       {
-                        showConfirmDelete && !user.email.startsWith('deleted-') && (               
+                        showConfirmDelete && !user.email.startsWith('deleted-') && (
                           <div className="delete-confirmation">
                             <p>Are you sure you want to delete this user? This action is permanent and cannot be undone.</p>
                             <button className="button-white" onClick={handleShowDelete}>x</button>

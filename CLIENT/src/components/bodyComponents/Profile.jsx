@@ -11,10 +11,13 @@ import useUserApi from "../../util/userApi";
 import { axiosPrivate } from "../../api/axios";
 import useLogout from "../../hooks/useLogout"
 
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 const profilePictureExists = async (userId) => {
 
-  const imageUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
+
+
+  const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
 
   try {
     const response = await fetch(imageUrl, { method: 'HEAD' });
@@ -121,7 +124,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   }, [userId]);
 
 
-  const profilePictureUrl = `http://localhost:3500/media/profile_pictures/${userId}/profilePicture.jpg`;
+  const profilePictureUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
 
   const handlePictureClick = () => {
     if (!isTestSuperAdmin) {
