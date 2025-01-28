@@ -417,20 +417,22 @@ const adminVersionSoftDeleteUser = async (req, res) => {
 
         // Get the current email, username
         const currentEmail = userResult.rows[0].email;
-        const currentUsername = userResult.rows[0].username;
 
         const timestamp = Date.now();
 
         // Create the new email
+        // Extract the email components
         const [localPart, domain] = currentEmail.split('@');
-        const firstLetter = localPart.charAt(0);
-        const lastLetter = localPart.charAt(localPart.length - 1);
-        const maskedLocalPart = firstLetter + '*'.repeat(localPart.length - 2) + lastLetter;
-        // const updatedEmail = `deleted-${timestamp}-${maskedLocalPart}@${domain}`;
 
-        const updatedEmail = currentEmail.startsWith('deleted-')
-            ? currentEmail
-            : `deleted-${timestamp}-${maskedLocalPart}@${domain}`;
+        // Check if the email starts with 'inactive-' and handle it
+        const emailPrefix = localPart;
+        const cleanLocalPart = emailPrefix.replace(/^inactive-\d+-/, ''); // Remove 'inactive-<timestamp>-'
+        const firstLetter = cleanLocalPart[0];
+        const lastLetter = cleanLocalPart[cleanLocalPart.length - 1];
+        const maskedLocalPart = firstLetter + '*'.repeat(cleanLocalPart.length - 2) + lastLetter;
+
+        // Construct the updated email
+        const updatedEmail = `deleted-${timestamp}-${maskedLocalPart}@${domain}`;
 
 
         const updatedUsername = `Deleted User`;
