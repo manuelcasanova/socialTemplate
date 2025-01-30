@@ -80,8 +80,6 @@ Restore the Previous Account: This will reactivate their old account (including 
 
 Create a New Account: This will create a completely new account with a fresh ID and no connection to the previous records.
 
-Currently, Admins and SuperAdmins cannot delete user accounts. However, they can revoke the "User_subscribed" role, which limits the user’s access to public pages only.
-
 *** Deleting an account – "Hard" Deletion (Anonymized, Not Fully Removed) by Administrator ***
 
 Administrators, including SuperAdmins, may need to perform a hard deletion of an account, either upon request from the user or as part of compliance with privacy laws. In certain jurisdictions, laws may require the app to offer users the ability to delete their accounts.
