@@ -550,6 +550,10 @@ const updateRoles = async (req, res) => {
             [loggedInUser]
         );
 
+        if (userId === 1) {
+            return res.status(404).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
+        }
+
         // Step 4: Get the users current roles 
 
         const userCurrentRolesResult = await pool.query(
