@@ -11,8 +11,9 @@ const corsOptions = {
         }
     },
     optionsSuccessStatus: 204,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods
-    allowedHeaders: 'Content-Type, Authorization' // Specify allowed headers
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
+    allowedHeaders: 'Content-Type, Authorization, X-CSRF-Token',  
+    credentials: true, 
 };
 
 module.exports = corsOptions;
