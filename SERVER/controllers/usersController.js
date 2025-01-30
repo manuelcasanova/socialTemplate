@@ -550,10 +550,6 @@ const updateRoles = async (req, res) => {
             [loggedInUser]
         );
 
-        if (userId === 1) {
-            return res.status(404).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
-        }
-
         // Step 4: Get the users current roles 
 
         const userCurrentRolesResult = await pool.query(
@@ -648,6 +644,10 @@ const updateRoles = async (req, res) => {
                 if (rolesToAdd.includes('SuperAdmin') || rolesToRemove.includes('SuperAdmin')) {
                     return res.status(403).json({ error: 'You cannot revoke your own SuperAdmin role' });
                 }
+            }
+
+            if (userId === 1) {
+                return res.status(404).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
             }
 
             // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.
