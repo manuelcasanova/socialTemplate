@@ -28,6 +28,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
   const [showSections, setShowSections] = useState({
     admin: false,
     profile: false,
+    social: false
   });
 
 
@@ -78,6 +79,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
       // Close all other sections, only toggle the clicked one
       admin: section === 'admin' ? !prevState.admin : false,
       profile: section === 'profile' ? !prevState.profile : false,
+      social: section === 'social' ? !prevState.social : false,
     }));
   };
 
@@ -99,33 +101,63 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
       {auth.roles && auth.roles.includes('Moderator') &&
-      <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
-}
+        <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
+      }
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
-
-      {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) && 
+    
       <div className='nav-item-with-dropdown'>
-        <div className='nav-item' onClick={() => toggleSection('admin')}>Admin
-          {showSections.admin ? '▲' : '▼'}
+          <div className='nav-item' onClick={() => toggleSection('social')}>Social
+            {showSections.social ? '▲' : '▼'}
+          </div>
+          {showSections.social && (
+            <>
+              <div className='subitem' onClick={() => handleNavigate('/social/users')}>All users</div>
+
+                <div className="subitem" onClick={() => handleNavigate('/social/following')}>
+                  Following
+                </div>
+  
+
+                <div className="subitem" onClick={() => handleNavigate('/social/followers')}>
+                  Followers
+                </div>
+
+                <div className="subitem" onClick={() => handleNavigate('/social/pending')}>
+                  Pending Requests
+                </div>
+
+                <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
+                  Muted
+                </div>
+
+            </>
+          )}
+
         </div>
-        {showSections.admin && (
-          <>
-            <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
-            {auth.roles && auth.roles.includes('SuperAdmin') && (
-              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
-                Role change log
-              </div>
-            )}
-            {auth.roles && auth.roles.includes('SuperAdmin') && (
-              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
-                Login history
-              </div>
-            )}
-          </>
-        )}
-      
-      </div>
-}
+
+      {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) &&
+        <div className='nav-item-with-dropdown'>
+          <div className='nav-item' onClick={() => toggleSection('admin')}>Admin
+            {showSections.admin ? '▲' : '▼'}
+          </div>
+          {showSections.admin && (
+            <>
+              <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
+              {auth.roles && auth.roles.includes('SuperAdmin') && (
+                <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
+                  Role change log
+                </div>
+              )}
+              {auth.roles && auth.roles.includes('SuperAdmin') && (
+                <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
+                  Login history
+                </div>
+              )}
+            </>
+          )}
+
+        </div>
+      }
 
       {!isLargeScreen && Object.keys(auth).length > 0 && (
         <div className="nav-item" onClick={signOut}>
