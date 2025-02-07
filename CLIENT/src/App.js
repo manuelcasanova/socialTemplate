@@ -27,6 +27,12 @@ import NotFound from './components/bodyComponents/NotFound';
 import Footer from './components/mainComponents/footer';
 import TEMPLATE from './components/bodyComponents/TEMPLATE-BODY';
 
+import SocialAllUsers from './components/bodyComponents/socialComponents/SocialAllUsers';
+import SocialFollowers from './components/bodyComponents/socialComponents/SocialFollowers';
+import SocialFollowing from './components/bodyComponents/socialComponents/SocialFollowing';
+import SocialMuted from './components/bodyComponents/socialComponents/SocialMuted';
+import SocialPendingRequests from './components/bodyComponents/socialComponents/SocialPendingRequests';
+
 
 function App() {
 
@@ -84,6 +90,21 @@ function App() {
             <Route path="/admin" element={<Admin isNavOpen={isNavOpen} />} />
           </Route>
 
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="social/following" element={<SocialFollowing isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="social/followers" element={<SocialFollowers isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="social/muted" element={<SocialMuted isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+          </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route path="profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />} />

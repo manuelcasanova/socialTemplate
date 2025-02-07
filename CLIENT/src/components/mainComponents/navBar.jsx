@@ -111,7 +111,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
           </div>
           {showSections.social && (
             <>
-              <div className='subitem' onClick={() => handleNavigate('/social/users')}>All users</div>
+              <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>All users</div>
 
                 <div className="subitem" onClick={() => handleNavigate('/social/following')}>
                   Following
