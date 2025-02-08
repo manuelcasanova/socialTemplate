@@ -50,16 +50,20 @@ export default function SocialAllUsers({ isNavOpen }) {
             {users.length > 0 ? (
               users.map((user) =>
 
-                <div className="user-row" key={user.user_id}>
+                <div className="user-row-social" key={user.user_id}>
                   <div className="user-info">
                     <p>
                       {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
                     </p>
-                    <button>Follow</button>
-                    <button>Mute</button>
 
                   </div>
-
+                  <div className="user-info-buttons">
+                    <button>Cancel Request
+                      {/* Follow/Unfollow/Follow Back */}
+                      </button>
+                    <button>Approve request</button>
+                    <button>Mute</button>
+                  </div>
 
                 </div>
 
