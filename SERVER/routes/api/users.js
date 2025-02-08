@@ -23,7 +23,7 @@ const upload = multer({
 router.route('/upload-profile-picture/:userId')
   .post(upload.single('profilePicture'), usersController.uploadProfilePicture);
 
-  router.route('/')
+router.route('/')
   .get(
     async (req, res, next) => {
       try {
@@ -43,7 +43,7 @@ router.route('/upload-profile-picture/:userId')
         next(err);
       }
     },
-    usersController.getAllUsers 
+    usersController.getAllUsers
   );
 
 router.route('/:user_id')
@@ -63,13 +63,13 @@ router.route('/:user_id')
   );
 
 
-  router.route('/subscriptions/status/:user_id')
+router.route('/subscriptions/status/:user_id')
   .get(
     async (req, res, next) => {
       try {
         // Log the request path and parameters
         // console.log("Received request for subscription status:", req.params);  // Logs { user_id: 'someUserId' }
-        
+
         // Fetch roles and verify them
         const rolesList = await fetchRoles();
         // console.log("Roles List:", rolesList);  // Log the rolesList to see what roles are being fetched
@@ -122,19 +122,19 @@ router.route('/softdelete/:userId')
   );
 
 
-  //Hard delete user account
-  router.route('/harddelete/:userId')
+//Hard delete user account
+router.route('/harddelete/:userId')
   .delete(
     async (req, res, next) => {
       try {
-        const rolesList = await fetchRoles();  
-        verifyRoles('Admin', 'SuperAdmin')(req, res, next); 
+        const rolesList = await fetchRoles();
+        verifyRoles('Admin', 'SuperAdmin')(req, res, next);
       } catch (err) {
-        next(err);  
+        next(err);
       }
     },
     // usersController.hardDeleteUser
-    usersController.adminVersionSoftDeleteUser 
+    usersController.adminVersionSoftDeleteUser
   );
 
 
@@ -152,17 +152,17 @@ router.route('/:user_id/roles')
     usersController.updateRoles // This will call your controller to update roles
   );
 
-  router.route('/subscribe')
+router.route('/subscribe')
   .post(
-      async (req, res, next) => {
-        try {
-          // Fetch roles and verify them
-          const rolesList = await fetchRoles();
-          verifyRoles(...rolesList)(req, res, next);
-        } catch (err) {
-          next(err); 
-        }
-      },
+    async (req, res, next) => {
+      try {
+        // Fetch roles and verify them
+        const rolesList = await fetchRoles();
+        verifyRoles(...rolesList)(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
     usersController.subscribeUser
   );
 
