@@ -46,6 +46,11 @@ width: 90%;
   box-sizing: border-box; /* Prevent overflow */
 }
 
+.user-row-social img {
+  max-height: 3em;
+  margin-right: 2em;
+}
+
 .user-info {
   position: relative;
   display: flex;

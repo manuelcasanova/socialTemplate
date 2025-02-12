@@ -8,6 +8,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function SocialAllUsers({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
@@ -55,6 +56,10 @@ export default function SocialAllUsers({ isNavOpen }) {
 
                 <div className="user-row-social" key={user.user_id}>
                   <div className="user-info">
+                    <img
+                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                      alt="Profile"
+                    />
                     <p>
                       {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
                     </p>
@@ -63,7 +68,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                   <div className="user-info-buttons">
                     <button>Cancel Request
                       {/* Follow/Unfollow/Follow Back */}
-                      </button>
+                    </button>
                     <button>Approve request</button>
                     <button><FontAwesomeIcon icon={faBellSlash} /></button>
                   </div>

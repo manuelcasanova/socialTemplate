@@ -8,7 +8,7 @@ const getAllUsers = async (req, res) => {
 
         // Start the base query
         let query = `
-            SELECT u.username 
+            SELECT u.user_id, u.username 
             FROM users u
             WHERE u.is_active = true 
         `;
@@ -22,7 +22,7 @@ const getAllUsers = async (req, res) => {
 
         // Add the GROUP BY and execute the query
         query += `
-            GROUP BY u.username
+            GROUP BY u.username, u.user_id
         `;
 
         // Execute the query
