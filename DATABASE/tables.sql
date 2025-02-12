@@ -1,6 +1,8 @@
 
 DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS followers;
+DROP TABLE IF EXISTS muted;
 DROP TABLE IF EXISTS login_history CASCADE;
 DROP TABLE IF EXISTS user_roles CASCADE;
 DROP TABLE IF EXISTS role_change_logs;
@@ -24,6 +26,24 @@ CREATE TABLE users (
   refresh_token VARCHAR(255),
   profile_picture VARCHAR(255),
   location VARCHAR(255)
+);
+
+CREATE TABLE followers (
+  follower_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+  followee_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+  status VARCHAR(20),
+  lastmodification timestamp,
+  newrequest boolean DEFAULT false,
+  PRIMARY KEY (follower_id, followee_id),
+  CHECK (follower_id <> followee_id) -- Users cannot follow themselves
+);
+
+CREATE TABLE muted (
+  muter INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+  mutee INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+  mute boolean DEFAULT false,
+  PRIMARY KEY (muter, mutee),
+  CHECK (muter <> mutee) -- Users cannot mute themselves
 );
 
 CREATE TABLE login_history (
