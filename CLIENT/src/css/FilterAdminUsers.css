@@ -43,7 +43,7 @@
   border-radius: 4px;
   box-sizing: border-box;
   height: 40px;
-  max-width: 33%;
+  /* max-width: 33%; */ /* Not ideal for social username search. Check if it breaks something else*/
   background-color: white;
 }
 

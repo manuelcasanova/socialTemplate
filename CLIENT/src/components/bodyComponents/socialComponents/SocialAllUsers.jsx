@@ -5,6 +5,9 @@ import '../../../css/AdminUsers.css';
 // import filterUsers
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
+import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 export default function SocialAllUsers({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
@@ -62,7 +65,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                       {/* Follow/Unfollow/Follow Back */}
                       </button>
                     <button>Approve request</button>
-                    <button>Mute</button>
+                    <button><FontAwesomeIcon icon={faBellSlash} /></button>
                   </div>
 
                 </div>

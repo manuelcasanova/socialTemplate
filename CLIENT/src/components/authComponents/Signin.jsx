@@ -9,9 +9,10 @@ import '../../css/Signup.css'
 
 const SIGNIN_URL = '/auth';
 // const DEFAULT_EMAIL = '@example.com';
-const DEFAULT_EMAIL = '';
-// const DEFAULT_PASSWORD = 'Password1!';  // Hardcoded default password for development
-const DEFAULT_PASSWORD = '';
+const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
+// const DEFAULT_EMAIL = '';
+const DEFAULT_PASSWORD = 'Password1!';  // Hardcoded default password for development
+// const DEFAULT_PASSWORD = '';
 
 const Signin = ({ isNavOpen, screenWidth }) => {
 
