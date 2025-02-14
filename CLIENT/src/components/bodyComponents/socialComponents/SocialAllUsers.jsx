@@ -29,6 +29,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [imageExistsMap, setImageExistsMap] = useState({});
+  const [showLargePicture, setShowLargePicture] = useState(null)
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -56,20 +57,20 @@ export default function SocialAllUsers({ isNavOpen }) {
     fetchUsers();
   }, [axiosPrivate, filters]);
 
-    // Check if profile picture exists for each user and store the result
-    useEffect(() => {
-      const checkImages = async () => {
-        const result = {};
-        for (const user of users) {
-          result[user.user_id] = await profilePictureExists(user.user_id);
-        }
-        setImageExistsMap(result);
-      };
-  
-      if (users.length > 0) {
-        checkImages();
+  // Check if profile picture exists for each user and store the result
+  useEffect(() => {
+    const checkImages = async () => {
+      const result = {};
+      for (const user of users) {
+        result[user.user_id] = await profilePictureExists(user.user_id);
       }
-    }, [users]);
+      setImageExistsMap(result);
+    };
+
+    if (users.length > 0) {
+      checkImages();
+    }
+  }, [users]);
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
@@ -84,16 +85,36 @@ export default function SocialAllUsers({ isNavOpen }) {
 
                 <div className="user-row-social" key={user.user_id}>
                   <div className="user-info">
-                  {imageExistsMap[user.user_id] ? (
+                    {imageExistsMap[user.user_id] ? (
                       <img
+                        onClick={() => setShowLargePicture(user.user_id)}
                         src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                         alt="Profile"
                       />
+
                     ) : (
-                      
-                      <FontAwesomeIcon icon={faUser} size="3x" style={{marginRight: '20px'}}  />
-                    
+
+                      <FontAwesomeIcon onClick={() => setShowLargePicture(user.user_id)} icon={faUser} size="3x" style={{ marginRight: '20px' }} />
+
                     )}
+
+
+
+                    {showLargePicture === user.user_id && <div
+                      className='large-picture'
+                      onClick={() => setShowLargePicture(null)}
+                    >
+                      <img
+                        className='users-all-picture-large'
+                        onClick={() => setShowLargePicture(null)}
+                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                      onError={(e) => {
+                        e.target.onerror = null; // Prevent infinite loop in case of repeated error
+                        e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                      }}
+                      />
+                    </div>}
+
                     <p>
                       {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
                     </p>
