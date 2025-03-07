@@ -4,6 +4,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import '../../../css/AdminUsers.css';
 // import filterUsers
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+import useAuth from "../../../hooks/useAuth";
 
 import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,6 +24,7 @@ const profilePictureExists = async (userId) => {
 };
 
 export default function SocialAllUsers({ isNavOpen }) {
+  const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
@@ -30,6 +32,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [isLoading, setIsLoading] = useState(false);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
+  const loggedInUser = auth.userId
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -120,13 +123,17 @@ export default function SocialAllUsers({ isNavOpen }) {
                     </p>
 
                   </div>
+{loggedInUser !== user.user_id && 
+
                   <div className="user-info-buttons">
-                    <button>Cancel Request
-                      {/* Follow/Unfollow/Follow Back */}
+                    <button>Follow
+                      {/* Unfollow/Follow Back/Cancel Request */}
                     </button>
                     <button>Approve request</button>
                     <button><FontAwesomeIcon icon={faBellSlash} /></button>
                   </div>
+
+}
 
                 </div>
 
