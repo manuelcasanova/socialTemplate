@@ -4,6 +4,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import '../../../css/AdminUsers.css';
 // import filterUsers
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+import FollowUserButton from "./socialButtons/FollowUserButton";
 import useAuth from "../../../hooks/useAuth";
 
 import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -33,6 +34,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
   const loggedInUser = auth.userId
+  const [followers, setFollowers] = useState([])
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -125,15 +127,28 @@ export default function SocialAllUsers({ isNavOpen }) {
                   </div>
 {loggedInUser !== user.user_id && 
 
-                  <div className="user-info-buttons">
-                    <button>Follow
-                      {/* Unfollow/Follow Back/Cancel Request */}
-                    </button>
-                    <button>Approve request</button>
-                    <button><FontAwesomeIcon icon={faBellSlash} /></button>
-                  </div>
+                  // <div className="user-info-buttons">
+                  //   <button>Follow
+                  //     {/* Unfollow/Follow Back/Cancel Request */}
+                  //   </button>
+                  //   <button>Approve request</button>
+                  //   <button><FontAwesomeIcon icon={faBellSlash} /></button>
+                  // </div>
 
-}
+
+<FollowUserButton 
+  
+  followeeId={user.user_id} 
+  followerId={loggedInUser} 
+  followers={followers} 
+  setFollowers={setFollowers} 
+  userLoggedInObject={auth}
+  /> 
+  
+  }
+
+
+
 
                 </div>
 
