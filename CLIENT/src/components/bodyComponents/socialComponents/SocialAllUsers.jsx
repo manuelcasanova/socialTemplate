@@ -28,16 +28,23 @@ const profilePictureExists = async (userId) => {
 export default function SocialAllUsers({ isNavOpen }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [filters, setFilters] = useState({});
+  const loggedInUser = auth.userId
+  const [users, setUsers] = useState([]);
+  const [followers, setFollowers] = useState([])
+  const usersExceptMe = users.filter(user => user.user_id !== loggedInUser && user.is_active);
+  const [mutedUsers, setMutedUsers] = useState([]);
+  const userIDsExceptMe = usersExceptMe.map(user => user.user_id);
+  const allUsersMutedOrMe = userIDsExceptMe.every(userId =>
+    mutedUsers.some(mute => (mute.muter === userId || mute.mutee === userId) && mute.mute)
+  );
+
+  const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
-  const loggedInUser = auth.userId
-  const [followers, setFollowers] = useState([])
-  const [mutedUsers, setMutedUsers] = useState([]);
-  const [hasMutedChanges, setHasMutedChanges] = useState(false);
+
 
   console.log("users", users)
 
@@ -90,9 +97,13 @@ export default function SocialAllUsers({ isNavOpen }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
         <h2>Social - All Users</h2>
+
+
         {isLoading ? (
           <LoadingSpinner />
-        ) :
+        ) : allUsersMutedOrMe ? (
+          <div>No users available or all users are muted.</div>
+        ) : (
           <div className="users-container">
             {users.length > 0 ? (
               users.map((user) =>
@@ -167,7 +178,8 @@ export default function SocialAllUsers({ isNavOpen }) {
               <p>No users found</p>
             )}
           </div>
-        }
+      
+        )}
 
       </div>
     </div>
