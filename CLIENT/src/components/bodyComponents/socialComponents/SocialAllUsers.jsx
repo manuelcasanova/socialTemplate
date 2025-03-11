@@ -5,6 +5,7 @@ import '../../../css/AdminUsers.css';
 // import filterUsers
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import FollowUserButton from "./socialButtons/FollowUserButton";
+import MuteUserButton from "./socialButtons/MuteUserButton";
 import useAuth from "../../../hooks/useAuth";
 
 import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -35,6 +36,10 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [showLargePicture, setShowLargePicture] = useState(null)
   const loggedInUser = auth.userId
   const [followers, setFollowers] = useState([])
+  const [mutedUsers, setMutedUsers] = useState([]);
+  const [hasMutedChanges, setHasMutedChanges] = useState(false);
+
+  console.log("users", users)
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -77,6 +82,10 @@ export default function SocialAllUsers({ isNavOpen }) {
     }
   }, [users]);
 
+  const handleMutedChanges = () => {
+    setHasMutedChanges(prevState => !prevState);
+  };
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
@@ -113,10 +122,10 @@ export default function SocialAllUsers({ isNavOpen }) {
                         className='users-all-picture-large'
                         onClick={() => setShowLargePicture(null)}
                         src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-                      onError={(e) => {
-                        e.target.onerror = null; // Prevent infinite loop in case of repeated error
-                        e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
-                      }}
+                        onError={(e) => {
+                          e.target.onerror = null; // Prevent infinite loop in case of repeated error
+                          e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                        }}
                       />
                     </div>}
 
@@ -125,29 +134,30 @@ export default function SocialAllUsers({ isNavOpen }) {
                     </p>
 
                   </div>
-{loggedInUser !== user.user_id && 
-
-                  // <div className="user-info-buttons">
-                  //   <button>Follow
-                  //     {/* Unfollow/Follow Back/Cancel Request */}
-                  //   </button>
-                  //   <button>Approve request</button>
-                  //   <button><FontAwesomeIcon icon={faBellSlash} /></button>
-                  // </div>
+                  {loggedInUser !== user.user_id &&
 
 
-<FollowUserButton 
-  
-  followeeId={user.user_id} 
-  followerId={loggedInUser} 
-  followers={followers} 
-  setFollowers={setFollowers} 
-  userLoggedInObject={auth}
-  /> 
-  
-  }
+                    <FollowUserButton
+
+                      followeeId={user.user_id}
+                      followerId={loggedInUser}
+                      followers={followers}
+                      setFollowers={setFollowers}
+                      userLoggedInObject={auth}
+                    />
 
 
+
+
+                  }
+
+                  <MuteUserButton
+                    userId={user.user_id}
+                    userLoggedin={loggedInUser}
+                    // isMuted={isMuted} 
+                    setMutedUsers={setMutedUsers}
+                    onMutedChange={handleMutedChanges}
+                  />
 
 
                 </div>

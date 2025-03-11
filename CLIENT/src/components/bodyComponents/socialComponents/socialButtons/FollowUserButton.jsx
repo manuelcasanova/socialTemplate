@@ -157,7 +157,7 @@ const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, use
   }
 
   return (
-    <>
+    <div className="user-info-buttons">
 
 
       {!amFollowingThem && !pendingAcceptMe && !amBeingFollowedByThem && <button onClick={handleFollow}>Follow</button>}
@@ -169,8 +169,9 @@ const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, use
       {pendingAcceptMe && <button onClick={handleCancelRequest}>Cancel request</button>}
 
       {pendingAcceptThem && <button onClick={() => { approveFollower(followeeId, followerId) }}>Approve request</button>}
+      
 
-    </>
+    </div>
 
 
 

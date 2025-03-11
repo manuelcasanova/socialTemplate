@@ -8,7 +8,7 @@ const getAllUsers = async (req, res) => {
 
         // Start the base query
         let query = `
-            SELECT u.user_id, u.username 
+            SELECT u.user_id, u.username, u.is_active
             FROM users u
             WHERE u.is_active = true 
         `;
