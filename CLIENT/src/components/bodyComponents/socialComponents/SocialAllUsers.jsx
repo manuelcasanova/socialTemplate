@@ -1,15 +1,26 @@
 
 import { useState, useEffect } from "react";
+
+//Hooks
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import useAuth from "../../../hooks/useAuth";
+
+//Styling
+
 import '../../../css/AdminUsers.css';
+import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+//Components
 // import filterUsers
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import FollowUserButton from "./socialButtons/FollowUserButton";
 import MuteUserButton from "./socialButtons/MuteUserButton";
-import useAuth from "../../../hooks/useAuth";
 
-import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//Util functions
+import fetchUsers from "./util_functions/FetchUsers";
+import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -46,32 +57,14 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [showLargePicture, setShowLargePicture] = useState(null)
 
 
-  console.log("users", users)
-
   // Reset the error message whenever filters change
   useEffect(() => {
     setError(null); // Clear error when filters change
   }, [filters]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      setIsLoading(true)
-      try {
-        const [usersResponse] = await Promise.all([
-          axiosPrivate.get(`/social/`, { params: filters })
-
-        ]);
-
-        setUsers(usersResponse.data); // Set user data
-      } catch (err) {
-        setError(`Failed to fetch data: ${err.response.data.error}`);
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUsers();
+    fetchUsers(filters, setUsers, setIsLoading, setError)
+    fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
   }, [axiosPrivate, filters]);
 
   // Check if profile picture exists for each user and store the result
@@ -102,7 +95,7 @@ export default function SocialAllUsers({ isNavOpen }) {
         {isLoading ? (
           <LoadingSpinner />
         ) : allUsersMutedOrMe ? (
-          <div>No users available or all users are muted.</div>
+          <p>No users available or all users are muted.</p>
         ) : (
           <div className="users-container">
             {users.length > 0 ? (
