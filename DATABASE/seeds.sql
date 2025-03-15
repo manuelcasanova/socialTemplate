@@ -28,11 +28,6 @@ INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
   (1, 5, 1),
   (2, 5, 2);  
 
-INSERT INTO muted (muter, mutee, mute)
-VALUES
-  (1, 2, true),
-  (2, 1, true);
-
 
 -- For testing expired subscription:
 

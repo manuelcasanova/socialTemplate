@@ -74,10 +74,70 @@ const getMutedUsers = async (req, res) => {
     }
 };
 
-
+// Mute user
+const muteUser = async (req, res, next) => {
+    const { userLoggedin, userId } = req.body;
+  
+    try {
+      // Check if the record already exists in the 'muted' table
+      const existingRecord = await pool.query(
+        'SELECT * FROM muted WHERE muter = $1 AND mutee = $2',
+        [userLoggedin, userId]
+      );
+  
+      if (existingRecord.rows.length === 0) {
+        // If record doesn't exist, insert a new record to mute the user
+        await pool.query(
+          'INSERT INTO muted (muter, mutee, mute) VALUES ($1, $2, true)',
+          [userLoggedin, userId]
+        );
+        return res.status(200).json({ message: 'User muted successfully.' });
+      } else {
+        // If record exists, update the mute status to true (mute the user)
+        await pool.query(
+          'UPDATE muted SET mute = true WHERE muter = $1 AND mutee = $2',
+          [userLoggedin, userId]
+        );
+        return res.status(200).json({ message: 'User muted successfully.' });
+      }
+    } catch (error) {
+      console.error('Error muting user:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+  
+  // Unmute user
+  const unmuteUser = async (req, res, next) => {
+    const { userLoggedin, userId } = req.body;
+  
+    try {
+      // Check if the record already exists in the 'muted' table
+      const existingRecord = await pool.query(
+        'SELECT * FROM muted WHERE muter = $1 AND mutee = $2',
+        [userLoggedin, userId]
+      );
+  
+      if (existingRecord.rows.length === 0) {
+        // If record doesn't exist, send a message indicating that the user is not muted
+        return res.status(400).json({ message: 'User is not muted.' });
+      } else {
+        // If record exists, update the mute status to false (unmute the user)
+        await pool.query(
+          'UPDATE muted SET mute = false WHERE muter = $1 AND mutee = $2',
+          [userLoggedin, userId]
+        );
+        return res.status(200).json({ message: 'User unmuted successfully.' });
+      }
+    } catch (error) {
+      console.error('Error unmuting user:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
 
 
 module.exports = {
     getAllUsers,
-    getMutedUsers
+    getMutedUsers,
+    muteUser,
+    unmuteUser
 };

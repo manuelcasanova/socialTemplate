@@ -65,7 +65,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError)
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
-  }, [axiosPrivate, filters]);
+  }, [axiosPrivate, filters, hasMutedChanges]);
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -98,8 +98,10 @@ export default function SocialAllUsers({ isNavOpen }) {
           <p>No users available or all users are muted.</p>
         ) : (
           <div className="users-container">
-            {users.length > 0 ? (
-              users.map((user) =>
+            {usersExceptMe.length > 0 ? (
+
+
+              usersExceptMe.map((user) =>
 
                 <div className="user-row-social" key={user.user_id}>
                   <div className="user-info">
