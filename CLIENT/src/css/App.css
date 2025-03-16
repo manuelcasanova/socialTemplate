@@ -272,6 +272,45 @@
   opacity: 0.6;
 }
 
+/* Info buttons and messages */
+
+.info-button {
+  margin: 10px; 
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+max-height: 10px;
+max-width: 10px;
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+}
+
+.info-message {
+  padding: 10px;
+  font-style: italic;
+  font-size: smaller;
+  background-color: blue;
+  color: white;
+  margin: 5px;
+  border-radius: 5px;
+}
+
+.info-message-2 {
+  font-style: italic;
+  font-size: smaller;
+  color: black;
+  border-radius: 5px;
+}
+
+.info-button:hover {
+  background-color: navy;
+}
+
 /* Mobile Styles */
 @media (max-width: 580px) {
 

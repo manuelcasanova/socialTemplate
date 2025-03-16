@@ -48,8 +48,6 @@ const getMutedUsers = async (req, res) => {
     try {
         const { userId } = req.query;
 
-
-        console.log("userId", userId)
         // Ensure that userId is provided
         if (!userId) {
             return res.status(400).json({ error: 'userId is required' });

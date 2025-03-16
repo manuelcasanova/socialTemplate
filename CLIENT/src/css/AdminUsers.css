@@ -9,6 +9,12 @@
 
 }
 
+.muted-users-title h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
 
 .admin-users h2 {
  text-align: center;
@@ -20,7 +26,7 @@ width: 90%;
 
   max-width: 500px; /* Ensure it doesn't exceed screen width */
   box-sizing: border-box; /* Ensure padding doesn't push it out */
-  overflow-x: hidden; /* Prevent horizontal overflow */
+  overflow-x: auto; 
 
   margin: auto; /* Vertically and horizontally center child elements */
   /* margin-top: 1em; */
@@ -232,9 +238,9 @@ button:hover {
 }
 
   .user-row-social {
-    flex-direction: column; 
+    flex-direction: row; 
   }
   .user-info-buttons button {
-  margin-left: 0;
+  /* margin-left: 0; */
   }
 }

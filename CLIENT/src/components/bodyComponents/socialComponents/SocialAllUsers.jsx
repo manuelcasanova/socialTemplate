@@ -86,15 +86,22 @@ export default function SocialAllUsers({ isNavOpen }) {
     setHasMutedChanges(prevState => !prevState);
   };
 
+  if (isLoading) {
+    <LoadingSpinner />
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
         <h2>Social - All Users</h2>
 
 
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : allUsersMutedOrMe ? (
+        {allUsersMutedOrMe ? (
           <p>No users available or all users are muted.</p>
         ) : (
           <div className="users-container">
