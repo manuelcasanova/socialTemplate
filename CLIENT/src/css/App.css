@@ -276,7 +276,7 @@
 
 .info-button {
   margin: 10px; 
-  background-color: blue;
+  background-color: var(--color9);
   color: white;
   padding: 10px;
   border: none;
@@ -294,10 +294,11 @@ max-width: 10px;
   padding: 10px;
   font-style: italic;
   font-size: smaller;
-  background-color: blue;
+  background-color: var(--color9);
   color: white;
   margin: 5px;
   border-radius: 5px;
+  text-align: center;
 }
 
 .info-message-2 {
