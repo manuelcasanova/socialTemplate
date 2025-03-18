@@ -20,7 +20,21 @@ INSERT INTO users (username, email, password, is_verified, is_selected, is_activ
 --   ('User2', 'user2@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, false, true, 'user2_pic.jpg', 'Userville'),
 --   ('User3', 'user3@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, false, true, 'user3_pic.jpg', 'Userplace');
   
+INSERT INTO followers (follower_id, followee_id, status, lastmodification, newrequest) VALUES
+  -- Manuel follows Superadministrator (accepted status)
+  -- (2, 1, 'accepted', CURRENT_TIMESTAMP, false);
+  
+  -- Superadministrator follows Manuel (accepted status)
+  -- (1, 2, 'accepted', CURRENT_TIMESTAMP, false);
 
+  -- Manuel requests to follow Superadministrator (pending status)
+  -- (2, 1, 'pending', CURRENT_TIMESTAMP, true);
+
+  -- Superadministrator requests to follow Manuel (pending status)
+--  (1, 2, 'pending', CURRENT_TIMESTAMP, true);
+
+  -- Manuel follows Superadministrator (pending status) again, simulating a new request
+  --  (2, 1, 'pending', CURRENT_TIMESTAMP, true);
 
 INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
   (1, 1, 1),

@@ -21,6 +21,7 @@ import MuteUserButton from "./socialButtons/MuteUserButton";
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
 import fetchMutedUsers from "./util_functions/FetchMutedUsers";
+import fetchFollowee from "./util_functions/FetchFollowee";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -65,6 +66,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError)
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
+    fetchFollowee(filters, setFollowers, setIsLoading, setError, loggedInUser)
   }, [axiosPrivate, filters, hasMutedChanges]);
 
   // Check if profile picture exists for each user and store the result

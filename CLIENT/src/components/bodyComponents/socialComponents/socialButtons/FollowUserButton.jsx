@@ -3,6 +3,10 @@ import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
 
 const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, userLoggedInObject }) => {
 
+  // console.log("followers", followers);
+  // console.log("followeeId", followeeId);
+  // console.log("followerId", followerId);
+  // console.log("userLoggedInObject", userLoggedInObject);
 
   const BACKEND = process.env.REACT_APP_API_URL;
   const axiosPrivate = useAxiosPrivate()
@@ -22,6 +26,11 @@ const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, use
   const pendingAcceptThem = followers.some(follower =>
     follower.followee_id === followerId && follower.follower_id === followeeId && follower.status === 'pending'
   );
+
+// console.log("amFollowingThem:", amFollowingThem);
+// console.log("amBeingFollowedByThem:", amBeingFollowedByThem);
+// console.log("pendingAcceptMe:", pendingAcceptMe);
+// console.log("pendingAcceptThem:", pendingAcceptThem);
 
   const followUser = (followeeId, followerId) => {
 

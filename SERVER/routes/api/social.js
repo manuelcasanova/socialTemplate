@@ -93,5 +93,34 @@ router.route('/users/unmute')
   socialController.unmuteUser
 );
 
+// Route to fetch followee data
+router.route('/users/followee')
+  .get(
+    async (req, res, next) => {
+
+   
+      try {
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+        
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only registered users have access to this list.' });
+        }
+
+
+        // Pass the roles to the verifyRoles middleware (if additional verification is needed)
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    socialController.getFolloweeData 
+  );
+
+module.exports = router;
+
 
 module.exports = router;

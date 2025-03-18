@@ -59,11 +59,6 @@ const getMutedUsers = async (req, res) => {
             [userId]
         );
 
-        // If no muted users found, log a message
-        if (result.rows.length === 0) {
-            console.log('No muted users found');
-        }
-
         // Return the result
         res.status(200).json(result.rows);
     } catch (error) {
@@ -133,9 +128,35 @@ const muteUser = async (req, res, next) => {
   };
 
 
+// Fetch followee data (users being followed by the logged-in user)
+const getFolloweeData = async (req, res, next) => {
+  const { userId } = req.query; 
+
+  try {
+    // Query to fetch the users the logged-in user is following (followees)
+    const followees = await pool.query(
+      `SELECT * FROM followers 
+      WHERE follower_id = $1 OR followee_id = $1 ORDER BY lastmodification DESC`,
+      [userId]
+    );
+
+    // Return the list of followees
+    return res.status(200).json(followees.rows);
+
+  } catch (error) {
+    console.error('Error fetching followee data:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = { getFolloweeData };
+
+
+
 module.exports = {
     getAllUsers,
     getMutedUsers,
     muteUser,
-    unmuteUser
+    unmuteUser,
+    getFolloweeData
 };
