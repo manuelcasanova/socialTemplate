@@ -1,9 +1,9 @@
 import React from 'react';
 import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
 
-const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, userLoggedInObject }) => {
+const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject }) => {
 
-  // console.log("followers", followers);
+  // console.log("followersAndFollowee", followersAndFollowee);
   // console.log("followeeId", followeeId);
   // console.log("followerId", followerId);
   // console.log("userLoggedInObject", userLoggedInObject);
@@ -11,19 +11,19 @@ const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, use
   const BACKEND = process.env.REACT_APP_API_URL;
   const axiosPrivate = useAxiosPrivate()
 
-  const amFollowingThem = followers.some(follower =>
+  const amFollowingThem = followersAndFollowee.some(follower =>
     follower.follower_id === followerId && follower.followee_id === followeeId && follower.status === 'accepted'
   );
 
-  const amBeingFollowedByThem = followers.some(follower =>
+  const amBeingFollowedByThem = followersAndFollowee.some(follower =>
     follower.follower_id === followeeId && follower.followee_id === followerId && follower.status === 'accepted'
   );
 
-  const pendingAcceptMe = followers.some(follower =>
+  const pendingAcceptMe = followersAndFollowee.some(follower =>
     follower.follower_id === followerId && follower.followee_id === followeeId && follower.status === 'pending'
   );
 
-  const pendingAcceptThem = followers.some(follower =>
+  const pendingAcceptThem = followersAndFollowee.some(follower =>
     follower.followee_id === followerId && follower.follower_id === followeeId && follower.status === 'pending'
   );
 
@@ -47,20 +47,20 @@ const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, use
         const newFollower = response.data;
 
         // Check if the new follower already exists in the state
-        const existingFollowerIndex = followers.findIndex(follower =>
+        const existingFollowerIndex = followersAndFollowee.findIndex(follower =>
           follower.follower_id === newFollower.follower_id &&
           follower.followee_id === newFollower.followee_id
         );
 
         // If an existing follower is found, replace it with the new follower
         if (existingFollowerIndex !== -1) {
-          const updatedFollowers = [...followers];
+          const updatedFollowers = [...followersAndFollowee];
           updatedFollowers[existingFollowerIndex] = newFollower;
-          setFollowers(updatedFollowers);
+          setFollowersAndFollowee(updatedFollowers);
           // console.log('Follower replaced in state:', newFollower);
         } else {
           // If no existing follower found, add the new follower to the state
-          setFollowers(prevFollowers => [...prevFollowers, newFollower]);
+          setFollowersAndFollowee(prevFollowers => [...prevFollowers, newFollower]);
         }
 
       })
@@ -87,12 +87,12 @@ const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, use
         const removedFollower = response.data;
 
         // Remove the unfollowed user from the state
-        const updatedFollowers = followers.filter(follower =>
+        const updatedFollowers = followersAndFollowee.filter(follower =>
           !(follower.follower_id === removedFollower.follower_id &&
             follower.followee_id === removedFollower.followee_id)
         );
 
-        setFollowers(updatedFollowers);
+        setFollowersAndFollowee(updatedFollowers);
       })
       .catch(error => {
         console.error('Error sending unfollow request:', error);
@@ -111,17 +111,17 @@ const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, use
       .then(response => {
         const newFollower = response.data;
 
-        const existingFollowerIndex = followers.findIndex(follower =>
+        const existingFollowerIndex = followersAndFollowee.findIndex(follower =>
           follower.follower_id === newFollower.follower_id &&
           follower.followee_id === newFollower.followee_id
         );
 
         if (existingFollowerIndex !== -1) {
-          const updatedFollowers = [...followers];
+          const updatedFollowers = [...followersAndFollowee];
           updatedFollowers[existingFollowerIndex] = newFollower;
-          setFollowers(updatedFollowers);
+          setFollowersAndFollowee(updatedFollowers);
         } else {
-          setFollowers(prevFollowers => [...prevFollowers, newFollower]);
+          setFollowersAndFollowee(prevFollowers => [...prevFollowers, newFollower]);
         }
       })
       .catch(error => {
@@ -141,11 +141,11 @@ const FollowUserButton = ({ followers, setFollowers, followeeId, followerId, use
         const canceledFollower = response.data;
 
         // Remove the canceled follower from the state
-        const updatedFollowers = followers.filter(follower =>
+        const updatedFollowers = followersAndFollowee.filter(follower =>
           !(follower.follower_id === canceledFollower.follower_id &&
             follower.followee_id === canceledFollower.followee_id)
         );
-        setFollowers(updatedFollowers);
+        setFollowersAndFollowee(updatedFollowers);
       })
       .catch(error => {
         console.error('Error canceling follow request:', error);

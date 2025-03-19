@@ -21,7 +21,7 @@ import MuteUserButton from "./socialButtons/MuteUserButton";
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
 import fetchMutedUsers from "./util_functions/FetchMutedUsers";
-import fetchFollowee from "./util_functions/FetchFollowee";
+import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowee";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -45,7 +45,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const loggedInUser = auth.userId
   const [users, setUsers] = useState([]);
-  const [followers, setFollowers] = useState([])
+  const [followersAndFollowee, setFollowersAndFollowee] = useState([])
   const usersExceptMe = users.filter(user => user.user_id !== loggedInUser && user.is_active);
   const [mutedUsers, setMutedUsers] = useState([]);
   const userIDsExceptMe = usersExceptMe.map(user => user.user_id);
@@ -66,7 +66,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError)
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
-    fetchFollowee(filters, setFollowers, setIsLoading, setError, loggedInUser)
+    fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
   }, [axiosPrivate, filters, hasMutedChanges]);
 
   // Check if profile picture exists for each user and store the result
@@ -157,8 +157,8 @@ export default function SocialAllUsers({ isNavOpen }) {
 
                       followeeId={user.user_id}
                       followerId={loggedInUser}
-                      followers={followers}
-                      setFollowers={setFollowers}
+                      followersAndFollowee={followersAndFollowee}
+                    setFollowersAndFollowee={setFollowersAndFollowee}
                       userLoggedInObject={auth}
                     />
 

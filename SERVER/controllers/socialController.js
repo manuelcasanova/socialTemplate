@@ -136,7 +136,7 @@ const getFolloweeData = async (req, res, next) => {
     // Query to fetch the users the logged-in user is following (followees)
     const followees = await pool.query(
       `SELECT * FROM followers 
-      WHERE follower_id = $1 OR followee_id = $1 ORDER BY lastmodification DESC`,
+      WHERE followee_id = $1 ORDER BY lastmodification DESC`,
       [userId]
     );
 
@@ -149,8 +149,46 @@ const getFolloweeData = async (req, res, next) => {
   }
 };
 
-module.exports = { getFolloweeData };
+// Fetch followee data (users followed by the logged-in user)
+const getFollowersData = async (req, res, next) => {
+  const { userId } = req.query; 
 
+  try {
+    const followers = await pool.query(
+      `SELECT * FROM followers 
+      WHERE follower_id = $1 ORDER BY lastmodification DESC`,
+      [userId]
+    );
+
+    // Return the list of followees
+    return res.status(200).json(followers.rows);
+
+  } catch (error) {
+    console.error('Error fetching followers data:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+// Fetch followee data (users followed by the logged-in user)
+const getFollowersAndFolloweeData = async (req, res, next) => {
+  const { userId } = req.query; 
+
+
+  try {
+    const followersAndFollowee = await pool.query(
+      `SELECT * FROM followers 
+      WHERE follower_id = $1 OR followee_id = $1 ORDER BY lastmodification DESC`,
+      [userId]
+    );
+
+    // Return the list of followees
+    return res.status(200).json(followersAndFollowee.rows);
+
+  } catch (error) {
+    console.error('Error fetching followersAndFollowee data:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 
 module.exports = {
@@ -158,5 +196,7 @@ module.exports = {
     getMutedUsers,
     muteUser,
     unmuteUser,
-    getFolloweeData
+    getFolloweeData,
+    getFollowersData,
+    getFollowersAndFolloweeData
 };

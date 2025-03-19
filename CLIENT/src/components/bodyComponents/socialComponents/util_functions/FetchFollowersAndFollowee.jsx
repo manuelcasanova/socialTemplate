@@ -1,13 +1,12 @@
 import { axiosPrivate } from "../../../../api/axios";
 
-const fetchFollowee = async (filters, setFollowee, setIsLoading, setError, loggedInUser)  => {
+const fetchFollowersAndFollowee = async (filters, setFollowee, setIsLoading, setError, loggedInUser)  => {
 
   setIsLoading(true)
 
-
   try {
     const [usersResponse] = await Promise.all([
-      axiosPrivate.get(`/social/users/followee`, { params: {...filters, userId: loggedInUser} })
+      axiosPrivate.get(`/social/users/followersAndFollowee`, { params: {...filters, userId: loggedInUser} })
 
     ]);
 
@@ -20,4 +19,4 @@ const fetchFollowee = async (filters, setFollowee, setIsLoading, setError, logge
   }
 };
 
-export default fetchFollowee
+export default fetchFollowersAndFollowee

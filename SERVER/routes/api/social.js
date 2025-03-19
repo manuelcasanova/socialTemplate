@@ -120,7 +120,60 @@ router.route('/users/followee')
     socialController.getFolloweeData 
   );
 
-module.exports = router;
+  // Route to fetch followers data
+router.route('/users/followers')
+.get(
+  async (req, res, next) => {
+
+ 
+    try {
+      const rolesList = await fetchRoles();
+
+      const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+      
+      const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+      if (!hasRequiredRole) {
+        return res.status(403).json({ error: 'Permission denied: Only registered users have access to this list.' });
+      }
+
+
+      // Pass the roles to the verifyRoles middleware (if additional verification is needed)
+      verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  },
+  socialController.getFollowersData 
+);
+
+  // Route to fetch followers data
+  router.route('/users/followersAndFollowee')
+  .get(
+    async (req, res, next) => {
+  
+
+      try {
+
+        const rolesList = await fetchRoles();
+  
+        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+        
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+  
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only registered users have access to this list.' });
+        }
+  
+        // Pass the roles to the verifyRoles middleware (if additional verification is needed)
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+  
+      } catch (err) {
+        next(err);
+      }
+    },
+    socialController.getFollowersAndFolloweeData 
+  );
 
 
 module.exports = router;
