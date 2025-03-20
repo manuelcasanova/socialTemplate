@@ -100,6 +100,8 @@ router.route('/users/followee')
 
    
       try {
+
+        console.log("hit backend 1")
         const rolesList = await fetchRoles();
 
         const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];

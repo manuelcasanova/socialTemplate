@@ -29,7 +29,7 @@ import TEMPLATE from './components/bodyComponents/TEMPLATE-BODY';
 
 import SocialAllUsers from './components/bodyComponents/socialComponents/SocialAllUsers';
 import SocialFollowers from './components/bodyComponents/socialComponents/SocialFollowers';
-import SocialFollowing from './components/bodyComponents/socialComponents/SocialFollowing';
+import SocialFollowee from './components/bodyComponents/socialComponents/SocialFollowee';
 import SocialMuted from './components/bodyComponents/socialComponents/SocialMuted';
 import SocialPendingRequests from './components/bodyComponents/socialComponents/SocialPendingRequests';
 
@@ -94,7 +94,7 @@ function App() {
             <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="social/following" element={<SocialFollowing isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+            <Route path="social/following" element={<SocialFollowee isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route path="social/followers" element={<SocialFollowers isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />

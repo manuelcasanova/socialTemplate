@@ -10,8 +10,10 @@ const fetchFollowee = async (filters, setFollowee, setIsLoading, setError, logge
       axiosPrivate.get(`/social/users/followee`, { params: {...filters, userId: loggedInUser} })
 
     ]);
-
+console.log("hit")
+console.log("usersREsponse.data", usersResponse.data)
     setFollowee(usersResponse.data); // Set user data
+    console.log("hit2")
   } catch (err) {
     setError(`Failed to fetch data: ${err.response.data.error}`);
     console.error(err);

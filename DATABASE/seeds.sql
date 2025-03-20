@@ -22,7 +22,7 @@ INSERT INTO users (username, email, password, is_verified, is_selected, is_activ
   
 INSERT INTO followers (follower_id, followee_id, status, lastmodification, newrequest) VALUES
   -- Manuel follows Superadministrator (accepted status)
-  -- (2, 1, 'accepted', CURRENT_TIMESTAMP, false);
+   (2, 1, 'accepted', CURRENT_TIMESTAMP, false);
   
   -- Superadministrator follows Manuel (accepted status)
   -- (1, 2, 'accepted', CURRENT_TIMESTAMP, false);
