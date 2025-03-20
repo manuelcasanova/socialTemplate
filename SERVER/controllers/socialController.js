@@ -133,15 +133,12 @@ const getFolloweeData = async (req, res, next) => {
   const { userId } = req.query; 
 
   try {
-    console.log("hit2")
     // Query to fetch the users the logged-in user is following (followees)
     const followees = await pool.query(
       `SELECT * FROM followers 
       WHERE follower_id = $1 ORDER BY lastmodification DESC`,
       [userId]
     );
-
-    console.log("hit3 followees.rows", followees.rows)
 
     // Return the list of followees
     return res.status(200).json(followees.rows);

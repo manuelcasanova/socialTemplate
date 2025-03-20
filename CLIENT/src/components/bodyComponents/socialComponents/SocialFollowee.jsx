@@ -49,9 +49,6 @@ export default function SocialFollowee({ isNavOpen }) {
     mutedUsers.some(mute => (mute.muter === userId || mute.mutee === userId) && mute.mute)
   );
 
-  console.log("followee", followee)
-  console.log("loggedinuser", loggedInUser)
-
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
@@ -94,20 +91,25 @@ export default function SocialFollowee({ isNavOpen }) {
     return <div>Error: {error}</div>;
   }
 
+  // Filter the followee list to remove muted users
+  const filteredFollowee = followee.filter(follow => {
+    const user = users.find(u => u.user_id === follow.followee_id);
+    return !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === follow.followee_id && mute.mute));
+  });
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
         <h2>Social - Following</h2>
 
-        {allUsersMutedOrMe ? (
+        {filteredFollowee.length === 0 ? (
           <p>No users available or all users are muted.</p>
         ) : (
           <div className="users-container">
-           {followee.length > 0 ? (
-  followee.map((follow) => {
-    // Find the user in the 'users' array based on followee_id (or follower_id)
-    const user = users.find((u) => u.user_id === follow.followee_id); // or follow.follower_id based on your requirement
-
+            {filteredFollowee.map((follow) => {
+              // Find the user details for the followee
+              const user = users.find((u) => u.user_id === follow.followee_id);
+              
     if (user) {
       return (
         <div className="user-row-social" key={follow.followee_id}>
@@ -161,13 +163,10 @@ export default function SocialFollowee({ isNavOpen }) {
     }
 
     return null;
-  })
-) : (
-  <p>No users found</p>
+  })}
+</div>
 )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+</div>
+</div>
+);
 }
