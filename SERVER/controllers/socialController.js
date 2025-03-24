@@ -136,7 +136,7 @@ const getFolloweeData = async (req, res, next) => {
     // Query to fetch the users the logged-in user is following (followees)
     const followees = await pool.query(
       `SELECT * FROM followers 
-      WHERE follower_id = $1 ORDER BY lastmodification DESC`,
+      WHERE follower_id = $1 AND status = 'accepted' ORDER BY lastmodification DESC`,
       [userId]
     );
 
@@ -156,7 +156,7 @@ const getFollowersData = async (req, res, next) => {
   try {
     const followers = await pool.query(
       `SELECT * FROM followers 
-      WHERE followee_id = $1 ORDER BY lastmodification DESC`,
+      WHERE followee_id = $1 AND status = 'accepted' ORDER BY lastmodification DESC`,
       [userId]
     );
 
@@ -190,6 +190,32 @@ const getFollowersAndFolloweeData = async (req, res, next) => {
   }
 };
 
+// Fetch pending requests for social connection
+const getPendingSocialRequests = async (req, res, next) => {
+  const { userId } = req.query; 
+
+  try {
+    const result = await pool.query(
+     `SELECT lastmodification, newrequest, follower_id FROM followers WHERE followee_id = $1 AND status = 'pending' ORDER BY lastmodification DESC`,
+      [userId]
+    );
+
+    const pendingUsers = result.rows.map(row => ({
+      follower_id: row.follower_id,
+      lastmodification: row.lastmodification,
+      newrequest: row.newrequest
+    })
+    );
+
+    // Return the list of followees
+    return res.status(200).json(pendingUsers); //Or {pendingUsers}?
+
+  } catch (error) {
+    console.error('Error fetching pendingUsers data:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 module.exports = {
     getAllUsers,
@@ -198,5 +224,6 @@ module.exports = {
     unmuteUser,
     getFolloweeData,
     getFollowersData,
-    getFollowersAndFolloweeData
+    getFollowersAndFolloweeData,
+    getPendingSocialRequests
 };

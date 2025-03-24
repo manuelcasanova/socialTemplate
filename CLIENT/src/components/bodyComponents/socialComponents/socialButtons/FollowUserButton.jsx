@@ -3,11 +3,6 @@ import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
 
 const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject }) => {
 
-  // console.log("followersAndFollowee", followersAndFollowee);
-  // console.log("followeeId", followeeId);
-  // console.log("followerId", followerId);
-  // console.log("userLoggedInObject", userLoggedInObject);
-
   const BACKEND = process.env.REACT_APP_API_URL;
   const axiosPrivate = useAxiosPrivate()
 
