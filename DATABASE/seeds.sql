@@ -25,13 +25,13 @@ INSERT INTO followers (follower_id, followee_id, status, lastmodification, newre
   --  (2, 1, 'accepted', CURRENT_TIMESTAMP, false),
   
   -- Superadministrator follows Manuel (accepted status)
-  -- (1, 2, 'accepted', CURRENT_TIMESTAMP, false);
+  (1, 2, 'accepted', CURRENT_TIMESTAMP, false),
 
   -- Manuel requests to follow Superadministrator (pending status)
-  -- (2, 1, 'pending', CURRENT_TIMESTAMP, true);
+  (2, 1, 'pending', CURRENT_TIMESTAMP, true);
 
   -- Superadministrator requests to follow Manuel (pending status)
- (1, 2, 'pending', CURRENT_TIMESTAMP, true);
+--  (1, 2, 'pending', CURRENT_TIMESTAMP, true);
 
   -- Manuel follows Superadministrator (pending status) again, simulating a new request
   --  (2, 1, 'pending', CURRENT_TIMESTAMP, true);

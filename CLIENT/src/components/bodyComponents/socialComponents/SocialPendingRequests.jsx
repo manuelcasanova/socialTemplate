@@ -14,11 +14,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MuteUserButton from "./socialButtons/MuteUserButton";
+import FollowUserButton from "./socialButtons/FollowUserButton";
 
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
 import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 import fetchPending from "./util_functions/FetchPending";
+import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowee";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -43,6 +45,7 @@ export default function SocialPendingRequests({ isNavOpen }) {
   const loggedInUser = auth.userId;
   const [users, setUsers] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [followersAndFollowee, setFollowersAndFollowee] = useState([])
   const [mutedUsers, setMutedUsers] = useState([]);
   const userIDsExceptMe = pendingRequests.map(user => user.user_id);
   const allUsersMutedOrMe = userIDsExceptMe.every(userId =>
@@ -61,7 +64,8 @@ export default function SocialPendingRequests({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError);
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
-    fetchPending(filters, setPendingRequests, setIsLoading, setError, loggedInUser); 
+    fetchPending(filters, setPendingRequests, setIsLoading, setError, loggedInUser);
+    fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
   }, [axiosPrivate, filters, hasMutedChanges]);
 
   // Check if profile picture exists for each user and store the result
@@ -109,64 +113,82 @@ export default function SocialPendingRequests({ isNavOpen }) {
             {filteredPending.map((pending) => {
               // Find the user details for the pendingRequests
               const user = users.find((u) => u.user_id === pending.follower_id);
-              
-    if (user) {
-      return (
-        <div className="user-row-social" key={pending.follower_id}>
-          <div className="user-info">
-            {imageExistsMap[user.user_id] ? (
-              <img
-                className="user-row-social-small-img"
-                onClick={() => setShowLargePicture(user.user_id)}
-                src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-                alt="Profile"
-              />
-            ) : (
-              <FontAwesomeIcon
-                onClick={() => setShowLargePicture(user.user_id)}
-                icon={faUser}
-                size="3x"
-                style={{ marginRight: '20px' }}
-              />
-            )}
 
-            {showLargePicture === user.user_id && (
-              <div
-                className="large-picture"
-                onClick={() => setShowLargePicture(null)}
-              >
-                <img
-                  className="users-all-picture-large"
-                  onClick={() => setShowLargePicture(null)}
-                  src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-                  onError={(e) => {
-                    e.target.onerror = null; // Prevent infinite loop in case of repeated error
-                    e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
-                  }}
-                />
-              </div>
-            )}
+              if (user) {
+                return (
+                  <div className="user-row-social" key={pending.follower_id}>
+                    <div className="user-info">
+                      {imageExistsMap[user.user_id] ? (
+                        <img
+                          className="user-row-social-small-img"
+                          onClick={() => setShowLargePicture(user.user_id)}
+                          src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                          alt="Profile"
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          onClick={() => setShowLargePicture(user.user_id)}
+                          icon={faUser}
+                          size="3x"
+                          style={{ marginRight: '20px' }}
+                        />
+                      )}
 
-            <p>
-              {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
-            </p>
+                      {showLargePicture === user.user_id && (
+                        <div
+                          className="large-picture"
+                          onClick={() => setShowLargePicture(null)}
+                        >
+                          <img
+                            className="users-all-picture-large"
+                            onClick={() => setShowLargePicture(null)}
+                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                            onError={(e) => {
+                              e.target.onerror = null; // Prevent infinite loop in case of repeated error
+                              e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                            }}
+                          />
+                        </div>
+                      )}
+
+                      <p>
+                        {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                      </p>
+                    </div>
+
+                    {loggedInUser !== user.user_id &&
+                      <>
+                        <FollowUserButton
+
+                          followeeId={user.user_id}
+                          followerId={loggedInUser}
+                          followersAndFollowee={followersAndFollowee}
+                          setFollowersAndFollowee={setFollowersAndFollowee}
+                          userLoggedInObject={auth}
+                        />
+
+
+
+
+
+
+                        <MuteUserButton
+                          userId={user.user_id}
+                          userLoggedin={loggedInUser}
+                          setMutedUsers={setMutedUsers}
+                          onMutedChange={handleMutedChanges}
+                        />
+                      </>
+                    }
+                  </div>
+                );
+              }
+
+              return null;
+            })}
           </div>
-
-          <MuteUserButton
-            userId={user.user_id}
-            userLoggedin={loggedInUser}
-            setMutedUsers={setMutedUsers}
-            onMutedChange={handleMutedChanges}
-          />
-        </div>
-      );
-    }
-
-    return null;
-  })}
-</div>
-)}
-</div>
-</div>
-);
+        )}
+      </div>
+    </div>
+  );
 }

@@ -116,7 +116,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                   <div className="user-info">
                     {imageExistsMap[user.user_id] ? (
                       <img
-                      className="user-row-social-small-img "
+                        className="user-row-social-small-img "
                         onClick={() => setShowLargePicture(user.user_id)}
                         src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                         alt="Profile"
@@ -152,29 +152,25 @@ export default function SocialAllUsers({ isNavOpen }) {
                   </div>
                   {loggedInUser !== user.user_id &&
 
+                    <>
+                      <FollowUserButton
 
-                    <FollowUserButton
+                        followeeId={user.user_id}
+                        followerId={loggedInUser}
+                        followersAndFollowee={followersAndFollowee}
+                        setFollowersAndFollowee={setFollowersAndFollowee}
+                        userLoggedInObject={auth}
+                      />
 
-                      followeeId={user.user_id}
-                      followerId={loggedInUser}
-                      followersAndFollowee={followersAndFollowee}
-                    setFollowersAndFollowee={setFollowersAndFollowee}
-                      userLoggedInObject={auth}
-                    />
-
-
-
-
+                      <MuteUserButton
+                        userId={user.user_id}
+                        userLoggedin={loggedInUser}
+                        // isMuted={isMuted} 
+                        setMutedUsers={setMutedUsers}
+                        onMutedChange={handleMutedChanges}
+                      />
+                    </>
                   }
-
-                  <MuteUserButton
-                    userId={user.user_id}
-                    userLoggedin={loggedInUser}
-                    // isMuted={isMuted} 
-                    setMutedUsers={setMutedUsers}
-                    onMutedChange={handleMutedChanges}
-                  />
-
 
                 </div>
 
@@ -183,7 +179,7 @@ export default function SocialAllUsers({ isNavOpen }) {
               <p>No users found</p>
             )}
           </div>
-      
+
         )}
 
       </div>
