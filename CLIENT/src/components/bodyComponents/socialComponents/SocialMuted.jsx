@@ -106,14 +106,14 @@ export default function SocialMuted({ isNavOpen }) {
       <div className="admin-users">
         <div className="muted-users-title">
           <h2>Muted Users
-          <button
-            className='info-button'
-            onClick={handleShowInfo}
-          >i</button>
+            <button
+              className='info-button'
+              onClick={handleShowInfo}
+            >i</button>
 
           </h2>
 
-          
+
 
         </div>
 
@@ -132,7 +132,7 @@ export default function SocialMuted({ isNavOpen }) {
                 <div className="user-info">
                   {imageExistsMap[user.user_id] ? (
                     <img
-                     className="user-row-social-small-img "
+                      className="user-row-social-small-img "
                       onClick={() => setShowLargePicture(user.user_id)}
                       src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                       alt="Profile"
@@ -155,8 +155,14 @@ export default function SocialMuted({ isNavOpen }) {
                       onClick={() => setShowLargePicture(null)}
                       src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                       onError={(e) => {
-                        e.target.onerror = null; // Prevent infinite loop in case of repeated error
-                        e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                        // Prevent infinite loop in case of repeated errors
+                        e.target.onerror = null;
+
+                        // Check if the fallback image has already been set to avoid infinite loop
+                        if (e.target.src !== `${BACKEND}/media/profile_pictures/user.png`) {
+                          // Fall back to the default user image if the profile picture fails
+                          e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                        }
                       }}
                     />
                   </div>}

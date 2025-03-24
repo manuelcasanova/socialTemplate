@@ -140,12 +140,18 @@ export default function SocialFollowers({ isNavOpen }) {
                           onClick={() => setShowLargePicture(null)}
                         >
                           <img
-                            className="users-all-picture-large"
+                            className='users-all-picture-large'
                             onClick={() => setShowLargePicture(null)}
                             src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                             onError={(e) => {
-                              e.target.onerror = null; // Prevent infinite loop in case of repeated error
-                              e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                              // Prevent infinite loop in case of repeated errors
+                              e.target.onerror = null;
+
+                              // Check if the fallback image has already been set to avoid infinite loop
+                              if (e.target.src !== `${BACKEND}/media/profile_pictures/user.png`) {
+                                // Fall back to the default user image if the profile picture fails
+                                e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                              }
                             }}
                           />
                         </div>
