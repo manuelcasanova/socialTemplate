@@ -3,7 +3,7 @@ import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
 
 const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject }) => {
 
-  const BACKEND = process.env.REACT_APP_API_URL;
+  const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const axiosPrivate = useAxiosPrivate()
 
   const amFollowingThem = followersAndFollowee.some(follower =>
@@ -36,7 +36,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
       date: new Date()
     };
 
-    axiosPrivate.post(`${BACKEND}/users/follow`, data)
+    axiosPrivate.post(`${BACKEND}/social/users/follow`, data)
       .then(response => {
 
         const newFollower = response.data;
@@ -75,7 +75,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
       user: userLoggedInObject
     };
 
-    axiosPrivate.post(`${BACKEND}/users/unfollow`, data)
+    axiosPrivate.post(`${BACKEND}/social/users/unfollow`, data)
       .then(response => {
 
 
@@ -102,7 +102,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
       date: new Date()
     };
 
-    axiosPrivate.post(`${BACKEND}/users/approvefollower`, data)
+    axiosPrivate.post(`${BACKEND}/social/users/approvefollower`, data)
       .then(response => {
         const newFollower = response.data;
 
@@ -131,7 +131,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
       user: userLoggedInObject
     };
 
-    axiosPrivate.delete(`${BACKEND}/users/cancel-follow`, { data: data })
+    axiosPrivate.delete(`${BACKEND}/social/users/cancel-follow`, { data: data })
       .then(response => {
         const canceledFollower = response.data;
 

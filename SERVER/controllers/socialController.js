@@ -3,134 +3,134 @@ const pool = require('../config/db');
 // Function to get all users
 
 const getAllUsers = async (req, res) => {
-    try {
-        const { username } = req.query;
+  try {
+    const { username } = req.query;
 
-        // Start the base query
-        let query = `
+    // Start the base query
+    let query = `
             SELECT u.user_id, u.username, u.is_active
             FROM users u
             WHERE u.is_active = true 
         `;
-        const params = [];
+    const params = [];
 
-        // Add filters to the query based on the req.query parameters
-        if (username) {
-            query += ` AND u.username ILIKE $${params.length + 1}`;
-            params.push(`%${username}%`);  // Use ILIKE for case-insensitive matching
-        }
+    // Add filters to the query based on the req.query parameters
+    if (username) {
+      query += ` AND u.username ILIKE $${params.length + 1}`;
+      params.push(`%${username}%`);  // Use ILIKE for case-insensitive matching
+    }
 
-        // Add the GROUP BY and execute the query
-        query += `
+    // Add the GROUP BY and execute the query
+    query += `
             GROUP BY u.username, u.user_id
         `;
 
-        // Execute the query
-        const result = await pool.query(query, params);
+    // Execute the query
+    const result = await pool.query(query, params);
 
-        // If no users found, log a message
-        if (result.rows.length === 0) {
-            console.log('No users found');
-        }
-
-        // Return the result
-        res.status(200).json(result.rows);
-    } catch (error) {
-        console.error('Error retrieving users:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    // If no users found, log a message
+    if (result.rows.length === 0) {
+      console.log('No users found');
     }
+
+    // Return the result
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error retrieving users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
 
 // Function to get all muted users
 
 const getMutedUsers = async (req, res) => {
-    try {
-        const { userId } = req.query;
+  try {
+    const { userId } = req.query;
 
-        // Ensure that userId is provided
-        if (!userId) {
-            return res.status(400).json({ error: 'userId is required' });
-        }
-
-        // Query to fetch muted users
-        const result = await pool.query(
-            'SELECT * FROM muted WHERE mute = true AND (muter = $1 OR mutee = $1)', 
-            [userId]
-        );
-
-        // Return the result
-        res.status(200).json(result.rows);
-    } catch (error) {
-        console.error('Error retrieving muted users:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    // Ensure that userId is provided
+    if (!userId) {
+      return res.status(400).json({ error: 'userId is required' });
     }
+
+    // Query to fetch muted users
+    const result = await pool.query(
+      'SELECT * FROM muted WHERE mute = true AND (muter = $1 OR mutee = $1)',
+      [userId]
+    );
+
+    // Return the result
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error retrieving muted users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
 // Mute user
 const muteUser = async (req, res, next) => {
-    const { userLoggedin, userId } = req.body;
-  
-    try {
-      // Check if the record already exists in the 'muted' table
-      const existingRecord = await pool.query(
-        'SELECT * FROM muted WHERE muter = $1 AND mutee = $2',
+  const { userLoggedin, userId } = req.body;
+
+  try {
+    // Check if the record already exists in the 'muted' table
+    const existingRecord = await pool.query(
+      'SELECT * FROM muted WHERE muter = $1 AND mutee = $2',
+      [userLoggedin, userId]
+    );
+
+    if (existingRecord.rows.length === 0) {
+      // If record doesn't exist, insert a new record to mute the user
+      await pool.query(
+        'INSERT INTO muted (muter, mutee, mute) VALUES ($1, $2, true)',
         [userLoggedin, userId]
       );
-  
-      if (existingRecord.rows.length === 0) {
-        // If record doesn't exist, insert a new record to mute the user
-        await pool.query(
-          'INSERT INTO muted (muter, mutee, mute) VALUES ($1, $2, true)',
-          [userLoggedin, userId]
-        );
-        return res.status(200).json({ message: 'User muted successfully.' });
-      } else {
-        // If record exists, update the mute status to true (mute the user)
-        await pool.query(
-          'UPDATE muted SET mute = true WHERE muter = $1 AND mutee = $2',
-          [userLoggedin, userId]
-        );
-        return res.status(200).json({ message: 'User muted successfully.' });
-      }
-    } catch (error) {
-      console.error('Error muting user:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
-  
-  // Unmute user
-  const unmuteUser = async (req, res, next) => {
-    const { userLoggedin, userId } = req.body;
-  
-    try {
-      // Check if the record already exists in the 'muted' table
-      const existingRecord = await pool.query(
-        'SELECT * FROM muted WHERE muter = $1 AND mutee = $2',
+      return res.status(200).json({ message: 'User muted successfully.' });
+    } else {
+      // If record exists, update the mute status to true (mute the user)
+      await pool.query(
+        'UPDATE muted SET mute = true WHERE muter = $1 AND mutee = $2',
         [userLoggedin, userId]
       );
-  
-      if (existingRecord.rows.length === 0) {
-        // If record doesn't exist, send a message indicating that the user is not muted
-        return res.status(400).json({ message: 'User is not muted.' });
-      } else {
-        // If record exists, update the mute status to false (unmute the user)
-        await pool.query(
-          'UPDATE muted SET mute = false WHERE muter = $1 AND mutee = $2',
-          [userLoggedin, userId]
-        );
-        return res.status(200).json({ message: 'User unmuted successfully.' });
-      }
-    } catch (error) {
-      console.error('Error unmuting user:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(200).json({ message: 'User muted successfully.' });
     }
-  };
+  } catch (error) {
+    console.error('Error muting user:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+// Unmute user
+const unmuteUser = async (req, res, next) => {
+  const { userLoggedin, userId } = req.body;
+
+  try {
+    // Check if the record already exists in the 'muted' table
+    const existingRecord = await pool.query(
+      'SELECT * FROM muted WHERE muter = $1 AND mutee = $2',
+      [userLoggedin, userId]
+    );
+
+    if (existingRecord.rows.length === 0) {
+      // If record doesn't exist, send a message indicating that the user is not muted
+      return res.status(400).json({ message: 'User is not muted.' });
+    } else {
+      // If record exists, update the mute status to false (unmute the user)
+      await pool.query(
+        'UPDATE muted SET mute = false WHERE muter = $1 AND mutee = $2',
+        [userLoggedin, userId]
+      );
+      return res.status(200).json({ message: 'User unmuted successfully.' });
+    }
+  } catch (error) {
+    console.error('Error unmuting user:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 
 // Fetch followee data (users being followed by the logged-in user)
 const getFolloweeData = async (req, res, next) => {
-  const { userId } = req.query; 
+  const { userId } = req.query;
 
   try {
     // Query to fetch the users the logged-in user is following (followees)
@@ -151,7 +151,7 @@ const getFolloweeData = async (req, res, next) => {
 
 // Fetch followee data (users followed by the logged-in user)
 const getFollowersData = async (req, res, next) => {
-  const { userId } = req.query; 
+  const { userId } = req.query;
 
   try {
     const followers = await pool.query(
@@ -171,7 +171,7 @@ const getFollowersData = async (req, res, next) => {
 
 // Fetch followee data (users followed by the logged-in user)
 const getFollowersAndFolloweeData = async (req, res, next) => {
-  const { userId } = req.query; 
+  const { userId } = req.query;
 
 
   try {
@@ -192,11 +192,11 @@ const getFollowersAndFolloweeData = async (req, res, next) => {
 
 // Fetch pending requests for social connection
 const getPendingSocialRequests = async (req, res, next) => {
-  const { userId } = req.query; 
+  const { userId } = req.query;
 
   try {
     const result = await pool.query(
-     `SELECT lastmodification, newrequest, follower_id FROM followers WHERE followee_id = $1 AND status = 'pending' ORDER BY lastmodification DESC`,
+      `SELECT lastmodification, newrequest, follower_id FROM followers WHERE followee_id = $1 AND status = 'pending' ORDER BY lastmodification DESC`,
       [userId]
     );
 
@@ -216,14 +216,61 @@ const getPendingSocialRequests = async (req, res, next) => {
   }
 };
 
+// Fetch pending requests for social connection
+const followUser = async (req, res, next) => {
+  try {
+
+    const followeeId = req.body.followeeId;
+    const followerId = req.body.followerId;
+    const now = req.body.date || new Date(); // Use provided date or current date/time
+
+    if (req.body.user) {
+      // Attempt to update existing record
+      const updateQuery = `
+        UPDATE followers
+        SET status = 'pending', lastmodification = $1, newrequest = true
+        WHERE follower_id = $2 AND followee_id = $3
+        RETURNING *
+      `;
+      const updateValues = [now, followerId, followeeId];
+
+      // Execute update query
+      const updateResult = await pool.query(updateQuery, updateValues);
+
+      // Check if any rows were updated
+      if (updateResult.rowCount > 0) {
+        res.json(updateResult.rows[0]); // Return updated row
+      } else {
+        // If no rows were updated, insert new record
+        const insertQuery = `
+          INSERT INTO followers (follower_id, followee_id, status, lastmodification, newrequest)
+          VALUES ($1, $2, 'pending', $3, true)
+          RETURNING *
+        `;
+        const insertValues = [followerId, followeeId, now];
+
+        // Execute insert query
+        const insertResult = await pool.query(insertQuery, insertValues);
+        res.json(insertResult.rows[0]); // Return inserted row
+      }
+    } else {
+      res.status(403).json({ error: "Unauthorized access" });
+    }
+
+  } catch (error) {
+    console.error('Error requesting to follow a user:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
-    getAllUsers,
-    getMutedUsers,
-    muteUser,
-    unmuteUser,
-    getFolloweeData,
-    getFollowersData,
-    getFollowersAndFolloweeData,
-    getPendingSocialRequests
+  getAllUsers,
+  getMutedUsers,
+  muteUser,
+  unmuteUser,
+  getFolloweeData,
+  getFollowersData,
+  getFollowersAndFolloweeData,
+  getPendingSocialRequests,
+  followUser
 };
