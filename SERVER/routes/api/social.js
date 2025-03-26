@@ -233,4 +233,37 @@ router.route('/users/follow')
     socialController.followUser
   );
 
+// Route to cancel follow request
+router.route('/users/cancel-follow')
+  .delete(
+    async (req, res, next) => {
+      try {
+
+        // Fetch the user's roles (you might already have logic for this)
+        const rolesList = await fetchRoles();
+        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+
+        // Check if the user has the required roles
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only registered users can cancel a follow request.' });
+        }
+
+        // Ensure the user is logged in and has permission to perform this action
+        const { followeeId, followerId, user } = req.body;
+        if (!user || user.userId !== followerId) {
+          return res.status(403).json({ error: 'Permission denied: You can only cancel your own follow requests.' });
+        }
+
+        // Now call the controller and pass the entire req object
+        await socialController.cancelFollowRequest(req, res, next);
+
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+
 module.exports = router;
