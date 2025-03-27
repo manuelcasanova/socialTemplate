@@ -312,6 +312,58 @@ const cancelFollowRequest = async (req, res, next) => {
   }
 };
 
+// Unfollow a user
+const unfollowUser = async (req, res, next) => {
+  try {
+
+
+
+    const { followeeId, followerId, user } = req.body; // Extract data from the request
+
+
+    if (user) {
+      // Check if the follow relationship exists before attempting to delete
+      const checkQuery = `
+        SELECT * FROM followers
+        WHERE follower_id = $1 AND followee_id = $2
+      `;
+      const checkValues = [followerId, followeeId];
+
+      // Execute the query to check if the follow exists
+      const checkResult = await pool.query(checkQuery, checkValues);
+
+      if (checkResult.rowCount === 0) {
+        // If no connection found, return an error response
+        return res.status(404).json({ error: "Social connection not found" });
+      }
+
+      // Proceed to delete the follow relationship
+      const deleteQuery = `
+        DELETE FROM followers
+        WHERE follower_id = $1 AND followee_id = $2
+        RETURNING *
+      `;
+      const deleteValues = [followerId, followeeId];
+
+      // Execute the delete query
+      const deleteResult = await pool.query(deleteQuery, deleteValues);
+
+      if (deleteResult.rowCount > 0) {
+        // Return the canceled follow relationship
+        res.json(deleteResult.rows[0]);
+      } else {
+        // If no follow request was deleted, send an error response
+        res.status(404).json({ error: "Social connection not found" });
+      }
+    } else {
+      res.status(403).json({ error: "Unauthorized access" });
+    }
+  } catch (err) {
+    console.error('Error unfollowing user:', err.message);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 module.exports = {
   getAllUsers,
@@ -323,5 +375,6 @@ module.exports = {
   getFollowersAndFolloweeData,
   getPendingSocialRequests,
   followUser,
-  cancelFollowRequest
+  cancelFollowRequest,
+  unfollowUser
 };

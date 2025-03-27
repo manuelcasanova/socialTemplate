@@ -37,33 +37,11 @@ app.options('/some-endpoint', cors(corsOptions)); // Explicitly handle preflight
 
 app.use(cookieParser()); // Middleware to parse cookies
 app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-encoded data
-// app.use(express.json({ limit: '2mb' })); // Set JSON body parser limit to 2MB
 app.use(logger); // Custom middleware logger
 app.use(customJsonParser);
 
 // Serve static files from the 'media' folder
 app.use('/media', express.static(path.join(__dirname, 'media')));
-
-// app.use('/media', (req, res, next) => {
-//     console.log(`Serving file: ${req.path}`);
-//     res.on('finish', () => {
-//       console.log(`Response headers:`, res.getHeaders());
-//     });
-//     next();
-//   }, express.static(path.join(__dirname, 'media')));
-
-
-
-// Custom middleware for handling JSON parsing errors
-app.use((req, res, next) => {
-    express.json({ limit: '2mb' })(req, res, (err) => {
-        if (err) {
-            return next(err);
-        }
-        next();
-    });
-});
-
 
 
 // Simple /ping endpoint

@@ -265,5 +265,36 @@ router.route('/users/cancel-follow')
     }
   );
 
+// Route to unfollow user
+router.route('/users/unfollow')
+  .delete(
+    async (req, res, next) => {
+      try {
+
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          console.log("User does not have required roles.");
+          return res.status(403).json({ error: 'Permission denied: Only registered users can request to unfollow a user.' });
+        }
+        const { followeeId, followerId, user } = req.body;
+ 
+        if (!user || user.userId !== followerId) {
+          console.log("User is not authorized to unfollow.");
+          return res.status(403).json({ error: 'Permission denied: You can only unfollow your own follow requests.' });
+        }
+
+        await socialController.unfollowUser(req, res, next);
+      } catch (err) {
+        next(err); // Pass any errors to the error handler
+      }
+    }
+  );
+
+
+
 
 module.exports = router;

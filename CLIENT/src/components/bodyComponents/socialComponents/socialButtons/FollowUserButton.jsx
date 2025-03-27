@@ -80,9 +80,9 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
       user: userLoggedInObject
     };
 
-    axiosPrivate.post(`${BACKEND}/social/users/unfollow`, data)
-      .then(response => {
+axiosPrivate.delete(`${BACKEND}/social/users/unfollow`, { data: data })
 
+      .then(response => {
 
         const removedFollower = response.data;
 
