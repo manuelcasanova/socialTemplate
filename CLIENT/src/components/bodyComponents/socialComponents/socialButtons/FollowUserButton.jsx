@@ -24,10 +24,10 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
     follower.followee_id === followerId && follower.follower_id === followeeId && follower.status === 'pending'
   );
 
-// console.log("amFollowingThem:", amFollowingThem);
-// console.log("amBeingFollowedByThem:", amBeingFollowedByThem);
-// console.log("pendingAcceptMe:", pendingAcceptMe);
-// console.log("pendingAcceptThem:", pendingAcceptThem);
+  // console.log("amFollowingThem:", amFollowingThem);
+  // console.log("amBeingFollowedByThem:", amBeingFollowedByThem);
+  // console.log("pendingAcceptMe:", pendingAcceptMe);
+  // console.log("pendingAcceptThem:", pendingAcceptThem);
 
   const followUser = (followeeId, followerId) => {
 
@@ -80,9 +80,10 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
       user: userLoggedInObject
     };
 
-axiosPrivate.delete(`${BACKEND}/social/users/unfollow`, { data: data })
+    axiosPrivate.delete(`${BACKEND}/social/users/unfollow`, { data: data })
 
       .then(response => {
+
 
         const removedFollower = response.data;
 
@@ -93,7 +94,7 @@ axiosPrivate.delete(`${BACKEND}/social/users/unfollow`, { data: data })
         );
 
         setFollowersAndFollowee(updatedFollowers);
-        setError(null); 
+        setError(null);
       })
       .catch(error => {
         console.error('Error sending unfollow request:', error);
@@ -152,7 +153,7 @@ axiosPrivate.delete(`${BACKEND}/social/users/unfollow`, { data: data })
             follower.followee_id === canceledFollower.followee_id)
         );
         setFollowersAndFollowee(updatedFollowers);
-        setError(null); 
+        setError(null);
       })
       .catch(error => {
         console.error('Error canceling follow request:', error);
@@ -188,7 +189,7 @@ axiosPrivate.delete(`${BACKEND}/social/users/unfollow`, { data: data })
       {pendingAcceptMe && <button onClick={handleCancelRequest}>Cancel request</button>}
 
       {pendingAcceptThem && <button onClick={() => { approveFollower(followeeId, followerId) }}>Approve request</button>}
-    
+
       {error && <div className="error-message">{error}</div>}
 
     </div>

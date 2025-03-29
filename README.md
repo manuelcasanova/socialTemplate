@@ -90,6 +90,10 @@ While we comply with these privacy regulations, we may still need to retain logs
 
 To manage user subscriptions, the system automatically checks the status of subscriptions once every 24 hours. If a user's subscription has expired (based on their renewal date), their subscription is marked as inactive. Additionally, the "User_subscribed" role is removed from users whose subscriptions are no longer active. This ensures that only active subscribers retain access to certain features.
 
+*** Social Features ***
+
+The app provides a range of social connection features to enhance user interaction and engagement. Users can view a list of all registered users, making it easy to discover new people to connect with. The system allows users to follow others, with a dedicated list displaying the users they are currently following, as well as a list of users who follow them back. Additionally, users can manage incoming follow requests through a list of pending requests, ensuring they have control over who they connect with. For those who prefer a quieter experience, users can mute specific individuals, and the app provides a list of all muted users.
+
 *** ENVIRONMENTAL VARIABLES ***
 
   *** Backend ***

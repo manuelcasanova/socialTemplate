@@ -364,6 +364,51 @@ const unfollowUser = async (req, res, next) => {
   }
 };
 
+const approveFollowRequest = async (req, res, next) => {
+  try {
+    const followeeId = req.body.followeeId;
+    const followerId = req.body.followerId;
+    const date = req.body.date || new Date();
+
+    if (req.body.user) {
+      // Attempt to update existing record
+      const updateQuery = `
+        UPDATE followers
+        SET status = 'accepted', lastmodification = $1
+        WHERE follower_id = $2 AND followee_id = $3
+        RETURNING *
+      `;
+      const updateValues = [date, followeeId, followerId];
+
+      // Execute update query
+      const updateResult = await pool.query(updateQuery, updateValues);
+
+      // Check if any rows were updated
+      if (updateResult.rowCount > 0) {
+        res.json(updateResult.rows[0]); // Return updated row
+      } else {
+        // If no rows were updated, insert new record
+        const insertQuery = `
+          INSERT INTO followers (follower_id, followee_id, status, lastmodification)
+          VALUES ($1, $2, 'accepted', $3)
+          RETURNING *
+        `;
+        const insertValues = [followerId, followeeId, date];
+
+        // Execute insert query
+        const insertResult = await pool.query(insertQuery, insertValues);
+        res.json(insertResult.rows[0]); // Return inserted row
+      }
+    } else {
+      res.status(403).json({ error: "Unauthorized access" });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 
 module.exports = {
   getAllUsers,
@@ -376,5 +421,6 @@ module.exports = {
   getPendingSocialRequests,
   followUser,
   cancelFollowRequest,
-  unfollowUser
+  unfollowUser,
+  approveFollowRequest
 };
