@@ -48,7 +48,7 @@
 
 .nav-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   height: auto;
@@ -80,7 +80,7 @@
 .subitem {
   font-style: italic;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   height: auto;
@@ -98,6 +98,29 @@
   color: var(--color9);
   font-weight: bold;
 }
+
+/*Follow notification*/
+
+.faBell-follow-request {
+  margin: 0em 0.5em 0em 0.5em;
+  position: relative;
+}
+
+.bell-container {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-dot {
+  position: absolute;
+  top: -5px; /* Adjust this value to position the dot closer/further */
+  right: 5px; /* Adjust this value to position the dot closer/further */
+  width: 10px; 
+  height: 10px; 
+  background-color: red;
+  border-radius: 50%;
+}
+
 
 /* Profile Image */
 

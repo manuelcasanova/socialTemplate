@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 //Components
 import Profile from '../navbarComponents/Profile';
 import Logo from '../navbarComponents/Logo';
+import FollowNotification from '../navbarComponents/FollowNotification';
 
 import useLogout from '../../hooks/useLogout';
 import useAuth from '../../hooks/useAuth';
@@ -33,6 +34,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
 
 
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  const [isFollowNotification, setIsFollowNotification] = useState(true)
 
   // Effect to detect window size
   useEffect(() => {
@@ -106,8 +109,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
     
       <div className='nav-item-with-dropdown'>
-          <div className='nav-item' onClick={() => toggleSection('social')}>Social
-            {showSections.social ? '▲' : '▼'}
+          <div className='nav-item' onClick={() => toggleSection('social')}>Users
+            {isFollowNotification ? 
+          <FollowNotification />
+        :
+            showSections.social ? '▲' : '▼'
+}
           </div>
           {showSections.social && (
             <>
@@ -124,6 +131,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
 
                 <div className="subitem" onClick={() => handleNavigate('/social/pending')}>
                   Pending Requests
+                  {isFollowNotification && <FollowNotification />}
                 </div>
 
                 <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
