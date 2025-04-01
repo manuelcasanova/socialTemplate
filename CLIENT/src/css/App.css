@@ -77,6 +77,11 @@
 
 .nav-item-logo:hover {}
 
+.nav-item-with-dropdown {
+  overflow: visible;
+  width: 100%;
+}
+
 .subitem {
   font-style: italic;
   display: flex;
@@ -84,9 +89,13 @@
   justify-content: center;
   align-items: center;
   height: auto;
-  padding: 5% 0% 5% 0%;
+  padding: 5% 5% 5% 10%;
   color: var(--color1);
   cursor: pointer;
+
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
 }
 
 .subitem:first-child {
@@ -386,10 +395,6 @@ max-width: 10px;
     padding-top: 5%;
   }
 
-  .nav-item-with-dropdown {
-    width: 100%;
-  }
-
   .hamburger {
     display: block;
   }
@@ -424,10 +429,6 @@ max-width: 10px;
     width: 100%;
   }
 
-  .nav-item-with-dropdown {
-    width: 100%;
-  }
-  
   .profile-image {
     max-height: 6em;
   }
@@ -490,12 +491,13 @@ max-width: 10px;
     flex: 1;
     height: 100%;
     padding: 0;
-    width: 100%;
   }
 
   .subitem {
     color: var(--color0);
     background-color: var(--color6);
+
+
   }
 
   .subitem:hover {
