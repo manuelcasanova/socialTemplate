@@ -32,7 +32,7 @@ CREATE TABLE followers (
   follower_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
   followee_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
   status VARCHAR(20),
-  lastmodification timestamp,
+  lastmodification TIMESTAMPTZ,
   newrequest boolean DEFAULT false,
   PRIMARY KEY (follower_id, followee_id),
   CHECK (follower_id <> followee_id) -- Users cannot follow themselves
@@ -49,7 +49,7 @@ CREATE TABLE muted (
 CREATE TABLE login_history (
   id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
-  login_time timestamp 
+  login_time TIMESTAMPTZ
 );
 
 CREATE TABLE user_roles (

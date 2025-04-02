@@ -220,12 +220,13 @@ const getPendingSocialRequests = async (req, res, next) => {
 const followUser = async (req, res, next) => {
   try {
 
+    
     const followeeId = req.body.followeeId;
     const followerId = req.body.followerId;
-    console.log("req.body.date followUser", req.body.date)
-    console.log("new DAte()", new Date().toString())
-    console.log(new Date().getTimezoneOffset()); 
-    const now = req.body.date || new Date(); // Use provided date or current date/time
+
+    const now = new Date(); 
+
+    // console.log("now new Date", new Date())
 
     if (req.body.user) {
       // Attempt to update existing record
@@ -371,7 +372,7 @@ const approveFollowRequest = async (req, res, next) => {
   try {
     const followeeId = req.body.followeeId;
     const followerId = req.body.followerId;
-    const date = req.body.date || new Date();
+    const date = new Date();
 
     if (req.body.user) {
       // Attempt to update existing record

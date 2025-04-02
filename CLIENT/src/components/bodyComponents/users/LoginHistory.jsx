@@ -66,11 +66,14 @@ export default function LoginHistory({ isNavOpen }) {
                 </tr>
               </thead>
               <tbody>
+              {/* {console.log(loginHistory)} */}
                 {loginHistory.map((login) => (
+                  
                   <tr key={`${login.login_time}-${login.user_id}`}>
                     <td>{login.user_id}</td>
                     <td>     {login.username.startsWith('inactive') ? 'Inactive User' : login.username}</td>
                     <td>{login.email}</td>
+                    
                     <td>{new Date(login.login_time).toLocaleString('en-GB', {
                       day: '2-digit',
                       month: '2-digit',

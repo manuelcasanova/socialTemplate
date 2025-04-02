@@ -4,7 +4,12 @@ const pool = require('../config/db')
 const getLoginHistory = async (req, res) => {
   try {
     const { user_id, username, email, from_date, to_date, from_time, to_time } = req.query;
-    // Get login history
+
+   // Set the time zone to UTC to ensure timestamps are returned in UTC
+   await pool.query('SET TIMEZONE TO \'UTC\'');
+
+       // Get login history
+
     let query = `
       SELECT 
         lh.user_id, 
@@ -68,6 +73,8 @@ const getLoginHistory = async (req, res) => {
 
     // Execute the query with parameters
     const result = await pool.query(query, queryParams);
+
+// console.log("loginHistory controller result.rows", result.rows[0])
 
     // Return the results
     res.status(200).json(result.rows);
