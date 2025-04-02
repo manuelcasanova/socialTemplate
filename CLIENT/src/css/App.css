@@ -20,7 +20,10 @@
   color: var(--color9);
   font-size: 2rem;
   cursor: pointer;
+}
 
+.hamburger:hover {
+  background-color: transparent;
 }
 
 .hamburger-open {

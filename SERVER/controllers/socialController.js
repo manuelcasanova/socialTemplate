@@ -222,6 +222,9 @@ const followUser = async (req, res, next) => {
 
     const followeeId = req.body.followeeId;
     const followerId = req.body.followerId;
+    console.log("req.body.date followUser", req.body.date)
+    console.log("new DAte()", new Date().toString())
+    console.log(new Date().getTimezoneOffset()); 
     const now = req.body.date || new Date(); // Use provided date or current date/time
 
     if (req.body.user) {

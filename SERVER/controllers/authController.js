@@ -45,7 +45,6 @@ const handleLogin = async (req, res) => {
 
         const roles = roleData.rows.map(role => role.role_name);
 
-
         // Insert login history with UTC time (ISO format)
         await pool.query(
           'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',

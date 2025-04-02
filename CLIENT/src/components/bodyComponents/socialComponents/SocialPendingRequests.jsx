@@ -100,7 +100,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
     return <div>Error: {error}</div>;
   }
 
-console.log("pendingRequests", pendingRequests)
+// console.log("pendingRequests", pendingRequests)
 
   // Filter the pendingRequests list to remove muted users
   const filteredPending = pendingRequests.filter(pending => {
@@ -112,9 +112,9 @@ console.log("pendingRequests", pendingRequests)
     return isUserActive &&  !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === pending.follower_id && mute.mute));
   });
 
-  console.log("mutedUSers", mutedUsers)
-  console.log("users", users)
-console.log("filteredPending", filteredPending)
+//   console.log("mutedUSers", mutedUsers)
+//   console.log("users", users)
+// console.log("filteredPending", filteredPending)
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>

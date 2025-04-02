@@ -49,7 +49,7 @@ CREATE TABLE muted (
 CREATE TABLE login_history (
   id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
-  login_time TIMESTAMPTZ 
+  login_time timestamp 
 );
 
 CREATE TABLE user_roles (
