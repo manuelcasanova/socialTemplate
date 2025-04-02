@@ -89,13 +89,18 @@
   justify-content: center;
   align-items: center;
   height: auto;
-  padding: 5% 5% 5% 10%;
+  padding: 5% 5% 5% 5%;
   color: var(--color1);
   cursor: pointer;
 
   white-space: nowrap; 
   overflow: hidden; 
   text-overflow: ellipsis; 
+}
+
+.with-notification-text {
+  /* color: white */
+  margin-left: 25px;
 }
 
 .subitem:first-child {

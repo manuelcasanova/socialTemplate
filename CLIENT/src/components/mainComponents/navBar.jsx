@@ -109,7 +109,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
     
       <div className='nav-item-with-dropdown'>
-          <div className='nav-item' onClick={() => toggleSection('social')}>Users
+          {/* <div className='nav-item' onClick={() => toggleSection('social')}>Users */}
+
+          <div className='nav-item' onClick={() => toggleSection('social')}>
+            <div className='with-notification-text'>Users</div>
+
             {isFollowNotification ? 
           <FollowNotification />
         :
@@ -130,7 +134,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
                 </div>
 
                 <div className="subitem" onClick={() => handleNavigate('/social/pending')}>
-                  Pending Requests
+                <div className='with-notification-text'>Pending Requests</div>
                   {isFollowNotification && <FollowNotification />}
                 </div>
 
