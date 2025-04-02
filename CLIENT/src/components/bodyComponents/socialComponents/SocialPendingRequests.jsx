@@ -100,11 +100,21 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
     return <div>Error: {error}</div>;
   }
 
+console.log("pendingRequests", pendingRequests)
+
   // Filter the pendingRequests list to remove muted users
   const filteredPending = pendingRequests.filter(pending => {
     const user = users.find(u => u.user_id === pending.follower_id);
-    return !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === pending.follower_id && mute.mute));
+
+  // Check if the user exists and is active
+  const isUserActive = user ? user.is_active : false;
+
+    return isUserActive &&  !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === pending.follower_id && mute.mute));
   });
+
+  console.log("mutedUSers", mutedUsers)
+  console.log("users", users)
+console.log("filteredPending", filteredPending)
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
@@ -112,7 +122,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
         <h2>Social - Pending Requests</h2>
 
         {filteredPending.length === 0 ? (
-          <p>No users available or all users are muted.</p>
+          <p>No pending requests.</p>
         ) : (
           <div className="users-container">
             {filteredPending.map((pending) => {
