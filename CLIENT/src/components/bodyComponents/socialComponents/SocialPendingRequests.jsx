@@ -36,7 +36,7 @@ const profilePictureExists = async (userId) => {
   }
 };
 
-export default function SocialPendingRequests({ isNavOpen }) {
+export default function SocialPendingRequests({ isNavOpen, isFollowingNotification, setIsFollowNotification }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [error, setError] = useState(null);
@@ -55,6 +55,11 @@ export default function SocialPendingRequests({ isNavOpen }) {
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
+
+
+  useEffect(() => {
+    setIsFollowNotification(false);
+  }, [setIsFollowNotification]);
 
   // Reset the error message whenever filters change
   useEffect(() => {

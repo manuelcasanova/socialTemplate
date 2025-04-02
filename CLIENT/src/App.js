@@ -37,6 +37,7 @@ import SocialPendingRequests from './components/bodyComponents/socialComponents/
 function App() {
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [isFollowNotification, setIsFollowNotification] = useState(false);
 
   // Update screenWidth on window resize
   useEffect(() => {
@@ -57,7 +58,7 @@ function App() {
 
     <div className="app">
 
-      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification}/>
 
       <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
@@ -103,7 +104,7 @@ function App() {
             <Route path="social/muted" element={<SocialMuted isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+            <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification}/> } />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>

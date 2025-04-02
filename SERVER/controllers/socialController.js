@@ -408,6 +408,82 @@ const approveFollowRequest = async (req, res, next) => {
   }
 };
 
+// Function to get follow notifications for a user
+const getFollowNotifications = async (req, res) => {
+  try {
+    const { userId } = req.query;
+
+    // Ensure that userId is provided
+    if (!userId) {
+      return res.status(400).json({ error: 'userId is required' });
+    }
+
+    // Get all follow requests where the last modification is later than the second last login
+    const result = await pool.query(
+      `WITH SecondLastLogin AS (
+          SELECT user_id, login_time,
+                 ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY login_time DESC) AS rn
+          FROM login_history
+        )
+        SELECT DISTINCT f.*
+        FROM followers f
+        JOIN SecondLastLogin sll ON f.followee_id = sll.user_id
+        WHERE f.lastmodification > (
+            SELECT MAX(login_time)
+            FROM SecondLastLogin
+            WHERE user_id = f.followee_id AND rn = 2
+          )
+        AND f.followee_id = $1
+        AND f.status = 'pending'
+        ORDER BY f.lastmodification DESC`,
+      [userId]
+    );
+
+    // Return the result
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error retrieving follow notifications:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+// const getFollowNotifications = async (req, res) => {
+//   try {
+//     const { userId } = req.query;
+
+//     console.log("hit socialController")
+
+//     // Ensure that userId is provided
+//     if (!userId) {
+//       return res.status(400).json({ error: 'userId is required' });
+//     }
+
+//     // Get all follow requests pending approval or follow actions involving the user
+//     const result = await pool.query(
+//       `SELECT f.follower_id, f.followee_id, f.status, f.newrequest, 
+//               f.lastmodification, u.username AS follower_username, 
+//               u2.username AS followee_username
+//        FROM followers f
+//        JOIN users u ON u.user_id = f.follower_id
+//        JOIN users u2 ON u2.user_id = f.followee_id
+//        WHERE (f.follower_id = $1 OR f.followee_id = $1)
+//        AND f.status = 'pending'
+//        ORDER BY f.lastmodification DESC`,
+//       [userId]
+//     );
+
+//     console.log("result.rows", result.rows)
+
+//     // Return the result
+//     res.status(200).json(result.rows);
+//   } catch (error) {
+//     console.error('Error retrieving follow notifications:', error);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// };
+
+
 
 
 module.exports = {
@@ -422,5 +498,6 @@ module.exports = {
   followUser,
   cancelFollowRequest,
   unfollowUser,
-  approveFollowRequest
+  approveFollowRequest,
+  getFollowNotifications
 };

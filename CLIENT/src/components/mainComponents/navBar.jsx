@@ -7,6 +7,7 @@ import Profile from '../navbarComponents/Profile';
 import Logo from '../navbarComponents/Logo';
 import FollowNotification from '../navbarComponents/FollowNotification';
 
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useLogout from '../../hooks/useLogout';
 import useAuth from '../../hooks/useAuth';
 
@@ -14,13 +15,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 
-const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey }) => {
-
+const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification }) => {
   const { auth } = useAuth();
+
+  const loggedInUser = auth.userId
 
   const logout = useLogout();
 
   const signOut = async () => {
+    setIsFollowNotification(false)
     await logout();
     navigate('/');
   }
@@ -32,10 +35,35 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
     social: false
   });
 
+  const axiosPrivate = useAxiosPrivate();
 
   const [isLargeScreen, setIsLargeScreen] = useState(false);
 
-  const [isFollowNotification, setIsFollowNotification] = useState(true)
+
+  // Fetch follow notifications when the component mounts
+  useEffect(() => {
+    if (!auth) {
+      console.error("auth is not available");
+      return;
+    }
+    const fetchFollowNotifications = async () => {
+      try {
+        const response = await axiosPrivate.get(`/social/users/follownotifications`, { params: { userId: loggedInUser } })
+        if (response.data.length > 0) {
+          setIsFollowNotification(true);
+        } else {
+          setIsFollowNotification(false);
+        }
+      } catch (error) {
+        console.error('Error fetching follow notifications:', error);
+        setIsFollowNotification(false);
+      }
+    };
+
+    if (loggedInUser) {
+      fetchFollowNotifications();
+    }
+  }, [loggedInUser, axiosPrivate]);
 
   // Effect to detect window size
   useEffect(() => {
@@ -107,45 +135,52 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey 
         <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
       }
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
-    
+
       <div className='nav-item-with-dropdown'>
-          {/* <div className='nav-item' onClick={() => toggleSection('social')}>Users */}
+        {/* <div className='nav-item' onClick={() => toggleSection('social')}>Users */}
 
-          <div className='nav-item' onClick={() => toggleSection('social')}>
-            <div className='with-notification-text'>Users</div>
+        <div className='nav-item' onClick={() => toggleSection('social')}>
 
-            {isFollowNotification ? 
-          <FollowNotification />
-        :
+          {isFollowNotification ? <div className='with-notification-text'>Users</div> :
+            <div>Users</div>}
+
+          {isFollowNotification ?
+            <FollowNotification />
+            :
             showSections.social ? '▲' : '▼'
-}
-          </div>
-          {showSections.social && (
-            <>
-              <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>All users</div>
-
-                <div className="subitem" onClick={() => handleNavigate('/social/following')}>
-                  Following
-                </div>
-  
-
-                <div className="subitem" onClick={() => handleNavigate('/social/followers')}>
-                  Followers
-                </div>
-
-                <div className="subitem" onClick={() => handleNavigate('/social/pending')}>
-                <div className='with-notification-text'>Pending Requests</div>
-                  {isFollowNotification && <FollowNotification />}
-                </div>
-
-                <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
-                  Muted
-                </div>
-
-            </>
-          )}
-
+          }
         </div>
+        {showSections.social && (
+          <>
+            <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>All users</div>
+
+            <div className="subitem" onClick={() => handleNavigate('/social/following')}>
+              Following
+            </div>
+
+
+            <div className="subitem" onClick={() => handleNavigate('/social/followers')}>
+              Followers
+            </div>
+
+            <div className="subitem" onClick={() => {
+              setIsFollowNotification(false);
+              handleNavigate('/social/pending')
+            }}
+            >
+              {isFollowNotification ? <div className='with-notification-text'>Pending requests</div> :
+                <div>Pending requests</div>}
+              {isFollowNotification && <FollowNotification />}
+            </div>
+
+            <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
+              Muted
+            </div>
+
+          </>
+        )}
+
+      </div>
 
       {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) &&
         <div className='nav-item-with-dropdown'>
