@@ -12,7 +12,7 @@ import useLogout from '../../hooks/useLogout';
 import useAuth from '../../hooks/useAuth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 
 const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification }) => {
@@ -206,6 +206,10 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         </div>
       }
 
+      <div className="nav-item" onClick={() => handleNavigate('/messages/allmessages')}>
+        <FontAwesomeIcon icon={faEnvelope} />
+      </div>
+
       {!isLargeScreen && Object.keys(auth).length > 0 && (
         <div className="nav-item" onClick={signOut}>
           <FontAwesomeIcon icon={faSignOutAlt} />
@@ -216,6 +220,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       {isLargeScreen && (
         <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
       )}
+
 
 
 

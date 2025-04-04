@@ -33,6 +33,8 @@ import SocialFollowee from './components/bodyComponents/socialComponents/SocialF
 import SocialMuted from './components/bodyComponents/socialComponents/SocialMuted';
 import SocialPendingRequests from './components/bodyComponents/socialComponents/SocialPendingRequests';
 
+import AllMessages from './components/bodyComponents/messagingComponents/AllMessages'
+
 
 function App() {
 
@@ -105,6 +107,10 @@ function App() {
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification}/> } />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="messages/allmessages" element={<AllMessages isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
