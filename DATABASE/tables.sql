@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS login_history CASCADE;
 DROP TABLE IF EXISTS user_roles CASCADE;
 DROP TABLE IF EXISTS role_change_logs;
 DROP TABLE IF EXISTS subscriptions;
+DROP TABLE IF EXISTS user_messages;
 
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
@@ -79,4 +80,14 @@ CREATE TABLE subscriptions (
   is_active BOOLEAN DEFAULT true,                  
   created_by_user_id INT,                        
   FOREIGN KEY (created_by_user_id) REFERENCES users(user_id) ON DELETE SET NULL
+);
+
+CREATE TABLE user_messages (
+    id SERIAL PRIMARY KEY,
+    sender INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    receiver INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    content TEXT,
+    date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'sent' CHECK (status IN ('sent', 'read', 'deleted')),
+    is_deleted BOOLEAN DEFAULT false
 );

@@ -350,6 +350,24 @@ router.route('/users/follownotifications')
     socialController.getFollowNotifications
   );
 
+  router.route('/users/with-messages')
+  .get(
+    async (req, res, next) => {
+      try {
+        const { userId } = req.query;
+
+        if (!userId) {
+          return res.status(400).json({ error: 'User ID is required' });
+        }
+
+        // Proceed to controller method
+        socialController.getUsersWithMessages(req, res);
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
 
 
 module.exports = router;

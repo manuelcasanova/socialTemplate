@@ -33,7 +33,7 @@ import SocialFollowee from './components/bodyComponents/socialComponents/SocialF
 import SocialMuted from './components/bodyComponents/socialComponents/SocialMuted';
 import SocialPendingRequests from './components/bodyComponents/socialComponents/SocialPendingRequests';
 
-import AllMessages from './components/bodyComponents/messagingComponents/AllMessages'
+import UsersWithMessages from './components/bodyComponents/messagingComponents/UsersWithMessages'
 
 
 function App() {
@@ -110,7 +110,7 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="messages/allmessages" element={<AllMessages isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+            <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>

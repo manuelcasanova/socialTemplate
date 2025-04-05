@@ -451,42 +451,42 @@ const getFollowNotifications = async (req, res) => {
   }
 };
 
+//Function to get all users that have messages and the timestamp of the last message
 
-// const getFollowNotifications = async (req, res) => {
-//   try {
-//     const { userId } = req.query;
+const getUsersWithMessages = async (req, res) => {
+  try {
+    const { userId } = req.query; // The logged-in user's ID from the request
 
-//     console.log("hit socialController")
+    // Query to fetch users who have exchanged messages with the logged-in user
+    const query = `
+ SELECT u.user_id, u.username, 
+       MAX(um.date) AS last_message_date
+FROM users u
+JOIN user_messages um
+    ON (um.sender = u.user_id OR um.receiver = u.user_id)
+WHERE (um.sender = $1 OR um.receiver = $1)
+  AND u.user_id != $1  -- Exclude your own user from the result
+GROUP BY u.user_id, u.username
+ORDER BY last_message_date DESC;
 
-//     // Ensure that userId is provided
-//     if (!userId) {
-//       return res.status(400).json({ error: 'userId is required' });
-//     }
+  `;
+  
+    
+    const result = await pool.query(query, [userId]);
 
-//     // Get all follow requests pending approval or follow actions involving the user
-//     const result = await pool.query(
-//       `SELECT f.follower_id, f.followee_id, f.status, f.newrequest, 
-//               f.lastmodification, u.username AS follower_username, 
-//               u2.username AS followee_username
-//        FROM followers f
-//        JOIN users u ON u.user_id = f.follower_id
-//        JOIN users u2 ON u2.user_id = f.followee_id
-//        WHERE (f.follower_id = $1 OR f.followee_id = $1)
-//        AND f.status = 'pending'
-//        ORDER BY f.lastmodification DESC`,
-//       [userId]
-//     );
+    // If no users found, return a message
+    if (result.rows.length === 0) {
+      // console.log('No users found with messages');
+      return res.status(200).json([]);
+    }
 
-//     console.log("result.rows", result.rows)
-
-//     // Return the result
-//     res.status(200).json(result.rows);
-//   } catch (error) {
-//     console.error('Error retrieving follow notifications:', error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// };
-
+    // console.log("Users found with messages", result.rows)
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error retrieving users with messages:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
 
@@ -503,5 +503,6 @@ module.exports = {
   cancelFollowRequest,
   unfollowUser,
   approveFollowRequest,
-  getFollowNotifications
+  getFollowNotifications,
+  getUsersWithMessages
 };

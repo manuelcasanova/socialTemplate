@@ -352,6 +352,10 @@ max-width: 10px;
   background-color: navy;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 /* Mobile Styles */
 @media (max-width: 580px) {
 

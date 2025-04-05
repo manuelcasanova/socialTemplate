@@ -51,4 +51,28 @@ INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
 
 
 
+-- Message 1: User 1 sends a message to User 2
+INSERT INTO user_messages (sender, receiver, content, date, status) 
+VALUES 
+(1, 2, 'Hey, how are you?', '2025-03-15 12:00:00+00', 'sent');
+
+-- Message 2: User 2 sends a message to User 1
+INSERT INTO user_messages (sender, receiver, content, date, status) 
+VALUES 
+(2, 1, 'I am good, how about you?', '2025-03-16 14:00:00+00', 'sent');
+
+-- Message 3: User 1 sends a follow-up message to User 2
+INSERT INTO user_messages (sender, receiver, content, date, status) 
+VALUES 
+(1, 2, 'Glad to hear that! What have you been up to?', '2025-03-20 10:30:00+00', 'sent');
+
+-- Message 4: User 2 sends another message to User 1
+INSERT INTO user_messages (sender, receiver, content, date, status) 
+VALUES 
+(2, 1, 'Just working on some projects. How about you?', '2025-03-22 16:00:00+00', 'sent');
+
+-- Test Message: User 1 sends a message to User 2 around April 30, 2025 for testing purposes
+INSERT INTO user_messages (sender, receiver, content, date, status) 
+VALUES 
+(1, 2, 'This is a test message for April 2025.', '2025-04-30 09:00:00+00', 'sent');
 

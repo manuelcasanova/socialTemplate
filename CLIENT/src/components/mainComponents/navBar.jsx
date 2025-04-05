@@ -136,7 +136,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
 
-      <div className='nav-item-with-dropdown'>
+      {auth.roles && <div className='nav-item-with-dropdown'>
         {/* <div className='nav-item' onClick={() => toggleSection('social')}>Users */}
 
         <div className='nav-item' onClick={() => toggleSection('social')}>
@@ -179,8 +179,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
           </>
         )}
-
       </div>
+      }
 
       {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) &&
         <div className='nav-item-with-dropdown'>
@@ -206,26 +206,32 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         </div>
       }
 
-      <div className="nav-item" onClick={() => handleNavigate('/messages/allmessages')}>
-        <FontAwesomeIcon icon={faEnvelope} />
-      </div>
-
-      {!isLargeScreen && Object.keys(auth).length > 0 && (
-        <div className="nav-item" onClick={signOut}>
-          <FontAwesomeIcon icon={faSignOutAlt} />
+      {auth.roles &&
+        < div className="nav-item" onClick={() => handleNavigate('/messages')}>
+          <FontAwesomeIcon icon={faEnvelope} />
         </div>
-      )}
+      }
+
+      {
+        !isLargeScreen && Object.keys(auth).length > 0 && (
+          <div className="nav-item" onClick={signOut}>
+            <FontAwesomeIcon icon={faSignOutAlt} />
+          </div>
+        )
+      }
 
 
-      {isLargeScreen && (
-        <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
-      )}
+      {
+        isLargeScreen && (
+          <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
+        )
+      }
 
 
 
 
 
-    </div>
+    </div >
   );
 };
 
