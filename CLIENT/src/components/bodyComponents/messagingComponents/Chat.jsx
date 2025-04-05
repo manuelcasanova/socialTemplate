@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 //Util functions
-import fetchUserById from "../socialComponents/util_functions/FetchUserById";
+import fetchUsernameById from "../socialComponents/util_functions/FetchUsernameById";
 
 
 //Styling
@@ -11,7 +11,6 @@ import '../../../css/Chat.css'
 export default function Chat({ isNavOpen }) {
 
   const { userId } = useParams();
-console.log("userId in Chat.jsx", userId)
 
   const navigate = useNavigate();
   const handleClose = () => navigate('/messages');
@@ -20,11 +19,9 @@ console.log("userId in Chat.jsx", userId)
   const [filters, setFilters] = useState({});
   const [users, setUsers] = useState([]);
   
-  // useEffect (() => {
-  //   fetchUserById(filters, setUsers, setIsLoading, setError, userId)
-  // }, [])
-
-  console.log("users in chat", users)
+  useEffect (() => {
+    fetchUsernameById(filters, setUsers, setIsLoading, setError, userId)
+  }, [])
 
 
   return (
@@ -32,7 +29,7 @@ console.log("userId in Chat.jsx", userId)
 
 <div className='chat-container'>
 <button className="chat-close-button" onClick={handleClose}>✖</button>
-<h2>Chat with {userId}</h2>
+<h2>Chat with {users.username}</h2>
 
 
 </div>

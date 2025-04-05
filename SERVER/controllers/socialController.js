@@ -43,15 +43,41 @@ const getAllUsers = async (req, res) => {
 
 // Function to get user by id
 
-const getUserById = async (req, res) => {
+const getUsernameByUserId = async (req, res) => {
   try {
-   console.log("hit socialController")
-  //  console.log("req,", req)
+
+    const { userId} = Number(req.query);
+
+    // Start the base query
+    let query = `
+            SELECT u.username
+            FROM users u
+        `;
+    const params = [];
+
+    // Add filter for user_id if provided
+    if (userId) {
+      query += ` AND u.user_id = $${params.length + 1}`;
+      params.push(userId);
+    }
+
+    // Execute the query
+    const result = await pool.query(query, params);
+
+    // If no user found, log a message
+    if (result.rows.length === 0) {
+      console.log('No user found with the given ID');
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return the username if found
+    res.status(200).json({ username: result.rows[0].username });
   } catch (error) {
-    console.error('Error retrieving users:', error);
+    console.error('Error retrieving username:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 
@@ -506,7 +532,7 @@ ORDER BY last_message_date DESC;
 
 module.exports = {
   getAllUsers,
-  getUserById,
+  getUsernameByUserId,
   getMutedUsers,
   muteUser,
   unmuteUser,
