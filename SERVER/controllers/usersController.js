@@ -94,44 +94,6 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-const getUserById = async (req, res) => {
-    const { user_id } = req.params; // Extract user_id from request parameters
-    try {
-        // Query to get user details (username, email)
-        const userResult = await pool.query(
-            'SELECT username, email FROM users WHERE user_id = $1',
-            [user_id]
-        );
-
-        if (userResult.rows.length === 0) {
-            // If no user is found, return a 404 status
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Query to get user roles, including whether the user is subscribed
-        const rolesResult = await pool.query(
-            'SELECT role_name FROM roles INNER JOIN user_roles ON roles.role_id = user_roles.role_id WHERE user_roles.user_id = $1',
-            [user_id]
-        );
-
-        const roles = rolesResult.rows.map(row => row.role_name);
-
-        // Check if the user has the 'user_subscribed' role
-        const isSubscribed = roles.includes('user_subscribed');
-
-        // Construct the response
-        const user = userResult.rows[0];
-        user.roles = roles;
-        user.isSubscribed = isSubscribed; // Add subscription status
-
-        // Return the user data along with subscription status
-        res.status(200).json(user);
-    } catch (error) {
-        console.error('Error retrieving user:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-};
-
 
 // Function to update user details
 const updateUser = async (req, res) => {
@@ -941,7 +903,6 @@ const processPayment = async ({ amount, currency }) => {
 
 module.exports = {
     getAllUsers,
-    getUserById,
     updateUser,
     softDeleteUser,
     uploadProfilePicture,

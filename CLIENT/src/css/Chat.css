@@ -1,0 +1,43 @@
+.chat-container {
+  width: 100%;
+  max-width: 1000px;
+  padding: 5px;
+  background-color: lightblue;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  min-height: 100%;
+  max-width: 500px;
+}
+
+.chat-close-button {
+  /* position: absolute; */
+text-align: right;
+  padding: 5px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--color0);
+  cursor: pointer;
+  /* transition: color 0.3s, transform 0.2s ease-in-out; */
+}
+
+.chat-close-button:hover {
+  /* color: var(--color1); */
+  background-color: transparent;
+
+}
+
+@media (max-width: 580px) {
+.chat-close-button {
+  /* top: 40px; */
+}
+}
+
+@media (min-width: 1025px) {
+  .chat-close-button {
+    /* top: 55px;
+    right: 35px; */
+  }
+  }

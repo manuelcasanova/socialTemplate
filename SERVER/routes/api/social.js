@@ -27,6 +27,8 @@ router.route('/users/all')
     socialController.getAllUsers
   );
 
+
+
 router.route('/users/muted')
   .get(
     async (req, res, next) => {

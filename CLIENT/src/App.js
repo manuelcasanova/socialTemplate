@@ -34,6 +34,7 @@ import SocialMuted from './components/bodyComponents/socialComponents/SocialMute
 import SocialPendingRequests from './components/bodyComponents/socialComponents/SocialPendingRequests';
 
 import UsersWithMessages from './components/bodyComponents/messagingComponents/UsersWithMessages'
+import Chat from './components/bodyComponents/messagingComponents/Chat';
 
 
 function App() {
@@ -111,6 +112,10 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+          </Route>
+
+          <Route element={<RequireAuth  allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']}/>}>
+          <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} />}/>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 //Hooks
 
@@ -37,17 +38,18 @@ function processUsername(username) {
   const match = username.match(regex);
 
   if (match) {
-      // If it matches, return the name with the '(Deleted account)' suffix
-      return match[1] + ' (Deleted account)';
+    // If it matches, return the name with the '(Deleted account)' suffix
+    return match[1] + ' (Deleted account)';
   } else {
-      // If it doesn't match, return the username as is
-      return username;
+    // If it doesn't match, return the username as is
+    return username;
   }
 }
 
 export default function UsersWithMessages({ isNavOpen }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -96,7 +98,7 @@ export default function UsersWithMessages({ isNavOpen }) {
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-      <div className="admin-users"> 
+      <div className="admin-users">
         <h2>Chats</h2>
 
         <div className="users-container">
@@ -146,7 +148,10 @@ export default function UsersWithMessages({ isNavOpen }) {
 
 
 
-                  <p className="cursor-pointer">{processUsername(user.username)}</p>
+                  <p
+                    className="cursor-pointer"
+                    onClick={() => navigate(`/messages/${user.user_id}`)}>
+                    {processUsername(user.username)}</p>
                 </div>
 
               </div>

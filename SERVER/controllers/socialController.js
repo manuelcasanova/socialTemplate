@@ -41,6 +41,20 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+// Function to get user by id
+
+const getUserById = async (req, res) => {
+  try {
+   console.log("hit socialController")
+  //  console.log("req,", req)
+  } catch (error) {
+    console.error('Error retrieving users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
 
 // Function to get all muted users
 
@@ -492,6 +506,7 @@ ORDER BY last_message_date DESC;
 
 module.exports = {
   getAllUsers,
+  getUserById,
   getMutedUsers,
   muteUser,
   unmuteUser,
