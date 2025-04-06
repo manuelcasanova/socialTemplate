@@ -46,21 +46,21 @@ router.route('/')
     usersController.getAllUsers
   );
 
-router.route('/:user_id')
-  .get(
-    async (req, res, next) => {
-      try {
-        const rolesList = await fetchRoles();
-        verifyRoles(...rolesList)(req, res, next);
-      } catch (err) {
-        next(err);
-      }
-    },
-    (req, res) => {
-      const { user_id } = req.params;
-      usersController.getUserById(req, res);
-    }
-  );
+// router.route('/:user_id')
+//   .get(
+//     async (req, res, next) => {
+//       try {
+//         const rolesList = await fetchRoles();
+//         verifyRoles(...rolesList)(req, res, next);
+//       } catch (err) {
+//         next(err);
+//       }
+//     },
+//     (req, res) => {
+//       const { user_id } = req.params;
+//       usersController.getUserById(req, res);
+//     }
+//   );
 
 
 router.route('/subscriptions/status/:user_id')

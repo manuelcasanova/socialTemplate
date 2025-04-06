@@ -61,6 +61,19 @@ export default function Chat({ isNavOpen }) {
     }
   }, [userId]);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    };
+    return new Intl.DateTimeFormat('en-GB', options).format(date);
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -107,6 +120,26 @@ export default function Chat({ isNavOpen }) {
           )}
 
           <h2>Chat with {users.username}</h2>
+
+
+          <div className="messages-container">
+          {messages.length > 0 ? (
+            messages.map((message) => (
+              <div key={message.id} className={message.sender === loggedInUser ? "message-left" : "message-right"}>
+
+                <div className={message.sender === loggedInUser ? "message-content-left" : "message-content-right"}>
+                  <p>{message.content}</p>
+                </div>
+                <div className="message-footer">
+                  <span className="message-date">{formatDate(message.date)}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No messages yet.</p>
+          )}
+        </div>
+
         </div>
 
       </div>

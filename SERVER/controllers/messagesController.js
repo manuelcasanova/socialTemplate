@@ -15,7 +15,7 @@ const userId = req.query.userId;
             WHERE (sender = $1 OR receiver = $1)
             AND 
             (sender = $2 OR receiver = $2)
-
+            ORDER BY date DESC;
         `;
     const params = [userId, loggedInUser];
 

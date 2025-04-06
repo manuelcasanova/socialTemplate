@@ -78,6 +78,79 @@ margin-bottom: 20px;
 
 }
 
+.messages-container {
+width: 100%;
+margin-top: 1em;
+}
+
+.message-right {
+margin-bottom: 1em;
+margin-left: 3em;
+
+}
+
+.message-left {
+  margin-bottom: 0.5em;
+  margin-right: 3em;
+}
+
+.message-footer {
+margin-top: 1px;
+color: black;
+text-align: end;
+font-style: italic;
+font-size: smaller;
+
+}
+
+.message-date {
+
+}
+
+.message-content-right {
+  background-color: var(--color9);
+padding: 0.5em;
+border-radius: 5px;
+font-weight: 400;
+}
+
+.message-content-left {
+  background-color: var(--color7);
+padding: 0.5em;
+border-radius: 5px;
+font-weight: 400;
+}
+
+.message-content-left p{
+  text-align: start;
+  color: var(--color1);
+  font-size: 16px;
+}
+
+.message-content-right p{
+  text-align: start;
+  color: var(--color1);
+  font-size: 16px;
+}
+
+/* Adding some space between messages */
+.messages-container .message + .message {
+
+}
+
+.messages-container p {
+ 
+}
+
+/* Ensure chat text area has enough padding */
+input, textarea {
+
+}
+
+textarea {
+
+}
+
 @media (max-width: 580px) {
   .chat-close-button {
     /* top: 40px; */
