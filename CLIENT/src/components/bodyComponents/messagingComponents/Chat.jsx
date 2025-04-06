@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 // Hooks
 import useAuth from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 // Util functions
 import fetchUsernameById from "../socialComponents/util_functions/FetchUsernameById";
@@ -32,6 +33,7 @@ const profilePictureExists = async (userId) => {
 export default function Chat({ isNavOpen }) {
   const { userId } = useParams();
   const { auth } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const loggedInUser = auth.userId;
   const navigate = useNavigate();
   const handleClose = () => navigate('/messages');
@@ -40,8 +42,19 @@ export default function Chat({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("")
   const [imageExists, setImageExists] = useState(false);
   const [showLargePicture, setShowLargePicture] = useState(false);
+  const inputRef = useRef(null);
+  
+  useEffect(() => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100); // Adjust time as necessary
+  }, []);
+
 
   // Fetch user data and messages
   useEffect(() => {
@@ -73,6 +86,42 @@ export default function Chat({ isNavOpen }) {
     };
     return new Intl.DateTimeFormat('en-GB', options).format(date);
   };
+
+  //Logic to send messages
+
+  const sendMessage = async (loggedInUser, userId) => {
+    // e.preventDefault();
+    try {
+      setIsLoading(true)
+      await axiosPrivate.post(`${BACKEND}/messages/send`, {
+        newMessage
+      });
+      setError(null)
+    } catch (err) {
+      console.log("error", err);
+      setError(err.response.data.message || "An error occurred. Try again later.");
+    }
+    finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!newMessage) {
+      alert('Please fill out the message field.');
+      return;
+    }
+    sendMessage(loggedInUser, userId)
+    setNewMessage("");
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit(e)
+    }
+  };
+
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -122,23 +171,48 @@ export default function Chat({ isNavOpen }) {
           <h2>Chat with {users.username}</h2>
 
 
-          <div className="messages-container">
-          {messages.length > 0 ? (
-            messages.map((message) => (
-              <div key={message.id} className={message.sender === loggedInUser ? "message-left" : "message-right"}>
+          <div className="users-messaging-send">
+            <input
+              placeholder="Aa"
+              ref={inputRef}
 
-                <div className={message.sender === loggedInUser ? "message-content-left" : "message-content-right"}>
-                  <p>{message.content}</p>
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                if (inputValue.length < 255) {
+                  setNewMessage(inputValue);
+                }
+              }}
+
+              onKeyDown={handleKeyDown}
+              value={newMessage}
+              required></input>
+            <button
+              disabled={!newMessage}
+              onClick={handleSubmit}
+              className="button-white"
+            >
+              {isLoading ? "Sending..." : "Send"}
+            </button>
+            {error && <p>{error}</p>}
+          </div>
+
+          <div className="messages-container">
+            {messages.length > 0 ? (
+              messages.map((message) => (
+                <div key={message.id} className={message.sender === loggedInUser ? "message-left" : "message-right"}>
+
+                  <div className={message.sender === loggedInUser ? "message-content-left" : "message-content-right"}>
+                    <p>{message.content}</p>
+                  </div>
+                  <div className="message-footer">
+                    <span className="message-date">{formatDate(message.date)}</span>
+                  </div>
                 </div>
-                <div className="message-footer">
-                  <span className="message-date">{formatDate(message.date)}</span>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No messages yet.</p>
-          )}
-        </div>
+              ))
+            ) : (
+              <p>No messages yet.</p>
+            )}
+          </div>
 
         </div>
 

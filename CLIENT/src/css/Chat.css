@@ -47,7 +47,8 @@
   margin: 0;
   font-size: 1.1em;
   padding-right: 1em;
-  overflow: hidden; /* Prevent any overflow from text */
+  overflow: hidden;
+  /* Prevent any overflow from text */
   color: var(--color0);
 }
 
@@ -55,10 +56,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
-justify-content: center;
-  align-items: center;
-  width: 100%; /* Ensure no overflow here */
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
 }
 
 .chat-one-user-info svg {
@@ -68,7 +68,7 @@ justify-content: center;
 .user-row-chat-small-img {
   max-height: 4em;
   max-width: 4em;
-margin-bottom: 20px;
+  margin-bottom: 20px;
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -79,13 +79,13 @@ margin-bottom: 20px;
 }
 
 .messages-container {
-width: 100%;
-margin-top: 1em;
+  width: 100%;
+  margin-top: 1em;
 }
 
 .message-right {
-margin-bottom: 1em;
-margin-left: 3em;
+  margin-bottom: 1em;
+  margin-left: 3em;
 
 }
 
@@ -95,61 +95,71 @@ margin-left: 3em;
 }
 
 .message-footer {
-margin-top: 1px;
-color: black;
-text-align: end;
-font-style: italic;
-font-size: smaller;
+  margin-top: 1px;
+  color: black;
+  text-align: end;
+  font-style: italic;
+  font-size: smaller;
 
 }
 
-.message-date {
-
-}
+.message-date {}
 
 .message-content-right {
   background-color: var(--color9);
-padding: 0.5em;
-border-radius: 5px;
-font-weight: 400;
+  padding: 0.5em;
+  border-radius: 5px;
+  font-weight: 400;
 }
 
 .message-content-left {
   background-color: var(--color7);
-padding: 0.5em;
-border-radius: 5px;
-font-weight: 400;
+  padding: 0.5em;
+  border-radius: 5px;
+  font-weight: 400;
 }
 
-.message-content-left p{
+.message-content-left p {
   text-align: start;
   color: var(--color1);
   font-size: 16px;
 }
 
-.message-content-right p{
+.message-content-right p {
   text-align: start;
   color: var(--color1);
   font-size: 16px;
 }
 
 /* Adding some space between messages */
-.messages-container .message + .message {
+.messages-container .message+.message {}
 
-}
-
-.messages-container p {
- 
-}
+.messages-container p {}
 
 /* Ensure chat text area has enough padding */
-input, textarea {
+input,
+textarea {}
 
+textarea {}
+
+.users-messaging-send {
+  padding: 10px;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
 }
 
-textarea {
-
+.users-messaging-send input {
+  flex-grow: 1;
+  margin-right: 10px;
+  height: 100%;
 }
+
+.users-messaging-send button {
+  height: 100%; /* Keep the button height same as input */
+}
+
 
 @media (max-width: 580px) {
   .chat-close-button {
