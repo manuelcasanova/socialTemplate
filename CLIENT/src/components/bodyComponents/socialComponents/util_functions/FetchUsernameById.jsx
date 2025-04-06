@@ -12,7 +12,7 @@ const fetchUsernameById = async (filters, setFollowers, setIsLoading, setError, 
     ]);
     setFollowers(usersResponse.data); // Set user data
   } catch (err) {
-    setError(`Failed to fetch data: ${err.response.data.error}`);
+    setError(`Failed to fetch data: ${err.response?.data?.error || err.message}`);
     console.error(err);
   } finally {
     setIsLoading(false);

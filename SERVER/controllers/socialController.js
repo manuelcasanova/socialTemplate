@@ -46,20 +46,15 @@ const getAllUsers = async (req, res) => {
 const getUsernameByUserId = async (req, res) => {
   try {
 
-    const { userId} = Number(req.query);
+    const userId = Number(req.query.userId);
 
     // Start the base query
     let query = `
             SELECT u.username
-            FROM users u
+            FROM users u 
+            wHERE u.user_id = $1
         `;
-    const params = [];
-
-    // Add filter for user_id if provided
-    if (userId) {
-      query += ` AND u.user_id = $${params.length + 1}`;
-      params.push(userId);
-    }
+    const params = [userId];
 
     // Execute the query
     const result = await pool.query(query, params);

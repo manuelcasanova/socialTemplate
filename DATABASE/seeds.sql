@@ -9,7 +9,8 @@ INSERT INTO roles (role_name) VALUES
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 
   ('Superadministrator', 'superadmin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-  ('Manuel', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
+  ('Manuel', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
+    ('Laura', 'laura@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
 ;
 
 -- INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture, location) VALUES
@@ -69,7 +70,7 @@ VALUES
 -- Message 4: User 2 sends another message to User 1
 INSERT INTO user_messages (sender, receiver, content, date, status) 
 VALUES 
-(2, 1, 'Just working on some projects. How about you?', '2025-03-22 16:00:00+00', 'sent');
+(2, 3, 'Just working on some projects. How about you?', '2025-03-22 16:00:00+00', 'sent');
 
 -- Test Message: User 1 sends a message to User 2 around April 30, 2025 for testing purposes
 INSERT INTO user_messages (sender, receiver, content, date, status) 
