@@ -52,7 +52,7 @@ export default function Chat({ isNavOpen }) {
       if (inputRef.current) {
         inputRef.current.focus();
       }
-    }, 500); 
+    }, 100); 
   }, []);
 
 
@@ -94,9 +94,21 @@ export default function Chat({ isNavOpen }) {
     try {
       setIsLoading(true)
       await axiosPrivate.post(`${BACKEND}/messages/send`, {
-        newMessage
+        newMessage,
+        loggedInUser,
+        userId
       });
       setError(null)
+
+      //Update messages after send
+      fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId);
+
+       // Focus back on the input field
+       setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 100); 
     } catch (err) {
       console.log("error", err);
       setError(err.response.data.message || "An error occurred. Try again later.");
@@ -155,8 +167,12 @@ export default function Chat({ isNavOpen }) {
 
           {/* Displaying Large Picture when clicked */}
           {showLargePicture && (
-            <div className="large-picture" onClick={() => setShowLargePicture(false)}>
+            // <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(false)}>
+              <div className="large-picture" onClick={() => setShowLargePicture(false)}>
+          
+              
               <img
+              
                 className="users-all-picture-large"
                 src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
                 alt="Large Profile"

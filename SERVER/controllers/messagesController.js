@@ -36,7 +36,39 @@ const userId = req.query.userId;
   }
 };
 
+// Send a message
+const sendMessage = async (req, res, next) => {
+
+  const sender = req.body.loggedInUser;
+const receiver = Number(req.body.userId);
+const newMessage = req.body.newMessage;
+const now = new Date();
+
+  try {
+
+    if (newMessage !== "") {
+      const addMessage = await pool.query(
+        `
+      INSERT INTO user_messages (content, receiver, sender, date)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *
+      `,
+        [newMessage, receiver, sender, now]
+      );
+      res.json(addMessage.rows[0])
+    } else {
+      return res.status(400).json({ error: 'Message cannot be empty' });
+    }
+
+
+
+  } catch (error) {
+    console.error('Error sending a message:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
-  getMessagesById
+  getMessagesById,
+  sendMessage
 };

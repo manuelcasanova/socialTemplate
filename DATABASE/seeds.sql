@@ -41,7 +41,9 @@ INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
   (1, 1, 1),
   (2, 1, 2),
   (1, 5, 1),
-  (2, 5, 2);  
+  (2, 5, 2),
+  (3, 1, 1)
+  ;  
 
 
 -- For testing expired subscription:
