@@ -13,7 +13,7 @@
 
 .chat-close-button {
   /* position: absolute; */
-text-align: right;
+  text-align: right;
   padding: 5px;
   background: none;
   border: none;
@@ -29,10 +29,59 @@ text-align: right;
 
 }
 
-@media (max-width: 580px) {
-.chat-close-button {
-  /* top: 40px; */
+.chat-user-info {
+  position: relative;
+  display: flex;
+  /* justify-content: space-between; */
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  /* Ensure no overflow here */
 }
+
+.chat-user-info svg:hover {
+  cursor: pointer;
+}
+
+.chat-user-info p {
+  margin: 0;
+  font-size: 1.1em;
+  padding-right: 1em;
+  overflow: hidden; /* Prevent any overflow from text */
+  color: var(--color0);
+}
+
+.chat-one-user-info {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+justify-content: center;
+  align-items: center;
+  width: 100%; /* Ensure no overflow here */
+}
+
+.chat-one-user-info svg {
+  margin-bottom: 20px;
+}
+
+.user-row-chat-small-img {
+  max-height: 4em;
+  max-width: 4em;
+margin-bottom: 20px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+
+}
+
+@media (max-width: 580px) {
+  .chat-close-button {
+    /* top: 40px; */
+  }
 }
 
 @media (min-width: 1025px) {
@@ -40,4 +89,4 @@ text-align: right;
     /* top: 55px;
     right: 35px; */
   }
-  }
+}

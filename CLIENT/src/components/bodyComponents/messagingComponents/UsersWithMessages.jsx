@@ -18,20 +18,10 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 //Util functions
 import fetchMutedUsers from "../socialComponents/util_functions/FetchMutedUsers";
 import fetchUsersWithMessages from "../socialComponents/util_functions/FetchUsersWithMessages";
+import { profilePictureExists } from "../../mainComponents/util_functions/ProfilePictureExists";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-// Function to check if profile picture exists for each user
-const profilePictureExists = async (userId) => {
-  const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
-  try {
-    const response = await fetch(imageUrl, { method: 'HEAD' });
-    return response.ok;
-  } catch (error) {
-    console.error("Error checking image existence:", error);
-    return false;
-  }
-};
 
 function processUsername(username) {
   const regex = /^inactive-\d{13}-(.*)$/; // Regex to match 'inactive-' followed by 13 digits and then the name
@@ -105,7 +95,7 @@ export default function UsersWithMessages({ isNavOpen }) {
           {usersToDisplay.length > 0 ? (
             usersToDisplay.map((user) => (
               <div className="user-row-social" key={user.user_id}>
-                <div className="user-info">
+                <div className="chat-user-info">
 
                   {imageExistsMap[user.user_id] ? (
                     <img

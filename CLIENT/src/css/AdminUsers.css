@@ -241,7 +241,7 @@ button:hover {
 @media (max-width: 580px) {
 
 .user-info {
- justify-content: center;
+ /* justify-content: center; */
 }
 
 .user-info-buttons {

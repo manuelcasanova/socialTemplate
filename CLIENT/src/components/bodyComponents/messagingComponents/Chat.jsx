@@ -4,16 +4,32 @@ import { useEffect, useState } from "react";
 // Hooks
 import useAuth from "../../../hooks/useAuth";
 
-//Util functions
+// Util functions
 import fetchUsernameById from "../socialComponents/util_functions/FetchUsernameById";
 import fetchMessages from "./util_functions/FetchMessages";
 
+// Components
+import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
-//Styling
+// Styling
 import '../../../css/Chat.css'
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
+
+const profilePictureExists = async (userId) => {
+  const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
+  try {
+    const response = await fetch(imageUrl, { method: 'HEAD' });
+    return response.ok;
+  } catch (error) {
+    console.error("Error checking image existence:", error);
+    return false;
+  }
+};
 
 export default function Chat({ isNavOpen }) {
-
   const { userId } = useParams();
   const { auth } = useAuth();
   const loggedInUser = auth.userId;
@@ -24,29 +40,76 @@ export default function Chat({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [imageExists, setImageExists] = useState(false);
+  const [showLargePicture, setShowLargePicture] = useState(false);
 
+  // Fetch user data and messages
   useEffect(() => {
-    fetchUsernameById(filters, setUsers, setIsLoading, setError, userId)
-    fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId)
-  }, [filters, loggedInUser, userId])
+    fetchUsernameById(filters, setUsers, setIsLoading, setError, userId);
+    fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId);
+  }, [filters, loggedInUser, userId]);
 
-  console.log("messages", messages)
+  // Check if profile picture exists for the user
+  useEffect(() => {
+    const checkImage = async () => {
+      const result = await profilePictureExists(userId);
+      setImageExists(result);
+    };
+
+    if (userId) {
+      checkImage();
+    }
+  }, [userId]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-
       <div className='chat-container'>
         <button className="chat-close-button" onClick={handleClose}>✖</button>
-        <h2>Chat with {users.username}</h2>
 
+        {/* Displaying the Profile Picture or Default Icon */}
+        <div className="chat-one-user-info">
+          {imageExists ? (
+            <img
+              className="user-row-chat-small-img"
+              src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
+              alt="Profile"
+              onClick={() => setShowLargePicture(true)}
+            />
+          ) : (
+            <FontAwesomeIcon
+              icon={faUser}
+              size="3x"
+              onClick={() => setShowLargePicture(true)}
+            />
+          )}
+
+          {/* Displaying Large Picture when clicked */}
+          {showLargePicture && (
+            <div className="large-picture" onClick={() => setShowLargePicture(false)}>
+              <img
+                className="users-all-picture-large"
+                src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
+                alt="Large Profile"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `${BACKEND}/media/profile_pictures/user.png`; // Default fallback image
+                }}
+              />
+            </div>
+          )}
+
+          <h2>Chat with {users.username}</h2>
+        </div>
 
       </div>
-
-
-
     </div>
-
-  )
+  );
 }
-
-
