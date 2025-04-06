@@ -63,9 +63,6 @@ width: 90%;
   object-fit: cover;
   border-radius: 50%;
   transition: transform 0.3s ease;
-
-
-
 }
 
 .user-row-social img:hover {

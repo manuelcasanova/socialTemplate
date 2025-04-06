@@ -9,10 +9,21 @@
   text-align: center;
   min-height: 100%;
   max-width: 500px;
+
+
+
+  align-items: center;
+  margin: auto;
+  display: flex;
+
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
+
+
 .chat-close-button {
-  /* position: absolute; */
+margin-left: 90%;
   text-align: right;
   padding: 5px;
   background: none;
@@ -20,7 +31,7 @@
   font-size: 24px;
   color: var(--color0);
   cursor: pointer;
-  /* transition: color 0.3s, transform 0.2s ease-in-out; */
+
 }
 
 .chat-close-button:hover {
@@ -68,6 +79,7 @@
 .user-row-chat-small-img {
   max-height: 4em;
   max-width: 4em;
+  margin: auto;
   margin-bottom: 20px;
   width: 100px;
   height: 100px;
@@ -155,10 +167,12 @@ textarea {}
   flex-grow: 1;
   margin-right: 10px;
   height: 100%;
+  padding: 0px 10px;
 }
 
 .users-messaging-send button {
-  height: 100%; /* Keep the button height same as input */
+  height: 100%;
+  /* Keep the button height same as input */
 }
 
 
@@ -166,15 +180,16 @@ textarea {}
   .chat-close-button {
     /* top: 40px; */
   }
+
   .users-messaging-send {
     flex-direction: column;
   }
 
   .users-messaging-send input {
-   margin-bottom: 0.5em;
-   margin-right: 0px;
-  height: 40px;
-  width: 100%;
+    margin-bottom: 0.5em;
+    margin-right: 0px;
+    height: 40px;
+    width: 100%;
   }
 
   .users-messaging-send button {
