@@ -52,7 +52,7 @@ export default function Chat({ isNavOpen }) {
       if (inputRef.current) {
         inputRef.current.focus();
       }
-    }, 100); // Adjust time as necessary
+    }, 500); 
   }, []);
 
 

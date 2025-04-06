@@ -148,6 +148,7 @@ textarea {}
   width: 100%;
   box-sizing: border-box;
   align-items: center;
+  max-width: 100%;
 }
 
 .users-messaging-send input {
@@ -165,6 +166,21 @@ textarea {}
   .chat-close-button {
     /* top: 40px; */
   }
+  .users-messaging-send {
+    flex-direction: column;
+  }
+
+  .users-messaging-send input {
+   margin-bottom: 0.5em;
+   margin-right: 0px;
+  height: 40px;
+  width: 100%;
+  }
+
+  .users-messaging-send button {
+    height: 50px;
+  }
+
 }
 
 @media (min-width: 1025px) {
