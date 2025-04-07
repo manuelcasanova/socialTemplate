@@ -72,10 +72,17 @@ VALUES
 -- Message 4: User 2 sends another message to User 1
 INSERT INTO user_messages (sender, receiver, content, date, status) 
 VALUES 
-(2, 3, 'Just working on some projects. How about you?', '2025-05-22 16:00:00+00', 'sent');
+(2, 1, 'Just working on some projects. How about you?', '2025-03-22 16:00:00+00', 'sent');
 
--- Test Message: User 1 sends a message to User 2 around April 30, 2025 for testing purposes
-INSERT INTO user_messages (sender, receiver, content, date, status) 
-VALUES 
-(1, 2, 'This is a test message for April 2025.', '2025-04-30 09:00:00+00', 'sent');
+-- -- Test Message: User 1 sends a message to User 2 around April 30, 2025 for testing purposes
+-- INSERT INTO user_messages (sender, receiver, content, date, status) 
+-- VALUES 
+-- (1, 2, 'This is a test message for March 2025.', '2025-03-30 09:00:00+00', 'sent');
 
+-- INSERT INTO user_messages (sender, receiver, content, date, status) 
+-- VALUES 
+-- (3, 2, 'This is a test message for May 2025.', '2025-04-30 09:00:00+00', 'sent');
+
+-- INSERT INTO user_messages (sender, receiver, content, date, status) 
+-- VALUES 
+-- (3, 2, 'This is a test message for June 2025.', '2025-06-30 09:00:00+00', 'sent');

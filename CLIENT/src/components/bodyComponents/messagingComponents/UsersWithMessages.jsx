@@ -14,11 +14,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+import MessageNotification from "../../navbarComponents/MessageNotification";
 
 //Util functions
 import fetchMutedUsers from "../socialComponents/util_functions/FetchMutedUsers";
 import fetchUsersWithMessages from "../socialComponents/util_functions/FetchUsersWithMessages";
 import { profilePictureExists } from "../../mainComponents/util_functions/ProfilePictureExists";
+import fetchNewMessagesNotification from "./util_functions/FetchNewMessagesNotification";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -43,11 +45,18 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [usersWithNewMessages, setUsersWithNewMessages] = useState([]);
   const [mutedUsers, setMutedUsers] = useState([]);
   const [filters, setFilters] = useState({});
   const loggedInUser = auth.userId;
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
+
+  console.log("users with new messages", usersWithNewMessages)
+
+  useEffect(() => {
+    fetchNewMessagesNotification(loggedInUser, setUsersWithNewMessages, setIsLoading, setError)
+  }, [])
 
   useEffect(() => {
     fetchUsersWithMessages(loggedInUser, setUsers, setIsLoading, setError);
@@ -134,14 +143,20 @@ export default function UsersWithMessages({ isNavOpen }) {
                     />
 
                   </div>}
-
-
+{/* 
+{console.log("user user id", user.user_id)}
+{console.log("usersWithNewMessages", usersWithNewMessages)} */}
 
 
                   <p
                     className="cursor-pointer"
                     onClick={() => navigate(`/messages/${user.user_id}`)}>
                     {processUsername(user.username)}</p>
+                    
+                    {/* <MessageNotification userId={user.user_id}/> */}
+                    {usersWithNewMessages.includes(user.user_id) && <MessageNotification userId={user.user_id} setUsersWithNewMessages={setUsersWithNewMessages}/>}
+
+
                 </div>
 
               </div>
