@@ -92,7 +92,7 @@ margin-left: 90%;
 
 .messages-container {
   width: 100%;
-  margin-top: 1em;
+  /* margin-top: 1em; */
 }
 
 .message-right {
@@ -147,6 +147,23 @@ margin-left: 90%;
 .messages-container .message+.message {}
 
 .messages-container p {}
+
+/* Refresh spinner */
+
+.refresh-messages {
+  color: var(--color9);
+  cursor: pointer;
+  transition: all 0.3s ease;
+ margin-right: 90%;
+ margin-bottom: 0px;
+ font-size: 20px;
+}
+
+.refresh-messages:hover {
+scale: 1.2;
+}
+
+
 
 /* Ensure chat text area has enough padding */
 input,

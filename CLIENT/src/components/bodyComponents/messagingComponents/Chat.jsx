@@ -14,7 +14,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 // Styling
 import '../../../css/Chat.css'
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -46,13 +46,13 @@ export default function Chat({ isNavOpen }) {
   const [imageExists, setImageExists] = useState(false);
   const [showLargePicture, setShowLargePicture] = useState(false);
   const inputRef = useRef(null);
-  
+
   useEffect(() => {
     setTimeout(() => {
       if (inputRef.current) {
         inputRef.current.focus();
       }
-    }, 100); 
+    }, 100);
   }, []);
 
 
@@ -103,12 +103,12 @@ export default function Chat({ isNavOpen }) {
       //Update messages after send
       fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId);
 
-       // Focus back on the input field
-       setTimeout(() => {
+      // Focus back on the input field
+      setTimeout(() => {
         if (inputRef.current) {
           inputRef.current.focus();
         }
-      }, 100); 
+      }, 100);
     } catch (err) {
       console.log("error", err);
       setError(err.response.data.message || "An error occurred. Try again later.");
@@ -168,11 +168,11 @@ export default function Chat({ isNavOpen }) {
           {/* Displaying Large Picture when clicked */}
           {showLargePicture && (
             // <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(false)}>
-              <div className="large-picture" onClick={() => setShowLargePicture(false)}>
-          
-              
+            <div className="large-picture" onClick={() => setShowLargePicture(false)}>
+
+
               <img
-              
+
                 className="users-all-picture-large"
                 src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
                 alt="Large Profile"
@@ -213,6 +213,14 @@ export default function Chat({ isNavOpen }) {
           </div>
 
           <div className="messages-container">
+            <FontAwesomeIcon
+              icon={faRefresh}
+              style={{ marginBottom: '5px' }}
+              title="Refresh messages"
+              className="refresh-messages"
+              onClick={() => fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId, messages)}
+            />
+
             {messages.length > 0 ? (
               messages.map((message) => (
                 <div key={message.id} className={message.sender === loggedInUser ? "message-left" : "message-right"}>
