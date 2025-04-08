@@ -41,6 +41,7 @@ function App() {
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [isFollowNotification, setIsFollowNotification] = useState(false);
+  const [hasNewMessages, setHasNewMessages] = useState(false)
 
   // Update screenWidth on window resize
   useEffect(() => {
@@ -61,7 +62,7 @@ function App() {
 
     <div className="app">
 
-      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification}/>
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages}/>
 
       <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
@@ -70,7 +71,7 @@ function App() {
 
         {/* Public routes */}
         <Route path="/bodytemplate" element={<TEMPLATE isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages}/>} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
         <Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
@@ -115,7 +116,7 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth  allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']}/>}>
-          <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} />}/>
+          <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages}/>}/>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>

@@ -14,7 +14,7 @@ const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
 const DEFAULT_PASSWORD = 'Password1!';  // Hardcoded default password for development
 // const DEFAULT_PASSWORD = '';
 
-const Signin = ({ isNavOpen, screenWidth }) => {
+const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
 
     const { setAuth } = useAuth();
     const navigate = useNavigate();
@@ -93,7 +93,8 @@ const Signin = ({ isNavOpen, screenWidth }) => {
 
         try {
             const response = await authenticateUser(password);
-            const { accessToken, userId, roles } = response?.data || {};
+            const { accessToken, userId, roles, hasNewMessages } = response?.data || {};
+            setHasNewMessages(hasNewMessages)
             setAuth({ userId, user, email, roles, accessToken });
             resetUser();
             passwordRef.current.value = '';

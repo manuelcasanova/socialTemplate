@@ -30,7 +30,7 @@ const profilePictureExists = async (userId) => {
   }
 };
 
-export default function Chat({ isNavOpen }) {
+export default function Chat({ isNavOpen, setHasNewMessages }) {
   const { userId } = useParams();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
@@ -60,6 +60,7 @@ export default function Chat({ isNavOpen }) {
   useEffect(() => {
     fetchUsernameById(filters, setUsers, setIsLoading, setError, userId);
     fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId);
+    setHasNewMessages(false);
   }, [filters, loggedInUser, userId]);
 
   // Check if profile picture exists for the user

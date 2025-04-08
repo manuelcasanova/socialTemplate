@@ -138,6 +138,29 @@
   border-radius: 50%;
 }
 
+/* New message notification */
+
+.faBell-new-message {
+  margin: 0em 0.5em 0em 0.5em;
+  position: relative;
+}
+
+.new-message-bell-container {
+  position: relative;
+  display: inline-block;
+}
+
+.new-message-notification-dot {
+  position: absolute;
+  top: -5px; /* Adjust this value to position the dot closer/further */
+  right: 5px; /* Adjust this value to position the dot closer/further */
+  width: 10px; 
+  height: 10px; 
+  background-color: red;
+  border-radius: 50%;
+}
+
+
 
 /* Profile Image */
 

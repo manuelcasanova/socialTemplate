@@ -45,6 +45,14 @@ const handleLogin = async (req, res) => {
 
         const roles = roleData.rows.map(role => role.role_name);
 
+        // Check if the user has any unread messages (status = 'sent')
+        const unreadMessages = await pool.query(
+            'SELECT * FROM user_messages WHERE receiver = $1 AND status = $2',
+            [userId, 'sent']
+          );
+  
+          const hasNewMessages = unreadMessages.rows.length > 0;
+
         // Insert login history with UTC time (ISO format)
         await pool.query(
           'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',
@@ -71,9 +79,9 @@ const handleLogin = async (req, res) => {
         res.cookie('jwt', refreshToken, {
           httpOnly: true, sameSite: "None", secure: true, maxAge: 24 * 60 * 60 * 1000
         });
-
+// console.log(`Does User ID ${userId} have new messages? ${hasNewMessages}`)
         // Return the response with the access token, user ID, and roles
-        res.json({ userId, roles, accessToken });
+        res.json({ userId, roles, accessToken, hasNewMessages });
 
       } else {
         res.status(401).json({ error: "Wrong email or password" });

@@ -14,13 +14,14 @@ import useAuth from '../../hooks/useAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
+const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages }) => {
 
-const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification }) => {
   const { auth } = useAuth();
-
   const loggedInUser = auth.userId
-
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const logout = useLogout();
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
   const signOut = async () => {
     setIsFollowNotification(false)
@@ -28,17 +29,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     navigate('/');
   }
 
-  const navigate = useNavigate();
   const [showSections, setShowSections] = useState({
     admin: false,
     profile: false,
     social: false
   });
-
-  const axiosPrivate = useAxiosPrivate();
-
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
-
 
   // Fetch follow notifications when the component mounts
   useEffect(() => {
@@ -206,9 +201,29 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         </div>
       }
 
-      {auth.roles &&
+      {auth.roles && !hasNewMessages &&
         < div className="nav-item" onClick={() => handleNavigate('/messages')}>
           <FontAwesomeIcon icon={faEnvelope} />
+        </div>
+      }
+
+      {auth.roles && hasNewMessages &&
+      <div className='nav-item'
+      onClick={() => {
+        navigate(`/messages/`);
+      }}
+      >
+        <div className="new-message-bell-container" 
+          onClick={() => {
+            navigate(`/messages/`);
+          }}
+        >
+
+          <FontAwesomeIcon
+            className="faBell-new-message" 
+            icon={faEnvelope} />
+          <span className="new-message-notification-dot"></span> 
+        </div>
         </div>
       }
 
