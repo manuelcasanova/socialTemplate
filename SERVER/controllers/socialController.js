@@ -468,10 +468,13 @@ const getFollowNotifications = async (req, res) => {
         FROM followers f
         JOIN SecondLastLogin sll ON f.followee_id = sll.user_id
         WHERE f.lastmodification > (
-            SELECT MAX(login_time)
-            FROM SecondLastLogin
-            WHERE user_id = f.followee_id AND rn = 2
-          )
+                SELECT COALESCE(
+               (SELECT MAX(login_time)
+                FROM SecondLastLogin
+                WHERE user_id = f.followee_id AND rn = 2),
+               '1970-01-01' -- or another default value
+           )
+)
         AND f.followee_id = $1
         AND f.status = 'pending'
         ORDER BY f.lastmodification DESC`,
