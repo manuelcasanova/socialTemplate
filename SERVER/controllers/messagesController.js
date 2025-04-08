@@ -22,11 +22,25 @@ const userId = req.query.userId;
     // Execute the query
     const result = await pool.query(query, params);
 
+console.log(result.rows)
+
     // If no user found, log a message
     if (result.rows.length === 0) {
-      console.log('No user found with the given ID');
-      return res.status(404).json({ message: 'User not found' });
+      console.log('No messages found');
+      return res.status(404).json({ message: 'Messages not found' });
     }
+
+        // Start the base query
+        let query2 = `
+        UPDATE user_messages
+        SET status = 'read'
+        WHERE receiver = $2
+        AND sender = $1
+    `;
+const params2 = [userId, loggedInUser];
+
+// Execute the query
+await pool.query(query2, params2);
 
     // Return the username if found
     res.status(200).json(result.rows);
