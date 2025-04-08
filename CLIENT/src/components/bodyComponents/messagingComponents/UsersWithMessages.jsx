@@ -52,7 +52,7 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
 
-  console.log("users with new messages", usersWithNewMessages)
+  // console.log("users with new messages", usersWithNewMessages)
 
   useEffect(() => {
     fetchNewMessagesNotification(loggedInUser, setUsersWithNewMessages, setIsLoading, setError)

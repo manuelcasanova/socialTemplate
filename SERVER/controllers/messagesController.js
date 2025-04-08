@@ -22,7 +22,7 @@ const userId = req.query.userId;
     // Execute the query
     const result = await pool.query(query, params);
 
-console.log(result.rows)
+// console.log(result.rows)
 
     // If no user found, log a message
     if (result.rows.length === 0) {
@@ -123,7 +123,8 @@ const getNewMessagesNotification = async (req, res) => {
       FROM user_messages
       WHERE receiver = $1
       AND date > $2
-      AND is_deleted = FALSE;
+      AND is_deleted = FALSE
+      AND status != 'read';
     `;
     const messageParams = [loggedInUser, secondRecentLoginTime];
 
