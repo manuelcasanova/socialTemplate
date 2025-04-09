@@ -510,11 +510,13 @@ const getUsersWithMessages = async (req, res) => {
               SELECT followee_id 
               FROM followers 
               WHERE follower_id = $1
+              AND status = 'accepted'
             ) 
              OR u.user_id IN (
               SELECT follower_id 
               FROM followers 
               WHERE followee_id = $1
+              AND status = 'accepted'
             ))
         AND u.username ILIKE $2 -- Match the username (case-insensitive)
       GROUP BY u.user_id, u.username
