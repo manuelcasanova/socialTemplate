@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MuteUserButton from "./socialButtons/MuteUserButton";
 import FollowUserButton from "./socialButtons/FollowUserButton";
+import Error from "../Error";
 
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
@@ -92,7 +93,7 @@ export default function SocialFollowers({ isNavOpen }) {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <Error isNavOpen={isNavOpen} error={error}/>
   }
 
   // Filter the followers list to remove muted users

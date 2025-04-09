@@ -11,6 +11,7 @@ import fetchMessages from "./util_functions/FetchMessages";
 
 // Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+import Error from "../Error";
 
 // Styling
 import '../../../css/Chat.css'
@@ -141,7 +142,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <Error isNavOpen={isNavOpen} error={error}/>
   }
 
   return (

@@ -201,6 +201,18 @@ button:hover {
   accent-color: #007bff; /* Matches button color */
 }
 
+.error-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+.error-suggestion {
+font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5em;
+}
+
 .error-message {
   color: red;
   font-weight: bold;

@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import filterUsers
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MuteUserButton from "./socialButtons/MuteUserButton";
+import Error from "../Error";
 
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
@@ -97,7 +98,7 @@ export default function SocialMuted({ isNavOpen }) {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <Error isNavOpen={isNavOpen} error={error}/>
   }
 
 

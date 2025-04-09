@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MessageNotification from "../../navbarComponents/MessageNotification";
+import Error from "../Error";
 
 //Util functions
 import fetchMutedUsers from "../socialComponents/util_functions/FetchMutedUsers";
@@ -97,7 +98,7 @@ export default function UsersWithMessages({ isNavOpen }) {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <Error isNavOpen={isNavOpen} error={error}/>
   }
 
   // Exclude muted users

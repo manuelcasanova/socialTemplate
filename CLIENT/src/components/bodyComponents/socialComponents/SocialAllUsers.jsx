@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import FollowUserButton from "./socialButtons/FollowUserButton";
 import MuteUserButton from "./socialButtons/MuteUserButton";
+import Error from "../Error";
 
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
@@ -93,7 +94,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <Error isNavOpen={isNavOpen} error={error}/>
   }
 
 

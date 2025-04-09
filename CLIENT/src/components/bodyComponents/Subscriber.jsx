@@ -4,6 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import LoadingSpinner from "../loadingSpinner/LoadingSpinner";
+import Error from "./Error";
 
 export default function Subscriber({ isNavOpen }) {
   const { auth } = useAuth();
@@ -62,7 +63,7 @@ export default function Subscriber({ isNavOpen }) {
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <Error isNavOpen={isNavOpen} error={error}/>
   }
 
   if (isSubscribed === false) {
