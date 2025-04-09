@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 
 //Hooks
@@ -47,27 +47,35 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [users, setUsers] = useState([]);
   const [usersWithNewMessages, setUsersWithNewMessages] = useState([]);
   const [mutedUsers, setMutedUsers] = useState([]);
-  const [filters, setFilters] = useState({});
+  const [filterUsername, setFilterUsername] = useState(""); 
+  const [filters, setFilters] = useState("")
   const loggedInUser = auth.userId;
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
-
+  const inputRef = useRef(null);
   // console.log("users with new messages", usersWithNewMessages)
+
+  useEffect(() => {
+    // Focus the input field after the component mounts
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }); 
 
   useEffect(() => {
     fetchNewMessagesNotification(loggedInUser, setUsersWithNewMessages, setIsLoading, setError)
   }, [])
 
   useEffect(() => {
-    fetchUsersWithMessages(loggedInUser, setUsers, setIsLoading, setError);
+    fetchUsersWithMessages(loggedInUser, setUsers, setIsLoading, setError, filterUsername);
     // Fetch muted users (optional depending on your app's structure)
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
-  }, [loggedInUser]);
+  }, [loggedInUser, filterUsername]);
 
   // Reset the error message whenever filters change
   useEffect(() => {
     setError(null); // Clear error when filters change
-  }, [filters]);
+  }, [filterUsername]);
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -99,6 +107,21 @@ export default function UsersWithMessages({ isNavOpen }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
         <h2>Chats</h2>
+
+        <div className="filter-container chats-filter">
+      <div className="filter-wrapper">
+        <input
+          type="text"
+          className="filter-container-input-username"
+          placeholder="Username"
+          value={filterUsername}
+          onChange={(e) => setFilterUsername(e.target.value)}
+          pattern="[a-zA-Z0-9-_^\s]+" // Optional, prevents invalid submission
+          ref={inputRef} 
+          title="Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+        />
+      </div>
+    </div>
 
         <div className="users-container">
           {usersToDisplay.length > 0 ? (

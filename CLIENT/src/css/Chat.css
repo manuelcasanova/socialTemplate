@@ -20,6 +20,11 @@
   margin-bottom: auto;
 }
 
+.chats-filter input {
+  width: 100%;
+  margin: auto;
+  max-width: 500px;
+}
 
 
 .chat-close-button {
