@@ -491,56 +491,161 @@ const getFollowNotifications = async (req, res) => {
 
 //Function to get all users that have messages and the timestamp of the last message
 
+// const getUsersWithMessages = async (req, res) => {
+//   try {
+//     const { userId, username, hideMuted } = req.query; // The logged-in user's ID and optional username from the request
+
+//     // Case 1: If username is provided (searching for a specific user), fetch users followed or following, regardless of message exchange
+//     if (username && username !== "") {
+//       const query = `
+//       SELECT u.user_id, u.username, 
+//              MAX(um.date) AS last_message_date
+//       FROM users u
+//       LEFT JOIN user_messages um
+//         ON (um.sender = u.user_id OR um.receiver = u.user_id)
+//       WHERE u.user_id != $1 -- Exclude the logged-in user
+//         AND (u.user_id IN (
+//               SELECT followee_id 
+//               FROM followers 
+//               WHERE follower_id = $1
+//               AND status = 'accepted'
+//             ) 
+//              OR u.user_id IN (
+//               SELECT follower_id 
+//               FROM followers 
+//               WHERE followee_id = $1
+//               AND status = 'accepted'
+//             ))
+//         AND u.username ILIKE $2 -- Match the username (case-insensitive)
+//       GROUP BY u.user_id, u.username
+//       ORDER BY last_message_date DESC NULLS LAST, u.username ASC;`;
+
+//       const result = await pool.query(query, [userId, `%${username}%`]);
+
+//       return res.status(200).json(result.rows);
+//     }
+
+//     // Case 2: If username is not provided, fetch users with whom messages have been exchanged
+//     const query = `
+//       SELECT u.user_id, u.username, 
+//              MAX(um.date) AS last_message_date
+//       FROM users u
+//       JOIN user_messages um
+//         ON (um.sender = u.user_id OR um.receiver = u.user_id)
+//       WHERE (um.sender = $1 OR um.receiver = $1)
+//         AND u.user_id != $1  -- Exclude your own user from the result
+//       GROUP BY u.user_id, u.username
+//       ORDER BY last_message_date DESC;
+//     `;
+
+//     const result = await pool.query(query, [userId]);
+
+//     // If no users found with messages, return an empty list
+//     if (result.rows.length === 0) {
+//       return res.status(200).json([]);
+//     }
+
+//     // If users are found with messages, return them
+//     res.status(200).json(result.rows);
+
+//   } catch (error) {
+//     console.error('Error retrieving users with messages:', error);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// };
+
+
 const getUsersWithMessages = async (req, res) => {
   try {
-    const { userId, username } = req.query; // The logged-in user's ID and optional username from the request
-
-    console.log("username", username);
+    const { userId, username, hideMuted } = req.query; // The logged-in user's ID and optional username from the request
 
     // Case 1: If username is provided (searching for a specific user), fetch users followed or following, regardless of message exchange
     if (username && username !== "") {
-      const query = `
-      SELECT u.user_id, u.username, 
-             MAX(um.date) AS last_message_date
-      FROM users u
-      LEFT JOIN user_messages um
-        ON (um.sender = u.user_id OR um.receiver = u.user_id)
-      WHERE u.user_id != $1 -- Exclude the logged-in user
-        AND (u.user_id IN (
-              SELECT followee_id 
-              FROM followers 
-              WHERE follower_id = $1
-              AND status = 'accepted'
-            ) 
-             OR u.user_id IN (
-              SELECT follower_id 
-              FROM followers 
-              WHERE followee_id = $1
-              AND status = 'accepted'
-            ))
-        AND u.username ILIKE $2 -- Match the username (case-insensitive)
-      GROUP BY u.user_id, u.username
-      ORDER BY last_message_date DESC NULLS LAST, u.username ASC;`;
+      const queryParts = [
+        `
+          SELECT u.user_id, u.username, 
+                 MAX(um.date) AS last_message_date
+          FROM users u
+          LEFT JOIN user_messages um
+            ON (um.sender = u.user_id OR um.receiver = u.user_id)
+        `
+      ];
 
-      const result = await pool.query(query, [userId, `%${username}%`]);
+      // Add the conditions for filtering based on followed/follower relationships
+      queryParts.push(`
+          WHERE u.user_id != $1 -- Exclude the logged-in user
+            AND (u.user_id IN (
+                  SELECT followee_id 
+                  FROM followers 
+                  WHERE follower_id = $1
+                  AND status = 'accepted'
+                ) 
+               OR u.user_id IN (
+                  SELECT follower_id 
+                  FROM followers 
+                  WHERE followee_id = $1
+                  AND status = 'accepted'
+                ))
+            AND u.username ILIKE $2 -- Match the username (case-insensitive)
+      `);
+
+      // If hideMuted is true, exclude muted users
+      if (hideMuted === 'true') {
+        queryParts.push(`
+          AND u.user_id NOT IN (
+            SELECT mutee
+            FROM muted
+            WHERE muter = $1
+            AND mute = true
+          )
+        `);
+      }
+
+      queryParts.push(`
+          GROUP BY u.user_id, u.username
+          ORDER BY last_message_date DESC NULLS LAST, u.username ASC;
+      `);
+
+      const result = await pool.query(queryParts.join(''), [userId, `%${username}%`]);
 
       return res.status(200).json(result.rows);
     }
 
     // Case 2: If username is not provided, fetch users with whom messages have been exchanged
-    const query = `
-      SELECT u.user_id, u.username, 
-             MAX(um.date) AS last_message_date
-      FROM users u
-      JOIN user_messages um
-        ON (um.sender = u.user_id OR um.receiver = u.user_id)
-      WHERE (um.sender = $1 OR um.receiver = $1)
-        AND u.user_id != $1  -- Exclude your own user from the result
-      GROUP BY u.user_id, u.username
-      ORDER BY last_message_date DESC;
-    `;
+    const queryParts = [
+      `
+        SELECT u.user_id, u.username, 
+               MAX(um.date) AS last_message_date
+        FROM users u
+        JOIN user_messages um
+          ON (um.sender = u.user_id OR um.receiver = u.user_id)
+      `
+    ];
 
-    const result = await pool.query(query, [userId]);
+    // Add conditions for excluding your own user and retrieving users with messages
+    queryParts.push(`
+        WHERE (um.sender = $1 OR um.receiver = $1)
+          AND u.user_id != $1  -- Exclude your own user from the result
+    `);
+
+    // If hideMuted is true, exclude muted users
+    if (hideMuted === 'true') {
+      queryParts.push(`
+        AND u.user_id NOT IN (
+          SELECT mutee
+          FROM muted
+          WHERE muter = $1
+          AND mute = true
+        )
+      `);
+    }
+
+    queryParts.push(`
+        GROUP BY u.user_id, u.username
+        ORDER BY last_message_date DESC;
+    `);
+
+    const result = await pool.query(queryParts.join(''), [userId]);
 
     // If no users found with messages, return an empty list
     if (result.rows.length === 0) {
@@ -557,43 +662,6 @@ const getUsersWithMessages = async (req, res) => {
 };
 
 
-
-
-// const getUsersWithMessages = async (req, res) => {
-//   try {
-//     const { userId, username } = req.query; // The logged-in user's ID from the request
-
-//     console.log("username", username)
-//     // Query to fetch users who have exchanged messages with the logged-in user
-//     const query = `
-//  SELECT u.user_id, u.username, 
-//        MAX(um.date) AS last_message_date
-// FROM users u
-// JOIN user_messages um
-//     ON (um.sender = u.user_id OR um.receiver = u.user_id)
-// WHERE (um.sender = $1 OR um.receiver = $1)
-//   AND u.user_id != $1  -- Exclude your own user from the result
-// GROUP BY u.user_id, u.username
-// ORDER BY last_message_date DESC;
-
-//   `;
-  
-    
-//     const result = await pool.query(query, [userId]);
-
-//     // If no users found, return a message
-//     if (result.rows.length === 0) {
-//       // console.log('No users found with messages');
-//       return res.status(200).json([]);
-//     }
-
-//     // console.log("Users found with messages", result.rows)
-//     res.status(200).json(result.rows);
-//   } catch (error) {
-//     console.error('Error retrieving users with messages:', error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// };
 
 
 

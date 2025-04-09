@@ -48,30 +48,33 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [users, setUsers] = useState([]);
   const [usersWithNewMessages, setUsersWithNewMessages] = useState([]);
   const [mutedUsers, setMutedUsers] = useState([]);
-  const [filterUsername, setFilterUsername] = useState(""); 
+  const [filterUsername, setFilterUsername] = useState("");
   const [filters, setFilters] = useState("")
+  const [hideMuted, setHideMuted] = useState(true); 
   const loggedInUser = auth.userId;
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
   const inputRef = useRef(null);
   // console.log("users with new messages", usersWithNewMessages)
 
+console.log("hideMuted", hideMuted)
+
   useEffect(() => {
     // Focus the input field after the component mounts
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }); 
+  });
 
   useEffect(() => {
     fetchNewMessagesNotification(loggedInUser, setUsersWithNewMessages, setIsLoading, setError)
   }, [])
 
   useEffect(() => {
-    fetchUsersWithMessages(loggedInUser, setUsers, setIsLoading, setError, filterUsername);
+    fetchUsersWithMessages(loggedInUser, setUsers, setIsLoading, setError, filterUsername, hideMuted);
     // Fetch muted users (optional depending on your app's structure)
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
-  }, [loggedInUser, filterUsername]);
+  }, [loggedInUser, filterUsername, hideMuted]);
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -98,11 +101,18 @@ export default function UsersWithMessages({ isNavOpen }) {
   }
 
   if (error) {
-    return <Error isNavOpen={isNavOpen} error={error}/>
+    return <Error isNavOpen={isNavOpen} error={error} />
   }
 
   // Exclude muted users
-  const usersToDisplay = users.filter(user => !mutedUsers.includes(user.user_id));
+
+  const usersToDisplay = hideMuted
+    ? users.filter(user => !mutedUsers.includes(user.user_id))
+    : users;
+
+  const handleToggleMute = () => {
+    setHideMuted(prevState => !prevState); // Toggle the hideMuted state
+  };
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
@@ -110,19 +120,37 @@ export default function UsersWithMessages({ isNavOpen }) {
         <h2>Chats</h2>
 
         <div className="filter-container chats-filter">
-      <div className="filter-wrapper">
-        <input
-          type="text"
-          className="filter-container-input-username"
-          placeholder="Username"
-          value={filterUsername}
-          onChange={(e) => setFilterUsername(e.target.value)}
-          pattern="[a-zA-Z0-9-_^\s]+" // Optional, prevents invalid submission
-          ref={inputRef} 
-          title="Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
-        />
-      </div>
-    </div>
+          <div className="filter-wrapper">
+            <input
+              type="text"
+              className="filter-container-input-username"
+              placeholder="Username"
+              value={filterUsername}
+              onChange={(e) => setFilterUsername(e.target.value)}
+              pattern="[a-zA-Z0-9-_^\s]+" // Optional, prevents invalid submission
+              ref={inputRef}
+              title="Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+            />
+          </div>
+        </div>
+
+
+        <div className="container-toggle-hide-chat-muted-users">
+          <div className="details-toggle-hide-chat-muted-users">
+            <div className="toggle-hide-chat-muted-users-text">Hide muted</div>
+            <input
+              type="checkbox"
+              id="toggle-chat-muted-users"
+              className="toggle-checkbox"
+              checked={hideMuted} 
+              onChange={handleToggleMute}
+            />
+            <label htmlFor="toggle-chat-muted-users" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+
 
         <div className="users-container">
           {usersToDisplay.length > 0 ? (
@@ -167,7 +195,7 @@ export default function UsersWithMessages({ isNavOpen }) {
                     />
 
                   </div>}
-{/* 
+                  {/* 
 {console.log("user user id", user.user_id)}
 {console.log("usersWithNewMessages", usersWithNewMessages)} */}
 
@@ -176,9 +204,9 @@ export default function UsersWithMessages({ isNavOpen }) {
                     className="cursor-pointer"
                     onClick={() => navigate(`/messages/${user.user_id}`)}>
                     {processUsername(user.username)}</p>
-                    
-                    {/* <MessageNotification userId={user.user_id}/> */}
-                    {usersWithNewMessages.includes(user.user_id) && <MessageNotification userId={user.user_id} setUsersWithNewMessages={setUsersWithNewMessages}/>}
+
+                  {/* <MessageNotification userId={user.user_id}/> */}
+                  {usersWithNewMessages.includes(user.user_id) && <MessageNotification userId={user.user_id} setUsersWithNewMessages={setUsersWithNewMessages} />}
 
 
                 </div>

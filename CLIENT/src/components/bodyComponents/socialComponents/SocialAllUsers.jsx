@@ -47,8 +47,16 @@ export default function SocialAllUsers({ isNavOpen }) {
   const loggedInUser = auth.userId
   const [users, setUsers] = useState([]);
   const [followersAndFollowee, setFollowersAndFollowee] = useState([])
-  const usersExceptMe = users.filter(user => user.user_id !== loggedInUser && user.is_active);
   const [mutedUsers, setMutedUsers] = useState([]);
+  const usersExceptMe = users.filter(user => {
+    // Filter out muted users
+    const isMuted = mutedUsers.some(mute => 
+      (mute.muter === loggedInUser && mute.mutee === user.user_id && mute.mute) ||
+      (mute.muter === user.user_id && mute.mutee === loggedInUser && mute.mute)
+    );
+    return user.user_id !== loggedInUser && user.is_active && !isMuted;
+  });
+
   const userIDsExceptMe = usersExceptMe.map(user => user.user_id);
   const allUsersMutedOrMe = userIDsExceptMe.every(userId =>
     mutedUsers.some(mute => (mute.muter === userId || mute.mutee === userId) && mute.mute)
@@ -58,6 +66,8 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
 
+  console.log("users", users)
+  console.log("muted users", mutedUsers)
 
   // Reset the error message whenever filters change
   useEffect(() => {
