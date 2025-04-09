@@ -78,7 +78,7 @@ const getNewMessagesNotification = async (req, res) => {
   try {
     const loggedInUser = req.query.loggedInUser;
 
-    // Fetch the most recent and second-most recent login times for the logged-in user
+    // Fetch the most recent login time for the logged-in user
     const recentLoginQuery = `
       SELECT login_time
       FROM login_history
@@ -86,6 +86,7 @@ const getNewMessagesNotification = async (req, res) => {
       ORDER BY login_time DESC
       LIMIT 1;
     `;
+    // Fetch the second-most recent login time (if it exists)
     const secondRecentLoginQuery = `
       SELECT login_time
       FROM login_history
@@ -98,16 +99,21 @@ const getNewMessagesNotification = async (req, res) => {
     const recentLoginResult = await pool.query(recentLoginQuery, [loggedInUser]);
     const secondRecentLoginResult = await pool.query(secondRecentLoginQuery, [loggedInUser]);
 
-    if (recentLoginResult.rows.length === 0 || secondRecentLoginResult.rows.length === 0) {
-      // console.log('No login history found for the logged-in user');
+    if (recentLoginResult.rows.length === 0) {
+      // No login history found for the logged-in user
       return res.status(404).json({ message: 'Login history not found' });
     }
 
     const recentLoginTime = recentLoginResult.rows[0].login_time;
-    const secondRecentLoginTime = secondRecentLoginResult.rows[0].login_time;
+    let secondRecentLoginTime = null;
 
-    // console.log('Recent Login Time:', recentLoginTime);
-    // console.log('Second Recent Login Time:', secondRecentLoginTime);
+    // If there's a second recent login, use that
+    if (secondRecentLoginResult.rows.length > 0) {
+      secondRecentLoginTime = secondRecentLoginResult.rows[0].login_time;
+    } else {
+      // If no second login exists, use the most recent login as the reference
+      secondRecentLoginTime = recentLoginTime;
+    }
 
     // Fetch the senders who sent messages after the second-most recent login
     const messageQuery = `
@@ -123,13 +129,10 @@ const getNewMessagesNotification = async (req, res) => {
     // Execute the query to get the senders
     const messageResult = await pool.query(messageQuery, messageParams);
 
-    // If no messages are found, log a message
+    // If no messages are found, return an empty array
     if (messageResult.rows.length === 0) {
-      // console.log('No new messages found');
       return res.status(200).json([]); 
     }
-
-// console.log("messageResult.rows", messageResult.rows)
 
     // Extract sender IDs from the result and send as an array
     const senderIds = messageResult.rows.map(row => row.sender);
@@ -141,6 +144,7 @@ const getNewMessagesNotification = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 module.exports = {

@@ -136,7 +136,7 @@ export default function UsersWithMessages({ isNavOpen }) {
         <div className="container-toggle-hide-chat-muted-users">
           <div className="details-toggle-hide-chat-muted-users">
             <div className="toggle-hide-chat-muted-users-text">
-              {hideMuted ? 'Show muted' : 'Hide muted'}
+              Hide muted
             </div>
 
             <input
