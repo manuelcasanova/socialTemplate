@@ -94,6 +94,10 @@ To manage user subscriptions, the system automatically checks the status of subs
 
 The app provides a range of social connection features to enhance user interaction and engagement. Users can view a list of all registered users, making it easy to discover new people to connect with. The system allows users to follow others, with a dedicated list displaying the users they are currently following, as well as a list of users who follow them back. Additionally, users can manage incoming follow requests through a list of pending requests, ensuring they have control over who they connect with. For those who prefer a quieter experience, users can mute specific individuals, and the app provides a list of all muted users.
 
+*** Messaging Features ***
+
+The app supports private messaging, allowing users to send direct messages to one another. To initiate a conversation, you must first be approved as a followee. Once a conversation is started, it remains accessible even if the other user unfollows or mutes you (or vice-versa). However, both you and the other user have the option to hide or unhide conversations with muted individuals, giving you control over the visibility of these interactions.
+
 *** ENVIRONMENTAL VARIABLES ***
 
   *** Backend ***
