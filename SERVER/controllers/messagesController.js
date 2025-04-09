@@ -22,14 +22,6 @@ const userId = req.query.userId;
     // Execute the query
     const result = await pool.query(query, params);
 
-// console.log(result.rows)
-
-    // If no user found, log a message
-    if (result.rows.length === 0) {
-      console.log('No messages found');
-      return res.status(404).json({ message: 'Messages not found' });
-    }
-
         // Start the base query
         let query2 = `
         UPDATE user_messages
