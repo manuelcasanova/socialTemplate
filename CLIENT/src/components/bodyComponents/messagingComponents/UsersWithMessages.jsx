@@ -50,14 +50,12 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [mutedUsers, setMutedUsers] = useState([]);
   const [filterUsername, setFilterUsername] = useState("");
   const [filters, setFilters] = useState("")
-  const [hideMuted, setHideMuted] = useState(true); 
+  const [hideMuted, setHideMuted] = useState(true);
   const loggedInUser = auth.userId;
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
   const inputRef = useRef(null);
   // console.log("users with new messages", usersWithNewMessages)
-
-console.log("hideMuted", hideMuted)
 
   useEffect(() => {
     // Focus the input field after the component mounts
@@ -137,12 +135,15 @@ console.log("hideMuted", hideMuted)
 
         <div className="container-toggle-hide-chat-muted-users">
           <div className="details-toggle-hide-chat-muted-users">
-            <div className="toggle-hide-chat-muted-users-text">Hide muted</div>
+            <div className="toggle-hide-chat-muted-users-text">
+              {hideMuted ? 'Show muted' : 'Hide muted'}
+            </div>
+
             <input
               type="checkbox"
               id="toggle-chat-muted-users"
               className="toggle-checkbox"
-              checked={hideMuted} 
+              checked={hideMuted}
               onChange={handleToggleMute}
             />
             <label htmlFor="toggle-chat-muted-users" className="toggle-label">

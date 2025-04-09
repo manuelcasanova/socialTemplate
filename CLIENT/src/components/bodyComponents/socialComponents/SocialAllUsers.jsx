@@ -66,9 +66,6 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
 
-  console.log("users", users)
-  console.log("muted users", mutedUsers)
-
   // Reset the error message whenever filters change
   useEffect(() => {
     setError(null); // Clear error when filters change
