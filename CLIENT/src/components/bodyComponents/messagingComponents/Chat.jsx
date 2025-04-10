@@ -229,45 +229,61 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
             />
 
             {messages.length > 0 ? (
-              messages.map((message) => (
-                <div key={message.id} className={message.sender === loggedInUser ? "message-left" : "message-right"}>
+              messages.map((message) => {
+                const isSender = message.sender === loggedInUser;
+                const isConfirmingDelete = messageToDelete === message.id;
 
-                  <div className={message.sender === loggedInUser ? "message-content-left" : "message-content-right"}>
-                    {messageToDelete !== message.id ? (
-                      <>
-                        <p>{message.content}</p>
-                        <FontAwesomeIcon
-                          className='delete-chat-messsage'
-                          icon={faTrash}
-                          onClick={() => handleShowConfirmDelete(message.id)}
-                        />
-                      </>
-                    ) : (
-                      <div className="confirm-delete-chat">
-                        <p 
-                        className="confirm-delete-chat-word"
-                        onClick={() => {
-                          console.log("Yes");
-                          // You can call your actual delete function here.
-                          setMessageToDelete(null);
-                        }}>
-                          Confirm delete
-                        </p>
-                        <p onClick={() => setMessageToDelete(null)}>Cancel</p>
-                      </div>
-                    )}
+                return (
+                  <div
+                    key={message.id}
+                    className={isSender ? "message-left" : "message-right"}
+                  >
+                    <div
+                      className={`${isSender ? "message-content-left" : "message-content-right"}${isConfirmingDelete ? " confirm" : ""}`}
+                    >
+                      {!isConfirmingDelete ? (
+                        <>
+                          <p>{message.content}</p>
+                          <FontAwesomeIcon
+                            className="delete-chat-messsage"
+                            icon={faTrash}
+                            onClick={() => handleShowConfirmDelete(message.id)}
+                          />
+                        </>
+                      ) : (
+                        <div className="confirm-delete-chat">
+                          <p
+                            className="button-red"
+                            onClick={() => {
+                              console.log("Yes");
+                              // Call your actual delete function here
+                              setMessageToDelete(null);
+                            }}
+                          >
+                            Confirm delete
+                          </p>
+                          <p
+                            className="button-white"
+                            style={{ color: "black" }}
+                            onClick={() => setMessageToDelete(null)}
+                          >
+                            Cancel
+                          </p>
 
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="message-footer">
+                      <span className="message-date">{formatDate(message.date)}</span>
+                    </div>
                   </div>
-
-
-                  <div className="message-footer">
-                    <span className="message-date">{formatDate(message.date)}</span>
-                  </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <p>No messages yet.</p>
             )}
+
           </div>
 
         </div>

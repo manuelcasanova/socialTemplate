@@ -206,11 +206,18 @@ margin-left: 90%;
   font-size: 16px;
 }
 
+
 .message-content-right p {
   text-align: start;
   color: var(--color1);
   font-size: 16px;
 }
+
+.message-content-left.confirm,
+.message-content-right.confirm {
+  background-color: transparent
+}
+
 
 .delete-chat-messsage {
   color: var(--color1);
@@ -225,23 +232,9 @@ margin-left: 90%;
   justify-content: center;  /* Center horizontally */
   align-items: center;      /* Center vertically (if you want) */
   gap: 20px;      
-  width: 100%;                     
-}
-.confirm-delete-chat p {
-  cursor: pointer;
-  margin: 0;                /* Remove default margin */
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  width: 100%;                  
 }
 
-.confirm-delete-chat p:hover {
-  background-color: #ddd;
-}
-
-.confirm-delete-chat-word {
-color: red !important;
-}
 
 /* Adding some space between messages */
 .messages-container .message+.message {}
