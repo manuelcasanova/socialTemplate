@@ -235,6 +235,12 @@ margin-left: 90%;
   width: 100%;                  
 }
 
+.deleted-message {
+ color: grey !important;
+font-style: italic;
+display: flex;
+flex-direction: row;
+}
 
 /* Adding some space between messages */
 .messages-container .message+.message {}

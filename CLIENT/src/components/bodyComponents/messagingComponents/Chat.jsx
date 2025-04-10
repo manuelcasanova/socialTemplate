@@ -15,7 +15,7 @@ import Error from "../Error";
 
 // Styling
 import '../../../css/Chat.css'
-import { faUser, faRefresh, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faRefresh, faTrash, faBan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -141,6 +141,28 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
     setMessageToDelete(prev => (prev === messageId ? null : messageId));
   };
 
+  const markMessageAsDeleted = async (messageId) => {
+    try {
+      setIsLoading(true);
+      
+      // Make the PUT request to mark the message as deleted
+      await axiosPrivate.put(`${BACKEND}/messages/${messageId}`);
+      
+      setError(null);
+      
+      // Refresh the messages list after the "soft delete"
+      fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId);
+    } catch (err) {
+      console.log("Error", err);
+      setError(err.response?.data?.message || "An error occurred while marking the message as deleted.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  
+  
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -228,61 +250,73 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
               onClick={() => fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId, messages)}
             />
 
-            {messages.length > 0 ? (
-              messages.map((message) => {
-                const isSender = message.sender === loggedInUser;
-                const isConfirmingDelete = messageToDelete === message.id;
+{messages.length > 0 ? (
+  messages.map((message) => {
+    const isSender = message.sender === loggedInUser;
+    const isConfirmingDelete = messageToDelete === message.id; // Ensure using message.id here
 
-                return (
-                  <div
-                    key={message.id}
-                    className={isSender ? "message-left" : "message-right"}
-                  >
-                    <div
-                      className={`${isSender ? "message-content-left" : "message-content-right"}${isConfirmingDelete ? " confirm" : ""}`}
-                    >
-                      {!isConfirmingDelete ? (
-                        <>
-                          <p>{message.content}</p>
-                          <FontAwesomeIcon
-                            className="delete-chat-messsage"
-                            icon={faTrash}
-                            onClick={() => handleShowConfirmDelete(message.id)}
-                          />
-                        </>
-                      ) : (
-                        <div className="confirm-delete-chat">
-                          <p
-                            className="button-red"
-                            onClick={() => {
-                              console.log("Yes");
-                              // Call your actual delete function here
-                              setMessageToDelete(null);
-                            }}
-                          >
-                            Confirm delete
-                          </p>
-                          <p
-                            className="button-white"
-                            style={{ color: "black" }}
-                            onClick={() => setMessageToDelete(null)}
-                          >
-                            Cancel
-                          </p>
+    return (
+      <div
+        key={message.id}
+        className={isSender ? "message-left" : "message-right"}
+      >
+        <div
+          className={`${isSender ? "message-content-left" : "message-content-right"}${isConfirmingDelete ? " confirm" : ""}`}
+        >
+          {!isConfirmingDelete ? (
+            <>
+              {/* Check if message is deleted */}
+              <p className={message.is_deleted ? "deleted-message" : ""}>
+                {message.is_deleted && (
+                  <FontAwesomeIcon icon={faBan} style={{ marginRight: "8px" }} />
+                )}
+                {message.is_deleted ? `This message was deleted` : message.content}
+              </p>
+              {/* Display delete icon if message is not deleted */}
+              {!message.is_deleted && (
+                <FontAwesomeIcon
+                  className="delete-chat-messsage"
+                  icon={faTrash}
+                  onClick={() => handleShowConfirmDelete(message.id)} // Pass message.id here
+                />
+              )}
+            </>
+          ) : (
+            <div className="confirm-delete-chat">
+              <p
+                className="button-red"
+                onClick={() => {
+                  if (messageToDelete) {
+                    markMessageAsDeleted(messageToDelete); // Pass the messageId directly
+                  }
+                  setMessageToDelete(null);
+                }}
+              >
+                Confirm delete
+              </p>
+              <p
+                className="button-white"
+                style={{ color: "black" }}
+                onClick={() => setMessageToDelete(null)}
+              >
+                Cancel
+              </p>
+            </div>
+          )}
+        </div>
 
-                        </div>
-                      )}
-                    </div>
+        <div className="message-footer">
+          <span className="message-date">{formatDate(message.date)}</span>
+        </div>
+      </div>
+    );
+  })
+) : (
+  <p>No messages yet.</p>
+)}
 
-                    <div className="message-footer">
-                      <span className="message-date">{formatDate(message.date)}</span>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p>No messages yet.</p>
-            )}
+
+
 
           </div>
 

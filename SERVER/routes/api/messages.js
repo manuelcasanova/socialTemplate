@@ -76,5 +76,30 @@ router.route('/getnewmessagesnotification')
     messagesController.getNewMessagesNotification
   );
 
+// Route to mark a message as deleted (soft delete) using PUT
+router.route('/:id')
+  .put(
+    async (req, res, next) => {
+      try {
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only registered users can update messages.' });
+        }
+
+        // Pass the roles to verifyRoles middleware
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    messagesController.markMessageAsDeleted
+  );
+
+
+
 
 module.exports = router;
