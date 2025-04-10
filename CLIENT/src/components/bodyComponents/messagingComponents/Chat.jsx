@@ -215,14 +215,14 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
               />
             </div>
           )}
-
           <h2>
-            {users.username.includes("Deleted User")
+            {users?.username?.includes("Deleted User")
               ? "Chat with a user who deleted their account"
-              : users.username.includes("inactive")
+              : users?.username?.includes("inactive")
                 ? `Chat with ${users.username.split('-').pop()} (inactive account)`
-                : `Chat with ${users.username}`}
+                : `Chat with ${users?.username || 'Unknown User'}`}
           </h2>
+
 
 
           <div className="users-messaging-send">
