@@ -98,7 +98,6 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
-
         const { userId } = req.params;
 
         // Validate userId (should be a positive integer)

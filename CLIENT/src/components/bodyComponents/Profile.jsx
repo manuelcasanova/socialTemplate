@@ -15,8 +15,6 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 const profilePictureExists = async (userId) => {
 
-
-
   const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
 
   try {
