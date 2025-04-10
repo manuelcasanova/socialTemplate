@@ -146,7 +146,10 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
       setIsLoading(true);
       
       // Make the PUT request to mark the message as deleted
-      await axiosPrivate.put(`${BACKEND}/messages/${messageId}`);
+      await axiosPrivate.put(`${BACKEND}/messages/${messageId}`, {
+        loggedInUser: loggedInUser, // Send the loggedInUser data
+      });
+      
       
       setError(null);
       
@@ -252,8 +255,8 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
 
 {messages.length > 0 ? (
   messages.map((message) => {
-    const isSender = message.sender === loggedInUser;
-    const isConfirmingDelete = messageToDelete === message.id; // Ensure using message.id here
+    const isSender = message.sender === loggedInUser;  // Check if logged-in user is the sender
+    const isConfirmingDelete = messageToDelete === message.id;  // Ensure using message.id here
 
     return (
       <div
@@ -272,8 +275,8 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                 )}
                 {message.is_deleted ? `This message was deleted` : message.content}
               </p>
-              {/* Display delete icon if message is not deleted */}
-              {!message.is_deleted && (
+              {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
+              {!message.is_deleted && isSender && (
                 <FontAwesomeIcon
                   className="delete-chat-messsage"
                   icon={faTrash}
@@ -314,6 +317,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
 ) : (
   <p>No messages yet.</p>
 )}
+
 
 
 

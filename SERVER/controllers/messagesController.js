@@ -148,9 +148,27 @@ const getNewMessagesNotification = async (req, res) => {
 // Mark a message as deleted (soft delete)
 const markMessageAsDeleted = async (req, res) => {
   const { id } = req.params;
+  const { loggedInUser } = req.body;  // Access loggedInUser from the request body
 
   try {
-    // Update the is_deleted flag instead of deleting the message entirely
+    // First, fetch the sender of the message
+    const messageResult = await pool.query(
+      `SELECT sender FROM user_messages WHERE id = $1;`,
+      [id]
+    );
+
+    if (messageResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Message not found.' });
+    }
+
+    const message = messageResult.rows[0];
+
+    // Ensure that the logged-in user is the sender of the message
+    if (message.sender !== loggedInUser) {
+      return res.status(403).json({ error: 'You can only delete your own messages.' });
+    }
+
+    // Mark the message as deleted
     const result = await pool.query(
       `
       UPDATE user_messages
@@ -171,6 +189,7 @@ const markMessageAsDeleted = async (req, res) => {
     res.status(500).json({ error: 'Internal server error while marking message as deleted.' });
   }
 };
+
 
 
 
