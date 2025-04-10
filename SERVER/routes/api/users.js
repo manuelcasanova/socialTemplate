@@ -46,21 +46,28 @@ router.route('/')
     usersController.getAllUsers
   );
 
-// router.route('/:user_id')
-//   .get(
-//     async (req, res, next) => {
-//       try {
-//         const rolesList = await fetchRoles();
-//         verifyRoles(...rolesList)(req, res, next);
-//       } catch (err) {
-//         next(err);
-//       }
-//     },
-//     (req, res) => {
-//       const { user_id } = req.params;
-//       usersController.getUserById(req, res);
-//     }
-//   );
+  router.route('/:userId')
+  .get(
+    async (req, res, next) => {
+      try {
+        const rolesList = await fetchRoles();
+
+        // Check if either Admin or SuperAdmin role exists in the list
+        const requiredRoles = ['Admin', 'SuperAdmin'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can access this' });
+        }
+
+        // Pass the roles to verifyRoles middleware
+        verifyRoles('Admin', 'SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    usersController.getUserById
+  );
 
 
 router.route('/subscriptions/status/:user_id')

@@ -94,6 +94,37 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+//Function to get user by id
+
+const getUserById = async (req, res) => {
+    try {
+
+        const { userId } = req.params;
+
+        // Validate userId (should be a positive integer)
+        if (userId && isNaN(userId)) {
+            return res.status(400).json({ error: 'Invalid userId format' });
+        }
+
+        // Build the query to select only the username for the given userId
+        const query = 'SELECT username, email FROM users WHERE user_id = $1';
+        const params = [userId];
+
+        const result = await pool.query(query, params);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const { username, email } = result.rows[0];
+        res.status(200).json({ username, email });
+    } catch (error) {
+        console.error('Error retrieving user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
 
 // Function to update user details
 const updateUser = async (req, res) => {
@@ -902,6 +933,7 @@ const processPayment = async ({ amount, currency }) => {
 
 
 module.exports = {
+    getUserById,
     getAllUsers,
     updateUser,
     softDeleteUser,
