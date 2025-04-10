@@ -98,24 +98,24 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   }
 
   if (error) {
-    return <Error isNavOpen={isNavOpen} error={error}/>
+    return <Error isNavOpen={isNavOpen} error={error} />
   }
 
-// console.log("pendingRequests", pendingRequests)
+  // console.log("pendingRequests", pendingRequests)
 
   // Filter the pendingRequests list to remove muted users
   const filteredPending = pendingRequests.filter(pending => {
     const user = users.find(u => u.user_id === pending.follower_id);
 
-  // Check if the user exists and is active
-  const isUserActive = user ? user.is_active : false;
+    // Check if the user exists and is active
+    const isUserActive = user ? user.is_active : false;
 
-    return isUserActive &&  !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === pending.follower_id && mute.mute));
+    return isUserActive && !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === pending.follower_id && mute.mute));
   });
 
-//   console.log("mutedUSers", mutedUsers)
-//   console.log("users", users)
-// console.log("filteredPending", filteredPending)
+  //   console.log("mutedUSers", mutedUsers)
+  //   console.log("users", users)
+  // console.log("filteredPending", filteredPending)
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
@@ -151,8 +151,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                       )}
 
                       {showLargePicture === user.user_id && (
-                        <div
-                          className="large-picture"
+                        <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
                           onClick={() => setShowLargePicture(null)}
                         >
                           <img

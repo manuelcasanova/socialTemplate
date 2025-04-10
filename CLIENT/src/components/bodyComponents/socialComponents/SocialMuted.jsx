@@ -98,7 +98,7 @@ export default function SocialMuted({ isNavOpen }) {
   }
 
   if (error) {
-    return <Error isNavOpen={isNavOpen} error={error}/>
+    return <Error isNavOpen={isNavOpen} error={error} />
   }
 
 
@@ -148,7 +148,7 @@ export default function SocialMuted({ isNavOpen }) {
 
 
                   {showLargePicture === user.user_id && <div
-                    className='large-picture'
+                    className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
                     onClick={() => setShowLargePicture(null)}
                   >
                     <img

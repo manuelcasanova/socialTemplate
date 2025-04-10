@@ -137,7 +137,7 @@ export default function SocialFollowers({ isNavOpen }) {
 
                       {showLargePicture === user.user_id && (
                         <div
-                          className="large-picture"
+                        className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
                           onClick={() => setShowLargePicture(null)}
                         >
                           <img

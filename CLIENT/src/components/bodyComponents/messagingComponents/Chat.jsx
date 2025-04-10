@@ -170,7 +170,8 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
           {/* Displaying Large Picture when clicked */}
           {showLargePicture && (
             // <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(false)}>
-            <div className="large-picture" onClick={() => setShowLargePicture(false)}>
+            <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+            onClick={() => setShowLargePicture(false)}>
 
 
               <img

@@ -154,8 +154,6 @@ justify-content: flex-start;
   align-items: center;
 }
 
-
-
 /*Override user-row-social img*/
 .large-picture img { 
   max-height: 300px;
@@ -270,3 +268,17 @@ font-size: 1rem;
   }
 }
 
+@media (min-width: 581px) and (max-width: 1024px) {
+  .large-picture-squeezed {
+    position: fixed;
+    top: 0;
+    left: 25%; /* Leaves 25% space on the left */
+    width: 75%; /* Takes up 75% of the viewport width */
+    height: 100%;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
