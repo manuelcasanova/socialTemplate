@@ -15,7 +15,7 @@ import Error from "../Error";
 
 // Styling
 import '../../../css/Chat.css'
-import { faUser, faRefresh } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faRefresh, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -46,6 +46,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   const [newMessage, setNewMessage] = useState("")
   const [imageExists, setImageExists] = useState(false);
   const [showLargePicture, setShowLargePicture] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -136,13 +137,16 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
     }
   };
 
+  const handleShowConfirmDelete = (messageId) => {
+    setMessageToDelete(prev => (prev === messageId ? null : messageId));
+  };
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   if (error) {
-    return <Error isNavOpen={isNavOpen} error={error}/>
+    return <Error isNavOpen={isNavOpen} error={error} />
   }
 
   return (
@@ -171,7 +175,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
           {showLargePicture && (
             // <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(false)}>
             <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
-            onClick={() => setShowLargePicture(false)}>
+              onClick={() => setShowLargePicture(false)}>
 
 
               <img
@@ -229,8 +233,33 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                 <div key={message.id} className={message.sender === loggedInUser ? "message-left" : "message-right"}>
 
                   <div className={message.sender === loggedInUser ? "message-content-left" : "message-content-right"}>
-                    <p>{message.content}</p>
+                    {messageToDelete !== message.id ? (
+                      <>
+                        <p>{message.content}</p>
+                        <FontAwesomeIcon
+                          className='delete-chat-messsage'
+                          icon={faTrash}
+                          onClick={() => handleShowConfirmDelete(message.id)}
+                        />
+                      </>
+                    ) : (
+                      <div className="confirm-delete-chat">
+                        <p 
+                        className="confirm-delete-chat-word"
+                        onClick={() => {
+                          console.log("Yes");
+                          // You can call your actual delete function here.
+                          setMessageToDelete(null);
+                        }}>
+                          Confirm delete
+                        </p>
+                        <p onClick={() => setMessageToDelete(null)}>Cancel</p>
+                      </div>
+                    )}
+
                   </div>
+
+
                   <div className="message-footer">
                     <span className="message-date">{formatDate(message.date)}</span>
                   </div>
