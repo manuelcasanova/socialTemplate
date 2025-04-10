@@ -144,15 +144,15 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   const markMessageAsDeleted = async (messageId) => {
     try {
       setIsLoading(true);
-      
+
       // Make the PUT request to mark the message as deleted
       await axiosPrivate.put(`${BACKEND}/messages/${messageId}`, {
         loggedInUser: loggedInUser, // Send the loggedInUser data
       });
-      
-      
+
+
       setError(null);
-      
+
       // Refresh the messages list after the "soft delete"
       fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId);
     } catch (err) {
@@ -162,9 +162,9 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
       setIsLoading(false);
     }
   };
-  
-  
-  
+
+
+
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -216,7 +216,13 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
             </div>
           )}
 
-          <h2>Chat with {users.username}</h2>
+          <h2>
+            {users.username.includes("Deleted User")
+              ? "Chat with a user who deleted their account"
+              : users.username.includes("inactive")
+                ? `Chat with ${users.username.split('-').pop()} (inactive account)`
+                : `Chat with ${users.username}`}
+          </h2>
 
 
           <div className="users-messaging-send">
@@ -253,70 +259,70 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
               onClick={() => fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId, messages)}
             />
 
-{messages.length > 0 ? (
-  messages.map((message) => {
-    const isSender = message.sender === loggedInUser;  // Check if logged-in user is the sender
-    const isConfirmingDelete = messageToDelete === message.id;  // Ensure using message.id here
+            {messages.length > 0 ? (
+              messages.map((message) => {
+                const isSender = message.sender === loggedInUser;  // Check if logged-in user is the sender
+                const isConfirmingDelete = messageToDelete === message.id;  // Ensure using message.id here
 
-    return (
-      <div
-        key={message.id}
-        className={isSender ? "message-left" : "message-right"}
-      >
-        <div
-          className={`${isSender ? "message-content-left" : "message-content-right"}${isConfirmingDelete ? " confirm" : ""}`}
-        >
-          {!isConfirmingDelete ? (
-            <>
-              {/* Check if message is deleted */}
-              <p className={message.is_deleted ? "deleted-message" : ""}>
-                {message.is_deleted && (
-                  <FontAwesomeIcon icon={faBan} style={{ marginRight: "8px" }} />
-                )}
-                {message.is_deleted ? `This message was deleted` : message.content}
-              </p>
-              {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
-              {!message.is_deleted && isSender && (
-                <FontAwesomeIcon
-                  className="delete-chat-messsage"
-                  icon={faTrash}
-                  onClick={() => handleShowConfirmDelete(message.id)} // Pass message.id here
-                />
-              )}
-            </>
-          ) : (
-            <div className="confirm-delete-chat">
-              <p
-                className="button-red"
-                onClick={() => {
-                  if (messageToDelete) {
-                    markMessageAsDeleted(messageToDelete); // Pass the messageId directly
-                  }
-                  setMessageToDelete(null);
-                }}
-              >
-                Confirm delete
-              </p>
-              <p
-                className="button-white"
-                style={{ color: "black" }}
-                onClick={() => setMessageToDelete(null)}
-              >
-                Cancel
-              </p>
-            </div>
-          )}
-        </div>
+                return (
+                  <div
+                    key={message.id}
+                    className={isSender ? "message-left" : "message-right"}
+                  >
+                    <div
+                      className={`${isSender ? "message-content-left" : "message-content-right"}${isConfirmingDelete ? " confirm" : ""}`}
+                    >
+                      {!isConfirmingDelete ? (
+                        <>
+                          {/* Check if message is deleted */}
+                          <p className={message.is_deleted ? "deleted-message" : ""}>
+                            {message.is_deleted && (
+                              <FontAwesomeIcon icon={faBan} style={{ marginRight: "8px" }} />
+                            )}
+                            {message.is_deleted ? `This message was deleted` : message.content}
+                          </p>
+                          {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
+                          {!message.is_deleted && isSender && (
+                            <FontAwesomeIcon
+                              className="delete-chat-messsage"
+                              icon={faTrash}
+                              onClick={() => handleShowConfirmDelete(message.id)} // Pass message.id here
+                            />
+                          )}
+                        </>
+                      ) : (
+                        <div className="confirm-delete-chat">
+                          <p
+                            className="button-red"
+                            onClick={() => {
+                              if (messageToDelete) {
+                                markMessageAsDeleted(messageToDelete); // Pass the messageId directly
+                              }
+                              setMessageToDelete(null);
+                            }}
+                          >
+                            Confirm delete
+                          </p>
+                          <p
+                            className="button-white"
+                            style={{ color: "black" }}
+                            onClick={() => setMessageToDelete(null)}
+                          >
+                            Cancel
+                          </p>
+                        </div>
+                      )}
+                    </div>
 
-        <div className="message-footer">
-          <span className="message-date">{formatDate(message.date)}</span>
-        </div>
-      </div>
-    );
-  })
-) : (
-  <p>No messages yet.</p>
-)}
+                    <div className="message-footer">
+                      <span className="message-date">{formatDate(message.date)}</span>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <p>No messages yet.</p>
+            )}
 
 
 
