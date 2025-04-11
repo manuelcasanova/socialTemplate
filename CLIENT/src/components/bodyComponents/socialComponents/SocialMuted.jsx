@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 //Hooks
 
@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MuteUserButton from "./socialButtons/MuteUserButton";
 import Error from "../Error";
+import FilterUsername from "./FilterUsername";
 
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
@@ -59,15 +60,19 @@ export default function SocialMuted({ isNavOpen }) {
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
 
+  const [filterUsername, setFilterUsername] = useState("");
+
+ const inputRef = useRef(null);
+
   // Reset the error message whenever filters change
   useEffect(() => {
     setError(null); // Clear error when filters change
-  }, [filters]);
+  }, [filters, filterUsername]);
 
   useEffect(() => {
-    fetchUsers(filters, setUsers, setIsLoading, setError)
+    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
-  }, [axiosPrivate, filters, hasMutedChanges]);
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -122,6 +127,8 @@ export default function SocialMuted({ isNavOpen }) {
           <div className='info-message'>You cannot interact with users you've muted, and they will not be able to interact with you either.</div>
 
         )}
+
+                <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
 
         <div className="users-container">
           {mutedUsersWithName.length > 0 ? (
