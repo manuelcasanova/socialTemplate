@@ -170,8 +170,17 @@ const getFolloweeData = async (req, res, next) => {
   try {
     // Query to fetch the users the logged-in user is following (followees)
     const followees = await pool.query(
-      `SELECT * FROM followers 
-      WHERE follower_id = $1 AND status = 'accepted' ORDER BY lastmodification DESC`,
+      `SELECT 
+         f.followee_id,
+         f.status,
+         f.lastmodification,
+         u.is_active
+       FROM followers f
+       JOIN users u ON f.followee_id = u.user_id
+       WHERE f.follower_id = $1 
+         AND f.status = 'accepted' 
+         AND u.is_active = true
+       ORDER BY f.lastmodification DESC`,
       [userId]
     );
 
@@ -190,8 +199,17 @@ const getFollowersData = async (req, res, next) => {
 
   try {
     const followers = await pool.query(
-      `SELECT * FROM followers 
-      WHERE followee_id = $1 AND status = 'accepted' ORDER BY lastmodification DESC`,
+      `SELECT 
+      f.follower_id,
+      f.status,
+      f.lastmodification,
+      u.is_active
+    FROM followers f
+    JOIN users u ON f.follower_id = u.user_id
+    WHERE f.followee_id = $1 
+      AND f.status = 'accepted'
+      AND u.is_active = true
+    ORDER BY f.lastmodification DESC`,
       [userId]
     );
 

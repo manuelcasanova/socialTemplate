@@ -9,9 +9,10 @@ INSERT INTO roles (role_name) VALUES
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 
   ('Superadministrator', 'superadmin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
+  ,
+  -- ;
+  ('Manuel', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
   ;
---   ('Manuel', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
---   ;
 --     ('Laura', 'laura@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
 -- ;
 
@@ -41,10 +42,11 @@ INSERT INTO users (username, email, password, is_verified, is_selected, is_activ
 
 INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
   (1, 1, 1),
-  -- (2, 1, 2),
+  (2, 1, 2),
   (1, 5, 1)
+  ,
+  (2, 5, 2)
   -- ,
-  -- (2, 5, 2),
   -- (3, 1, 1)
   ;  
 
