@@ -1,11 +1,15 @@
 import { axiosPrivate } from "../../../../api/axios";
 
-const fetchUsers = async (filters, setUsers, setIsLoading, setError)  => {
+const fetchUsers = async (filters, setUsers, setIsLoading, setError, filterUsername)  => {
   setIsLoading(true)
   try {
     const [usersResponse] = await Promise.all([
-      axiosPrivate.get(`/social/users/all`, { params: filters })
-
+      axiosPrivate.get(`/social/users/all`, {
+        params: {
+          ...filters,
+          username: filterUsername, 
+        },
+      }),
     ]);
 
     setUsers(usersResponse.data); // Set user data
