@@ -277,7 +277,11 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                           {/* Check if message is deleted */}
                           <p className={message.is_deleted ? "deleted-message" : ""}>
                             {message.is_deleted && (
-                              <FontAwesomeIcon icon={faBan} style={{ marginRight: "8px" }} />
+                              <FontAwesomeIcon icon={faBan} 
+                              style={{ marginRight: "8px"
+                              // , marginBottom: "0px"
+                               }} 
+                              />
                             )}
                             {message.is_deleted ? `This message was deleted` : message.content}
                           </p>
