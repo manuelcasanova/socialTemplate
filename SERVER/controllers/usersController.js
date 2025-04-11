@@ -101,27 +101,69 @@ const getUserById = async (req, res) => {
         const { userId } = req.params;
 
         // Validate userId (should be a positive integer)
-        if (userId && isNaN(userId)) {
+        if (!userId || isNaN(userId)) {
             return res.status(400).json({ error: 'Invalid userId format' });
         }
 
-        // Build the query to select only the username for the given userId
-        const query = 'SELECT username, email FROM users WHERE user_id = $1';
-        const params = [userId];
+        // Query to get username and email
+        const userQuery = 'SELECT username, email FROM users WHERE user_id = $1';
+        const userParams = [userId];
+        const userResult = await pool.query(userQuery, userParams);
 
-        const result = await pool.query(query, params);
-
-        if (result.rows.length === 0) {
+        if (userResult.rows.length === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        const { username, email } = result.rows[0];
-        res.status(200).json({ username, email });
+        const { username, email } = userResult.rows[0];
+
+        // Query to get roles
+        const rolesQuery = `
+            SELECT r.role_id, r.role_name
+            FROM roles r
+            INNER JOIN user_roles ur ON ur.role_id = r.role_id
+            WHERE ur.user_id = $1
+        `;
+        const rolesResult = await pool.query(rolesQuery, [userId]);
+
+        const roles = rolesResult.rows.map(row => ({
+            role_id: row.role_id,
+            role_name: row.role_name
+        }));
+
+        res.status(200).json({ username, email, roles });
     } catch (error) {
         console.error('Error retrieving user:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+
+// const getUserById = async (req, res) => {
+//     try {
+//         const { userId } = req.params;
+
+//         // Validate userId (should be a positive integer)
+//         if (userId && isNaN(userId)) {
+//             return res.status(400).json({ error: 'Invalid userId format' });
+//         }
+
+//         // Build the query to select only the username for the given userId
+//         const query = 'SELECT username, email FROM users WHERE user_id = $1';
+//         const params = [userId];
+
+//         const result = await pool.query(query, params);
+
+//         if (result.rows.length === 0) {
+//             return res.status(404).json({ error: 'User not found' });
+//         }
+
+//         const { username, email } = result.rows[0];
+//         res.status(200).json({ username, email });
+//     } catch (error) {
+//         console.error('Error retrieving user:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// };
 
 
 

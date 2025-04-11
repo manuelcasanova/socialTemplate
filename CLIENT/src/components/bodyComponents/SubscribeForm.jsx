@@ -18,6 +18,7 @@ const SubscribeForm = ({ isNavOpen }) => {
         expYear: '',
         cvc: ''
     });
+
     const [showPaymentForm, setShowPaymentForm] = useState(false); // State to toggle the display of the payment form
     const userId = auth.userId;
 
@@ -26,13 +27,14 @@ const SubscribeForm = ({ isNavOpen }) => {
 
     // Function to check the current subscription status
     const checkSubscriptionStatus = async () => {
-        if (!axiosPrivate) return;
+        if (!userId) return;
 
         try {
             const response = await axiosPrivate.get(`/users/${userId}`);
 
             // Assuming response contains roles information
             const roles = response.data.roles;
+
             if (roles.includes('User_subscribed')) {
                 setIsSubscribed(true);
             } else {
