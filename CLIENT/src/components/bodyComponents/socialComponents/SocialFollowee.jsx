@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 //Hooks
 
@@ -16,6 +16,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MuteUserButton from "./socialButtons/MuteUserButton";
 import FollowUserButton from "./socialButtons/FollowUserButton";
 import Error from "../Error";
+import FilterUsername from "./FilterUsername";
 
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
@@ -56,6 +57,17 @@ export default function SocialFollowee({ isNavOpen }) {
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
+  const [filterUsername, setFilterUsername] = useState("");
+
+ const inputRef = useRef(null);
+
+ useEffect(() => {
+  // Focus the input field after the component mounts
+  if (inputRef.current) {
+    inputRef.current.focus();
+  }
+});
+
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -63,11 +75,11 @@ export default function SocialFollowee({ isNavOpen }) {
   }, [filters]);
 
   useEffect(() => {
-    fetchUsers(filters, setUsers, setIsLoading, setError);
+    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
     fetchFollowee(filters, setFollowee, setIsLoading, setError, loggedInUser);
     fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
-  }, [axiosPrivate, filters, hasMutedChanges]);
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -88,6 +100,11 @@ export default function SocialFollowee({ isNavOpen }) {
     setHasMutedChanges(prevState => !prevState);
   };
 
+  useEffect(() => {
+    setError(null); // Clear error when filters change
+  }, [filterUsername]);
+
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -106,6 +123,8 @@ export default function SocialFollowee({ isNavOpen }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
         <h2>Social - Following</h2>
+
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
 
         {filteredFollowee.length === 0 ? (
           <p>No users available or all users are muted.</p>
