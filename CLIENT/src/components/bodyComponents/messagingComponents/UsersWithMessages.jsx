@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MessageNotification from "../../navbarComponents/MessageNotification";
 import Error from "../Error";
+import FilterUsername from "../socialComponents/FilterUsername";
 
 //Util functions
 import fetchMutedUsers from "../socialComponents/util_functions/FetchMutedUsers";
@@ -117,20 +118,7 @@ export default function UsersWithMessages({ isNavOpen }) {
       <div className="admin-users">
         <h2>Chats</h2>
 
-        <div className="filter-container chats-filter">
-          <div className="filter-wrapper">
-            <input
-              type="text"
-              className="filter-container-input-username"
-              placeholder="Username"
-              value={filterUsername}
-              onChange={(e) => setFilterUsername(e.target.value)}
-              pattern="[a-zA-Z0-9-_^\s]+" // Optional, prevents invalid submission
-              ref={inputRef}
-              title="Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
-            />
-          </div>
-        </div>
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
 
 
         <div className="container-toggle-hide-chat-muted-users">
