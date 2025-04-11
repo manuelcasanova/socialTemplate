@@ -72,7 +72,7 @@ export default function SocialFollowee({ isNavOpen }) {
   // Reset the error message whenever filters change
   useEffect(() => {
     setError(null); // Clear error when filters change
-  }, [filters]);
+  }, [filters, filterUsername]);
 
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
@@ -99,11 +99,6 @@ export default function SocialFollowee({ isNavOpen }) {
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
   };
-
-  useEffect(() => {
-    setError(null); // Clear error when filters change
-  }, [filterUsername]);
-
 
   if (isLoading) {
     return <LoadingSpinner />;
