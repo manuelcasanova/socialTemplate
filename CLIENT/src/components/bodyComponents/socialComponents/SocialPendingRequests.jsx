@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 //Hooks
 
@@ -16,6 +16,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MuteUserButton from "./socialButtons/MuteUserButton";
 import FollowUserButton from "./socialButtons/FollowUserButton";
 import Error from "../Error";
+import FilterUsername from "./FilterUsername";
 
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
@@ -57,6 +58,10 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
 
+  const [filterUsername, setFilterUsername] = useState("");
+
+  const inputRef = useRef(null);
+ 
 
   useEffect(() => {
     setIsFollowNotification(false);
@@ -65,14 +70,22 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   // Reset the error message whenever filters change
   useEffect(() => {
     setError(null); // Clear error when filters change
-  }, [filters]);
+  }, [filters, filterUsername]);
 
   useEffect(() => {
-    fetchUsers(filters, setUsers, setIsLoading, setError);
+    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
     fetchPending(filters, setPendingRequests, setIsLoading, setError, loggedInUser);
     fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
-  }, [axiosPrivate, filters, hasMutedChanges]);
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
+
+  useEffect(() => {
+    // Focus the input field after the component mounts
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  });
+  
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -122,6 +135,9 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
       <div className="admin-users">
         <h2>Social - Pending Requests</h2>
 
+
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
+        
         {filteredPending.length === 0 ? (
           <p>No pending requests.</p>
         ) : (
