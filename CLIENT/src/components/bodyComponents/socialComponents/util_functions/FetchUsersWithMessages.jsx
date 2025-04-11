@@ -12,8 +12,16 @@ const fetchUsersWithMessages = async (userId, setUsers, setIsLoading, setError, 
   });
     setUsers(response.data); // Set the users who have exchanged messages
   } catch (err) {
-    setError(`Failed to fetch users with messages: ${err.response.data.error}`);
-    console.error(err);
+    console.error("Error fetching users:", err);
+
+    let errorMsg = "Failed to fetch users.";
+    if (err.response?.data?.error) {
+      errorMsg += ` ${err.response.data.error}`;
+    } else if (err.message) {
+      errorMsg += ` ${err.message}`;
+    }
+
+    setError(errorMsg);
   } finally {
     setIsLoading(false);
   }

@@ -93,7 +93,7 @@ export default function SocialFollowee({ isNavOpen }) {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <Error isNavOpen={isNavOpen} error={error} />
   }
 
   // Filter the followee list to remove muted users

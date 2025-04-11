@@ -42,8 +42,16 @@ export default function AdminUsers({ isNavOpen }) {
         setRoles(rolesResponse.data); // Set roles from the server
 
       } catch (err) {
-        setError(`Failed to fetch data: ${err.response.data.error}`);
-        console.error(err);
+        console.error("Error fetching users:", err);
+
+        let errorMsg = "Failed to fetch users.";
+        if (err.response?.data?.error) {
+          errorMsg += ` ${err.response.data.error}`;
+        } else if (err.message) {
+          errorMsg += ` ${err.message}`;
+        }
+    
+        setError(errorMsg);
       } finally {
         setIsLoading(false);
       }
@@ -77,8 +85,10 @@ export default function AdminUsers({ isNavOpen }) {
 
     } catch (error) {
       console.error("Error updating roles", error);
-      setError(`${error.response.data.error}`);
+      const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
+      setError(errorMsg);
     }
+    
   };
 
   // const handleDeleteUser = async (userId, loggedInUser) => {
@@ -115,8 +125,11 @@ export default function AdminUsers({ isNavOpen }) {
           setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== userId));
 
         } catch (error) {
-          console.error("Error deleting user", error);
-          setError(`${error.response?.data?.error || 'An error occurred'}`);
+          console.error("Error updating roles", error);
+          const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
+          setError(errorMsg);
+
+        
         } finally {
           setIsLoading(false);
         }

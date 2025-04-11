@@ -12,8 +12,16 @@ const fetchFollowersAndFollowee = async (filters, setFollowee, setIsLoading, set
 
     setFollowee(usersResponse.data); // Set user data
   } catch (err) {
-    setError(`Failed to fetch data: ${err.response.data.error}`);
-    console.error(err);
+    console.error('Error fetching followers and followees:', err);
+
+    let errorMsg = 'Failed to fetch data.';
+    if (err.response?.data?.error) {
+      errorMsg += ` ${err.response.data.error}`;
+    } else if (err.message) {
+      errorMsg += ` ${err.message}`;
+    }
+
+    setError(errorMsg);
   } finally {
     setIsLoading(false);
   }

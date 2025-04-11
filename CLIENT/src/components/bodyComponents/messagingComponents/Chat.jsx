@@ -114,7 +114,8 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
       }, 100);
     } catch (err) {
       console.log("error", err);
-      setError(err.response.data.message || "An error occurred. Try again later.");
+      setError(err?.response?.data?.message || err?.message || "An error occurred. Try again later.");
+
     }
     finally {
       setIsLoading(false);

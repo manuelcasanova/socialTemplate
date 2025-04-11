@@ -12,8 +12,16 @@ const fetchMessages = async (filters, setMessages, setIsLoading, setError, logge
     ]);
     setMessages(messages.data); 
   } catch (err) {
-    setError(`Failed to fetch data: ${err.response?.data?.error || err.message}`);
-    console.error(err);
+    console.error("Error fetching users:", err);
+
+    let errorMsg = "Failed to fetch users.";
+    if (err.response?.data?.error) {
+      errorMsg += ` ${err.response.data.error}`;
+    } else if (err.message) {
+      errorMsg += ` ${err.message}`;
+    }
+
+    setError(errorMsg);
   } finally {
     setIsLoading(false);
   }

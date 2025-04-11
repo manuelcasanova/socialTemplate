@@ -97,7 +97,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   };
 
   if (isLoading) {
-    <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (error) {
