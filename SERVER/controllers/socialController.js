@@ -224,15 +224,26 @@ const getFollowersData = async (req, res, next) => {
 
 // Fetch followee data (users followed by the logged-in user)
 const getFollowersAndFolloweeData = async (req, res, next) => {
-  const { userId } = req.query;
-
+  const { userId, username } = req.query; // ← Make sure to extract `username` if you're going to use it
 
   try {
-    const followersAndFollowee = await pool.query(
-      `SELECT * FROM followers 
-      WHERE follower_id = $1 OR followee_id = $1 ORDER BY lastmodification DESC`,
-      [userId]
-    );
+    // Start building your query
+    let query = `
+      SELECT * FROM followers 
+      WHERE follower_id = $1 OR followee_id = $1
+    `;
+    const params = [userId];
+
+    // Add filters to the query based on the req.query parameters
+    if (username) {
+      query += ` AND username ILIKE $${params.length + 1}`; // Assuming there's a `username` field
+      params.push(`%${username}%`);
+    }
+
+    // Order by modification date
+    query += ` ORDER BY lastmodification DESC`;
+
+    const followersAndFollowee = await pool.query(query, params);
 
     // Return the list of followees
     return res.status(200).json(followersAndFollowee.rows);
@@ -242,6 +253,7 @@ const getFollowersAndFolloweeData = async (req, res, next) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // Fetch pending requests for social connection
 const getPendingSocialRequests = async (req, res, next) => {
