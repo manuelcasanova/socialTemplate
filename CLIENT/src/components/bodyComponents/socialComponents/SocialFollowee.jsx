@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 //Hooks
 
@@ -8,7 +9,7 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 
 import '../../../css/AdminUsers.css';
-import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //Components
@@ -41,6 +42,7 @@ const profilePictureExists = async (userId) => {
 export default function SocialFollowee({ isNavOpen }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({});
@@ -59,14 +61,14 @@ export default function SocialFollowee({ isNavOpen }) {
   const [showLargePicture, setShowLargePicture] = useState(null);
   const [filterUsername, setFilterUsername] = useState("");
 
- const inputRef = useRef(null);
+  const inputRef = useRef(null);
 
- useEffect(() => {
-  // Focus the input field after the component mounts
-  if (inputRef.current) {
-    inputRef.current.focus();
-  }
-});
+  useEffect(() => {
+    // Focus the input field after the component mounts
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  });
 
 
   // Reset the error message whenever filters change
@@ -119,7 +121,7 @@ export default function SocialFollowee({ isNavOpen }) {
       <div className="admin-users">
         <h2>Social - Following</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
 
         {filteredFollowee.length === 0 ? (
           <p>No users available or all users are muted.</p>
@@ -180,6 +182,28 @@ export default function SocialFollowee({ isNavOpen }) {
                     {loggedInUser !== user.user_id &&
 
                       <>
+
+                        <div className="user-info-buttons">
+                          {
+                            followersAndFollowee.some(f =>
+                              f.follower_id === user.user_id ||
+                              f.followee_id === user.user_id &&
+                              f.status === "accepted"
+                            ) && (
+                              <button
+                                onClick={() => navigate(`/messages/${user.user_id}`)}
+                              >
+
+                                <FontAwesomeIcon
+                                  icon={faEnvelope}
+                                  style={{ cursor: "pointer" }}
+                                  title="This user follows you"
+                                />
+                              </button>
+                            )
+                          }
+                        </div>
+
                         <FollowUserButton
 
                           followeeId={user.user_id}
