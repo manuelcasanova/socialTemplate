@@ -37,7 +37,13 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   const axiosPrivate = useAxiosPrivate();
   const loggedInUser = auth.userId;
   const navigate = useNavigate();
-  const handleClose = () => navigate('/messages');
+  const handleClose = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/messages');
+    }
+  };
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({});
