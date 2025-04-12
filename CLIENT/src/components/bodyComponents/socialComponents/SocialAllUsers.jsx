@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 //Hooks
 
@@ -9,7 +10,7 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 
 import '../../../css/AdminUsers.css';
-import { faBellSlash, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //Components
@@ -42,6 +43,7 @@ const profilePictureExists = async (userId) => {
 export default function SocialAllUsers({ isNavOpen }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({});
@@ -53,7 +55,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   const inputRef = useRef(null);
   const usersExceptMe = users.filter(user => {
     // Filter out muted users
-    const isMuted = mutedUsers.some(mute => 
+    const isMuted = mutedUsers.some(mute =>
       (mute.muter === loggedInUser && mute.mutee === user.user_id && mute.mute) ||
       (mute.muter === user.user_id && mute.mutee === loggedInUser && mute.mute)
     );
@@ -111,7 +113,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   }
 
   if (error) {
-    return <Error isNavOpen={isNavOpen} error={error}/>
+    return <Error isNavOpen={isNavOpen} error={error} />
   }
 
 
@@ -120,7 +122,7 @@ export default function SocialAllUsers({ isNavOpen }) {
       <div className="admin-users">
         <h2>Social - All Users</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
 
         {allUsersMutedOrMe ? (
           <p>No users available or all users are muted.</p>
@@ -179,6 +181,28 @@ export default function SocialAllUsers({ isNavOpen }) {
                   {loggedInUser !== user.user_id &&
 
                     <>
+
+                      <div className="user-info-buttons">
+                        {
+                          followersAndFollowee.some(f =>
+                            f.follower_id === user.user_id ||
+                            f.followee_id === user.user_id &&
+                            f.status === "accepted"
+                          ) && (
+                            <button
+                            onClick={() => navigate(`/messages/${user.user_id}`)}
+                            >
+                              
+                            <FontAwesomeIcon
+                              icon={faEnvelope}
+                              style={{ cursor: "pointer" }}
+                              title="This user follows you"
+                            />
+                            </button>
+                          )
+                        }
+                      </div>
+
                       <FollowUserButton
 
                         followeeId={user.user_id}
