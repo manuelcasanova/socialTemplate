@@ -4,6 +4,10 @@ import { Routes, Route } from 'react-router-dom';
 
 //Components
 
+import Unauthorized from './components/authComponents/Unauthorized';
+import PersistLogin from './components/authComponents/PersistLogin';
+import RequireAuth from './components/authComponents/RequireAuth';
+
 import Navbar from './components/mainComponents/navBar';
 import Hamburger from './components/mainComponents/hamburger';
 
@@ -12,20 +16,19 @@ import User from './components/bodyComponents/User';
 import Moderator from './components/bodyComponents/Moderator';
 import Subscriber from './components/bodyComponents/Subscriber';
 import Admin from './components/bodyComponents/Admin';
+
 import Signin from './components/authComponents/Signin';
 import Signup from './components/authComponents/Signup';
+import ResetPassword from './components/authComponents/ResetPassword';
+
 import Profile from './components/bodyComponents/Profile';
 import AdminUsers from './components/bodyComponents/users/AdminUsers';
-import Unauthorized from './components/authComponents/Unauthorized';
-import PersistLogin from './components/authComponents/PersistLogin';
-import RequireAuth from './components/authComponents/RequireAuth';
-import ResetPassword from './components/authComponents/ResetPassword';
+
 import RoleChangeLog from './components/bodyComponents/users/RoleChangeLog';
 import SubscribeForm from './components/bodyComponents/SubscribeForm';
 import LoginHistory from './components/bodyComponents/users/LoginHistory';
 import NotFound from './components/bodyComponents/NotFound';
 import Footer from './components/mainComponents/footer';
-import TEMPLATE from './components/bodyComponents/TEMPLATE-BODY';
 
 import SocialAllUsers from './components/bodyComponents/socialComponents/SocialAllUsers';
 import SocialFollowers from './components/bodyComponents/socialComponents/SocialFollowers';
@@ -35,6 +38,9 @@ import SocialPendingRequests from './components/bodyComponents/socialComponents/
 
 import UsersWithMessages from './components/bodyComponents/messagingComponents/UsersWithMessages'
 import Chat from './components/bodyComponents/messagingComponents/Chat';
+
+import AllPosts from './components/postsComponents/AllPosts';
+import MyPosts from './components/postsComponents/MyPosts';
 
 
 function App() {
@@ -62,7 +68,7 @@ function App() {
 
     <div className="app">
 
-      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages}/>
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} />
 
       <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
@@ -70,8 +76,7 @@ function App() {
       <Routes>
 
         {/* Public routes */}
-        <Route path="/bodytemplate" element={<TEMPLATE isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages}/>} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} />} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
         <Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
@@ -96,27 +101,36 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+            <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="social/following" element={<SocialFollowee isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+            <Route path="social/following" element={<SocialFollowee isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="social/followers" element={<SocialFollowers isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+            <Route path="social/followers" element={<SocialFollowers isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="social/muted" element={<SocialMuted isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+            <Route path="social/muted" element={<SocialMuted isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification}/> } />
+            <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth}/>} />
+            <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
 
-          <Route element={<RequireAuth  allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']}/>}>
-          <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages}/>}/>
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="posts/allposts" element={<AllPosts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="posts/myposts" element={<MyPosts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+          </Route>
+
+
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
@@ -139,7 +153,7 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
       </Routes>
-<Footer isNavOpen={isNavOpen} />
+      <Footer isNavOpen={isNavOpen} />
 
     </div>
 

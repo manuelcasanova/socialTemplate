@@ -106,6 +106,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       admin: section === 'admin' ? !prevState.admin : false,
       profile: section === 'profile' ? !prevState.profile : false,
       social: section === 'social' ? !prevState.social : false,
+      posts: section === 'posts' ? !prevState.posts : false,
     }));
   };
 
@@ -126,6 +127,22 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
+
+      {auth.roles && <div className='nav-item-with-dropdown'>
+        <div className='nav-item' onClick={() => toggleSection('posts')}>
+          <div>Posts{showSections.posts ? '▲' : '▼'}</div>
+        </div>
+        {showSections.posts && (
+          <>
+            <div className='subitem' onClick={() => handleNavigate('/posts/allposts')}>All posts</div>
+
+            <div className="subitem" onClick={() => handleNavigate('/posts/myposts')}>
+              My posts
+            </div>
+          </>
+        )}
+      </div>}
+
       {auth.roles && auth.roles.includes('Moderator') &&
         <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
       }
@@ -143,6 +160,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
             <FollowNotification />
             :
             showSections.social ? '▲' : '▼'
+            
           }
         </div>
         {showSections.social && (
@@ -180,7 +198,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) &&
         <div className='nav-item-with-dropdown'>
           <div className='nav-item' onClick={() => toggleSection('admin')}>Admin
-            {showSections.admin ? '▲' : '▼'}
+            {showSections.admin ? '▲' : '▼'
+            }
           </div>
           {showSections.admin && (
             <>
@@ -208,22 +227,22 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {auth.roles && hasNewMessages &&
-      <div className='nav-item'
-      onClick={() => {
-        navigate(`/messages/`);
-      }}
-      >
-        <div className="new-message-bell-container" 
+        <div className='nav-item'
           onClick={() => {
             navigate(`/messages/`);
           }}
         >
+          <div className="new-message-bell-container"
+            onClick={() => {
+              navigate(`/messages/`);
+            }}
+          >
 
-          <FontAwesomeIcon
-            className="faBell-new-message" 
-            icon={faEnvelope} />
-          <span className="new-message-notification-dot"></span> 
-        </div>
+            <FontAwesomeIcon
+              className="faBell-new-message"
+              icon={faEnvelope} />
+            <span className="new-message-notification-dot"></span>
+          </div>
         </div>
       }
 
