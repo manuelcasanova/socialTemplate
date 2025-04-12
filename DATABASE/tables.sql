@@ -1,13 +1,17 @@
-
-DROP TABLE IF EXISTS roles CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS followers;
-DROP TABLE IF EXISTS muted;
-DROP TABLE IF EXISTS login_history CASCADE;
+DROP TABLE IF EXISTS wall_reactions CASCADE;
+DROP TABLE IF EXISTS wall_comments CASCADE;
+DROP TABLE IF EXISTS wall_messages CASCADE;
+DROP TABLE IF EXISTS user_messages CASCADE;
+DROP TABLE IF EXISTS subscriptions CASCADE;
+DROP TABLE IF EXISTS role_change_logs CASCADE;
 DROP TABLE IF EXISTS user_roles CASCADE;
-DROP TABLE IF EXISTS role_change_logs;
-DROP TABLE IF EXISTS subscriptions;
-DROP TABLE IF EXISTS user_messages;
+DROP TABLE IF EXISTS login_history CASCADE;
+DROP TABLE IF EXISTS muted CASCADE;
+DROP TABLE IF EXISTS followers CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
+
+
 
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
@@ -91,3 +95,31 @@ CREATE TABLE user_messages (
     status VARCHAR(20) DEFAULT 'sent' CHECK (status IN ('sent', 'read', 'deleted')),
     is_deleted BOOLEAN DEFAULT false
 );
+
+CREATE TABLE wall_messages (
+    id SERIAL PRIMARY KEY,
+    sender INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    visibility VARCHAR(20) NOT NULL CHECK (visibility IN ('public', 'followers', 'private')),
+    is_deleted BOOLEAN DEFAULT false,
+    UNIQUE(id, sender)
+);
+
+CREATE TABLE wall_reactions (
+    message_id INTEGER REFERENCES wall_messages(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    reaction_type VARCHAR(20) NOT NULL,  -- e.g. 'like', 'love', 'laugh', etc.
+    reacted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (message_id, user_id)
+);
+
+CREATE TABLE wall_comments (
+    id SERIAL PRIMARY KEY,
+    message_id INTEGER REFERENCES wall_messages(id) ON DELETE CASCADE,
+    commenter INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    is_deleted BOOLEAN DEFAULT false
+);
+
