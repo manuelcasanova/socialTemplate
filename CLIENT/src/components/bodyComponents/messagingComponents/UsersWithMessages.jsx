@@ -17,6 +17,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import MessageNotification from "../../navbarComponents/MessageNotification";
 import Error from "../Error";
 import FilterUsername from "../socialComponents/FilterUsername";
+import MuteUserButton from "../socialComponents/socialButtons/MuteUserButton";
 
 //Util functions
 import fetchMutedUsers from "../socialComponents/util_functions/FetchMutedUsers";
@@ -49,6 +50,7 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [users, setUsers] = useState([]);
   const [usersWithNewMessages, setUsersWithNewMessages] = useState([]);
   const [mutedUsers, setMutedUsers] = useState([]);
+  const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [filterUsername, setFilterUsername] = useState("");
   const [filters, setFilters] = useState("")
   const [hideMuted, setHideMuted] = useState(true);
@@ -73,7 +75,7 @@ export default function UsersWithMessages({ isNavOpen }) {
     fetchUsersWithMessages(loggedInUser, setUsers, setIsLoading, setError, filterUsername, hideMuted);
     // Fetch muted users (optional depending on your app's structure)
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
-  }, [loggedInUser, filterUsername, hideMuted]);
+  }, [loggedInUser, filterUsername, hideMuted, hasMutedChanges]);
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -94,6 +96,11 @@ export default function UsersWithMessages({ isNavOpen }) {
       checkImages();
     }
   }, [users]);
+
+  const handleMutedChanges = () => {
+    setHasMutedChanges(prevState => !prevState);
+  };
+
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -118,7 +125,7 @@ export default function UsersWithMessages({ isNavOpen }) {
       <div className="admin-users">
         <h2>Chats</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
 
 
         <div className="container-toggle-hide-chat-muted-users">
@@ -197,6 +204,12 @@ export default function UsersWithMessages({ isNavOpen }) {
                   {/* <MessageNotification userId={user.user_id}/> */}
                   {usersWithNewMessages.includes(user.user_id) && <MessageNotification userId={user.user_id} setUsersWithNewMessages={setUsersWithNewMessages} />}
 
+                  <MuteUserButton userId={user.user_id} userLoggedin={loggedInUser} onMutedChange={handleMutedChanges} setMutedUsers={setMutedUsers}
+                    isMuted={mutedUsers.some(mute =>
+                      (mute.muter === user.user_id && mute.mutee === loggedInUser) ||
+                      (mute.muter === loggedInUser && mute.mutee === user.user_id)
+                    )}
+                  />
 
                 </div>
 
