@@ -17,6 +17,7 @@ import FilterUsername from "../socialComponents/FilterUsername";
 
 //Util functions
 import { fetchPosts, fetchMyPosts } from "./util_functions/FetchPosts";
+import fetchUsers from "../socialComponents/util_functions/FetchUsers";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -28,6 +29,7 @@ export default function AllPosts({ isNavOpen }) {
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({});
   const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([])
   const [filterUsername, setFilterUsername] = useState("");
   const inputRef = useRef(null);
   const loggedInUser = auth.userId;
@@ -39,6 +41,7 @@ export default function AllPosts({ isNavOpen }) {
 
   useEffect(() => {
     fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser);
+     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
   }, [axiosPrivate, filters, filterUsername]);
 
   const handlePostDelete = (postId) => {
@@ -55,6 +58,12 @@ export default function AllPosts({ isNavOpen }) {
     };
 
     deletePost();
+  };
+
+  const getUsernameById = (userId) => {
+    const user = users.find(user => user.user_id === userId);
+
+    return user ? user.username : "Unknown User"; 
   };
 
   if (isLoading) {
@@ -84,7 +93,7 @@ export default function AllPosts({ isNavOpen }) {
               <div className="post-row" key={post.id}>
                 <div className="post-info">
                   <div className="post-header">
-                    <p><strong>{post.sender}</strong></p>
+                    <p><strong>{getUsernameById(post.sender)}</strong></p>
                     <p>{new Date(post.date).toLocaleString()}</p>
                   </div>
 
