@@ -22,6 +22,17 @@ import { formatDate } from "./util_functions/formatDate";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
+const profilePictureExists = async (userId) => {
+  const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
+  try {
+    const response = await fetch(imageUrl, { method: 'HEAD' });
+    return response.ok;
+  } catch (error) {
+    console.error("Error checking image existence:", error);
+    return false;
+  }
+};
+
 export default function AllPosts({ isNavOpen }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
@@ -36,6 +47,8 @@ export default function AllPosts({ isNavOpen }) {
   const loggedInUser = auth.userId;
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [imageExistsMap, setImageExistsMap] = useState({});
+  const [showLargePicture, setShowLargePicture] = useState(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -54,6 +67,21 @@ export default function AllPosts({ isNavOpen }) {
     fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser);
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
   }, [axiosPrivate, filters, filterUsername]);
+
+
+  useEffect(() => {
+    const checkImages = async () => {
+      const result = {};
+      for (const user of users) {
+        result[user.user_id] = await profilePictureExists(user.user_id);
+      }
+      setImageExistsMap(result);
+    };
+
+    if (users.length > 0) {
+      checkImages();
+    }
+  }, [users]);
 
   const handlePostDelete = (postId) => {
     // Function to delete a post (soft delete)
@@ -76,6 +104,10 @@ export default function AllPosts({ isNavOpen }) {
     const user = users.find(user => user.user_id === userId);
 
     return user ? user.username : "Unknown User";
+  };
+
+  const handleImageClick = (userId) => {
+    setShowLargePicture(userId);
   };
 
   if (isLoading) {
@@ -105,9 +137,31 @@ export default function AllPosts({ isNavOpen }) {
               <div className="post-row" key={post.id}>
                 <div className="post-info">
                   <div className="post-header">
-                    <p className="post-header-sender"><strong>{getUsernameById(post.sender)}</strong></p>
-                    {/* <p>{new Date(post.date).toLocaleString()}</p> */}
-                    <p className="post-header-date">{formatDate(post.date)}</p>
+                    <div className="post-header-photo">
+                      {imageExistsMap[post.sender] ? (
+                        <img
+                          className="user-row-social-small-img"
+                          style={{ marginRight: "0px" }}
+                          src={`${BACKEND}/media/profile_pictures/${post.sender}/profilePicture.jpg`}
+                          alt="User"
+                          onClick={() => handleImageClick(post.sender)}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          icon={faUser}
+                          size="3x"
+                          onClick={() => handleImageClick(post.sender)}
+                        />
+                      )}
+
+
+
+                    </div>
+                    <div className="post-header-sender-and-date">
+                      <p className="post-header-sender"><strong>{getUsernameById(post.sender)}</strong></p>
+                      {/* <p>{new Date(post.date).toLocaleString()}</p> */}
+                      <p className="post-header-date">{formatDate(post.date)}</p>
+                    </div>
                   </div>
 
                   <p>{post.content}</p>
@@ -150,6 +204,25 @@ export default function AllPosts({ isNavOpen }) {
           </div>
         )}
       </div>
+
+      {showLargePicture && (
+        <div
+          className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+          onClick={() => setShowLargePicture(null)}
+        >
+          <img
+            className="users-all-picture-large"
+            src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
+            alt="Profile"
+            onError={(e) => {
+              // Fallback image handling
+              e.target.onerror = null;
+              e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+            }}
+          />
+        </div>
+      )}
+
     </div>
   );
 }
