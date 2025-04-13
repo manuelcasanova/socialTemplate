@@ -62,7 +62,9 @@
   color: var(--color1);
 }
 
-
+.post-header-photo {
+  cursor: pointer;
+}
 
 .post-header-sender-and-date {
  
