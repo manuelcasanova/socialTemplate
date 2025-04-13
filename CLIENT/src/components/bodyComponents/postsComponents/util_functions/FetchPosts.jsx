@@ -1,14 +1,20 @@
 import { axiosPrivate } from "../../../../api/axios";
 
-const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser) => {
+const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page) => {
   setIsLoading(true);
 
   try {
     const { data } = await axiosPrivate.get(`/posts/all`, { 
-      params: { ...filters, loggedInUser, filterUsername } 
+      params: { 
+        ...filters, 
+        loggedInUser, 
+        filterUsername,
+        page,
+        limit: 20 
+      } 
     });
     // Safeguard if data is not an array or doesn't exist
-    setPosts(Array.isArray(data) ? data : []);
+    setPosts(prevPosts => [...prevPosts, ...data]); // Append the new posts
   } catch (err) {
     // console.error("Error fetching posts:", err);
 

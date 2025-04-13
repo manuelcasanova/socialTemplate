@@ -49,6 +49,9 @@ export default function AllPosts({ isNavOpen }) {
   const [postIdToDelete, setPostIdToDelete] = useState(null);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
+  const [page, setPage] = useState(1); // Track the current page
+  const [hasMorePosts, setHasMorePosts] = useState(true); // To track if more posts exist
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -59,12 +62,20 @@ export default function AllPosts({ isNavOpen }) {
   }, [filterUsername]);
 
   useEffect(() => {
+    fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page);
+  }, [axiosPrivate, filters, filterUsername, page]);
+
+  const loadMorePosts = () => {
+    setPage(prevPage => prevPage + 1);
+  };
+
+
+  useEffect(() => {
     // Reset error when filters change
     setError(null);
   }, [filters, filterUsername]);
 
   useEffect(() => {
-    fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser);
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
   }, [axiosPrivate, filters, filterUsername]);
 
@@ -221,6 +232,10 @@ export default function AllPosts({ isNavOpen }) {
             }}
           />
         </div>
+      )}
+
+      {hasMorePosts && !isLoading && (
+        <button onClick={loadMorePosts}>Load More</button>
       )}
 
     </div>

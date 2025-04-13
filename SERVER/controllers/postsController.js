@@ -6,6 +6,9 @@ const getAllPosts = async (req, res) => {
   try {
     const loggedInUser = req.query.loggedInUser;
     const filteredUsername = req.query.filterUsername;
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit) || 20; // Default to 20 posts per page if not provided
+    const offset = (page - 1) * limit; // Calculate the offset for pagination
 
     if (!loggedInUser) {
       return res.status(400).json({ error: 'Missing or invalid loggedInUser ID.' });
@@ -13,7 +16,7 @@ const getAllPosts = async (req, res) => {
 
     // Step 1: Resolve filteredUsername to filteredUserId using LIKE
     let filteredUserIdCondition = '';
-    let queryParams = [loggedInUser];
+    let queryParams = [loggedInUser, offset, limit]; 
 
     if (filteredUsername) {
       // Use LIKE for partial matching on username
@@ -56,7 +59,9 @@ const getAllPosts = async (req, res) => {
             OR (mutee = $1 AND muter = posts.sender AND mute = TRUE)
         )
         ${filteredUserIdCondition}
-      ORDER BY date DESC;
+      ORDER BY date DESC
+      LIMIT $3 OFFSET $2;
+      ;
     `;
 
     const result = await pool.query(query, queryParams);
