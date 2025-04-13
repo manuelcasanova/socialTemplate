@@ -18,6 +18,7 @@ import FilterUsername from "../socialComponents/FilterUsername";
 //Util functions
 import { fetchPosts, fetchMyPosts } from "./util_functions/FetchPosts";
 import fetchUsers from "../socialComponents/util_functions/FetchUsers";
+import { formatDate } from "./util_functions/formatDate";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -104,8 +105,9 @@ export default function AllPosts({ isNavOpen }) {
               <div className="post-row" key={post.id}>
                 <div className="post-info">
                   <div className="post-header">
-                    <p><strong>{getUsernameById(post.sender)}</strong></p>
-                    <p>{new Date(post.date).toLocaleString()}</p>
+                    <p className="post-header-sender"><strong>{getUsernameById(post.sender)}</strong></p>
+                    {/* <p>{new Date(post.date).toLocaleString()}</p> */}
+                    <p className="post-header-date">{formatDate(post.date)}</p>
                   </div>
 
                   <p>{post.content}</p>

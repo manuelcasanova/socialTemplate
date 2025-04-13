@@ -49,70 +49,27 @@ INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
   -- ,
   -- (3, 1, 1)
   ;  
-
-
--- For testing expired subscription:
-
--- INSERT INTO subscriptions (user_id, start_date, renewal_due_date, is_active, created_by_user_id) 
--- VALUES 
--- (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '2 seconds', true, 4);
-
-
-
--- Message 1: User 1 sends a message to User 2
--- INSERT INTO user_messages (sender, receiver, content, date, status) 
--- VALUES 
--- (1, 2, 'Hey, how are you?', '2025-03-15 12:00:00+00', 'sent');
-
--- -- Message 2: User 2 sends a message to User 1
--- INSERT INTO user_messages (sender, receiver, content, date, status) 
--- VALUES 
--- (2, 1, 'I am good, how about you?', '2025-03-16 14:00:00+00', 'sent');
-
--- -- Message 3: User 1 sends a follow-up message to User 2
--- INSERT INTO user_messages (sender, receiver, content, date, status) 
--- VALUES 
--- (1, 2, 'Glad to hear that! What have you been up to?', '2025-03-20 10:30:00+00', 'sent');
-
--- -- Message 4: User 2 sends another message to User 1
--- INSERT INTO user_messages (sender, receiver, content, date, status) 
--- VALUES 
--- (2, 1, 'Just working on some projects. How about you?', '2025-03-22 16:00:00+00', 'sent');
-
--- -- Test Message: User 1 sends a message to User 2 around April 30, 2025 for testing purposes
--- INSERT INTO user_messages (sender, receiver, content, date, status) 
--- VALUES 
--- (1, 2, 'This is a test message for March 2025.', '2025-03-30 09:00:00+00', 'sent');
-
--- INSERT INTO user_messages (sender, receiver, content, date, status) 
--- VALUES 
--- (3, 2, 'This is a test message for May 2025.', '2025-04-30 09:00:00+00', 'sent');
-
--- INSERT INTO user_messages (sender, receiver, content, date, status) 
--- VALUES 
--- (3, 2, 'This is a test message for June 2025.', '2025-06-30 09:00:00+00', 'sent');
-
--- Clearer seed data for posts_messages table
-
--- Public messages
-INSERT INTO posts (sender, content, visibility)
+-- Assuming current timestamp is April 13, 2025, 1:20 PM UTC
+-- User 1 posts
+INSERT INTO posts (sender, content, date, visibility, is_deleted)
 VALUES
-(1, '📢 [Public] Hello world! This is my first public message.', 'public'),
-(2, '📢 [Public] Anyone going to the meetup this weekend?', 'public');
+  (1, 'This is a post from User 1, a few seconds ago.', CURRENT_TIMESTAMP - INTERVAL '5 seconds', 'public', false),
+  (1, 'This is a post from User 1, a few minutes ago.', CURRENT_TIMESTAMP - INTERVAL '5 minutes', 'followers', false),
+  (1, 'This is a post from User 1, a few hours ago.', CURRENT_TIMESTAMP - INTERVAL '3 hours', 'private', false),
+  (1, 'This is a post from User 1, about 30 hours ago.', CURRENT_TIMESTAMP - INTERVAL '30 hours', 'public', false),
+  (1, 'This is a post from User 1, a week ago.', CURRENT_TIMESTAMP - INTERVAL '7 days', 'followers', false),
+  (1, 'This is a post from User 1, a month ago.', CURRENT_TIMESTAMP - INTERVAL '1 month', 'private', false),
+  (1, 'This is a post from User 1, 11 months ago.', CURRENT_TIMESTAMP - INTERVAL '11 months', 'followers', false),
+  (1, 'This is a post from User 1, 2 years ago.', CURRENT_TIMESTAMP - INTERVAL '2 years', 'public', false);
 
--- Followers-only messages
-INSERT INTO posts (sender, content, visibility)
+-- User 2 posts
+INSERT INTO posts (sender, content, date, visibility, is_deleted)
 VALUES
-(2, '🔒 [Followers of user 2] Just had coffee ☕ Anyone else up early?', 'followers'),
-(1, '🔒 [Followers of user 1] Taking a short break from social media. See you soon!', 'followers');
-
--- Private messages
-INSERT INTO posts (sender, content, visibility)
-VALUES
-(1, '🔐 [Private Only seen by user 1] This message is private and should only be seen by me, user 1.', 'private'),
-(2, '🔐 [Private Only seen bu user 2]  This message is private and should only be seen by me, user 2', 'private');
-
--- Mark one private message as deleted
--- UPDATE posts
--- SET is_deleted = true
--- WHERE content = '🔐 [Private] This message was removed by the user.';
+  (2, 'This is a post from User 2, a few seconds ago.', CURRENT_TIMESTAMP - INTERVAL '10 seconds', 'private', false),
+  (2, 'This is a post from User 2, a few minutes ago.', CURRENT_TIMESTAMP - INTERVAL '10 minutes', 'public', false),
+  (2, 'This is a post from User 2, a few hours ago.', CURRENT_TIMESTAMP - INTERVAL '5 hours', 'followers', false),
+  (2, 'This is a post from User 2, about 30 hours ago.', CURRENT_TIMESTAMP - INTERVAL '30 hours', 'private', false),
+  (2, 'This is a post from User 2, a week ago.', CURRENT_TIMESTAMP - INTERVAL '7 days', 'followers', false),
+  (2, 'This is a post from User 2, a month ago.', CURRENT_TIMESTAMP - INTERVAL '1 month', 'private', false),
+  (2, 'This is a post from User 2, 11 months ago.', CURRENT_TIMESTAMP - INTERVAL '11 months', 'public', false),
+  (2, 'This is a post from User 2, 2 years ago.', CURRENT_TIMESTAMP - INTERVAL '2 years', 'followers', false);
