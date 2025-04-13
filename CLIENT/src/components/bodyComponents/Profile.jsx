@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import useAuth from "../../../src/hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import '../../css/Profile.css';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Footer from "../mainComponents/footer";
@@ -357,7 +357,12 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                     alt="Profile"
                   />
                 ) : (
-                  <FontAwesomeIcon icon={faUser} size="6x" />
+                  <img
+                  className="user-row-social-small-img"
+                  src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                  alt="Profile"
+                />
+                  
                 )}
               </div>
             }

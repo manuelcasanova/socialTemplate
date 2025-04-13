@@ -8,7 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 import '../../../css/Posts.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -158,9 +158,11 @@ export default function AllPosts({ isNavOpen }) {
                           onClick={() => handleImageClick(post.sender)}
                         />
                       ) : (
-                        <FontAwesomeIcon
-                          icon={faUser}
-                          size="3x"
+                        <img
+                          className="user-row-social-small-img"
+                          style={{ marginRight: "0px" }}
+                          src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                          alt="User"
                           onClick={() => handleImageClick(post.sender)}
                         />
                       )}
@@ -228,7 +230,7 @@ export default function AllPosts({ isNavOpen }) {
             onError={(e) => {
               // Fallback image handling
               e.target.onerror = null;
-              e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+              e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
             }}
           />
         </div>

@@ -37,6 +37,9 @@ export default function ProfileImage({profilePictureKey, setProfilePictureKey}) 
         <img className='profile-image'     src={`${profilePictureUrl}?key=${profilePictureKey}`}  alt="Profile" />
       ) : (
         <FontAwesomeIcon className='profile-image-default' icon={faUser} />
+
+
+        
       )}
     </div>
   );

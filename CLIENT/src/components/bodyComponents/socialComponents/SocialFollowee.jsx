@@ -9,7 +9,7 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 
 import '../../../css/AdminUsers.css';
-import { faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //Components
@@ -143,11 +143,11 @@ export default function SocialFollowee({ isNavOpen }) {
                           alt="Profile"
                         />
                       ) : (
-                        <FontAwesomeIcon
+                        <img
+                          className="user-row-social-small-img"
                           onClick={() => setShowLargePicture(user.user_id)}
-                          icon={faUser}
-                          size="3x"
-                          style={{ marginRight: '20px' }}
+                          src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                          alt="Profile"
                         />
                       )}
 
@@ -159,7 +159,7 @@ export default function SocialFollowee({ isNavOpen }) {
                           <img
                             className='users-all-picture-large'
                             onClick={() => setShowLargePicture(null)}
-                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                            src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
                             onError={(e) => {
                               // Prevent infinite loop in case of repeated errors
                               e.target.onerror = null;

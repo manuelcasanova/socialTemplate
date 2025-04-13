@@ -9,8 +9,6 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 
 import '../../../css/AdminUsers.css';
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -164,7 +162,12 @@ export default function UsersWithMessages({ isNavOpen }) {
 
                   ) : (
 
-                    <FontAwesomeIcon onClick={() => setShowLargePicture(user.user_id)} icon={faUser} size="3x" style={{ marginRight: '20px' }} />
+                    <img
+                      className="user-row-social-small-img "
+                      onClick={() => setShowLargePicture(user.user_id)}
+                      src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                      alt="Profile"
+                    />
 
                   )}
 
@@ -177,7 +180,7 @@ export default function UsersWithMessages({ isNavOpen }) {
                     <img
                       className='users-all-picture-large'
                       onClick={() => setShowLargePicture(null)}
-                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                      src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
                       onError={(e) => {
                         // Prevent infinite loop in case of repeated errors
                         e.target.onerror = null;
@@ -185,7 +188,7 @@ export default function UsersWithMessages({ isNavOpen }) {
                         // Check if the fallback image has already been set to avoid infinite loop
                         if (e.target.src !== `${BACKEND}/media/profile_pictures/user.png`) {
                           // Fall back to the default user image if the profile picture fails
-                          e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                          e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
                         }
                       }}
                     />

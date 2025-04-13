@@ -15,7 +15,7 @@ import Error from "../Error";
 
 // Styling
 import '../../../css/Chat.css'
-import { faUser, faRefresh, faTrashAlt, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faRefresh, faTrashAlt, faBan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -196,9 +196,10 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
               onClick={() => setShowLargePicture(true)}
             />
           ) : (
-            <FontAwesomeIcon
-              icon={faUser}
-              size="3x"
+            <img
+              className="user-row-chat-small-img"
+              src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+              alt="Profile"
               onClick={() => setShowLargePicture(true)}
             />
           )}
@@ -213,11 +214,11 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
               <img
 
                 className="users-all-picture-large"
-                src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
+                src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
                 alt="Large Profile"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = `${BACKEND}/media/profile_pictures/user.png`; // Default fallback image
+                  e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`; // Default fallback image
                 }}
               />
             </div>

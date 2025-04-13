@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import '../../../css/AdminUsers.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import useAuth from "../../../hooks/useAuth";
 import FilterAdminUsers from "./FilterAdminUsers";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -186,11 +185,13 @@ export default function AdminUsers({ isNavOpen }) {
                             }}
                           />
                           {/* Display FontAwesome icon if image is not found */}
-                          <FontAwesomeIcon
-                            icon={faUser}
-                            className="admin-profile-image"
-                            style={{ display: 'none' }}  // Initially hidden
-                          />
+                    
+                           <img
+                        className="user-row-social-small-img"
+                        src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                        alt="Profile"
+                        style={{ display: 'none' }}  // Initially hidden
+                      />
                         </div>
                         <p>
                           <strong>Username:</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
