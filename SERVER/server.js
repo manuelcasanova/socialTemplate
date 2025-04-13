@@ -69,6 +69,7 @@ app.use(verifyJWT);
 app.use('/users', require('./routes/api/users'));  
 app.use('/social', require('./routes/api/social')); 
 app.use('/messages', require('./routes/api/messages')); 
+app.use('/posts', require('./routes/api/posts')); 
 app.use('/roles', require('./routes/api/roles'));
 app.use('/log-events', require('./routes/api/log-events'));
 

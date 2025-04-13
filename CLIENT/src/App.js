@@ -39,8 +39,8 @@ import SocialPendingRequests from './components/bodyComponents/socialComponents/
 import UsersWithMessages from './components/bodyComponents/messagingComponents/UsersWithMessages'
 import Chat from './components/bodyComponents/messagingComponents/Chat';
 
-import AllPosts from './components/postsComponents/AllPosts';
-import MyPosts from './components/postsComponents/MyPosts';
+import AllPosts from './components/bodyComponents/postsComponents/AllPosts';
+import MyPosts from './components/bodyComponents/postsComponents/MyPosts';
 
 
 function App() {

@@ -92,27 +92,27 @@ INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES
 -- VALUES 
 -- (3, 2, 'This is a test message for June 2025.', '2025-06-30 09:00:00+00', 'sent');
 
--- Clearer seed data for wall_messages table
+-- Clearer seed data for posts_messages table
 
 -- Public messages
-INSERT INTO wall_messages (sender, content, visibility)
+INSERT INTO posts (sender, content, visibility)
 VALUES
 (1, '📢 [Public] Hello world! This is my first public message.', 'public'),
-(1, '📢 [Public] Anyone going to the meetup this weekend?', 'public');
+(2, '📢 [Public] Anyone going to the meetup this weekend?', 'public');
 
 -- Followers-only messages
-INSERT INTO wall_messages (sender, content, visibility)
+INSERT INTO posts (sender, content, visibility)
 VALUES
-(2, '🔒 [Followers] Just had coffee ☕ Anyone else up early?', 'followers'),
-(2, '🔒 [Followers] Taking a short break from social media. See you soon!', 'followers');
+(2, '🔒 [Followers of user 2] Just had coffee ☕ Anyone else up early?', 'followers'),
+(1, '🔒 [Followers of user 1] Taking a short break from social media. See you soon!', 'followers');
 
 -- Private messages
-INSERT INTO wall_messages (sender, content, visibility)
+INSERT INTO posts (sender, content, visibility)
 VALUES
-(1, '🔐 [Private] This message is private and should only be seen by me.', 'private'),
-(2, '🔐 [Private] This message was removed by the user.', 'private');
+(1, '🔐 [Private Only seen by user 1] This message is private and should only be seen by me, user 1.', 'private'),
+(2, '🔐 [Private Only seen bu user 2]  This message is private and should only be seen by me, user 2', 'private');
 
 -- Mark one private message as deleted
-UPDATE wall_messages
-SET is_deleted = true
-WHERE content = '🔐 [Private] This message was removed by the user.';
+-- UPDATE posts
+-- SET is_deleted = true
+-- WHERE content = '🔐 [Private] This message was removed by the user.';

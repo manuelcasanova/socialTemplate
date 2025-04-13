@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS wall_reactions CASCADE;
-DROP TABLE IF EXISTS wall_comments CASCADE;
-DROP TABLE IF EXISTS wall_messages CASCADE;
+DROP TABLE IF EXISTS posts_reactions CASCADE;
+DROP TABLE IF EXISTS posts_comments CASCADE;
+DROP TABLE IF EXISTS posts CASCADE;
 DROP TABLE IF EXISTS user_messages CASCADE;
 DROP TABLE IF EXISTS subscriptions CASCADE;
 DROP TABLE IF EXISTS role_change_logs CASCADE;
@@ -96,7 +96,7 @@ CREATE TABLE user_messages (
     is_deleted BOOLEAN DEFAULT false
 );
 
-CREATE TABLE wall_messages (
+CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     sender INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     content TEXT NOT NULL,
@@ -106,17 +106,17 @@ CREATE TABLE wall_messages (
     UNIQUE(id, sender)
 );
 
-CREATE TABLE wall_reactions (
-    message_id INTEGER REFERENCES wall_messages(id) ON DELETE CASCADE,
+CREATE TABLE posts_reactions (
+    message_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
     user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     reaction_type VARCHAR(20) NOT NULL,  -- e.g. 'like', 'love', 'laugh', etc.
     reacted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (message_id, user_id)
 );
 
-CREATE TABLE wall_comments (
+CREATE TABLE posts_comments (
     id SERIAL PRIMARY KEY,
-    message_id INTEGER REFERENCES wall_messages(id) ON DELETE CASCADE,
+    message_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
     commenter INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

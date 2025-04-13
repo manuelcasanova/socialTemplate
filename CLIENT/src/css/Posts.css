@@ -1,0 +1,104 @@
+/* Layout container similar to .chat-container */
+.admin-posts {
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  background-color: lightblue;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.admin-posts h2 {
+  color: var(--color);
+  margin-bottom: 1em;
+}
+
+/* Input filter (FilterUsername) */
+.admin-posts input {
+  width: 100%;
+  max-width: 500px;
+  margin: 10px 0;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Posts container like messages-container */
+.posts-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 10px;
+}
+
+/* Individual post rows */
+.post-row {
+  background-color: var(--color7);
+  padding: 0.8em;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  color: var(--color1) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header row in a post */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  font-size: 14px;
+  color: var(--color1);
+}
+
+/* Post content */
+.post-info p {
+  margin: 0.3em 0;
+  font-size: 16px;
+  text-align: start;
+}
+
+/* Action buttons (edit/delete/etc) */
+.post-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5em;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color1);
+  font-size: 1.2em;
+  transition: transform 0.2s ease;
+}
+
+.post-actions button:hover {
+  transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 580px) {
+  .admin-posts {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .admin-posts input {
+    width: 100%;
+  }
+
+  .post-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
