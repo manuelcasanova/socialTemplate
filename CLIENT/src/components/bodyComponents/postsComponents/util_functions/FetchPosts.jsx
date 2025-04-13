@@ -5,7 +5,7 @@ const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsern
 
   try {
     const { data } = await axiosPrivate.get(`/posts/all`, { 
-      params: { ...filters, loggedInUser } 
+      params: { ...filters, loggedInUser, filterUsername } 
     });
     // Safeguard if data is not an array or doesn't exist
     setPosts(Array.isArray(data) ? data : []);

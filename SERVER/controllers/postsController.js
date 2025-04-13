@@ -1,47 +1,65 @@
 const pool = require('../config/db');
 
 // Function to get all posts (is_deleted false), is_private only if I'm the sender
+
 const getAllPosts = async (req, res) => {
   try {
     const loggedInUser = req.query.loggedInUser;
-  
+    const filteredUsername = req.query.filterUsername;
 
     if (!loggedInUser) {
       return res.status(400).json({ error: 'Missing or invalid loggedInUser ID.' });
     }
 
+    // Step 1: Resolve filteredUsername to filteredUserId using LIKE
+    let filteredUserIdCondition = '';
+    let queryParams = [loggedInUser];
+
+    if (filteredUsername) {
+      // Use LIKE for partial matching on username
+      filteredUserIdCondition = `
+        AND sender IN (
+          SELECT user_id 
+          FROM users 
+          WHERE username LIKE $2
+        )
+      `;
+      queryParams.push(`%${filteredUsername}%`); // Adds the wildcard to search partially
+    }
+
+    // Step 2: Modify the SQL query to include the filteredUserIdCondition if it exists
     const query = `
       SELECT * 
-FROM posts
-WHERE 
-  is_deleted = FALSE 
-  AND (
-    visibility = 'public'
-    OR (visibility = 'private' AND sender = $1)
-    OR (
-      visibility = 'followers'
-      AND (
-        sender = $1
-        OR sender IN (
-          SELECT followee_id
-          FROM followers
-          WHERE follower_id = $1 AND status = 'accepted'
+      FROM posts
+      WHERE 
+        is_deleted = FALSE 
+        AND (
+          visibility = 'public'
+          OR (visibility = 'private' AND sender = $1)
+          OR (
+            visibility = 'followers'
+            AND (
+              sender = $1
+              OR sender IN (
+                SELECT followee_id
+                FROM followers
+                WHERE follower_id = $1 AND status = 'accepted'
+              )
+            )
+          )
         )
-      )
-    )
-  )
-  AND NOT EXISTS (
-    SELECT 1
-    FROM muted
-    WHERE 
-      (muter = $1 AND mutee = posts.sender AND mute = TRUE)
-      OR (mutee = $1 AND muter = posts.sender AND mute = TRUE)
-  )
-ORDER BY date DESC;
-
+        AND NOT EXISTS (
+          SELECT 1
+          FROM muted
+          WHERE 
+            (muter = $1 AND mutee = posts.sender AND mute = TRUE)
+            OR (mutee = $1 AND muter = posts.sender AND mute = TRUE)
+        )
+        ${filteredUserIdCondition}
+      ORDER BY date DESC;
     `;
 
-    const result = await pool.query(query, [loggedInUser]);
+    const result = await pool.query(query, queryParams);
     res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error retrieving posts:', error);

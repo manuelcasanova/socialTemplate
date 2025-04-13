@@ -12,6 +12,7 @@
   margin: auto;
   margin-top: auto;
   margin-bottom: auto;
+  min-height: 100%;
 }
 
 .admin-posts h2 {
@@ -38,9 +39,11 @@
   margin-top: 10px;
 }
 
+
+
 /* Individual post rows */
 .post-row {
-  background-color: var(--color7);
+  background-color: var(--color14);
   padding: 0.8em;
   border-radius: 5px;
   display: flex;
@@ -64,7 +67,7 @@
   margin: 0.3em 0;
   font-size: 16px;
   text-align: start;
-  color: var(--color0);
+  color: var(--color1);
 }
 
 /* Action buttons (edit/delete/etc) */

@@ -15,7 +15,7 @@ import Error from "../Error";
 
 // Styling
 import '../../../css/Chat.css'
-import { faUser, faRefresh, faTrash, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faRefresh, faTrashAlt, faBan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -296,7 +296,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                           {!message.is_deleted && isSender && (
                             <FontAwesomeIcon
                               className="delete-chat-messsage"
-                              icon={faTrash}
+                              icon={faTrashAlt}
                               onClick={() => handleShowConfirmDelete(message.id)} // Pass message.id here
                             />
                           )}

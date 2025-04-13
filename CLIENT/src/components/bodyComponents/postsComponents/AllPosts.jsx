@@ -33,6 +33,16 @@ export default function AllPosts({ isNavOpen }) {
   const [filterUsername, setFilterUsername] = useState("");
   const inputRef = useRef(null);
   const loggedInUser = auth.userId;
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
+  }, [filterUsername]);
 
   useEffect(() => {
     // Reset error when filters change
@@ -41,7 +51,7 @@ export default function AllPosts({ isNavOpen }) {
 
   useEffect(() => {
     fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser);
-     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
+    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
   }, [axiosPrivate, filters, filterUsername]);
 
   const handlePostDelete = (postId) => {
@@ -50,7 +60,8 @@ export default function AllPosts({ isNavOpen }) {
       try {
         await axiosPrivate.put(`/posts/delete/${postId}`, { loggedInUser });
         // Remove deleted post from the UI
-        setPosts((prevPosts) => prevPosts.filter(post => post.id !== postId));
+        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+        setPostIdToDelete(null); // Reset the deletion confirmation state
       } catch (err) {
         console.error("Error deleting post:", err);
         setError("Failed to delete post.");
@@ -63,7 +74,7 @@ export default function AllPosts({ isNavOpen }) {
   const getUsernameById = (userId) => {
     const user = users.find(user => user.user_id === userId);
 
-    return user ? user.username : "Unknown User"; 
+    return user ? user.username : "Unknown User";
   };
 
   if (isLoading) {
@@ -101,12 +112,34 @@ export default function AllPosts({ isNavOpen }) {
 
                   {loggedInUser === post.sender && (
                     <div className="post-actions">
-                      <button
-                        onClick={() => handlePostDelete(post.id)}
-                        title="Delete Post"
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} size="lg" />
-                      </button>
+                      {postIdToDelete === post.id && (
+                        <div className="confirm-delete-chat">
+                          <p
+                            className="button-red"
+                            onClick={() => {
+                              handlePostDelete(post.id);
+                            }}
+                          >
+                            Confirm delete
+                          </p>
+                          <p
+                            className="button-white"
+                            style={{ color: "black" }}
+                            onClick={() => setPostIdToDelete(null)} // Close confirmation modal
+                          >
+                            Cancel
+                          </p>
+                        </div>
+                      )}
+
+                      {postIdToDelete !== post.id && (
+                        <button
+                          onClick={() => setPostIdToDelete(post.id)} // Show confirmation modal for this post
+                          title="Delete Post"
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
