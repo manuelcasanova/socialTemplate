@@ -10,7 +10,7 @@ const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsern
         loggedInUser, 
         filterUsername,
         page,
-        limit: 20 
+        limit: 1 //20 in production 
       } 
     });
     // Safeguard if data is not an array or doesn't exist

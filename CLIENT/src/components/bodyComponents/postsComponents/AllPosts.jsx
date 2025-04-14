@@ -237,7 +237,7 @@ export default function AllPosts({ isNavOpen }) {
       )}
 
       {hasMorePosts && !isLoading && (
-        <button onClick={loadMorePosts}>Load More</button>
+        <button className="button-white" style={{marginTop: '0.5em'}} onClick={loadMorePosts}>Load More</button>
       )}
 
     </div>
