@@ -14,6 +14,7 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 import FilterUsername from "../socialComponents/FilterUsername";
+import WritePost from "./WritePost";
 
 //Util functions
 import { fetchPosts, fetchMyPosts } from "./util_functions/FetchPosts";
@@ -55,6 +56,7 @@ export default function AllPosts({ isNavOpen }) {
 
   const firstNewPostRef = useRef(null);
   const topPostRef = useRef(null);
+  const firstRender = useRef(true);
 
   useEffect(() => {
     if (firstNewPostRef.current) {
@@ -146,6 +148,10 @@ export default function AllPosts({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-posts">
+
+        <h2>Posts</h2>
+
+        <WritePost />
 
         <FilterUsername
           filterUsername={filterUsername}

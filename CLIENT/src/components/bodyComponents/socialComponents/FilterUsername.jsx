@@ -5,7 +5,7 @@ return (
     <input
       type="text"
       className="filter-container-input-username"
-      placeholder="Username"
+      placeholder="Search by username"
       value={filterUsername}
       onChange={(e) => setFilterUsername(e.target.value)}
       // pattern="[a-zA-Z0-9-_^\s]+" 
