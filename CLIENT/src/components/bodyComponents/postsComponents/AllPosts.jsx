@@ -147,7 +147,6 @@ export default function AllPosts({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-posts">
-        <h2>Posts</h2>
 
         <FilterUsername
           filterUsername={filterUsername}

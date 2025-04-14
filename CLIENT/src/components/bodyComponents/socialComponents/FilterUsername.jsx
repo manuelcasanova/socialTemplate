@@ -1,6 +1,6 @@
 export default function FilterUsername ({filterUsername, setFilterUsername, inputRef}) {
 return (
-  <div className="filter-container chats-filter">
+  <div className="filter-container chats-filter posts-filter">
   <div className="filter-wrapper">
     <input
       type="text"
