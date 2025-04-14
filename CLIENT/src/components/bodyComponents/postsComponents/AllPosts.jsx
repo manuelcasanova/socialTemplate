@@ -121,6 +121,9 @@ export default function AllPosts({ isNavOpen }) {
     setShowLargePicture(userId);
   };
 
+  useEffect(() => {
+  }, [posts]);
+
   if (isLoading) {
     return <LoadingSpinner />;
   }

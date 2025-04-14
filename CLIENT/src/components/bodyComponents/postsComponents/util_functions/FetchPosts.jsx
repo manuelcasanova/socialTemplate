@@ -14,7 +14,14 @@ const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsern
       } 
     });
     // Safeguard if data is not an array or doesn't exist
-    setPosts(prevPosts => [...prevPosts, ...data]); // Append the new posts
+
+    if (page === 1) {
+      setPosts(data); // replace
+    } else {
+      setPosts(prevPosts => [...prevPosts, ...data]); // append
+    }
+
+
   } catch (err) {
     // console.error("Error fetching posts:", err);
 
