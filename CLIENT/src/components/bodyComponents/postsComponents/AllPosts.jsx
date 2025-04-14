@@ -275,11 +275,12 @@ export default function AllPosts({ isNavOpen }) {
           <button
             className="button-white"
             style={{ marginTop: '0.5em', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
-            onClick={() => {
-              if (topPostRef.current) {
-                topPostRef.current.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            // onClick={() => {
+            //   if (topPostRef.current) {
+            //     topPostRef.current.scrollIntoView({ behavior: 'smooth' });
+            //   }
+            // }}
           >
             Go to Top
           </button>

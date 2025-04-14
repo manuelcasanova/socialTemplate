@@ -44,11 +44,6 @@
   flex-direction: column;
   gap: 1em;
   margin-top: 10px;
-
-  overflow-y: auto;
-  /* Enable scrolling within this container */
-  max-height: 400px;
-  /* Set a max height for scrolling (adjust to your needs) */
 }
 
 .write-post-container {
