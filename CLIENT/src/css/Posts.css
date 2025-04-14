@@ -20,9 +20,9 @@
 .posts-filter {
   position: sticky;
   top: 0; /* Fix the filter to the top of the parent container */
-  background-color: white; /* Optional: Makes sure the background is solid */
   z-index: 10; /* Optional: To ensure it's on top of the other content */
   border-radius: 4px;
+  margin: 0px;
 }
 
 .admin-posts h2 {
