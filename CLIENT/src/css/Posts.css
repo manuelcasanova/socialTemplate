@@ -120,6 +120,12 @@
   transform: scale(1.2);
 }
 
+.load-more-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
 /* Responsive */
 @media (max-width: 580px) {
   .admin-posts {

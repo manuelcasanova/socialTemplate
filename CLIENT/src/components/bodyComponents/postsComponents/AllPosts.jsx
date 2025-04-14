@@ -53,9 +53,8 @@ export default function AllPosts({ isNavOpen }) {
   const limit = 10 //How many posts to fetch per load
   const [hasMorePosts, setHasMorePosts] = useState(true); // To track if more posts exist
 
-
-
   const firstNewPostRef = useRef(null);
+  const topPostRef = useRef(null);
 
   useEffect(() => {
     if (firstNewPostRef.current) {
@@ -159,11 +158,14 @@ export default function AllPosts({ isNavOpen }) {
         ) : (
           <div className="posts-container">
             {posts.map((post, index) => (
-                            <div
-                            className="post-row"
-                            key={post.id}
-                            ref={index === posts.length - limit - 1 ? firstNewPostRef : null} // Reference for the first new post 
-                          >
+              <div
+                className="post-row"
+                key={post.id}
+                ref={(el) => {
+                  if (index === 0) topPostRef.current = el;
+                  if (index === posts.length - limit) firstNewPostRef.current = el;
+                }}
+              >
                 <div className="post-info">
                   <div className="post-header">
                     <div className="post-header-photo">
@@ -255,13 +257,28 @@ export default function AllPosts({ isNavOpen }) {
       )}
 
       {hasMorePosts && !isLoading && (
-        <button 
-  className="button-white" 
-  style={{ marginTop: '0.5em', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', display: 'block' }} 
-  onClick={loadMorePosts}
->
-  Load More
-</button>
+        <div className="load-more-buttons">
+          <button
+            className="button-white"
+            style={{ marginTop: '0.5em', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
+            onClick={loadMorePosts}
+          >
+            Load More
+          </button>
+
+          <button
+            className="button-white"
+            style={{ marginTop: '0.5em', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
+            onClick={() => {
+              if (topPostRef.current) {
+                topPostRef.current.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+          >
+            Go to Top
+          </button>
+        </div>
+
       )}
 
     </div>
