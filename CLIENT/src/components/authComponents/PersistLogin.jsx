@@ -17,11 +17,15 @@ const PersistLogin = () => {
         const verifyRefreshToken = async () => {
             try {
                 // await new Promise(resolve => setTimeout(resolve, 2000));
-                
+
                 await refresh();
             }
             catch (err) {
-                console.error(err);
+                if (err?.response?.status === 401) {
+                    console.log('No valid refresh token — user not logged in yet.');
+                } else {
+                    console.error('Error verifying refresh token:', err);
+                }
             }
             finally {
                 isMounted && setIsLoading(false);
