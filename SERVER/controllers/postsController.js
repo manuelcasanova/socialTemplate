@@ -8,7 +8,10 @@ const getAllPosts = async (req, res) => {
     const filteredUsername = req.query.filterUsername;
     const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
     const limit = parseInt(req.query.limit) || 20; // Default to 20 posts per page if not provided
-    const offset = (page - 1) * limit; // Calculate the offset for pagination
+    let offset = (page - 1) * limit;// Calculate the offset for pagination
+
+    // Ensure offset is an integer (avoid any BigInt confusion)
+    offset = Number(offset); // Explicitly cast to a number to avoid any type issues
 
     if (!loggedInUser) {
       return res.status(400).json({ error: 'Missing or invalid loggedInUser ID.' });
@@ -24,7 +27,7 @@ const getAllPosts = async (req, res) => {
         AND sender IN (
           SELECT user_id 
           FROM users 
-          WHERE username LIKE $2
+          WHERE username LIKE $4
         )
       `;
       queryParams.push(`%${filteredUsername}%`); // Adds the wildcard to search partially
