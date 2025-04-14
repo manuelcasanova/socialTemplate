@@ -53,6 +53,14 @@ export default function AllPosts({ isNavOpen }) {
   const [hasMorePosts, setHasMorePosts] = useState(true); // To track if more posts exist
 
 
+  const lastPostRef = useRef(null);
+
+  useEffect(() => {
+    if (page > 1 && lastPostRef.current) {
+      lastPostRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [posts]);
+
   useEffect(() => {
     setTimeout(() => {
       if (inputRef.current) {
@@ -147,8 +155,8 @@ export default function AllPosts({ isNavOpen }) {
           <p>No posts available</p>
         ) : (
           <div className="posts-container">
-            {posts.map((post) => (
-              <div className="post-row" key={post.id}>
+            {posts.map((post, index) => (
+              <div className="post-row" key={post.id} ref={index === posts.length - 1 ? lastPostRef : null}>
                 <div className="post-info">
                   <div className="post-header">
                     <div className="post-header-photo">
@@ -240,7 +248,13 @@ export default function AllPosts({ isNavOpen }) {
       )}
 
       {hasMorePosts && !isLoading && (
-        <button className="button-white" style={{marginTop: '0.5em'}} onClick={loadMorePosts}>Load More</button>
+        <button 
+  className="button-white" 
+  style={{ marginTop: '0.5em', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', display: 'block' }} 
+  onClick={loadMorePosts}
+>
+  Load More
+</button>
       )}
 
     </div>
