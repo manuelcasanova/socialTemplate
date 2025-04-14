@@ -43,6 +43,7 @@ export default function AllPosts({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([])
+  const filteredPosts = posts.filter(post => users.some(user => user.user_id === post.sender));
   const [filterUsername, setFilterUsername] = useState("");
   const inputRef = useRef(null);
   const loggedInUser = auth.userId;
@@ -56,7 +57,6 @@ export default function AllPosts({ isNavOpen }) {
 
   const firstNewPostRef = useRef(null);
   const topPostRef = useRef(null);
-  const firstRender = useRef(true);
 
   useEffect(() => {
     if (firstNewPostRef.current) {
@@ -73,6 +73,8 @@ export default function AllPosts({ isNavOpen }) {
       }
     }, 100);
   }, [filterUsername]);
+
+  
 
   useEffect(() => {
     fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page, limit);
@@ -163,14 +165,14 @@ export default function AllPosts({ isNavOpen }) {
           <p>No posts available</p>
         ) : (
           <div className="posts-container">
-            {posts.map((post, index) => (
+            {filteredPosts.map((post, index) => (
               <div
                 className="post-row"
                 key={post.id}
-                ref={(el) => {
-                  if (index === 0) topPostRef.current = el;
-                  if (index === posts.length - limit) firstNewPostRef.current = el;
-                }}
+                // ref={(el) => {
+                //   if (index === 0) topPostRef.current = el;
+                //   if (index === posts.length - limit) firstNewPostRef.current = el;
+                // }}
               >
                 <div className="post-info">
                   <div className="post-header">
