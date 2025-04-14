@@ -1,6 +1,6 @@
 import { axiosPrivate } from "../../../../api/axios";
 
-const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page) => {
+const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page, limit) => {
   setIsLoading(true);
 
   try {
@@ -10,7 +10,7 @@ const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsern
         loggedInUser, 
         filterUsername,
         page,
-        limit: 1 //20 in production 
+        limit: limit
       } 
     });
     // Safeguard if data is not an array or doesn't exist

@@ -50,16 +50,20 @@ export default function AllPosts({ isNavOpen }) {
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
   const [page, setPage] = useState(1); // Track the current page
+  const limit = 10 //How many posts to fetch per load
   const [hasMorePosts, setHasMorePosts] = useState(true); // To track if more posts exist
 
 
-  const lastPostRef = useRef(null);
+
+  const firstNewPostRef = useRef(null);
 
   useEffect(() => {
-    if (page > 1 && lastPostRef.current) {
-      lastPostRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (firstNewPostRef.current) {
+      // Scroll to the first post of the newly loaded posts
+      firstNewPostRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [posts]);
+  }, [posts]); // This will run every time posts are updated
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -70,7 +74,7 @@ export default function AllPosts({ isNavOpen }) {
   }, [filterUsername]);
 
   useEffect(() => {
-    fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page);
+    fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page, limit);
   }, [axiosPrivate, filters, filterUsername, page]);
 
   const loadMorePosts = () => {
@@ -156,7 +160,11 @@ export default function AllPosts({ isNavOpen }) {
         ) : (
           <div className="posts-container">
             {posts.map((post, index) => (
-              <div className="post-row" key={post.id} ref={index === posts.length - 1 ? lastPostRef : null}>
+                            <div
+                            className="post-row"
+                            key={post.id}
+                            ref={index === posts.length - limit - 1 ? firstNewPostRef : null} // Reference for the first new post 
+                          >
                 <div className="post-info">
                   <div className="post-header">
                     <div className="post-header-photo">
