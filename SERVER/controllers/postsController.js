@@ -147,8 +147,47 @@ const markPostAsDeleted = async (req, res) => {
   }
 };
 
+// Function to create a new post
+const writePost = async (req, res) => {
+  const { content, visibility, loggedInUser } = req.body; // Destructure the incoming data
+
+  try {
+    // Validate input fields
+    if (!content || !visibility || !loggedInUser) {
+      return res.status(400).json({ error: 'Content, visibility, and loggedInUser are required.' });
+    }
+
+    // Validate that the loggedInUser exists in the database (optional but a good practice)
+    const userCheckQuery = `SELECT user_id FROM users WHERE user_id = $1;`;
+    const userCheckResult = await pool.query(userCheckQuery, [loggedInUser]);
+
+    if (userCheckResult.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid logged-in user.' });
+    }
+
+    // Insert the new post into the posts table
+    const query = `
+      INSERT INTO posts (content, sender, visibility, date, is_deleted)
+      VALUES ($1, $2, $3, NOW(), FALSE)
+      RETURNING *;
+    `;
+    const params = [content, loggedInUser, visibility];
+
+    const result = await pool.query(query, params);
+
+    // Return the newly created post
+    const newPost = result.rows[0];
+    res.status(201).json(newPost);
+  } catch (error) {
+    console.error('Error creating post:', error);
+    res.status(500).json({ error: 'Internal server error while creating the post.' });
+  }
+};
+
+
 module.exports = {
   getAllPosts,
   getPostsById,
   markPostAsDeleted,
+  writePost
 };

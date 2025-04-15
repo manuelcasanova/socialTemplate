@@ -11,6 +11,7 @@ return (
       // pattern="[a-zA-Z0-9-_^\s]+" 
       ref={inputRef}
       title="Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+      
     />
   </div>
 </div>

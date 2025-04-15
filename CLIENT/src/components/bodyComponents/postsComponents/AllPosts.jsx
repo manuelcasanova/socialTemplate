@@ -58,6 +58,7 @@ export default function AllPosts({ isNavOpen }) {
   const firstNewPostRef = useRef(null);
   const topPostRef = useRef(null);
   const [loadMore, setLoadMore] = useState(false)
+  const [newPostSubmitted, setNewPostSubmitted] = useState(false);
 
 
   useEffect(() => {
@@ -101,6 +102,12 @@ export default function AllPosts({ isNavOpen }) {
     }
   }, [filterUsername]);
 
+  useEffect(() => {
+    if (newPostSubmitted) {
+      fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, 1, limit);
+      setNewPostSubmitted(false); // Reset the trigger after fetching the posts
+    }
+  }, [newPostSubmitted, filters, filterUsername, loggedInUser, page]); 
 
   useEffect(() => {
     const checkImages = async () => {
@@ -160,7 +167,7 @@ export default function AllPosts({ isNavOpen }) {
 
         <h2>Posts</h2>
 
-        <WritePost />
+        <WritePost loggedInUser={loggedInUser} setNewPostSubmitted={setNewPostSubmitted}/>
 
         <div className="write-post-container">
 
