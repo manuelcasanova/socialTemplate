@@ -126,6 +126,7 @@
 /* Action buttons (edit/delete/etc) */
 .post-actions {
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
   margin-top: 0.5em;
 }
@@ -137,10 +138,7 @@
   color: var(--color1);
   font-size: 1.2em;
   transition: transform 0.2s ease;
-}
-
-.post-actions button:hover {
-  transform: scale(1.2);
+  text-align: end;
 }
 
 .load-more-buttons {

@@ -15,6 +15,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 import FilterUsername from "../socialComponents/FilterUsername";
 import WritePost from "./WritePost";
+import PostsComments from "./PostsComments";
 
 //Util functions
 import { fetchPosts, fetchMyPosts } from "./util_functions/FetchPosts";
@@ -48,7 +49,7 @@ export default function Posts({ isNavOpen }) {
 
   const filteredPosts = posts.filter(post => {
     if (showMyPosts) {
-      return post.sender === loggedInUser; 
+      return post.sender === loggedInUser;
     }
     return users.some(user => user.user_id === post.sender);
   });
@@ -227,19 +228,19 @@ export default function Posts({ isNavOpen }) {
         </div>
 
         <div className="which-posts-container">
-          <button 
-          className="button-white"
-          onClick={() => {
-            setShowMyPosts(false); 
-            setPage(1);
-          }}
+          <button
+            className="button-white"
+            onClick={() => {
+              setShowMyPosts(false);
+              setPage(1);
+            }}
           >All posts</button>
-          <button 
-          className="button-white"
-          onClick={() => {
-            setShowMyPosts(true); // Show only my posts
-            setPage(1); 
-          }}
+          <button
+            className="button-white"
+            onClick={() => {
+              setShowMyPosts(true); // Show only my posts
+              setPage(1);
+            }}
           >My posts</button>
         </div>
 
@@ -295,6 +296,8 @@ export default function Posts({ isNavOpen }) {
 
                   <p>{post.content}</p>
 
+                  <PostsComments />
+
                   {loggedInUser === post.sender && (
                     <div className="post-actions">
                       {postIdToDelete === post.id && (
@@ -325,7 +328,9 @@ export default function Posts({ isNavOpen }) {
                           <FontAwesomeIcon icon={faTrashAlt} />
                         </button>
                       )}
+
                     </div>
+
                   )}
                 </div>
               </div>
