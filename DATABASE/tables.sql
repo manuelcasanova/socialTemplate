@@ -90,7 +90,7 @@ CREATE TABLE user_messages (
     id SERIAL PRIMARY KEY,
     sender INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     receiver INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-    content TEXT,
+    content VARCHAR(5000),
     date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(20) DEFAULT 'sent' CHECK (status IN ('sent', 'read', 'deleted')),
     is_deleted BOOLEAN DEFAULT false
@@ -99,7 +99,7 @@ CREATE TABLE user_messages (
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     sender INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-    content TEXT NOT NULL,
+    content VARCHAR(5000) NOT NULL,
     date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     visibility VARCHAR(20) NOT NULL CHECK (visibility IN ('public', 'followers', 'private')),
     is_deleted BOOLEAN DEFAULT false,
@@ -118,7 +118,7 @@ CREATE TABLE posts_comments (
     id SERIAL PRIMARY KEY,
     message_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
     commenter INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-    content TEXT NOT NULL,
+    content VARCHAR(5000) NOT NULL,
     date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     is_deleted BOOLEAN DEFAULT false
 );

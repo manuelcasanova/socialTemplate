@@ -11,6 +11,7 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted }) {
   const [visibility, setVisibility] = useState("public");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const MAX_CHAR_LIMIT = 5000;
 
   useEffect(() => {
     if (inputRef.current) {
@@ -53,6 +54,11 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted }) {
     try {
       if (!content.trim()) {
         setError("Content cannot be empty!");
+        return;
+      }
+
+      if (content.length > MAX_CHAR_LIMIT) {
+        setError(`Content exceeds the ${MAX_CHAR_LIMIT} character limit!`);
         return;
       }
 
@@ -125,9 +131,18 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted }) {
       <button
         className="button-white"
         onClick={handleClick}
+        disabled={content.length > MAX_CHAR_LIMIT || isLoading}
       >
         <FontAwesomeIcon icon={faPaperPlane} />
       </button>
+
+      {error && <div className="error-message">{error}</div>}
+      {content.length > MAX_CHAR_LIMIT && (
+        <div className="char-count">
+          {content.length} / {MAX_CHAR_LIMIT} characters
+        </div>
+      )}
+      
     </div>
   )
 }
