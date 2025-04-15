@@ -64,6 +64,7 @@ export default function AllPosts({ isNavOpen }) {
     // If `loadMore` is true, scroll to the new batch of posts
     if (loadMore && firstNewPostRef.current) {
       firstNewPostRef.current.scrollIntoView({ behavior: 'smooth' });
+      
     } else {
       // Scroll to top of the page when posts are first rendered or after reset
       window.scrollTo({ top: 0, behavior: 'smooth' });
