@@ -14,6 +14,9 @@ import useLogout from "../../hooks/useLogout"
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
+const MAX_FILE_SIZE_MB = 1;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 const profilePictureExists = async (userId) => {
 
   const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
@@ -53,16 +56,16 @@ const validateInput = (editMode, value, confirmPwd = "") => {
       return { valid: false, message: regexValidation.message };
     }
     return { valid: true };
-  } else if (editMode === "matchEmail") { 
-    if (value !== confirmPwd) { 
-      errorMessage = "Emails must match."; 
-      return { valid: false, message: errorMessage }; 
+  } else if (editMode === "matchEmail") {
+    if (value !== confirmPwd) {
+      errorMessage = "Emails must match.";
+      return { valid: false, message: errorMessage };
     }
-    const regexValidation = validateInput("email", value); 
-    if (!regexValidation.valid) { 
-      return { valid: false, message: regexValidation.message }; 
-    } 
-    return { valid: true }; 
+    const regexValidation = validateInput("email", value);
+    if (!regexValidation.valid) {
+      return { valid: false, message: regexValidation.message };
+    }
+    return { valid: true };
   }
 
 
@@ -150,6 +153,21 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   // Handle file selection and trigger upload automatically
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
+
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(selectedFile.type)) {
+      setError("Unsupported file format. Please upload a JPG, PNG or WEBP image.");
+      setFile(null);
+      setFileName("");
+      return;
+    }
+
+    if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
+      setError(`File size exceeds ${MAX_FILE_SIZE_MB}MB. Please choose a smaller image.`);
+      setFile(null);
+      setFileName("");
+      return;
+    }
+
     if (selectedFile) {
       setFile(selectedFile);
       setFileName(selectedFile.name || "No file chosen");
@@ -175,7 +193,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       } catch (error) {
         console.error("Critical Error: Upload failed:", error);
         setCriticalError(true);
-  
+
       }
     }
   };
@@ -241,12 +259,12 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
       setIsInputValid(regexValidation.valid && matchValidation.valid);
       setError(regexValidation.valid ? matchValidation.message : regexValidation.message);
-    } else if (editMode === "email") { 
-      const emailValidation = validateInput("email", value); 
-      const matchEmailValidation = validateInput("matchEmail", value, confirmEmail); 
+    } else if (editMode === "email") {
+      const emailValidation = validateInput("email", value);
+      const matchEmailValidation = validateInput("matchEmail", value, confirmEmail);
 
-      setIsInputValid(emailValidation.valid && matchEmailValidation.valid); 
-      setError(emailValidation.valid ? matchEmailValidation.message : emailValidation.message); 
+      setIsInputValid(emailValidation.valid && matchEmailValidation.valid);
+      setError(emailValidation.valid ? matchEmailValidation.message : emailValidation.message);
     }
 
 
@@ -257,13 +275,13 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     }
   };
 
-  const handleConfirmEmailChange = (e) => { 
-    const value = e.target.value; 
-    setConfirmEmail(value); 
+  const handleConfirmEmailChange = (e) => {
+    const value = e.target.value;
+    setConfirmEmail(value);
 
-    const matchEmailValidation = validateInput("matchEmail", inputValue, value); 
-    setIsInputValid(matchEmailValidation.valid); 
-    setError(matchEmailValidation.message); 
+    const matchEmailValidation = validateInput("matchEmail", inputValue, value);
+    setIsInputValid(matchEmailValidation.valid);
+    setError(matchEmailValidation.message);
   };
 
   const handleConfirmPwdChange = (e) => {
@@ -342,9 +360,9 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
 
-//  if (criticalError) {
-//     return <Error isNavOpen={isNavOpen} error={error} />
-//   }
+  //  if (criticalError) {
+  //     return <Error isNavOpen={isNavOpen} error={error} />
+  //   }
 
   if (criticalError) return <Error isNavOpen={isNavOpen} error="A server error occurred. Please try again later." />;
 
@@ -364,11 +382,11 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   />
                 ) : (
                   <img
-                  className="user-row-social-small-img"
-                  src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                  alt="Profile"
-                />
-                  
+                    className="user-row-social-small-img"
+                    src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                    alt="Profile"
+                  />
+
                 )}
               </div>
             }
@@ -391,6 +409,12 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
                 {/* Text for chosen file */}
                 <span className="file-name">{fileName || "No file chosen"}</span>
+
+                {error && (
+                  <div className="profile-input-instructions">
+                    {error}
+                  </div>
+                )}
 
                 <button className="button-red" onClick={handleCloseModal}>x</button>
 
@@ -484,10 +508,10 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                         placeholder={placeholderText}
                       />
                       <input
-                        type="email" 
-                        value={confirmEmail} 
-                        onChange={handleConfirmEmailChange} 
-                        placeholder="Confirm new email" 
+                        type="email"
+                        value={confirmEmail}
+                        onChange={handleConfirmEmailChange}
+                        placeholder="Confirm new email"
                       />
                     </>
                   )}

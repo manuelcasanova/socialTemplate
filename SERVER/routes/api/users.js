@@ -9,7 +9,7 @@ const multer = require('multer');
 const upload = multer({
   dest: 'tmp/', // Temporary storage location
   limits: {
-    fileSize: 5 * 1024 * 1024, // Limit file size to 5MB
+    fileSize: 1 * 1024 * 1024, // Limit file size to 5MB
   },
   fileFilter: (req, file, cb) => {
     // Only allow image files
