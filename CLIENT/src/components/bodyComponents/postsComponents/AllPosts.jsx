@@ -8,7 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 import '../../../css/Posts.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -57,14 +57,18 @@ export default function AllPosts({ isNavOpen }) {
   const [searchQuery, setSearchQuery] = useState("");
   const firstNewPostRef = useRef(null);
   const topPostRef = useRef(null);
+  const [loadMore, setLoadMore] = useState(false)
+
 
   useEffect(() => {
-    if (firstNewPostRef.current) {
-      // Scroll to the first post of the newly loaded posts
+    // If `loadMore` is true, scroll to the new batch of posts
+    if (loadMore && firstNewPostRef.current) {
       firstNewPostRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // Scroll to top of the page when posts are first rendered or after reset
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [posts]); // This will run every time posts are updated
-
+  }, [loadMore, posts]); 
 
 
   useEffect(() => {
@@ -73,6 +77,7 @@ export default function AllPosts({ isNavOpen }) {
 
   const loadMorePosts = () => {
     setPage(prevPage => prevPage + 1);
+    setLoadMore(true)
   };
 
 
@@ -156,25 +161,25 @@ export default function AllPosts({ isNavOpen }) {
 
         <WritePost />
 
-<div className="write-post-container">
+        <div className="write-post-container">
 
-<FilterUsername
-          filterUsername={filterUsername}
-          setFilterUsername={setFilterUsername}
-          inputRef={inputRef}
-        />
+          <FilterUsername
+            filterUsername={filterUsername}
+            setFilterUsername={setFilterUsername}
+            inputRef={inputRef}
+          />
 
-        <button
-          className="button-white"
-          onClick={() => {
-            setSearchQuery(filterUsername); // Apply filter on click
-            setPage(1); // Reset pagination
-          }}
-        >
-               <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </button>
+          <button
+            className="button-white"
+            onClick={() => {
+              setSearchQuery(filterUsername); // Apply filter on click
+              setPage(1); // Reset pagination
+            }}
+          >
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
 
-</div>
+        </div>
 
 
 
@@ -186,10 +191,10 @@ export default function AllPosts({ isNavOpen }) {
               <div
                 className="post-row"
                 key={post.id}
-              // ref={(el) => {
-              //   if (index === 0) topPostRef.current = el;
-              //   if (index === posts.length - limit) firstNewPostRef.current = el;
-              // }}
+                ref={(el) => {
+                  if (index === 0) topPostRef.current = el;
+                  if (index === posts.length - limit) firstNewPostRef.current = el;
+                }}
               >
                 <div className="post-info">
                   <div className="post-header">
