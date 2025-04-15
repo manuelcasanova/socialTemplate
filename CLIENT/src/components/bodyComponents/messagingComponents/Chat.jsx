@@ -54,6 +54,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   const [showLargePicture, setShowLargePicture] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState(null);
   const inputRef = useRef(null);
+  const MAX_CHAR_LIMIT = 5000;
 
   useEffect(() => {
     setTimeout(() => {
@@ -170,7 +171,12 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
     }
   };
 
-
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    if (inputValue.length <= MAX_CHAR_LIMIT) {
+      setNewMessage(inputValue);
+    }
+  };
 
 
   if (isLoading) {
@@ -240,21 +246,29 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
 
               onChange={(e) => {
                 const inputValue = e.target.value;
-                if (inputValue.length < 255) {
-                  setNewMessage(inputValue);
-                }
+
+                setNewMessage(inputValue);
+
               }}
 
               onKeyDown={handleKeyDown}
               value={newMessage}
               required></input>
             <button
-              disabled={!newMessage}
+              disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
               onClick={handleSubmit}
               className="button-white"
             >
               {isLoading ? "Sending..." : "Send"}
             </button>
+
+            {newMessage.length > MAX_CHAR_LIMIT && (
+              <div className="char-count">
+                {newMessage.length} / {MAX_CHAR_LIMIT} characters
+              </div>
+            )}
+
+
             {error && <p>{error}</p>}
           </div>
 
@@ -285,10 +299,11 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                           {/* Check if message is deleted */}
                           <p className={message.is_deleted ? "deleted-message" : ""}>
                             {message.is_deleted && (
-                              <FontAwesomeIcon icon={faBan} 
-                              style={{ marginRight: "8px"
-                              // , marginBottom: "0px"
-                               }} 
+                              <FontAwesomeIcon icon={faBan}
+                                style={{
+                                  marginRight: "8px"
+                                  // , marginBottom: "0px"
+                                }}
                               />
                             )}
                             {message.is_deleted ? `This message was deleted` : message.content}
