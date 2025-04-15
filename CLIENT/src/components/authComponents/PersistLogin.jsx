@@ -22,7 +22,7 @@ const PersistLogin = () => {
             }
             catch (err) {
                 if (err?.response?.status === 401) {
-                    console.log('No valid refresh token — user not logged in yet.');
+                    // console.log('No valid refresh token — user not logged in yet.');
                 } else {
                     console.error('Error verifying refresh token:', err);
                 }

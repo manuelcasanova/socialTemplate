@@ -39,8 +39,7 @@ import SocialPendingRequests from './components/bodyComponents/socialComponents/
 import UsersWithMessages from './components/bodyComponents/messagingComponents/UsersWithMessages'
 import Chat from './components/bodyComponents/messagingComponents/Chat';
 
-import AllPosts from './components/bodyComponents/postsComponents/AllPosts';
-import MyPosts from './components/bodyComponents/postsComponents/MyPosts';
+import Posts from './components/bodyComponents/postsComponents/Posts';
 
 
 function App() {
@@ -121,13 +120,8 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="posts/allposts" element={<AllPosts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+            <Route path="posts/" element={<Posts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
-
-          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="posts/myposts" element={<MyPosts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-          </Route>
-
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages} />} />

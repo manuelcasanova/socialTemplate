@@ -34,8 +34,9 @@ const profilePictureExists = async (userId) => {
   }
 };
 
-export default function AllPosts({ isNavOpen }) {
+export default function Posts({ isNavOpen }) {
   const { auth } = useAuth();
+  const loggedInUser = auth.userId;
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -43,16 +44,23 @@ export default function AllPosts({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([])
-  const filteredPosts = posts.filter(post => users.some(user => user.user_id === post.sender));
+  const [showMyPosts, setShowMyPosts] = useState(false);
+
+  const filteredPosts = posts.filter(post => {
+    if (showMyPosts) {
+      return post.sender === loggedInUser; 
+    }
+    return users.some(user => user.user_id === post.sender);
+  });
   const [filterUsername, setFilterUsername] = useState("");
   const inputRef = useRef(null);
-  const loggedInUser = auth.userId;
+
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
   const [page, setPage] = useState(1); // Track the current page
-  const limit = 5 //How many posts to fetch per load
+  const limit = 10 //How many posts to fetch per load
   const [hasMorePosts, setHasMorePosts] = useState(true); // To track if more posts exist
   const [searchQuery, setSearchQuery] = useState("");
   const firstNewPostRef = useRef(null);
@@ -91,7 +99,7 @@ export default function AllPosts({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
     fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page, limit);
-  }, [axiosPrivate, filters, searchQuery]);
+  }, [axiosPrivate, filters, searchQuery, showMyPosts]);
 
   useEffect(() => {
     if (filterUsername === "") {
@@ -167,18 +175,18 @@ export default function AllPosts({ isNavOpen }) {
   };
 
   // Function to get the tooltip text for visibility
-const getVisibilityTooltip = (visibility) => {
-  switch (visibility) {
-    case "public":
-      return "Public";
-    case "private":
-      return "Private";
-    case "followers":
-      return "Followers only";
-    default:
-      return "Public post";
-  }
-};
+  const getVisibilityTooltip = (visibility) => {
+    switch (visibility) {
+      case "public":
+        return "Public";
+      case "private":
+        return "Private";
+      case "followers":
+        return "Followers only";
+      default:
+        return "Public post";
+    }
+  };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -196,6 +204,8 @@ const getVisibilityTooltip = (visibility) => {
 
         <div className="write-post-container">
 
+
+
           <FilterUsername
             filterUsername={filterUsername}
             setFilterUsername={setFilterUsername}
@@ -212,8 +222,26 @@ const getVisibilityTooltip = (visibility) => {
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
 
+
+
         </div>
 
+        <div className="which-posts-container">
+          <button 
+          className="button-white"
+          onClick={() => {
+            setShowMyPosts(false); 
+            setPage(1);
+          }}
+          >All posts</button>
+          <button 
+          className="button-white"
+          onClick={() => {
+            setShowMyPosts(true); // Show only my posts
+            setPage(1); 
+          }}
+          >My posts</button>
+        </div>
 
 
         {posts.length === 0 ? (
@@ -256,9 +284,9 @@ const getVisibilityTooltip = (visibility) => {
                     <div className="post-header-sender-and-date">
                       <div className="post-header-sender-and-visibility">
                         <p className="post-header-sender"><strong>{getUsernameById(post.sender)}</strong></p>
-                        <FontAwesomeIcon 
-                        icon={getVisibilityIcon(post.visibility)} 
-                        title={getVisibilityTooltip(post.visibility)} 
+                        <FontAwesomeIcon
+                          icon={getVisibilityIcon(post.visibility)}
+                          title={getVisibilityTooltip(post.visibility)}
                         />
                       </div>
                       <p className="post-header-date">{formatDate(post.date)}</p>

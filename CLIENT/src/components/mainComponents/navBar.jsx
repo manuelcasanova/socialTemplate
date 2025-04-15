@@ -128,20 +128,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
 
-      {auth.roles && <div className='nav-item-with-dropdown'>
-        <div className='nav-item' onClick={() => toggleSection('posts')}>
-          <div>Posts{showSections.posts ? '▲' : '▼'}</div>
-        </div>
-        {showSections.posts && (
-          <>
-            <div className='subitem' onClick={() => handleNavigate('/posts/allposts')}>All posts</div>
-
-            <div className="subitem" onClick={() => handleNavigate('/posts/myposts')}>
-              My posts
-            </div>
-          </>
-        )}
-      </div>}
+   
+        <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
+ 
 
       {auth.roles && auth.roles.includes('Moderator') &&
         <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
