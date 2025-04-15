@@ -6,6 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import '../../css/Profile.css';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Footer from "../mainComponents/footer";
+import Error from "./Error";
 
 import useUserApi from "../../util/userApi";
 import { axiosPrivate } from "../../api/axios";
@@ -84,6 +85,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const [confirmEmail, setConfirmEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [criticalError, setCriticalError] = useState(false);
   const [isInputValid, setIsInputValid] = useState(false);
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
@@ -171,7 +173,9 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
           console.error("Error uploading profile picture:", response?.data?.message);
         }
       } catch (error) {
-        console.error("Error uploading profile picture:", error);
+        console.error("Critical Error: Upload failed:", error);
+        setCriticalError(true);
+  
       }
     }
   };
@@ -203,10 +207,10 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       } else {
         setError(response?.data?.message || 'Account deletion failed. Please try again.');
       }
-    } catch (err) {
-      console.log("err", err)
-      console.error('Error deleting account:', err);
-      setError('An error occurred while deleting the account. Please try again later.');
+    } catch (error) {
+      console.error("Critical Error: Deletion failed:", error);
+      setCriticalError(true);
+
     } finally {
       setIsLoading(false); // Hide the loading spinner
     }
@@ -303,10 +307,10 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       } else {
         setError(response?.data?.message || 'Update failed. Please try again.');
       }
-    } catch (err) {
-      console.log("err", err.response.data)
-      console.error('Error updating profile:', err.response.data.error);
-      setError(`Error updating profile: ${err.response.data.error}`);
+    } catch (error) {
+      console.error("Critical Error: Update failed:", error);
+      setCriticalError(true);
+
     } finally {
       setIsLoading(false);
     }
@@ -317,10 +321,6 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       handleUpdate(); // Trigger handleUpdate when Enter is pressed
     }
   };
-
-
-
-
 
   const handleEditButtonClick = (type) => {
     setError("");
@@ -341,6 +341,12 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const toggleConfirmPasswordVisibility = () => {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
+
+//  if (criticalError) {
+//     return <Error isNavOpen={isNavOpen} error={error} />
+//   }
+
+  if (criticalError) return <Error isNavOpen={isNavOpen} error="A server error occurred. Please try again later." />;
 
 
   return (
