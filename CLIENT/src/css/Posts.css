@@ -9,6 +9,14 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
+  margin: auto;
+}
+
+.posts-filter-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  width: 100%;
 }
 
 .posts-filter {
@@ -16,6 +24,7 @@
   /* Fix the filter to the top of the parent container */
   border-radius: 4px;
   margin: 0px;
+  padding-left: 0px;
 }
 
 .admin-posts h2 {
@@ -50,11 +59,10 @@
   display: flex;
   flex-direction: row;
   gap: 1em;
+  width: 100%;
+  margin-bottom: 1em;
 }
 
-.write-post-container button {
-
-}
 
 /* Individual post rows */
 .post-row {
@@ -124,6 +132,8 @@
   display: flex;
   flex-direction: row;
   gap: 1em;
+  max-width: 500px;
+  margin: auto;
 }
 
 /* Responsive */

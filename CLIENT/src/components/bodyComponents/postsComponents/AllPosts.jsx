@@ -8,7 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 import '../../../css/Posts.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -52,9 +52,9 @@ export default function AllPosts({ isNavOpen }) {
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
   const [page, setPage] = useState(1); // Track the current page
-  const limit = 10 //How many posts to fetch per load
+  const limit = 5 //How many posts to fetch per load
   const [hasMorePosts, setHasMorePosts] = useState(true); // To track if more posts exist
-
+  const [searchQuery, setSearchQuery] = useState("");
   const firstNewPostRef = useRef(null);
   const topPostRef = useRef(null);
 
@@ -66,19 +66,10 @@ export default function AllPosts({ isNavOpen }) {
   }, [posts]); // This will run every time posts are updated
 
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }, 100);
-  }, [filterUsername]);
-
-  
 
   useEffect(() => {
     fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page, limit);
-  }, [axiosPrivate, filters, filterUsername, page]);
+  }, [page]);
 
   const loadMorePosts = () => {
     setPage(prevPage => prevPage + 1);
@@ -88,11 +79,21 @@ export default function AllPosts({ isNavOpen }) {
   useEffect(() => {
     // Reset error when filters change
     setError(null);
-  }, [filters, filterUsername]);
+  }, [filters]);
 
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
-  }, [axiosPrivate, filters, filterUsername]);
+    fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page, limit);
+  }, [axiosPrivate, filters, searchQuery]);
+
+  useEffect(() => {
+    if (filterUsername === "") {
+      setSearchQuery(""); // Clear search query to fetch all
+      setPage(1); // Reset pagination
+      fetchUsers(filters, setUsers, setIsLoading, setError, "", loggedInUser);
+      fetchPosts(filters, setPosts, setIsLoading, setError, "", loggedInUser, 1, limit);
+    }
+  }, [filterUsername]);
 
 
   useEffect(() => {
@@ -155,11 +156,27 @@ export default function AllPosts({ isNavOpen }) {
 
         <WritePost />
 
-        <FilterUsername
+<div className="write-post-container">
+
+<FilterUsername
           filterUsername={filterUsername}
           setFilterUsername={setFilterUsername}
           inputRef={inputRef}
         />
+
+        <button
+          className="button-white"
+          onClick={() => {
+            setSearchQuery(filterUsername); // Apply filter on click
+            setPage(1); // Reset pagination
+          }}
+        >
+               <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </button>
+
+</div>
+
+
 
         {posts.length === 0 ? (
           <p>No posts available</p>
@@ -169,10 +186,10 @@ export default function AllPosts({ isNavOpen }) {
               <div
                 className="post-row"
                 key={post.id}
-                // ref={(el) => {
-                //   if (index === 0) topPostRef.current = el;
-                //   if (index === posts.length - limit) firstNewPostRef.current = el;
-                // }}
+              // ref={(el) => {
+              //   if (index === 0) topPostRef.current = el;
+              //   if (index === posts.length - limit) firstNewPostRef.current = el;
+              // }}
               >
                 <div className="post-info">
                   <div className="post-header">
@@ -278,11 +295,11 @@ export default function AllPosts({ isNavOpen }) {
             className="button-white"
             style={{ marginTop: '0.5em', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            // onClick={() => {
-            //   if (topPostRef.current) {
-            //     topPostRef.current.scrollIntoView({ behavior: 'smooth' });
-            //   }
-            // }}
+          // onClick={() => {
+          //   if (topPostRef.current) {
+          //     topPostRef.current.scrollIntoView({ behavior: 'smooth' });
+          //   }
+          // }}
           >
             Go to Top
           </button>
