@@ -8,7 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 import '../../../css/Posts.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faMagnifyingGlass, faLock, faEarth, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -65,12 +65,12 @@ export default function AllPosts({ isNavOpen }) {
     // If `loadMore` is true, scroll to the new batch of posts
     if (loadMore && firstNewPostRef.current) {
       firstNewPostRef.current.scrollIntoView({ behavior: 'smooth' });
-      
+
     } else {
       // Scroll to top of the page when posts are first rendered or after reset
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [loadMore, posts]); 
+  }, [loadMore, posts]);
 
 
   useEffect(() => {
@@ -107,7 +107,7 @@ export default function AllPosts({ isNavOpen }) {
       fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, 1, limit);
       setNewPostSubmitted(false); // Reset the trigger after fetching the posts
     }
-  }, [newPostSubmitted, filters, filterUsername, loggedInUser, page]); 
+  }, [newPostSubmitted, filters, filterUsername, loggedInUser, page]);
 
   useEffect(() => {
     const checkImages = async () => {
@@ -153,6 +153,33 @@ export default function AllPosts({ isNavOpen }) {
   useEffect(() => {
   }, [posts]);
 
+  const getVisibilityIcon = (visibility) => {
+    switch (visibility) {
+      case "public":
+        return faEarth;
+      case "private":
+        return faLock;
+      case "followers":
+        return faUserFriends;
+      default:
+        return faEarth;
+    }
+  };
+
+  // Function to get the tooltip text for visibility
+const getVisibilityTooltip = (visibility) => {
+  switch (visibility) {
+    case "public":
+      return "Public";
+    case "private":
+      return "Private";
+    case "followers":
+      return "Followers only";
+    default:
+      return "Public post";
+  }
+};
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -165,9 +192,7 @@ export default function AllPosts({ isNavOpen }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-posts">
 
-        <h2>Posts</h2>
-
-        <WritePost loggedInUser={loggedInUser} setNewPostSubmitted={setNewPostSubmitted}/>
+        <WritePost loggedInUser={loggedInUser} setNewPostSubmitted={setNewPostSubmitted} />
 
         <div className="write-post-container">
 
@@ -229,8 +254,13 @@ export default function AllPosts({ isNavOpen }) {
 
                     </div>
                     <div className="post-header-sender-and-date">
-                      <p className="post-header-sender"><strong>{getUsernameById(post.sender)}</strong></p>
-                      {/* <p>{new Date(post.date).toLocaleString()}</p> */}
+                      <div className="post-header-sender-and-visibility">
+                        <p className="post-header-sender"><strong>{getUsernameById(post.sender)}</strong></p>
+                        <FontAwesomeIcon 
+                        icon={getVisibilityIcon(post.visibility)} 
+                        title={getVisibilityTooltip(post.visibility)} 
+                        />
+                      </div>
                       <p className="post-header-date">{formatDate(post.date)}</p>
                     </div>
                   </div>

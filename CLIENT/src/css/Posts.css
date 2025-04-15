@@ -91,11 +91,18 @@
 }
 
 .post-header-sender-and-date {
-
   margin-left: 1em;
 }
 
-.post-header-sender {}
+.post-header-sender-and-visibility {
+  display: flex;
+  flex-direction: row;
+}
+
+.post-header-sender-and-visibility svg {
+ margin: 0.5em 0;
+ margin-left: 0.5em;
+}
 
 .post-header-date {
   font-size: 12px !important;
