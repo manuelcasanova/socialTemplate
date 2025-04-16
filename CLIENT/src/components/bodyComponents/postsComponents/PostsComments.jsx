@@ -16,6 +16,7 @@ import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faFac
           // fetchPostComments
 
 import { fetchPostReactionsCount } from './util_functions/FetchPostReactions';
+import { fetchPostCommentsCount } from './util_functions/FetchPostComments';
 
 
 export default function PostsComments({postId}) {
@@ -33,7 +34,10 @@ export default function PostsComments({postId}) {
 
 useEffect (() => {
 fetchPostReactionsCount({postId, setIsLoading, setError, setReactionsCount})
+fetchPostCommentsCount({postId, setIsLoading, setError, setCommentsCount})
 }, [])
+
+
 
   return (
     <div className="post-comments">
@@ -50,7 +54,7 @@ fetchPostReactionsCount({postId, setIsLoading, setError, setReactionsCount})
 
         <div className='post-comments-top-right-comments'>
           <div className='post-comments-text'>
-            Number
+            {commentsCount}
           </div>
           <FontAwesomeIcon icon={faComment} />
         </div>

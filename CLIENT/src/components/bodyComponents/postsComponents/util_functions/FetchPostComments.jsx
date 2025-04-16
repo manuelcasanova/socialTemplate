@@ -1,20 +1,20 @@
 import { axiosPrivate } from "../../../../api/axios";
 
-const fetchPostReactionsCount = async ({postId, setReactionsCount, setError, setIsLoading}) => {
+const fetchPostCommentsCount = async ({postId, setCommentsCount, setError, setIsLoading}) => {
   setIsLoading(true);
 
   try {
-    // console.log("hit FetchPostReactions.jsx")
-    const { data } = await axiosPrivate.get(`/posts/reactions/count`, { 
+    // console.log("hit fetchPostComments.jsx")
+    const { data } = await axiosPrivate.get(`/posts/comments/count`, { 
       params: { 
         postId
       } 
     });
 
-    setReactionsCount(data);
+    setCommentsCount(data);
 
   } catch (err) {
-    let errorMsg = "Failed to fetch reactions count.";
+    let errorMsg = "Failed to fetch comments count.";
     if (err.response?.data?.error) {
       errorMsg += ` ${err.response.data.error}`;
     } else if (err.message) {
@@ -28,4 +28,4 @@ const fetchPostReactionsCount = async ({postId, setReactionsCount, setError, set
   }
 };
 
-export { fetchPostReactionsCount };
+export { fetchPostCommentsCount };
