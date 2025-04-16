@@ -15,10 +15,10 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 import FilterUsername from "../socialComponents/FilterUsername";
 import WritePost from "./WritePost";
-import PostsComments from "./PostsComments";
+import PostInteractions from "./PostInteractions";
 
 //Util functions
-import { fetchPosts, fetchMyPosts } from "./util_functions/FetchPosts";
+import { fetchPosts } from "./util_functions/FetchPosts";
 import fetchUsers from "../socialComponents/util_functions/FetchUsers";
 import { formatDate } from "./util_functions/formatDate";
 
@@ -296,7 +296,7 @@ export default function Posts({ isNavOpen }) {
 
                   <p>{post.content}</p>
 
-                  <PostsComments postId={post.id}/>
+                  <PostInteractions postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender}/>
 
                   {loggedInUser === post.sender && (
                     <div className="post-actions">

@@ -1,8 +1,8 @@
-.post-comments {
+.post-interactions {
   margin-top: 0.5em;
 }
 
-.post-comments-top {
+.post-interactions-top {
   margin-top: 1em;
   border-bottom: 1px solid darkgray;
   padding: 0.5em 0em;
@@ -11,49 +11,58 @@
   justify-content: space-between;
 }
 
-.post-comments-bottom {
+.post-interactions-bottom {
   padding: 0.5em 0em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.post-comments-top-left-reaction {
+.post-interactions-top-left-reaction {
   display: flex;
   flex-direction: row;
   gap: 0.5em;
 }
 
-.post-comments-top-left-reaction:hover {
+.post-interactions-top-left-reaction:hover {
 cursor: pointer;
 }
 
-.post-comments-top-right-comments {
+.post-interactions-top-right-comments {
   display: flex;
   flex-direction: row;
   gap: 0.5em;
 }
 
-.post-comments-top-right-comments:hover {
-cursor: pointer;
-} 
-
-.post-comments-bottom-left-reaction {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5em;
-}
-
-.post-comments-bottom-left-reaction:hover {
+.post-interactions-top-right-comments:hover {
 cursor: pointer;
 } 
 
-.post-comments-bottom-right-comments {
+.post-interactions-bottom-left-reaction {
   display: flex;
   flex-direction: row;
   gap: 0.5em;
 }
 
-.post-comments-bottom-right-comments:hover {
+.post-interactions-bottom-left-reaction:hover {
+cursor: pointer;
+} 
+
+.post-interactions-bottom-right-comments {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+}
+
+.post-interactions-bottom-right-comments:hover {
  cursor: pointer;
+}
+
+.centered-container-button-close {
+  display: flex;
+  justify-content: end;
+}
+
+.centered-container-post {
+  background-color: var(--color14);
 }

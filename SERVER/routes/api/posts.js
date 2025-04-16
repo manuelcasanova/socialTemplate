@@ -27,14 +27,12 @@ router.route('/all')
     postsController.getAllPosts
   );
 
-// Route to get posts by a specific user (is_deleted = false)
-router.route('/user')
+  router.route('/:postId')
   .get(
     async (req, res, next) => {
       try {
         const rolesList = await fetchRoles();
 
-        // Define the roles that have permission to access this route
         const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
         const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
 
@@ -42,7 +40,6 @@ router.route('/user')
           return res.status(403).json({ error: 'Permission denied: Only registered users have access to this list.' });
         }
 
-        // Pass the roles to verifyRoles middleware
         verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
       } catch (err) {
         next(err);
@@ -50,6 +47,30 @@ router.route('/user')
     },
     postsController.getPostsById
   );
+
+// Route to get posts by a specific user (is_deleted = false)
+// router.route('/user')
+//   .get(
+//     async (req, res, next) => {
+//       try {
+//         const rolesList = await fetchRoles();
+
+//         // Define the roles that have permission to access this route
+//         const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+//         const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+//         if (!hasRequiredRole) {
+//           return res.status(403).json({ error: 'Permission denied: Only registered users have access to this list.' });
+//         }
+
+//         // Pass the roles to verifyRoles middleware
+//         verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+//       } catch (err) {
+//         next(err);
+//       }
+//     },
+//     postsController.getPostsById
+//   );
 
 // Route to mark a post as deleted (soft delete)
 router.route('/delete/:id')

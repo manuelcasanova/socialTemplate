@@ -78,18 +78,21 @@ const getAllPosts = async (req, res) => {
 
 // Function to get posts by a specific user (is_deleted false)
 const getPostsById = async (req, res) => {
+  console.log("hit postsController")
   try {
-    const userId = req.query.userId;
+console.log("req.params", req.params.postId)
+    const postId = req.params.postId;
+   
+    console.log("postId", postId)
 
     // Query to get posts from a specific user, excluding deleted posts
     const query = `
       SELECT * 
       FROM posts 
-      WHERE sender = $1 
-      AND is_deleted = false
+      WHERE id = $1
       ORDER BY date DESC;
     `;
-    const params = [userId];
+    const params = [postId];
 
     // Execute the query
     const result = await pool.query(query, params);
@@ -97,7 +100,7 @@ const getPostsById = async (req, res) => {
     // Return the posts if found
     res.status(200).json(result.rows);
   } catch (error) {
-    console.error('Error retrieving posts by user:', error);
+    console.error('Error retrieving post:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

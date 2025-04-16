@@ -39,20 +39,20 @@ const fetchPosts = async (filters, setPosts, setIsLoading, setError, filterUsern
   }
 };
 
-const fetchMyPosts = async (filters, setPosts, setIsLoading, setError, loggedInUser) => {
+const fetchPostById = async (postId, setPost, setIsLoading, setError) => {
   setIsLoading(true);
 
   try {
-    const { data } = await axiosPrivate.get(`/posts/${loggedInUser}`, { 
-      params: { ...filters, loggedInUser } 
-    });
+    const { data } = await axiosPrivate.get(`/posts/${postId}`);
 
-    // Safeguard if data is not an array or doesn't exist
-    setPosts(Array.isArray(data) ? data : []);
+    // Safeguard if data does not exist
+    if (data) {
+      setPost(data); // Set the post data
+    } else {
+      setError("Post not found.");
+    }
   } catch (err) {
-    console.error("Error fetching my posts:", err);
-
-    let errorMsg = "Failed to fetch my posts.";
+    let errorMsg = "Failed to fetch post.";
     if (err.response?.data?.error) {
       errorMsg += ` ${err.response.data.error}`;
     } else if (err.message) {
@@ -66,4 +66,6 @@ const fetchMyPosts = async (filters, setPosts, setIsLoading, setError, loggedInU
   }
 };
 
-export { fetchPosts, fetchMyPosts };
+
+
+export { fetchPosts, fetchPostById };
