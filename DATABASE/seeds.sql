@@ -12,9 +12,9 @@ INSERT INTO users (username, email, password, is_verified, is_selected, is_activ
   ,
   -- ;
   ('Manuel', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
-  ;
---     ('Laura', 'laura@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
--- ;
+  ,
+    ('Laura', 'laura@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
+;
 
   
 INSERT INTO followers (follower_id, followee_id, status, lastmodification, newrequest) VALUES
@@ -50,25 +50,27 @@ VALUES
   ;
 
   -- Reactions for post ID 1
-INSERT INTO posts_reactions (message_id, user_id, reaction_type)
+INSERT INTO posts_reactions (post_id, user_id, reaction_type)
 VALUES
 (1, 1, 'like'),
 (1, 2, 'dislike');
 
 -- Reactions for post ID 2
-INSERT INTO posts_reactions (message_id, user_id, reaction_type)
+INSERT INTO posts_reactions (post_id, user_id, reaction_type)
 VALUES
 (2, 1, 'laugh'),
-(2, 2, 'cry');
+(2, 2, 'cry'),
+(2, 3, 'dislike')
+;
 
 -- Comments for post ID 1
-INSERT INTO posts_comments (message_id, commenter, content)
+INSERT INTO posts_comments (post_id, commenter, content)
 VALUES
 (1, 2, 'Really liked your point here!'),
 (1, 2, 'This gave me something to think about.');
 
 -- Comments for post ID 2
-INSERT INTO posts_comments (message_id, commenter, content)
+INSERT INTO posts_comments (post_id, commenter, content)
 VALUES
 (2, 1, 'I don’t quite see it the same way, but interesting read.'),
 (2, 1, 'Thanks for sharing this perspective!');

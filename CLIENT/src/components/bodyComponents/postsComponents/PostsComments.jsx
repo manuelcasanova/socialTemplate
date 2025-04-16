@@ -1,10 +1,40 @@
+import { useEffect, useState } from 'react';
+
 // Styling
 
 import '../../../css/PostsComments.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faFaceAngry, faPlus } from "@fortawesome/free-solid-svg-icons";
 
-export default function PostsComments() {
+// Components
+
+          // Component to see comments
+          // Component to write comments (Inside:   // Function to comment)
+
+// Util functions
+
+          // fetchPostComments
+
+import { fetchPostReactionsCount } from './util_functions/FetchPostReactions';
+
+
+export default function PostsComments({postId}) {
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [reactionsCount, setReactionsCount] = useState();
+  const [commentsCount, setCommentsCount] = useState();
+
+  // Function to react to posts
+
+
+// console.log("PostsComments.jsx postId", postId)
+// console.log("reactionsCount in PostsComments.jsx", reactionsCount)
+
+useEffect (() => {
+fetchPostReactionsCount({postId, setIsLoading, setError, setReactionsCount})
+}, [])
+
   return (
     <div className="post-comments">
 
@@ -14,7 +44,7 @@ export default function PostsComments() {
         <div className='post-comments-top-left-reaction'>
           <FontAwesomeIcon icon={faSmile} />
           <div className='post-comments-text'>
-            Reactions count
+            {reactionsCount}
           </div>
         </div>
 

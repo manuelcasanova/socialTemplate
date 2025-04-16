@@ -296,7 +296,7 @@ export default function Posts({ isNavOpen }) {
 
                   <p>{post.content}</p>
 
-                  <PostsComments />
+                  <PostsComments postId={post.id}/>
 
                   {loggedInUser === post.sender && (
                     <div className="post-actions">
