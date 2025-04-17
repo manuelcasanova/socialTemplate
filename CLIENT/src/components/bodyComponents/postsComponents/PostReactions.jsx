@@ -103,8 +103,6 @@ export default function PostReactions({ isNavOpen }) {
     setShowLargePicture(userId);
   };
 
-
-
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -145,56 +143,51 @@ export default function PostReactions({ isNavOpen }) {
         )}
 
         <div className="centered-container centered-container-reaction">
-          {postReactions.map((reaction) => (
-            <>
+          {postReactions.length === 0 ? (
+            <p style={{ textAlign: "center", fontStyle: "italic", color: "#666" }}>
+              This post has no reactions.
+            </p>
+          ) : (
 
+            postReactions.map((reaction) => (
+              <>
+                <div className="row-reaction" key={reaction.id}>
+                  {imageExistsMap[reaction.user_id] ? (
+                    <img
+                      className="user-row-social-small-img"
+                      style={{ marginRight: "0px" }}
+                      src={`${BACKEND}/media/profile_pictures/${reaction.user_id}/profilePicture.jpg`}
+                      alt="User"
+                      onClick={() => handleImageClick(reaction.user_id)}
+                    />
+                  ) : (
+                    <img
+                      className="user-row-social-small-img"
+                      style={{ marginRight: "0px" }}
+                      src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                      alt="User"
+                      onClick={() => handleImageClick(reaction.user_id)}
+                    />
+                  )}
 
-              <div className="row-reaction" key={reaction.id}>
-                {imageExistsMap[reaction.user_id] ? (
-                  <img
-                    className="user-row-social-small-img"
-                    style={{ marginRight: "0px" }}
-                    src={`${BACKEND}/media/profile_pictures/${reaction.user_id}/profilePicture.jpg`}
-                    alt="User"
-                    onClick={() => handleImageClick(reaction.user_id)}
-                  />
-                ) : (
-                  <img
-                    className="user-row-social-small-img"
-                    style={{ marginRight: "0px" }}
-                    src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                    alt="User"
-                    onClick={() => handleImageClick(reaction.user_id)}
-                  />
-                )}
+                  <div>
+                    {reaction.reaction_type === "like" && <FontAwesomeIcon icon={faThumbsUp} />}
+                    {reaction.reaction_type === "dislike" && <FontAwesomeIcon icon={faThumbsDown} />}
+                    {reaction.reaction_type === "happy" && <FontAwesomeIcon icon={faSmile} />}
+                    {reaction.reaction_type === "laugh" && <FontAwesomeIcon icon={faLaugh} />}
+                    {reaction.reaction_type === "cry" && <FontAwesomeIcon icon={faSadTear} />}
+                    {reaction.reaction_type === "angry" && <FontAwesomeIcon icon={faFaceAngry} />}
+                  </div>
 
-<div>
-    {reaction.reaction_type === "like" && <FontAwesomeIcon icon={faThumbsUp} />}
-    {reaction.reaction_type === "dislike" && <FontAwesomeIcon icon={faThumbsDown} />}
-    {reaction.reaction_type === "happy" && <FontAwesomeIcon icon={faSmile} />}
-    {reaction.reaction_type === "laugh" && <FontAwesomeIcon icon={faLaugh} />}
-    {reaction.reaction_type === "cry" && <FontAwesomeIcon icon={faSadTear} />}
-    {reaction.reaction_type === "angry" && <FontAwesomeIcon icon={faFaceAngry} />}
-  </div>
+                  <div style={{ fontWeight: 'bold' }}>{reaction.username}</div>
 
-                <div style={{ fontWeight: 'bold' }}>{reaction.username}</div>
-
-                <button>Follow User Button</button>
-              </div>
-
-            </>
-          ))
-
-          }
-
-
-
-
+                  <button>Follow User Button</button>
+                </div>
+              </>
+            ))
+          )}
         </div>
       </div>
-
-
-
     </div>
   )
 }
