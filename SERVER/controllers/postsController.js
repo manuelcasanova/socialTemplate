@@ -242,12 +242,15 @@ const getPostComments = async (req, res) => {
 // console.log("req.query", req.query)
     const postId = Number(req.query.postId)
 
-    const query = `
-      SELECT * 
-      FROM posts_comments
-      WHERE post_id = $1 
-      ORDER BY date DESC;
-    `;
+const query = `
+  SELECT 
+    pc.*, 
+    u.username 
+  FROM posts_comments pc
+  JOIN users u ON u.user_id = pc.commenter
+  WHERE pc.post_id = $1 
+  ORDER BY pc.date DESC;
+`;
     const params = [postId];
 
     // Execute the query

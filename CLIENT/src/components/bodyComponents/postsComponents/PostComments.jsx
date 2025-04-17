@@ -207,7 +207,7 @@ export default function PostComments({ isNavOpen }) {
           {postComments.map((comment) => (
             <>
             <div className="post-comment" key={comment.id}>
-              <div style={{ fontWeight: 'bold' }}>{comment.commenter}</div>
+              <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
               <div>{comment.content}</div>
             </div>
             <div className="post-comment-date">{formatDate(comment.date)}</div>
