@@ -59,7 +59,7 @@ const now = new Date();
       VALUES ($1, $2, $3, $4)
       RETURNING *
       `,
-        [newMessage, receiver, sender, now]
+        [newMessage, receiver, sender, now()]
       );
       res.json(addMessage.rows[0])
     } else {

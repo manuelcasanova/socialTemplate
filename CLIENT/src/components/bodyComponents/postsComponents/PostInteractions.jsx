@@ -76,10 +76,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
           <div className='post-interactions-bottom-right-comments'
           >
-            <FontAwesomeIcon icon={faComment} />
-            <div className='post-interactions-text'>
-              Comment
-            </div>
+
           </div>
 
         </div>

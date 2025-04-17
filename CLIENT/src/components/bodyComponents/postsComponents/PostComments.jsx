@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+// Hooks
+import useAuth from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 //Util functions
 import { fetchPostById } from "./util_functions/FetchPosts";
@@ -9,7 +13,7 @@ import { fetchPostComments } from "./util_functions/FetchPostComments";
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faMagnifyingGlass, faLock, faEarth, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faMagnifyingGlass, faLock, faEarth, faUserFriends, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -24,6 +28,9 @@ export default function PostComments({ isNavOpen }) {
   const navigate = useNavigate();
   const handleClose = () => navigate(-1);
   const { param } = useParams();
+  const { auth } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
+  const loggedInUser = auth.userId;
   const postId = Number(param);
   const [post, setPost] = useState();
   const [senderInfo, setSenderInfo] = useState(null);
@@ -32,11 +39,13 @@ export default function PostComments({ isNavOpen }) {
   const [error, setError] = useState("");
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
-
+  const [newMessage, setNewMessage] = useState("")
+  const MAX_CHAR_LIMIT = 1000;
+  const [errMsg, setErrMsg] = useState('');
 
   // console.log("post", post)
   // console.log("postId", postId)
-  console.log("postComments", postComments)
+  // console.log("postComments", postComments)
 
 
   const postSender = post?.[0]?.sender;
@@ -44,6 +53,56 @@ export default function PostComments({ isNavOpen }) {
   const postVisibility = post?.[0]?.visibility;
   const postContent = post?.[0]?.content;
   const userId = postSender;
+  const inputRef = useRef(null);
+  const errRef = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true)
+
+    try {
+
+setIsLoading(true)
+await axiosPrivate.post(`${BACKEND}/posts/comments/send`, {
+        newMessage,
+        loggedInUser,
+        postId
+      });
+      setError(null)
+
+      fetchPostComments({ postId, setPostComments, setError, setIsLoading })
+
+setNewMessage("")
+
+setTimeout(() => {
+  if (inputRef.current) {
+    inputRef.current.focus();
+  }
+}, 100);
+    } catch (err) {
+      console.log(err)
+      // Always learned !err but not sure what's the sense behind. 
+      if (!err?.response) {
+        setErrMsg('No Server Response');
+      } else if (err.response?.status === 403) {
+        setErrMsg('This email was not found in our database');
+      } else if (err.response?.status === 401) {
+        setErrMsg('Unauthorized');
+      } else {
+        setErrMsg('Attempt Failed');
+      }
+      errRef.current?.focus();
+    } finally {
+      setIsLoading(false); // Set loading to false once request completes
+    }
+  }
+
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit(e)
+    }
+  };
 
   const profilePictureExists = async (userId) => {
     const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
@@ -82,6 +141,14 @@ export default function PostComments({ isNavOpen }) {
       fetchSenderNameById(postSender, setIsLoading, setError, setSenderInfo);
     }
   }, [postSender]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
+  }, []);
 
   const handleImageClick = (userId) => {
     setShowLargePicture(userId);
@@ -135,7 +202,7 @@ export default function PostComments({ isNavOpen }) {
         </div>
 
 
-        <div className="post-info">
+        <div className="post-info post-info-modal">
           <div className="post-header">
             <div className="post-header-photo">
               {imageExistsMap[postSender] ? (
@@ -197,9 +264,28 @@ export default function PostComments({ isNavOpen }) {
             />
           </div>
         )}
-        <div className="centered-container centered-container-post">
-          <input></input>
-          <button>Send</button>
+        <div className="centered-container centered-container-post flex-row">
+        <input
+              placeholder="Aa"
+              ref={inputRef}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                setNewMessage(inputValue);
+              }}
+              onKeyDown={handleKeyDown}
+              value={newMessage}
+              required></input>
+          <button 
+          onClick={handleSubmit}
+          className="button-white white"
+          style={{width: '100px', margin: 'auto'}}
+          disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
+          >
+                <FontAwesomeIcon
+                  icon={faPaperPlane}
+                  title='Send'
+                />
+          </button>
         </div>
 
 

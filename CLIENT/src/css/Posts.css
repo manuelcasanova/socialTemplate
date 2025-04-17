@@ -126,6 +126,11 @@
   text-align: justify; 
 }
 
+.post-info-modal p {
+  /* background-color: red; */
+  padding: 0px 10px;
+}
+
 /* Action buttons (edit/delete/etc) */
 .post-actions {
   display: flex;
