@@ -65,4 +65,22 @@ cursor: pointer;
 
 .centered-container-post {
   background-color: var(--color14);
+  padding: 10px;
+}
+
+.post-comment {
+  background-color: #999999;
+  color: var(--color1);
+  border-radius: 4px;
+  text-align: left;
+  width: fit-content;
+  max-width: 100%; 
+  padding: 5px;
+  margin: 5px 0px;
+}
+
+.post-comment-date {
+  width: fit-content;
+  color: var(--color1);
+  font-size: smaller;
 }

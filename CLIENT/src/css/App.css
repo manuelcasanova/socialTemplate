@@ -313,6 +313,10 @@
   border: 1px solid white;
 }
 
+.button-smaller {
+  padding: 2px 5px;
+}
+
 .button-white:hover:not(:disabled) {
   background-color: darkgrey;
   transform: scale(1.05);

@@ -236,6 +236,31 @@ const getPostCommentsCount = async (req, res) => {
   }
 };
 
+const getPostComments = async (req, res) => {
+  try {
+    // console.log("hit controller getPostCommentsCount")
+// console.log("req.query", req.query)
+    const postId = Number(req.query.postId)
+
+    const query = `
+      SELECT * 
+      FROM posts_comments
+      WHERE post_id = $1 
+      ORDER BY date DESC;
+    `;
+    const params = [postId];
+
+    // Execute the query
+    const result = await pool.query(query, params);
+
+    // Return the posts if found
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error retrieving post comments:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 module.exports = {
   getAllPosts,
@@ -243,5 +268,6 @@ module.exports = {
   markPostAsDeleted,
   writePost,
   getPostReactionsCount,
-  getPostCommentsCount
+  getPostCommentsCount,
+  getPostComments
 };
