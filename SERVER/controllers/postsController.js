@@ -303,6 +303,121 @@ const writePostComment = async (req, res) => {
   }
 };
 
+const getPostReactionsData = async (req, res) => {
+  try {
+    // console.log("hit controller getPostCommentsCount")
+// console.log("req.query", req.query)
+    const postId = Number(req.query.postId)
+
+const query = `
+  SELECT 
+    pr.*, 
+    u.username 
+  FROM posts_reactions pr
+  JOIN users u ON u.user_id = pr.user_id
+  WHERE pr.post_id = $1 
+  ORDER BY pr.date DESC;
+`;
+    const params = [postId];
+
+    // Execute the query
+    const result = await pool.query(query, params);
+
+    // Return the posts if found
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error retrieving post comments:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const sendReaction = async (req, res) => {
+  const { loggedInUserId, postId, reactionType } = req.body; 
+
+  try {
+    // Step 1: Validate the input data
+    if (!loggedInUserId || !postId) {
+      return res.status(400).json({ error: 'Logged-in user and postId are required.' });
+    }
+
+    if (!reactionType) {
+      return res.status(400).json({ error: 'Reaction type is required.' });
+    }
+
+    // Step 2: Validate that the loggedInUserId exists in the database
+    const userCheckQuery = `SELECT user_id FROM users WHERE user_id = $1;`;
+    const userCheckResult = await pool.query(userCheckQuery, [loggedInUserId]);
+
+    if (userCheckResult.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid logged-in user.' });
+    }
+
+    if (reactionType === 'remove-reaction') {
+      // Step 3: Remove the reaction if "remove-reaction" is passed
+      const deleteReactionQuery = `
+        DELETE FROM posts_reactions 
+        WHERE user_id = $1 AND post_id = $2
+        RETURNING *;
+      `;
+      const deleteParams = [loggedInUserId, postId];
+      const deleteResult = await pool.query(deleteReactionQuery, deleteParams);
+
+      if (deleteResult.rows.length === 0) {
+        return res.status(404).json({ error: 'No reaction found to remove.' });
+      }
+
+      return res.status(200).json({
+        message: 'Reaction removed successfully.',
+      });
+    } else {
+      // Step 4: Check if the user has already reacted to this post
+      const checkReactionQuery = `
+        SELECT * 
+        FROM posts_reactions 
+        WHERE user_id = $1 AND post_id = $2;
+      `;
+      const checkReactionResult = await pool.query(checkReactionQuery, [loggedInUserId, postId]);
+
+      // Step 5: If a reaction exists, update it. Otherwise, insert a new one.
+      if (checkReactionResult.rows.length > 0) {
+        // If the reaction already exists, we update the reaction_type
+        const updateReactionQuery = `
+          UPDATE posts_reactions 
+          SET reaction_type = $1, date = NOW()
+          WHERE user_id = $2 AND post_id = $3
+          RETURNING *;
+        `;
+        const updateParams = [reactionType, loggedInUserId, postId];
+        const updateResult = await pool.query(updateReactionQuery, updateParams);
+
+        return res.status(200).json({
+          message: 'Reaction updated successfully.',
+          reaction: updateResult.rows[0], // Return the updated reaction details
+        });
+      } else {
+        // If no reaction exists, insert the new reaction
+        const insertReactionQuery = `
+          INSERT INTO posts_reactions (user_id, post_id, reaction_type, date)
+          VALUES ($1, $2, $3, NOW())
+          RETURNING *;
+        `;
+        const insertParams = [loggedInUserId, postId, reactionType];
+        const insertResult = await pool.query(insertReactionQuery, insertParams);
+
+        return res.status(201).json({
+          message: 'Reaction added successfully.',
+          reaction: insertResult.rows[0], // Return the newly added reaction details
+        });
+      }
+    }
+
+  } catch (error) {
+    console.error('Error sending reaction:', error);
+    res.status(500).json({ error: 'Internal server error while sending the reaction.' });
+  }
+};
+
+
 module.exports = {
   getAllPosts,
   getPostsById,
@@ -311,5 +426,7 @@ module.exports = {
   getPostReactionsCount,
   getPostCommentsCount,
   getPostComments,
-  writePostComment
+  writePostComment,
+  getPostReactionsData,
+  sendReaction
 };

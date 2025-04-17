@@ -1,44 +1,90 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+
+//hooks
+import { axiosPrivate } from '../../../api/axios';
 
 // Styling
 
 import '../../../css/PostsComments.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faFaceAngry, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan } from "@fortawesome/free-solid-svg-icons";
 
 // Components
 
 import PostComments from './PostComments';
-// Component to write comments (Inside:   // Function to comment)
 
-// Util functions
-
-// fetchPostComments
 
 import { fetchPostReactionsCount } from './util_functions/FetchPostReactions';
 import { fetchPostCommentsCount } from './util_functions/FetchPostComments';
 
-
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostInteractions({ postId, isNavOpen, postContent, postSender }) {
 
+  const { auth } = useAuth();
+  const loggedInUserId = auth.userId
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [errMsg, setErrMsg] = useState("");
   const [reactionsCount, setReactionsCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
+  const [reactOption, setReactOption] = useState(false)
+  const [selectedReaction, setSelectedReaction] = useState(null);
+  const errRef = useRef();
 
-  // Function to react to posts
+  const handleShowReactOptions = () => {
+    setReactOption(prevState => !prevState);
+  };
 
-
-  // console.log("PostsComments.jsx postId", postId)
-  // console.log("reactionsCount in PostsComments.jsx", reactionsCount)
+  const handleReactionSelect = (reaction) => {
+    setSelectedReaction(reaction); 
+    setReactOption(false); 
+    sendReactionToBackend(reaction);
+  };
 
   useEffect(() => {
     fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount })
     fetchPostCommentsCount({ postId, setIsLoading, setError, setCommentsCount })
   }, [])
+
+  const sendReactionToBackend = async (reactionType) => {
+    try {
+      setIsLoading(true);
+      const response = await axiosPrivate.post(`${BACKEND}/posts/reactions/send`, {
+        loggedInUserId, 
+        postId,        
+        reactionType, 
+      });
+
+      setSelectedReaction(reactionType); 
+
+      handleShowReactOptions();
+
+      fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount });
+
+
+    } catch (err) {
+      console.log(err);
+      if (!err?.response) {
+        setErrMsg('No Server Response');
+      } else if (err.response?.status === 403) {
+        setErrMsg('Forbidden: You are not allowed to react');
+      } else if (err.response?.status === 401) {
+        setErrMsg('Unauthorized: Please log in');
+      } else if (err.response?.status === 400) {
+        setErrMsg('Bad Request: Please try again');
+      } else {
+        setErrMsg('Attempt Failed');
+      }
+      errRef.current?.focus();
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+
 
   return (
     <>
@@ -47,7 +93,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
         <div className="post-interactions-top">
 
-          <div className='post-interactions-top-left-reaction'>
+          <div className='post-interactions-top-left-reaction'
+            onClick={() => navigate(`/posts/reactions/${postId}`)}>
             <FontAwesomeIcon icon={faSmile} />
             <div className='post-interactions-text'>
               {reactionsCount}
@@ -55,8 +102,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
           </div>
 
           <div className='post-interactions-top-right-comments'
-                 onClick={() => navigate(`/posts/${postId}`)}
-          >
+            onClick={() => navigate(`/posts/${postId}`)}>
             <div className='post-interactions-text'
             >
               {commentsCount}
@@ -67,24 +113,47 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
         <div className="post-interactions-bottom">
 
-          <div className='post-interactions-bottom-left-reaction'>
-            <FontAwesomeIcon icon={faSmile} />
-            <div className='post-interactions-text'>
-              React
-            </div>
+
+          <div className='post-interactions-bottom-left-reaction'
+            onClick={handleShowReactOptions}>
+
+
+            {!reactOption && (
+              <>
+                <FontAwesomeIcon icon={faSmile} />
+                <div className='post-interactions-text'>
+                  React
+                </div>
+              </>
+            )}
+
+
+            {reactOption && (
+              <div className="reaction-options">
+  <div onClick={() => handleReactionSelect('like')} title="Like">
+    <FontAwesomeIcon icon={faThumbsUp} />
+  </div>
+  <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
+    <FontAwesomeIcon icon={faThumbsDown} />
+  </div>
+  <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
+    <FontAwesomeIcon icon={faLaugh} />
+  </div>
+  <div onClick={() => handleReactionSelect('cry')} title="Cry">
+    <FontAwesomeIcon icon={faSadTear} />
+  </div>
+  <div onClick={() => handleReactionSelect('smile')} title="Smile">
+    <FontAwesomeIcon icon={faSmile} />
+  </div>
+  <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
+    <FontAwesomeIcon icon={faBan} />
+  </div>
+</div>
+
+            )}
           </div>
-
-          <div className='post-interactions-bottom-right-comments'
-          >
-
-          </div>
-
         </div>
-
-
       </div>
-
-
     </>
   )
 }

@@ -62,8 +62,8 @@ export default function PostComments({ isNavOpen }) {
 
     try {
 
-setIsLoading(true)
-await axiosPrivate.post(`${BACKEND}/posts/comments/send`, {
+      setIsLoading(true)
+      await axiosPrivate.post(`${BACKEND}/posts/comments/send`, {
         newMessage,
         loggedInUser,
         postId
@@ -72,13 +72,13 @@ await axiosPrivate.post(`${BACKEND}/posts/comments/send`, {
 
       fetchPostComments({ postId, setPostComments, setError, setIsLoading })
 
-setNewMessage("")
+      setNewMessage("")
 
-setTimeout(() => {
-  if (inputRef.current) {
-    inputRef.current.focus();
-  }
-}, 100);
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 100);
     } catch (err) {
       console.log(err)
       // Always learned !err but not sure what's the sense behind. 
@@ -265,26 +265,26 @@ setTimeout(() => {
           </div>
         )}
         <div className="centered-container centered-container-post flex-row">
-        <input
-              placeholder="Aa"
-              ref={inputRef}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                setNewMessage(inputValue);
-              }}
-              onKeyDown={handleKeyDown}
-              value={newMessage}
-              required></input>
-          <button 
-          onClick={handleSubmit}
-          className="button-white white"
-          style={{width: '100px', margin: 'auto'}}
-          disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
+          <input
+            placeholder="Aa"
+            ref={inputRef}
+            onChange={(e) => {
+              const inputValue = e.target.value;
+              setNewMessage(inputValue);
+            }}
+            onKeyDown={handleKeyDown}
+            value={newMessage}
+            required></input>
+          <button
+            onClick={handleSubmit}
+            className="button-white white"
+            style={{ width: '100px', margin: 'auto' }}
+            disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
           >
-                <FontAwesomeIcon
-                  icon={faPaperPlane}
-                  title='Send'
-                />
+            <FontAwesomeIcon
+              icon={faPaperPlane}
+              title='Send'
+            />
           </button>
         </div>
 
@@ -292,11 +292,11 @@ setTimeout(() => {
         <div className="centered-container centered-container-post">
           {postComments.map((comment) => (
             <>
-            <div className="post-comment" key={comment.id}>
-              <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
-              <div>{comment.content}</div>
-            </div>
-            <div className="post-comment-date">{formatDate(comment.date)}</div>
+              <div className="post-comment" key={comment.id}>
+                <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
+                <div>{comment.content}</div>
+              </div>
+              <div className="post-comment-date">{formatDate(comment.date)}</div>
             </>
           ))
 
