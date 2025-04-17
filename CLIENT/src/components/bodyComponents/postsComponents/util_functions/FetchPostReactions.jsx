@@ -1,13 +1,14 @@
 import { axiosPrivate } from "../../../../api/axios";
 
-const fetchPostReactionsCount = async ({postId, setReactionsCount, setError, setIsLoading}) => {
+const fetchPostReactionsCount = async ({postId, setReactionsCount, setError, setIsLoading, loggedInUserId}) => {
   setIsLoading(true);
 
   try {
     // console.log("hit FetchPostReactions.jsx")
     const { data } = await axiosPrivate.get(`/posts/reactions/count`, { 
       params: { 
-        postId
+        postId,
+        loggedInUserId
       } 
     });
 
@@ -28,14 +29,15 @@ const fetchPostReactionsCount = async ({postId, setReactionsCount, setError, set
   }
 };
 
-const fetchPostReactionsData = async ({postId, setPostReactions, setError, setIsLoading}) => {
+const fetchPostReactionsData = async ({postId, setPostReactions, setError, setIsLoading, loggedInUserId}) => {
   setIsLoading(true);
 
   try {
-    console.log("hit FetchPostReactions.jsx")
+    // console.log("hit FetchPostReactions.jsx")
     const { data } = await axiosPrivate.get(`/posts/reactions/data`, { 
       params: { 
-        postId
+        postId,
+        loggedInUserId
       } 
     });
 

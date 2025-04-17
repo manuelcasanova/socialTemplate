@@ -1,13 +1,14 @@
 import { axiosPrivate } from "../../../../api/axios";
 
-const fetchPostCommentsCount = async ({postId, setCommentsCount, setError, setIsLoading}) => {
+const fetchPostCommentsCount = async ({postId, setCommentsCount, setError, setIsLoading, loggedInUserId}) => {
   setIsLoading(true);
 
   try {
     // console.log("hit fetchPostComments.jsx")
     const { data } = await axiosPrivate.get(`/posts/comments/count`, { 
       params: { 
-        postId
+        postId,
+        loggedInUserId
       } 
     });
 
@@ -28,14 +29,15 @@ const fetchPostCommentsCount = async ({postId, setCommentsCount, setError, setIs
   }
 };
 
-const fetchPostComments = async ({postId, setPostComments, setError, setIsLoading}) => {
+const fetchPostComments = async ({postId, setPostComments, setError, setIsLoading, loggedInUserId}) => {
   setIsLoading(true);
 
   try {
     // console.log("hit fetchPostComments.jsx")
     const { data } = await axiosPrivate.get(`/posts/comments/data`, { 
       params: { 
-        postId
+        postId,
+        loggedInUserId
       } 
     });
 

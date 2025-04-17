@@ -191,17 +191,22 @@ const getPostReactionsCount = async (req, res) => {
     // console.log("hit controller getPostReactionsCount")
 
     const postId = Number(req.query.postId)
+    const currentUserId = req.query.loggedInUserId;
 
     const query = `
-      SELECT * 
-      FROM posts_reactions 
-      WHERE post_id = $1 
-      ORDER BY date DESC;
+      SELECT *
+      FROM posts_reactions pr
+      JOIN users u ON u.user_id = pr.user_id
+      LEFT JOIN muted m ON m.muter = $2 AND m.mutee = u.user_id
+      WHERE pr.post_id = $1
+        AND (m.mute IS NULL OR m.mute = FALSE);
     `;
-    const params = [postId];
+
+    const params = [postId, currentUserId];
 
     // Execute the query
     const result = await pool.query(query, params);
+    
 
     // Return the posts if found
     res.status(200).json(result.rows.length);
@@ -216,14 +221,19 @@ const getPostCommentsCount = async (req, res) => {
     // console.log("hit controller getPostCommentsCount")
 
     const postId = Number(req.query.postId)
+    const loggedInUserId = req.query.loggedInUserId
+
 
     const query = `
-      SELECT * 
-      FROM posts_comments
-      WHERE post_id = $1 
-      ORDER BY date DESC;
+      SELECT *
+      FROM posts_comments pc
+      JOIN users u ON u.user_id = pc.commenter
+      LEFT JOIN muted m ON m.muter = $2 AND m.mutee = u.user_id
+      WHERE pc.post_id = $1
+        AND (m.mute IS NULL OR m.mute = FALSE);
     `;
-    const params = [postId];
+
+    const params = [postId, loggedInUserId];
 
     // Execute the query
     const result = await pool.query(query, params);
@@ -240,7 +250,10 @@ const getPostComments = async (req, res) => {
   try {
     // console.log("hit controller getPostCommentsCount")
 // console.log("req.query", req.query)
-    const postId = Number(req.query.postId)
+  
+const postId = Number(req.query.postId);
+const currentUserId = req.query.loggedInUserId;
+
 
 const query = `
   SELECT 
@@ -248,14 +261,17 @@ const query = `
     u.username 
   FROM posts_comments pc
   JOIN users u ON u.user_id = pc.commenter
-  WHERE pc.post_id = $1 
+  LEFT JOIN muted m1 ON m1.muter = $2 AND m1.mutee = u.user_id
+  WHERE pc.post_id = $1
+    AND (m1.mute IS NULL OR m1.mute = FALSE)
   ORDER BY pc.date DESC;
 `;
-    const params = [postId];
+
+const result = await pool.query(query, [postId, currentUserId]);
 
     // Execute the query
-    const result = await pool.query(query, params);
 
+// console.log("result", result.rows)
     // Return the posts if found
     res.status(200).json(result.rows);
   } catch (error) {
@@ -308,17 +324,21 @@ const getPostReactionsData = async (req, res) => {
     // console.log("hit controller getPostCommentsCount")
 // console.log("req.query", req.query)
     const postId = Number(req.query.postId)
+    const currentUserId = req.query.loggedInUserId;
 
-const query = `
-  SELECT 
-    pr.*, 
-    u.username 
-  FROM posts_reactions pr
-  JOIN users u ON u.user_id = pr.user_id
-  WHERE pr.post_id = $1 
-  ORDER BY pr.date DESC;
-`;
-    const params = [postId];
+    const query = `
+      SELECT 
+        pr.*, 
+        u.username 
+      FROM posts_reactions pr
+      JOIN users u ON u.user_id = pr.user_id
+      LEFT JOIN muted m ON m.muter = $2 AND m.mutee = u.user_id
+      WHERE pr.post_id = $1
+        AND (m.mute IS NULL OR m.mute = FALSE)
+      ORDER BY pr.date DESC;
+    `;
+
+    const params = [postId, currentUserId];
 
     // Execute the query
     const result = await pool.query(query, params);

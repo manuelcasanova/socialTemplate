@@ -29,6 +29,7 @@ export default function PostComments({ isNavOpen }) {
   const handleClose = () => navigate(-1);
   const { param } = useParams();
   const { auth } = useAuth();
+  const loggedInUserId = auth.userId
   const axiosPrivate = useAxiosPrivate();
   const loggedInUser = auth.userId;
   const postId = Number(param);
@@ -70,7 +71,7 @@ export default function PostComments({ isNavOpen }) {
       });
       setError(null)
 
-      fetchPostComments({ postId, setPostComments, setError, setIsLoading })
+      fetchPostComments({ postId, setPostComments, setError, setIsLoading, loggedInUserId })
 
       setNewMessage("")
 
@@ -133,7 +134,7 @@ export default function PostComments({ isNavOpen }) {
 
   useEffect(() => {
     fetchPostById(postId, setPost, setIsLoading, setError);
-    fetchPostComments({ postId, setPostComments, setError, setIsLoading })
+    fetchPostComments({ postId, setPostComments, setError, setIsLoading, loggedInUserId })
   }, [postId]);
 
   useEffect(() => {

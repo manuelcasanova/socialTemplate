@@ -29,6 +29,7 @@ export default function PostReactions({ isNavOpen }) {
   const handleClose = () => navigate(-1);
   const { param } = useParams();
   const { auth } = useAuth();
+  const loggedInUserId = auth.userId;
   const axiosPrivate = useAxiosPrivate();
   const loggedInUser = auth.userId;
   const postId = Number(param);
@@ -82,7 +83,7 @@ export default function PostReactions({ isNavOpen }) {
 
   useEffect(() => {
     fetchPostById(postId, setPost, setIsLoading, setError);
-    fetchPostReactionsData({ postId, setPostReactions, setError, setIsLoading })
+    fetchPostReactionsData({ postId, setPostReactions, setError, setIsLoading, loggedInUserId })
   }, [postId]);
 
   useEffect(() => {
@@ -181,7 +182,7 @@ export default function PostReactions({ isNavOpen }) {
 
                   <div style={{ fontWeight: 'bold' }}>{reaction.username}</div>
 
-                  <button>Follow User Button</button>
+                
                 </div>
               </>
             ))

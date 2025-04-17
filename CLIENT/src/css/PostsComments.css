@@ -93,8 +93,8 @@ width: 100%;
   flex-wrap: wrap; /* Allow items to wrap when space is constrained */
 }
 
-.row-reaction > :last-child {
-  margin-left: auto; /* Pushes the last child to the right */
+.row-reaction > :nth-child(3) {
+  margin-right: auto; 
 }
 
 

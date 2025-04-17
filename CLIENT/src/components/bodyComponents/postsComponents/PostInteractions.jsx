@@ -46,8 +46,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   };
 
   useEffect(() => {
-    fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount })
-    fetchPostCommentsCount({ postId, setIsLoading, setError, setCommentsCount })
+    fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount, loggedInUserId })
+    fetchPostCommentsCount({ postId, setIsLoading, setError, setCommentsCount, loggedInUserId })
   }, [])
 
   const sendReactionToBackend = async (reactionType) => {
