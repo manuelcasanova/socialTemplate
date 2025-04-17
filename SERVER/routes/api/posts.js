@@ -72,6 +72,7 @@ router.route('/all')
 //     postsController.getPostsById
 //   );
 
+
 // Route to mark a post as deleted (soft delete)
 router.route('/delete/:id')
   .put(

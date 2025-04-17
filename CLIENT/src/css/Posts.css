@@ -94,6 +94,8 @@
 
 .post-header-photo {
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .post-header-sender-and-date {
@@ -103,6 +105,7 @@
 .post-header-sender-and-visibility {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .post-header-sender-and-visibility svg {

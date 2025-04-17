@@ -78,12 +78,11 @@ const getAllPosts = async (req, res) => {
 
 // Function to get posts by a specific user (is_deleted false)
 const getPostsById = async (req, res) => {
-  console.log("hit postsController")
   try {
-console.log("req.params", req.params.postId)
+// console.log("req.params", req.params)
     const postId = req.params.postId;
    
-    console.log("postId", postId)
+    // console.log("postId", postId)
 
     // Query to get posts from a specific user, excluding deleted posts
     const query = `

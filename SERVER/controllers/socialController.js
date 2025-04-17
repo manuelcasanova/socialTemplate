@@ -47,7 +47,7 @@ const getUsernameByUserId = async (req, res) => {
   try {
 
     const userId = Number(req.query.userId);
-
+console.log("req.query", req.query)
     // Start the base query
     let query = `
             SELECT u.username

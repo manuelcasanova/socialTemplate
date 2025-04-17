@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 //Util functions
 import { fetchPostById } from "./util_functions/FetchPosts";
-import { useEffect } from "react";
 import { formatDate } from "./util_functions/formatDate";
+import fetchSenderNameById from "./util_functions/FetchSenderNameById";
 
 
 //Styling
@@ -22,17 +22,33 @@ export default function PostComments({ isNavOpen }) {
   const { param } = useParams();
   const postId = Number(param);
   const [post, setPost] = useState();
-
+  const [senderInfo, setSenderInfo] = useState(null); 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  console.log("post", post)
+
+  // console.log("post", post)
+  // console.log("postId", postId)
+
+  
+  const postSender = post?.[0]?.sender;
+  const postDate = post?.[0]?.date;
+  const postVisibility = post?.[0]?.visibility;
+  const postContent = post?.[0]?.content;
+
+  // console.log("postSenderId", postSender)
+
 
   useEffect(() => {
-    fetchPostById(postId, setPost, setIsLoading, setError)
+    fetchPostById(postId, setPost, setIsLoading, setError);
+  }, [postId]);
 
-  }, [postId])
-
+  useEffect(() => {
+    if (postSender) {
+      fetchSenderNameById(postSender, setIsLoading, setError, setSenderInfo);
+    }
+  }, [postSender]);
+  
   const getVisibilityIcon = (visibility) => {
     switch (visibility) {
       case "public":
@@ -68,16 +84,6 @@ export default function PostComments({ isNavOpen }) {
     return <Error isNavOpen={isNavOpen} error={error} />;
   }
 
-  if (!post || !Array.isArray(post) || post.length === 0) {
-    return <div>No post found.</div>;
-  }
-  
-  const postSender = post[0].sender;
-  const postDate = post[0].date;
-  const postVisibility = post[0].visibility;
-  const postContent = post[0].content;
-
-  
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="centered-container centered-container-post" style={{ minHeight: '400px' }}>
@@ -96,10 +102,11 @@ export default function PostComments({ isNavOpen }) {
             </div>
             <div className="post-header-sender-and-date">
               <div className="post-header-sender-and-visibility">
-                {postSender}
+                {/* {postSender} */}
+                {senderInfo ? senderInfo : <LoadingSpinner />}
                 <FontAwesomeIcon
-                  icon={getVisibilityIcon(post.visibility)}
-                  title={getVisibilityTooltip(post.visibility)}
+                  icon={getVisibilityIcon(postVisibility)}
+                  title={getVisibilityTooltip(postVisibility)}
                 />
               </div>
               <p className="post-header-date">
