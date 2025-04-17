@@ -15,6 +15,10 @@ import { faTrashAlt, faMagnifyingGlass, faLock, faEarth, faUserFriends } from "@
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
+
+
+
 export default function PostComments({ isNavOpen }) {
 
   const navigate = useNavigate();
@@ -25,6 +29,8 @@ export default function PostComments({ isNavOpen }) {
   const [senderInfo, setSenderInfo] = useState(null); 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [imageExistsMap, setImageExistsMap] = useState({});
+  const [showLargePicture, setShowLargePicture] = useState(null);
 
 
   // console.log("post", post)
@@ -35,6 +41,31 @@ export default function PostComments({ isNavOpen }) {
   const postDate = post?.[0]?.date;
   const postVisibility = post?.[0]?.visibility;
   const postContent = post?.[0]?.content;
+  const userId = postSender;
+
+  const profilePictureExists = async (userId) => {
+    const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
+    try {
+      const response = await fetch(imageUrl, { method: 'HEAD' });
+      return response.ok;
+    } catch (error) {
+      console.error("Error checking image existence:", error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const checkSenderImage = async () => {
+      if (postSender) {
+        const exists = await profilePictureExists(postSender);
+        setImageExistsMap((prev) => ({ ...prev, [postSender]: exists }));
+      }
+    };
+  
+    checkSenderImage();
+  }, [postSender]);
+  
+
 
   // console.log("postSenderId", postSender)
 
@@ -48,6 +79,10 @@ export default function PostComments({ isNavOpen }) {
       fetchSenderNameById(postSender, setIsLoading, setError, setSenderInfo);
     }
   }, [postSender]);
+
+  const handleImageClick = (userId) => {
+    setShowLargePicture(userId);
+  };
   
   const getVisibilityIcon = (visibility) => {
     switch (visibility) {
@@ -89,7 +124,7 @@ export default function PostComments({ isNavOpen }) {
       <div className="centered-container centered-container-post" style={{ minHeight: '400px' }}>
         <div className="centered-container-button-close">
           <button
-            className="button-white"
+            className="button-white white"
             onClick={handleClose}
           >x</button>
         </div>
@@ -97,9 +132,28 @@ export default function PostComments({ isNavOpen }) {
 
         <div className="post-info">
           <div className="post-header">
-            <div className="post-header-photo">
-              Photo
-            </div>
+          <div className="post-header-photo">
+                      {imageExistsMap[postSender] ? (
+                        <img
+                          className="user-row-social-small-img"
+                          style={{ marginRight: "0px" }}
+                          src={`${BACKEND}/media/profile_pictures/${postSender}/profilePicture.jpg`}
+                          alt="User"
+                          onClick={() => handleImageClick(postSender)}
+                        />
+                      ) : (
+                        <img
+                          className="user-row-social-small-img"
+                          style={{ marginRight: "0px" }}
+                          src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                          alt="User"
+                          onClick={() => handleImageClick(post.sender)}
+                        />
+                      )}
+
+
+
+                    </div>
             <div className="post-header-sender-and-date">
               <div className="post-header-sender-and-visibility">
                 {/* {postSender} */}
@@ -120,6 +174,24 @@ export default function PostComments({ isNavOpen }) {
           <p>{postContent}</p>
 
         </div>
+
+        {showLargePicture && (
+        <div
+          className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+          onClick={() => setShowLargePicture(null)}
+        >
+          <img
+            className="users-all-picture-large"
+            src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
+            alt="Profile"
+            onError={(e) => {
+              // Fallback image handling
+              e.target.onerror = null;
+              e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+            }}
+          />
+        </div>
+      )}
 
       </div>
     </div>

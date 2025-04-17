@@ -308,6 +308,11 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.white {
+  color: white;
+  border: 1px solid white;
+}
+
 .button-white:hover:not(:disabled) {
   background-color: darkgrey;
   transform: scale(1.05);

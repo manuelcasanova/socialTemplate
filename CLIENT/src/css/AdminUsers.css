@@ -56,7 +56,7 @@ width: 90%;
 .user-row-social-small-img {
   max-height: 4em;
   max-width: 4em;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 
   width: 100px;
   height: 100px;
@@ -114,6 +114,7 @@ justify-content: flex-start;
   padding-right: 1em;
   overflow: hidden; /* Prevent any overflow from text */
   color: var(--color0);
+  margin-left: 20px;
 }
 
 .user-info button {
