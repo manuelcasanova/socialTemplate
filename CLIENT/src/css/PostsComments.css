@@ -110,6 +110,14 @@ width: 100%;
   margin: 5px 0px;
 }
 
+.post-comment-interactions {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  color: white;
+  font-size: xx-small;
+}
+
 .post-comment-date {
   width: fit-content;
   color: var(--color1);

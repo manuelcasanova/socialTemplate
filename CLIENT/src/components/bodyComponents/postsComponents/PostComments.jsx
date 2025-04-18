@@ -18,6 +18,7 @@ import { faTrashAlt, faMagnifyingGlass, faLock, faEarth, faUserFriends, faPaperP
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
+import PostCommentsInteractions from "./PostCommentsInteractions";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -298,7 +299,10 @@ export default function PostComments({ isNavOpen }) {
                   <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
                   <div>{comment.content}</div>
                 </div>
-                <div className="post-comment-date">{formatDate(comment.date)}</div>
+
+                <PostCommentsInteractions commentDate={comment.date}/>
+              
+
               </>
             ))
 
