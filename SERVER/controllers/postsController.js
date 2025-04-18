@@ -383,7 +383,9 @@ const sendReaction = async (req, res) => {
       const deleteResult = await pool.query(deleteReactionQuery, deleteParams);
 
       if (deleteResult.rows.length === 0) {
-        return res.status(404).json({ error: 'No reaction found to remove.' });
+        return res.status(200).json({
+          message: 'No reaction found to remove',
+        });
       }
 
       return res.status(200).json({

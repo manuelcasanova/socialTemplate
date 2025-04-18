@@ -114,79 +114,81 @@ export default function PostReactions({ isNavOpen }) {
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-      <div className="centered-container centered-container-post"
-      // style={{ minHeight: '400px' }}
-      >
-        <div className="centered-container-button-close">
-          <button
-            className="button-white white button-smaller"
-            onClick={handleClose}
-          >x</button>
-        </div>
-
-
-        {showLargePicture && (
-          <div
-            className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
-            onClick={() => setShowLargePicture(null)}
-          >
-            <img
-              className="users-all-picture-large"
-              src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
-              alt="Profile"
-              onError={(e) => {
-                // Fallback image handling
-                e.target.onerror = null;
-                e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
-              }}
-            />
+      <div className="admin-posts">
+        <div className="centered-container centered-container-post"
+        // style={{ minHeight: '400px' }}
+        >
+          <div className="centered-container-button-close">
+            <button
+              className="button-white white button-smaller"
+              onClick={handleClose}
+            >x</button>
           </div>
-        )}
 
-        <div className="centered-container centered-container-reaction">
-          {postReactions.length === 0 ? (
-            <p style={{ textAlign: "center", fontStyle: "italic", color: "#666" }}>
-              This post has no reactions.
-            </p>
-          ) : (
 
-            postReactions.map((reaction) => (
-              <>
-                <div className="row-reaction" key={reaction.id}>
-                  {imageExistsMap[reaction.user_id] ? (
-                    <img
-                      className="user-row-social-small-img"
-                      style={{ marginRight: "0px" }}
-                      src={`${BACKEND}/media/profile_pictures/${reaction.user_id}/profilePicture.jpg`}
-                      alt="User"
-                      onClick={() => handleImageClick(reaction.user_id)}
-                    />
-                  ) : (
-                    <img
-                      className="user-row-social-small-img"
-                      style={{ marginRight: "0px" }}
-                      src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                      alt="User"
-                      onClick={() => handleImageClick(reaction.user_id)}
-                    />
-                  )}
-
-                  <div>
-                    {reaction.reaction_type === "like" && <FontAwesomeIcon icon={faThumbsUp} />}
-                    {reaction.reaction_type === "dislike" && <FontAwesomeIcon icon={faThumbsDown} />}
-                    {reaction.reaction_type === "happy" && <FontAwesomeIcon icon={faSmile} />}
-                    {reaction.reaction_type === "laugh" && <FontAwesomeIcon icon={faLaugh} />}
-                    {reaction.reaction_type === "cry" && <FontAwesomeIcon icon={faSadTear} />}
-                    {reaction.reaction_type === "angry" && <FontAwesomeIcon icon={faFaceAngry} />}
-                  </div>
-
-                  <div style={{ fontWeight: 'bold' }}>{reaction.username}</div>
-
-                
-                </div>
-              </>
-            ))
+          {showLargePicture && (
+            <div
+              className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+              onClick={() => setShowLargePicture(null)}
+            >
+              <img
+                className="users-all-picture-large"
+                src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
+                alt="Profile"
+                onError={(e) => {
+                  // Fallback image handling
+                  e.target.onerror = null;
+                  e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                }}
+              />
+            </div>
           )}
+
+          <div className="centered-container centered-container-reaction">
+            {postReactions.length === 0 ? (
+              <p style={{ textAlign: "center", fontStyle: "italic", color: "#666" }}>
+                This post has no reactions.
+              </p>
+            ) : (
+
+              postReactions.map((reaction) => (
+                <>
+                  <div className="row-reaction" key={reaction.id}>
+                    {imageExistsMap[reaction.user_id] ? (
+                      <img
+                        className="user-row-social-small-img"
+                        style={{ marginRight: "0px" }}
+                        src={`${BACKEND}/media/profile_pictures/${reaction.user_id}/profilePicture.jpg`}
+                        alt="User"
+                        onClick={() => handleImageClick(reaction.user_id)}
+                      />
+                    ) : (
+                      <img
+                        className="user-row-social-small-img"
+                        style={{ marginRight: "0px" }}
+                        src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                        alt="User"
+                        onClick={() => handleImageClick(reaction.user_id)}
+                      />
+                    )}
+
+                    <div>
+                      {reaction.reaction_type === "like" && <FontAwesomeIcon icon={faThumbsUp} />}
+                      {reaction.reaction_type === "dislike" && <FontAwesomeIcon icon={faThumbsDown} />}
+                      {reaction.reaction_type === "happy" && <FontAwesomeIcon icon={faSmile} />}
+                      {reaction.reaction_type === "laugh" && <FontAwesomeIcon icon={faLaugh} />}
+                      {reaction.reaction_type === "cry" && <FontAwesomeIcon icon={faSadTear} />}
+                      {reaction.reaction_type === "angry" && <FontAwesomeIcon icon={faFaceAngry} />}
+                    </div>
+
+                    <div style={{ fontWeight: 'bold' }}>{reaction.username}</div>
+
+
+                  </div>
+                </>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>

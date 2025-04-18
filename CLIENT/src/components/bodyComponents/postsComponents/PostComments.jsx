@@ -192,123 +192,124 @@ export default function PostComments({ isNavOpen }) {
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-      <div className="centered-container centered-container-post"
-      // style={{ minHeight: '400px' }}
-      >
-        <div className="centered-container-button-close">
-          <button
-            className="button-white white button-smaller"
-            onClick={handleClose}
-          >x</button>
-        </div>
+      <div className="admin-posts">
+        <div className="centered-container centered-container-post"
+        // style={{ minHeight: '400px' }}
+        >
+          <div className="centered-container-button-close">
+            <button
+              className="button-white white button-smaller"
+              onClick={handleClose}
+            >x</button>
+          </div>
 
 
-        <div className="post-info post-info-modal">
-          <div className="post-header">
-            <div className="post-header-photo">
-              {imageExistsMap[postSender] ? (
-                <img
-                  className="user-row-social-small-img"
-                  style={{ marginRight: "0px" }}
-                  src={`${BACKEND}/media/profile_pictures/${postSender}/profilePicture.jpg`}
-                  alt="User"
-                  onClick={() => handleImageClick(postSender)}
-                />
-              ) : (
-                <img
-                  className="user-row-social-small-img"
-                  style={{ marginRight: "0px" }}
-                  src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                  alt="User"
-                  onClick={() => handleImageClick(post.sender)}
-                />
-              )}
+          <div className="post-info post-info-modal">
+            <div className="post-header">
+              <div className="post-header-photo">
+                {imageExistsMap[postSender] ? (
+                  <img
+                    className="user-row-social-small-img"
+                    style={{ marginRight: "0px" }}
+                    src={`${BACKEND}/media/profile_pictures/${postSender}/profilePicture.jpg`}
+                    alt="User"
+                    onClick={() => handleImageClick(postSender)}
+                  />
+                ) : (
+                  <img
+                    className="user-row-social-small-img"
+                    style={{ marginRight: "0px" }}
+                    src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                    alt="User"
+                    onClick={() => handleImageClick(post.sender)}
+                  />
+                )}
 
 
 
-            </div>
-            <div className="post-header-sender-and-date">
-              <div className="post-header-sender-and-visibility">
-                {/* {postSender} */}
-                {senderInfo ? senderInfo : <LoadingSpinner />}
-                <FontAwesomeIcon
-                  icon={getVisibilityIcon(postVisibility)}
-                  title={getVisibilityTooltip(postVisibility)}
-                />
               </div>
-              <p className="post-header-date">
-                {formatDate(postDate)}
-              </p>
+              <div className="post-header-sender-and-date">
+                <div className="post-header-sender-and-visibility">
+                  {/* {postSender} */}
+                  {senderInfo ? senderInfo : <LoadingSpinner />}
+                  <FontAwesomeIcon
+                    icon={getVisibilityIcon(postVisibility)}
+                    title={getVisibilityTooltip(postVisibility)}
+                  />
+                </div>
+                <p className="post-header-date">
+                  {formatDate(postDate)}
+                </p>
+
+              </div>
+
 
             </div>
-
+            <p>{postContent}</p>
 
           </div>
-          <p>{postContent}</p>
 
-        </div>
-
-        {showLargePicture && (
-          <div
-            className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
-            onClick={() => setShowLargePicture(null)}
-          >
-            <img
-              className="users-all-picture-large"
-              src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
-              alt="Profile"
-              onError={(e) => {
-                // Fallback image handling
-                e.target.onerror = null;
-                e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+          {showLargePicture && (
+            <div
+              className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+              onClick={() => setShowLargePicture(null)}
+            >
+              <img
+                className="users-all-picture-large"
+                src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
+                alt="Profile"
+                onError={(e) => {
+                  // Fallback image handling
+                  e.target.onerror = null;
+                  e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                }}
+              />
+            </div>
+          )}
+          <div className="centered-container centered-container-post flex-row">
+            <input
+              placeholder="Aa"
+              ref={inputRef}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                setNewMessage(inputValue);
               }}
-            />
+              onKeyDown={handleKeyDown}
+              value={newMessage}
+              required></input>
+            <button
+              onClick={handleSubmit}
+              className="button-white white"
+              style={{ width: '100px', margin: 'auto' }}
+              disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
+            >
+              <FontAwesomeIcon
+                icon={faPaperPlane}
+                title='Send'
+              />
+            </button>
           </div>
-        )}
-        <div className="centered-container centered-container-post flex-row">
-          <input
-            placeholder="Aa"
-            ref={inputRef}
-            onChange={(e) => {
-              const inputValue = e.target.value;
-              setNewMessage(inputValue);
-            }}
-            onKeyDown={handleKeyDown}
-            value={newMessage}
-            required></input>
-          <button
-            onClick={handleSubmit}
-            className="button-white white"
-            style={{ width: '100px', margin: 'auto' }}
-            disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
-          >
-            <FontAwesomeIcon
-              icon={faPaperPlane}
-              title='Send'
-            />
-          </button>
-        </div>
 
 
-        <div className="centered-container centered-container-post">
-          {postComments.map((comment) => (
-            <>
-              <div className="post-comment" key={comment.id}>
-                <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
-                <div>{comment.content}</div>
-              </div>
-              <div className="post-comment-date">{formatDate(comment.date)}</div>
-            </>
-          ))
+          <div className="centered-container centered-container-post">
+            {postComments.map((comment) => (
+              <>
+                <div className="post-comment" key={comment.id}>
+                  <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
+                  <div>{comment.content}</div>
+                </div>
+                <div className="post-comment-date">{formatDate(comment.date)}</div>
+              </>
+            ))
 
-          }
+            }
 
 
 
 
+          </div>
         </div>
       </div>
-
 
 
     </div>

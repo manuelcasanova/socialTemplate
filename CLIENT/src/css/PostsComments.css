@@ -91,6 +91,7 @@ width: 100%;
   max-width: 100%;  
   box-sizing: border-box;
   flex-wrap: wrap; /* Allow items to wrap when space is constrained */
+  color: white;
 }
 
 .row-reaction > :nth-child(3) {
