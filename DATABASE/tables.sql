@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS muted CASCADE;
 DROP TABLE IF EXISTS followers CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
+DROP TABLE IF EXISTS posts_comments_reactions;
 
 
 
@@ -123,3 +124,10 @@ CREATE TABLE posts_comments (
     is_deleted BOOLEAN DEFAULT false
 );
 
+CREATE TABLE posts_comments_reactions (
+    comment_id INTEGER REFERENCES posts_comments(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    reaction_type VARCHAR(20) NOT NULL,  -- e.g. 'like', 'laugh', 'angry', etc.
+    date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (comment_id, user_id)
+);

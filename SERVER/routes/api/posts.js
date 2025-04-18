@@ -145,6 +145,29 @@ router.route('/reactions/count')
     postsController.getPostReactionsCount
   );
 
+  // Route to get posts comments reactions' count
+router.route('/comments/reactions/count')
+.get(
+  async (req, res, next) => {
+    try {
+      // console.log("hit reactions/count route")
+      const rolesList = await fetchRoles();
+
+      const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+      const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+      if (!hasRequiredRole) {
+        return res.status(403).json({ error: 'Permission denied: Only registered users have access to this list.' });
+      }
+
+      verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  },
+  postsController.getPostCommentsReactionsCount
+);
+
 
   // Route to get posts comments' count
 router.route('/comments/count')

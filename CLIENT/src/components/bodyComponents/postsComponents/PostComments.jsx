@@ -58,6 +58,7 @@ export default function PostComments({ isNavOpen }) {
   const inputRef = useRef(null);
   const errRef = useRef();
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true)
@@ -300,7 +301,7 @@ export default function PostComments({ isNavOpen }) {
                   <div>{comment.content}</div>
                 </div>
 
-                <PostCommentsInteractions commentDate={comment.date}/>
+                <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} loggedInUserId={loggedInUserId}/>
               
 
               </>

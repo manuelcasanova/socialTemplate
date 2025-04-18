@@ -74,3 +74,6 @@ INSERT INTO posts_comments (post_id, commenter, content)
 VALUES
 (2, 1, 'I don’t quite see it the same way, but interesting read.'),
 (2, 1, 'Thanks for sharing this perspective!');
+
+INSERT INTO posts_comments_reactions (comment_id, user_id, reaction_type)
+VALUES (1, 2, 'like');

@@ -216,6 +216,39 @@ const getPostReactionsCount = async (req, res) => {
   }
 };
 
+const getPostCommentsReactionsCount = async (req, res) => {
+  try {
+    // console.log("hit controller getPostReactionsCount")
+
+    const commentId = Number(req.query.commentId)
+    const currentUserId = Number(req.query.loggedInUserId);
+
+    // console.log("commentId", commentId)
+    // console.log("currentUserId", currentUserId)
+
+    const query = `
+      SELECT *
+      FROM posts_comments_reactions pc
+      JOIN users u ON u.user_id = pc.user_id
+      LEFT JOIN muted m ON m.muter = $2 AND m.mutee = u.user_id
+      WHERE pc.comment_id = $1
+        AND (m.mute IS NULL OR m.mute = FALSE);
+    `;
+
+    const params = [commentId, currentUserId];
+
+    // Execute the query
+    const result = await pool.query(query, params);
+    
+// console.log("result.rows", result.rows)
+    // Return the posts if found
+    res.status(200).json(result.rows.length);
+  } catch (error) {
+    console.error('Error retrieving post reactions:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 const getPostCommentsCount = async (req, res) => {
   try {
     // console.log("hit controller getPostCommentsCount")
@@ -450,5 +483,6 @@ module.exports = {
   getPostComments,
   writePostComment,
   getPostReactionsData,
-  sendReaction
+  sendReaction,
+  getPostCommentsReactionsCount
 };
