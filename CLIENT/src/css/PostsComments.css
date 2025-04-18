@@ -100,7 +100,7 @@ width: 100%;
 }
 
 
-.post-comment {
+.post-comment-container {
   background-color: #999999;
   color: var(--color1);
   border-radius: 4px;
@@ -109,6 +109,23 @@ width: 100%;
   max-width: 100%; 
   padding: 5px;
   margin: 5px 0px;
+  display: flex;
+  flex-direction: row;
+}
+
+.post-comment-image {
+  display: flex;
+  align-items: center;
+}
+
+.post-comment-image img {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+}
+
+.post-comment-name-content {
+  margin-left: 5px;
 }
 
 .post-comment-interactions {

@@ -183,6 +183,26 @@ export default function PostComments({ isNavOpen }) {
         return "Public post";
     }
   };
+  
+  useEffect(() => {
+    const checkCommenterImages = async () => {
+      const newMap = { ...imageExistsMap };
+  
+      for (const comment of postComments) {
+        const commenterId = comment.commenter;
+        if (newMap[commenterId] === undefined) {
+          const exists = await profilePictureExists(commenterId);
+          newMap[commenterId] = exists;
+        }
+      }
+  
+      setImageExistsMap(newMap);
+    };
+  
+    if (postComments.length > 0) {
+      checkCommenterImages();
+    }
+  }, [postComments]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -223,7 +243,7 @@ export default function PostComments({ isNavOpen }) {
                     style={{ marginRight: "0px" }}
                     src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
                     alt="User"
-                    onClick={() => handleImageClick(post.sender)}
+                    onClick={() => handleImageClick(postSender)}
                   />
                 )}
 
@@ -295,14 +315,37 @@ export default function PostComments({ isNavOpen }) {
 
           <div className="centered-container centered-container-post">
             {postComments.map((comment) => (
+            
               <>
-                <div className="post-comment" key={comment.id}>
-                  <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
-                  <div>{comment.content}</div>
+                <div className="post-comment-container" key={comment.id}>
+                  <div className="post-comment-image">
+                  {imageExistsMap[comment.commenter] ? (
+                  <img
+                    className="user-row-social-small-img"
+                    style={{ marginRight: "0px" }}
+                    src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg`}
+                    alt="User"
+                    onClick={() => handleImageClick(comment.commenter)}
+                  />
+          
+                ) : (
+                  <img
+                    className="user-row-social-small-img"
+                    style={{ marginRight: "0px" }}
+                    src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                    alt="User"
+                    onClick={() => handleImageClick(comment.commenter)}
+                  />
+                )}
+                  </div>
+                  <div className="post-comment-name-content">
+                    <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
+                    <div>{comment.content}</div>
+                  </div>
                 </div>
 
-                <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} loggedInUserId={loggedInUserId}/>
-              
+                <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} loggedInUserId={loggedInUserId} />
+
 
               </>
             ))
