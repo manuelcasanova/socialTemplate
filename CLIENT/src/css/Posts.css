@@ -157,8 +157,8 @@
   margin: auto;
 }
 
-.post-interactions-text {
-
+.post-interactions-text:hover {
+cursor: pointer;
 }
 
 /* Responsive */

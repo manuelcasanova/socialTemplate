@@ -131,7 +131,7 @@ width: 100%;
 .post-comment-interactions {
   display: flex;
   flex-direction: row;
-  gap: 1em;
+  gap: 3em;
   color: white;
   font-size: xx-small;
 }

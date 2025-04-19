@@ -175,7 +175,7 @@ export default function PostReactions({ isNavOpen }) {
                     <div>
                       {reaction.reaction_type === "like" && <FontAwesomeIcon icon={faThumbsUp} />}
                       {reaction.reaction_type === "dislike" && <FontAwesomeIcon icon={faThumbsDown} />}
-                      {reaction.reaction_type === "happy" && <FontAwesomeIcon icon={faSmile} />}
+                      {reaction.reaction_type === "smile" && <FontAwesomeIcon icon={faSmile} />}
                       {reaction.reaction_type === "laugh" && <FontAwesomeIcon icon={faLaugh} />}
                       {reaction.reaction_type === "cry" && <FontAwesomeIcon icon={faSadTear} />}
                       {reaction.reaction_type === "angry" && <FontAwesomeIcon icon={faFaceAngry} />}

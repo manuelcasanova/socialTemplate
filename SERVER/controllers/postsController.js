@@ -507,6 +507,95 @@ const sendReaction = async (req, res) => {
   }
 };
 
+const sendCommentReaction = async (req, res) => {
+  const { loggedInUserId, commentId, reactionType } = req.body; 
+
+  try {
+    // Step 1: Validate the input data
+    if (!loggedInUserId || !commentId) {
+      return res.status(400).json({ error: 'Logged-in user and commentId are required.' });
+    }
+
+    if (!reactionType) {
+      return res.status(400).json({ error: 'Reaction type is required.' });
+    }
+
+    // Step 2: Validate that the loggedInUserId exists in the database
+    const userCheckQuery = `SELECT user_id FROM users WHERE user_id = $1;`;
+    const userCheckResult = await pool.query(userCheckQuery, [loggedInUserId]);
+
+    if (userCheckResult.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid logged-in user.' });
+    }
+
+    if (reactionType === 'remove-reaction') {
+
+      // Step 3: Remove the reaction if "remove-reaction" is passed
+      const deleteReactionQuery = `
+        DELETE FROM posts_comments_reactions 
+        WHERE user_id = $1 AND comment_id = $2
+        RETURNING *;
+      `;
+      const deleteParams = [loggedInUserId, commentId];
+      const deleteResult = await pool.query(deleteReactionQuery, deleteParams);
+
+      if (deleteResult.rows.length === 0) {
+        return res.status(200).json({
+          message: 'No reaction found to remove',
+        });
+      }
+
+      return res.status(200).json({
+        message: 'Reaction removed successfully.',
+      });
+    } else {
+      // Step 4: Check if the user has already reacted to this post
+      const checkReactionQuery = `
+        SELECT * 
+        FROM posts_comments_reactions
+        WHERE user_id = $1 AND comment_id = $2;
+      `;
+      const checkReactionResult = await pool.query(checkReactionQuery, [loggedInUserId, commentId]);
+
+      // Step 5: If a reaction exists, update it. Otherwise, insert a new one.
+      if (checkReactionResult.rows.length > 0) {
+        // If the reaction already exists, we update the reaction_type
+        const updateReactionQuery = `
+          UPDATE posts_comments_reactions
+          SET reaction_type = $1, date = NOW()
+          WHERE user_id = $2 AND comment_id = $3
+          RETURNING *;
+        `;
+        const updateParams = [reactionType, loggedInUserId, commentId];
+        const updateResult = await pool.query(updateReactionQuery, updateParams);
+
+        return res.status(200).json({
+          message: 'Reaction updated successfully.',
+          reaction: updateResult.rows[0], // Return the updated reaction details
+        });
+      } else {
+        // If no reaction exists, insert the new reaction
+        const insertReactionQuery = `
+          INSERT INTO posts_comments_reactions(user_id, comment_id, reaction_type, date)
+          VALUES ($1, $2, $3, NOW())
+          RETURNING *;
+        `;
+        const insertParams = [loggedInUserId, commentId, reactionType];
+        const insertResult = await pool.query(insertReactionQuery, insertParams);
+
+        return res.status(201).json({
+          message: 'Reaction added successfully.',
+          reaction: insertResult.rows[0], // Return the newly added reaction details
+        });
+      }
+    }
+
+  } catch (error) {
+    console.error('Error sending comment reaction:', error);
+    res.status(500).json({ error: 'Internal server error while sending the reaction.' });
+  }
+};
+
 
 module.exports = {
   getAllPosts,
@@ -520,5 +609,6 @@ module.exports = {
   getPostReactionsData,
   sendReaction,
   getPostCommentsReactionsCount,
-  getPostCommentsReactionsData
+  getPostCommentsReactionsData,
+  sendCommentReaction
 };

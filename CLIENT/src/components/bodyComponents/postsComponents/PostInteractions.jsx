@@ -40,8 +40,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   };
 
   const handleReactionSelect = (reaction) => {
-    setSelectedReaction(reaction); 
-    setReactOption(false); 
+    setSelectedReaction(reaction);
+    setReactOption(false);
     sendReactionToBackend(reaction);
   };
 
@@ -54,12 +54,12 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
     try {
       setIsLoading(true);
       const response = await axiosPrivate.post(`${BACKEND}/posts/reactions/send`, {
-        loggedInUserId, 
-        postId,        
-        reactionType, 
+        loggedInUserId,
+        postId,
+        reactionType,
       });
 
-      setSelectedReaction(reactionType); 
+      setSelectedReaction(reactionType);
 
       handleShowReactOptions();
 
@@ -81,7 +81,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
       }
       errRef.current?.focus();
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -130,25 +130,25 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
             {reactOption && (
               <div className="reaction-options">
-  <div onClick={() => handleReactionSelect('like')} title="Like">
-    <FontAwesomeIcon icon={faThumbsUp} />
-  </div>
-  <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
-    <FontAwesomeIcon icon={faThumbsDown} />
-  </div>
-  <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
-    <FontAwesomeIcon icon={faLaugh} />
-  </div>
-  <div onClick={() => handleReactionSelect('cry')} title="Cry">
-    <FontAwesomeIcon icon={faSadTear} />
-  </div>
-  <div onClick={() => handleReactionSelect('smile')} title="Smile">
-    <FontAwesomeIcon icon={faSmile} />
-  </div>
-  <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
-    <FontAwesomeIcon icon={faBan} />
-  </div>
-</div>
+                <div onClick={() => handleReactionSelect('like')} title="Like">
+                  <FontAwesomeIcon icon={faThumbsUp} />
+                </div>
+                <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
+                  <FontAwesomeIcon icon={faThumbsDown} />
+                </div>
+                <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
+                  <FontAwesomeIcon icon={faLaugh} />
+                </div>
+                <div onClick={() => handleReactionSelect('cry')} title="Cry">
+                  <FontAwesomeIcon icon={faSadTear} />
+                </div>
+                <div onClick={() => handleReactionSelect('smile')} title="Smile">
+                  <FontAwesomeIcon icon={faSmile} />
+                </div>
+                <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
+                  <FontAwesomeIcon icon={faBan} />
+                </div>
+              </div>
 
             )}
           </div>
