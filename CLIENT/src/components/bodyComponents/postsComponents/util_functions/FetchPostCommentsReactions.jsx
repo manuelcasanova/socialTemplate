@@ -29,11 +29,11 @@ const fetchPostCommentsReactionsCount = async ({commentId, setReactionsCount, se
   }
 };
 
-const fetchPostCommentsReactionsData = async ({commentId, setPostReactions, setError, setIsLoading, loggedInUserId}) => {
+const fetchPostCommentsReactionsData = async ({commentId, setPostCommentReactions, setError, setIsLoading, loggedInUserId}) => {
   setIsLoading(true);
 
   try {
-    // console.log("hit FetchPostReactions.jsx")
+    // console.log("hit FetchPostCommentsReactionsData in util function.jsx")
     const { data } = await axiosPrivate.get(`/posts/comments/reactions/data`, { 
       params: { 
         commentId,
@@ -41,7 +41,7 @@ const fetchPostCommentsReactionsData = async ({commentId, setPostReactions, setE
       } 
     });
 
-    setPostReactions(data);
+    setPostCommentReactions(data);
 
   } catch (err) {
     let errorMsg = "Failed to fetch post reactions.";

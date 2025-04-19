@@ -76,4 +76,14 @@ VALUES
 (2, 1, 'Thanks for sharing this perspective!');
 
 INSERT INTO posts_comments_reactions (comment_id, user_id, reaction_type)
-VALUES (1, 2, 'like');
+VALUES 
+(1, 2, 'cry'),
+(1, 1, 'like'),
+(2, 2, 'cry'),
+(2, 1, 'like'),
+(3, 2, 'cry'),
+(3, 1, 'like'),
+(4, 2, 'cry'),
+(4, 1, 'like'),
+(4, 3, 'laugh')
+;

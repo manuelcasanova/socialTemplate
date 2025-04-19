@@ -42,6 +42,7 @@ import Chat from './components/bodyComponents/messagingComponents/Chat';
 import Posts from './components/bodyComponents/postsComponents/Posts';
 import PostComments from './components/bodyComponents/postsComponents/PostComments';
 import PostReactions from './components/bodyComponents/postsComponents/PostReactions';
+import PostCommentReactions from './components/bodyComponents/postsComponents/PostCommentReactions';
 
 
 function App() {
@@ -131,6 +132,10 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route path="posts/reactions/:param" element={<PostReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="posts/comments/reactions/:param" element={<PostCommentReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
 
 

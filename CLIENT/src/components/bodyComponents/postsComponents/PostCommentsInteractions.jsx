@@ -2,6 +2,7 @@
 import { formatDate } from "./util_functions/formatDate"
 import { fetchPostCommentsReactionsCount } from "./util_functions/FetchPostCommentsReactions"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner"
@@ -13,7 +14,8 @@ import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan
 
 export default function PostCommentsInteractions({ commentId, commentDate, loggedInUserId }) {
 
-  const [reactionsCount, setReactionsCount] = useState()
+  const navigate = useNavigate();
+  const [reactionsCount, setReactionsCount] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -31,7 +33,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, logge
 
 
       <div className='post-interactions-top-left-reaction'
-        // onClick={() => navigate(`/posts/reactions/${postId}`)}
+        onClick={() => navigate(`/posts/comments/reactions/${commentId}`)}
         >
    
         <div className='post-interactions-text'>
