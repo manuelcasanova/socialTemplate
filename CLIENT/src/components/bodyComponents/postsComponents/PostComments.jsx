@@ -315,7 +315,6 @@ export default function PostComments({ isNavOpen }) {
 
           <div className="centered-container centered-container-post">
             {postComments.map((comment) => (
-            
               <>
                 <div className="post-comment-container" key={comment.id}>
                   <div className="post-comment-image">
@@ -339,7 +338,16 @@ export default function PostComments({ isNavOpen }) {
                 )}
                   </div>
                   <div className="post-comment-name-content">
-                    <div style={{ fontWeight: 'bold' }}>{comment.username}</div>
+                    <div 
+                    style={{ fontWeight: 'bold' }}
+                    onClick={() => {
+                      if (comment.commenter === loggedInUser) {
+                        navigate("/profile/myaccount");
+                      } else {
+                        navigate(`/social/users/${comment.commenter}`);
+                      }
+                    }}
+                    >{comment.username}</div>
                     <div>{comment.content}</div>
                   </div>
                 </div>

@@ -283,19 +283,19 @@ export default function Posts({ isNavOpen }) {
                     </div>
                     <div className="post-header-sender-and-date">
                       <div className="post-header-sender-and-visibility">
-                      <p
-  className="post-header-sender"
-  style={{ cursor: 'pointer' }}
-  onClick={() => {
-    if (post.sender === loggedInUser) {
-      navigate("/profile/myaccount");
-    } else {
-      navigate(`/social/users/${post.sender}`);
-    }
-  }}
->
-  <strong>{getUsernameById(post.sender)}</strong>
-</p>
+                        <p
+                          className="post-header-sender"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            if (post.sender === loggedInUser) {
+                              navigate("/profile/myaccount");
+                            } else {
+                              navigate(`/social/users/${post.sender}`);
+                            }
+                          }}
+                        >
+                          <strong>{getUsernameById(post.sender)}</strong>
+                        </p>
                         <FontAwesomeIcon
                           icon={getVisibilityIcon(post.visibility)}
                           title={getVisibilityTooltip(post.visibility)}
@@ -307,7 +307,7 @@ export default function Posts({ isNavOpen }) {
 
                   <p>{post.content}</p>
 
-                  <PostInteractions postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender}/>
+                  <PostInteractions postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} />
 
                   {loggedInUser === post.sender && (
                     <div className="post-actions">
