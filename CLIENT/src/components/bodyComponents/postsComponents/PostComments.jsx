@@ -251,7 +251,15 @@ export default function PostComments({ isNavOpen }) {
 
               </div>
               <div className="post-header-sender-and-date">
-                <div className="post-header-sender-and-visibility">
+                <div className="post-header-sender-and-visibility"
+                                    onClick={() => {
+                                      if (postSender === loggedInUser) {
+                                        navigate("/profile/myaccount");
+                                      } else {
+                                        navigate(`/social/users/${postSender}`);
+                                      }
+                                    }}
+                >
                   {/* {postSender} */}
                   {senderInfo ? senderInfo : <LoadingSpinner />}
                   <FontAwesomeIcon
