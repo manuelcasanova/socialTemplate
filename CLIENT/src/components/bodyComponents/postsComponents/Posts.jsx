@@ -69,7 +69,6 @@ export default function Posts({ isNavOpen }) {
   const [loadMore, setLoadMore] = useState(false)
   const [newPostSubmitted, setNewPostSubmitted] = useState(false);
 
-
   useEffect(() => {
     // If `loadMore` is true, scroll to the new batch of posts
     if (loadMore && firstNewPostRef.current) {
@@ -284,7 +283,19 @@ export default function Posts({ isNavOpen }) {
                     </div>
                     <div className="post-header-sender-and-date">
                       <div className="post-header-sender-and-visibility">
-                        <p className="post-header-sender"><strong>{getUsernameById(post.sender)}</strong></p>
+                      <p
+  className="post-header-sender"
+  style={{ cursor: 'pointer' }}
+  onClick={() => {
+    if (post.sender === loggedInUser) {
+      navigate("/profile/myaccount");
+    } else {
+      navigate(`/social/users/${post.sender}`);
+    }
+  }}
+>
+  <strong>{getUsernameById(post.sender)}</strong>
+</p>
                         <FontAwesomeIcon
                           icon={getVisibilityIcon(post.visibility)}
                           title={getVisibilityTooltip(post.visibility)}

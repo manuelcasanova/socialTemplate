@@ -35,6 +35,7 @@ import SocialFollowers from './components/bodyComponents/socialComponents/Social
 import SocialFollowee from './components/bodyComponents/socialComponents/SocialFollowee';
 import SocialMuted from './components/bodyComponents/socialComponents/SocialMuted';
 import SocialPendingRequests from './components/bodyComponents/socialComponents/SocialPendingRequests';
+import SocialOneUser from './components/bodyComponents/socialComponents/SocialOneUser';
 
 import UsersWithMessages from './components/bodyComponents/messagingComponents/UsersWithMessages'
 import Chat from './components/bodyComponents/messagingComponents/Chat';
@@ -116,6 +117,10 @@ function App() {
           </Route>
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+            <Route path="social/users/:userId" element={<SocialOneUser isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
