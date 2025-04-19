@@ -12,7 +12,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner"
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -92,6 +92,9 @@ export default function PostCommentsInteractions({ commentId, commentDate, logge
 
         {reactOption && (
           <div className="reaction-options-small">
+            <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
+              <FontAwesomeIcon icon={faBan} />
+            </div>
             <div onClick={() => handleReactionSelect('like')} title="Like">
               <FontAwesomeIcon icon={faThumbsUp} />
             </div>
@@ -106,9 +109,6 @@ export default function PostCommentsInteractions({ commentId, commentDate, logge
             </div>
             <div onClick={() => handleReactionSelect('smile')} title="Smile">
               <FontAwesomeIcon icon={faSmile} />
-            </div>
-            <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
-              <FontAwesomeIcon icon={faBan} />
             </div>
           </div>
 

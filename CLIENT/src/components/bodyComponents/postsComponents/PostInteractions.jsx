@@ -9,11 +9,13 @@ import { axiosPrivate } from '../../../api/axios';
 
 import '../../../css/PostsComments.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan, faEllipsisH, faFlag, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 // Components
 
 import PostComments from './PostComments';
+import PostDelete from './PostDelete';
+import FlagPost from './FlagPost';
 
 
 import { fetchPostReactionsCount } from './util_functions/FetchPostReactions';
@@ -21,7 +23,7 @@ import { fetchPostCommentsCount } from './util_functions/FetchPostComments';
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function PostInteractions({ postId, isNavOpen, postContent, postSender }) {
+export default function PostInteractions({ postId, isNavOpen, postContent, postSender, loggedInUser, setPosts }) {
 
   const { auth } = useAuth();
   const loggedInUserId = auth.userId
@@ -33,6 +35,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const [commentsCount, setCommentsCount] = useState();
   const [reactOption, setReactOption] = useState(false)
   const [selectedReaction, setSelectedReaction] = useState(null);
+  const [showEllipsisMenu, setShowEllipsisMenu] = useState(false);
   const errRef = useRef();
 
   const handleShowReactOptions = () => {
@@ -130,6 +133,9 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
             {reactOption && (
               <div className="reaction-options">
+                <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
+                  <FontAwesomeIcon icon={faBan} />
+                </div>
                 <div onClick={() => handleReactionSelect('like')} title="Like">
                   <FontAwesomeIcon icon={faThumbsUp} />
                 </div>
@@ -145,13 +151,31 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
                 <div onClick={() => handleReactionSelect('smile')} title="Smile">
                   <FontAwesomeIcon icon={faSmile} />
                 </div>
-                <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
-                  <FontAwesomeIcon icon={faBan} />
-                </div>
               </div>
 
             )}
           </div>
+
+          <div className='post-interactions-bottom-left-reaction'>
+            {!showEllipsisMenu && (
+              <FontAwesomeIcon icon={faEllipsisH}
+                onClick={() => setShowEllipsisMenu(prev => !prev)}
+              />
+            )}
+            {showEllipsisMenu && (
+              <div className="post-menu-dropdown">
+                <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
+                <FlagPost />
+                <FontAwesomeIcon icon={faXmark}
+                  onClick={() => setShowEllipsisMenu(prev => !prev)}
+                />
+              </div>
+            )}
+
+          </div>
+
+
+
         </div>
       </div>
     </>

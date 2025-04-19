@@ -16,6 +16,7 @@ import Error from "../Error";
 import FilterUsername from "../socialComponents/FilterUsername";
 import WritePost from "./WritePost";
 import PostInteractions from "./PostInteractions";
+import PostDelete from "./PostDelete";
 
 //Util functions
 import { fetchPosts } from "./util_functions/FetchPosts";
@@ -56,8 +57,6 @@ export default function Posts({ isNavOpen }) {
   const [filterUsername, setFilterUsername] = useState("");
   const inputRef = useRef(null);
 
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  const [postIdToDelete, setPostIdToDelete] = useState(null);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
   const [page, setPage] = useState(1); // Track the current page
@@ -80,7 +79,6 @@ export default function Posts({ isNavOpen }) {
     }
   }, [loadMore, posts]);
 
-
   useEffect(() => {
     fetchPosts(filters, setPosts, setIsLoading, setError, filterUsername, loggedInUser, page, limit);
   }, [page]);
@@ -89,7 +87,6 @@ export default function Posts({ isNavOpen }) {
     setPage(prevPage => prevPage + 1);
     setLoadMore(true)
   };
-
 
   useEffect(() => {
     // Reset error when filters change
@@ -130,23 +127,6 @@ export default function Posts({ isNavOpen }) {
       checkImages();
     }
   }, [users]);
-
-  const handlePostDelete = (postId) => {
-    // Function to delete a post (soft delete)
-    const deletePost = async () => {
-      try {
-        await axiosPrivate.put(`/posts/delete/${postId}`, { loggedInUser });
-        // Remove deleted post from the UI
-        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-        setPostIdToDelete(null); // Reset the deletion confirmation state
-      } catch (err) {
-        console.error("Error deleting post:", err);
-        setError("Failed to delete post.");
-      }
-    };
-
-    deletePost();
-  };
 
   const getUsernameById = (userId) => {
     const user = users.find(user => user.user_id === userId);
@@ -307,42 +287,8 @@ export default function Posts({ isNavOpen }) {
 
                   <p>{post.content}</p>
 
-                  <PostInteractions postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} />
+                  <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser}/>
 
-                  {loggedInUser === post.sender && (
-                    <div className="post-actions">
-                      {postIdToDelete === post.id && (
-                        <div className="confirm-delete-chat">
-                          <p
-                            className="button-red"
-                            onClick={() => {
-                              handlePostDelete(post.id);
-                            }}
-                          >
-                            Confirm delete
-                          </p>
-                          <p
-                            className="button-white"
-                            style={{ color: "black" }}
-                            onClick={() => setPostIdToDelete(null)} // Close confirmation modal
-                          >
-                            Cancel
-                          </p>
-                        </div>
-                      )}
-
-                      {postIdToDelete !== post.id && (
-                        <button
-                          onClick={() => setPostIdToDelete(post.id)} // Show confirmation modal for this post
-                          title="Delete Post"
-                        >
-                          <FontAwesomeIcon icon={faTrashAlt} />
-                        </button>
-                      )}
-
-                    </div>
-
-                  )}
                 </div>
               </div>
             ))}
