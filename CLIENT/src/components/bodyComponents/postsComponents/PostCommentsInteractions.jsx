@@ -91,7 +91,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, logge
         )}
 
         {reactOption && (
-          <div className="reaction-options">
+          <div className="reaction-options-small">
             <div onClick={() => handleReactionSelect('like')} title="Like">
               <FontAwesomeIcon icon={faThumbsUp} />
             </div>

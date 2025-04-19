@@ -180,13 +180,13 @@ export default function UsersWithMessages({ isNavOpen }) {
                     <img
                       className='users-all-picture-large'
                       onClick={() => setShowLargePicture(null)}
-                      src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                       onError={(e) => {
                         // Prevent infinite loop in case of repeated errors
                         e.target.onerror = null;
 
                         // Check if the fallback image has already been set to avoid infinite loop
-                        if (e.target.src !== `${BACKEND}/media/profile_pictures/user.png`) {
+                        if (e.target.src !== `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`) {
                           // Fall back to the default user image if the profile picture fails
                           e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
                         }

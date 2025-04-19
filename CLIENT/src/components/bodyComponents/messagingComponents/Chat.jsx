@@ -220,7 +220,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
               <img
 
                 className="users-all-picture-large"
-                src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
                 alt="Large Profile"
                 onError={(e) => {
                   e.target.onerror = null;
