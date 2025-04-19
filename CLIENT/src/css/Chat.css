@@ -127,6 +127,7 @@ margin-left: 90%;
   overflow: hidden;
   /* Prevent any overflow from text */
   color: var(--color0);
+  margin-left: 5px;
 }
 
 .chat-one-user-info {

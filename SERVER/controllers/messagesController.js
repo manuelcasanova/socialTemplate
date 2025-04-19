@@ -48,7 +48,6 @@ const sendMessage = async (req, res, next) => {
   const sender = req.body.loggedInUser;
 const receiver = Number(req.body.userId);
 const newMessage = req.body.newMessage;
-const now = new Date();
 
   try {
 
@@ -59,7 +58,7 @@ const now = new Date();
       VALUES ($1, $2, $3, $4)
       RETURNING *
       `,
-        [newMessage, receiver, sender, now()]
+        [newMessage, receiver, sender, new Date()]
       );
       res.json(addMessage.rows[0])
     } else {

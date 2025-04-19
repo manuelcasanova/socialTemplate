@@ -181,7 +181,16 @@ export default function PostReactions({ isNavOpen }) {
                       {reaction.reaction_type === "angry" && <FontAwesomeIcon icon={faFaceAngry} />}
                     </div>
 
-                    <div style={{ fontWeight: 'bold' }}>{reaction.username}</div>
+                    <div 
+                    style={{ fontWeight: 'bold' }}
+                     onClick={() => {
+                      if (reaction.user_id === loggedInUser) {
+                        navigate("/profile/myaccount");
+                      } else {
+                        navigate(`/social/users/${reaction.user_id}`);
+                      }
+                    }}
+                    >{reaction.username}</div>
 
 
                   </div>

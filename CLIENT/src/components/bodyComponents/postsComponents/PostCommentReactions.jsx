@@ -152,7 +152,7 @@ export default function PostCommentReactions({ isNavOpen }) {
             ) : (
 
               postCommentReactions.map((reaction) => (
-                <>
+                <div key={reaction.id}>
                   <div className="row-reaction" key={reaction.id}>
                     {imageExistsMap[reaction.user_id] ? (
                       <img
@@ -181,11 +181,19 @@ export default function PostCommentReactions({ isNavOpen }) {
                       {reaction.reaction_type === "angry" && <FontAwesomeIcon icon={faFaceAngry} />}
                     </div>
 
-                    <div style={{ fontWeight: 'bold' }}>{reaction.username}</div>
+                    <div style={{ fontWeight: 'bold' }}
+                     onClick={() => {
+                      if (reaction.user_id === loggedInUser) {
+                        navigate("/profile/myaccount");
+                      } else {
+                        navigate(`/social/users/${reaction.user_id}`);
+                      }
+                    }}
+                    >{reaction.username}</div>
 
 
                   </div>
-                </>
+                </div>
               ))
             )}
           </div>

@@ -59,12 +59,13 @@ VALUES
 (12, 1, 1),
 (13, 1, 1);
 
-
+/*
 INSERT INTO posts (sender, content, date, visibility, is_deleted)
 VALUES
   (1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu malesuada nisi. Morbi et magna sem. Donec est augue, sodales.', CURRENT_TIMESTAMP - INTERVAL '25 hours', 'public', false),
   (2, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu malesuada nisi. Morbi et magna sem. Donec est augue, sodales.', CURRENT_TIMESTAMP - INTERVAL '2 hours', 'public', false);
   ;
+  
   
 -- Reactions for post ID 1
 INSERT INTO posts_reactions (post_id, user_id, reaction_type, date)
@@ -149,3 +150,4 @@ VALUES
 (4, 11, 'like', '2025-05-20 20:15:00+00'),
 (4, 12, 'smile', '2025-05-21 21:30:00+00'),
 (4, 13, 'cry', '2025-05-22 22:00:00+00');
+*/

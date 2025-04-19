@@ -315,7 +315,7 @@ export default function PostComments({ isNavOpen }) {
 
           <div className="centered-container centered-container-post">
             {postComments.map((comment) => (
-              <>
+              < div key={comment.id}>
                 <div className="post-comment-container" key={comment.id}>
                   <div className="post-comment-image">
                   {imageExistsMap[comment.commenter] ? (
@@ -355,7 +355,7 @@ export default function PostComments({ isNavOpen }) {
                 <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} loggedInUserId={loggedInUserId} />
 
 
-              </>
+              </div>
             ))
 
             }
