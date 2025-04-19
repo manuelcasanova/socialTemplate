@@ -13,8 +13,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import FollowUserButton from "./socialButtons/FollowUserButton";
+import MuteUserButton from "./socialButtons/MuteUserButton"
 import Error from "../Error";
-import FilterUsername from "./FilterUsername";
+
 
 //Util functions
 import fetchUsers from "./util_functions/FetchUsers";
@@ -47,12 +48,22 @@ export default function SocialOneUser({ isNavOpen }) {
   const loggedInUser = auth.userId;
   const [user, setUser] = useState(null); // Store the specific user
   const [mutedUsers, setMutedUsers] = useState([]);
+  const [hasMutedChanges, setHasMutedChanges] = useState(false)
   const [followersAndFollowee, setFollowersAndFollowee] = useState([]);
   const [filterUsername, setFilterUsername] = useState("");
   const inputRef = useRef(null);
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
 
+  useEffect(() => {
+    if (hasMutedChanges) {
+      navigate(-1); // Navigate back to previous page
+    }
+  }, [hasMutedChanges, navigate]);
+
+  const handleMutedChanges = () => {
+    setHasMutedChanges(prevState => !prevState);
+  };
 
   useEffect(() => {
     // Focus the input field after the component mounts
@@ -93,7 +104,7 @@ export default function SocialOneUser({ isNavOpen }) {
       }));
       setMutedUsers(cleaned);
     }, setIsLoading, setError, loggedInUser);
-    
+
   }, [filters, loggedInUser]);
 
 
@@ -194,6 +205,18 @@ export default function SocialOneUser({ isNavOpen }) {
                   followersAndFollowee={followersAndFollowee}
                   setFollowersAndFollowee={setFollowersAndFollowee}
                   userLoggedInObject={auth}
+                />
+
+
+                <MuteUserButton 
+                userId={user.user_id} 
+                userLoggedin={loggedInUser} 
+                onMutedChange={handleMutedChanges} 
+                setMutedUsers={setMutedUsers}
+                  isMuted={mutedUsers.some(mute =>
+                    (mute.muter === user.user_id && mute.mutee === loggedInUser) ||
+                    (mute.muter === loggedInUser && mute.mutee === user.user_id)
+                  )}
                 />
               </div>
             )}

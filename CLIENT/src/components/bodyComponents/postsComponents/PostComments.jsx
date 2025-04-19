@@ -183,11 +183,11 @@ export default function PostComments({ isNavOpen }) {
         return "Public post";
     }
   };
-  
+
   useEffect(() => {
     const checkCommenterImages = async () => {
       const newMap = { ...imageExistsMap };
-  
+
       for (const comment of postComments) {
         const commenterId = comment.commenter;
         if (newMap[commenterId] === undefined) {
@@ -195,10 +195,10 @@ export default function PostComments({ isNavOpen }) {
           newMap[commenterId] = exists;
         }
       }
-  
+
       setImageExistsMap(newMap);
     };
-  
+
     if (postComments.length > 0) {
       checkCommenterImages();
     }
@@ -252,13 +252,13 @@ export default function PostComments({ isNavOpen }) {
               </div>
               <div className="post-header-sender-and-date">
                 <div className="post-header-sender-and-visibility"
-                                    onClick={() => {
-                                      if (postSender === loggedInUser) {
-                                        navigate("/profile/myaccount");
-                                      } else {
-                                        navigate(`/social/users/${postSender}`);
-                                      }
-                                    }}
+                  onClick={() => {
+                    if (postSender === loggedInUser) {
+                      navigate("/profile/myaccount");
+                    } else {
+                      navigate(`/social/users/${postSender}`);
+                    }
+                  }}
                 >
                   {/* {postSender} */}
                   {senderInfo ? senderInfo : <LoadingSpinner />}
@@ -326,35 +326,35 @@ export default function PostComments({ isNavOpen }) {
               < div key={comment.id}>
                 <div className="post-comment-container" key={comment.id}>
                   <div className="post-comment-image">
-                  {imageExistsMap[comment.commenter] ? (
-                  <img
-                    className="user-row-social-small-img"
-                    style={{ marginRight: "0px" }}
-                    src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg`}
-                    alt="User"
-                    onClick={() => handleImageClick(comment.commenter)}
-                  />
-          
-                ) : (
-                  <img
-                    className="user-row-social-small-img"
-                    style={{ marginRight: "0px" }}
-                    src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                    alt="User"
-                    onClick={() => handleImageClick(comment.commenter)}
-                  />
-                )}
+                    {imageExistsMap[comment.commenter] ? (
+                      <img
+                        className="user-row-social-small-img"
+                        style={{ marginRight: "0px" }}
+                        src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg`}
+                        alt="User"
+                        onClick={() => handleImageClick(comment.commenter)}
+                      />
+
+                    ) : (
+                      <img
+                        className="user-row-social-small-img"
+                        style={{ marginRight: "0px" }}
+                        src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                        alt="User"
+                        onClick={() => handleImageClick(comment.commenter)}
+                      />
+                    )}
                   </div>
                   <div className="post-comment-name-content">
-                    <div 
-                    style={{ fontWeight: 'bold' }}
-                    onClick={() => {
-                      if (comment.commenter === loggedInUser) {
-                        navigate("/profile/myaccount");
-                      } else {
-                        navigate(`/social/users/${comment.commenter}`);
-                      }
-                    }}
+                    <div
+                      style={{ fontWeight: 'bold' }}
+                      onClick={() => {
+                        if (comment.commenter === loggedInUser) {
+                          navigate("/profile/myaccount");
+                        } else {
+                          navigate(`/social/users/${comment.commenter}`);
+                        }
+                      }}
                     >{comment.username}</div>
                     <div>{comment.content}</div>
                   </div>
