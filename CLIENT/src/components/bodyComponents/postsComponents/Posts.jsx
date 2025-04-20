@@ -320,7 +320,7 @@ export default function Posts({ isNavOpen }) {
                         You can still see it by clicking here, but discretion is advised.
                       </p>
                       <button
-                      className="button-white button-smaller"
+                      className="button-white white button-smaller"
                       onClick={() => {
                         const updatedFlaggedPosts = new Set(flaggedPosts);
                         updatedFlaggedPosts.delete(post.id);  // Remove the post from the Set
