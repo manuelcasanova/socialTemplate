@@ -1,6 +1,8 @@
 import { axiosPrivate } from "../../../api/axios"
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
+
 
 //Util functions
 
@@ -11,6 +13,7 @@ export default function ModeratorPostsHistory({ isNavOpen }) {
 
   const auth = useAuth;
   const loggedInUser = auth.userId;
+  const navigate = useNavigate()
   const [reports, setReports] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null);
@@ -76,7 +79,10 @@ export default function ModeratorPostsHistory({ isNavOpen }) {
               <tbody>
                 {reports.map((log) => (
                   <tr key={log.id}>
-                    <td>{log.report_id}</td>
+                    <td
+                    style={{cursor:'pointer'}}
+                    onClick={() => navigate(`/posts/${log.report_id}`)}
+                    >{log.report_id}</td>
                     <td>
                       {users[log.changed_by]
                         ? `${users[log.changed_by]} (UserId: ${log.changed_by})`
