@@ -118,9 +118,43 @@ const getPostReportHistory = async (req, res, next) => {
   }
 };
 
+const getPostReport = async (req, res, next) => {
+  try {
+    // Query to fetch report history with post content and sender
+    const query = `
+      SELECT 
+        pr.id AS report_id,
+        pr.post_id,
+        pr.reported_by,
+        pr.reported_at,
+        pr.status,
+        pr.reason,
+        p.sender,
+        p.content
+      FROM post_reports pr
+      JOIN posts p ON pr.post_id = p.id
+      ORDER BY pr.reported_at DESC;
+    `;
+
+    // Execute the query
+    const { rows } = await pool.query(query);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No report history found.' });
+    }
+
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching post report history:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
 module.exports = {
   reportPost,
   hasReported,
-  getPostReportHistory
+  getPostReportHistory,
+  getPostReport
 };

@@ -3,9 +3,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
-export default function ModeratorPostsHistory({ isNavOpen }) {
+// Styling
 
-  const auth = useAuth;
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faBan } from "@fortawesome/free-solid-svg-icons";
+
+export default function ModeratorPosts({ isNavOpen }) {
+
+  const { auth } = useAuth();
   const loggedInUser = auth.userId;
   const navigate = useNavigate()
   const [reports, setReports] = useState([]);
@@ -14,21 +19,23 @@ export default function ModeratorPostsHistory({ isNavOpen }) {
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    const fetchReportHistory = async () => {
+    const fetchReports = async () => {
       try {
-        const response = await axiosPrivate.get('/reports/post-report-history');
+        const response = await axiosPrivate.get('/reports/post-report');
         const reportData = response.data;
+        // console.log("reportData", reportData)
         setReports(reportData);
 
-        const userIds = [...new Set(reportData.map(report => report.changed_by))];
+        const userIds = [...new Set(reportData.map(report => report.reported_by))];
 
+        // console.log("userIds", userIds)
         const userResponses = await Promise.all(
           userIds.map(id => axiosPrivate.get(`/users/${id}`))
         );
 
         const usersMap = {};
         userResponses.forEach(res => {
-          const user = res.data; // 🔥 Access the actual user data
+          const user = res.data; 
           usersMap[user.user_id] = user.username;
         });
 
@@ -39,13 +46,13 @@ export default function ModeratorPostsHistory({ isNavOpen }) {
       }
     };
 
-    fetchReportHistory();
+    fetchReports();
   }, []);
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Post report history</h2>
+        <h2>Reports Awaiting Assessment</h2>
         {error && error !== "No post report history found" && (
           <p className="error-message">{error}</p>
         )}
@@ -58,10 +65,13 @@ export default function ModeratorPostsHistory({ isNavOpen }) {
                 <tr>
 
                   <th>Post Id</th>
+                  <th>Post Content</th>
                   <th>Status</th>
                   <th>Note</th>
-                  <th>Performed by</th>
-                  <th>Performed at</th>
+                  <th>Reported by</th>
+                  <th>Reported at</th>
+                  <th>Ok</th>
+                  <th>Hide</th>
                 </tr>
               </thead>
               <tbody>
@@ -71,14 +81,26 @@ export default function ModeratorPostsHistory({ isNavOpen }) {
                       style={{ cursor: 'pointer' }}
                       onClick={() => navigate(`/posts/${log.report_id}`)}
                     >{log.report_id}</td>
-                    <td>{log.new_status}</td>
-                    <td>{log.note}</td>
-                    <td>
-                      {users[log.changed_by]
-                        ? `${users[log.changed_by]} (UserId: ${log.changed_by})`
-                        : `UserId: ${log.changed_by}`}
+                    <td>{log.content}</td>
+                    <td>{log.status}</td>
+                    <td>{log.reason}</td>
+                    <td 
+                    style={{cursor: 'pointer'}}
+                    onClick={() => {
+                      if (log.reported_by === loggedInUser) {
+                        navigate("/profile/myaccount");
+                      } else {
+                        navigate(`/social/users/${log.reported_by}`);
+                      }
+                    }}
+                    >
+                      {users[log.reported_by]
+                        ? `${users[log.reported_by]} (UserId: ${log.reported_by})`
+                        : `UserId: ${log.reported_by}`}
                     </td>
-                    <td>{new Date(log.changed_at).toLocaleString('en-GB')}</td>
+                    <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
+                    <td><FontAwesomeIcon title='Approve Comment' style={{color: 'green', cursor: 'pointer'}} icon={faCircleCheck} /></td>
+                    <td><FontAwesomeIcon title='Hide Comment' style={{color: 'red', cursor: 'pointer'}} icon={faBan} /></td>
 
                   </tr>
                 ))}

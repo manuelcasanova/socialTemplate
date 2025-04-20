@@ -114,10 +114,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
 
   return (
-
-
     <div className={`navbar ${isNavOpen ? 'navbar-open' : ''}`} data-testid="navbar">
-
 
       {isLargeScreen && (
         <Logo handleNavigate={handleNavigate} />
@@ -129,13 +126,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
-
-
       <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
 
-
       {auth.roles && auth.roles.includes('Moderator') &&
-
         <div className='nav-item-with-dropdown'>
           <div className='nav-item' onClick={() => toggleSection('moderator')}>Moderator
             {showSections.moderator ? '▲' : '▼'
@@ -152,16 +145,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               <div className="subitem" onClick={() => handleNavigate('/moderator/comments')}>
                 Moderate posts' comments
               </div>
-
             </>
           )}
-
         </div>
-
-
-
-
-
       }
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
 
@@ -231,7 +217,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
                   Login history
                 </div>
               )}
-                            {auth.roles && auth.roles.includes('SuperAdmin') && (
+              {auth.roles && auth.roles.includes('SuperAdmin') && (
                 <div className="subitem" onClick={() => handleNavigate('/moderator/posts/history')}>
                   Moderation History
                 </div>
