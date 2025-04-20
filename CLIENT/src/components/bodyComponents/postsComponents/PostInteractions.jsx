@@ -165,7 +165,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             {showEllipsisMenu && (
               <div className="post-menu-dropdown">
                 <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
-                <FlagPost />
+                <FlagPost postId={postId} loggedInUserId={loggedInUserId}/>
                 <FontAwesomeIcon icon={faXmark}
                   onClick={() => setShowEllipsisMenu(prev => !prev)}
                 />

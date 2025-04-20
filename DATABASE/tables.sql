@@ -1,18 +1,20 @@
+DROP TABLE IF EXISTS roles CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS followers CASCADE;
+DROP TABLE IF EXISTS muted CASCADE;
+DROP TABLE IF EXISTS login_history CASCADE;
+DROP TABLE IF EXISTS user_roles CASCADE;
+DROP TABLE IF EXISTS role_change_logs CASCADE;
+DROP TABLE IF EXISTS subscriptions CASCADE;
+DROP TABLE IF EXISTS user_messages CASCADE;
+
+DROP TABLE IF EXISTS posts CASCADE;
 DROP TABLE IF EXISTS posts_reactions CASCADE;
 DROP TABLE IF EXISTS posts_comments CASCADE;
-DROP TABLE IF EXISTS posts CASCADE;
-DROP TABLE IF EXISTS user_messages CASCADE;
-DROP TABLE IF EXISTS subscriptions CASCADE;
-DROP TABLE IF EXISTS role_change_logs CASCADE;
-DROP TABLE IF EXISTS user_roles CASCADE;
-DROP TABLE IF EXISTS login_history CASCADE;
-DROP TABLE IF EXISTS muted CASCADE;
-DROP TABLE IF EXISTS followers CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS posts_comments_reactions;
 
-
+DROP TABLE IF EXISTS post_reports CASCADE;
+DROP TABLE IF EXISTS post_report_history CASCADE;
 
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
@@ -130,4 +132,23 @@ CREATE TABLE posts_comments_reactions (
     reaction_type VARCHAR(20) NOT NULL,  -- e.g. 'like', 'laugh', 'angry', etc.
     date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (comment_id, user_id)
+);
+
+CREATE TABLE post_reports (
+    id SERIAL PRIMARY KEY,
+    post_id INTEGER UNIQUE REFERENCES posts(id) ON DELETE CASCADE,
+    reported_by INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    reported_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'Reported' CHECK (status IN ('Reported', 'Inappropriate', 'Ok')),
+    reason TEXT
+);
+
+
+CREATE TABLE post_report_history (
+    id SERIAL PRIMARY KEY,
+    report_id INTEGER REFERENCES post_reports(id) ON DELETE CASCADE,
+    changed_by INTEGER REFERENCES users(user_id) ON DELETE SET NULL,
+    changed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    new_status VARCHAR(20) CHECK (new_status IN ('Reported', 'Inappropriate', 'Ok')),
+    note TEXT
 );
