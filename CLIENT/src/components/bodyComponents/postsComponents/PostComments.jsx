@@ -37,6 +37,7 @@ export default function PostComments({ isNavOpen }) {
   const [post, setPost] = useState();
   const [senderInfo, setSenderInfo] = useState(null);
   const [postComments, setPostComments] = useState([]);
+  const [isFlagged, setIsFlagged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [imageExistsMap, setImageExistsMap] = useState({});
@@ -157,6 +158,30 @@ export default function PostComments({ isNavOpen }) {
     setShowLargePicture(userId);
   };
 
+  useEffect(() => {
+    const checkIfPostIsFlagged = async () => {
+      try {
+        const res = await axiosPrivate.get("/reports/has-reported", {
+          params: {
+            post_id: postId,
+            user_id: loggedInUserId,
+          },
+        });
+
+        if (res.data?.hasReported) {
+          setIsFlagged(true);
+        }
+      } catch (err) {
+        console.error("Error checking report status:", err);
+      }
+    };
+
+    if (postId && loggedInUserId) {
+      checkIfPostIsFlagged();
+    }
+  }, [postId, loggedInUserId, axiosPrivate]);
+
+
   const getVisibilityIcon = (visibility) => {
     switch (visibility) {
       case "public":
@@ -211,6 +236,7 @@ export default function PostComments({ isNavOpen }) {
   if (error) {
     return <Error isNavOpen={isNavOpen} error={error} />;
   }
+
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
@@ -275,7 +301,23 @@ export default function PostComments({ isNavOpen }) {
 
 
             </div>
-            <p>{postContent}</p>
+            {isFlagged ? (
+              <div>
+                <p style={{ fontStyle: 'italic' }}>
+                  This post has been reported as inappropriate and is pending review by a moderator.
+                  You can still see it by clicking below, but discretion is advised.
+                </p>
+                <button
+                  className="button-white white button-smaller"
+                  onClick={() => setIsFlagged(false)}
+                >
+                  Click to view
+                </button>
+              </div>
+            ) : (
+              <p>{postContent}</p>
+            )}
+
 
           </div>
 
