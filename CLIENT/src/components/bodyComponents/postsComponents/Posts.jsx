@@ -45,6 +45,7 @@ export default function Posts({ isNavOpen }) {
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({});
   const [posts, setPosts] = useState([]);
+  const [flaggedPosts, setFlaggedPosts] = useState(new Set());
   const [users, setUsers] = useState([])
   const [showMyPosts, setShowMyPosts] = useState(false);
 
@@ -67,6 +68,33 @@ export default function Posts({ isNavOpen }) {
   const topPostRef = useRef(null);
   const [loadMore, setLoadMore] = useState(false)
   const [newPostSubmitted, setNewPostSubmitted] = useState(false);
+
+  useEffect(() => {
+    const checkReports = async () => {
+      try {
+        const reportedPosts = new Set();
+
+        for (const post of posts) {
+          const res = await axiosPrivate.get("/reports/has-reported", {
+            params: {
+              post_id: post.id,
+              user_id: loggedInUser,
+            },
+          });
+
+          if (res.data?.hasReported) {
+            reportedPosts.add(post.id);
+          }
+        }
+
+        setFlaggedPosts(reportedPosts);
+      } catch (err) {
+        console.error("Error checking report status:", err);
+      }
+    };
+
+    checkReports();
+  }, [posts, loggedInUser]);
 
   useEffect(() => {
     // If `loadMore` is true, scroll to the new batch of posts
@@ -285,9 +313,27 @@ export default function Posts({ isNavOpen }) {
                     </div>
                   </div>
 
-                  <p>{post.content}</p>
+                  {flaggedPosts.has(post.id) ? (
+                    <div>
+                      <p style={{fontStyle: 'italic'}}> 
+                        This post has been reported as inappropriate and is pending review by a moderator.
+                        You can still see it by clicking here, but discretion is advised.
+                      </p>
+                      <button
+                      className="button-white button-smaller"
+                      onClick={() => {
+                        const updatedFlaggedPosts = new Set(flaggedPosts);
+                        updatedFlaggedPosts.delete(post.id);  // Remove the post from the Set
+                        setFlaggedPosts(updatedFlaggedPosts);  // Set the updated Set as the new state
+                      }}>
+                        Click to view
+                      </button>
+                    </div>
+                  ) : (
+                    <p>{post.content}</p>
+                  )}
 
-                  <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser}/>
+                  <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} />
 
                 </div>
               </div>

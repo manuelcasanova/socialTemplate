@@ -1,9 +1,35 @@
 const pool = require('../config/db');
 
+//Check if a post has been reported
+const hasReported = async (req, res, next) => {
+  try {
+    const { post_id, user_id } = req.query;
+
+    if (!post_id || !user_id) {
+      return res.status(400).json({ error: 'post_id and user_id are required as query parameters.' });
+    }
+
+    const checkQuery = `
+      SELECT 1 FROM post_reports
+      WHERE post_id = $1 AND reported_by = $2
+      LIMIT 1;
+    `;
+    const values = [post_id, user_id];
+    const { rows } = await pool.query(checkQuery, values);
+
+    const hasReported = rows.length > 0;
+
+    return res.status(200).json({ hasReported });
+  } catch (error) {
+    console.error('Error checking if post has been reported:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Report a post
 const reportPost = async (req, res, next) => {
   try {
-    console.log("reportPost in reportsController");
+    // console.log("reportPost in reportsController");
 
     const { post_id, reported_by, reason } = req.body;
 
@@ -67,5 +93,6 @@ const reportPost = async (req, res, next) => {
 };
 
 module.exports = {
-  reportPost
+  reportPost,
+  hasReported
 };

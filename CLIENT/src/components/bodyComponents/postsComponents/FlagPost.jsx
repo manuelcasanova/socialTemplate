@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { axiosPrivate } from "../../../api/axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,27 @@ export default function FlagPost({postId, loggedInUserId}) {
 
   const [flagged, setFlagged] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const checkIfReported = async () => {
+      try {
+        const res = await axiosPrivate.get("/reports/has-reported", {
+          params: {
+            post_id: postId,
+            user_id: loggedInUserId
+          }
+        });
+
+        if (res.data?.hasReported) {
+          setFlagged(true);
+        }
+      } catch (err) {
+        console.error("Error checking report status:", err);
+      }
+    };
+
+    checkIfReported();
+  }, [postId, loggedInUserId]);
 
   const handleFlag = async () => {
     try {
@@ -34,7 +55,7 @@ export default function FlagPost({postId, loggedInUserId}) {
         style={{ color: flagged ? "red" : "inherit" }}
       >
         <FontAwesomeIcon icon={faFlag} />
-        {flagged && <span style={{ marginLeft: "5px" }}>Reported. Pending review</span>}
+        {flagged && <span style={{ marginLeft: "5px", cursor: 'default' }}>Reported. Pending review</span>}
       </button>
       {error && <p className="error">{error}</p>}
     </div>
