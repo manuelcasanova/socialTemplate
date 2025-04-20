@@ -8,6 +8,11 @@ import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faBan } from "@fortawesome/free-solid-svg-icons";
 
+//Components
+
+import ModeratorHideReportedPost from "./ModeratorHideReportedPost";
+import ModeratorOkReportedPost from "./ModeratorOkReportedPost";
+
 export default function ModeratorPosts({ isNavOpen }) {
 
   const { auth } = useAuth();
@@ -18,34 +23,36 @@ export default function ModeratorPosts({ isNavOpen }) {
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([])
 
+
+  const fetchReports = async () => {
+    try {
+      const response = await axiosPrivate.get('/reports/post-report');
+      const reportData = response.data;
+      // console.log("reportData", reportData)
+      setReports(reportData);
+
+      const userIds = [...new Set(reportData.map(report => report.reported_by))];
+
+      // console.log("userIds", userIds)
+      const userResponses = await Promise.all(
+        userIds.map(id => axiosPrivate.get(`/users/${id}`))
+      );
+
+      const usersMap = {};
+      userResponses.forEach(res => {
+        const user = res.data;
+        usersMap[user.user_id] = user.username;
+      });
+
+      setUsers(usersMap);
+    } catch (err) {
+      setError('No post report history found');
+      console.error(err);
+    }
+  };
+
+
   useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const response = await axiosPrivate.get('/reports/post-report');
-        const reportData = response.data;
-        // console.log("reportData", reportData)
-        setReports(reportData);
-
-        const userIds = [...new Set(reportData.map(report => report.reported_by))];
-
-        // console.log("userIds", userIds)
-        const userResponses = await Promise.all(
-          userIds.map(id => axiosPrivate.get(`/users/${id}`))
-        );
-
-        const usersMap = {};
-        userResponses.forEach(res => {
-          const user = res.data; 
-          usersMap[user.user_id] = user.username;
-        });
-
-        setUsers(usersMap);
-      } catch (err) {
-        setError('No post report history found');
-        console.error(err);
-      }
-    };
-
     fetchReports();
   }, []);
 
@@ -57,13 +64,11 @@ export default function ModeratorPosts({ isNavOpen }) {
           <p className="error-message">{error}</p>
         )}
 
-
         {reports.length > 0 ? (
           <div className="table-wrapper">
             <table>
               <thead>
                 <tr>
-
                   <th>Post Id</th>
                   <th>Post Content</th>
                   <th>Status</th>
@@ -76,32 +81,31 @@ export default function ModeratorPosts({ isNavOpen }) {
               </thead>
               <tbody>
                 {reports.map((log) => (
-                  <tr key={log.id}>
+                  <tr key={`${log.report_id}-${log.reported_by}`}>
                     <td
                       style={{ cursor: 'pointer' }}
-                      onClick={() => navigate(`/posts/${log.report_id}`)}
-                    >{log.report_id}</td>
+                      onClick={() => navigate(`/posts/${log.post_id}`)}
+                    >{log.post_id}</td>
                     <td>{log.content}</td>
                     <td>{log.status}</td>
                     <td>{log.reason}</td>
-                    <td 
-                    style={{cursor: 'pointer'}}
-                    onClick={() => {
-                      if (log.reported_by === loggedInUser) {
-                        navigate("/profile/myaccount");
-                      } else {
-                        navigate(`/social/users/${log.reported_by}`);
-                      }
-                    }}
+                    <td
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        if (log.reported_by === loggedInUser) {
+                          navigate("/profile/myaccount");
+                        } else {
+                          navigate(`/social/users/${log.reported_by}`);
+                        }
+                      }}
                     >
                       {users[log.reported_by]
                         ? `${users[log.reported_by]} (UserId: ${log.reported_by})`
                         : `UserId: ${log.reported_by}`}
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
-                    <td><FontAwesomeIcon title='Approve Comment' style={{color: 'green', cursor: 'pointer'}} icon={faCircleCheck} /></td>
-                    <td><FontAwesomeIcon title='Hide Comment' style={{color: 'red', cursor: 'pointer'}} icon={faBan} /></td>
-
+                    <ModeratorOkReportedPost postId={log.post_id} refreshData={fetchReports} setReports={setReports} />
+                    <ModeratorHideReportedPost postId={log.post_id} />
                   </tr>
                 ))}
               </tbody>

@@ -133,15 +133,17 @@ const getPostReport = async (req, res, next) => {
         p.content
       FROM post_reports pr
       JOIN posts p ON pr.post_id = p.id
+      WHERE pr.status = 'Reported'
       ORDER BY pr.reported_at DESC;
     `;
 
     // Execute the query
     const { rows } = await pool.query(query);
-
+  
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'No report history found.' });
+      return res.status(200).json([]); 
     }
+
 
     return res.status(200).json(rows);
   } catch (error) {
@@ -150,11 +152,70 @@ const getPostReport = async (req, res, next) => {
   }
 };
 
+// Report a post (corrected pool.query usage)
+const reportPostOk = async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    // Update the status in post_reports
+    const result = await pool.query(
+      `UPDATE post_reports
+       SET status = $1
+       WHERE post_id = $2
+       RETURNING id;`,
+      ['Ok', postId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'No report found for this post ID' });
+    }
+
+    const reportId = result.rows[0].id;
+
+    res.status(200).json({ message: 'Report status updated', reportId });
+  } catch (err) {
+    console.error('Error updating report:', err);
+    res.status(500).json({ error: 'Server error updating report' });
+  }
+};
+
+// Add report history (corrected pool.query usage)
+const addReportHistory = async (req, res) => {
+  const { postId, changedBy, newStatus, note } = req.body;
+
+  try {
+    // Get report ID from post_id
+    const report = await pool.query(
+      `SELECT id FROM post_reports WHERE post_id = $1`,
+      [postId]
+    );
+
+    if (report.rowCount === 0) {
+      return res.status(404).json({ error: 'Report not found for this post' });
+    }
+
+    const reportId = report.rows[0].id;
+
+    // Insert into history table
+    await pool.query(
+      `INSERT INTO post_report_history (report_id, changed_by, changed_at, new_status, note)
+       VALUES ($1, $2, NOW(), $3, $4);`,
+      [reportId, changedBy, newStatus, note]
+    );
+
+    res.status(201).json({ message: 'Report history logged' });
+  } catch (err) {
+    console.error('Error inserting report history:', err);
+    res.status(500).json({ error: 'Server error inserting report history' });
+  }
+};
 
 
 module.exports = {
   reportPost,
   hasReported,
   getPostReportHistory,
-  getPostReport
+  getPostReport,
+  addReportHistory,
+  reportPostOk
 };
