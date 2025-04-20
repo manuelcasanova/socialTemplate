@@ -50,4 +50,27 @@ router.route('/reportpost')
     reportsController.hasReported
   );
 
+  router.route('/post-report-history')
+  .get(
+    async (req, res, next) => {
+      try {
+        // console.log("reports.js")
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only registed users have access to this action.' });
+        }
+
+        // Pass the roles to verifyRoles middleware
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    reportsController.getPostReportHistory
+  );
+
 module.exports = router;

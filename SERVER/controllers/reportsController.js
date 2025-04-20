@@ -11,7 +11,7 @@ const hasReported = async (req, res, next) => {
 
     const checkQuery = `
       SELECT 1 FROM post_reports
-      WHERE post_id = $1 AND reported_by = $2
+      WHERE post_id = $1 AND reported_by = $2 AND status = 'Reported'
       LIMIT 1;
     `;
     const values = [post_id, user_id];
@@ -92,7 +92,35 @@ const reportPost = async (req, res, next) => {
   }
 };
 
+// Controller for getting post report history
+const getPostReportHistory = async (req, res, next) => {
+  try {
+    // console.log("hit getPostReportHistory")
+
+
+    // Query to fetch report history for the specified post_id
+    const query = `
+      SELECT * FROM post_report_history
+      ORDER BY changed_at DESC;
+    `;
+
+    // Execute the query
+    const { rows } = await pool.query(query);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No report history found.' });
+    }
+
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching post report history:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 module.exports = {
   reportPost,
-  hasReported
+  hasReported,
+  getPostReportHistory
 };

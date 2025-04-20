@@ -32,7 +32,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   const [showSections, setShowSections] = useState({
     admin: false,
     profile: false,
-    social: false
+    social: false,
+    moderator: false
   });
 
   // Fetch follow notifications when the component mounts
@@ -107,6 +108,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       profile: section === 'profile' ? !prevState.profile : false,
       social: section === 'social' ? !prevState.social : false,
       posts: section === 'posts' ? !prevState.posts : false,
+      moderator: section === 'moderator' ? !prevState.moderator : false,
     }));
   };
 
@@ -128,12 +130,38 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
 
-   
-        <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
- 
+
+      <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
+
 
       {auth.roles && auth.roles.includes('Moderator') &&
-        <div className='nav-item' onClick={() => handleNavigate('/moderator')}>Moderator</div>
+
+        <div className='nav-item-with-dropdown'>
+          <div className='nav-item' onClick={() => toggleSection('moderator')}>Moderator
+            {showSections.moderator ? '▲' : '▼'
+            }
+          </div>
+          {showSections.moderator && (
+            <>
+              <div className='subitem' onClick={() => handleNavigate('/moderator/')}>Moderator</div>
+
+              <div className="subitem" onClick={() => handleNavigate('/moderator/posts')}>
+                Moderate posts
+              </div>
+
+              <div className="subitem" onClick={() => handleNavigate('/moderator/comments')}>
+                Moderate posts' comments
+              </div>
+
+            </>
+          )}
+
+        </div>
+
+
+
+
+
       }
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
 
@@ -149,7 +177,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
             <FollowNotification />
             :
             showSections.social ? '▲' : '▼'
-            
+
           }
         </div>
         {showSections.social && (
@@ -201,6 +229,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               {auth.roles && auth.roles.includes('SuperAdmin') && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
                   Login history
+                </div>
+              )}
+                            {auth.roles && auth.roles.includes('SuperAdmin') && (
+                <div className="subitem" onClick={() => handleNavigate('/moderator/posts/history')}>
+                  Moderation History
                 </div>
               )}
             </>
