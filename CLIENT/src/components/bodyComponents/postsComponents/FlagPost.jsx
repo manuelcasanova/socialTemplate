@@ -4,7 +4,7 @@ import { axiosPrivate } from "../../../api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag } from "@fortawesome/free-solid-svg-icons";
 
-export default function FlagPost({postId, loggedInUserId}) {
+export default function FlagPost({postId, loggedInUserId, hideFlag}) {
 
   // console.log("postId in FlagPost", postId)
 
@@ -48,6 +48,7 @@ export default function FlagPost({postId, loggedInUserId}) {
 
   return (
     <div className="post-actions">
+       {!hideFlag && (
       <button
         title="Report as inappropiate"
         onClick={handleFlag}
@@ -57,6 +58,7 @@ export default function FlagPost({postId, loggedInUserId}) {
         <FontAwesomeIcon icon={faFlag} />
         {flagged && <span style={{ marginLeft: "5px", cursor: 'default' }}>Reported. Pending review</span>}
       </button>
+          )}
       {error && <p className="error">{error}</p>}
     </div>
   )

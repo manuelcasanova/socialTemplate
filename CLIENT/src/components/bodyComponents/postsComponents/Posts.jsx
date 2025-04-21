@@ -46,6 +46,7 @@ export default function Posts({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const [posts, setPosts] = useState([]);
   const [flaggedPosts, setFlaggedPosts] = useState(new Set());
+  const [inappropriatePosts, setInappropriatePosts] = useState(new Set());
   const [users, setUsers] = useState([])
   const [showMyPosts, setShowMyPosts] = useState(false);
 
@@ -95,6 +96,34 @@ export default function Posts({ isNavOpen }) {
 
     checkReports();
   }, [posts, loggedInUser]);
+
+  useEffect(() => {
+    const checkInappropriate = async () => {
+      try {
+        const hiddenPosts = new Set();
+
+        for (const post of posts) {
+          const res = await axiosPrivate.get("/reports/has-hidden", {
+            params: {
+              post_id: post.id,
+              user_id: loggedInUser,
+            },
+          });
+
+          if (res.data?.hasHidden) {
+            hiddenPosts.add(post.id);
+          }
+        }
+
+        setInappropriatePosts(hiddenPosts);
+      } catch (err) {
+        console.error("Error checking inappropriate status:", err);
+      }
+    };
+
+    checkInappropriate();
+  }, [posts, loggedInUser]);
+
 
   useEffect(() => {
     // If `loadMore` is true, scroll to the new batch of posts
@@ -313,19 +342,25 @@ export default function Posts({ isNavOpen }) {
                     </div>
                   </div>
 
-                  {flaggedPosts.has(post.id) ? (
+                  {inappropriatePosts.has(post.id) ? (
                     <div>
-                      <p style={{fontStyle: 'italic'}}> 
-                        This post has been reported as inappropriate and is pending review by a moderator.
+                      <p style={{ fontStyle: 'italic', color: 'darkred' }}>
+                        This post has been reported and reviewed by a moderator. It was deemed inappropriate and has been hidden.
+                      </p>
+                    </div>
+                  ) : flaggedPosts.has(post.id) ? (
+                    <div>
+                      <p style={{ fontStyle: 'italic' }}>
+                        This post has been reported and is pending moderator review.
                         You can still see it by clicking here, but discretion is advised.
                       </p>
                       <button
-                      className="button-white white button-smaller"
-                      onClick={() => {
-                        const updatedFlaggedPosts = new Set(flaggedPosts);
-                        updatedFlaggedPosts.delete(post.id);  // Remove the post from the Set
-                        setFlaggedPosts(updatedFlaggedPosts);  // Set the updated Set as the new state
-                      }}>
+                        className="button-white white button-smaller"
+                        onClick={() => {
+                          const updatedFlaggedPosts = new Set(flaggedPosts);
+                          updatedFlaggedPosts.delete(post.id);
+                          setFlaggedPosts(updatedFlaggedPosts);
+                        }}>
                         Click to view
                       </button>
                     </div>
@@ -333,7 +368,7 @@ export default function Posts({ isNavOpen }) {
                     <p>{post.content}</p>
                   )}
 
-                  <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} />
+                  <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} />
 
                 </div>
               </div>

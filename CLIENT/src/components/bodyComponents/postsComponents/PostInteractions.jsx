@@ -23,7 +23,7 @@ import { fetchPostCommentsCount } from './util_functions/FetchPostComments';
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function PostInteractions({ postId, isNavOpen, postContent, postSender, loggedInUser, setPosts }) {
+export default function PostInteractions({ postId, isNavOpen, postContent, postSender, loggedInUser, setPosts, hideFlag }) {
 
   const { auth } = useAuth();
   const loggedInUserId = auth.userId
@@ -165,7 +165,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             {showEllipsisMenu && (
               <div className="post-menu-dropdown">
                 <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
-                <FlagPost postId={postId} loggedInUserId={loggedInUserId}/>
+                <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag}/>
                 <FontAwesomeIcon icon={faXmark}
                   onClick={() => setShowEllipsisMenu(prev => !prev)}
                 />

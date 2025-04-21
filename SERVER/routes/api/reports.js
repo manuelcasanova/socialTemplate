@@ -50,6 +50,29 @@ router.route('/reportpost')
     reportsController.hasReported
   );
 
+  router.route('/has-hidden')
+  .get(
+    async (req, res, next) => {
+      try {
+        // console.log("reports.js")
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only registed users have access to this action.' });
+        }
+
+        // Pass the roles to verifyRoles middleware
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    reportsController.hasHidden
+  );
+
   router.route('/post-report-history')
   .get(
     async (req, res, next) => {
@@ -143,6 +166,51 @@ router.route('/reportpost')
     reportsController.addReportHistory // The controller that handles adding the history record
   );
 
+// Hide post and mark as "Inappropriate"
+router.route('/post/inappropriate/:postId')
+  .put(
+    async (req, res, next) => {
+      try {
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Moderator'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only moderators can hide posts.' });
+        }
+
+        // Pass the roles to verifyRoles middleware
+        verifyRoles('Moderator')(req, res, next);
+
+      } catch (err) {
+        next(err);
+      }
+    },
+    reportsController.reportPostInappropriate 
+  );
+
+// Add history record when hiding post
+router.route('/post/inappropriate/history')
+  .post(
+    async (req, res, next) => {
+      try {
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Moderator'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only moderators can add history.' });
+        }
+
+        next(); 
+      } catch (err) {
+        next(err);
+      }
+    },
+    reportsController.addReportHistory 
+  );
 
 
 module.exports = router;

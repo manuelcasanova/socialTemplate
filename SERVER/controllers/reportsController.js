@@ -26,6 +26,32 @@ const hasReported = async (req, res, next) => {
   }
 };
 
+//Check if a post has been hidden by a moderator
+const hasHidden = async (req, res, next) => {
+  try {
+    const { post_id, user_id } = req.query;
+
+    if (!post_id || !user_id) {
+      return res.status(400).json({ error: 'post_id and user_id are required as query parameters.' });
+    }
+
+    const checkQuery = `
+      SELECT 1 FROM post_reports
+      WHERE post_id = $1 AND reported_by = $2 AND status = 'Inappropriate'
+      LIMIT 1;
+    `;
+    const values = [post_id, user_id];
+    const { rows } = await pool.query(checkQuery, values);
+
+    const hasHidden = rows.length > 0;
+
+    return res.status(200).json({ hasHidden });
+  } catch (error) {
+    console.error('Error checking if post has been flagged as inappropiate:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Report a post
 const reportPost = async (req, res, next) => {
   try {
@@ -46,6 +72,11 @@ const reportPost = async (req, res, next) => {
     `;
     const { rows: existingPostRows } = await pool.query(existingPostQuery, [post_id]);
     
+    if (existingPostRows.length > 0 && existingPostRows[0].status === 'Inappropriate') {
+      await pool.query('ROLLBACK');
+      return res.status(400).json({ error: 'Cannot report a post marked as Inappropriate.' });
+    }
+
     let report;
     const status = 'Reported';  // You can change this based on your requirements
     const reportedAt = new Date();  // Current timestamp for reporting
@@ -210,12 +241,40 @@ const addReportHistory = async (req, res) => {
   }
 };
 
+// Mark the post as inappropriate
+const reportPostInappropriate = async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    // Update the status in post_reports
+    const result = await pool.query(
+      `UPDATE post_reports
+       SET status = $1
+       WHERE post_id = $2
+       RETURNING id;`,
+      ['Inappropriate', postId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'No report found for this post ID' });
+    }
+
+    const reportId = result.rows[0].id;
+    res.status(200).json({ message: 'Report status updated to Inappropriate', reportId });
+  } catch (err) {
+    console.error('Error updating report:', err);
+    res.status(500).json({ error: 'Server error updating report' });
+  }
+};
+
 
 module.exports = {
   reportPost,
   hasReported,
+  hasHidden,
   getPostReportHistory,
   getPostReport,
   addReportHistory,
-  reportPostOk
+  reportPostOk,
+  reportPostInappropriate
 };

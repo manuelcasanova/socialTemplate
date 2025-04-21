@@ -105,7 +105,7 @@ export default function ModeratorPosts({ isNavOpen }) {
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
                     <ModeratorOkReportedPost postId={log.post_id} refreshData={fetchReports} setReports={setReports} />
-                    <ModeratorHideReportedPost postId={log.post_id} />
+                    <ModeratorHideReportedPost postId={log.post_id} refreshData={fetchReports} setReports={setReports}/>
                   </tr>
                 ))}
               </tbody>
