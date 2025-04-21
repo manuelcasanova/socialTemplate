@@ -47,7 +47,7 @@ const hasHidden = async (req, res, next) => {
 
     return res.status(200).json({ hasHidden });
   } catch (error) {
-    console.error('Error checking if post has been flagged as inappropiate:', error);
+    console.error('Error checking if post has been flagged as inappropriate:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };

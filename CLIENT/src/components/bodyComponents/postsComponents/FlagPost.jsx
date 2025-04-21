@@ -50,7 +50,7 @@ export default function FlagPost({postId, loggedInUserId, hideFlag}) {
     <div className="post-actions">
        {!hideFlag && (
       <button
-        title="Report as inappropiate"
+        title="Report as inappropriate"
         onClick={handleFlag}
         disabled={flagged}
         style={{ color: flagged ? "red" : "inherit" }}
