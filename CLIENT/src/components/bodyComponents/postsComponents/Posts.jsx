@@ -347,6 +347,13 @@ export default function Posts({ isNavOpen }) {
                       <p style={{ fontStyle: 'italic', color: 'darkred' }}>
                         This post has been reported and reviewed by a moderator. It was deemed inappropriate and has been hidden.
                       </p>
+
+                      {auth?.roles?.includes("Moderator") && (
+                        <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
+                          <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
+                          <p style={{color: 'black'}}>{post.content}</p>
+                        </div>
+                      )}
                     </div>
                   ) : flaggedPosts.has(post.id) ? (
                     <div>
@@ -367,6 +374,33 @@ export default function Posts({ isNavOpen }) {
                   ) : (
                     <p>{post.content}</p>
                   )}
+
+
+                  {/* {inappropriatePosts.has(post.id) ? (
+                    <div>
+                      <p style={{ fontStyle: 'italic', color: 'darkred' }}>
+                        This post has been reported and reviewed by a moderator. It was deemed inappropriate and has been hidden.
+                      </p>
+                    </div>
+                  ) : flaggedPosts.has(post.id) ? (
+                    <div>
+                      <p style={{ fontStyle: 'italic' }}>
+                        This post has been reported and is pending moderator review.
+                        You can still see it by clicking here, but discretion is advised.
+                      </p>
+                      <button
+                        className="button-white white button-smaller"
+                        onClick={() => {
+                          const updatedFlaggedPosts = new Set(flaggedPosts);
+                          updatedFlaggedPosts.delete(post.id);
+                          setFlaggedPosts(updatedFlaggedPosts);
+                        }}>
+                        Click to view
+                      </button>
+                    </div>
+                  ) : (
+                    <p>{post.content}</p>
+                  )} */}
 
                   <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} />
 
