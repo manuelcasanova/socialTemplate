@@ -38,6 +38,7 @@ export default function PostComments({ isNavOpen }) {
   const [senderInfo, setSenderInfo] = useState(null);
   const [postComments, setPostComments] = useState([]);
   const [isFlagged, setIsFlagged] = useState(false);
+  const [isInappropriate, setIsInappropriate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [imageExistsMap, setImageExistsMap] = useState({});
@@ -181,6 +182,29 @@ export default function PostComments({ isNavOpen }) {
     }
   }, [postId, loggedInUserId, axiosPrivate]);
 
+  useEffect(() => {
+    const checkIfPostIsInappropriate = async () => {
+      try {
+        const res = await axiosPrivate.get("/reports/has-hidden", {
+          params: {
+            post_id: postId,
+            user_id: loggedInUserId,
+          },
+        });
+  
+        if (res.data?.hasHidden) {
+          setIsInappropriate(true);
+        }
+      } catch (err) {
+        console.error("Error checking hidden status:", err);
+      }
+    };
+  
+    if (postId && loggedInUserId) {
+      checkIfPostIsInappropriate();
+    }
+  }, [postId, loggedInUserId]);
+  
 
   const getVisibilityIcon = (visibility) => {
     switch (visibility) {
@@ -301,22 +325,35 @@ export default function PostComments({ isNavOpen }) {
 
 
             </div>
-            {isFlagged ? (
-              <div>
-                <p style={{ fontStyle: 'italic' }}>
-                  This post has been reported as inappropriate and is pending review by a moderator.
-                  You can still see it by clicking below, but discretion is advised.
-                </p>
-                <button
-                  className="button-white white button-smaller"
-                  onClick={() => setIsFlagged(false)}
-                >
-                  Click to view
-                </button>
-              </div>
-            ) : (
-              <p>{postContent}</p>
-            )}
+            {isInappropriate ? (
+  <div>
+    <p style={{ fontStyle: 'italic', color: 'darkred' }}>
+      This post has been reviewed by a moderator and deemed inappropriate. It has been hidden.
+    </p>
+    {auth?.roles?.includes("Moderator") && (
+      <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
+        <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
+        <p style={{ color: 'black' }}>{postContent}</p>
+      </div>
+    )}
+  </div>
+) : isFlagged ? (
+  <div>
+    <p style={{ fontStyle: 'italic' }}>
+      This post has been reported as inappropriate and is pending review by a moderator.
+      You can still see it by clicking below, but discretion is advised.
+    </p>
+    <button
+      className="button-white white button-smaller"
+      onClick={() => setIsFlagged(false)}
+    >
+      Click to view
+    </button>
+  </div>
+) : (
+  <p>{postContent}</p>
+)}
+
 
 
           </div>

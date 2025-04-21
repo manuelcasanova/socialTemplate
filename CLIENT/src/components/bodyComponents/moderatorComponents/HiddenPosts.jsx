@@ -24,9 +24,9 @@ export default function ModeratorPosts({ isNavOpen }) {
   const [users, setUsers] = useState([])
 
 
-  const fetchReports = async () => {
+  const fetchHiddenPosts = async () => {
     try {
-      const response = await axiosPrivate.get('/reports/post-report');
+      const response = await axiosPrivate.get('/reports/hidden-posts');
       const reportData = response.data;
       // console.log("reportData", reportData)
       setReports(reportData);
@@ -53,13 +53,13 @@ export default function ModeratorPosts({ isNavOpen }) {
 
 
   useEffect(() => {
-    fetchReports();
+    fetchHiddenPosts();
   }, []);
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Reports Awaiting Assessment</h2>
+        <h2>Reports Hiden (Assessed as Inappropriate)</h2>
         {error && error !== "No post report history found" && (
           <p className="error-message">{error}</p>
         )}
@@ -73,10 +73,9 @@ export default function ModeratorPosts({ isNavOpen }) {
                   <th>Post Content</th>
                   <th>Status</th>
                   <th>Note</th>
-                  <th>Reported by</th>
-                  <th>Reported at</th>
+                  <th>Hidden by</th>
+                  <th>Hidden at</th>
                   <th>Ok</th>
-                  <th>Hide</th>
                 </tr>
               </thead>
               <tbody>
@@ -104,15 +103,15 @@ export default function ModeratorPosts({ isNavOpen }) {
                         : `UserId: ${log.reported_by}`}
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
-                    <ModeratorOkReportedPost postId={log.post_id} refreshData={fetchReports} setReports={setReports} />
-                    <ModeratorHideReportedPost postId={log.post_id} refreshData={fetchReports} setReports={setReports}/>
+                    <ModeratorOkReportedPost postId={log.post_id} refreshData={fetchHiddenPosts} setReports={setReports} />
+
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         ) : (
-          <p>No post found.</p>
+          <p>No posts found.</p>
         )}
 
       </div>

@@ -52,6 +52,32 @@ const hasHidden = async (req, res, next) => {
   }
 };
 
+//Get hidden posts
+const getHiddenPosts = async (req, res, next) => {
+  try {
+
+    const checkQuery = `
+      SELECT 
+        pr.*, 
+        p.content, 
+        p.sender, 
+        p.date, 
+        p.visibility, 
+        p.is_deleted
+      FROM post_reports pr
+      JOIN posts p ON pr.post_id = p.id
+      WHERE pr.status = 'Inappropriate';
+    `;
+
+    const { rows } = await pool.query(checkQuery);
+
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error retrieving hidden posts:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Report a post
 const reportPost = async (req, res, next) => {
   try {
@@ -272,6 +298,7 @@ module.exports = {
   reportPost,
   hasReported,
   hasHidden,
+  getHiddenPosts,
   getPostReportHistory,
   getPostReport,
   addReportHistory,

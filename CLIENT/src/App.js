@@ -47,6 +47,7 @@ import PostCommentReactions from './components/bodyComponents/postsComponents/Po
 
 import ModeratorPosts from './components/bodyComponents/moderatorComponents/ModeratorPosts';
 import ModeratorPostsHistory from './components/bodyComponents/moderatorComponents/ModeratorPostsHistory';
+import HiddenPosts from './components/bodyComponents/moderatorComponents/HiddenPosts'
 
 
 function App() {
@@ -103,6 +104,9 @@ function App() {
           </Route>
           <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
             <Route path="/moderator/posts/history" element={<ModeratorPostsHistory isNavOpen={isNavOpen} />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+            <Route path="/moderator/hidden/posts" element={<HiddenPosts isNavOpen={isNavOpen} />} />
           </Route>
 
 

@@ -145,6 +145,10 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               <div className="subitem" onClick={() => handleNavigate('/moderator/comments')}>
                 Moderate posts' comments
               </div>
+
+              <div className="subitem" onClick={() => handleNavigate('/moderator/hidden/posts')}>
+                Hidden posts
+              </div>
             </>
           )}
         </div>
