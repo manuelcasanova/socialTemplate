@@ -4,12 +4,17 @@ import { axiosPrivate } from "../../../api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag } from "@fortawesome/free-solid-svg-icons";
 
-export default function FlagPost({postId, loggedInUserId, hideFlag}) {
+//Components
+import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+import Error from "../Error";
+
+export default function FlagPost({postId, loggedInUserId, hideFlag, isNavOpen}) {
 
   // console.log("postId in FlagPost", postId)
 
   const [flagged, setFlagged] = useState(false);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const checkIfReported = async () => {
@@ -45,6 +50,16 @@ export default function FlagPost({postId, loggedInUserId, hideFlag}) {
       setError("Failed to report post.");
     }
   };
+
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+  
+    if (error) {
+      return <Error isNavOpen={isNavOpen} error={error} />;
+    }
+  
+  
 
   return (
     <div className="post-actions">

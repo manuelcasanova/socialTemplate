@@ -1,5 +1,5 @@
 import { axiosPrivate } from "../../../api/axios"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
@@ -10,8 +10,9 @@ import { faCircleCheck, faBan } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 
-import ModeratorHideReportedPost from "./ModeratorHideReportedPost";
 import ModeratorOkReportedPost from "./ModeratorOkReportedPost";
+import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+import Error from "../Error";
 
 export default function ModeratorPosts({ isNavOpen }) {
 
@@ -22,7 +23,7 @@ export default function ModeratorPosts({ isNavOpen }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([])
-
+  const errRef = useRef();
 
   const fetchHiddenPosts = async () => {
     try {
@@ -46,8 +47,23 @@ export default function ModeratorPosts({ isNavOpen }) {
 
       setUsers(usersMap);
     } catch (err) {
-      setError('No post report history found');
       console.error(err);
+    
+      if (!err?.response) {
+        setError('Server is unreachable. Please try again later.');
+      } else if (err.response?.status === 404) {
+        setError('No post report history found');
+      } else if (err.response?.status === 403) {
+        setError('Access denied. You do not have permission to view this history.');
+      } else if (err.response?.status === 401) {
+        setError('Unauthorized. Please log in and try again.');
+      } else if (err.response?.status === 500) {
+        setError('Server error. Please try again later.');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+    
+      errRef.current?.focus();
     }
   };
 
@@ -55,6 +71,20 @@ export default function ModeratorPosts({ isNavOpen }) {
   useEffect(() => {
     fetchHiddenPosts();
   }, []);
+
+      if (isLoading) {
+        return (
+          <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
+            <LoadingSpinner />
+          </div>
+        )
+      }
+    
+      if (error) {
+        return <Error isNavOpen={isNavOpen} error={error}/>
+      }
+    
+  
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>

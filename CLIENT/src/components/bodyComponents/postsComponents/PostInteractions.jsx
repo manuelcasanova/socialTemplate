@@ -16,6 +16,8 @@ import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan
 import PostComments from './PostComments';
 import PostDelete from './PostDelete';
 import FlagPost from './FlagPost';
+import LoadingSpinner from '../../loadingSpinner/LoadingSpinner';
+import Error from '../Error';
 
 
 import { fetchPostReactionsCount } from './util_functions/FetchPostReactions';
@@ -71,22 +73,35 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
     } catch (err) {
       console.log(err);
+      let message = '';
       if (!err?.response) {
-        setErrMsg('No Server Response');
+        message = 'No Server Response';
       } else if (err.response?.status === 403) {
-        setErrMsg('Forbidden: You are not allowed to react');
+        message = 'Forbidden: You are not allowed to react';
       } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized: Please log in');
+        message = 'Unauthorized: Please log in';
       } else if (err.response?.status === 400) {
-        setErrMsg('Bad Request: Please try again');
+        message = 'Bad Request: Please try again';
       } else {
-        setErrMsg('Attempt Failed');
+        message = 'Attempt Failed';
       }
+      setErrMsg(message);
+      setError(message);
       errRef.current?.focus();
     } finally {
       setIsLoading(false);
     }
   };
+
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <Error isNavOpen={isNavOpen} error={error} />;
+  }
+
 
 
   return (
@@ -165,7 +180,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             {showEllipsisMenu && (
               <div className="post-menu-dropdown">
                 <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
-                <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag}/>
+                <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} />
                 <FontAwesomeIcon icon={faXmark}
                   onClick={() => setShowEllipsisMenu(prev => !prev)}
                 />

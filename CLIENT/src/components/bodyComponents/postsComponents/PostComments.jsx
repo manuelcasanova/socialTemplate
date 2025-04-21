@@ -86,8 +86,8 @@ export default function PostComments({ isNavOpen }) {
       }, 100);
     } catch (err) {
       console.log(err)
-      // Always learned !err but not sure what's the sense behind. 
       if (!err?.response) {
+        setError('Server is unreachable. Please try again later.');
         setErrMsg('No Server Response');
       } else if (err.response?.status === 403) {
         setErrMsg('This email was not found in our database');
