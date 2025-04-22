@@ -89,7 +89,7 @@ export default function ModeratorPosts({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Reports Hiden (Assessed as Inappropriate)</h2>
+        <h2>Posts Hiden (Assessed as Inappropriate)</h2>
         {error && error !== "No post report history found" && (
           <p className="error-message">{error}</p>
         )}

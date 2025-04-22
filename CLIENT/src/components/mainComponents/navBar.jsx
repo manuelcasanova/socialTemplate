@@ -143,11 +143,15 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/moderator/comments')}>
-                Moderate posts' comments
+                Moderate comments
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/moderator/hidden/posts')}>
                 Hidden posts
+              </div>
+
+              <div className="subitem" onClick={() => handleNavigate('/moderator/hidden/comments')}>
+                Hidden comments
               </div>
             </>
           )}
@@ -223,7 +227,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               )}
               {auth.roles && auth.roles.includes('SuperAdmin') && (
                 <div className="subitem" onClick={() => handleNavigate('/moderator/posts/history')}>
-                  Moderation History
+                  Moderation History (Posts)
+                </div>
+              )}
+              {auth.roles && auth.roles.includes('SuperAdmin') && (
+                <div className="subitem" onClick={() => handleNavigate('/moderator/comments/history')}>
+                  Moderation History (Comments)
                 </div>
               )}
             </>

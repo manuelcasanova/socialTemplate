@@ -49,6 +49,10 @@ import ModeratorPosts from './components/bodyComponents/moderatorComponents/Mode
 import ModeratorPostsHistory from './components/bodyComponents/moderatorComponents/ModeratorPostsHistory';
 import HiddenPosts from './components/bodyComponents/moderatorComponents/HiddenPosts'
 
+import ModeratorComments from './components/bodyComponents/moderatorComponents/ModeratorComments';
+import HiddenComments from './components/bodyComponents/moderatorComponents/HiddenComments';
+import ModeratorsCommentsHistory from './components/bodyComponents/moderatorComponents/ModeratorCommentsHistory';
+
 
 function App() {
 
@@ -106,7 +110,16 @@ function App() {
             <Route path="/moderator/posts/history" element={<ModeratorPostsHistory isNavOpen={isNavOpen} />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+            <Route path="/moderator/comments/history" element={<ModeratorsCommentsHistory isNavOpen={isNavOpen} />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
             <Route path="/moderator/hidden/posts" element={<HiddenPosts isNavOpen={isNavOpen} />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+            <Route path="/moderator/comments/" element={<ModeratorComments isNavOpen={isNavOpen} />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+            <Route path="/moderator/hidden/comments/" element={<HiddenComments isNavOpen={isNavOpen} />} />
           </Route>
 
 

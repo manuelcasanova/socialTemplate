@@ -126,6 +126,16 @@ CREATE TABLE posts_comments (
     is_deleted BOOLEAN DEFAULT false
 );
 
+CREATE TABLE post_comments_reports (
+    id SERIAL PRIMARY KEY,
+    comment_id INTEGER UNIQUE REFERENCES posts_comments(id) ON DELETE CASCADE,
+    reported_by INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    reported_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'Reported' CHECK (status IN ('Reported', 'Inappropriate', 'Ok')),
+    reason TEXT
+);
+
+
 CREATE TABLE posts_comments_reactions (
     comment_id INTEGER REFERENCES posts_comments(id) ON DELETE CASCADE,
     user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
@@ -143,10 +153,18 @@ CREATE TABLE post_reports (
     reason TEXT
 );
 
-
 CREATE TABLE post_report_history (
     id SERIAL PRIMARY KEY,
     report_id INTEGER REFERENCES post_reports(id) ON DELETE CASCADE,
+    changed_by INTEGER REFERENCES users(user_id) ON DELETE SET NULL,
+    changed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    new_status VARCHAR(20) CHECK (new_status IN ('Reported', 'Inappropriate', 'Ok')),
+    note TEXT
+);
+
+CREATE TABLE post_comment_report_history (
+    id SERIAL PRIMARY KEY,
+    report_id INTEGER REFERENCES post_comments_reports(id) ON DELETE CASCADE,
     changed_by INTEGER REFERENCES users(user_id) ON DELETE SET NULL,
     changed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     new_status VARCHAR(20) CHECK (new_status IN ('Reported', 'Inappropriate', 'Ok')),
