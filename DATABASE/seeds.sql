@@ -68,21 +68,14 @@ VALUES
 
 INSERT INTO posts_comments (post_id, commenter, content, date)
 VALUES
-(1, 1, 'Post comment.', '2025-04-03 10:30:00+00');
+(1, 1, 'Comment 1 to post 1', '2025-04-03 10:30:00+00'),  
+(1, 1, 'Comment 2 to post 1', '2025-04-04 10:30:00+00')
+;
 
-INSERT INTO post_comments_reports (
-    comment_id,
-    reported_by,
-    reported_at,
-    status,
-    reason
-) VALUES (
-    1, -- assuming comment with ID 1 exists
-    2, -- assuming user with ID 2 exists
-    NOW(),
-    'Inappropriate',
-    'This comment contains offensive language and violates community guidelines.'
-);
+INSERT INTO post_comments_reports (comment_id, reported_by, reported_at, status,reason ) 
+VALUES 
+( 1, 2, NOW(), 'Reported', 'This comment contains offensive language and violates community guidelines.'),
+( 2, 2, NOW(), 'Reported', 'This comment contains offensive language and violates community guidelines.');
 
 /*
 INSERT INTO posts (sender, content, date, visibility, is_deleted)
