@@ -205,7 +205,7 @@ const getPostReport = async (req, res, next) => {
   }
 };
 
-// Report a post (corrected pool.query usage)
+// Ok a reported post
 const reportPostOk = async (req, res) => {
   const { postId } = req.params;
 
@@ -232,7 +232,7 @@ const reportPostOk = async (req, res) => {
   }
 };
 
-// Add report history (corrected pool.query usage)
+// Add report history 
 const addReportHistory = async (req, res) => {
   const { postId, changedBy, newStatus, note } = req.body;
 
@@ -248,6 +248,8 @@ const addReportHistory = async (req, res) => {
     }
 
     const reportId = report.rows[0].id;
+
+console.log ("addReportHistory reportId", reportId)
 
     // Insert into history table
     await pool.query(

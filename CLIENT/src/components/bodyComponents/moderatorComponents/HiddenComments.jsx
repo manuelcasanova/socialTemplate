@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
 //Components
-//ModeratorOkReportedComment
+import ModeratorOkReportedComment from "./ModeratorOkReportedComment";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
@@ -19,7 +19,7 @@ export default function HiddenComments({ isNavOpen }) {
   const [users, setUsers] = useState([])
   const errRef = useRef();
 
-  // console.log("reports", reports)
+  console.log("reports", reports)
 
   const fetchHiddenComments = async () => {
     try {
@@ -121,7 +121,7 @@ export default function HiddenComments({ isNavOpen }) {
                         : `UserId: ${log.reported_by}`}
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
-                   <td>Ok</td>
+                   <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchHiddenComments} setReports={setReports} />
 
                   </tr>
                 ))}
