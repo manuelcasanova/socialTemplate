@@ -75,7 +75,7 @@ VALUES
 INSERT INTO post_comments_reports (comment_id, reported_by, reported_at, status,reason ) 
 VALUES 
 ( 1, 2, NOW(), 'Reported', 'This comment contains offensive language and violates community guidelines.'),
-( 2, 2, NOW(), 'Reported', 'This comment contains offensive language and violates community guidelines.');
+( 2, 2, NOW(), 'Inappropriate', 'This comment contains offensive language and violates community guidelines.');
 
 /*
 INSERT INTO posts (sender, content, date, visibility, is_deleted)

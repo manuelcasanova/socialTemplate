@@ -68,7 +68,6 @@ export default function ModeratorComments({ isNavOpen }) {
     fetchReports();
   }, []);
 
-
   if (isLoading) {
     return (
       <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}><LoadingSpinner /></div>)

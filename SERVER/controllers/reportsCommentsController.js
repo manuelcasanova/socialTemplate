@@ -34,6 +34,33 @@ const getCommentReport = async (req, res, next) => {
   }
 };
 
+//Get hidden posts
+const getHiddenComments = async (req, res, next) => {
+  try {
+
+    const checkQuery = `
+      SELECT 
+        cr.*, 
+        c.content, 
+        c.commenter, 
+        c.date, 
+        c.is_deleted,
+        c.post_id
+      FROM post_comments_reports cr
+      JOIN posts_comments c ON cr.comment_id = c.id
+      WHERE cr.status = 'Inappropriate';
+    `;
+
+    const { rows } = await pool.query(checkQuery);
+
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error retrieving hidden comments:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
-getCommentReport
+getCommentReport,
+getHiddenComments
 };

@@ -3,11 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
-// Styling
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faBan } from "@fortawesome/free-solid-svg-icons";
-
 //Components
 
 import ModeratorOkReportedPost from "./ModeratorOkReportedPost";
