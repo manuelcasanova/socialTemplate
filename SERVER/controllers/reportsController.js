@@ -164,10 +164,6 @@ const getPostReportHistory = async (req, res, next) => {
     // Execute the query
     const { rows } = await pool.query(query);
 
-    if (rows.length === 0) {
-      return res.status(404).json({ error: 'No report history found.' });
-    }
-
     return res.status(200).json(rows);
   } catch (error) {
     console.error('Error fetching post report history:', error);

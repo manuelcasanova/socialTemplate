@@ -16,6 +16,10 @@ DROP TABLE IF EXISTS posts_comments_reactions;
 DROP TABLE IF EXISTS post_reports CASCADE;
 DROP TABLE IF EXISTS post_report_history CASCADE;
 
+DROP TABLE IF EXISTS post_comments_reports CASCADE;
+DROP TABLE IF EXISTS post_comment_report_history;
+
+
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
   role_name VARCHAR(50) UNIQUE NOT NULL
