@@ -7,6 +7,7 @@ import useAuth from "../../../hooks/useAuth";
 
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner"
 import Error from "../Error"
+import ModeratorOkReportedComment from "./ModeratorOkReportedComment";
 
 
 export default function ModeratorComments({ isNavOpen }) {
@@ -77,64 +78,64 @@ export default function ModeratorComments({ isNavOpen }) {
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-            <div className="admin-users">
-              <h2>Comments Awaiting Assessment</h2>
-              {error && error !== "No comments found" && (
-                <p className="error-message">{error}</p>
-              )}
-      
-              {reports.length > 0 ? (
-                <div className="table-wrapper">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Comment/Post Id</th>
-                        <th>Comment</th>
-                        <th>Status</th>
-                        <th>Note</th>
-                        <th>Reported by</th>
-                        <th>Reported at</th>
-                        <th>Ok</th>
-                        <th>Hide</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {reports.map((log) => (
-                        <tr key={`${log.report_id}-${log.reported_by}`}>
-                          <td
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => navigate(`/posts/${log.post_id}`)}
-                          >{`${log.comment_id} / ${log.post_id}`}</td>
-                          <td>{log.comment_content}</td>
-                          <td>{log.status}</td>
-                          <td>{log.reason}</td>
-                          <td
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                              if (log.reported_by === loggedInUser) {
-                                navigate("/profile/myaccount");
-                              } else {
-                                navigate(`/social/users/${log.reported_by}`);
-                              }
-                            }}
-                          >
-                            {users[log.reported_by]
-                              ? `${users[log.reported_by]} (UserId: ${log.reported_by})`
-                              : `UserId: ${log.reported_by}`}
-                          </td>
-                          <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
-                          <td>Ok</td>
-                          <td>Hide</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p>No post found.</p>
-              )}
-      
-            </div>
+      <div className="admin-users">
+        <h2>Comments Awaiting Assessment</h2>
+        {error && error !== "No comments found" && (
+          <p className="error-message">{error}</p>
+        )}
+
+        {reports.length > 0 ? (
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Comment/Post Id</th>
+                  <th>Comment</th>
+                  <th>Status</th>
+                  <th>Note</th>
+                  <th>Reported by</th>
+                  <th>Reported at</th>
+                  <th>Ok</th>
+                  <th>Hide</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reports.map((log) => (
+                  <tr key={`${log.report_id}-${log.reported_by}`}>
+                    <td
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => navigate(`/posts/${log.post_id}`)}
+                    >{`${log.comment_id} / ${log.post_id}`}</td>
+                    <td>{log.comment_content}</td>
+                    <td>{log.status}</td>
+                    <td>{log.reason}</td>
+                    <td
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        if (log.reported_by === loggedInUser) {
+                          navigate("/profile/myaccount");
+                        } else {
+                          navigate(`/social/users/${log.reported_by}`);
+                        }
+                      }}
+                    >
+                      {users[log.reported_by]
+                        ? `${users[log.reported_by]} (UserId: ${log.reported_by})`
+                        : `UserId: ${log.reported_by}`}
+                    </td>
+                    <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
+                    <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} />
+                    <td>Hide</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>No post found.</p>
+        )}
+
+      </div>
     </div>
 
   )
