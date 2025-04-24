@@ -9,14 +9,15 @@ import { axiosPrivate } from '../../../api/axios';
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner"
+import FlagComment from "./FlagComment";
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan, faEllipsisH, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function PostCommentsInteractions({ commentId, commentDate, loggedInUserId }) {
+export default function PostCommentsInteractions({ commentId, commentDate, loggedInUserId, hideFlag }) {
 
   const navigate = useNavigate();
   const [reactionsCount, setReactionsCount] = useState();
@@ -25,6 +26,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, logge
   const [errMsg, setErrMsg] = useState("");
   const [reactOption, setReactOption] = useState(false)
   const [selectedReaction, setSelectedReaction] = useState(null);
+  const [showEllipsisMenu, setShowEllipsisMenu] = useState(false);
   const errRef = useRef();
 
   const handleShowReactOptions = () => {
@@ -122,11 +124,29 @@ export default function PostCommentsInteractions({ commentId, commentDate, logge
         onClick={() => navigate(`/posts/comments/reactions/${commentId}`)}
       >
 
+
         <div className='post-interactions-text'>
           {isLoading ? <LoadingSpinner /> : error ? "Error" : `${reactionsCount ?? 0}`}
         </div>
         <FontAwesomeIcon icon={faSmile} />
       </div>
+
+
+      {!showEllipsisMenu && (
+        <FontAwesomeIcon icon={faEllipsisH}
+          onClick={() => setShowEllipsisMenu(prev => !prev)}
+        />
+      )}
+      {showEllipsisMenu && (
+        <div className="post-menu-dropdown">
+          {/* <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
+          */}
+            <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} /> 
+          <FontAwesomeIcon icon={faXmark}
+            onClick={() => setShowEllipsisMenu(prev => !prev)}
+          />
+        </div>
+      )}
 
 
 

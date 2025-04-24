@@ -61,25 +61,25 @@ VALUES
 (12, 1, 1),
 (13, 1, 1);
 
-INSERT INTO posts (sender, content, date, visibility, is_deleted)
-VALUES
-  (1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu malesuada nisi. Morbi et magna sem. Donec est augue, sodales.', CURRENT_TIMESTAMP - INTERVAL '25 hours', 'public', false);
+-- INSERT INTO posts (sender, content, date, visibility, is_deleted)
+-- VALUES
+--   (1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu malesuada nisi. Morbi et magna sem. Donec est augue, sodales.', CURRENT_TIMESTAMP - INTERVAL '25 hours', 'public', false);
   
 
-INSERT INTO posts_comments (post_id, commenter, content, date)
-VALUES
-(1, 1, 'Comment 1 to post 1', '2025-04-03 10:30:00+00'),  
-(1, 1, 'Comment 2 to post 1', '2025-04-04 10:30:00+00')
-;
+-- INSERT INTO posts_comments (post_id, commenter, content, date)
+-- VALUES
+-- (1, 1, 'Comment 1 to post 1', '2025-04-03 10:30:00+00'),  
+-- (1, 1, 'Comment 2 to post 1', '2025-04-04 10:30:00+00')
+-- ;
 
-INSERT INTO post_comments_reports (comment_id, reported_by, reported_at, status,reason ) 
-VALUES 
-( 1, 2, NOW(), 'Reported', 'This comment contains offensive language and violates community guidelines.'),
-( 2, 2, NOW(), 'Inappropriate', 'This comment contains offensive language and violates community guidelines.');
+-- INSERT INTO post_comments_reports (comment_id, reported_by, reported_at, status,reason ) 
+-- VALUES 
+-- ( 1, 2, NOW(), 'Reported', 'This comment contains offensive language and violates community guidelines.'),
+-- ( 2, 2, NOW(), 'Inappropriate', 'This comment contains offensive language and violates community guidelines.');
 
-INSERT INTO post_comment_report_history 
-(report_id, changed_by, changed_at, new_status, note)
-VALUES(1, 1, NOW(), 'Inappropriate', 'This comment contains offensive language and violates community guidelines.');
+-- INSERT INTO post_comment_report_history 
+-- (report_id, changed_by, changed_at, new_status, note)
+-- VALUES(1, 1, NOW(), 'Inappropriate', 'This comment contains offensive language and violates community guidelines.');
 
 /*
 INSERT INTO posts (sender, content, date, visibility, is_deleted)

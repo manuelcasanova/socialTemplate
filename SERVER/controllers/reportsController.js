@@ -104,8 +104,8 @@ const reportPost = async (req, res, next) => {
     }
 
     let report;
-    const status = 'Reported';  // You can change this based on your requirements
-    const reportedAt = new Date();  // Current timestamp for reporting
+    const status = 'Reported'; 
+    const reportedAt = new Date(); 
 
     if (existingPostRows.length > 0) {
       // Post exists, update the record
