@@ -54,7 +54,7 @@ router.route('/comment/ok/:commentId')
   .put(
     async (req, res, next) => {
       try {
-        console.log("reports-comments hit comment/ok/:commentId");
+        // console.log("reports-comments hit comment/ok/:commentId");
 
         const rolesList = await fetchRoles();
         req.roles = rolesList; // 🔑 Attach roles to the request object
@@ -72,7 +72,7 @@ router.route('/comment/ok/:commentId')
   .post(
     async (req, res, next) => {
       try {
-        console.log("reports-comments comment/ok/history")
+        // console.log("reports-comments comment/ok/history")
         // Check for roles before proceeding
         const rolesList = await fetchRoles();
 
@@ -135,6 +135,52 @@ router.route('/comment/ok/:commentId')
       }
     },
     reportsCommentsController.reportComment
+  );
+
+// Hide comment and mark as "Inappropriate"
+router.route('/comment/inappropriate/:commentId')
+  .put(
+    async (req, res, next) => {
+      try {
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Moderator'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only moderators can hide comments.' });
+        }
+
+        // Pass the roles to verifyRoles middleware
+        verifyRoles('Moderator')(req, res, next);
+
+      } catch (err) {
+        next(err);
+      }
+    },
+    reportsCommentsController.reportCommentInappropriate 
+  );
+
+// Add history record when hiding comment
+router.route('/comment/inappropriate/history')
+  .post(
+    async (req, res, next) => {
+      try {
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Moderator'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only moderators can add history.' });
+        }
+
+        next(); 
+      } catch (err) {
+        next(err);
+      }
+    },
+    reportsCommentsController.addReportHistory 
   );
 
 module.exports = router;

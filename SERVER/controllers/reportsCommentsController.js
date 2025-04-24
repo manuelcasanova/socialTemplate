@@ -65,7 +65,7 @@ const reportCommentOk = async (req, res) => {
   const { commentId } = req.params;
 
   try {
-    console.log("Hit controller report Comment Ok")
+    // console.log("Hit controller report Comment Ok")
     // Update the status in post_reports
     const result = await pool.query(
       `UPDATE post_comments_reports
@@ -93,7 +93,7 @@ const addCommentReportHistory = async (req, res) => {
   const { commentId, changedBy, newStatus, note } = req.body;
 
   try {
-    console.log("Hit controller addCommentReportHistory")
+    // console.log("Hit controller addCommentReportHistory")
     // Get report ID from post_id
     const report = await pool.query(
       `SELECT id FROM post_comments_reports WHERE comment_id = $1`,
@@ -106,7 +106,7 @@ const addCommentReportHistory = async (req, res) => {
 
     const reportId = report.rows[0].id;
 
-    console.log ("addCommentHistory reportId", reportId)
+    // console.log ("addCommentHistory reportId", reportId)
 
     // Insert into history table
     await pool.query(
@@ -141,7 +141,7 @@ const hasReported = async (req, res, next) => {
 
     const hasReported = rows.length > 0;
 
-    console.log("hasReported", hasReported)
+    // console.log("hasReported", hasReported)
 
     return res.status(200).json({ hasReported });
   } catch (error) {
@@ -221,11 +221,73 @@ const reportComment = async (req, res, next) => {
   }
 };
 
+// Add report history 
+const addReportHistory = async (req, res) => {
+  const { commentId, changedBy, newStatus, note } = req.body;
+
+  try {
+    // Get report ID from post_id
+    const report = await pool.query(
+      `SELECT id FROM post_comments_reports WHERE comment_id = $1`,
+      [commentId]
+    );
+
+    if (report.rowCount === 0) {
+      return res.status(404).json({ error: 'Report not found for this comment' });
+    }
+
+    const reportId = report.rows[0].id;
+
+// console.log ("addReportHistory reportId", reportId)
+
+    // Insert into history table
+    await pool.query(
+      `INSERT INTO post_comment_report_history (report_id, changed_by, changed_at, new_status, note)
+       VALUES ($1, $2, NOW(), $3, $4);`,
+      [reportId, changedBy, newStatus, note]
+    );
+
+    res.status(201).json({ message: 'Report history logged' });
+  } catch (err) {
+    console.error('Error inserting report history:', err);
+    res.status(500).json({ error: 'Server error inserting report history' });
+  }
+};
+
+// Mark the post as inappropriate
+const reportCommentInappropriate = async (req, res) => {
+  const { commentId } = req.params;
+
+  try {
+    // Update the status in post_reports
+    const result = await pool.query(
+      `UPDATE post_comments_reports
+       SET status = $1
+       WHERE comment_id = $2
+       RETURNING id;`,
+      ['Inappropriate', commentId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'No report found for this comment ID' });
+    }
+
+    const reportId = result.rows[0].id;
+    res.status(200).json({ message: 'Report status updated to Inappropriate', reportId });
+  } catch (err) {
+    console.error('Error updating report:', err);
+    res.status(500).json({ error: 'Server error updating report' });
+  }
+};
+
+
 module.exports = {
 getCommentReport,
 getHiddenComments,
 reportCommentOk,
 addCommentReportHistory,
 hasReported,
-reportComment
+reportComment,
+reportCommentInappropriate,
+addReportHistory
 };

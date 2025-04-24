@@ -249,7 +249,7 @@ const addReportHistory = async (req, res) => {
 
     const reportId = report.rows[0].id;
 
-console.log ("addReportHistory reportId", reportId)
+// console.log ("addReportHistory reportId", reportId)
 
     // Insert into history table
     await pool.query(

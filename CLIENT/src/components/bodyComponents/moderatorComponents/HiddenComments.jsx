@@ -19,7 +19,7 @@ export default function HiddenComments({ isNavOpen }) {
   const [users, setUsers] = useState([])
   const errRef = useRef();
 
-  console.log("reports", reports)
+  // console.log("reports", reports)
 
   const fetchHiddenComments = async () => {
     try {

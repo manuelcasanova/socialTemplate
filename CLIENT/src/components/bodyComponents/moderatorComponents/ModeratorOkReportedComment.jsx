@@ -15,7 +15,7 @@ const { auth } = useAuth();
 
 const handleApproveClick = async () => {
   try {
-    console.log("util function hit, commendId", commentId)
+    // console.log("util function hit, commendId", commentId)
     // Step 1: Update the post_reports status
     await axiosPrivate.put(`/reports-comments/comment/ok/${commentId}`, {
       status: "Ok",

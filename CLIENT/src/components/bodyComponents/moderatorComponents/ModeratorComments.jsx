@@ -8,6 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner"
 import Error from "../Error"
 import ModeratorOkReportedComment from "./ModeratorOkReportedComment";
+import ModeratorHideReportedComment from "./ModeratorHideReportedComment";
 
 
 export default function ModeratorComments({ isNavOpen }) {
@@ -125,7 +126,7 @@ export default function ModeratorComments({ isNavOpen }) {
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
                     <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} />
-                    <td>Hide</td>
+                    <ModeratorHideReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} />
                   </tr>
                 ))}
               </tbody>
