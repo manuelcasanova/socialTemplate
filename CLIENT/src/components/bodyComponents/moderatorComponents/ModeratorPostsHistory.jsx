@@ -76,7 +76,7 @@ export default function ModeratorPostsHistory({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Post report history</h2>
+        <h2>Post Moderation History</h2>
         {error && error !== "No post report history found" && (
           <p className="error-message">{error}</p>
         )}
@@ -97,6 +97,7 @@ export default function ModeratorPostsHistory({ isNavOpen }) {
               </thead>
               <tbody>
                 {reports.map((log) => (
+              
                   <tr key={log.id}>
                     <td
                       style={{ cursor: 'pointer' }}

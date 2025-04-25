@@ -317,5 +317,5 @@ module.exports = {
   getPostReport,
   addReportHistory,
   reportPostOk,
-  reportPostInappropriate
+  reportPostInappropriate,
 };

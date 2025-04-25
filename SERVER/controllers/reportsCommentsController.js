@@ -330,6 +330,36 @@ const reportCommentInappropriate = async (req, res) => {
   }
 };
 
+// Controller for getting post report history
+const getCommentReportHistory = async (req, res, next) => {
+  try {
+    // console.log("hit getPostReportHistory")
+
+
+    // Query to fetch report history for the specified post_id
+    const query = `
+SELECT 
+  h.*, 
+  c.post_id,
+  c.content
+FROM post_comment_report_history h
+JOIN post_comments_reports r ON h.report_id = r.id
+JOIN posts_comments c ON r.comment_id = c.id
+ORDER BY h.changed_at DESC;
+
+
+    `;
+
+    // Execute the query
+    const { rows } = await pool.query(query);
+
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching comment report history:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 module.exports = {
 getCommentReport,
@@ -340,5 +370,6 @@ hasReported,
 hasHidden,
 reportComment,
 reportCommentInappropriate,
-addReportHistory
+addReportHistory,
+getCommentReportHistory
 };

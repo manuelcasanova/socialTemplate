@@ -206,4 +206,27 @@ router.route('/comment/inappropriate/history')
     reportsCommentsController.hasHidden
   );
 
+  router.route('/comment-report-history')
+  .get(
+    async (req, res, next) => {
+      try {
+        // console.log("reports.js")
+        const rolesList = await fetchRoles();
+
+        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator'];
+        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+        if (!hasRequiredRole) {
+          return res.status(403).json({ error: 'Permission denied: Only registed users have access to this action.' });
+        }
+
+        // Pass the roles to verifyRoles middleware
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    reportsCommentsController.getCommentReportHistory
+  );
+
 module.exports = router;
