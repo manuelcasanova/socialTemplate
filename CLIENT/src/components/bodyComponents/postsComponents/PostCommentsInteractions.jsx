@@ -17,12 +17,11 @@ import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function PostCommentsInteractions({ commentId, commentDate, loggedInUserId, hideFlag }) {
+export default function PostCommentsInteractions({ commentId, commentDate, loggedInUserId, hideFlag, setError }) {
 
   const navigate = useNavigate();
   const [reactionsCount, setReactionsCount] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [reactOption, setReactOption] = useState(false)
   const [selectedReaction, setSelectedReaction] = useState(null);
@@ -126,7 +125,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, logge
 
 
         <div className='post-interactions-text'>
-          {isLoading ? <LoadingSpinner /> : error ? "Error" : `${reactionsCount ?? 0}`}
+          {isLoading ? <LoadingSpinner /> : `${reactionsCount ?? 0}`}
         </div>
         <FontAwesomeIcon icon={faSmile} />
       </div>
@@ -141,7 +140,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, logge
         <div className="post-menu-dropdown">
           {/* <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
           */}
-            <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} /> 
+          <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
           <FontAwesomeIcon icon={faXmark}
             onClick={() => setShowEllipsisMenu(prev => !prev)}
           />

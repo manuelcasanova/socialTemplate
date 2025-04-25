@@ -15,13 +15,12 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
 
-export default function ModeratorOkReportedPost({ postId, refreshData, setReports, isNavOpen }) {
+export default function ModeratorOkReportedPost({ postId, refreshData, setReports, isNavOpen, setError }) {
 const axiosPrivate = useAxiosPrivate();
 
 const { auth } = useAuth();
 // console.log("postId", postId)
 const [isLoading, setIsLoading] = useState(false);
-const [error, setError] = useState(false)
   const errRef = useRef();
 
 const handleApproveClick = async () => {
@@ -73,10 +72,6 @@ const handleApproveClick = async () => {
           <LoadingSpinner />
         </div>
       )
-    }
-  
-    if (error) {
-      return <Error isNavOpen={isNavOpen} error={error}/>
     }
   
 

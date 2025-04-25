@@ -13,11 +13,10 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
 
-export default function ModeratorHideReportedPost({ postId, refreshData, setReports, isNavOpen }) {
+export default function ModeratorHideReportedPost({ postId, refreshData, setReports, isNavOpen, setError }) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-const [error, setError] = useState(false)
   const errRef = useRef();
 
   const handleHideClick = async () => {
@@ -72,12 +71,6 @@ const [error, setError] = useState(false)
       )
     }
   
-    if (error) {
-      return <Error isNavOpen={isNavOpen} error={error}/>
-    }
-  
-
-
   return (
     <td>
       <FontAwesomeIcon

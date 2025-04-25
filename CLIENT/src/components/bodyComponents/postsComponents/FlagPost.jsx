@@ -8,12 +8,11 @@ import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
-export default function FlagPost({postId, loggedInUserId, hideFlag, isNavOpen}) {
+export default function FlagPost({postId, loggedInUserId, hideFlag, isNavOpen, setError}) {
 
   // console.log("postId in FlagPost", postId)
 
   const [flagged, setFlagged] = useState(false);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // console.log("flagged", flagged)
@@ -57,11 +56,7 @@ export default function FlagPost({postId, loggedInUserId, hideFlag, isNavOpen}) 
     if (isLoading) {
       return <LoadingSpinner />;
     }
-  
-    if (error) {
-      return <Error isNavOpen={isNavOpen} error={error} />;
-    }
-  
+
   
 
   return (
@@ -77,7 +72,6 @@ export default function FlagPost({postId, loggedInUserId, hideFlag, isNavOpen}) 
         {flagged && <span style={{ marginLeft: "5px", cursor: 'default' }}>Reported. Pending review</span>}
       </button>
           )}
-      {error && <p className="error">{error}</p>}
     </div>
   )
 }

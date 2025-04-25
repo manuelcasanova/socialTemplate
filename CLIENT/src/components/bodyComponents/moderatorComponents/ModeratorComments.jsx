@@ -125,8 +125,8 @@ export default function ModeratorComments({ isNavOpen }) {
                         : `UserId: ${log.reported_by}`}
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
-                    <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} />
-                    <ModeratorHideReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} />
+                    <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} setError={setError}/>
+                    <ModeratorHideReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} setError={setError}/>
                   </tr>
                 ))}
               </tbody>

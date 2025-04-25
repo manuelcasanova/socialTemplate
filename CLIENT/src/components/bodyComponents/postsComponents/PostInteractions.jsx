@@ -25,14 +25,13 @@ import { fetchPostCommentsCount } from './util_functions/FetchPostComments';
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function PostInteractions({ postId, isNavOpen, postContent, postSender, loggedInUser, setPosts, hideFlag }) {
+export default function PostInteractions({ postId, isNavOpen, postContent, postSender, loggedInUser, setPosts, hideFlag, setError }) {
 
   const { auth } = useAuth();
   const loggedInUserId = auth.userId
   // console.log("loggedInUserId in PostInteractions", loggedInUserId)
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [reactionsCount, setReactionsCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
@@ -98,11 +97,6 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   if (isLoading) {
     return <LoadingSpinner />;
   }
-
-  if (error) {
-    return <Error isNavOpen={isNavOpen} error={error} />;
-  }
-
 
 
   return (
@@ -181,7 +175,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             {showEllipsisMenu && (
               <div className="post-menu-dropdown">
                 <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
-                <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} />
+                <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
                 <FontAwesomeIcon icon={faXmark}
                   onClick={() => setShowEllipsisMenu(prev => !prev)}
                 />

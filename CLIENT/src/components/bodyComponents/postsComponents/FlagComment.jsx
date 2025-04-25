@@ -8,12 +8,11 @@ import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
-export default function FlagComment({commentId, loggedInUserId, hideFlag, isNavOpen}) {
+export default function FlagComment({commentId, loggedInUserId, hideFlag, isNavOpen, setError}) {
 
   // console.log("commentId in FlagPost", commentId)
 
   const [flagged, setFlagged] = useState(false);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -55,11 +54,6 @@ export default function FlagComment({commentId, loggedInUserId, hideFlag, isNavO
       return <LoadingSpinner />;
     }
   
-    if (error) {
-      return <Error isNavOpen={isNavOpen} error={error} />;
-    }
-  
-  
 
   return (
     <div className="post-actions">
@@ -74,7 +68,6 @@ export default function FlagComment({commentId, loggedInUserId, hideFlag, isNavO
         {flagged && <span style={{ marginLeft: "5px", cursor: 'default' }}>Reported. Pending review</span>}
       </button>
           )}
-      {error && <p className="error">{error}</p>}
     </div>
   )
 }

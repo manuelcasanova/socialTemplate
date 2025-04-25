@@ -12,15 +12,13 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
-import Error from "../Error";
 
 
-export default function ModeratorOkReportedComment({ commentId, refreshData, setReports, isNavOpen }) {
+export default function ModeratorOkReportedComment({ commentId, refreshData, setReports, isNavOpen, setError }) {
 const axiosPrivate = useAxiosPrivate();
 
 const { auth } = useAuth();
 const [isLoading, setIsLoading] = useState(false);
-const [error, setError] = useState(false)
   const errRef = useRef();
 
 const handleApproveClick = async () => {
@@ -73,10 +71,6 @@ const handleApproveClick = async () => {
           <LoadingSpinner />
         </div>
       )
-    }
-  
-    if (error) {
-      return <Error isNavOpen={isNavOpen} error={error}/>
     }
   
 
