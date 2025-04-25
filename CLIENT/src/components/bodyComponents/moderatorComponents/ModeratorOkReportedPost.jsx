@@ -1,3 +1,7 @@
+import { useState, useRef } from "react";
+
+//Hooks
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 
@@ -6,14 +10,22 @@ import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
+//Components
+import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+import Error from "../Error";
 
-export default function ModeratorOkReportedPost({ postId, refreshData, setReports }) {
+
+export default function ModeratorOkReportedPost({ postId, refreshData, setReports, isNavOpen }) {
 const axiosPrivate = useAxiosPrivate();
 
 const { auth } = useAuth();
 // console.log("postId", postId)
+const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState(false)
+  const errRef = useRef();
 
 const handleApproveClick = async () => {
+  setIsLoading(true);
   try {
     // Step 1: Update the post_reports status
     await axiosPrivate.put(`/reports/post/ok/${postId}`, {
@@ -33,10 +45,40 @@ const handleApproveClick = async () => {
     if (refreshData) refreshData(); 
 
   } catch (err) {
-    console.error("Error approving report:", err);
+    console.error(err);
+    
+    if (!err?.response) {
+      setError('Server is unreachable. Please try again later.');
+    } else if (err.response?.status === 404) {
+      setError('No post report found');
+    } else if (err.response?.status === 403) {
+      setError('Access denied. You might not have permission to view this.');
+    } else if (err.response?.status === 401) {
+      setError('Unauthorized. Please log in and try again.');
+    } else if (err.response?.status === 500) {
+      setError('Server error. Please try again later.');
+    } else {
+      setError('Something went wrong. Please try again.');
+    }
+    errRef.current?.focus();
+  }
+  finally {
+    setIsLoading(false);
   }
 };
 
+    if (isLoading) {
+      return (
+        <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
+          <LoadingSpinner />
+        </div>
+      )
+    }
+  
+    if (error) {
+      return <Error isNavOpen={isNavOpen} error={error}/>
+    }
+  
 
   return (
 

@@ -1,13 +1,29 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan } from "@fortawesome/free-solid-svg-icons";
+import { useState, useRef } from "react";
+
+
+//Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";  // Import custom hook for making requests
 import useAuth from "../../../hooks/useAuth"; // Import authentication hook
 
-export default function ModeratorHideReportedComment({ commentId, refreshData, setReports }) {
+//Styling
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBan } from "@fortawesome/free-solid-svg-icons";
+
+//Components
+import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+import Error from "../Error";
+
+
+export default function ModeratorHideReportedComment({ commentId, refreshData, setReports, isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState(false)
+  const errRef = useRef();
+
 
   const handleHideClick = async () => {
+    setIsLoading(true);
     try {
       // Step 1: Update the post_comments_reports status to 'Inappropriate'
       await axiosPrivate.put(`/reports-comments/comment/inappropriate/${commentId}`, {
@@ -28,9 +44,41 @@ export default function ModeratorHideReportedComment({ commentId, refreshData, s
       // Optionally, refresh data to ensure the UI is up to date
       if (refreshData) refreshData();
     } catch (err) {
-      console.error("Error hiding report:", err);
+      console.error(err);
+      
+      if (!err?.response) {
+        setError('Server is unreachable. Please try again later.');
+      } else if (err.response?.status === 404) {
+        setError('No post report found');
+      } else if (err.response?.status === 403) {
+        setError('Access denied. You might not have permission to view this.');
+      } else if (err.response?.status === 401) {
+        setError('Unauthorized. Please log in and try again.');
+      } else if (err.response?.status === 500) {
+        setError('Server error. Please try again later.');
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
+      errRef.current?.focus();
+    }
+    finally {
+      setIsLoading(false);
     }
   };
+
+
+      if (isLoading) {
+        return (
+          <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
+            <LoadingSpinner />
+          </div>
+        )
+      }
+    
+      if (error) {
+        return <Error isNavOpen={isNavOpen} error={error}/>
+      }
+    
 
   return (
     <td>
