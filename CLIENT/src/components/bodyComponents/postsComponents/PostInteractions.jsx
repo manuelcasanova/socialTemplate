@@ -29,6 +29,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
   const { auth } = useAuth();
   const loggedInUserId = auth.userId
+  // console.log("loggedInUserId in PostInteractions", loggedInUserId)
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");

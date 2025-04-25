@@ -133,10 +133,10 @@ const hasReported = async (req, res, next) => {
 
     const checkQuery = `
       SELECT 1 FROM post_comments_reports
-      WHERE comment_id = $1 AND reported_by = $2 AND status = 'Reported'
+      WHERE comment_id = $1 AND status = 'Reported'
       LIMIT 1;
     `;
-    const values = [comment_id, user_id];
+    const values = [comment_id];
     const { rows } = await pool.query(checkQuery, values);
 
     const hasReported = rows.length > 0;
@@ -150,11 +150,35 @@ const hasReported = async (req, res, next) => {
   }
 };
 
+//Check if a comment has been hidden by a moderator
+const hasHidden = async (req, res, next) => {
+  try {
+    const { comment_id, user_id } = req.query;
+
+    if (!comment_id || !user_id) {
+      return res.status(400).json({ error: 'comment_id and user_id are required as query parameters.' });
+    }
+
+    const checkQuery = `
+      SELECT 1 FROM post_comments_reports
+      WHERE comment_id = $1 AND status = 'Inappropriate'
+      LIMIT 1;
+    `;
+    const values = [comment_id];
+    const { rows } = await pool.query(checkQuery, values);
+
+    const hasHidden = rows.length > 0;
+
+    return res.status(200).json({ hasHidden });
+  } catch (error) {
+    console.error('Error checking if comment has been flagged as inappropriate:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 //Report a comment
 const reportComment = async (req, res, next) => {
   try {
-    // console.log("reportPost in reportsController");
-
     const { comment_id, reported_by, reason } = req.body;
 
     if (!comment_id || !reported_by) {
@@ -169,18 +193,25 @@ const reportComment = async (req, res, next) => {
       SELECT * FROM post_comments_reports WHERE comment_id = $1;
     `;
     const { rows: existingPostRows } = await pool.query(existingPostQuery, [comment_id]);
-    
-    if (existingPostRows.length > 0 && existingPostRows[0].status === 'Inappropriate') {
-      await pool.query('ROLLBACK');
-      return res.status(400).json({ error: 'Cannot report a comment marked as Inappropriate.' });
-    }
 
-    let report;
-    const status = 'Reported'; 
-    const reportedAt = new Date(); 
-
+    // Check if any report exists for the comment
     if (existingPostRows.length > 0) {
-      // Post exists, update the record
+      // If the comment is already reported
+      if (existingPostRows[0].status === 'Reported') {
+        await pool.query('ROLLBACK');
+        return res.status(400).json({ error: 'This comment has already been reported.' });
+      }
+
+      // If the comment is marked as inappropriate
+      if (existingPostRows[0].status === 'Inappropriate') {
+        await pool.query('ROLLBACK');
+        return res.status(400).json({ error: 'Cannot report a comment marked as Inappropriate.' });
+      }
+
+      // If the comment exists but hasn't been reported yet, update the record
+      const status = 'Reported'; 
+      const reportedAt = new Date();
+
       const updateReportQuery = `
         UPDATE post_comments_reports
         SET status = $1, reported_by = $2, reported_at = $3, reason = $4
@@ -189,9 +220,26 @@ const reportComment = async (req, res, next) => {
       `;
       const updateReportValues = [status, reported_by, reportedAt, reason || null, comment_id];
       const { rows: updatedRows } = await pool.query(updateReportQuery, updateReportValues);
-      report = updatedRows[0];
+      const report = updatedRows[0];
+
+      // Insert into post_comment_report_history
+      const historyQuery = `
+        INSERT INTO post_comment_report_history (report_id, changed_by, new_status, note)
+        VALUES ($1, $2, $3, $4)
+      `;
+      const historyValues = [report.id, reported_by, status, reason || null];
+      await pool.query(historyQuery, historyValues);
+
+      // Commit transaction
+      await pool.query('COMMIT');
+
+      return res.status(201).json({ message: 'Comment reported successfully', report });
+
     } else {
-      // Post doesn't exist, insert a new record
+      // If no existing report found, create a new report
+      const status = 'Reported'; 
+      const reportedAt = new Date();
+
       const insertReportQuery = `
         INSERT INTO post_comments_reports (comment_id, reported_by, reason, status, reported_at)
         VALUES ($1, $2, $3, $4, $5)
@@ -199,27 +247,29 @@ const reportComment = async (req, res, next) => {
       `;
       const insertReportValues = [comment_id, reported_by, reason || null, status, reportedAt];
       const { rows: insertedRows } = await pool.query(insertReportQuery, insertReportValues);
-      report = insertedRows[0];
+      const report = insertedRows[0];
+
+      // Insert into post_comment_report_history
+      const historyQuery = `
+        INSERT INTO post_comment_report_history (report_id, changed_by, new_status, note)
+        VALUES ($1, $2, $3, $4)
+      `;
+      const historyValues = [report.id, reported_by, status, reason || null];
+      await pool.query(historyQuery, historyValues);
+
+      // Commit transaction
+      await pool.query('COMMIT');
+
+      return res.status(201).json({ message: 'Comment reported successfully', report });
     }
 
-    // Insert into post_report_history
-    const historyQuery = `
-      INSERT INTO post_comment_report_history (report_id, changed_by, new_status, note)
-      VALUES ($1, $2, $3, $4)
-    `;
-    const historyValues = [report.id, reported_by, status, reason || null];
-    await pool.query(historyQuery, historyValues);
-
-    // Commit transaction
-    await pool.query('COMMIT');
-
-    return res.status(201).json({ message: 'Comment reported successfully', report });
   } catch (error) {
     await pool.query('ROLLBACK');
     console.error('Error reporting a comment:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // Add report history 
 const addReportHistory = async (req, res) => {
@@ -287,6 +337,7 @@ getHiddenComments,
 reportCommentOk,
 addCommentReportHistory,
 hasReported,
+hasHidden,
 reportComment,
 reportCommentInappropriate,
 addReportHistory

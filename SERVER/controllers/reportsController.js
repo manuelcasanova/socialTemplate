@@ -9,12 +9,15 @@ const hasReported = async (req, res, next) => {
       return res.status(400).json({ error: 'post_id and user_id are required as query parameters.' });
     }
 
+// console.log("post_id", post_id)
+// console.log("user_id", user_id)
+
     const checkQuery = `
       SELECT 1 FROM post_reports
-      WHERE post_id = $1 AND reported_by = $2 AND status = 'Reported'
+      WHERE post_id = $1 AND status = 'Reported'
       LIMIT 1;
     `;
-    const values = [post_id, user_id];
+    const values = [post_id];
     const { rows } = await pool.query(checkQuery, values);
 
     const hasReported = rows.length > 0;
@@ -37,10 +40,10 @@ const hasHidden = async (req, res, next) => {
 
     const checkQuery = `
       SELECT 1 FROM post_reports
-      WHERE post_id = $1 AND reported_by = $2 AND status = 'Inappropriate'
+      WHERE post_id = $1 AND status = 'Inappropriate'
       LIMIT 1;
     `;
-    const values = [post_id, user_id];
+    const values = [post_id];
     const { rows } = await pool.query(checkQuery, values);
 
     const hasHidden = rows.length > 0;
@@ -81,8 +84,6 @@ const getHiddenPosts = async (req, res, next) => {
 // Report a post
 const reportPost = async (req, res, next) => {
   try {
-    // console.log("reportPost in reportsController");
-
     const { post_id, reported_by, reason } = req.body;
 
     if (!post_id || !reported_by) {
@@ -97,57 +98,72 @@ const reportPost = async (req, res, next) => {
       SELECT * FROM post_reports WHERE post_id = $1;
     `;
     const { rows: existingPostRows } = await pool.query(existingPostQuery, [post_id]);
-    
-    if (existingPostRows.length > 0 && existingPostRows[0].status === 'Inappropriate') {
-      await pool.query('ROLLBACK');
-      return res.status(400).json({ error: 'Cannot report a post marked as Inappropriate.' });
-    }
 
-    let report;
-    const status = 'Reported'; 
-    const reportedAt = new Date(); 
-
+    // Check if any report exists for the post
     if (existingPostRows.length > 0) {
-      // Post exists, update the record
+      // Check if the post is already reported or inappropriate
+      if (existingPostRows[0].status === 'Reported') {
+        await pool.query('ROLLBACK');
+        return res.status(400).json({ error: 'This post has already been reported.' });
+      }
+
+      if (existingPostRows[0].status === 'Inappropriate') {
+        await pool.query('ROLLBACK');
+        return res.status(400).json({ error: 'Cannot report a post marked as Inappropriate.' });
+      }
+
+      // Update the existing report if it's not already reported or inappropriate
       const updateReportQuery = `
         UPDATE post_reports
         SET status = $1, reported_by = $2, reported_at = $3, reason = $4
         WHERE post_id = $5
         RETURNING *;
       `;
-      const updateReportValues = [status, reported_by, reportedAt, reason || null, post_id];
+      const updateReportValues = ['Reported', reported_by, new Date(), reason || null, post_id];
       const { rows: updatedRows } = await pool.query(updateReportQuery, updateReportValues);
-      report = updatedRows[0];
+      const report = updatedRows[0];
+
+      // Insert into post_report_history
+      const historyQuery = `
+        INSERT INTO post_report_history (report_id, changed_by, new_status, note)
+        VALUES ($1, $2, $3, $4)
+      `;
+      const historyValues = [report.id, reported_by, 'Reported', reason || null];
+      await pool.query(historyQuery, historyValues);
+
+      // Commit transaction
+      await pool.query('COMMIT');
+      return res.status(201).json({ message: 'Post reported successfully', report });
     } else {
-      // Post doesn't exist, insert a new record
+      // If no existing report found, create a new report
       const insertReportQuery = `
         INSERT INTO post_reports (post_id, reported_by, reason, status, reported_at)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING *;
       `;
-      const insertReportValues = [post_id, reported_by, reason || null, status, reportedAt];
+      const insertReportValues = [post_id, reported_by, reason || null, 'Reported', new Date()];
       const { rows: insertedRows } = await pool.query(insertReportQuery, insertReportValues);
-      report = insertedRows[0];
+      const report = insertedRows[0];
+
+      // Insert into post_report_history
+      const historyQuery = `
+        INSERT INTO post_report_history (report_id, changed_by, new_status, note)
+        VALUES ($1, $2, $3, $4)
+      `;
+      const historyValues = [report.id, reported_by, 'Reported', reason || null];
+      await pool.query(historyQuery, historyValues);
+
+      // Commit transaction
+      await pool.query('COMMIT');
+      return res.status(201).json({ message: 'Post reported successfully', report });
     }
-
-    // Insert into post_report_history
-    const historyQuery = `
-      INSERT INTO post_report_history (report_id, changed_by, new_status, note)
-      VALUES ($1, $2, $3, $4)
-    `;
-    const historyValues = [report.id, reported_by, status, reason || null];
-    await pool.query(historyQuery, historyValues);
-
-    // Commit transaction
-    await pool.query('COMMIT');
-
-    return res.status(201).json({ message: 'Post reported successfully', report });
   } catch (error) {
     await pool.query('ROLLBACK');
     console.error('Error reporting a post:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // Controller for getting post report history
 const getPostReportHistory = async (req, res, next) => {

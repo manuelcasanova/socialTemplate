@@ -240,9 +240,7 @@ export default function Posts({ isNavOpen }) {
         <WritePost loggedInUser={loggedInUser} setNewPostSubmitted={setNewPostSubmitted} />
 
         <div className="write-post-container">
-
-
-
+          
           <FilterUsername
             filterUsername={filterUsername}
             setFilterUsername={setFilterUsername}

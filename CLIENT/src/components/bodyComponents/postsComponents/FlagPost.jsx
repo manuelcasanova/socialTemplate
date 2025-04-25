@@ -16,6 +16,9 @@ export default function FlagPost({postId, loggedInUserId, hideFlag, isNavOpen}) 
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // console.log("flagged", flagged)
+  // console.log("loggedInUserId in FlagPost", loggedInUserId)
+
   useEffect(() => {
     const checkIfReported = async () => {
       try {
