@@ -3,6 +3,7 @@ const pool = require('../config/db');
 const jwt = require('jsonwebtoken');
 let nodemailer = require('nodemailer');
 const { response } = require('express');
+const admin = require('../firebaseAdmin');  
 const validateEmailConfig = require('../middleware/validateEnv')
 
 const BASE_URL = process.env.REMOTE_CLIENT_APP;
@@ -238,7 +239,43 @@ const getRoleAssignments = (role) => {
 };
 
 
+// New Google Sign-Up Handler
+const handleGoogleSignUp = async (req, res) => {
+    const { token } = req.body;  // The token will be sent from the frontend
+  
+    try {
+      // Verify the Firebase ID token using Firebase Admin SDK
+      const decodedToken = await admin.auth().verifyIdToken(token);
+      const { email, uid, name } = decodedToken;
+  
+      // Check if the user already exists (based on email or UID)
+      const duplicateCheckQuery = 'SELECT * FROM users WHERE email = $1 AND is_active = true';
+      const result = await pool.query(duplicateCheckQuery, [email]);
+  
+      if (result.rows.length > 0) {
+        return res.status(409).json({ message: 'User with this email already exists.' });
+      }
+  
+      // Proceed to create a new user with the decoded token details
+      const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified) VALUES ($1, $2, $3, true) RETURNING user_id';
+      const userInsertResult = await pool.query(insertUserQuery, [name, email, 'google_auth_token']); // Store 'google_auth_token' as a placeholder password
+      const newUserId = userInsertResult.rows[0].user_id;
+  
+      // Handle user roles and verification (can be skipped or modified as needed)
+      const roleAssignments = getRoleAssignments('user_not_subscribed');
+      const roleQueries = roleAssignments.map(role_id => {
+        return pool.query('INSERT INTO user_roles (user_id, role_id) VALUES ($1, $2)', [newUserId, role_id]);
+      });
+  
+      await Promise.all(roleQueries);
+  
+      res.status(201).json({ message: 'Google sign-up successful. User created.' });
+  
+    } catch (err) {
+      console.error('Error verifying Firebase token:', err);
+      res.status(500).json({ message: 'Error during Google sign-up.' });
+    }
+  };
 
 
-
-module.exports = { handleNewUser };
+module.exports = { handleNewUser, handleGoogleSignUp };

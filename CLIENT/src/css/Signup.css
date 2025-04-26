@@ -220,3 +220,31 @@ width: 100%;
     margin-left: 0;
   }
 }
+
+/* Google button */
+
+.google-signup-btn {
+  /* background-color: #4285F4;  */
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.google-signup-btn:hover {
+  background-color: #357AE8; /* Slightly darker blue on hover */
+  transform: scale(1.05);
+}
+
+.google-signup-btn:focus {
+  outline: none;
+}
+
+.google-signup-btn:active {
+  background-color: #3367D6; /* Even darker blue when button is pressed */
+}

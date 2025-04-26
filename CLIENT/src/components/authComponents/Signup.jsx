@@ -4,8 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+
 import axios from './../../api/axios.js';
 import { Link } from "react-router-dom";
+
+
+import { auth } from '../../firebase';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+
+
 
 export default function Signup({ isNavOpen, screenWidth }) {
   const navigate = useNavigate();
@@ -97,7 +105,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
     }));
   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!Object.values(validity).every(Boolean)) {
@@ -165,14 +173,36 @@ const handleSubmit = async (e) => {
   };
 
 
-const handleIgnoreRestoreAccount = () => {
-  setRestoreAction(false)
-  setFormData((prev) => ({
-    ...prev,
-    restoreAction
-  }));
+  const handleIgnoreRestoreAccount = () => {
+    setRestoreAction(false)
+    setFormData((prev) => ({
+      ...prev,
+      restoreAction
+    }));
 
+  }
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const provider = new GoogleAuthProvider(); // Google provider
+      const result = await signInWithPopup(auth, provider); // Use the shared auth instance
+      const user = result.user;
+  
+      const idToken = await user.getIdToken();
+  
+      const response = await axios.post('/signup/google', { token: idToken });
+  
+// console.log("response google", response)
+
+if (response.status === 201) {
+  setSuccess(true); 
 }
+    } catch (err) {
+      console.error('Google Sign-Up Error:', err);
+    }
+  };
+  
+  
 
   const handleRestoreAccount = async () => {
     // Call an API to restore the account or reactivate the email
@@ -245,67 +275,73 @@ const handleIgnoreRestoreAccount = () => {
   return (
     <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
       <div className='centered-section transparent'>
-      <button className="close-button" onClick={handleClose}>✖</button>
+        <button className="close-button" onClick={handleClose}>✖</button>
 
-      {success ? (
-        <section className='signup-success'>
-          <div className="success-message">
-            <h2>All Set!</h2>
-            <p>Check your inbox (or spam) to verify your account.</p>
-          </div>
-        </section>
-      ) : (
-        <section className="centered-section">
-          <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+        {success ? (
+          <section className='signup-success'>
+            <div className="success-message">
+              <h2>All Set!</h2>
+              <p>If you registered with your email, please check your inbox (or spam folder) to verify your account.</p>
+            </div>
+          </section>
+        ) : (
+          <section className="centered-section">
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
-          {/* Render the Restore Button if restoreAction is true */}
-          {restoreAction && (
-            <div className="restore-action">
-              {/* <p>{errMsg}</p> */}
-              <button
-                className="button-auth"
-                onClick={handleRestoreAccount}
-                disabled={isSubmitting || loading}
-              >
+            {/* Render the Restore Button if restoreAction is true */}
+            {restoreAction && (
+              <div className="restore-action">
+                {/* <p>{errMsg}</p> */}
+                <button
+                  className="button-auth"
+                  onClick={handleRestoreAccount}
+                  disabled={isSubmitting || loading}
+                >
+                  {loading ? (
+                    <div className="spinner">
+                      <div className="spinner__circle"></div>
+                    </div>
+                  ) : (
+                    "Restore Account"
+                  )}
+                </button>
+                <button
+                  className="button-auth"
+                  onClick={handleIgnoreRestoreAccount}
+                >Create a New Account</button>
+              </div>
+            )}
+
+            <div className="signup-title">Sign Up</div>
+            <form className="signup-form" onSubmit={handleSubmit}>
+              {renderInput("user", "Name", "text", "name")}
+              {renderInput("email", "Email", "text", "email")}
+              {renderInput("pwd", "Password", "password", "pwd")}
+              {renderInput("matchPwd", "Confirm Password", "password", "match")}
+
+              <button className='button-auth' disabled={!Object.values(validity).every(Boolean) || isSubmitting}>
                 {loading ? (
                   <div className="spinner">
                     <div className="spinner__circle"></div>
                   </div>
                 ) : (
-                  "Restore Account"
+                  "Sign Up"
                 )}
               </button>
-              <button 
-              className="button-auth"
-              onClick={handleIgnoreRestoreAccount}
-              >Create a New Account</button>
+            </form>
+
+            <button className="google-signup-btn" onClick={handleGoogleSignUp}>
+            <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
+
+              Sign up with Google
+              </button>
+
+            <div className='have-an-account'>
+              <p>Already have an account?</p>
+              <p><Link to="/signin">Sign In</Link></p>
             </div>
-          )}
-
-          <div className="signup-title">Sign Up</div>
-          <form className="signup-form" onSubmit={handleSubmit}>
-            {renderInput("user", "Name", "text", "name")}
-            {renderInput("email", "Email", "text", "email")}
-            {renderInput("pwd", "Password", "password", "pwd")}
-            {renderInput("matchPwd", "Confirm Password", "password", "match")}
-
-            <button className='button-auth' disabled={!Object.values(validity).every(Boolean) || isSubmitting}>
-              {loading ? (
-                <div className="spinner">
-                  <div className="spinner__circle"></div>
-                </div>
-              ) : (
-                "Sign Up"
-              )}
-            </button>
-          </form>
-
-          <div className='have-an-account'>
-            <p>Already have an account?</p>
-            <p><Link to="/signin">Sign In</Link></p>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
       </div>
     </div>
   );
