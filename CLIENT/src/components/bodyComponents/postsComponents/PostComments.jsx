@@ -531,7 +531,7 @@ const [inappropriateComments, setInappropriateComments] = useState(new Set());
                   </div>
                 </div>
 
-                <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} loggedInUserId={loggedInUserId} hideFlag={inappropriateComments.has(comment.id)} setError={setError}/>
+                <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} commentCommenter={comment.commenter} loggedInUserId={loggedInUserId} hideFlag={inappropriateComments.has(comment.id)} setError={setError}/>
 
 
               </div>

@@ -263,6 +263,7 @@ const getPostCommentsCount = async (req, res) => {
       JOIN users u ON u.user_id = pc.commenter
       LEFT JOIN muted m ON m.muter = $2 AND m.mutee = u.user_id
       WHERE pc.post_id = $1
+      AND pc.is_deleted = FALSE
         AND (m.mute IS NULL OR m.mute = FALSE);
     `;
 
@@ -296,6 +297,7 @@ const query = `
   JOIN users u ON u.user_id = pc.commenter
   LEFT JOIN muted m1 ON m1.muter = $2 AND m1.mutee = u.user_id
   WHERE pc.post_id = $1
+  AND pc.is_deleted = FALSE
     AND (m1.mute IS NULL OR m1.mute = FALSE)
   ORDER BY pc.date DESC;
 `;
@@ -596,6 +598,55 @@ const sendCommentReaction = async (req, res) => {
   }
 };
 
+// Function to mark a comment as deleted (soft delete)
+const markCommentAsDeleted = async (req, res) => {
+  const { id } = req.params;
+  const { loggedInUserId } = req.body; // Logged-in user ID from the request body
+
+console.log("req.body", req.body)
+
+  try {
+    // First, fetch the sender of the post
+    const commentResult = await pool.query(
+      `SELECT commenter FROM posts_comments WHERE id = $1;`,
+      [id]
+    );
+
+    if (commentResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Comment not found.' });
+    }
+
+    const comment = commentResult.rows[0];
+
+console.log("comment", comment)
+
+    // Ensure that the logged-in user is the sender of the post
+    if (comment.commenter !== loggedInUserId) {
+      return res.status(403).json({ error: 'You can only delete your own comments.' });
+    }
+
+    // Mark the post as deleted (soft delete)
+    const result = await pool.query(
+      `
+      UPDATE posts_comments
+      SET is_deleted = TRUE
+      WHERE id = $1
+      RETURNING *;
+      `,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Comment not found or already marked as deleted.' });
+    }
+
+    res.status(200).json({ message: 'Comment marked as deleted successfully.' });
+  } catch (error) {
+    console.error('Error marking comment as deleted:', error);
+    res.status(500).json({ error: 'Internal server error while marking comment as deleted.' });
+  }
+};
+
 
 module.exports = {
   getAllPosts,
@@ -610,5 +661,6 @@ module.exports = {
   sendReaction,
   getPostCommentsReactionsCount,
   getPostCommentsReactionsData,
-  sendCommentReaction
+  sendCommentReaction,
+  markCommentAsDeleted
 };

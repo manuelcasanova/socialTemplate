@@ -97,6 +97,30 @@ router.route('/delete/:id')
     postsController.markPostAsDeleted
   );
 
+  // Route to mark a post as deleted (soft delete)
+router.route('/comments/delete/:id')
+.put(
+  async (req, res, next) => {
+    try {
+      const rolesList = await fetchRoles();
+
+      // Define the roles that have permission to access this route
+      const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
+      const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
+
+      if (!hasRequiredRole) {
+        return res.status(403).json({ error: 'Permission denied: Only registered users have access to this route.' });
+      }
+
+      // Pass the roles to verifyRoles middleware
+      verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  },
+  postsController.markCommentAsDeleted
+);
+
 // Route to mark a post as deleted (soft delete)
 router.route('/send/')
 
