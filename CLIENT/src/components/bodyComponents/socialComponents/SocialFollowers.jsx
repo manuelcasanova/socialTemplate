@@ -151,15 +151,17 @@ export default function SocialFollowers({ isNavOpen }) {
                         />
                       )}
 
-                      {showLargePicture === user.user_id && (
+{showLargePicture === user.user_id && (
                         <div
-                        className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+                          className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
                           onClick={() => setShowLargePicture(null)}
                         >
                           <img
                             className='users-all-picture-large'
                             onClick={() => setShowLargePicture(null)}
-                            src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                            src={imageExistsMap[user.user_id]
+                              ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
+                              : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
                             onError={(e) => {
                               // Prevent infinite loop in case of repeated errors
                               e.target.onerror = null;

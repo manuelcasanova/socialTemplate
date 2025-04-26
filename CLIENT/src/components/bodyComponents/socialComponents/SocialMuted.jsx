@@ -61,7 +61,7 @@ export default function SocialMuted({ isNavOpen }) {
 
   const [filterUsername, setFilterUsername] = useState("");
 
- const inputRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -127,7 +127,7 @@ export default function SocialMuted({ isNavOpen }) {
 
         )}
 
-                <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
 
         <div className="users-container">
           {mutedUsersWithName.length > 0 ? (
@@ -158,26 +158,30 @@ export default function SocialMuted({ isNavOpen }) {
 
 
 
-                  {showLargePicture === user.user_id && <div
-                    className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
-                    onClick={() => setShowLargePicture(null)}
-                  >
-                    <img
-                      className='users-all-picture-large'
+{showLargePicture === user.user_id && (
+                    <div
+                      className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
                       onClick={() => setShowLargePicture(null)}
-                      src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                      onError={(e) => {
-                        // Prevent infinite loop in case of repeated errors
-                        e.target.onerror = null;
+                    >
+                      <img
+                        className='users-all-picture-large'
+                        onClick={() => setShowLargePicture(null)}
+                        src={imageExistsMap[user.user_id]
+                          ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
+                          : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                        onError={(e) => {
+                          // Prevent infinite loop in case of repeated errors
+                          e.target.onerror = null;
 
-                        // Check if the fallback image has already been set to avoid infinite loop
-                        if (e.target.src !== `${BACKEND}/media/profile_pictures/user.png`) {
-                          // Fall back to the default user image if the profile picture fails
-                          e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
-                        }
-                      }}
-                    />
-                  </div>}
+                          // Check if the fallback image has already been set to avoid infinite loop
+                          if (e.target.src !== `${BACKEND}/media/profile_pictures/user.png`) {
+                            // Fall back to the default user image if the profile picture fails
+                            e.target.src = `${BACKEND}/media/profile_pictures/user.png`;
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
 
                   <p>
                     {user.username.startsWith('inactive') ? 'Inactive User' : user.username}

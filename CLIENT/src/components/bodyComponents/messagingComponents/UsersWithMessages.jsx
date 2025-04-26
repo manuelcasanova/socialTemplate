@@ -90,6 +90,8 @@ export default function UsersWithMessages({ isNavOpen }) {
       setImageExistsMap(result);
     };
 
+
+
     if (users.length > 0) {
       checkImages();
     }
@@ -173,27 +175,31 @@ export default function UsersWithMessages({ isNavOpen }) {
 
 
 
-                  {showLargePicture === user.user_id && <div
-                    className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
-                    onClick={() => setShowLargePicture(null)}
-                  >
-                    <img
-                      className='users-all-picture-large'
-                      onClick={() => setShowLargePicture(null)}
-                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-                      onError={(e) => {
-                        // Prevent infinite loop in case of repeated errors
-                        e.target.onerror = null;
+{showLargePicture === user.user_id && (
+  <div
+    className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+    onClick={() => setShowLargePicture(null)}
+  >
+    <img
+      className='users-all-picture-large'
+      onClick={() => setShowLargePicture(null)}
+      src={imageExistsMap[user.user_id]
+        ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
+        : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+      onError={(e) => {
+        // Prevent infinite loop in case of repeated errors
+        e.target.onerror = null;
 
-                        // Check if the fallback image has already been set to avoid infinite loop
-                        if (e.target.src !== `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`) {
-                          // Fall back to the default user image if the profile picture fails
-                          e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
-                        }
-                      }}
-                    />
+        // Check if the fallback image has already been set to avoid infinite loop
+        if (e.target.src !== `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`) {
+          // Fall back to the default user image if the profile picture fails
+          e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+        }
+      }}
+    />
+  </div>
+)}
 
-                  </div>}
                   {/* 
 {console.log("user user id", user.user_id)}
 {console.log("usersWithNewMessages", usersWithNewMessages)} */}
