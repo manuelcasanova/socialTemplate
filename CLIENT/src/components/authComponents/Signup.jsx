@@ -199,6 +199,15 @@ if (response.status === 201) {
 }
     } catch (err) {
       console.error('Google Sign-Up Error:', err);
+
+      if (err?.response?.status === 409) {
+        setErrMsg('User with this email already exists.');
+      } else {
+        setErrMsg('Google Sign-Up failed. Please try again.');
+      }
+  
+      errRef.current?.focus();
+
     }
   };
   
