@@ -10,7 +10,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
 
-export default function CommentDelete({commentId, loggedInUserId, commentCommenter, setError}) {
+export default function CommentDelete({commentId, loggedInUserId, commentCommenter, setError, setPostComments}) {
 
   const [commentIdToDelete, setCommentIdToDelete] = useState(null);
 
@@ -20,6 +20,10 @@ export default function CommentDelete({commentId, loggedInUserId, commentComment
       try {
         await axiosPrivate.put(`/posts/comments/delete/${commentId}`, { loggedInUserId, commentCommenter});
       
+        setPostComments(prevComments =>
+          prevComments.filter(comment => comment.id !== commentId)
+        );
+
         setCommentIdToDelete(null); 
       } catch (err) {
         console.error("Error deleting comment:", err);

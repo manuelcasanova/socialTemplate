@@ -18,7 +18,7 @@ import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function PostCommentsInteractions({ commentId, commentDate, commentCommenter, loggedInUserId, hideFlag, setError }) {
+export default function PostCommentsInteractions({ commentId, commentDate, commentCommenter, loggedInUserId, hideFlag, setError, setPostComments }) {
 
   const navigate = useNavigate();
   const [reactionsCount, setReactionsCount] = useState();
@@ -139,7 +139,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
       )}
       {showEllipsisMenu && (
         <div className="post-menu-dropdown">
-          <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError}/>
+          <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments}/>
           <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
           <FontAwesomeIcon icon={faXmark}
             onClick={() => setShowEllipsisMenu(prev => !prev)}

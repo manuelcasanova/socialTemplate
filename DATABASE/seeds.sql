@@ -8,30 +8,15 @@ INSERT INTO roles (role_name) VALUES
 
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 
-  ('Superadministrator', 'superadmin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
-  ,
-  ('Manuel', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
-  ,
-    ('Laura', 'laura@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
-    ,
-    ('James', 'james@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('Emma', 'emma@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('Michael', 'michael@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('Sophia', 'sophia@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('Daniel', 'daniel@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('Olivia', 'olivia@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('William', 'william@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('Ava', 'ava@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('Benjamin', 'benjamin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
-('Isabella', 'isabella@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg');
+  ('Superadministrator', 'superadmin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg');
 
   
-INSERT INTO followers (follower_id, followee_id, status, lastmodification, newrequest) VALUES
+-- INSERT INTO followers (follower_id, followee_id, status, lastmodification, newrequest) VALUES
   -- Manuel follows Superadministrator (accepted status)
-   (2, 1, 'accepted', CURRENT_TIMESTAMP, false),
+  --  (2, 1, 'accepted', CURRENT_TIMESTAMP, false),
   
   -- Superadministrator follows Manuel (accepted status)
-  (1, 2, 'accepted', CURRENT_TIMESTAMP, false);
+  -- (1, 2, 'accepted', CURRENT_TIMESTAMP, false);
 
   -- Manuel requests to follow Superadministrator (pending status)
   -- (2, 1, 'pending', CURRENT_TIMESTAMP, true);
@@ -45,21 +30,11 @@ INSERT INTO followers (follower_id, followee_id, status, lastmodification, newre
 INSERT INTO user_roles (user_id, role_id, assigned_by_user_id)
 VALUES
 (1, 1, 1),
-(2, 1, 2),
-(1, 5, 1),
-(2, 3, 1),
-(2, 5, 1),
-(3, 1, 1),
-(4, 1, 1),
-(5, 1, 1),
-(6, 1, 1),
-(7, 1, 1),
-(8, 1, 1),
-(9, 1, 1),
-(10, 1, 1),
-(11, 1, 1),
-(12, 1, 1),
-(13, 1, 1);
+(1, 2, 1),
+(1, 3, 1),
+(1, 4, 1),
+(1, 5, 1)
+;
 
 -- INSERT INTO posts (sender, content, date, visibility, is_deleted)
 -- VALUES

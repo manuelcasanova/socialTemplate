@@ -603,7 +603,7 @@ const markCommentAsDeleted = async (req, res) => {
   const { id } = req.params;
   const { loggedInUserId } = req.body; // Logged-in user ID from the request body
 
-console.log("req.body", req.body)
+// console.log("req.body", req.body)
 
   try {
     // First, fetch the sender of the post
@@ -618,7 +618,7 @@ console.log("req.body", req.body)
 
     const comment = commentResult.rows[0];
 
-console.log("comment", comment)
+// console.log("comment", comment)
 
     // Ensure that the logged-in user is the sender of the post
     if (comment.commenter !== loggedInUserId) {
