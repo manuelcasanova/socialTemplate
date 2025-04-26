@@ -105,7 +105,8 @@ export default function ModeratorPosts({ isNavOpen }) {
               </thead>
               <tbody>
                 {reports.map((log) => (
-                  <tr key={`${log.report_id}-${log.reported_by}`}>
+                
+                  <tr key={`${log.id}-${log.reported_by}`}>
                     <td
                       style={{ cursor: 'pointer' }}
                       onClick={() => navigate(`/posts/${log.post_id}`)}
