@@ -13,8 +13,10 @@ const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
 const getAllUsers = async (req, res) => {
     try {
-        const { username, email, role, is_active, user_id } = req.query;
+        const { username, email, role, user_id } = req.query;
+        let {is_active} = req.query;
 
+        // console.log("req.query", req.query)
 
         // Validate and sanitize user_id (should be a positive integer)
         if (user_id && isNaN(user_id)) {
@@ -71,8 +73,16 @@ const getAllUsers = async (req, res) => {
             params.push(role);
         }
         if (is_active !== undefined) {
-            query += ` AND u.is_active = $${params.length + 1}`;
-            params.push(is_active === 'true');  // Convert to boolean
+            if (is_active === 'true') {
+                query += ` AND u.is_active = $${params.length + 1}`;
+                params.push(true);
+            } else if (is_active === 'false') {
+                query += ` AND u.is_active = $${params.length + 1}`;
+                params.push(false);
+            } else {
+                // Treat undefined as NULL to fetch both active and inactive users
+                query += ` AND u.is_active IS NULL`;
+            }
         }
         if (user_id) {
             query += ` AND u.user_id = $${params.length + 1}`;

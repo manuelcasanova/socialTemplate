@@ -37,6 +37,8 @@ export default function AdminUsers({ isNavOpen }) {
           axiosPrivate.get(`/roles/`) // Fetch roles via the server route
         ]);
 
+        // console.log("usersResponse.data", usersResponse.data)
+
         setUsers(usersResponse.data); // Set user data
         setRoles(rolesResponse.data); // Set roles from the server
 
