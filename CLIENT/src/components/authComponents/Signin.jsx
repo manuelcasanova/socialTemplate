@@ -77,7 +77,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
             const { email, displayName, uid } = user;
 
             // Now you can send the Firebase user data to your backend for further processing, like storing tokens
-            const response = await axios.post('/auth/firebase-login', { email, displayName, uid });
+            const response = await axios.post('/auth/firebase-login', { email, displayName, uid }, { withCredentials: true });
 
             const { userId, roles, accessToken, hasNewMessages } = response.data;
 
@@ -88,7 +88,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
         } catch (error) {
             // console.error('Error during Google login:', error);
             if (error.response && error.response.data && error.response.data.error) {
-                setErrMsg(error.response.data.error); 
+                setErrMsg(error.response.data.error);
             } else {
                 setErrMsg('Failed to sign in with Google.');
             }
@@ -98,10 +98,10 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
     };
 
 
-    const authenticateUser = async () => {
+    const authenticateUser = async (password) => {
         const csrfToken = getCsrfToken();  // Get CSRF token from cookies
-        return axios.post(SIGNIN_URL, JSON.stringify({ user, pwd: passwordRef.current.value, email: email.trim().toLowerCase() }), {
-            headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken, },
+        return axios.post(SIGNIN_URL, JSON.stringify({ user, pwd: password, email: email.trim().toLowerCase() }), {
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
             withCredentials: true,
         });
     };
@@ -231,15 +231,12 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                     </form>
 
                     <div>
-                      
-                
-                            {isLoading ? <LoadingSpinner /> : 
-                                      <button className="google-signup-btn" onClick={handleGoogleLogin} disabled={isLoading}>
-                                        <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
-                                        Sign in with Google
-                                      </button>
-                            }
-               =
+                        {isLoading ? <LoadingSpinner /> :
+                            <button className="google-signup-btn" onClick={handleGoogleLogin} disabled={isLoading}>
+                                <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
+                                Sign in with Google
+                            </button>
+                        }
                     </div>
 
                     <div className="have-an-account">
