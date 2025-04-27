@@ -10,6 +10,10 @@ import '../../css/Signup.css'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../firebase'
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+
+
 const SIGNIN_URL = '/auth';
 // const DEFAULT_EMAIL = '@example.com';
 const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
@@ -228,9 +232,14 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
 
                     <div>
                       
-                        <button onClick={handleGoogleLogin} disabled={isLoading}>
-                            {isLoading ? <LoadingSpinner /> : 'Sign in with Google'}
-                        </button>
+                
+                            {isLoading ? <LoadingSpinner /> : 
+                                      <button className="google-signup-btn" onClick={handleGoogleLogin} disabled={isLoading}>
+                                        <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
+                                        Sign up with Google
+                                      </button>
+                            }
+               =
                     </div>
 
                     <div className="have-an-account">
