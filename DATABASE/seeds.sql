@@ -8,7 +8,8 @@ INSERT INTO roles (role_name) VALUES
 
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 
-  ('Superadministrator', 'superadmin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg');
+  ('Superadministrator User', 'superadmin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),
+  ('Manuel Casanova', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg');
 
   
 -- INSERT INTO followers (follower_id, followee_id, status, lastmodification, newrequest) VALUES
@@ -33,7 +34,8 @@ VALUES
 (1, 2, 1),
 (1, 3, 1),
 (1, 4, 1),
-(1, 5, 1)
+(1, 5, 1),
+(2, 1, 1)
 ;
 
 -- INSERT INTO posts (sender, content, date, visibility, is_deleted)

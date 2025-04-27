@@ -3,19 +3,20 @@ const pool = require('../config/db');
 const jwt = require('jsonwebtoken');
 let nodemailer = require('nodemailer');
 const { response } = require('express');
-const admin = require('../firebaseAdmin');  
+const admin = require('../firebaseAdmin');
 const validateEmailConfig = require('../middleware/validateEnv')
 
 const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
-const usernameRegex = /^[A-z][A-z0-9-_]{3,23}$/;
+// const usernameRegex = /^[A-z][A-z0-9-_]{3,23}$/;
+const usernameRegex = /^[A-z][A-z0-9-_ ]{3,23}$/
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/;
 const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
 let forceCreateNew = false;
 
 const handleNewUser = async (req, res) => {
-    validateEmailConfig(); 
+    validateEmailConfig();
     let { user, pwd, email, role, restoreAction } = req.body;
 
     if (!user || !pwd || !email) {
@@ -35,8 +36,9 @@ const handleNewUser = async (req, res) => {
         return res.status(400).json({ 'message': 'Invalid email format.' });
     }
 
-    // Normalize username (capitalize the first letter and lowercase the rest)
-    user = user.charAt(0).toUpperCase() + user.slice(1).toLowerCase();
+
+    // Normalize username: Capitalize the first letter of each word in the username
+    user = user.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 
     // Default role if not provided (if the role is user_subscribed, for example)
     const userRole = role || 'user_not_subscribed'; // Default role can be 'user_not_subscribed'
@@ -57,11 +59,11 @@ const handleNewUser = async (req, res) => {
 
 
         if (!restoreAction) {
-        // Step 2: Check for inactive email (soft-deleted account)
-        const checkSoftDeleteQuery = 'SELECT * FROM users WHERE email LIKE $1 AND is_active = false';
+            // Step 2: Check for inactive email (soft-deleted account)
+            const checkSoftDeleteQuery = 'SELECT * FROM users WHERE email LIKE $1 AND is_active = false';
 
 
-        // Check for soft-deleted email, but skip it if 'forceCreateNew' is set to true
+            // Check for soft-deleted email, but skip it if 'forceCreateNew' is set to true
 
             // Query to match emails that are soft deleted (inactive) with a timestamp
             const softDeletedResult = await pool.query(checkSoftDeleteQuery, [`inactive-%${email}`]);
@@ -256,9 +258,37 @@ const handleGoogleSignUp = async (req, res) => {
         return res.status(409).json({ message: 'User with this email already exists.' });
       }
   
+      // Capitalize the username (first letter of each word)
+      let username = name.trim().toLowerCase(); // Normalize to lowercase first
+      let words = username.split(" ");  // Split by spaces to separate words
+      words = words.map(word => {
+        // Capitalize the first letter of each word and make the rest lowercase
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      });
+      username = words.join(" "); // Join the words back together with a single space
+  
+      let originalUsername = username;  // Keep the properly capitalized base username
+      let usernameExists = true;
+      let suffix = 2;
+  
+      // Check for uniqueness by querying the database using lowercase comparison
+      while (usernameExists) {
+        // Check if the username already exists, using a case-insensitive query
+        const usernameCheckQuery = 'SELECT * FROM users WHERE LOWER(username) = $1 AND is_active = true'; 
+        const usernameCheckResult = await pool.query(usernameCheckQuery, [username.toLowerCase()]); // Case-insensitive check
+  
+        if (usernameCheckResult.rows.length === 0) {
+          usernameExists = false; // No duplicate, proceed with this username
+        } else {
+          // If the username exists, append a suffix and keep the capitalization intact
+          username = `${originalUsername}_${suffix}`; // Append suffix to the capitalized base username
+          suffix++;
+        }
+      }
+  
       // Proceed to create a new user with the decoded token details
       const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified) VALUES ($1, $2, $3, true) RETURNING user_id';
-      const userInsertResult = await pool.query(insertUserQuery, [name, email, 'google_auth_token']); // Store 'google_auth_token' as a placeholder password
+      const userInsertResult = await pool.query(insertUserQuery, [username, email, 'google_auth_token']); // Store 'google_auth_token' as a placeholder password
       const newUserId = userInsertResult.rows[0].user_id;
   
       // Handle user roles and verification (can be skipped or modified as needed)
@@ -276,6 +306,11 @@ const handleGoogleSignUp = async (req, res) => {
       res.status(500).json({ message: 'Error during Google sign-up.' });
     }
   };
+  
+  
+  
+  
+  
 
 
 module.exports = { handleNewUser, handleGoogleSignUp };
