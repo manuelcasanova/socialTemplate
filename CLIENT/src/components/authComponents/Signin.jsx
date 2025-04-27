@@ -236,7 +236,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                             {isLoading ? <LoadingSpinner /> : 
                                       <button className="google-signup-btn" onClick={handleGoogleLogin} disabled={isLoading}>
                                         <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
-                                        Sign up with Google
+                                        Sign in with Google
                                       </button>
                             }
                =
