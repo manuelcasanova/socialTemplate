@@ -34,7 +34,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
   let regex, errorMessage;
 
   if (editMode === "username") {
-    regex = /^[a-zA-Z][a-zA-Z0-9_-]{3,23}$/;
+    regex = /^[A-z][A-z0-9-_ ]{3,23}$/
     errorMessage = "4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.";
   } else if (editMode === "email") {
     regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -326,12 +326,16 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
         setError(response?.data?.message || 'Update failed. Please try again.');
       }
     } catch (error) {
-      console.error("Critical Error: Update failed:", error);
-      setCriticalError(true);
-
-    } finally {
+      // Check if the error is a validation error from the backend (username or email already exists)
+      if (error.response && error.response.status === 400) {
+          setError(error.response.data.message || 'Validation error. Please check your input.');
+      } else {
+          console.error("Critical Error: Update failed:", error);
+          setCriticalError(true); // Only set critical error for actual server issues
+      }
+  } finally {
       setIsLoading(false);
-    }
+  }
   };
 
   const handleKeyDown = (e) => {

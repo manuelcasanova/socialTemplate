@@ -7,6 +7,9 @@ import axios from '../../api/axios';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import '../../css/Signup.css'
 
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../../firebase'
+
 const SIGNIN_URL = '/auth';
 // const DEFAULT_EMAIL = '@example.com';
 const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
@@ -55,6 +58,39 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
             .split('; ')
             .find(row => row.startsWith('csrf_token='))
             ?.split('=')[1];
+    };
+
+    const handleGoogleLogin = async () => {
+        const provider = new GoogleAuthProvider();
+        setIsLoading(true);
+
+        try {
+            // Sign in using Google provider
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            // Get user details
+            const { email, displayName, uid } = user;
+
+            // Now you can send the Firebase user data to your backend for further processing, like storing tokens
+            const response = await axios.post('/auth/firebase-login', { email, displayName, uid });
+
+            const { userId, roles, accessToken, hasNewMessages } = response.data;
+
+            setHasNewMessages(hasNewMessages);
+            setAuth({ userId, displayName, email, roles, accessToken });
+
+            navigate(from, { replace: true });
+        } catch (error) {
+            // console.error('Error during Google login:', error);
+            if (error.response && error.response.data && error.response.data.error) {
+                setErrMsg(error.response.data.error); 
+            } else {
+                setErrMsg('Failed to sign in with Google.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
 
@@ -189,6 +225,13 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                             <label htmlFor="persist">Trust This Device</label>
                         </div>
                     </form>
+
+                    <div>
+                      
+                        <button onClick={handleGoogleLogin} disabled={isLoading}>
+                            {isLoading ? <LoadingSpinner /> : 'Sign in with Google'}
+                        </button>
+                    </div>
 
                     <div className="have-an-account">
                         <p>Need an Account?</p>

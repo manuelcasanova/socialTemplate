@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const validateEmailConfig = require('../middleware/validateEnv')
 
-const usernameRegex = /^[A-z][A-z0-9-_]{5,23}$/;
+const usernameRegex = /^[A-z][A-z0-9-_ ]{3,23}$/
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/;
 const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
@@ -14,7 +14,7 @@ const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 const getAllUsers = async (req, res) => {
     try {
         const { username, email, role, user_id } = req.query;
-        let {is_active} = req.query;
+        let { is_active } = req.query;
 
         // console.log("req.query", req.query)
 
@@ -194,8 +194,11 @@ const updateUser = async (req, res) => {
 
     if (username) {
 
-        // Capitalize the username if it’s provided
-        username = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
+        // Capitalize each word in the username
+        username = username
+            .split(' ') // Split the string by spaces
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize first letter of each word
+            .join(' '); // Join the words back together with spaces
 
         if (!usernameRegex.test(username)) {
             return res.status(400).json({ 'message': 'Invalid username. It must be 4-24 characters long, start with a letter, and can include letters, numbers, dashes, or underscores.' });
@@ -207,7 +210,7 @@ const updateUser = async (req, res) => {
 
         // If the username exists and is not for the current user (i.e., userId), return an error
         if (checkUsernameResult.rowCount > 0 && checkUsernameResult.rows[0].user_id !== userId) {
-            return res.status(400).json({ error: 'Username already exists.' });
+            return res.status(400).json({ 'message': 'Username already exists.' });
         }
     }
 

@@ -7,92 +7,92 @@ const validateEmailConfig = require('../middleware/validateEnv')
 
 
 const handleLogin = async (req, res) => {
-    validateEmailConfig(); 
-    
-  const { pwd, email } = req.body;
+    validateEmailConfig();
 
-  if (!pwd || !email) return res.status(400).json({ 'message': 'Email and password are required.' });
+    const { pwd, email } = req.body;
 
-
-  try {
-    const data = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    const foundEmail = data.rows;
+    if (!pwd || !email) return res.status(400).json({ 'message': 'Email and password are required.' });
 
 
-    if (foundEmail.length === 0) {
-      return res.status(400).json({ error: "Wrong email or password" });
-    }
-
-    // Check if the user is verified
-    if (!foundEmail[0].is_verified) {
-      return res.status(401).json({ error: "Please verify your email before logging in. Check your spam folder" });
-    }
+    try {
+        const data = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        const foundEmail = data.rows;
 
 
-    bcrypt.compare(pwd, foundEmail[0].password, async (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: "Server error" });
-      } else if (result === true) {
-        // Grab the userId and roles
-        const userId = foundEmail[0].user_id;
+        if (foundEmail.length === 0) {
+            return res.status(400).json({ error: "Wrong email or password" });
+        }
 
-        // Get user roles from the user_roles and roles tables
-        const roleData = await pool.query(
-          'SELECT r.role_name FROM roles r ' +
-          'JOIN user_roles ur ON ur.role_id = r.role_id ' +
-          'WHERE ur.user_id = $1', [userId]
-        );
-
-        const roles = roleData.rows.map(role => role.role_name);
-
-        // Check if the user has any unread messages (status = 'sent')
-        const unreadMessages = await pool.query(
-            'SELECT * FROM user_messages WHERE receiver = $1 AND status = $2',
-            [userId, 'sent']
-          );
-  
-          const hasNewMessages = unreadMessages.rows.length > 0;
-
-        // Insert login history with UTC time (ISO format)
-        await pool.query(
-          'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',
-          [userId, new Date().toISOString()]  // Should store UTC time
-        );
+        // Check if the user is verified
+        if (!foundEmail[0].is_verified) {
+            return res.status(401).json({ error: "Please verify your email before logging in. Check your spam folder" });
+        }
 
 
-        // Create JWTs
-        const accessToken = jwt.sign(
-          { "UserInfo": { "email": foundEmail[0].email, "roles": roles } },
-          process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: '5m' }
-        );
-        const refreshToken = jwt.sign(
-          { "username": foundEmail[0].username },
-          process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: '24h' }
-        );
+        bcrypt.compare(pwd, foundEmail[0].password, async (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: "Server error" });
+            } else if (result === true) {
+                // Grab the userId and roles
+                const userId = foundEmail[0].user_id;
 
-        // Save refreshToken with current user
-        await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
+                // Get user roles from the user_roles and roles tables
+                const roleData = await pool.query(
+                    'SELECT r.role_name FROM roles r ' +
+                    'JOIN user_roles ur ON ur.role_id = r.role_id ' +
+                    'WHERE ur.user_id = $1', [userId]
+                );
 
-        // Set the refresh token as a secure HTTP-only cookie
-        res.cookie('jwt', refreshToken, {
-          httpOnly: true, sameSite: "None", secure: true, maxAge: 24 * 60 * 60 * 1000
+                const roles = roleData.rows.map(role => role.role_name);
+
+                // Check if the user has any unread messages (status = 'sent')
+                const unreadMessages = await pool.query(
+                    'SELECT * FROM user_messages WHERE receiver = $1 AND status = $2',
+                    [userId, 'sent']
+                );
+
+                const hasNewMessages = unreadMessages.rows.length > 0;
+
+                // Insert login history with UTC time (ISO format)
+                await pool.query(
+                    'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',
+                    [userId, new Date().toISOString()]  // Should store UTC time
+                );
+
+
+                // Create JWTs
+                const accessToken = jwt.sign(
+                    { "UserInfo": { "email": foundEmail[0].email, "roles": roles } },
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: '5m' }
+                );
+                const refreshToken = jwt.sign(
+                    { "username": foundEmail[0].username },
+                    process.env.REFRESH_TOKEN_SECRET,
+                    { expiresIn: '24h' }
+                );
+
+                // Save refreshToken with current user
+                await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
+
+                // Set the refresh token as a secure HTTP-only cookie
+                res.cookie('jwt', refreshToken, {
+                    httpOnly: true, sameSite: "None", secure: true, maxAge: 24 * 60 * 60 * 1000
+                });
+                // console.log(`Does User ID ${userId} have new messages? ${hasNewMessages}`)
+                // Return the response with the access token, user ID, and roles
+                res.json({ userId, roles, accessToken, hasNewMessages });
+
+            } else {
+                res.status(401).json({ error: "Wrong email or password" });
+            }
         });
-// console.log(`Does User ID ${userId} have new messages? ${hasNewMessages}`)
-        // Return the response with the access token, user ID, and roles
-        res.json({ userId, roles, accessToken, hasNewMessages });
-
-      } else {
-        res.status(401).json({ error: "Wrong email or password" });
-      }
-    });
 
 
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 };
 
 
@@ -133,10 +133,10 @@ const resendVerificationEmail = async (req, res) => {
 
         // Email content
         let mailOptions = {
-          from: RESET_EMAIL,
-          to: email,
-          subject: 'Email Verification - Fullstack Template',
-          html: `
+            from: RESET_EMAIL,
+            to: email,
+            subject: 'Email Verification - Fullstack Template',
+            html: `
           <!DOCTYPE html>
           <html lang="en">
               <head>
@@ -220,8 +220,8 @@ const resendVerificationEmail = async (req, res) => {
               </body>
           </html>
           `
-      };
-      
+        };
+
 
         // Send the email
         await new Promise((resolve, reject) => {
@@ -244,5 +244,58 @@ const resendVerificationEmail = async (req, res) => {
     }
 };
 
+const handleFirebaseLogin = async (req, res) => {
+    const { email, displayName, uid } = req.body;
 
-module.exports = { handleLogin, resendVerificationEmail };
+    // Validate input
+    if (!email || !uid) {
+        return res.status(400).json({ error: 'Invalid Firebase credentials.' });
+    }
+
+    try {
+        // Check if the user exists in the database
+        let data = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        let user = data.rows[0];
+
+        if (!user) {
+            // If user is not found, return the specific error message
+            return res.status(404).json({ error: 'User not registered.' });
+        }
+
+        // Generate JWT tokens
+        const userId = user.user_id;
+        const roleData = await pool.query('SELECT r.role_name FROM roles r JOIN user_roles ur ON ur.role_id = r.role_id WHERE ur.user_id = $1', [userId]);
+        const roles = roleData.rows.map(role => role.role_name);
+
+        const accessToken = jwt.sign(
+            { "UserInfo": { "email": email, "roles": roles } },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '5m' }
+        );
+        const refreshToken = jwt.sign(
+            { "username": user.username },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Save refresh token in the database
+        await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
+
+        // Set the refresh token as an HTTP-only cookie
+        res.cookie('jwt', refreshToken, {
+            httpOnly: true, sameSite: "None", secure: true, maxAge: 24 * 60 * 60 * 1000
+        });
+
+        // Send the response with the generated tokens
+        res.json({ userId, roles, accessToken });
+    } catch (error) {
+        console.error('Error during Firebase login:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+
+
+module.exports = { handleLogin, resendVerificationEmail, handleFirebaseLogin };

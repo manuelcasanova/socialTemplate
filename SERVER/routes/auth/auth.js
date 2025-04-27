@@ -6,4 +6,7 @@ const { signinAttemptsLimit } = require('../../middleware/signinAttemptsLimit')
 router.post('/', signinAttemptsLimit, authController.handleLogin);
 router.post('/resend-verification-email', signinAttemptsLimit, authController.resendVerificationEmail);
 
+router.post('/firebase-login', authController.handleFirebaseLogin); 
+
+
 module.exports = router;
