@@ -1,24 +1,33 @@
 import axios from '../api/axios';
 import useAuth from './useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const useRefreshToken = () => {
+    const navigate = useNavigate();
+
     const { setAuth } = useAuth();
 
     const refresh = async () => {
-        const response = await axios.get('/refresh', {
-            withCredentials: true
-        });
+        try {
+            const response = await axios.get('/refresh', {
+                withCredentials: true
+            });
 
-        setAuth(prev => {
+            setAuth(prev => {
 
-            return {
-                ...prev,
-                roles: response.data.roles,
-                accessToken: response.data.accessToken,
-                userId: response.data.userId
-            }
-        });
-        return response.data.accessToken;
+                return {
+                    ...prev,
+                    roles: response.data.roles,
+                    accessToken: response.data.accessToken,
+                    userId: response.data.userId
+                }
+            });
+            return response.data.accessToken;
+        } catch (err) {
+            console.error('Refresh failed', err);
+            navigate('/signin', { replace: true });
+            throw err; // important to throw, so axiosPrivate knows it failed
+        }
     }
     return refresh;
 };
