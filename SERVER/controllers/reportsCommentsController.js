@@ -65,8 +65,6 @@ const reportCommentOk = async (req, res) => {
   const { commentId } = req.params;
 
   try {
-    // console.log("Hit controller report Comment Ok")
-    // Update the status in post_reports
     const result = await pool.query(
       `UPDATE post_comments_reports
        SET status = $1
