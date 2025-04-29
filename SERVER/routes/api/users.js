@@ -27,17 +27,6 @@ router.route('/')
   .get(
     async (req, res, next) => {
       try {
-        const rolesList = await fetchRoles();
-
-        // Check if either Admin or SuperAdmin role exists in the list
-        const requiredRoles = ['Admin', 'SuperAdmin'];
-        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
-
-        if (!hasRequiredRole) {
-          return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can access this' });
-        }
-
-        // Pass the roles to verifyRoles middleware
         verifyRoles('Admin', 'SuperAdmin')(req, res, next);
       } catch (err) {
         next(err);
@@ -46,21 +35,15 @@ router.route('/')
     usersController.getAllUsers
   );
 
+
   router.route('/:userId')
   .get(
     async (req, res, next) => {
       try {
-        const rolesList = await fetchRoles();
-
-        const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];
-        const hasRequiredRole = requiredRoles.some(role => rolesList.includes(role));
-
-        if (!hasRequiredRole) {
-          return res.status(403).json({ error: 'Permission denied: Only registered users have access to this resource.' });
-        }
-
-        // Pass the roles to verifyRoles middleware
-        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+        verifyRoles(
+        'Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'
+        // 'ForceError'
+        )(req, res, next);
       } catch (err) {
         next(err);
       }
@@ -68,33 +51,19 @@ router.route('/')
     usersController.getUserById
   );
 
-
-router.route('/subscriptions/status/:user_id')
+  router.route('/subscriptions/status/:user_id')
   .get(
     async (req, res, next) => {
       try {
-        // Log the request path and parameters
-        // console.log("Received request for subscription status:", req.params);  // Logs { user_id: 'someUserId' }
-
-        // Fetch roles and verify them
-        const rolesList = await fetchRoles();
-        // console.log("Roles List:", rolesList);  // Log the rolesList to see what roles are being fetched
-
-        verifyRoles(...rolesList)(req, res, next);
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed')(req, res, next);
       } catch (err) {
-        console.error("Error during role verification:", err);  // Log any errors during role verification
         next(err);
       }
     },
     (req, res) => {
-      const { user_id } = req.params;
-      // console.log("User ID from URL params:", user_id);  // Log user_id extracted from the URL
-
-      // Call your controller to get the subscription status
       usersController.getSubscriptionStatus(req, res);
     }
   );
-
 
 
 
@@ -117,45 +86,39 @@ router.route('/softdelete/:userId')
   .put(
     async (req, res, next) => {
       try {
-        // Fetch roles and verify them
         const rolesList = await fetchRoles();
         verifyRoles(...rolesList)(req, res, next);
       } catch (err) {
-        next(err); // Handle errors during role verification
+        next(err); 
       }
     },
-    usersController.softDeleteUser // Controller function to handle user deletion
+    usersController.softDeleteUser 
   );
-
 
 //Hard delete user account
 router.route('/harddelete/:userId')
   .delete(
     async (req, res, next) => {
       try {
-        const rolesList = await fetchRoles();
         verifyRoles('Admin', 'SuperAdmin')(req, res, next);
       } catch (err) {
         next(err);
       }
     },
-    // usersController.hardDeleteUser
     usersController.adminVersionSoftDeleteUser
   );
-
 
 //Update roles (by admin)
 router.route('/:user_id/roles')
   .put(
     async (req, res, next) => {
       try {
-        const rolesList = await fetchRoles();
-        verifyRoles(...rolesList)(req, res, next); // Make sure the user is authorized (admin check)
+        verifyRoles('Admin', 'SuperAdmin')(req, res, next);
       } catch (err) {
         next(err);
       }
     },
-    usersController.updateRoles // This will call your controller to update roles
+    usersController.updateRoles 
   );
 
 router.route('/subscribe')

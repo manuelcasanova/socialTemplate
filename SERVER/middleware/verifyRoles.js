@@ -4,6 +4,8 @@ const verifyRoles = (...allowedRoles) => {
     if (!userRoles) {
       return res.status(403).json({ message: 'Access Denied' });
     }
+// console.log("userRoles", userRoles)
+// console.log("allowedRoles", allowedRoles)
 
     const hasRole = userRoles.some(role => allowedRoles.includes(role));
     
