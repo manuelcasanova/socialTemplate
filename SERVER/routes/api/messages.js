@@ -9,6 +9,7 @@ router.route('/all')
   .get(
     async (req, res, next) => {
       try {
+        console.log("hit")
         const rolesList = await fetchRoles();
 
         const requiredRoles = ['Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'];

@@ -56,7 +56,7 @@ const handleLogin = async (req, res) => {
                 // Insert login history with UTC time (ISO format)
                 await pool.query(
                     'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',
-                    [userId, new Date().toISOString()]  // Should store UTC time
+                    [userId, new Date().toISOString()]
                 );
 
 
@@ -64,12 +64,12 @@ const handleLogin = async (req, res) => {
                 const accessToken = jwt.sign(
                     { "UserInfo": { "email": foundEmail[0].email, "roles": roles } },
                     process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: '5m' } 
+                    { expiresIn: '5m' }
                 );
                 const refreshToken = jwt.sign(
                     { "username": foundEmail[0].username },
                     process.env.REFRESH_TOKEN_SECRET,
-                    { expiresIn: '24h' } 
+                    { expiresIn: '24h' }
                 );
 
                 // Save refreshToken with current user
@@ -270,16 +270,31 @@ const handleFirebaseLogin = async (req, res) => {
         const accessToken = jwt.sign(
             { "UserInfo": { "email": email, "roles": roles } },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '5m' } 
+            { expiresIn: '5m' }
         );
         const refreshToken = jwt.sign(
             { "username": user.username },
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: '24h' } 
+            { expiresIn: '24h' }
         );
 
         // Save refresh token in the database
         await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [refreshToken, email]);
+
+        const unreadMessages = await pool.query(
+            'SELECT * FROM user_messages WHERE receiver = $1 AND status = $2',
+            [userId, 'sent']
+        );
+
+        const hasNewMessages = unreadMessages.rows.length > 0;
+
+        // Insert login history with UTC time (ISO format)
+        await pool.query(
+            'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',
+            [userId, new Date().toISOString()]
+        );
+
+
 
         // Set the refresh token as an HTTP-only cookie
         res.cookie('jwt', refreshToken, {
@@ -287,7 +302,7 @@ const handleFirebaseLogin = async (req, res) => {
         });
 
         // Send the response with the generated tokens
-        res.json({ userId, roles, accessToken });
+        res.json({ userId, roles, accessToken, hasNewMessages });
     } catch (error) {
         console.error('Error during Firebase login:', error);
         res.status(500).json({ error: 'Internal Server Error' });
