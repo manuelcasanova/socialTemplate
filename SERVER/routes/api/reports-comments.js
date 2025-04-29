@@ -63,6 +63,7 @@ router.route('/has-reported')
     reportsCommentsController.hasReported
   );
 
+// Report comment and mark as "Reported"
 router.route('/reportcomment')
   .post(
     async (req, res, next) => {
