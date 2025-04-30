@@ -38,6 +38,15 @@ VALUES
 (2, 1, 1)
 ;
 
+INSERT INTO global_provider_settings (
+  show_posts_feature,
+  allow_user_post,
+  allow_admin_post,
+  allow_comments,
+  allow_post_reactions,
+  allow_comment_reactions
+) VALUES (TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);
+
 -- INSERT INTO posts (sender, content, date, visibility, is_deleted)
 -- VALUES
 --   (1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu malesuada nisi. Morbi et magna sem. Donec est augue, sodales.', CURRENT_TIMESTAMP - INTERVAL '25 hours', 'public', false);
@@ -150,3 +159,4 @@ VALUES
 (4, 12, 'smile', '2025-05-21 21:30:00+00'),
 (4, 13, 'cry', '2025-05-22 22:00:00+00');
 */
+

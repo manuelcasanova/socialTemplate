@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useGlobal } from '../../context/GlobalProvider';
 
 //Components
 import Profile from '../navbarComponents/Profile';
@@ -12,10 +13,11 @@ import useLogout from '../../hooks/useLogout';
 import useAuth from '../../hooks/useAuth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faEnvelope, faCog } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages }) => {
 
+  const { postFeatures } = useGlobal();
   const { auth } = useAuth();
   const loggedInUser = auth.userId
   const axiosPrivate = useAxiosPrivate();
@@ -126,9 +128,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
-      <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
 
-      {auth.roles && auth.roles.includes('Moderator') &&
+      {postFeatures.showPostsFeature &&
+        <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
+      }
+
+      {auth.roles && auth.roles.includes('Moderator') && postFeatures.showPostsFeature &&
         <div className='nav-item-with-dropdown'>
           <div className='nav-item' onClick={() => toggleSection('moderator')}>Moderator
             {showSections.moderator ? '▲' : '▼'
@@ -214,6 +219,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
           </div>
           {showSections.admin && (
             <>
+              {auth.roles && auth.roles.includes('SuperAdmin') && (
+                <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/setup')}>
+                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Settings
+                </div>
+              )}
               <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
               {auth.roles && auth.roles.includes('SuperAdmin') && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
@@ -225,12 +235,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
                   Login history
                 </div>
               )}
-              {auth.roles && auth.roles.includes('SuperAdmin') && (
+              {auth.roles && auth.roles.includes('SuperAdmin') && postFeatures.showPostsFeature && (
                 <div className="subitem" onClick={() => handleNavigate('/moderator/posts/history')}>
                   Moderation History (Posts)
                 </div>
               )}
-              {auth.roles && auth.roles.includes('SuperAdmin') && (
+              {auth.roles && auth.roles.includes('SuperAdmin') && postFeatures.showPostsFeature && (
                 <div className="subitem" onClick={() => handleNavigate('/moderator/comments/history')}>
                   Moderation History (Comments)
                 </div>

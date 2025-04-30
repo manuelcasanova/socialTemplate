@@ -74,6 +74,7 @@ app.use('/reports', require('./routes/api/reports'));
 app.use('/reports-comments', require('./routes/api/reports-comments'));
 app.use('/roles', require('./routes/api/roles'));
 app.use('/log-events', require('./routes/api/log-events'));
+app.use('/settings', require('./routes/api/settings'));
 
 
 // app.use('/login-history', (req, res, next) => {

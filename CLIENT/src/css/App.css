@@ -160,6 +160,73 @@
   border-radius: 50%;
 }
 
+/* Reusable toggle button */
+
+/* Basic container styling */
+.toggle-container {
+  margin: auto;
+  /* width: 100%; */
+  max-width: 500px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: end; */
+  padding-top: 5px;
+}
+
+.toggle-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.toggle-hide-chat-muted-users-text {
+  margin-right: 1em;
+}
+
+/* Hide the checkbox */
+.toggle-checkbox {
+  display: none;
+}
+
+/* Label that will function as the toggle */
+.toggle-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background-color: #ccc;  /* Light grey background (off) */
+  border-radius: 50px;     /* Rounded corners */
+  transition: background-color 0.3s;
+}
+
+/* The circle that moves */
+.toggle-circle {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-color: white;  /* White circle for contrast */
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+/* When checkbox is checked, the background color changes */
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #333; /* Dark grey background (on) */
+}
+
+/* When checkbox is checked, move the circle to the right */
+.toggle-checkbox:checked + .toggle-label .toggle-circle {
+  left: 30px; /* Move circle to the right */
+}
+
+/* End reusable toggle button */
+
 
 
 /* Profile Image */

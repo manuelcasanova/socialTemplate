@@ -2,6 +2,10 @@ import './css/App.css';
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
+//Context
+import { useGlobal } from '../src/context/GlobalProvider';
+
+
 //Components
 
 import Unauthorized from './components/authComponents/Unauthorized';
@@ -53,6 +57,8 @@ import ModeratorComments from './components/bodyComponents/moderatorComponents/M
 import HiddenComments from './components/bodyComponents/moderatorComponents/HiddenComments';
 import ModeratorsCommentsHistory from './components/bodyComponents/moderatorComponents/ModeratorCommentsHistory';
 
+import AdminSetup from './components/bodyComponents/adminComponents/AdminSetup';
+
 
 function App() {
 
@@ -74,6 +80,8 @@ function App() {
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
   };
+
+  const { postFeatures } = useGlobal();
 
   return (
 
@@ -100,28 +108,31 @@ function App() {
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed']} />}>
             <Route path="/user" element={<User isNavOpen={isNavOpen} />} />
           </Route>
-          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-            <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-            <Route path="/moderator/posts" element={<ModeratorPosts isNavOpen={isNavOpen} />} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-            <Route path="/moderator/posts/history" element={<ModeratorPostsHistory isNavOpen={isNavOpen} />} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-            <Route path="/moderator/comments/history" element={<ModeratorsCommentsHistory isNavOpen={isNavOpen} />} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-            <Route path="/moderator/hidden/posts" element={<HiddenPosts isNavOpen={isNavOpen} />} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-            <Route path="/moderator/comments/" element={<ModeratorComments isNavOpen={isNavOpen} />} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-            <Route path="/moderator/hidden/comments/" element={<HiddenComments isNavOpen={isNavOpen} />} />
-          </Route>
 
+          {postFeatures.showPostsFeature &&
+            <>
+              <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+                <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+                <Route path="/moderator/posts" element={<ModeratorPosts isNavOpen={isNavOpen} />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+                <Route path="/moderator/posts/history" element={<ModeratorPostsHistory isNavOpen={isNavOpen} />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+                <Route path="/moderator/comments/history" element={<ModeratorsCommentsHistory isNavOpen={isNavOpen} />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+                <Route path="/moderator/hidden/posts" element={<HiddenPosts isNavOpen={isNavOpen} />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+                <Route path="/moderator/comments/" element={<ModeratorComments isNavOpen={isNavOpen} />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
+                <Route path="/moderator/hidden/comments/" element={<HiddenComments isNavOpen={isNavOpen} />} />
+              </Route>
+            </>}
 
           <Route element={<RequireAuth allowedRoles={['User_subscribed']} />}>
             <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
@@ -155,22 +166,31 @@ function App() {
             <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="posts/" element={<Posts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-          </Route>
 
-          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="posts/:param" element={<PostComments isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-          </Route>
+          {postFeatures.showPostsFeature &&
+            <>
+              <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+                <Route path="posts/" element={<Posts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              </Route>
 
-          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="posts/reactions/:param" element={<PostReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-          </Route>
 
-          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-            <Route path="posts/comments/reactions/:param" element={<PostCommentReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-          </Route>
+              <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+                <Route path="posts/:param" element={<PostComments isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              </Route>
 
+
+
+              <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+                <Route path="posts/reactions/:param" element={<PostReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              </Route>
+
+
+
+              <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+                <Route path="posts/comments/reactions/:param" element={<PostCommentReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              </Route>
+            </>
+          }
 
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
             <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages} />} />
@@ -183,6 +203,10 @@ function App() {
           {/* Admin-specific routes */}
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
             <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
+            <Route path="/admin/superadmin/setup" element={<AdminSetup isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>

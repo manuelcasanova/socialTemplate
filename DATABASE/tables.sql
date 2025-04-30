@@ -19,6 +19,8 @@ DROP TABLE IF EXISTS post_report_history CASCADE;
 DROP TABLE IF EXISTS post_comments_reports CASCADE;
 DROP TABLE IF EXISTS post_comment_report_history;
 
+DROP TABLE IF EXISTS global_provider_settings;
+
 
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
@@ -173,4 +175,14 @@ CREATE TABLE post_comment_report_history (
     changed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     new_status VARCHAR(20) CHECK (new_status IN ('Reported', 'Inappropriate', 'Ok')),
     note TEXT
+);
+
+CREATE TABLE global_provider_settings (
+  id SERIAL PRIMARY KEY,
+  show_posts_feature BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_user_post BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_admin_post BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_comments BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_post_reactions BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_comment_reactions BOOLEAN NOT NULL DEFAULT TRUE
 );

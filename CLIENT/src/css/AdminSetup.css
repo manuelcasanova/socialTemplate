@@ -1,0 +1,23 @@
+.admin-setup-container {
+  align-items: baseline;
+  
+}
+
+.admin-setup-title {
+  align-self: center;
+  margin-bottom: 1em;
+}
+
+.admin-setup-subtitle {
+  margin-bottom: 10px;
+}
+
+.admin-setup-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.admin-setup-line-text {
+  margin-left: 1em;
+}
