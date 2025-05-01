@@ -189,6 +189,24 @@ export default function AdminSetup({ isNavOpen }) {
               <div className="toggle-wrapper">
                 <input
                   type="checkbox"
+                  id="AllowFlagComments"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowFlagComments}
+                  onChange={postFeatures.toggleAllowFlagComments}
+                />
+                <label htmlFor="AllowFlagComments" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Allow flag comments</div>
+          </div>
+
+          <div className='admin-setup-subline'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
                   id="AllowDeleteComments"
                   className="toggle-checkbox"
                   checked={postFeatures.allowDeleteComments}

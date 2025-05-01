@@ -124,12 +124,9 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
 
         </div>
 
-
-
         <div className='post-interactions-top-left-reaction'
           onClick={() => navigate(`/posts/comments/reactions/${commentId}`)}
         >
-
 
           <div className='post-interactions-text'>
             {isLoading ? <LoadingSpinner /> : `${reactionsCount ?? 0}`}
@@ -138,27 +135,36 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
         </div>
       </>}
 
-      {!showEllipsisMenu && (
-        <FontAwesomeIcon icon={faEllipsisH}
-          onClick={() => setShowEllipsisMenu(prev => !prev)}
-        />
-      )}
-      {showEllipsisMenu && (
-        <div className="post-menu-dropdown">
-          {postFeatures.allowDeleteComments &&
-            <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
-          }
-            <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
-          <FontAwesomeIcon icon={faXmark}
-            onClick={() => setShowEllipsisMenu(prev => !prev)}
-          />
-        </div>
-      )}
+
+      {(postFeatures.allowDeleteComments || postFeatures.allowFlagComments) && (
+        <>
+
+          {!showEllipsisMenu && (
+            <FontAwesomeIcon icon={faEllipsisH}
+              onClick={() => setShowEllipsisMenu(prev => !prev)}
+            />
+          )}
+          {showEllipsisMenu && (
+            <div className="post-menu-dropdown">
+              {postFeatures.allowDeleteComments &&
+                <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
+              }
+              {postFeatures.allowFlagComments &&
+                <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
+              }
+              <FontAwesomeIcon icon={faXmark}
+                onClick={() => setShowEllipsisMenu(prev => !prev)}
+              />
+            </div>
+          )}
+
+        </>)}
 
 
 
 
 
     </div>
+
   )
 }

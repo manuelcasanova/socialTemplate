@@ -105,5 +105,14 @@ router.route('/global-provider/toggleAllowFlagPosts')
     settingsController.toggleAllowDeleteComments
   );
 
+    // Allow Flag Comments
+
+router.route('/global-provider/toggleAllowFlagComments')
+.put(
+  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+  settingsController.toggleAllowFlagComments
+);
+
+
 
 module.exports = router;

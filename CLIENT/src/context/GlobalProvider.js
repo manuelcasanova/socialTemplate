@@ -55,6 +55,7 @@ export const GlobalProvider = ({ children }) => {
   const [allowDeletePosts, setAllowDeletePosts] = useState();
   const [allowFlagPosts, setAllowFlagPosts] = useState();
   const [allowDeleteComments, setAllowDeleteComments] = useState();
+  const [allowFlagComments, setAllowFlagComments] = useState();
 
   // Toggle functions
 
@@ -78,6 +79,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowDeletePosts(false);
         setAllowFlagPosts(false)
         setAllowDeleteComments(false)
+        setAllowFlagComments(false)
 
         // Update the database with the new values for the other settings
         await axiosPrivate.put('/settings/global-provider/toggleAllowAdminPost', { allow_admin_post: false });
@@ -89,6 +91,7 @@ export const GlobalProvider = ({ children }) => {
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeletePosts', { allow_delete_posts: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: false });
       }
 
       // Then update the local state
@@ -175,11 +178,13 @@ export const GlobalProvider = ({ children }) => {
 
         setAllowCommentReactions(false);
         setAllowDeleteComments(false);
+        setAllowFlagComments(false);
 
         // Update the database with all related settings
 
         await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: false });
       }
 
 
@@ -250,6 +255,24 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const toggleAllowFlagComments = async () => {
+    // Prevent changes if post interactions are disabled
+    if (!allowPostInteractions) return;
+    if (!allowComments) return;
+  
+    const newValue = !allowFlagComments;
+    setAllowFlagComments(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', {
+        allow_flag_comments: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowFlagComments setting:', err);
+      setAllowFlagComments(prev => !prev);
+    }
+  };
+
   const toggleAllowDeleteComments = async () => {
     // Prevent changes if post interactions are disabled
     if (!allowPostInteractions) return;
@@ -280,6 +303,7 @@ export const GlobalProvider = ({ children }) => {
     allowDeletePosts,
     allowFlagPosts,
     allowDeleteComments,
+    allowFlagComments,
     
 
     setShowPostsFeature,
@@ -292,6 +316,7 @@ export const GlobalProvider = ({ children }) => {
     setAllowDeletePosts,
     setAllowFlagPosts,
     setAllowDeleteComments,
+    setAllowFlagComments,
 
     toggleShowPostsFeature,
     toggleAllowUserPost,
@@ -302,11 +327,12 @@ export const GlobalProvider = ({ children }) => {
     toggleAllowCommentReactions,
     toggleAllowDeletePosts,
     toggleAllowFlagPosts,
-    toggleAllowDeleteComments
+    toggleAllowDeleteComments,
+    toggleAllowFlagComments
   };
 
 // console.log("postFeatures in Global Provider", postFeatures)
-// console.log("allowDeletePosts", allowDeletePosts)
+// console.log("allowFlagComments", allowFlagComments)
 
   return (
     <GlobalContext.Provider value={{
