@@ -37,6 +37,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowDeletePosts(settings.allow_delete_posts);
         setAllowFlagPosts(settings.allow_flag_posts);
         setAllowDeleteComments(settings.allow_delete_comments);
+        setAllowFlagComments(settings.allow_flag_comments);
       }
     };
 
@@ -92,6 +93,29 @@ export const GlobalProvider = ({ children }) => {
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: false });
+      } else {
+        // If enabling: set all related settings to true
+        setAllowAdminPost(true);
+        setAllowUserPost(true);
+        setAllowPostInteractions(true);
+        setAllowComments(true);
+        setAllowPostReactions(true);
+        setAllowCommentReactions(true);
+        setAllowDeletePosts(true);
+        setAllowFlagPosts(true);
+        setAllowDeleteComments(true);
+        setAllowFlagComments(true);
+  
+        await axiosPrivate.put('/settings/global-provider/toggleAllowAdminPost', { allow_admin_post: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowUserPost', { allow_user_post: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowPostInteractions', { allow_post_interactions: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowComments', { allow_comments: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowPostReactions', { allow_post_reactions: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeletePosts', { allow_delete_posts: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: true });
       }
 
       // Then update the local state
@@ -158,6 +182,23 @@ export const GlobalProvider = ({ children }) => {
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: false });
+      } else {
+        setAllowComments(true);
+        setAllowPostReactions(true);
+        setAllowCommentReactions(true);
+        setAllowDeletePosts(true);
+        setAllowFlagPosts(true);
+        setAllowDeleteComments(true);
+        setAllowFlagComments(true);
+
+        // Update the database with all related settings
+        await axiosPrivate.put('/settings/global-provider/toggleAllowComments', { allow_comments: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowPostReactions', { allow_post_reactions: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeletePosts', { allow_delete_posts: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: true });
       }
     } catch (err) {
       console.error('Failed to update allowPostInteractions setting:', err);
@@ -187,6 +228,16 @@ export const GlobalProvider = ({ children }) => {
         await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: false });
+      } else {
+        setAllowCommentReactions(true);
+        setAllowDeleteComments(true);
+        setAllowFlagComments(true);
+
+        // Update the database with all related settings
+
+        await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: true });
       }
 
 

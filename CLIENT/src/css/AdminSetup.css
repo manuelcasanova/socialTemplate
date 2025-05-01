@@ -10,6 +10,7 @@
 
 .admin-setup-subtitle {
   margin-bottom: 10px;
+  font-size: larger;
 }
 
 .admin-setup-line, .admin-setup-subline, .admin-setup-subline2 {
@@ -20,14 +21,15 @@
 }
 
 .admin-setup-subline {
-  padding-left: 5em;
+  padding-left: 1em;
 }
 
 .admin-setup-subline2 {
-  padding-left: 10em;
+  padding-left: 2em;
 }
 
 
 .admin-setup-line-text {
   margin-left: 1em;
+  font-size: larger;
 }
