@@ -31,7 +31,7 @@ export default function AdminSetup({ isNavOpen }) {
         <div className='admin-setup-line-text'>ENABLE POSTS FEATURE</div>
       </div>
 
-      <div className='admin-setup-line'>
+      <div className='admin-setup-subline'>
         <div className="toggle-container">
           <div className="toggle-wrapper">
             <input
@@ -49,7 +49,7 @@ export default function AdminSetup({ isNavOpen }) {
         <div className='admin-setup-line-text'>ALLOW ADMINS TO POST</div>
       </div>
 
-      <div className='admin-setup-line'>
+      <div className='admin-setup-subline'>
         <div className="toggle-container">
           <div className="toggle-wrapper">
             <input
@@ -65,6 +65,24 @@ export default function AdminSetup({ isNavOpen }) {
           </div>
         </div>
         <div className='admin-setup-line-text'>ALLOW NON ADMIN USERS TO POST</div>
+      </div>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="AllowPostInteractions"
+              className="toggle-checkbox"
+              checked={postFeatures.allowPostInteractions}
+              onChange={postFeatures.toggleAllowPostInteractions}
+            />
+            <label htmlFor="AllowPostInteractions" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>ENABLE POST INTERACTIONS</div>
       </div>
 
 

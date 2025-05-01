@@ -411,7 +411,9 @@ export default function Posts({ isNavOpen }) {
                     <p>{post.content}</p>
                   )} */}
 
-                  <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} setError={setError} />
+                  {postFeatures.allowPostInteractions &&
+                    <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} setError={setError} />
+                  }
 
                 </div>
               </div>

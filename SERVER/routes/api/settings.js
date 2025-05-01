@@ -46,6 +46,17 @@ router.route('/global-provider/toggleAllowAdminPost')
     settingsController.toggleAllowAdminPost
   );
 
+// Allow Post Interactions
+
+router.route('/global-provider/toggleAllowPostInteractions')
+
+  .put(
+   
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowPostInteractions
+  );
+
+
 // Allow Comments
 
 router.route('/global-provider/toggleAllowComments')

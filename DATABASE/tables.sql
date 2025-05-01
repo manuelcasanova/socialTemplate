@@ -182,6 +182,7 @@ CREATE TABLE global_provider_settings (
   show_posts_feature BOOLEAN NOT NULL DEFAULT TRUE,
   allow_user_post BOOLEAN NOT NULL DEFAULT TRUE,
   allow_admin_post BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_post_interactions BOOLEAN NOT NULL DEFAULT TRUE,
   allow_comments BOOLEAN NOT NULL DEFAULT TRUE,
   allow_post_reactions BOOLEAN NOT NULL DEFAULT TRUE,
   allow_comment_reactions BOOLEAN NOT NULL DEFAULT TRUE

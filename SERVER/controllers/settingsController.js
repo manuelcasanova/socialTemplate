@@ -101,6 +101,30 @@ const toggleAllowAdminPost = async (req, res) => {
   }
 };
 
+const toggleAllowPostInteractions = async (req, res) => {
+  try {
+    const { allow_post_interactions } = req.body;
+
+    if (typeof allow_post_interactions !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_post_interactions. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_post_interactions = $1 WHERE id = 1 RETURNING *;`,
+      [allow_post_interactions]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_post_interactions:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 const toggleAllowComments = async (req, res) => {
   try {
     const { allow_comments } = req.body;
@@ -179,6 +203,7 @@ module.exports = {
   toggleShowPostsFeature,
   toggleAllowUserPost,
   toggleAllowAdminPost,
+  toggleAllowPostInteractions,
   toggleAllowComments,
   toggleAllowPostReactions,
   toggleAllowCommentReactions

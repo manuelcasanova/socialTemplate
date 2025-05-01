@@ -10,7 +10,7 @@ const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
 
-  const {auth} = useAuth();
+  const { auth } = useAuth();
 
   const getGlobalProviderSettings = async () => {
     try {
@@ -21,21 +21,22 @@ export const GlobalProvider = ({ children }) => {
       return null;
     }
   };
-  
+
   useEffect(() => {
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
-    
+
       if (settings) {
         setShowPostsFeature(settings.show_posts_feature);
         setAllowUserPost(settings.allow_user_post);
         setAllowAdminPost(settings.allow_admin_post);
+        setAllowPostInteractions(settings.allow_post_interactions);
         setAllowComments(settings.allow_comments);
         setAllowPostReactions(settings.allow_post_reactions);
         setAllowCommentReactions(settings.allow_comment_reactions);
       }
     };
-  
+
     fetchSettings();
   }, [auth]);
 
@@ -44,6 +45,7 @@ export const GlobalProvider = ({ children }) => {
   const [showPostsFeature, setShowPostsFeature] = useState(); // Superadmin decides whether Posts are enabled
   const [allowUserPost, setAllowUserPost] = useState(); // Registered users can post
   const [allowAdminPost, setAllowAdminPost] = useState(); // Admins can post
+  const [allowPostInteractions, setAllowPostInteractions] = useState();
   const [allowComments, setAllowComments] = useState(); // Comments on posts
   const [allowPostReactions, setAllowPostReactions] = useState(); // Reactions to posts
   const [allowCommentReactions, setAllowCommentReactions] = useState(); // Reactions to comments
@@ -52,18 +54,35 @@ export const GlobalProvider = ({ children }) => {
 
   const toggleShowPostsFeature = async () => {
     const newValue = !showPostsFeature;
-    setShowPostsFeature(newValue);
+  
     try {
+      // Update the database first
       await axiosPrivate.put('/settings/global-provider/toggleShowPostsFeature', {
         show_posts_feature: newValue
       });
+  
+      // If the posts feature is being disabled, reset the other two settings
+      if (!newValue) {
+        setAllowAdminPost(false);
+        setAllowUserPost(false);
+  
+        // Update the database with the new values for the other settings
+        await axiosPrivate.put('/settings/global-provider/toggleAllowAdminPost', { allow_admin_post: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowUserPost', { allow_user_post: false });
+      }
+  
+      // Then update the local state
+      setShowPostsFeature(newValue);
+  
     } catch (err) {
       console.error('Failed to update showPostsFeature setting:', err);
-      setShowPostsFeature(prev => !prev);
+      setShowPostsFeature(prev => !prev); // Revert the state if the API request fails
     }
   };
   
+
   const toggleAllowUserPost = async () => {
+    if (!showPostsFeature) return;
     const newValue = !allowUserPost;
     setAllowUserPost(newValue);
     try {
@@ -75,8 +94,9 @@ export const GlobalProvider = ({ children }) => {
       setAllowUserPost(prev => !prev);
     }
   };
-  
+
   const toggleAllowAdminPost = async () => {
+    if (!showPostsFeature) return;
     const newValue = !allowAdminPost;
     setAllowAdminPost(newValue);
     try {
@@ -88,7 +108,21 @@ export const GlobalProvider = ({ children }) => {
       setAllowAdminPost(prev => !prev);
     }
   };
-  
+
+  const toggleAllowPostInteractions = async () => {
+    if (!showPostsFeature) return;
+    const newValue = !allowPostInteractions;
+    setAllowPostInteractions(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowPostInteractions', {
+        allow_post_interactions: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update allowPostInteractions setting:', err);
+      setAllowPostInteractions(prev => !prev);
+    }
+  };
+
   const toggleAllowComments = async () => {
     const newValue = !allowComments;
     setAllowComments(newValue);
@@ -101,7 +135,7 @@ export const GlobalProvider = ({ children }) => {
       setAllowComments(prev => !prev);
     }
   };
-  
+
   const toggleAllowPostReactions = async () => {
     const newValue = !allowPostReactions;
     setAllowPostReactions(newValue);
@@ -114,7 +148,7 @@ export const GlobalProvider = ({ children }) => {
       setAllowPostReactions(prev => !prev);
     }
   };
-  
+
   const toggleAllowCommentReactions = async () => {
     const newValue = !allowCommentReactions;
     setAllowCommentReactions(newValue);
@@ -127,12 +161,13 @@ export const GlobalProvider = ({ children }) => {
       setAllowCommentReactions(prev => !prev);
     }
   };
-  
+
 
   const postFeatures = {
     showPostsFeature,
     allowUserPost,
     allowAdminPost,
+    allowPostInteractions,
     allowComments,
     allowPostReactions,
     allowCommentReactions,
@@ -140,6 +175,7 @@ export const GlobalProvider = ({ children }) => {
     setShowPostsFeature,
     setAllowUserPost,
     setAllowAdminPost,
+    setAllowPostInteractions,
     setAllowComments,
     setAllowPostReactions,
     setAllowCommentReactions,
@@ -147,6 +183,7 @@ export const GlobalProvider = ({ children }) => {
     toggleShowPostsFeature,
     toggleAllowUserPost,
     toggleAllowAdminPost,
+    toggleAllowPostInteractions,
     toggleAllowComments,
     toggleAllowPostReactions,
     toggleAllowCommentReactions,
