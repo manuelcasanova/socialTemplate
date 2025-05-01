@@ -11,7 +11,8 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_post_interactions,
         allow_post_reactions,
         allow_comment_reactions,
-        allow_delete_posts
+        allow_delete_posts,
+        allow_flag_posts
       FROM global_provider_settings
     `);
 
@@ -223,6 +224,29 @@ const toggleAllowDeletePosts = async (req, res) => {
   }
 };
 
+const toggleAllowFlagPosts = async (req, res) => {
+  try {
+    const { allow_flag_posts } = req.body;
+
+    if (typeof allow_flag_posts !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_flag_posts. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_flag_posts = $1 WHERE id = 1 RETURNING *;`,
+      [allow_flag_posts]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_flag_posts:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 module.exports = {
   getGlobalProviderSettings,
@@ -233,7 +257,8 @@ module.exports = {
   toggleAllowComments,
   toggleAllowPostReactions,
   toggleAllowCommentReactions,
-  toggleAllowDeletePosts
+  toggleAllowDeletePosts,
+  toggleAllowFlagPosts
 };
 
 

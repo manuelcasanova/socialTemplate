@@ -72,23 +72,25 @@ export default function AdminSetup({ isNavOpen }) {
 
         </>}
 
-      <div className='admin-setup-line'>
-        <div className="toggle-container">
-          <div className="toggle-wrapper">
-            <input
-              type="checkbox"
-              id="AllowPostInteractions"
-              className="toggle-checkbox"
-              checked={postFeatures.allowPostInteractions}
-              onChange={postFeatures.toggleAllowPostInteractions}
-            />
-            <label htmlFor="AllowPostInteractions" className="toggle-label">
-              <span className="toggle-circle"></span>
-            </label>
+      {postFeatures.showPostsFeature &&
+        <div className='admin-setup-line'>
+          <div className="toggle-container">
+            <div className="toggle-wrapper">
+              <input
+                type="checkbox"
+                id="AllowPostInteractions"
+                className="toggle-checkbox"
+                checked={postFeatures.allowPostInteractions}
+                onChange={postFeatures.toggleAllowPostInteractions}
+              />
+              <label htmlFor="AllowPostInteractions" className="toggle-label">
+                <span className="toggle-circle"></span>
+              </label>
+            </div>
           </div>
+          <div className='admin-setup-line-text'>Allow users to interact with posts</div>
         </div>
-        <div className='admin-setup-line-text'>Allow users to interact with posts</div>
-      </div>
+      }
 
       {postFeatures.allowPostInteractions &&
         <>
@@ -163,9 +165,27 @@ export default function AdminSetup({ isNavOpen }) {
             </div>
             <div className='admin-setup-line-text'>Allow delete posts</div>
           </div>
-          
+
+          <div className='admin-setup-subline'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowFlagPosts"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowFlagPosts}
+                  onChange={postFeatures.toggleAllowFlagPosts}
+                />
+                <label htmlFor="AllowFlagPosts" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Allow report posts as innappropriate</div>
+          </div>
+
         </>
-        }
+      }
 
     </div>
 

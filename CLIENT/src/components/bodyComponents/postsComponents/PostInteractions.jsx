@@ -32,6 +32,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
   const { auth } = useAuth();
   const { postFeatures } = useGlobal();
+  // console.log("postFeatures", postFeatures)
   const loggedInUserId = auth.userId
   // console.log("loggedInUserId in PostInteractions", loggedInUserId)
   const navigate = useNavigate()
@@ -178,27 +179,31 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             </div>
           }
 
-          <div className='post-interactions-bottom-left-reaction'>
-            {!showEllipsisMenu && (
-              <FontAwesomeIcon icon={faEllipsisH}
-                onClick={() => setShowEllipsisMenu(prev => !prev)}
-              />
-            )}
-            {showEllipsisMenu && (
-              <div className="post-menu-dropdown">
-                {postFeatures.allowDeletePosts &&
-                  <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
-                }
+          {(postFeatures.allowDeletePosts || postFeatures.allowFlagPosts) && (
+            <>
+              <div className='post-interactions-bottom-left-reaction'>
+                {!showEllipsisMenu && (
+                  <FontAwesomeIcon icon={faEllipsisH}
+                    onClick={() => setShowEllipsisMenu(prev => !prev)}
+                  />
+                )}
+                {showEllipsisMenu && (
+                  <div className="post-menu-dropdown">
+                    {postFeatures.allowDeletePosts &&
+                      <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
+                    }
 
-                <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
-                <FontAwesomeIcon icon={faXmark}
-                  onClick={() => setShowEllipsisMenu(prev => !prev)}
-                />
+                    {postFeatures.allowFlagPosts &&
+                      <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
+                    }
+                    <FontAwesomeIcon icon={faXmark}
+                      onClick={() => setShowEllipsisMenu(prev => !prev)}
+                    />
+                  </div>
+                )}
               </div>
-            )}
-
-          </div>
-
+            </>
+          )}
 
 
         </div>

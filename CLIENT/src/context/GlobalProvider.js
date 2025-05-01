@@ -35,6 +35,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowPostReactions(settings.allow_post_reactions);
         setAllowCommentReactions(settings.allow_comment_reactions);
         setAllowDeletePosts(settings.allow_delete_posts);
+        setAllowFlagPosts(settings.allow_flag_posts);
       }
     };
 
@@ -51,6 +52,7 @@ export const GlobalProvider = ({ children }) => {
   const [allowPostReactions, setAllowPostReactions] = useState(); // Reactions to posts
   const [allowCommentReactions, setAllowCommentReactions] = useState(); // Reactions to comments
   const [allowDeletePosts, setAllowDeletePosts] = useState();
+  const [allowFlagPosts, setAllowFlagPosts] = useState();
 
   // Toggle functions
 
@@ -72,6 +74,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowPostReactions(false);
         setAllowCommentReactions(false);
         setAllowDeletePosts(false);
+        setAllowFlagPosts(false)
 
         // Update the database with the new values for the other settings
         await axiosPrivate.put('/settings/global-provider/toggleAllowAdminPost', { allow_admin_post: false });
@@ -80,6 +83,8 @@ export const GlobalProvider = ({ children }) => {
         await axiosPrivate.put('/settings/global-provider/toggleAllowComments', { allow_comments: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowPostReactions', { allow_post_reactions: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeletePosts', { allow_delete_posts: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: false });
       }
 
       // Then update the local state
@@ -134,12 +139,14 @@ export const GlobalProvider = ({ children }) => {
         setAllowPostReactions(false);
         setAllowCommentReactions(false);
         setAllowDeletePosts(false);
+        setAllowFlagPosts(false);
 
         // Update the database with all related settings
         await axiosPrivate.put('/settings/global-provider/toggleAllowComments', { allow_comments: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowPostReactions', { allow_post_reactions: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeletePosts', { allow_delete_posts: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: false });
       }
     } catch (err) {
       console.error('Failed to update allowPostInteractions setting:', err);
@@ -207,6 +214,21 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const toggleAllowFlagPosts = async () => {
+    // Prevent changes if post interactions are disabled
+    if (!allowPostInteractions) return;
+    const newValue = !allowFlagPosts;
+    setAllowFlagPosts(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', {
+        allow_flag_posts: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update allowFlagPosts setting:', err);
+      setAllowFlagPosts(prev => !prev);
+    }
+  };
+
 
   const postFeatures = {
     showPostsFeature,
@@ -217,6 +239,8 @@ export const GlobalProvider = ({ children }) => {
     allowPostReactions,
     allowCommentReactions,
     allowDeletePosts,
+    allowFlagPosts,
+    
 
     setShowPostsFeature,
     setAllowUserPost,
@@ -226,6 +250,7 @@ export const GlobalProvider = ({ children }) => {
     setAllowPostReactions,
     setAllowCommentReactions,
     setAllowDeletePosts,
+    setAllowFlagPosts,
 
     toggleShowPostsFeature,
     toggleAllowUserPost,
@@ -234,7 +259,8 @@ export const GlobalProvider = ({ children }) => {
     toggleAllowComments,
     toggleAllowPostReactions,
     toggleAllowCommentReactions,
-    toggleAllowDeletePosts
+    toggleAllowDeletePosts,
+    toggleAllowFlagPosts
   };
 
 // console.log("postFeatures in Global Provider", postFeatures)

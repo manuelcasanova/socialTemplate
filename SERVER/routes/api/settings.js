@@ -81,12 +81,20 @@ router.route('/global-provider/toggleAllowCommentReactions')
     settingsController.toggleAllowCommentReactions
   );
 
-  // Allow Comment Reactions
+  // Allow Delete Posts
 
 router.route('/global-provider/toggleAllowDeletePosts')
 .put(
   (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
   settingsController.toggleAllowDeletePosts
+);
+
+  // Allow Flag Posts
+
+router.route('/global-provider/toggleAllowFlagPosts')
+.put(
+  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+  settingsController.toggleAllowFlagPosts
 );
 
 
