@@ -148,6 +148,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowDeletePosts(false);
         setAllowFlagPosts(false);
         setAllowDeleteComments(false);
+        setAllowFlagComments(false);
 
         // Update the database with all related settings
         await axiosPrivate.put('/settings/global-provider/toggleAllowComments', { allow_comments: false });
@@ -156,6 +157,7 @@ export const GlobalProvider = ({ children }) => {
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeletePosts', { allow_delete_posts: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: false });
       }
     } catch (err) {
       console.error('Failed to update allowPostInteractions setting:', err);
