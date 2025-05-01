@@ -166,59 +166,64 @@ export default function AdminSetup({ isNavOpen }) {
             <div className='admin-setup-line-text'>Allow comments on posts</div>
           </div>
 
-          <div className='admin-setup-subline'>
-            <div className="toggle-container">
-              <div className="toggle-wrapper">
-                <input
-                  type="checkbox"
-                  id="AllowCommentsReactions"
-                  className="toggle-checkbox"
-                  checked={postFeatures.allowCommentReactions}
-                  onChange={postFeatures.toggleAllowCommentReactions}
-                />
-                <label htmlFor="AllowCommentsReactions" className="toggle-label">
-                  <span className="toggle-circle"></span>
-                </label>
+          {postFeatures.allowComments &&
+            <>
+              <div className='admin-setup-subline2'>
+                <div className="toggle-container">
+                  <div className="toggle-wrapper">
+                    <input
+                      type="checkbox"
+                      id="AllowCommentsReactions"
+                      className="toggle-checkbox"
+                      checked={postFeatures.allowCommentReactions}
+                      onChange={postFeatures.toggleAllowCommentReactions}
+                    />
+                    <label htmlFor="AllowCommentsReactions" className="toggle-label">
+                      <span className="toggle-circle"></span>
+                    </label>
+                  </div>
+                </div>
+                <div className='admin-setup-line-text'>Allow reactions to comments</div>
               </div>
-            </div>
-            <div className='admin-setup-line-text'>Allow reactions to comments</div>
-          </div>
 
-          <div className='admin-setup-subline'>
-            <div className="toggle-container">
-              <div className="toggle-wrapper">
-                <input
-                  type="checkbox"
-                  id="AllowFlagComments"
-                  className="toggle-checkbox"
-                  checked={postFeatures.allowFlagComments}
-                  onChange={postFeatures.toggleAllowFlagComments}
-                />
-                <label htmlFor="AllowFlagComments" className="toggle-label">
-                  <span className="toggle-circle"></span>
-                </label>
+              <div className='admin-setup-subline2'>
+                <div className="toggle-container">
+                  <div className="toggle-wrapper">
+                    <input
+                      type="checkbox"
+                      id="AllowFlagComments"
+                      className="toggle-checkbox"
+                      checked={postFeatures.allowFlagComments}
+                      onChange={postFeatures.toggleAllowFlagComments}
+                    />
+                    <label htmlFor="AllowFlagComments" className="toggle-label">
+                      <span className="toggle-circle"></span>
+                    </label>
+                  </div>
+                </div>
+                <div className='admin-setup-line-text'>Allow flag comments</div>
               </div>
-            </div>
-            <div className='admin-setup-line-text'>Allow flag comments</div>
-          </div>
 
-          <div className='admin-setup-subline'>
-            <div className="toggle-container">
-              <div className="toggle-wrapper">
-                <input
-                  type="checkbox"
-                  id="AllowDeleteComments"
-                  className="toggle-checkbox"
-                  checked={postFeatures.allowDeleteComments}
-                  onChange={postFeatures.toggleAllowDeleteComments}
-                />
-                <label htmlFor="AllowDeleteComments" className="toggle-label">
-                  <span className="toggle-circle"></span>
-                </label>
+              <div className='admin-setup-subline2'>
+                <div className="toggle-container">
+                  <div className="toggle-wrapper">
+                    <input
+                      type="checkbox"
+                      id="AllowDeleteComments"
+                      className="toggle-checkbox"
+                      checked={postFeatures.allowDeleteComments}
+                      onChange={postFeatures.toggleAllowDeleteComments}
+                    />
+                    <label htmlFor="AllowDeleteComments" className="toggle-label">
+                      <span className="toggle-circle"></span>
+                    </label>
+                  </div>
+                </div>
+                <div className='admin-setup-line-text'>Allow delete comments</div>
               </div>
-            </div>
-            <div className='admin-setup-line-text'>Allow delete comments</div>
-          </div>
+
+            </>
+          }
 
         </>
       }

@@ -12,7 +12,7 @@
   margin-bottom: 10px;
 }
 
-.admin-setup-line, .admin-setup-subline {
+.admin-setup-line, .admin-setup-subline, .admin-setup-subline2 {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -22,6 +22,11 @@
 .admin-setup-subline {
   padding-left: 5em;
 }
+
+.admin-setup-subline2 {
+  padding-left: 10em;
+}
+
 
 .admin-setup-line-text {
   margin-left: 1em;
