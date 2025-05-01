@@ -185,5 +185,6 @@ CREATE TABLE global_provider_settings (
   allow_post_interactions BOOLEAN NOT NULL DEFAULT TRUE,
   allow_comments BOOLEAN NOT NULL DEFAULT TRUE,
   allow_post_reactions BOOLEAN NOT NULL DEFAULT TRUE,
-  allow_comment_reactions BOOLEAN NOT NULL DEFAULT TRUE
+  allow_comment_reactions BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_delete_posts BOOLEAN NOT NULL DEFAULT TRUE
 );

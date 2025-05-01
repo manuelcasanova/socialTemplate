@@ -7,6 +7,7 @@ import '../../../css/AdminSetup.css'
 export default function AdminSetup({ isNavOpen }) {
 
   const { postFeatures } = useGlobal();
+  // console.log("postFeatures in AdminSetup.jsx", postFeatures)
 
   return (
     <div className={`admin-setup-container ${isNavOpen ? 'body-squeezed' : 'body'}`}>
@@ -143,6 +144,24 @@ export default function AdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Allow reactions to comments</div>
+          </div>
+
+          <div className='admin-setup-subline'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowDeletePosts"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowDeletePosts}
+                  onChange={postFeatures.toggleAllowDeletePosts}
+                />
+                <label htmlFor="AllowDeletePosts" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Allow delete posts</div>
           </div>
           
         </>
