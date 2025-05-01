@@ -12,7 +12,7 @@ export default function AdminSetup({ isNavOpen }) {
   return (
     <div className={`admin-setup-container ${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <h2 className='admin-setup-title'>App Settings</h2>
-      <h4 className='admin-setup-subtitle'>POSTS FEATURE</h4>
+      <h4 className='admin-setup-subtitle'>POSTS</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -29,7 +29,12 @@ export default function AdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        <div className='admin-setup-line-text'>Enable Post Feature</div>
+        {postFeatures.showPostsFeature ? 
+        <div className='admin-setup-line-text'>Disable</div>
+        :
+        <div className='admin-setup-line-text'>Enable</div>
+        }
+        
       </div>
 
       {postFeatures.showPostsFeature &&
@@ -227,6 +232,8 @@ export default function AdminSetup({ isNavOpen }) {
 
         </>
       }
+
+<h4 className='admin-setup-subtitle'>PRIVATE MESSAGES</h4>
 
     </div>
 

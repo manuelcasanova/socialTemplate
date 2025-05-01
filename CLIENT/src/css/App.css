@@ -195,11 +195,12 @@
   align-items: center;
   cursor: pointer;
   position: relative;
-  width: 60px;
-  height: 30px;
+  width: 30px;
+  height: 15px;
   background-color: #ccc;  /* Light grey background (off) */
   border-radius: 50px;     /* Rounded corners */
   transition: background-color 0.3s;
+  
 }
 
 /* The circle that moves */
@@ -208,8 +209,8 @@
   top: 50%;
   left: 5px;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
   background-color: white;  /* White circle for contrast */
   border-radius: 50%;
   transition: 0.3s;
@@ -222,7 +223,7 @@
 
 /* When checkbox is checked, move the circle to the right */
 .toggle-checkbox:checked + .toggle-label .toggle-circle {
-  left: 30px; /* Move circle to the right */
+  left: 15px; /* Move circle to the right */
 }
 
 /* End reusable toggle button */

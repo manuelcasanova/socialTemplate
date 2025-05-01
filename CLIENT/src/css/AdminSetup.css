@@ -9,7 +9,7 @@
 }
 
 .admin-setup-subtitle {
-  margin-bottom: 10px;
+  margin: 10px 0px;
   font-size: larger;
 }
 
@@ -21,11 +21,11 @@
 }
 
 .admin-setup-subline {
-  padding-left: 1em;
+  /* padding-left: 1em; */
 }
 
 .admin-setup-subline2 {
-  padding-left: 2em;
+  /* padding-left: 2em; */
 }
 
 
