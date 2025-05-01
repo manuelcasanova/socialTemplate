@@ -17,6 +17,7 @@ router.route('/global-provider')
     settingsController.getGlobalProviderSettings
   );
 
+  //Show posts feature
   router.route('/global-provider/toggleShowPostsFeature')
   .put(
     async (req, res, next) => {
@@ -27,7 +28,46 @@ router.route('/global-provider')
       }
     },
     settingsController.toggleShowPostsFeature
+  );
 
+// Allow User Post
+
+router.route('/global-provider/toggleAllowUserPost')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowUserPost
+  );
+
+// Allow Admin Post
+
+router.route('/global-provider/toggleAllowAdminPost')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowAdminPost
+  );
+
+// Allow Comments
+
+router.route('/global-provider/toggleAllowComments')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowComments
+  );
+
+// Allow Post Reactions
+
+router.route('/global-provider/toggleAllowPostReactions')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowPostReactions
+  );
+
+// Allow Comment Reactions
+
+router.route('/global-provider/toggleAllowCommentReactions')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowCommentReactions
   );
 
 

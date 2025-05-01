@@ -53,9 +53,135 @@ const toggleShowPostsFeature = async (req, res) => {
   }
 };
 
+const toggleAllowUserPost = async (req, res) => {
+  try {
+    const { allow_user_post } = req.body;
+
+    if (typeof allow_user_post !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_user_post. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_user_post = $1 WHERE id = 1 RETURNING *;`,
+      [allow_user_post]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_user_post:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowAdminPost = async (req, res) => {
+  try {
+    const { allow_admin_post } = req.body;
+
+    if (typeof allow_admin_post !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_admin_post. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_admin_post = $1 WHERE id = 1 RETURNING *;`,
+      [allow_admin_post]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_admin_post:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowComments = async (req, res) => {
+  try {
+    const { allow_comments } = req.body;
+
+    if (typeof allow_comments !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_comments. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_comments = $1 WHERE id = 1 RETURNING *;`,
+      [allow_comments]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_comments:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowPostReactions = async (req, res) => {
+  try {
+    const { allow_post_reactions } = req.body;
+
+    if (typeof allow_post_reactions !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_post_reactions. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_post_reactions = $1 WHERE id = 1 RETURNING *;`,
+      [allow_post_reactions]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_post_reactions:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowCommentReactions = async (req, res) => {
+  try {
+    const { allow_comment_reactions } = req.body;
+
+    if (typeof allow_comment_reactions !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_comment_reactions. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_comment_reactions = $1 WHERE id = 1 RETURNING *;`,
+      [allow_comment_reactions]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_comment_reactions:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 module.exports = {
   getGlobalProviderSettings,
-  toggleShowPostsFeature
+  toggleShowPostsFeature,
+  toggleAllowUserPost,
+  toggleAllowAdminPost,
+  toggleAllowComments,
+  toggleAllowPostReactions,
+  toggleAllowCommentReactions
 };
 
 

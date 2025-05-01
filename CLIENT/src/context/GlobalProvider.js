@@ -40,10 +40,6 @@ export const GlobalProvider = ({ children }) => {
   }, [auth]);
 
 
-  
-  
-  
-
   // Post-related features
   const [showPostsFeature, setShowPostsFeature] = useState(); // Superadmin decides whether Posts are enabled
   const [allowUserPost, setAllowUserPost] = useState(); // Registered users can post
@@ -57,23 +53,81 @@ export const GlobalProvider = ({ children }) => {
   const toggleShowPostsFeature = async () => {
     const newValue = !showPostsFeature;
     setShowPostsFeature(newValue);
-  
     try {
       await axiosPrivate.put('/settings/global-provider/toggleShowPostsFeature', {
         show_posts_feature: newValue
       });
     } catch (err) {
       console.error('Failed to update showPostsFeature setting:', err);
-      // Revert on error
       setShowPostsFeature(prev => !prev);
     }
   };
-
-  const toggleAllowUserPost = () => setAllowUserPost(prev => !prev);
-  const toggleAllowAdminPost = () => setAllowAdminPost(prev => !prev);
-  const toggleAllowComments = () => setAllowComments(prev => !prev);
-  const toggleAllowPostReactions = () => setAllowPostReactions(prev => !prev);
-  const toggleAllowCommentReactions = () => setAllowCommentReactions(prev => !prev);
+  
+  const toggleAllowUserPost = async () => {
+    const newValue = !allowUserPost;
+    setAllowUserPost(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowUserPost', {
+        allow_user_post: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update allowUserPost setting:', err);
+      setAllowUserPost(prev => !prev);
+    }
+  };
+  
+  const toggleAllowAdminPost = async () => {
+    const newValue = !allowAdminPost;
+    setAllowAdminPost(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowAdminPost', {
+        allow_admin_post: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update allowAdminPost setting:', err);
+      setAllowAdminPost(prev => !prev);
+    }
+  };
+  
+  const toggleAllowComments = async () => {
+    const newValue = !allowComments;
+    setAllowComments(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowComments', {
+        allow_comments: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update allowComments setting:', err);
+      setAllowComments(prev => !prev);
+    }
+  };
+  
+  const toggleAllowPostReactions = async () => {
+    const newValue = !allowPostReactions;
+    setAllowPostReactions(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowPostReactions', {
+        allow_post_reactions: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update allowPostReactions setting:', err);
+      setAllowPostReactions(prev => !prev);
+    }
+  };
+  
+  const toggleAllowCommentReactions = async () => {
+    const newValue = !allowCommentReactions;
+    setAllowCommentReactions(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', {
+        allow_comment_reactions: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update allowCommentReactions setting:', err);
+      setAllowCommentReactions(prev => !prev);
+    }
+  };
+  
 
   const postFeatures = {
     showPostsFeature,

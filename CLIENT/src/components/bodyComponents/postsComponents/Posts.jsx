@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
 //Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
@@ -38,6 +41,8 @@ const profilePictureExists = async (userId) => {
 
 export default function Posts({ isNavOpen }) {
   const { auth } = useAuth();
+  const isAdmin = auth.roles.includes('Admin');
+  const { postFeatures } = useGlobal();
   const loggedInUser = auth.userId;
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -237,7 +242,13 @@ export default function Posts({ isNavOpen }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-posts">
 
-        <WritePost loggedInUser={loggedInUser} setNewPostSubmitted={setNewPostSubmitted} />
+        {(isAdmin && postFeatures.allowAdminPost) ||
+          (!isAdmin && postFeatures.allowUserPost) ? (
+          <WritePost
+            loggedInUser={loggedInUser}
+            setNewPostSubmitted={setNewPostSubmitted}
+          />
+        ) : null}
 
         <div className="write-post-container">
 
@@ -349,7 +360,7 @@ export default function Posts({ isNavOpen }) {
                       {auth?.roles?.includes("Moderator") && (
                         <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
                           <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
-                          <p style={{color: 'black'}}>{post.content}</p>
+                          <p style={{ color: 'black' }}>{post.content}</p>
                         </div>
                       )}
                     </div>
@@ -400,7 +411,7 @@ export default function Posts({ isNavOpen }) {
                     <p>{post.content}</p>
                   )} */}
 
-                  <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} setError={setError}/>
+                  <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} setError={setError} />
 
                 </div>
               </div>
