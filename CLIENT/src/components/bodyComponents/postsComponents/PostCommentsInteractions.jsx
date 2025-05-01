@@ -1,3 +1,6 @@
+//Context
+import { useGlobal } from '../../../context/GlobalProvider';
+
 //Util functions
 import { formatDate } from "./util_functions/formatDate"
 import { fetchPostCommentsReactionsCount } from "./util_functions/FetchPostCommentsReactions"
@@ -20,6 +23,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostCommentsInteractions({ commentId, commentDate, commentCommenter, loggedInUserId, hideFlag, setError, setPostComments }) {
 
+  const { postFeatures } = useGlobal();
   const navigate = useNavigate();
   const [reactionsCount, setReactionsCount] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -82,55 +86,57 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
   return (
     <div className="post-comment-interactions">
       <div className="post-comment-date">{formatDate(commentDate)}</div>
-      <div className="post-comment-react"
-        onClick={handleShowReactOptions}>
-        {!reactOption && (
-          <>
-            <div className='post-interactions-text'>
-              React
+
+      {postFeatures.allowCommentReactions && <>
+        <div className="post-comment-react"
+          onClick={handleShowReactOptions}>
+          {!reactOption && (
+            <>
+              <div className='post-interactions-text'>
+                React
+              </div>
+            </>
+          )}
+
+          {reactOption && (
+            <div className="reaction-options-small">
+              <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
+                <FontAwesomeIcon icon={faBan} />
+              </div>
+              <div onClick={() => handleReactionSelect('like')} title="Like">
+                <FontAwesomeIcon icon={faThumbsUp} />
+              </div>
+              <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
+                <FontAwesomeIcon icon={faThumbsDown} />
+              </div>
+              <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
+                <FontAwesomeIcon icon={faLaugh} />
+              </div>
+              <div onClick={() => handleReactionSelect('cry')} title="Cry">
+                <FontAwesomeIcon icon={faSadTear} />
+              </div>
+              <div onClick={() => handleReactionSelect('smile')} title="Smile">
+                <FontAwesomeIcon icon={faSmile} />
+              </div>
             </div>
-          </>
-        )}
 
-        {reactOption && (
-          <div className="reaction-options-small">
-            <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
-              <FontAwesomeIcon icon={faBan} />
-            </div>
-            <div onClick={() => handleReactionSelect('like')} title="Like">
-              <FontAwesomeIcon icon={faThumbsUp} />
-            </div>
-            <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
-              <FontAwesomeIcon icon={faThumbsDown} />
-            </div>
-            <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
-              <FontAwesomeIcon icon={faLaugh} />
-            </div>
-            <div onClick={() => handleReactionSelect('cry')} title="Cry">
-              <FontAwesomeIcon icon={faSadTear} />
-            </div>
-            <div onClick={() => handleReactionSelect('smile')} title="Smile">
-              <FontAwesomeIcon icon={faSmile} />
-            </div>
-          </div>
+          )}
 
-        )}
-
-      </div>
-
-
-
-      <div className='post-interactions-top-left-reaction'
-        onClick={() => navigate(`/posts/comments/reactions/${commentId}`)}
-      >
-
-
-        <div className='post-interactions-text'>
-          {isLoading ? <LoadingSpinner /> : `${reactionsCount ?? 0}`}
         </div>
-        <FontAwesomeIcon icon={faSmile} />
-      </div>
 
+
+
+        <div className='post-interactions-top-left-reaction'
+          onClick={() => navigate(`/posts/comments/reactions/${commentId}`)}
+        >
+
+
+          <div className='post-interactions-text'>
+            {isLoading ? <LoadingSpinner /> : `${reactionsCount ?? 0}`}
+          </div>
+          <FontAwesomeIcon icon={faSmile} />
+        </div>
+      </>}
 
       {!showEllipsisMenu && (
         <FontAwesomeIcon icon={faEllipsisH}
@@ -139,7 +145,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
       )}
       {showEllipsisMenu && (
         <div className="post-menu-dropdown">
-          <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments}/>
+          <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
           <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
           <FontAwesomeIcon icon={faXmark}
             onClick={() => setShowEllipsisMenu(prev => !prev)}

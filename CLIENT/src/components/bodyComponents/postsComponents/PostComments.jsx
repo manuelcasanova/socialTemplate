@@ -22,8 +22,6 @@ import PostCommentsInteractions from "./PostCommentsInteractions";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-
-
 export default function PostComments({ isNavOpen }) {
 
   const navigate = useNavigate();
@@ -47,7 +45,7 @@ export default function PostComments({ isNavOpen }) {
   const MAX_CHAR_LIMIT = 1000;
   const [errMsg, setErrMsg] = useState('');
   const [flaggedComments, setFlaggedComments] = useState(new Set());
-const [inappropriateComments, setInappropriateComments] = useState(new Set());
+  const [inappropriateComments, setInappropriateComments] = useState(new Set());
 
   // console.log("post", post)
   // console.log("postId", postId)
@@ -66,7 +64,7 @@ const [inappropriateComments, setInappropriateComments] = useState(new Set());
     const checkFlaggedComments = async () => {
       try {
         const flagged = new Set();
-  
+
         for (const comment of postComments) {
           const res = await axiosPrivate.get("/reports-comments/has-reported", {
             params: {
@@ -74,29 +72,29 @@ const [inappropriateComments, setInappropriateComments] = useState(new Set());
               user_id: loggedInUserId,
             },
           });
-  
+
           if (res.data?.hasReported) {
             flagged.add(comment.id);
           }
         }
-  
+
         setFlaggedComments(flagged);
       } catch (err) {
         console.error("Error checking flagged comments:", err);
       }
     };
-  
+
     if (postComments.length > 0 && loggedInUserId) {
       checkFlaggedComments();
     }
   }, [postComments, loggedInUserId]);
-  
+
 
   useEffect(() => {
     const checkHiddenComments = async () => {
       try {
         const hidden = new Set();
-  
+
         for (const comment of postComments) {
           const res = await axiosPrivate.get("/reports-comments/has-hidden", {
             params: {
@@ -104,23 +102,23 @@ const [inappropriateComments, setInappropriateComments] = useState(new Set());
               user_id: loggedInUserId,
             },
           });
-  
+
           if (res.data?.hasHidden) {
             hidden.add(comment.id);
           }
         }
-  
+
         setInappropriateComments(hidden);
       } catch (err) {
         console.error("Error checking inappropriate comments:", err);
       }
     };
-  
+
     if (postComments.length > 0 && loggedInUserId) {
       checkHiddenComments();
     }
   }, [postComments, loggedInUserId]);
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -252,7 +250,7 @@ const [inappropriateComments, setInappropriateComments] = useState(new Set());
             user_id: loggedInUserId,
           },
         });
-  
+
         if (res.data?.hasHidden) {
           setIsInappropriate(true);
         }
@@ -260,12 +258,12 @@ const [inappropriateComments, setInappropriateComments] = useState(new Set());
         console.error("Error checking hidden status:", err);
       }
     };
-  
+
     if (postId && loggedInUserId) {
       checkIfPostIsInappropriate();
     }
   }, [postId, loggedInUserId]);
-  
+
 
   const getVisibilityIcon = (visibility) => {
     switch (visibility) {
@@ -387,33 +385,33 @@ const [inappropriateComments, setInappropriateComments] = useState(new Set());
 
             </div>
             {isInappropriate ? (
-  <div>
-    <p style={{ fontStyle: 'italic', color: 'darkred' }}>
-      This post has been reviewed by a moderator and deemed inappropriate. It has been hidden.
-    </p>
-    {auth?.roles?.includes("Moderator") && (
-      <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
-        <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
-        <p style={{ color: 'black' }}>{postContent}</p>
-      </div>
-    )}
-  </div>
-) : isFlagged ? (
-  <div>
-    <p style={{ fontStyle: 'italic' }}>
-      This post has been reported as inappropriate and is pending review by a moderator.
-      You can still see it by clicking below, but discretion is advised.
-    </p>
-    <button
-      className="button-white white button-smaller"
-      onClick={() => setIsFlagged(false)}
-    >
-      Click to view
-    </button>
-  </div>
-) : (
-  <p>{postContent}</p>
-)}
+              <div>
+                <p style={{ fontStyle: 'italic', color: 'darkred' }}>
+                  This post has been reviewed by a moderator and deemed inappropriate. It has been hidden.
+                </p>
+                {auth?.roles?.includes("Moderator") && (
+                  <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
+                    <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
+                    <p style={{ color: 'black' }}>{postContent}</p>
+                  </div>
+                )}
+              </div>
+            ) : isFlagged ? (
+              <div>
+                <p style={{ fontStyle: 'italic' }}>
+                  This post has been reported as inappropriate and is pending review by a moderator.
+                  You can still see it by clicking below, but discretion is advised.
+                </p>
+                <button
+                  className="button-white white button-smaller"
+                  onClick={() => setIsFlagged(false)}
+                >
+                  Click to view
+                </button>
+              </div>
+            ) : (
+              <p>{postContent}</p>
+            )}
 
 
 
@@ -496,42 +494,42 @@ const [inappropriateComments, setInappropriateComments] = useState(new Set());
                         }
                       }}
                     >{comment.username}</div>
-{inappropriateComments.has(comment.id) ? (
-  <div>
-    <p style={{ fontStyle: 'italic', color: 'darkred' }}>
-      This comment has been reviewed and hidden for being inappropriate.
-    </p>
-    {auth?.roles?.includes("Moderator") && (
-      <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
-        <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
-        <p style={{ color: 'black' }}>{comment.content}</p>
-      </div>
-    )}
-  </div>
-) : flaggedComments.has(comment.id) ? (
-  <div>
-    <p style={{ fontStyle: 'italic' }}>
-      This comment has been reported and is pending moderator review.
-    </p>
-    <button
-      className="button-white white button-smaller"
-      onClick={() => {
-        const updated = new Set(flaggedComments);
-        updated.delete(comment.id);
-        setFlaggedComments(updated);
-      }}
-    >
-      Click to view
-    </button>
-  </div>
-) : (
-  <div>{comment.content}</div>
-)}
+                    {inappropriateComments.has(comment.id) ? (
+                      <div>
+                        <p style={{ fontStyle: 'italic', color: 'darkred' }}>
+                          This comment has been reviewed and hidden for being inappropriate.
+                        </p>
+                        {auth?.roles?.includes("Moderator") && (
+                          <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
+                            <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
+                            <p style={{ color: 'black' }}>{comment.content}</p>
+                          </div>
+                        )}
+                      </div>
+                    ) : flaggedComments.has(comment.id) ? (
+                      <div>
+                        <p style={{ fontStyle: 'italic' }}>
+                          This comment has been reported and is pending moderator review.
+                        </p>
+                        <button
+                          className="button-white white button-smaller"
+                          onClick={() => {
+                            const updated = new Set(flaggedComments);
+                            updated.delete(comment.id);
+                            setFlaggedComments(updated);
+                          }}
+                        >
+                          Click to view
+                        </button>
+                      </div>
+                    ) : (
+                      <div>{comment.content}</div>
+                    )}
 
                   </div>
                 </div>
 
-                <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} commentCommenter={comment.commenter} loggedInUserId={loggedInUserId} hideFlag={inappropriateComments.has(comment.id)} setError={setError} setPostComments={setPostComments}/>
+                <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} commentCommenter={comment.commenter} loggedInUserId={loggedInUserId} hideFlag={inappropriateComments.has(comment.id)} setError={setError} setPostComments={setPostComments} />
 
 
               </div>

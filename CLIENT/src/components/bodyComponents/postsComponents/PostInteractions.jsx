@@ -1,8 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../../../hooks/useAuth';
+
+//Context
+import { useGlobal } from '../../../context/GlobalProvider';
 
 //hooks
+import useAuth from '../../../hooks/useAuth';
 import { axiosPrivate } from '../../../api/axios';
 
 // Styling
@@ -28,6 +31,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 export default function PostInteractions({ postId, isNavOpen, postContent, postSender, loggedInUser, setPosts, hideFlag, setError }) {
 
   const { auth } = useAuth();
+  const { postFeatures } = useGlobal();
   const loggedInUserId = auth.userId
   // console.log("loggedInUserId in PostInteractions", loggedInUserId)
   const navigate = useNavigate()
@@ -106,65 +110,73 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
         <div className="post-interactions-top">
 
-          <div className='post-interactions-top-left-reaction'
-            onClick={() => navigate(`/posts/reactions/${postId}`)}>
-            <FontAwesomeIcon icon={faSmile} />
-            <div className='post-interactions-text'>
-              {reactionsCount}
+          {postFeatures.allowPostReactions &&
+            <div className='post-interactions-top-left-reaction'
+              onClick={() => navigate(`/posts/reactions/${postId}`)}>
+              <FontAwesomeIcon icon={faSmile} />
+              <div className='post-interactions-text'>
+                {reactionsCount}
+              </div>
             </div>
-          </div>
+          }
 
-          <div className='post-interactions-top-right-comments'
-            onClick={() => navigate(`/posts/${postId}`)}>
-            <div className='post-interactions-text'
-            >
-              {commentsCount}
+          {postFeatures.allowComments &&
+            <div className='post-interactions-top-right-comments'
+              onClick={() => navigate(`/posts/${postId}`)}>
+              <div className='post-interactions-text'
+              >
+                {commentsCount}
+              </div>
+              <FontAwesomeIcon icon={faComment} />
             </div>
-            <FontAwesomeIcon icon={faComment} />
-          </div>
+          }
+
+
         </div>
 
         <div className="post-interactions-bottom">
 
-
-          <div className='post-interactions-bottom-left-reaction'
-            onClick={handleShowReactOptions}>
-
-
-            {!reactOption && (
-              <>
-                <FontAwesomeIcon icon={faSmile} />
-                <div className='post-interactions-text'>
-                  React
-                </div>
-              </>
-            )}
+          {postFeatures.allowPostReactions &&
+            <div className='post-interactions-bottom-left-reaction'
+              onClick={handleShowReactOptions}>
 
 
-            {reactOption && (
-              <div className="reaction-options">
-                <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
-                  <FontAwesomeIcon icon={faBan} />
-                </div>
-                <div onClick={() => handleReactionSelect('like')} title="Like">
-                  <FontAwesomeIcon icon={faThumbsUp} />
-                </div>
-                <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
-                  <FontAwesomeIcon icon={faThumbsDown} />
-                </div>
-                <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
-                  <FontAwesomeIcon icon={faLaugh} />
-                </div>
-                <div onClick={() => handleReactionSelect('cry')} title="Cry">
-                  <FontAwesomeIcon icon={faSadTear} />
-                </div>
-                <div onClick={() => handleReactionSelect('smile')} title="Smile">
+              {!reactOption && (
+                <>
                   <FontAwesomeIcon icon={faSmile} />
-                </div>
-              </div>
+                  <div className='post-interactions-text'>
+                    React
+                  </div>
+                </>
+              )}
 
-            )}
-          </div>
+
+
+              {reactOption && (
+                <div className="reaction-options">
+                  <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
+                    <FontAwesomeIcon icon={faBan} />
+                  </div>
+                  <div onClick={() => handleReactionSelect('like')} title="Like">
+                    <FontAwesomeIcon icon={faThumbsUp} />
+                  </div>
+                  <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
+                    <FontAwesomeIcon icon={faThumbsDown} />
+                  </div>
+                  <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
+                    <FontAwesomeIcon icon={faLaugh} />
+                  </div>
+                  <div onClick={() => handleReactionSelect('cry')} title="Cry">
+                    <FontAwesomeIcon icon={faSadTear} />
+                  </div>
+                  <div onClick={() => handleReactionSelect('smile')} title="Smile">
+                    <FontAwesomeIcon icon={faSmile} />
+                  </div>
+                </div>
+
+              )}
+            </div>
+          }
 
           <div className='post-interactions-bottom-left-reaction'>
             {!showEllipsisMenu && (

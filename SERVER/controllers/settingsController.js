@@ -8,6 +8,7 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_user_post,
         allow_admin_post,
         allow_comments,
+        allow_post_interactions,
         allow_post_reactions,
         allow_comment_reactions
       FROM global_provider_settings
