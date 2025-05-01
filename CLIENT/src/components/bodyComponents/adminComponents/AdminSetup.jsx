@@ -117,6 +117,42 @@ export default function AdminSetup({ isNavOpen }) {
               <div className="toggle-wrapper">
                 <input
                   type="checkbox"
+                  id="AllowFlagPosts"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowFlagPosts}
+                  onChange={postFeatures.toggleAllowFlagPosts}
+                />
+                <label htmlFor="AllowFlagPosts" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Allow report posts as innappropriate</div>
+          </div>
+
+          <div className='admin-setup-subline'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowDeletePosts"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowDeletePosts}
+                  onChange={postFeatures.toggleAllowDeletePosts}
+                />
+                <label htmlFor="AllowDeletePosts" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Allow delete posts</div>
+          </div>
+
+          <div className='admin-setup-subline'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
                   id="AllowComments"
                   className="toggle-checkbox"
                   checked={postFeatures.allowComments}
@@ -153,35 +189,17 @@ export default function AdminSetup({ isNavOpen }) {
               <div className="toggle-wrapper">
                 <input
                   type="checkbox"
-                  id="AllowDeletePosts"
+                  id="AllowDeleteComments"
                   className="toggle-checkbox"
-                  checked={postFeatures.allowDeletePosts}
-                  onChange={postFeatures.toggleAllowDeletePosts}
+                  checked={postFeatures.allowDeleteComments}
+                  onChange={postFeatures.toggleAllowDeleteComments}
                 />
-                <label htmlFor="AllowDeletePosts" className="toggle-label">
+                <label htmlFor="AllowDeleteComments" className="toggle-label">
                   <span className="toggle-circle"></span>
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow delete posts</div>
-          </div>
-
-          <div className='admin-setup-subline'>
-            <div className="toggle-container">
-              <div className="toggle-wrapper">
-                <input
-                  type="checkbox"
-                  id="AllowFlagPosts"
-                  className="toggle-checkbox"
-                  checked={postFeatures.allowFlagPosts}
-                  onChange={postFeatures.toggleAllowFlagPosts}
-                />
-                <label htmlFor="AllowFlagPosts" className="toggle-label">
-                  <span className="toggle-circle"></span>
-                </label>
-              </div>
-            </div>
-            <div className='admin-setup-line-text'>Allow report posts as innappropriate</div>
+            <div className='admin-setup-line-text'>Allow delete comments</div>
           </div>
 
         </>

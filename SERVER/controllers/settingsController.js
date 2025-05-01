@@ -12,7 +12,8 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_post_reactions,
         allow_comment_reactions,
         allow_delete_posts,
-        allow_flag_posts
+        allow_flag_posts,
+        allow_delete_comments
       FROM global_provider_settings
     `);
 
@@ -248,6 +249,31 @@ const toggleAllowFlagPosts = async (req, res) => {
   }
 };
 
+const toggleAllowDeleteComments = async (req, res) => {
+  try {
+    const { allow_delete_comments } = req.body;
+
+    if (typeof allow_delete_comments !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_delete_comments. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_delete_comments = $1 WHERE id = 1 RETURNING *;`,
+      [allow_delete_comments]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_delete_comments:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 module.exports = {
   getGlobalProviderSettings,
   toggleShowPostsFeature,
@@ -258,7 +284,8 @@ module.exports = {
   toggleAllowPostReactions,
   toggleAllowCommentReactions,
   toggleAllowDeletePosts,
-  toggleAllowFlagPosts
+  toggleAllowFlagPosts,
+  toggleAllowDeleteComments
 };
 
 

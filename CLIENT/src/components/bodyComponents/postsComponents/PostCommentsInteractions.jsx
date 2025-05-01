@@ -145,8 +145,10 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
       )}
       {showEllipsisMenu && (
         <div className="post-menu-dropdown">
-          <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
-          <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
+          {postFeatures.allowDeleteComments &&
+            <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
+          }
+            <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
           <FontAwesomeIcon icon={faXmark}
             onClick={() => setShowEllipsisMenu(prev => !prev)}
           />

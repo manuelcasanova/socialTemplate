@@ -36,6 +36,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowCommentReactions(settings.allow_comment_reactions);
         setAllowDeletePosts(settings.allow_delete_posts);
         setAllowFlagPosts(settings.allow_flag_posts);
+        setAllowDeleteComments(settings.allow_delete_comments);
       }
     };
 
@@ -53,6 +54,7 @@ export const GlobalProvider = ({ children }) => {
   const [allowCommentReactions, setAllowCommentReactions] = useState(); // Reactions to comments
   const [allowDeletePosts, setAllowDeletePosts] = useState();
   const [allowFlagPosts, setAllowFlagPosts] = useState();
+  const [allowDeleteComments, setAllowDeleteComments] = useState();
 
   // Toggle functions
 
@@ -75,6 +77,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowCommentReactions(false);
         setAllowDeletePosts(false);
         setAllowFlagPosts(false)
+        setAllowDeleteComments(false)
 
         // Update the database with the new values for the other settings
         await axiosPrivate.put('/settings/global-provider/toggleAllowAdminPost', { allow_admin_post: false });
@@ -85,6 +88,7 @@ export const GlobalProvider = ({ children }) => {
         await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeletePosts', { allow_delete_posts: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
       }
 
       // Then update the local state
@@ -140,6 +144,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowCommentReactions(false);
         setAllowDeletePosts(false);
         setAllowFlagPosts(false);
+        setAllowDeleteComments(false);
 
         // Update the database with all related settings
         await axiosPrivate.put('/settings/global-provider/toggleAllowComments', { allow_comments: false });
@@ -147,6 +152,7 @@ export const GlobalProvider = ({ children }) => {
         await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeletePosts', { allow_delete_posts: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowFlagPosts', { allow_flag_posts: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
       }
     } catch (err) {
       console.error('Failed to update allowPostInteractions setting:', err);
@@ -163,6 +169,20 @@ export const GlobalProvider = ({ children }) => {
       await axiosPrivate.put('/settings/global-provider/toggleAllowComments', {
         allow_comments: newValue
       });
+
+      // If turning off, reset related settings
+      if (!newValue) {
+
+        setAllowCommentReactions(false);
+        setAllowDeleteComments(false);
+
+        // Update the database with all related settings
+
+        await axiosPrivate.put('/settings/global-provider/toggleAllowCommentReactions', { allow_comment_reactions: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', { allow_delete_comments: false });
+      }
+
+
     } catch (err) {
       console.error('Failed to update allowComments setting:', err);
       setAllowComments(prev => !prev);
@@ -187,6 +207,7 @@ export const GlobalProvider = ({ children }) => {
   const toggleAllowCommentReactions = async () => {
     // Prevent changes if post interactions are disabled
     if (!allowPostInteractions) return;
+    if (!allowComments) return;
     const newValue = !allowCommentReactions;
     setAllowCommentReactions(newValue);
     try {
@@ -229,6 +250,24 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const toggleAllowDeleteComments = async () => {
+    // Prevent changes if post interactions are disabled
+    if (!allowPostInteractions) return;
+    if (!allowComments) return;
+  
+    const newValue = !allowDeleteComments;
+    setAllowDeleteComments(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteComments', {
+        allow_delete_comments: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowDeleteComments setting:', err);
+      setAllowDeleteComments(prev => !prev);
+    }
+  };
+
 
   const postFeatures = {
     showPostsFeature,
@@ -240,6 +279,7 @@ export const GlobalProvider = ({ children }) => {
     allowCommentReactions,
     allowDeletePosts,
     allowFlagPosts,
+    allowDeleteComments,
     
 
     setShowPostsFeature,
@@ -251,6 +291,7 @@ export const GlobalProvider = ({ children }) => {
     setAllowCommentReactions,
     setAllowDeletePosts,
     setAllowFlagPosts,
+    setAllowDeleteComments,
 
     toggleShowPostsFeature,
     toggleAllowUserPost,
@@ -260,7 +301,8 @@ export const GlobalProvider = ({ children }) => {
     toggleAllowPostReactions,
     toggleAllowCommentReactions,
     toggleAllowDeletePosts,
-    toggleAllowFlagPosts
+    toggleAllowFlagPosts,
+    toggleAllowDeleteComments
   };
 
 // console.log("postFeatures in Global Provider", postFeatures)
