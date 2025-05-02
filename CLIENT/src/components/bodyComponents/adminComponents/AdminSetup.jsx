@@ -397,6 +397,26 @@ export default function AdminSetup({ isNavOpen }) {
             <div className='admin-setup-line-text'>Admins Can Delete Users</div>
           </div>
 
+          <h4 className='admin-setup-subtitle'>PROFILE</h4>
+
+          <div className='admin-setup-line'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowEditUsername"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowEditUsername}
+                  onChange={postFeatures.toggleAllowEditUsername}
+                />
+                <label htmlFor="AllowEditUsername" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Users Can Edit their Username</div>
+          </div>
+
     </div>
 
   )

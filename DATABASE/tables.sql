@@ -202,6 +202,12 @@ CREATE TABLE global_provider_settings (
   allow_mute BOOLEAN NOT NULL DEFAULT TRUE,
 
   allow_manage_roles BOOLEAN NOT NULL DEFAULT TRUE,
-  allow_delete_users BOOLEAN NOT NULL DEFAULT TRUE
+  allow_delete_users BOOLEAN NOT NULL DEFAULT TRUE,
+
+  allow_edit_username BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_edit_email BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_edit_password BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_delete_my_user BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_modify_profile_picture BOOLEAN NOT NULL DEFAULT TRUE
 
 );

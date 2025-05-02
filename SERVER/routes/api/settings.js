@@ -178,5 +178,12 @@ router.route('/global-provider/toggleAllowDeleteUsers')
     settingsController.toggleAllowDeleteUsers
   );
 
+  // Allow Edit username
+router.route('/global-provider/toggleAllowEditUsername')
+.put(
+  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+  settingsController.toggleAllowEditUsername
+);
+
 
 module.exports = router;

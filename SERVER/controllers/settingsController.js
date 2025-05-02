@@ -28,7 +28,9 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_mute,
 
         allow_manage_roles,
-        allow_delete_users
+        allow_delete_users,
+
+        allow_edit_username
 
       FROM global_provider_settings
     `);
@@ -515,6 +517,30 @@ const toggleAllowDeleteUsers = async (req, res) => {
   }
 };
 
+const toggleAllowEditUsername = async (req, res) => {
+  try {
+    const { allow_edit_username } = req.body;
+
+    if (typeof allow_edit_username !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_edit_username. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_edit_username = $1 WHERE id = 1 RETURNING *;`,
+      [allow_edit_username]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_edit_username:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 
 module.exports = {
@@ -543,7 +569,9 @@ module.exports = {
   toggleAllowMute,
 
   toggleAllowManageRoles,
-  toggleAllowDeleteUsers
+  toggleAllowDeleteUsers,
+
+  toggleAllowEditUsername
 
 };
 

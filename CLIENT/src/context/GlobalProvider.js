@@ -572,6 +572,43 @@ const toggleAllowDeleteUsers = async () => {
 
 // ------- END ADMIN SETTINGS ------- //
 
+
+// ------- START PROFILE SETTINGS ------- //
+
+const [allowEditUsername, setAllowEditUsername] = useState();
+
+useEffect(() => {
+  const fetchSettings = async () => {
+    const settings = await getGlobalProviderSettings();
+
+    if (settings) {
+      setAllowEditUsername(settings.allow_manage_roles);
+    }
+  };
+
+  fetchSettings();
+}, [auth]);
+
+
+const toggleAllowEditUsername = async () => {
+
+  const newValue = !allowEditUsername;
+  setAllowEditUsername(newValue);
+  try {
+    await axiosPrivate.put('/settings/global-provider/toggleAllowEditUsername', {
+      allow_edit_username: newValue
+    });
+
+  } catch (err) {
+    console.error('Failed to update allowEditUsername setting:', err);
+    setAllowEditUsername(prev => !prev);
+  }
+};
+
+
+
+// ------- END PROFILE SETTINGS ------- //
+
   const postFeatures = {
     showPostsFeature,
 
@@ -598,6 +635,8 @@ const toggleAllowDeleteUsers = async () => {
     allowManageRoles,
     allowDeleteUsers,
 
+    allowEditUsername,
+
     setShowPostsFeature,
 
     setAllowUserPost,
@@ -615,6 +654,8 @@ const toggleAllowDeleteUsers = async () => {
     setShowMessagesFeature,
     setAllowSendMessages,
     setAllowDeleteMessages,
+
+    setAllowEditUsername,
 
     setShowSocialFeature,
     setAllowFollow,
@@ -645,12 +686,14 @@ const toggleAllowDeleteUsers = async () => {
     toggleAllowMute,
 
     toggleAllowManageRoles,
-    toggleAllowDeleteUsers
+    toggleAllowDeleteUsers,
+
+    toggleAllowEditUsername
   };
 
   // console.log("postFeatures in Global Provider", postFeatures)
   // console.log("allowManageRoles", allowManageRoles)
-  // console.log("allowDeleteUsers", allowDeleteUsers)
+  console.log("allowEditUsername", allowEditUsername)
 
   return (
     <GlobalContext.Provider value={{

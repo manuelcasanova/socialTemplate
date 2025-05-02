@@ -1,16 +1,26 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
+import { axiosPrivate } from "../../api/axios";
+
+//Context
+import { useGlobal } from "../../context/GlobalProvider";
+
+//Hooks
 import useAuth from "../../../src/hooks/useAuth";
+import useLogout from "../../hooks/useLogout"
+import useUserApi from "../../util/userApi";
+
+//Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import '../../css/Profile.css';
+
+
+//Components
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Footer from "../mainComponents/footer";
 import Error from "./Error";
 
-import useUserApi from "../../util/userApi";
-import { axiosPrivate } from "../../api/axios";
-import useLogout from "../../hooks/useLogout"
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -78,6 +88,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
 
 export default function Profile({ isNavOpen, profilePictureKey, setProfilePictureKey }) {
   const { auth } = useAuth();
+  const {postFeatures} = useGlobal();
   const isTestSuperAdmin = auth.userId === 1;
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
   const [imageExists, setImageExists] = useState(true);
@@ -328,14 +339,14 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     } catch (error) {
       // Check if the error is a validation error from the backend (username or email already exists)
       if (error.response && error.response.status === 400) {
-          setError(error.response.data.message || 'Validation error. Please check your input.');
+        setError(error.response.data.message || 'Validation error. Please check your input.');
       } else {
-          console.error("Critical Error: Update failed:", error);
-          setCriticalError(true); // Only set critical error for actual server issues
+        console.error("Critical Error: Update failed:", error);
+        setCriticalError(true); // Only set critical error for actual server issues
       }
-  } finally {
+    } finally {
       setIsLoading(false);
-  }
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -434,13 +445,15 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
           {!isTestSuperAdmin && (
 
             <div className="profile-actions">
-              <button
-                className="profile-actions-button button-white"
-                onClick={() => handleEditButtonClick("username")}
-              // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
-              >
-                Edit Username
-              </button>
+              {postFeatures.allowEditUsername &&
+                <button
+                  className="profile-actions-button button-white"
+                  onClick={() => handleEditButtonClick("username")}
+                // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
+                >
+                  Edit Username
+                </button>
+              }
               <button
                 className="profile-actions-button button-white"
                 onClick={() => handleEditButtonClick("email")}
