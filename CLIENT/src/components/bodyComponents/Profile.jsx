@@ -463,12 +463,15 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   Edit Email
                 </button>
               }
-              <button
-                className="profile-actions-button button-white"
-                onClick={() => handleEditButtonClick("password")}
-              >
-                Edit Password
-              </button>
+
+              {postFeatures.allowEditPassword &&
+                <button
+                  className="profile-actions-button button-white"
+                  onClick={() => handleEditButtonClick("password")}
+                >
+                  Edit Password
+                </button>
+              }
 
               <button
                 className="profile-actions-button button-red"

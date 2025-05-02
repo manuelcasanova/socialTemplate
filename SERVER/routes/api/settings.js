@@ -192,5 +192,28 @@ router.route('/global-provider/toggleAllowEditUsername')
     settingsController.toggleAllowEditEmail
   );
 
+  // Allow Edit password
+    router.route('/global-provider/toggleAllowEditPassword')
+    .put(
+      (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+      settingsController.toggleAllowEditPassword
+    );
+
+    
+  // Allow Delete my user
+  router.route('/global-provider/toggleAllowDeleteMyUser')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowDeleteMyUser
+  );
+
+
+  // Allow Edit profile image
+    router.route('/global-provider/toggleAllowModifyProfilePicture')
+    .put(
+      (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+      settingsController.toggleAllowModifyProfilePicture
+    );
+  
 
 module.exports = router;

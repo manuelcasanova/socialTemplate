@@ -31,7 +31,10 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_delete_users,
 
         allow_edit_username,
-        allow_edit_email
+        allow_edit_email,
+        allow_edit_password,
+        allow_delete_my_user,
+        allow_modify_profile_picture
 
       FROM global_provider_settings
     `);
@@ -566,7 +569,77 @@ const toggleAllowEditEmail= async (req, res) => {
   }
 };
 
+const toggleAllowEditPassword = async (req, res) => {
+  try {
+    const { allow_edit_password } = req.body;
 
+    if (typeof allow_edit_password !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_edit_password. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_edit_password = $1 WHERE id = 1 RETURNING *;`,
+      [allow_edit_password]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_edit_password:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowDeleteMyUser = async (req, res) => {
+  try {
+    const { allow_delete_my_user } = req.body;
+
+    if (typeof allow_delete_my_user !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_delete_my_user. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_delete_my_user = $1 WHERE id = 1 RETURNING *;`,
+      [allow_delete_my_user]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_delete_my_user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowModifyProfilePicture = async (req, res) => {
+  try {
+    const { allow_modify_profile_picture } = req.body;
+
+    if (typeof allow_modify_profile_picture !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_modify_profile_picture. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_modify_profile_picture = $1 WHERE id = 1 RETURNING *;`,
+      [allow_modify_profile_picture]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_modify_profile_picture:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 module.exports = {
   getGlobalProviderSettings,
@@ -597,7 +670,10 @@ module.exports = {
   toggleAllowDeleteUsers,
 
   toggleAllowEditUsername,
-  toggleAllowEditEmail
+  toggleAllowEditEmail,
+  toggleAllowEditPassword,
+  toggleAllowDeleteMyUser,
+  toggleAllowModifyProfilePicture
 
 };
 

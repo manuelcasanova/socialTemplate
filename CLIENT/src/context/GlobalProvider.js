@@ -577,6 +577,9 @@ const toggleAllowDeleteUsers = async () => {
 
 const [allowEditUsername, setAllowEditUsername] = useState();
 const [allowEditEmail, setAllowEditEmail] = useState();
+const [allowEditPassword, setAllowEditPassword] = useState();
+const [allowDeleteMyUser, setAllowDeleteMyUser] = useState();
+const [allowModifyProfilePicture, setModifyProfilePicture] = useState(); 
 
 useEffect(() => {
   const fetchSettings = async () => {
@@ -585,6 +588,7 @@ useEffect(() => {
     if (settings) {
       setAllowEditUsername(settings.allow_edit_username);
       setAllowEditEmail(settings.allow_edit_email);
+      setAllowEditPassword(settings.allow_edit_password);
     }
   };
 
@@ -622,6 +626,21 @@ const toggleAllowEditEmail = async () => {
   }
 };
 
+const toggleAllowEditPassword = async () => {
+
+  const newValue = !allowEditPassword;
+  setAllowEditPassword(newValue);
+  try {
+    await axiosPrivate.put('/settings/global-provider/toggleAllowEditPassword', {
+      allow_edit_password: newValue
+    });
+
+  } catch (err) {
+    console.error('Failed to update allowEditPassword setting:', err);
+    setAllowEditPassword(prev => !prev);
+  }
+};
+
 
 
 // ------- END PROFILE SETTINGS ------- //
@@ -654,6 +673,7 @@ const toggleAllowEditEmail = async () => {
 
     allowEditUsername,
     allowEditEmail,
+    allowEditPassword,
 
     setShowPostsFeature,
 
@@ -682,6 +702,7 @@ const toggleAllowEditEmail = async () => {
 
     setAllowEditUsername,
     setAllowEditEmail,
+    setAllowEditPassword,
 
     toggleShowPostsFeature,
     toggleAllowUserPost,
@@ -708,12 +729,13 @@ const toggleAllowEditEmail = async () => {
     toggleAllowDeleteUsers,
 
     toggleAllowEditUsername,
-    toggleAllowEditEmail
+    toggleAllowEditEmail,
+    toggleAllowEditPassword
   };
 
   // console.log("postFeatures in Global Provider", postFeatures)
   // console.log("allowManageRoles", allowManageRoles)
-  console.log("allowEditEmail", allowEditEmail)
+  console.log("allowEditPassword", allowEditPassword)
 
   return (
     <GlobalContext.Provider value={{
