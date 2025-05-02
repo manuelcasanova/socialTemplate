@@ -29,12 +29,12 @@ export default function AdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        {postFeatures.showPostsFeature ? 
-        <div className='admin-setup-line-text'>Disable</div>
-        :
-        <div className='admin-setup-line-text'>Enable</div>
+        {postFeatures.showPostsFeature ?
+          <div className='admin-setup-line-text'>Disable</div>
+          :
+          <div className='admin-setup-line-text'>Enable</div>
         }
-        
+
       </div>
 
       {postFeatures.showPostsFeature &&
@@ -233,8 +233,68 @@ export default function AdminSetup({ isNavOpen }) {
         </>
       }
 
-<h4 className='admin-setup-subtitle'>PRIVATE MESSAGES</h4>
+      <h4 className='admin-setup-subtitle'>PRIVATE MESSAGES</h4>
 
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="ShowMessagessFeature"
+              className="toggle-checkbox"
+              checked={postFeatures.showMessagesFeature}
+              onChange={postFeatures.toggleShowMessagesFeature}
+            />
+            <label htmlFor="ShowMessagessFeature" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        {postFeatures.showMessagesFeature ?
+          <div className='admin-setup-line-text'>Disable</div>
+          :
+          <div className='admin-setup-line-text'>Enable</div>
+        }
+      </div>
+
+      {postFeatures.showMessagesFeature &&
+        <>
+          <div className='admin-setup-line'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowSendMessages"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowSendMessages}
+                  onChange={postFeatures.toggleAllowSendMessages}
+                />
+                <label htmlFor="AllowSendMessages" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Allow users to send messages</div>
+          </div>
+
+          <div className='admin-setup-line'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowDeleteMessages"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowDeleteMessages}
+                  onChange={postFeatures.toggleAllowDeleteMessages}
+                />
+                <label htmlFor="AllowDeleteMessages" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Allow users to delete messages</div>
+          </div>
+        </>}
     </div>
 
   )

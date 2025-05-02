@@ -250,31 +250,34 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
         </div>
       }
+      {postFeatures.showMessagesFeature &&
+        <>
+          {auth.roles && !hasNewMessages &&
+            < div className="nav-item" onClick={() => handleNavigate('/messages')}>
+              <FontAwesomeIcon icon={faEnvelope} />
+            </div>
+          }
 
-      {auth.roles && !hasNewMessages &&
-        < div className="nav-item" onClick={() => handleNavigate('/messages')}>
-          <FontAwesomeIcon icon={faEnvelope} />
-        </div>
-      }
+          {auth.roles && hasNewMessages &&
+            <div className='nav-item'
+              onClick={() => {
+                navigate(`/messages/`);
+              }}
+            >
+              <div className="new-message-bell-container"
+                onClick={() => {
+                  navigate(`/messages/`);
+                }}
+              >
 
-      {auth.roles && hasNewMessages &&
-        <div className='nav-item'
-          onClick={() => {
-            navigate(`/messages/`);
-          }}
-        >
-          <div className="new-message-bell-container"
-            onClick={() => {
-              navigate(`/messages/`);
-            }}
-          >
-
-            <FontAwesomeIcon
-              className="faBell-new-message"
-              icon={faEnvelope} />
-            <span className="new-message-notification-dot"></span>
-          </div>
-        </div>
+                <FontAwesomeIcon
+                  className="faBell-new-message"
+                  icon={faEnvelope} />
+                <span className="new-message-notification-dot"></span>
+              </div>
+            </div>
+          }
+        </>
       }
 
       {

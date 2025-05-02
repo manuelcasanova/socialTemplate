@@ -1,6 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
 // Hooks
 import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -34,6 +37,7 @@ const profilePictureExists = async (userId) => {
 export default function Chat({ isNavOpen, setHasNewMessages }) {
   const { userId } = useParams();
   const { auth } = useAuth();
+  const { postFeatures } = useGlobal();
   const axiosPrivate = useAxiosPrivate();
   const loggedInUser = auth.userId;
   const navigate = useNavigate();
@@ -238,39 +242,40 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
           </h2>
 
 
+          {postFeatures.allowSendMessages &&
+            <div className="users-messaging-send">
+              <input
+                placeholder="Aa"
+                ref={inputRef}
 
-          <div className="users-messaging-send">
-            <input
-              placeholder="Aa"
-              ref={inputRef}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
 
-              onChange={(e) => {
-                const inputValue = e.target.value;
+                  setNewMessage(inputValue);
 
-                setNewMessage(inputValue);
+                }}
 
-              }}
+                onKeyDown={handleKeyDown}
+                value={newMessage}
+                required></input>
+              <button
+                disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
+                onClick={handleSubmit}
+                className="button-white"
+              >
+                {isLoading ? "Sending..." : "Send"}
+              </button>
 
-              onKeyDown={handleKeyDown}
-              value={newMessage}
-              required></input>
-            <button
-              disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
-              onClick={handleSubmit}
-              className="button-white"
-            >
-              {isLoading ? "Sending..." : "Send"}
-            </button>
-
-            {newMessage.length > MAX_CHAR_LIMIT && (
-              <div className="char-count">
-                {newMessage.length} / {MAX_CHAR_LIMIT} characters
-              </div>
-            )}
+              {newMessage.length > MAX_CHAR_LIMIT && (
+                <div className="char-count">
+                  {newMessage.length} / {MAX_CHAR_LIMIT} characters
+                </div>
+              )}
 
 
-            {error && <p>{error}</p>}
-          </div>
+              {error && <p>{error}</p>}
+            </div>
+          }
 
           <div className="messages-container">
             <FontAwesomeIcon
@@ -309,7 +314,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                             {message.is_deleted ? `This message was deleted` : message.content}
                           </p>
                           {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
-                          {!message.is_deleted && isSender && (
+                          {!message.is_deleted && isSender && postFeatures.allowDeleteMessages && (
                             <FontAwesomeIcon
                               className="delete-chat-messsage"
                               icon={faTrashAlt}

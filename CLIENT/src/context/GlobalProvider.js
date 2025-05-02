@@ -22,6 +22,8 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  // -------END POSTS SETTINGS ------- START MESSAGES SETTINGS //
+
   useEffect(() => {
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
@@ -105,7 +107,7 @@ export const GlobalProvider = ({ children }) => {
         setAllowFlagPosts(true);
         setAllowDeleteComments(true);
         setAllowFlagComments(true);
-  
+
         await axiosPrivate.put('/settings/global-provider/toggleAllowAdminPost', { allow_admin_post: true });
         await axiosPrivate.put('/settings/global-provider/toggleAllowUserPost', { allow_user_post: true });
         await axiosPrivate.put('/settings/global-provider/toggleAllowPostInteractions', { allow_post_interactions: true });
@@ -312,7 +314,7 @@ export const GlobalProvider = ({ children }) => {
     // Prevent changes if post interactions are disabled
     if (!allowPostInteractions) return;
     if (!allowComments) return;
-  
+
     const newValue = !allowFlagComments;
     setAllowFlagComments(newValue);
     try {
@@ -330,7 +332,7 @@ export const GlobalProvider = ({ children }) => {
     // Prevent changes if post interactions are disabled
     if (!allowPostInteractions) return;
     if (!allowComments) return;
-  
+
     const newValue = !allowDeleteComments;
     setAllowDeleteComments(newValue);
     try {
@@ -344,6 +346,100 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  // -------END POSTS SETTINGS ------- START MESSAGES SETTINGS //
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const settings = await getGlobalProviderSettings();
+
+      if (settings) {
+        setShowMessagesFeature(settings.show_messages_feature);
+        setAllowSendMessages(settings.allow_send_messages);
+        setAllowDeleteMessages(settings.allow_delete_messages);
+      }
+    };
+
+    fetchSettings();
+  }, [auth]);
+
+
+
+  // Post-related features
+  const [showMessagesFeature, setShowMessagesFeature] = useState();
+  const [allowSendMessages, setAllowSendMessages] = useState();
+  const [allowDeleteMessages, setAllowDeleteMessages] = useState();
+
+  const toggleShowMessagesFeature = async () => {
+    // Prevent changes if post interactions are disabled
+    const newValue = !showMessagesFeature;
+    setShowMessagesFeature(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleShowMessagesFeature', {
+        show_messages_feature: newValue
+      });
+
+      // If turning off, reset related settings
+      if (!newValue) {
+
+        setAllowSendMessages(false);
+        setAllowDeleteMessages(false);
+
+        // Update the database with all related settings
+
+        await axiosPrivate.put('/settings/global-provider/toggleAllowSendMessages', { allow_send_messages: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMessages', { allow_delete_messages: false });
+
+      } else {
+        setAllowSendMessages(true);
+        setAllowDeleteMessages(true);
+
+        // Update the database with all related settings
+
+        await axiosPrivate.put('/settings/global-provider/toggleAllowSendMessages', { allow_send_messages: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMessages', { allow_delete_messages: true });
+
+      }
+    } catch (err) {
+      console.error('Failed to update showMessagesFeature setting:', err);
+      setShowMessagesFeature(prev => !prev);
+    }
+  };
+
+
+  const toggleAllowSendMessages = async () => {
+    if (!showMessagesFeature) return;
+
+    const newValue = !allowSendMessages;
+    setAllowSendMessages(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowSendMessages', {
+        allow_send_messages: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowSendMessages setting:', err);
+      setAllowSendMessages(prev => !prev);
+    }
+  };
+
+  const toggleAllowDeleteMessages = async () => {
+    if (!showMessagesFeature) return;
+
+    const newValue = !allowDeleteMessages;
+    setAllowDeleteMessages(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMessages', {
+        allow_delete_messages: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowDeleteMessages setting:', err);
+      setAllowDeleteMessages(prev => !prev);
+    }
+  };
+
+
+  // -------END MESSAGES SETTINGS ----------- //
 
   const postFeatures = {
     showPostsFeature,
@@ -357,7 +453,10 @@ export const GlobalProvider = ({ children }) => {
     allowFlagPosts,
     allowDeleteComments,
     allowFlagComments,
-    
+    showMessagesFeature,
+    allowSendMessages,
+    allowDeleteMessages,
+
 
     setShowPostsFeature,
     setAllowUserPost,
@@ -370,6 +469,9 @@ export const GlobalProvider = ({ children }) => {
     setAllowFlagPosts,
     setAllowDeleteComments,
     setAllowFlagComments,
+    setShowMessagesFeature,
+    setAllowSendMessages,
+    setAllowDeleteMessages,
 
     toggleShowPostsFeature,
     toggleAllowUserPost,
@@ -381,11 +483,14 @@ export const GlobalProvider = ({ children }) => {
     toggleAllowDeletePosts,
     toggleAllowFlagPosts,
     toggleAllowDeleteComments,
-    toggleAllowFlagComments
+    toggleAllowFlagComments,
+    toggleShowMessagesFeature,
+    toggleAllowSendMessages,
+    toggleAllowDeleteMessages
   };
 
-// console.log("postFeatures in Global Provider", postFeatures)
-// console.log("allowFlagComments", allowFlagComments)
+  // console.log("postFeatures in Global Provider", postFeatures)
+  // console.log("showMessagesFeature", showMessagesFeature)
 
   return (
     <GlobalContext.Provider value={{

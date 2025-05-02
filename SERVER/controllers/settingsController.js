@@ -14,7 +14,10 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_delete_posts,
         allow_flag_posts,
         allow_delete_comments,
-        allow_flag_comments
+        allow_flag_comments,
+        show_messages_feature,
+        allow_send_messages,
+        allow_delete_messages
       FROM global_provider_settings
     `);
 
@@ -298,6 +301,82 @@ const toggleAllowFlagComments = async (req, res) => {
   }
 };
 
+const toggleShowMessagesFeature = async (req, res) => {
+  try {
+    const { show_messages_feature } = req.body;
+
+    if (typeof show_messages_feature !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for show_messages_feature. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET show_messages_feature = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [show_messages_feature]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowSendMessages = async (req, res) => {
+  try {
+    const { allow_send_messages } = req.body;
+
+    if (typeof allow_send_messages !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_send_messages. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_send_messages = $1 WHERE id = 1 RETURNING *;`,
+      [allow_send_messages]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_send_messages:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowDeleteMessages = async (req, res) => {
+  try {
+    const { allow_delete_messages } = req.body;
+
+    if (typeof allow_delete_messages !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_delete_messages. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_delete_messages = $1 WHERE id = 1 RETURNING *;`,
+      [allow_delete_messages]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_delete_messages:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 module.exports = {
   getGlobalProviderSettings,
@@ -311,7 +390,10 @@ module.exports = {
   toggleAllowDeletePosts,
   toggleAllowFlagPosts,
   toggleAllowDeleteComments,
-  toggleAllowFlagComments
+  toggleAllowFlagComments,
+  toggleShowMessagesFeature,
+  toggleAllowSendMessages,
+  toggleAllowDeleteMessages
 };
 
 

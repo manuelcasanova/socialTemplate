@@ -17,8 +17,8 @@ router.route('/global-provider')
     settingsController.getGlobalProviderSettings
   );
 
-  //Show posts feature
-  router.route('/global-provider/toggleShowPostsFeature')
+//Show posts feature
+router.route('/global-provider/toggleShowPostsFeature')
   .put(
     async (req, res, next) => {
       try {
@@ -51,7 +51,7 @@ router.route('/global-provider/toggleAllowAdminPost')
 router.route('/global-provider/toggleAllowPostInteractions')
 
   .put(
-   
+
     (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
     settingsController.toggleAllowPostInteractions
   );
@@ -81,36 +81,66 @@ router.route('/global-provider/toggleAllowCommentReactions')
     settingsController.toggleAllowCommentReactions
   );
 
-  // Allow Delete Posts
+// Allow Delete Posts
 
 router.route('/global-provider/toggleAllowDeletePosts')
-.put(
-  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-  settingsController.toggleAllowDeletePosts
-);
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowDeletePosts
+  );
 
-  // Allow Flag Posts
+// Allow Flag Posts
 
 router.route('/global-provider/toggleAllowFlagPosts')
-.put(
-  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-  settingsController.toggleAllowFlagPosts
-);
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowFlagPosts
+  );
 
-  // Allow Delete Comments
+// Allow Delete Comments
 
-  router.route('/global-provider/toggleAllowDeleteComments')
+router.route('/global-provider/toggleAllowDeleteComments')
   .put(
     (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
     settingsController.toggleAllowDeleteComments
   );
 
-    // Allow Flag Comments
+// Allow Flag Comments
 
 router.route('/global-provider/toggleAllowFlagComments')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowFlagComments
+  );
+
+//Show messages feature
+
+router.route('/global-provider/toggleShowMessagesFeature')
+  .put(
+    async (req, res, next) => {
+      try {
+        verifyRoles('SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    settingsController.toggleShowMessagesFeature
+  );
+
+    // Allow Send Messages
+
+router.route('/global-provider/toggleAllowSendMessages')
 .put(
   (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-  settingsController.toggleAllowFlagComments
+  settingsController.toggleAllowSendMessages
+);
+
+  // Allow Delete Messages
+
+router.route('/global-provider/toggleAllowDeleteMessages')
+.put(
+  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+  settingsController.toggleAllowDeleteMessages
 );
 
 
