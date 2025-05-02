@@ -362,9 +362,7 @@ export const GlobalProvider = ({ children }) => {
     fetchSettings();
   }, [auth]);
 
-
-
-  // Post-related features
+  // Messages-related features
   const [showMessagesFeature, setShowMessagesFeature] = useState();
   const [allowSendMessages, setAllowSendMessages] = useState();
   const [allowDeleteMessages, setAllowDeleteMessages] = useState();
@@ -521,9 +519,58 @@ const toggleAllowMute = async () => {
   }
 };
 
+// ------- END SOCIAL SETTINGS ------- //
+
+// ------- START ADMIN SETTINGS ------- //
+
+const [allowManageRoles, setAllowManageRoles] = useState();
+const [allowDeleteUsers, setAllowDeleteUsers] = useState();
+
+useEffect(() => {
+  const fetchSettings = async () => {
+    const settings = await getGlobalProviderSettings();
+
+    if (settings) {
+      setAllowManageRoles(settings.allow_manage_roles);
+      setAllowDeleteUsers(settings.allow_delete_users);
+    }
+  };
+
+  fetchSettings();
+}, [auth]);
 
 
-  // ------- END SOCIAL SETTINGS ------- //
+const toggleAllowManageRoles = async () => {
+
+  const newValue = !allowManageRoles;
+  setAllowManageRoles(newValue);
+  try {
+    await axiosPrivate.put('/settings/global-provider/toggleAllowManageRoles', {
+      allow_manage_roles: newValue
+    });
+
+  } catch (err) {
+    console.error('Failed to update allowManageRoles setting:', err);
+    setAllowManageRoles(prev => !prev);
+  }
+};
+
+const toggleAllowDeleteUsers = async () => {
+
+  const newValue = !allowDeleteUsers;
+  setAllowDeleteUsers(newValue);
+  try {
+    await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteUsers', {
+      allow_delete_users: newValue
+    });
+
+  } catch (err) {
+    console.error('Failed to update allowDeleteUsers setting:', err);
+    setAllowDeleteUsers(prev => !prev);
+  }
+};
+
+// ------- END ADMIN SETTINGS ------- //
 
   const postFeatures = {
     showPostsFeature,
@@ -548,6 +595,9 @@ const toggleAllowMute = async () => {
     allowFollow,
     allowMute,
 
+    allowManageRoles,
+    allowDeleteUsers,
+
     setShowPostsFeature,
 
     setAllowUserPost,
@@ -570,6 +620,9 @@ const toggleAllowMute = async () => {
     setAllowFollow,
     setAllowMute,
 
+    setAllowManageRoles,
+    setAllowDeleteUsers,
+
     toggleShowPostsFeature,
     toggleAllowUserPost,
     toggleAllowAdminPost,
@@ -589,11 +642,15 @@ const toggleAllowMute = async () => {
     
     toggleShowSocialFeature,
     toggleAllowFollow,
-    toggleAllowMute
+    toggleAllowMute,
+
+    toggleAllowManageRoles,
+    toggleAllowDeleteUsers
   };
 
   // console.log("postFeatures in Global Provider", postFeatures)
-  // console.log("showMessagesFeature", showMessagesFeature)
+  // console.log("allowManageRoles", allowManageRoles)
+  // console.log("allowDeleteUsers", allowDeleteUsers)
 
   return (
     <GlobalContext.Provider value={{

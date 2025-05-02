@@ -25,7 +25,11 @@ const getGlobalProviderSettings = async (req, res) => {
         
         show_social_feature, 
         allow_follow, 
-        allow_mute 
+        allow_mute,
+
+        allow_manage_roles,
+        allow_delete_users
+
       FROM global_provider_settings
     `);
 
@@ -463,6 +467,55 @@ const toggleAllowMute = async (req, res) => {
   }
 };
 
+const toggleAllowManageRoles = async (req, res) => {
+  try {
+    const { allow_manage_roles } = req.body;
+
+    if (typeof allow_manage_roles !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_manage_roles. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_manage_roles = $1 WHERE id = 1 RETURNING *;`,
+      [allow_manage_roles]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_manage_roles:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowDeleteUsers = async (req, res) => {
+  try {
+    const { allow_delete_users } = req.body;
+
+    if (typeof allow_delete_users !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_delete_users. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_delete_users = $1 WHERE id = 1 RETURNING *;`,
+      [allow_delete_users]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_delete_users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 
 module.exports = {
   getGlobalProviderSettings,
@@ -487,7 +540,10 @@ module.exports = {
 
   toggleShowSocialFeature,
   toggleAllowFollow,
-  toggleAllowMute
+  toggleAllowMute,
+
+  toggleAllowManageRoles,
+  toggleAllowDeleteUsers
 
 };
 

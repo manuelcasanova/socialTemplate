@@ -164,6 +164,19 @@ router.route('/global-provider/toggleAllowMute')
     settingsController.toggleAllowMute
   );
 
+  // Allow Manage Roles (Admin)
+router.route('/global-provider/toggleAllowManageRoles')
+.put(
+  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+  settingsController.toggleAllowManageRoles
+);
+
+// Allow Delete Users (Admin)
+router.route('/global-provider/toggleAllowDeleteUsers')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowDeleteUsers
+  );
 
 
 module.exports = router;

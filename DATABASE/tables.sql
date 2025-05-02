@@ -199,5 +199,9 @@ CREATE TABLE global_provider_settings (
 
   show_social_feature BOOLEAN NOT NULL DEFAULT TRUE,
   allow_follow BOOLEAN NOT NULL DEFAULT TRUE,
-  allow_mute BOOLEAN NOT NULL DEFAULT TRUE
+  allow_mute BOOLEAN NOT NULL DEFAULT TRUE,
+
+  allow_manage_roles BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_delete_users BOOLEAN NOT NULL DEFAULT TRUE
+
 );

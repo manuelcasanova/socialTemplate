@@ -1,9 +1,18 @@
-import Footer from "../../mainComponents/footer";
+
 import { useState, useEffect } from "react";
+
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
+//Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import '../../../css/AdminUsers.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useAuth from "../../../hooks/useAuth";
+
+//Styling
+import '../../../css/AdminUsers.css';
+
+//Components
+
 import FilterAdminUsers from "./FilterAdminUsers";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
@@ -11,6 +20,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 export default function AdminUsers({ isNavOpen }) {
   const axiosPrivate = useAxiosPrivate();
+  const { postFeatures } = useGlobal();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState(null);
@@ -51,7 +61,7 @@ export default function AdminUsers({ isNavOpen }) {
         } else if (err.message) {
           errorMsg += ` ${err.message}`;
         }
-    
+
         setError(errorMsg);
       } finally {
         setIsLoading(false);
@@ -89,7 +99,7 @@ export default function AdminUsers({ isNavOpen }) {
       const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
       setError(errorMsg);
     }
-    
+
   };
 
   // const handleDeleteUser = async (userId, loggedInUser) => {
@@ -130,7 +140,7 @@ export default function AdminUsers({ isNavOpen }) {
           const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
           setError(errorMsg);
 
-        
+
         } finally {
           setIsLoading(false);
         }
@@ -187,13 +197,13 @@ export default function AdminUsers({ isNavOpen }) {
                             }}
                           />
                           {/* Display FontAwesome icon if image is not found */}
-                    
-                           <img
-                        className="user-row-social-small-img"
-                        src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                        alt="Profile"
-                        style={{ display: 'none' }}  // Initially hidden
-                      />
+
+                          <img
+                            className="user-row-social-small-img"
+                            src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                            alt="Profile"
+                            style={{ display: 'none' }}  // Initially hidden
+                          />
                         </div>
                         <p>
                           <strong>Username:</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
@@ -201,23 +211,27 @@ export default function AdminUsers({ isNavOpen }) {
                         <p><strong>E-mail:</strong> {user.email}</p>
                         <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
                         <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
-                        <h4>Roles</h4>
-                        <ul>
-                          {roles.map((role, index) => (
-                            <li key={index}>
-                              <input
-                                type="checkbox"
-                                className="checkbox"
-                                checked={user.roles.includes(role)}
-                                onChange={(e) => {
-                                  setError("");  // Clear any previous error when the checkbox is clicked
-                                  handleRoleChange(user, role, e.target.checked); // Pass the full user object here
-                                }}
-                              />
-                              {role}
-                            </li>
-                          ))}
-                        </ul>
+                        {postFeatures.allowManageRoles &&
+                          <>
+                            <h4>Roles</h4>
+                            <ul>
+                              {roles.map((role, index) => (
+                                <li key={index}>
+                                  <input
+                                    type="checkbox"
+                                    className="checkbox"
+                                    checked={user.roles.includes(role)}
+                                    onChange={(e) => {
+                                      setError("");  // Clear any previous error when the checkbox is clicked
+                                      handleRoleChange(user, role, e.target.checked); // Pass the full user object here
+                                    }}
+                                  />
+                                  {role}
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        }
                         <h4>Last login</h4>
                         {user.login_history.length > 0 ? (
                           <ul>
@@ -242,33 +256,33 @@ export default function AdminUsers({ isNavOpen }) {
                         )}
 
 
+                        {postFeatures.allowDeleteUsers && <>
+                          {
+                            !showConfirmDelete && !user.email.startsWith('deleted-') && (
+                              <div className="delete-user">
+                                <button
+                                  className="button-red"
+                                  onClick={handleShowDelete}
+                                >Delete user</button>
+                              </div>
+                            )
+                          }
 
-                        {
-                          !showConfirmDelete && !user.email.startsWith('deleted-') && (
-                            <div className="delete-user">
-                              <button
-                                className="button-red"
-                                onClick={handleShowDelete}
-                              >Delete user</button>
-                            </div>
-                          )
-                        }
+                          {
+                            showConfirmDelete && !user.email.startsWith('deleted-') && (
+                              <div className="delete-confirmation">
+                                <p>Are you sure you want to delete this user? This action is permanent and cannot be undone.</p>
+                                <button className="button-white" onClick={handleShowDelete}>x</button>
+                                <button
+                                  className="button-red"
+                                  disabled={isLoading}
+                                  onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
+                                >{isLoading ? <LoadingSpinner /> : 'Confirm delete'}</button>
 
-                        {
-                          showConfirmDelete && !user.email.startsWith('deleted-') && (
-                            <div className="delete-confirmation">
-                              <p>Are you sure you want to delete this user? This action is permanent and cannot be undone.</p>
-                              <button className="button-white" onClick={handleShowDelete}>x</button>
-                              <button
-                                className="button-red"
-                                disabled={isLoading}
-                                onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
-                              >{isLoading ? <LoadingSpinner /> : 'Confirm delete'}</button>
-
-                            </div>
-                          )
-                        }
-
+                              </div>
+                            )
+                          }
+                        </>}
                       </div>
                     )}
                   </div>
