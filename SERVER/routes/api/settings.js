@@ -185,5 +185,12 @@ router.route('/global-provider/toggleAllowEditUsername')
   settingsController.toggleAllowEditUsername
 );
 
+  // Allow Edit email
+  router.route('/global-provider/toggleAllowEditEmail')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowEditEmail
+  );
+
 
 module.exports = router;

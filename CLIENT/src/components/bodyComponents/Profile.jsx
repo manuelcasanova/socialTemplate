@@ -88,7 +88,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
 
 export default function Profile({ isNavOpen, profilePictureKey, setProfilePictureKey }) {
   const { auth } = useAuth();
-  const {postFeatures} = useGlobal();
+  const { postFeatures } = useGlobal();
   const isTestSuperAdmin = auth.userId === 1;
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
   const [imageExists, setImageExists] = useState(true);
@@ -454,13 +454,15 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   Edit Username
                 </button>
               }
-              <button
-                className="profile-actions-button button-white"
-                onClick={() => handleEditButtonClick("email")}
-              // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
-              >
-                Edit Email
-              </button>
+              {postFeatures.allowEditEmail &&
+                <button
+                  className="profile-actions-button button-white"
+                  onClick={() => handleEditButtonClick("email")}
+                // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
+                >
+                  Edit Email
+                </button>
+              }
               <button
                 className="profile-actions-button button-white"
                 onClick={() => handleEditButtonClick("password")}

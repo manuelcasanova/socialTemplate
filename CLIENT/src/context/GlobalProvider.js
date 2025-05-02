@@ -576,13 +576,15 @@ const toggleAllowDeleteUsers = async () => {
 // ------- START PROFILE SETTINGS ------- //
 
 const [allowEditUsername, setAllowEditUsername] = useState();
+const [allowEditEmail, setAllowEditEmail] = useState();
 
 useEffect(() => {
   const fetchSettings = async () => {
     const settings = await getGlobalProviderSettings();
 
     if (settings) {
-      setAllowEditUsername(settings.allow_manage_roles);
+      setAllowEditUsername(settings.allow_edit_username);
+      setAllowEditEmail(settings.allow_edit_email);
     }
   };
 
@@ -602,6 +604,21 @@ const toggleAllowEditUsername = async () => {
   } catch (err) {
     console.error('Failed to update allowEditUsername setting:', err);
     setAllowEditUsername(prev => !prev);
+  }
+};
+
+const toggleAllowEditEmail = async () => {
+
+  const newValue = !allowEditEmail;
+  setAllowEditEmail(newValue);
+  try {
+    await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', {
+      allow_edit_email: newValue
+    });
+
+  } catch (err) {
+    console.error('Failed to update allowEditEmail setting:', err);
+    setAllowEditEmail(prev => !prev);
   }
 };
 
@@ -636,6 +653,7 @@ const toggleAllowEditUsername = async () => {
     allowDeleteUsers,
 
     allowEditUsername,
+    allowEditEmail,
 
     setShowPostsFeature,
 
@@ -655,14 +673,15 @@ const toggleAllowEditUsername = async () => {
     setAllowSendMessages,
     setAllowDeleteMessages,
 
-    setAllowEditUsername,
-
     setShowSocialFeature,
     setAllowFollow,
     setAllowMute,
 
     setAllowManageRoles,
     setAllowDeleteUsers,
+
+    setAllowEditUsername,
+    setAllowEditEmail,
 
     toggleShowPostsFeature,
     toggleAllowUserPost,
@@ -688,12 +707,13 @@ const toggleAllowEditUsername = async () => {
     toggleAllowManageRoles,
     toggleAllowDeleteUsers,
 
-    toggleAllowEditUsername
+    toggleAllowEditUsername,
+    toggleAllowEditEmail
   };
 
   // console.log("postFeatures in Global Provider", postFeatures)
   // console.log("allowManageRoles", allowManageRoles)
-  console.log("allowEditUsername", allowEditUsername)
+  console.log("allowEditEmail", allowEditEmail)
 
   return (
     <GlobalContext.Provider value={{

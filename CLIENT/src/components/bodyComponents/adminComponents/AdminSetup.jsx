@@ -417,6 +417,24 @@ export default function AdminSetup({ isNavOpen }) {
             <div className='admin-setup-line-text'>Users Can Edit their Username</div>
           </div>
 
+          <div className='admin-setup-line'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowEditEmail"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowEditEmail}
+                  onChange={postFeatures.toggleAllowEditEmail}
+                />
+                <label htmlFor="AllowEditEmail" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Users Can Edit their Email</div>
+          </div>
+
     </div>
 
   )
