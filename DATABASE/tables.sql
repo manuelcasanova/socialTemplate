@@ -180,8 +180,10 @@ CREATE TABLE post_comment_report_history (
 CREATE TABLE global_provider_settings (
   id SERIAL PRIMARY KEY,
   show_posts_feature BOOLEAN NOT NULL DEFAULT TRUE,
+  
   allow_user_post BOOLEAN NOT NULL DEFAULT TRUE,
   allow_admin_post BOOLEAN NOT NULL DEFAULT TRUE,
+  
   allow_post_interactions BOOLEAN NOT NULL DEFAULT TRUE,
   allow_comments BOOLEAN NOT NULL DEFAULT TRUE,
   allow_post_reactions BOOLEAN NOT NULL DEFAULT TRUE,
@@ -190,7 +192,12 @@ CREATE TABLE global_provider_settings (
   allow_flag_posts BOOLEAN NOT NULL DEFAULT TRUE,
   allow_delete_comments BOOLEAN NOT NULL DEFAULT TRUE,
   allow_flag_comments BOOLEAN NOT NULL DEFAULT TRUE,
+
   show_messages_feature BOOLEAN NOT NULL DEFAULT TRUE,
   allow_send_messages BOOLEAN NOT NULL DEFAULT TRUE,
-  allow_delete_messages BOOLEAN NOT NULL DEFAULT TRUE
+  allow_delete_messages BOOLEAN NOT NULL DEFAULT TRUE,
+
+  show_social_feature BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_follow BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_mute BOOLEAN NOT NULL DEFAULT TRUE
 );

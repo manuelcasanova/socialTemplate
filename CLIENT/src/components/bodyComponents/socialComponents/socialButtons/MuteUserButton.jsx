@@ -1,11 +1,19 @@
+//Hooks
+
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+
+//Context
+
+import { useGlobal } from "../../../../context/GlobalProvider";
+
+//Styling
 
 import { faBellSlash, faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedChange, handleRefresh }) => {
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
-
+  const { postFeatures } = useGlobal();
   const axiosPrivate = useAxiosPrivate()
   const muteUser = () => {
     axiosPrivate.post(`${BACKEND}/social/users/mute`, { userLoggedin, userId })
@@ -30,6 +38,8 @@ const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedC
   };
 
   return (
+
+    postFeatures.allowMute &&
     <div className="user-info-buttons">
       {isMuted ? (
         <button title="Unmute user" onClick={unmuteUser}><FontAwesomeIcon icon={faBell}></FontAwesomeIcon></button>
@@ -37,6 +47,7 @@ const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedC
         <button title="Mute user" onClick={muteUser}> <FontAwesomeIcon icon={faBellSlash} /></button>
       )}
     </div>
+
   );
 };
 

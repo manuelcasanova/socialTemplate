@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
 //Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
@@ -40,6 +43,7 @@ export default function SocialOneUser({ isNavOpen }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
+  const { postFeatures } = useGlobal();
   const { userId } = useParams(); // Get the userId from the URL parameter
   const userIdNumber = Number(userId);
   const [error, setError] = useState(null);
@@ -194,7 +198,7 @@ export default function SocialOneUser({ isNavOpen }) {
               <div className="user-info-buttons">
                 {followersAndFollowee.some(f =>
                   (f.follower_id === user.user_id || f.followee_id === user.user_id) && f.status === "accepted"
-                ) && (
+                ) && postFeatures.showMessagesFeature && (
                     <button onClick={() => navigate(`/messages/${user.user_id}`)}>
                       <FontAwesomeIcon icon={faEnvelope} style={{ cursor: "pointer" }} title="This user follows you" />
                     </button>

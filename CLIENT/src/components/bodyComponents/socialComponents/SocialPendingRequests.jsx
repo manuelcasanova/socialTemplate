@@ -5,11 +5,12 @@ import { useState, useEffect, useRef } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
 //Styling
 
 import '../../../css/AdminUsers.css';
-import { faBellSlash, faBell } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -41,6 +42,7 @@ const profilePictureExists = async (userId) => {
 export default function SocialPendingRequests({ isNavOpen, isFollowingNotification, setIsFollowNotification }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const { postFeatures } = useGlobal();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({});
@@ -61,7 +63,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   const [filterUsername, setFilterUsername] = useState("");
 
   const inputRef = useRef(null);
- 
+
 
   useEffect(() => {
     setIsFollowNotification(false);
@@ -85,7 +87,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
       inputRef.current.focus();
     }
   });
-  
+
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -136,9 +138,9 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
         <h2>Social - Pending Requests</h2>
 
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}/>
-        
-        {filteredPending.length === 0 ? (
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
+
+        {(filteredPending.length === 0 || !postFeatures.allowFollow) ? (
           <p>No pending requests.</p>
         ) : (
           <div className="users-container">
@@ -166,7 +168,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                         />
                       )}
 
-{showLargePicture === user.user_id && (
+                      {showLargePicture === user.user_id && (
                         <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(null)}>
                           <img
                             className='users-all-picture-large'

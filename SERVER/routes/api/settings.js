@@ -143,6 +143,27 @@ router.route('/global-provider/toggleAllowDeleteMessages')
   settingsController.toggleAllowDeleteMessages
 );
 
+// Show Social Feature
+router.route('/global-provider/toggleShowSocialFeature')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleShowSocialFeature
+  );
+
+// Allow Follow
+router.route('/global-provider/toggleAllowFollow')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowFollow
+  );
+
+// Allow Mute
+router.route('/global-provider/toggleAllowMute')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowMute
+  );
+
 
 
 module.exports = router;

@@ -2,6 +2,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
 //Hooks
 
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -43,6 +46,7 @@ const profilePictureExists = async (userId) => {
 export default function SocialAllUsers({ isNavOpen }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const { postFeatures } = useGlobal();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -156,30 +160,30 @@ export default function SocialAllUsers({ isNavOpen }) {
 
 
 
-{showLargePicture === user.user_id && (
-  <div
-    className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
-    onClick={() => setShowLargePicture(null)}
-  >
-    <img
-      className='users-all-picture-large'
-      onClick={() => setShowLargePicture(null)}
-      src={imageExistsMap[user.user_id]
-        ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
-        : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-      onError={(e) => {
-        // Prevent infinite loop in case of repeated errors
-        e.target.onerror = null;
+                    {showLargePicture === user.user_id && (
+                      <div
+                        className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+                        onClick={() => setShowLargePicture(null)}
+                      >
+                        <img
+                          className='users-all-picture-large'
+                          onClick={() => setShowLargePicture(null)}
+                          src={imageExistsMap[user.user_id]
+                            ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
+                            : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                          onError={(e) => {
+                            // Prevent infinite loop in case of repeated errors
+                            e.target.onerror = null;
 
-        // Check if the fallback image has already been set to avoid infinite loop
-        if (e.target.src !== `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`) {
-          // Fall back to the default user image if the profile picture fails
-          e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
-        }
-      }}
-    />
-  </div>
-)}
+                            // Check if the fallback image has already been set to avoid infinite loop
+                            if (e.target.src !== `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`) {
+                              // Fall back to the default user image if the profile picture fails
+                              e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
 
 
                     <p>
@@ -188,29 +192,29 @@ export default function SocialAllUsers({ isNavOpen }) {
 
                   </div>
                   {loggedInUser !== user.user_id &&
-
                     <>
-
                       <div className="user-info-buttons">
                         {
                           followersAndFollowee.some(f =>
                             f.follower_id === user.user_id ||
                             f.followee_id === user.user_id &&
                             f.status === "accepted"
-                          ) && (
+                          ) && postFeatures.showMessagesFeature && (
+
                             <button
-                            onClick={() => navigate(`/messages/${user.user_id}`)}
+                              onClick={() => navigate(`/messages/${user.user_id}`)}
                             >
-                              
-                            <FontAwesomeIcon
-                              icon={faEnvelope}
-                              style={{ cursor: "pointer" }}
-                              title="This user follows you"
-                            />
+
+                              <FontAwesomeIcon
+                                icon={faEnvelope}
+                                style={{ cursor: "pointer" }}
+                                title="This user follows you"
+                              />
                             </button>
                           )
                         }
                       </div>
+
 
                       <FollowUserButton
 

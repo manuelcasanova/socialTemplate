@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 
+//Context 
+import { useGlobal } from "../../../context/GlobalProvider";
+
 //Styling
 
 import '../../../css/AdminUsers.css';
@@ -42,6 +45,7 @@ const profilePictureExists = async (userId) => {
 export default function SocialFollowee({ isNavOpen }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const { postFeatures } = useGlobal();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -151,7 +155,7 @@ export default function SocialFollowee({ isNavOpen }) {
                         />
                       )}
 
-{showLargePicture === user.user_id && (
+                      {showLargePicture === user.user_id && (
                         <div
                           className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
                           onClick={() => setShowLargePicture(null)}
@@ -191,7 +195,7 @@ export default function SocialFollowee({ isNavOpen }) {
                               f.follower_id === user.user_id ||
                               f.followee_id === user.user_id &&
                               f.status === "accepted"
-                            ) && (
+                            ) && postFeatures.showMessagesFeature && (
                               <button
                                 onClick={() => navigate(`/messages/${user.user_id}`)}
                               >
@@ -205,6 +209,7 @@ export default function SocialFollowee({ isNavOpen }) {
                             )
                           }
                         </div>
+
 
                         <FollowUserButton
 

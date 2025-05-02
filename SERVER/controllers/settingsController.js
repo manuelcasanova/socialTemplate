@@ -5,9 +5,12 @@ const getGlobalProviderSettings = async (req, res) => {
     const result = await pool.query(`
       SELECT 
         show_posts_feature,
+        
         allow_user_post,
         allow_admin_post,
+
         allow_comments,
+
         allow_post_interactions,
         allow_post_reactions,
         allow_comment_reactions,
@@ -15,9 +18,14 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_flag_posts,
         allow_delete_comments,
         allow_flag_comments,
+
         show_messages_feature,
         allow_send_messages,
-        allow_delete_messages
+        allow_delete_messages,
+        
+        show_social_feature, 
+        allow_follow, 
+        allow_mute 
       FROM global_provider_settings
     `);
 
@@ -378,11 +386,92 @@ const toggleAllowDeleteMessages = async (req, res) => {
   }
 };
 
+const toggleShowSocialFeature = async (req, res) => {
+  try {
+    const { show_social_feature } = req.body;
+
+    if (typeof show_social_feature !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for show_social_feature. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET show_social_feature = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [show_social_feature]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating show_social_feature:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowFollow = async (req, res) => {
+  try {
+    const { allow_follow } = req.body;
+
+    if (typeof allow_follow !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_follow. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_follow = $1 WHERE id = 1 RETURNING *;`,
+      [allow_follow]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_follow:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowMute = async (req, res) => {
+  try {
+    const { allow_mute } = req.body;
+
+    if (typeof allow_mute !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_mute. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE global_provider_settings SET allow_mute = $1 WHERE id = 1 RETURNING *;`,
+      [allow_mute]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating allow_mute:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 module.exports = {
   getGlobalProviderSettings,
+
   toggleShowPostsFeature,
+  
   toggleAllowUserPost,
   toggleAllowAdminPost,
+  
   toggleAllowPostInteractions,
   toggleAllowComments,
   toggleAllowPostReactions,
@@ -391,9 +480,15 @@ module.exports = {
   toggleAllowFlagPosts,
   toggleAllowDeleteComments,
   toggleAllowFlagComments,
+  
   toggleShowMessagesFeature,
   toggleAllowSendMessages,
-  toggleAllowDeleteMessages
+  toggleAllowDeleteMessages,
+
+  toggleShowSocialFeature,
+  toggleAllowFollow,
+  toggleAllowMute
+
 };
 
 

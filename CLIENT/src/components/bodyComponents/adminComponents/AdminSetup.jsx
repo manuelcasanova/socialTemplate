@@ -30,9 +30,9 @@ export default function AdminSetup({ isNavOpen }) {
           </div>
         </div>
         {postFeatures.showPostsFeature ?
-          <div className='admin-setup-line-text'>Disable</div>
+          <div className='admin-setup-line-text'>Disable Posts</div>
           :
-          <div className='admin-setup-line-text'>Enable</div>
+          <div className='admin-setup-line-text'>Enable Posts</div>
         }
 
       </div>
@@ -54,7 +54,7 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow admins to publish posts</div>
+            <div className='admin-setup-line-text'>Admins Can Post</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -72,7 +72,7 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow users to publish posts</div>
+            <div className='admin-setup-line-text'>Users Can Post</div>
           </div>
 
         </>}
@@ -93,7 +93,7 @@ export default function AdminSetup({ isNavOpen }) {
               </label>
             </div>
           </div>
-          <div className='admin-setup-line-text'>Allow users to interact with posts</div>
+          <div className='admin-setup-line-text'>Enable Post Interactions</div>
         </div>
       }
 
@@ -114,7 +114,7 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow reactions to posts</div>
+            <div className='admin-setup-line-text'>Reactions on Posts</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -132,7 +132,7 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow report posts as innappropriate</div>
+            <div className='admin-setup-line-text'>Report Posts</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -150,7 +150,7 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow delete posts</div>
+            <div className='admin-setup-line-text'>Delete posts</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -168,7 +168,7 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow comments on posts</div>
+            <div className='admin-setup-line-text'>Comments on Posts</div>
           </div>
 
           {postFeatures.allowComments &&
@@ -188,7 +188,7 @@ export default function AdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Allow reactions to comments</div>
+                <div className='admin-setup-line-text'>Reactions on comments</div>
               </div>
 
               <div className='admin-setup-subline2'>
@@ -206,7 +206,7 @@ export default function AdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Allow flag comments</div>
+                <div className='admin-setup-line-text'>Report comments</div>
               </div>
 
               <div className='admin-setup-subline2'>
@@ -224,7 +224,7 @@ export default function AdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Allow delete comments</div>
+                <div className='admin-setup-line-text'>Delete comments</div>
               </div>
 
             </>
@@ -233,7 +233,7 @@ export default function AdminSetup({ isNavOpen }) {
         </>
       }
 
-      <h4 className='admin-setup-subtitle'>PRIVATE MESSAGES</h4>
+      <h4 className='admin-setup-subtitle'>DIRECT MESSAGING</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -251,9 +251,9 @@ export default function AdminSetup({ isNavOpen }) {
           </div>
         </div>
         {postFeatures.showMessagesFeature ?
-          <div className='admin-setup-line-text'>Disable</div>
+          <div className='admin-setup-line-text'>Disable messaging</div>
           :
-          <div className='admin-setup-line-text'>Enable</div>
+          <div className='admin-setup-line-text'>Enable messaging</div>
         }
       </div>
 
@@ -274,7 +274,7 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow users to send messages</div>
+            <div className='admin-setup-line-text'>Users Can Message</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -292,9 +292,74 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Allow users to delete messages</div>
+            <div className='admin-setup-line-text'>Users can delete messages</div>
           </div>
         </>}
+
+      <h4 className='admin-setup-subtitle'>SOCIAL CONNECTIONS</h4>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="ShowSocialFeature"
+              className="toggle-checkbox"
+              checked={postFeatures.showSocialFeature}
+              onChange={postFeatures.toggleShowSocialFeature}
+            />
+            <label htmlFor="ShowSocialFeature" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        {postFeatures.showSocialFeature ?
+          <div className='admin-setup-line-text'>Disable social features</div>
+          :
+          <div className='admin-setup-line-text'>Enable social features</div>
+        }
+      </div>
+
+      {postFeatures.showSocialFeature &&
+        <>
+          <div className='admin-setup-line'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowFollow"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowFollow}
+                  onChange={postFeatures.toggleAllowFollow}
+                />
+                <label htmlFor="AllowFollow" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Enable users following</div>
+          </div>
+
+          <div className='admin-setup-line'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowMute"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowMute}
+                  onChange={postFeatures.toggleAllowMute}
+                />
+                <label htmlFor="AllowMute" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Enable muting</div>
+          </div>
+        </>}
+
+
     </div>
 
   )

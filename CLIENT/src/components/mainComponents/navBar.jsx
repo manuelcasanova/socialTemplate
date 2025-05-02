@@ -164,51 +164,56 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
       <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
 
-      {auth.roles && <div className='nav-item-with-dropdown'>
-        {/* <div className='nav-item' onClick={() => toggleSection('social')}>Users */}
+      {postFeatures.showSocialFeature &&
+        <>
+          {
+            auth.roles && <div className='nav-item-with-dropdown'>
+              {/* <div className='nav-item' onClick={() => toggleSection('social')}>Users */}
 
-        <div className='nav-item' onClick={() => toggleSection('social')}>
+              <div className='nav-item' onClick={() => toggleSection('social')}>
 
-          {isFollowNotification ? <div className='with-notification-text'>Users</div> :
-            <div>Users</div>}
+                {isFollowNotification ? <div className='with-notification-text'>Users</div> :
+                  <div>Users</div>}
 
-          {isFollowNotification ?
-            <FollowNotification />
-            :
-            showSections.social ? '▲' : '▼'
+                {isFollowNotification ?
+                  <FollowNotification />
+                  :
+                  showSections.social ? '▲' : '▼'
 
+                }
+              </div>
+              {showSections.social && (
+                <>
+                  <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>All users</div>
+
+                  <div className="subitem" onClick={() => handleNavigate('/social/following')}>
+                    Following
+                  </div>
+
+
+                  <div className="subitem" onClick={() => handleNavigate('/social/followers')}>
+                    Followers
+                  </div>
+
+                  <div className="subitem" onClick={() => {
+                    setIsFollowNotification(false);
+                    handleNavigate('/social/pending')
+                  }}
+                  >
+                    {isFollowNotification ? <div className='with-notification-text'>Pending requests</div> :
+                      <div>Pending requests</div>}
+                    {isFollowNotification && <FollowNotification />}
+                  </div>
+
+                  <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
+                    Muted
+                  </div>
+
+                </>
+              )}
+            </div>
           }
-        </div>
-        {showSections.social && (
-          <>
-            <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>All users</div>
-
-            <div className="subitem" onClick={() => handleNavigate('/social/following')}>
-              Following
-            </div>
-
-
-            <div className="subitem" onClick={() => handleNavigate('/social/followers')}>
-              Followers
-            </div>
-
-            <div className="subitem" onClick={() => {
-              setIsFollowNotification(false);
-              handleNavigate('/social/pending')
-            }}
-            >
-              {isFollowNotification ? <div className='with-notification-text'>Pending requests</div> :
-                <div>Pending requests</div>}
-              {isFollowNotification && <FollowNotification />}
-            </div>
-
-            <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
-              Muted
-            </div>
-
-          </>
-        )}
-      </div>
+        </>
       }
 
       {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) &&

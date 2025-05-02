@@ -22,7 +22,7 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
-  // -------END POSTS SETTINGS ------- START MESSAGES SETTINGS //
+  // ------- START POSTS SETTINGS ------- //
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -346,7 +346,7 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
-  // -------END POSTS SETTINGS ------- START MESSAGES SETTINGS //
+  // ------- END POSTS SETTINGS ------- START MESSAGES SETTINGS //
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -438,13 +438,99 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  // ------- END MESSAGES SETTINGS ------- //
 
-  // -------END MESSAGES SETTINGS ----------- //
+  // ------- START SOCIAL SETTINGS ------- //
+
+  // Social-related features
+const [showSocialFeature, setShowSocialFeature] = useState();
+const [allowFollow, setAllowFollow] = useState();
+const [allowMute, setAllowMute] = useState();
+
+useEffect(() => {
+  const fetchSettings = async () => {
+    const settings = await getGlobalProviderSettings();
+
+    if (settings) {
+
+      setShowSocialFeature(settings.show_social_feature);
+      setAllowFollow(settings.allow_follow);
+      setAllowMute(settings.allow_mute);
+    }
+  };
+
+  fetchSettings();
+}, [auth]);
+
+
+const toggleShowSocialFeature = async () => {
+  const newValue = !showSocialFeature;
+  setShowSocialFeature(newValue);
+  try {
+    await axiosPrivate.put('/settings/global-provider/toggleShowSocialFeature', {
+      show_social_feature: newValue
+    });
+
+    // If turning off, reset related settings
+    if (!newValue) {
+      setAllowFollow(false);
+      setAllowMute(false);
+
+      await axiosPrivate.put('/settings/global-provider/toggleAllowFollow', { allow_follow: false });
+      await axiosPrivate.put('/settings/global-provider/toggleAllowMute', { allow_mute: false });
+    } else {
+      setAllowFollow(true);
+      setAllowMute(true);
+
+      await axiosPrivate.put('/settings/global-provider/toggleAllowFollow', { allow_follow: true });
+      await axiosPrivate.put('/settings/global-provider/toggleAllowMute', { allow_mute: true });
+    }
+  } catch (err) {
+    console.error('Failed to update showSocialFeature setting:', err);
+    setShowSocialFeature(prev => !prev);
+  }
+};
+
+const toggleAllowFollow = async () => {
+  if (!showSocialFeature) return;
+
+  const newValue = !allowFollow;
+  setAllowFollow(newValue);
+  try {
+    await axiosPrivate.put('/settings/global-provider/toggleAllowFollow', {
+      allow_follow: newValue
+    });
+  } catch (err) {
+    console.error('Failed to update allowFollow setting:', err);
+    setAllowFollow(prev => !prev);
+  }
+};
+
+const toggleAllowMute = async () => {
+  if (!showSocialFeature) return;
+
+  const newValue = !allowMute;
+  setAllowMute(newValue);
+  try {
+    await axiosPrivate.put('/settings/global-provider/toggleAllowMute', {
+      allow_mute: newValue
+    });
+  } catch (err) {
+    console.error('Failed to update allowMute setting:', err);
+    setAllowMute(prev => !prev);
+  }
+};
+
+
+
+  // ------- END SOCIAL SETTINGS ------- //
 
   const postFeatures = {
     showPostsFeature,
+
     allowUserPost,
     allowAdminPost,
+
     allowPostInteractions,
     allowComments,
     allowPostReactions,
@@ -453,14 +539,20 @@ export const GlobalProvider = ({ children }) => {
     allowFlagPosts,
     allowDeleteComments,
     allowFlagComments,
+    
     showMessagesFeature,
     allowSendMessages,
     allowDeleteMessages,
 
+    showSocialFeature,
+    allowFollow,
+    allowMute,
 
     setShowPostsFeature,
+
     setAllowUserPost,
     setAllowAdminPost,
+
     setAllowPostInteractions,
     setAllowComments,
     setAllowPostReactions,
@@ -469,13 +561,19 @@ export const GlobalProvider = ({ children }) => {
     setAllowFlagPosts,
     setAllowDeleteComments,
     setAllowFlagComments,
+    
     setShowMessagesFeature,
     setAllowSendMessages,
     setAllowDeleteMessages,
 
+    setShowSocialFeature,
+    setAllowFollow,
+    setAllowMute,
+
     toggleShowPostsFeature,
     toggleAllowUserPost,
     toggleAllowAdminPost,
+
     toggleAllowPostInteractions,
     toggleAllowComments,
     toggleAllowPostReactions,
@@ -484,9 +582,14 @@ export const GlobalProvider = ({ children }) => {
     toggleAllowFlagPosts,
     toggleAllowDeleteComments,
     toggleAllowFlagComments,
+    
     toggleShowMessagesFeature,
     toggleAllowSendMessages,
-    toggleAllowDeleteMessages
+    toggleAllowDeleteMessages,
+    
+    toggleShowSocialFeature,
+    toggleAllowFollow,
+    toggleAllowMute
   };
 
   // console.log("postFeatures in Global Provider", postFeatures)

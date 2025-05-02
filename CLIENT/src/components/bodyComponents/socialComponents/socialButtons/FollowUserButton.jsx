@@ -1,11 +1,18 @@
 import React from 'react';
+
+//Hooks
 import { useState } from 'react';
 import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
+
+//Context
+
+import { useGlobal } from '../../../../context/GlobalProvider';
 
 const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject }) => {
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const axiosPrivate = useAxiosPrivate()
+  const { postFeatures } = useGlobal();
   const [error, setError] = useState(null);
 
   const amFollowingThem = followersAndFollowee.some(follower =>
@@ -176,7 +183,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
 
   return (
 
-
+    postFeatures.allowFollow &&
     <div className="user-info-buttons">
 
 
