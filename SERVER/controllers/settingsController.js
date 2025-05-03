@@ -35,7 +35,9 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_edit_email,
         allow_edit_password,
         allow_delete_my_user,
-        allow_modify_profile_picture
+        allow_modify_profile_picture,
+
+        show_subscriber_feature
 
       FROM global_provider_settings
     `);
@@ -673,7 +675,7 @@ const toggleAllowModifyProfilePicture = async (req, res) => {
 
 const toggleShowSubscriberFeature = async (req, res) => {
   try {
-    const { show_subscriber_feature} = req.body;
+    const { show_subscriber_feature } = req.body;
 
     if (typeof show_subscriber_feature!== 'boolean') {
       return res.status(400).json({ error: 'Invalid value for show_subscriber_feature. Must be a boolean.' });

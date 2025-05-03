@@ -33,17 +33,17 @@ export const GlobalProvider = ({ children }) => {
       const settings = await getGlobalProviderSettings();
 
       if (settings) {
-        setShowPostsFeature(settings.show_posts_feature);
-        setAllowUserPost(settings.allow_user_post);
-        setAllowAdminPost(settings.allow_admin_post);
-        setAllowPostInteractions(settings.allow_post_interactions);
-        setAllowComments(settings.allow_comments);
-        setAllowPostReactions(settings.allow_post_reactions);
-        setAllowCommentReactions(settings.allow_comment_reactions);
-        setAllowDeletePosts(settings.allow_delete_posts);
-        setAllowFlagPosts(settings.allow_flag_posts);
-        setAllowDeleteComments(settings.allow_delete_comments);
-        setAllowFlagComments(settings.allow_flag_comments);
+        setShowPostsFeature(settings?.show_posts_feature ?? false);
+        setAllowUserPost(settings?.allow_user_post ?? false);
+        setAllowAdminPost(settings?.allow_admin_post ?? false);
+        setAllowPostInteractions(settings?.allow_post_interactions ?? false);
+        setAllowComments(settings?.allow_comments ?? false);
+        setAllowPostReactions(settings?.allow_post_reactions ?? false);
+        setAllowCommentReactions(settings?.allow_comment_reactions ?? false);
+        setAllowDeletePosts(settings?.allow_delete_posts ?? false);
+        setAllowFlagPosts(settings?.allow_flag_posts ?? false);
+        setAllowDeleteComments(settings?.allow_delete_comments ?? false);
+        setAllowFlagComments(settings?.allow_flag_comments ?? false);
       }
     };
 
@@ -357,9 +357,9 @@ export const GlobalProvider = ({ children }) => {
       const settings = await getGlobalProviderSettings();
 
       if (settings) {
-        setShowMessagesFeature(settings.show_messages_feature);
-        setAllowSendMessages(settings.allow_send_messages);
-        setAllowDeleteMessages(settings.allow_delete_messages);
+        setShowMessagesFeature(settings?.show_messages_feature ?? false);
+        setAllowSendMessages(settings?.allow_send_messages ?? false);
+        setAllowDeleteMessages(settings?.allow_delete_messages ?? false);
       }
     };
 
@@ -455,9 +455,9 @@ export const GlobalProvider = ({ children }) => {
 
       if (settings) {
 
-        setShowSocialFeature(settings.show_social_feature);
-        setAllowFollow(settings.allow_follow);
-        setAllowMute(settings.allow_mute);
+        setShowSocialFeature(settings?.show_social_feature ?? false);
+        setAllowFollow(settings?.allow_follow ?? false);
+        setAllowMute(settings?.allow_mute ?? false);
       }
     };
 
@@ -535,8 +535,8 @@ export const GlobalProvider = ({ children }) => {
       const settings = await getGlobalProviderSettings();
 
       if (settings) {
-        setAllowManageRoles(settings.allow_manage_roles);
-        setAllowDeleteUsers(settings.allow_delete_users);
+        setAllowManageRoles(settings?.allow_manage_roles ?? false);
+        setAllowDeleteUsers(settings?.allow_delete_users ?? false);
       }
     };
 
@@ -591,12 +591,12 @@ export const GlobalProvider = ({ children }) => {
       const settings = await getGlobalProviderSettings();
 
       if (settings) {
-        setShowProfileFeature(settings.show_profile_feature);
-        setAllowEditUsername(settings.allow_edit_username);
-        setAllowEditEmail(settings.allow_edit_email);
-        setAllowEditPassword(settings.allow_edit_password);
-        setAllowModifyProfilePicture(settings.allow_modify_profile_picture);
-        setAllowDeleteMyUser(settings.allow_delete_my_user)
+        setShowProfileFeature(settings?.show_profile_feature  ?? false);
+        setAllowEditUsername(settings?.allow_edit_username ?? false);
+        setAllowEditEmail(settings?.allow_edit_email ?? false);
+        setAllowEditPassword(settings?.allow_edit_password ?? false);
+        setAllowModifyProfilePicture(settings?.allow_modify_profile_picture ?? false);
+        setAllowDeleteMyUser(settings?.allow_delete_my_user ?? false)
       }
     };
     fetchSettings();
@@ -744,7 +744,7 @@ export const GlobalProvider = ({ children }) => {
       const settings = await getGlobalProviderSettings();
 
       if (settings) {
-        setShowSubscriberFeature(settings.show_subscriber_feature);
+        setShowSubscriberFeature(settings?.show_subscriber_feature ?? false);
       }
     };
     fetchSettings();
