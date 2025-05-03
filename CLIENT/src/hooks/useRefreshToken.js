@@ -24,7 +24,12 @@ const useRefreshToken = () => {
             });
             return response.data.accessToken;
         } catch (err) {
-            console.error('Refresh failed', err);
+            if (err?.response?.status === 401) {
+                // Expected if no session exists; redirect but no scary log
+                console.info('User not logged in. Redirecting to signin.');
+            } else {
+                console.error('Refresh failed', err);
+            }
             navigate('/signin', { replace: true });
             throw err; // important to throw, so axiosPrivate knows it failed
         }

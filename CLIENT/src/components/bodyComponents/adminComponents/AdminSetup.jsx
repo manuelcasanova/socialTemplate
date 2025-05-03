@@ -251,9 +251,9 @@ export default function AdminSetup({ isNavOpen }) {
           </div>
         </div>
         {postFeatures.showMessagesFeature ?
-          <div className='admin-setup-line-text'>Disable messaging</div>
+          <div className='admin-setup-line-text'>Disable Messaging</div>
           :
-          <div className='admin-setup-line-text'>Enable messaging</div>
+          <div className='admin-setup-line-text'>Enable Messaging</div>
         }
       </div>
 
@@ -314,9 +314,9 @@ export default function AdminSetup({ isNavOpen }) {
           </div>
         </div>
         {postFeatures.showSocialFeature ?
-          <div className='admin-setup-line-text'>Disable social features</div>
+          <div className='admin-setup-line-text'>Disable Social Features</div>
           :
-          <div className='admin-setup-line-text'>Enable social features</div>
+          <div className='admin-setup-line-text'>Enable Social Features</div>
         }
       </div>
 
@@ -493,7 +493,7 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Users Can Change Their Profile Image</div>
+            <div className='admin-setup-line-text'>Users Can Change their Profile Image</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -511,9 +511,35 @@ export default function AdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Users Can Delete Their Account</div>
+            <div className='admin-setup-line-text'>Users Can Delete their Account</div>
           </div>
         </>}
+
+        <h4 className='admin-setup-subtitle'>SUBSCRIBER</h4>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="ShowSubscriberFeature"
+              className="toggle-checkbox"
+              checked={postFeatures.showSubscriberFeature}
+              onChange={postFeatures.toggleShowSubscriberFeature}
+            />
+            <label htmlFor="ShowSubscriberFeature" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        {postFeatures.showSubscriberFeature ?
+          <div className='admin-setup-line-text'>Disable Subscriber Feature</div>
+          :
+          <div className='admin-setup-line-text'>Enable Subscriber Feature</div>
+        }
+
+      </div>
+
     </div>
 
   )

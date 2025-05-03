@@ -221,6 +221,19 @@ router.route('/global-provider/toggleAllowEditUsername')
       (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
       settingsController.toggleAllowModifyProfilePicture
     );
+
+    //Show subscriber feature
+router.route('/global-provider/toggleShowSubscriberFeature')
+.put(
+  async (req, res, next) => {
+    try {
+      verifyRoles('SuperAdmin')(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  },
+  settingsController.toggleShowSubscriberFeature
+);
   
 
 module.exports = router;

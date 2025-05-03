@@ -17,8 +17,12 @@ export const GlobalProvider = ({ children }) => {
       const response = await axiosPrivate.get('/settings/global-provider');
       return response.data;
     } catch (err) {
-      console.error('Failed to fetch global provider settings:', err);
-      return null;
+      if (err?.response?.status === 401) {
+        return null;
+      } else {
+        console.error('Failed to fetch global provider settings:', err);
+        return null;
+      }
     }
   };
 
@@ -573,160 +577,196 @@ export const GlobalProvider = ({ children }) => {
   // ------- END ADMIN SETTINGS ------- //
 
 
-    // ------- START PROFILE SETTINGS ------- //
+  // ------- START PROFILE SETTINGS ------- //
 
-    const [showProfileFeature, setShowProfileFeature] = useState(false);
-    const [allowEditUsername, setAllowEditUsername] = useState(false);
-    const [allowEditEmail, setAllowEditEmail] = useState(false);
-    const [allowEditPassword, setAllowEditPassword] = useState(false);
-    const [allowDeleteMyUser, setAllowDeleteMyUser] = useState(false);
-    const [allowModifyProfilePicture, setAllowModifyProfilePicture] = useState(false);
+  const [showProfileFeature, setShowProfileFeature] = useState(false);
+  const [allowEditUsername, setAllowEditUsername] = useState(false);
+  const [allowEditEmail, setAllowEditEmail] = useState(false);
+  const [allowEditPassword, setAllowEditPassword] = useState(false);
+  const [allowDeleteMyUser, setAllowDeleteMyUser] = useState(false);
+  const [allowModifyProfilePicture, setAllowModifyProfilePicture] = useState(false);
 
-    useEffect(() => {
-      const fetchSettings = async () => {
-        const settings = await getGlobalProviderSettings();
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const settings = await getGlobalProviderSettings();
 
-        if (settings) {
-          setShowProfileFeature(settings.show_profile_feature);
-          setAllowEditUsername(settings.allow_edit_username);
-          setAllowEditEmail(settings.allow_edit_email);
-          setAllowEditPassword(settings.allow_edit_password);
-          setAllowModifyProfilePicture(settings.allow_modify_profile_picture);
-          setAllowDeleteMyUser(settings.allow_delete_my_user)
-        }
-      };
-      fetchSettings();
-    }, [auth]);
-
-    const toggleShowProfileFeature = async () => {
-      const newValue = !showProfileFeature;
-
-      try {
-        // Update the database first
-        await axiosPrivate.put('/settings/global-provider/toggleShowProfileFeature', {
-          show_profile_feature: newValue
-        });
-
-        // If the profile feature is being disabled, reset the other two settings
-        if (!newValue) {
-          setAllowEditUsername(false);
-          setAllowEditEmail(false);
-          setAllowEditPassword(false);
-          setAllowModifyProfilePicture(false);
-          setAllowDeleteMyUser(false);
-
-
-          // Update the database with the new values for the other settings
-          await axiosPrivate.put('/settings/global-provider/toggleAllowEditUsername', { allow_edit_username: false });
-          await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', { allow_edit_email: false });
-          await axiosPrivate.put('/settings/global-provider/toggleAllowEditPassword', { allow_edit_password: false });
-          await axiosPrivate.put('/settings/global-provider/toggleAllowModifyProfilePicture', { allow_modify_profile_picture: false });
-          await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMyUser', { allow_delete_my_user: false });
-
-
-        } else {
-          // If enabling: set all related settings to true
-          setAllowEditUsername(true);
-          setAllowEditEmail(true);
-          setAllowEditPassword(true);
-          setAllowModifyProfilePicture(true);
-          setAllowDeleteMyUser(true);
-
-
-          await axiosPrivate.put('/settings/global-provider/toggleAllowEditUsername', { allow_edit_username: true });
-          await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', { allow_edit_email: true });
-          await axiosPrivate.put('/settings/global-provider/toggleAllowEditPassword', { allow_edit_password: true });
-          await axiosPrivate.put('/settings/global-provider/toggleAllowModifyProfilePicture', { allow_modify_profile_picture: true });
-          await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMyUser', { allow_delete_my_user: true });
-        }
-
-        // Then update the local state
-        setShowProfileFeature(newValue);
-
-      } catch (err) {
-        console.error('Failed to update showProfileFeature setting:', err);
-        setShowProfileFeature(prev => !prev); // Revert the state if the API request fails
+      if (settings) {
+        setShowProfileFeature(settings.show_profile_feature);
+        setAllowEditUsername(settings.allow_edit_username);
+        setAllowEditEmail(settings.allow_edit_email);
+        setAllowEditPassword(settings.allow_edit_password);
+        setAllowModifyProfilePicture(settings.allow_modify_profile_picture);
+        setAllowDeleteMyUser(settings.allow_delete_my_user)
       }
     };
+    fetchSettings();
+  }, [auth]);
+
+  const toggleShowProfileFeature = async () => {
+    const newValue = !showProfileFeature;
+
+    try {
+      // Update the database first
+      await axiosPrivate.put('/settings/global-provider/toggleShowProfileFeature', {
+        show_profile_feature: newValue
+      });
+
+      // If the profile feature is being disabled, reset the other two settings
+      if (!newValue) {
+        setAllowEditUsername(false);
+        setAllowEditEmail(false);
+        setAllowEditPassword(false);
+        setAllowModifyProfilePicture(false);
+        setAllowDeleteMyUser(false);
 
 
-    const toggleAllowEditUsername = async () => {
+        // Update the database with the new values for the other settings
+        await axiosPrivate.put('/settings/global-provider/toggleAllowEditUsername', { allow_edit_username: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', { allow_edit_email: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowEditPassword', { allow_edit_password: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowModifyProfilePicture', { allow_modify_profile_picture: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMyUser', { allow_delete_my_user: false });
 
-      const newValue = !allowEditUsername;
-      setAllowEditUsername(newValue);
-      try {
-        await axiosPrivate.put('/settings/global-provider/toggleAllowEditUsername', {
-          allow_edit_username: newValue
-        });
 
-      } catch (err) {
-        console.error('Failed to update allowEditUsername setting:', err);
-        setAllowEditUsername(prev => !prev);
+      } else {
+        // If enabling: set all related settings to true
+        setAllowEditUsername(true);
+        setAllowEditEmail(true);
+        setAllowEditPassword(true);
+        setAllowModifyProfilePicture(true);
+        setAllowDeleteMyUser(true);
+
+
+        await axiosPrivate.put('/settings/global-provider/toggleAllowEditUsername', { allow_edit_username: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', { allow_edit_email: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowEditPassword', { allow_edit_password: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowModifyProfilePicture', { allow_modify_profile_picture: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMyUser', { allow_delete_my_user: true });
       }
-    };
 
-    const toggleAllowEditEmail = async () => {
+      // Then update the local state
+      setShowProfileFeature(newValue);
 
-      const newValue = !allowEditEmail;
-      setAllowEditEmail(newValue);
-      try {
-        await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', {
-          allow_edit_email: newValue
-        });
+    } catch (err) {
+      console.error('Failed to update showProfileFeature setting:', err);
+      setShowProfileFeature(prev => !prev); // Revert the state if the API request fails
+    }
+  };
 
-      } catch (err) {
-        console.error('Failed to update allowEditEmail setting:', err);
-        setAllowEditEmail(prev => !prev);
-      }
-    };
 
-    const toggleAllowEditPassword = async () => {
+  const toggleAllowEditUsername = async () => {
 
-      const newValue = !allowEditPassword;
-      setAllowEditPassword(newValue);
-      try {
-        await axiosPrivate.put('/settings/global-provider/toggleAllowEditPassword', {
-          allow_edit_password: newValue
-        });
+    const newValue = !allowEditUsername;
+    setAllowEditUsername(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowEditUsername', {
+        allow_edit_username: newValue
+      });
 
-      } catch (err) {
-        console.error('Failed to update allowEditPassword setting:', err);
-        setAllowEditPassword(prev => !prev);
-      }
-    };
+    } catch (err) {
+      console.error('Failed to update allowEditUsername setting:', err);
+      setAllowEditUsername(prev => !prev);
+    }
+  };
 
-    const toggleAllowEditProfileImage = async () => {
+  const toggleAllowEditEmail = async () => {
 
-      const newValue = !allowModifyProfilePicture;
-      setAllowModifyProfilePicture(newValue);
-      try {
-        await axiosPrivate.put('/settings/global-provider/toggleAllowModifyProfilePicture', {
-          allow_modify_profile_picture: newValue
-        });
+    const newValue = !allowEditEmail;
+    setAllowEditEmail(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', {
+        allow_edit_email: newValue
+      });
 
-      } catch (err) {
-        console.error('Failed to update allowModifyProfilePicture setting:', err);
-        setAllowModifyProfilePicture(prev => !prev);
-      }
-    };
+    } catch (err) {
+      console.error('Failed to update allowEditEmail setting:', err);
+      setAllowEditEmail(prev => !prev);
+    }
+  };
 
-    const toggleAllowDeleteMyUser = async () => {
+  const toggleAllowEditPassword = async () => {
 
-      const newValue = !allowDeleteMyUser;
-      setAllowDeleteMyUser(newValue);
-      try {
-        await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMyUser', {
-          allow_delete_my_user: newValue
-        });
+    const newValue = !allowEditPassword;
+    setAllowEditPassword(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowEditPassword', {
+        allow_edit_password: newValue
+      });
 
-      } catch (err) {
-        console.error('Failed to update allowDeleteMyUser setting:', err);
-        setAllowDeleteMyUser(prev => !prev);
-      }
-    };
+    } catch (err) {
+      console.error('Failed to update allowEditPassword setting:', err);
+      setAllowEditPassword(prev => !prev);
+    }
+  };
+
+  const toggleAllowEditProfileImage = async () => {
+
+    const newValue = !allowModifyProfilePicture;
+    setAllowModifyProfilePicture(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowModifyProfilePicture', {
+        allow_modify_profile_picture: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowModifyProfilePicture setting:', err);
+      setAllowModifyProfilePicture(prev => !prev);
+    }
+  };
+
+  const toggleAllowDeleteMyUser = async () => {
+
+    const newValue = !allowDeleteMyUser;
+    setAllowDeleteMyUser(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMyUser', {
+        allow_delete_my_user: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowDeleteMyUser setting:', err);
+      setAllowDeleteMyUser(prev => !prev);
+    }
+  };
 
 
   // ------- END PROFILE SETTINGS ------- //
+
+
+  // ------- START SUBSCRIBER SETTINGS ------- //
+
+
+  const [showSubscriberFeature, setShowSubscriberFeature] = useState(false);
+
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const settings = await getGlobalProviderSettings();
+
+      if (settings) {
+        setShowSubscriberFeature(settings.show_subscriber_feature);
+      }
+    };
+    fetchSettings();
+  }, [auth]);
+
+
+  const toggleShowSubscriberFeature = async () => {
+
+    const newValue = !showSubscriberFeature;
+    setShowSubscriberFeature(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleShowSubscriberFeature', {
+        show_subscriber_feature: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update showSubscriberFeature setting:', err);
+      setShowSubscriberFeature(prev => !prev);
+    }
+  };
+
+  // ------- END SUBSCRIBER SETTINGS ------- //
 
   const postFeatures = {
     showPostsFeature,
@@ -761,6 +801,8 @@ export const GlobalProvider = ({ children }) => {
     allowModifyProfilePicture,
     allowDeleteMyUser,
 
+    showSubscriberFeature,
+
     setShowPostsFeature,
 
     setAllowUserPost,
@@ -793,6 +835,8 @@ export const GlobalProvider = ({ children }) => {
     setAllowModifyProfilePicture,
     setAllowDeleteMyUser,
 
+    setShowSubscriberFeature,
+
     toggleShowPostsFeature,
     toggleAllowUserPost,
     toggleAllowAdminPost,
@@ -822,7 +866,9 @@ export const GlobalProvider = ({ children }) => {
     toggleAllowEditEmail,
     toggleAllowEditPassword,
     toggleAllowEditProfileImage,
-    toggleAllowDeleteMyUser
+    toggleAllowDeleteMyUser,
+
+    toggleShowSubscriberFeature
   };
 
   // console.log("postFeatures in Global Provider", postFeatures)

@@ -162,7 +162,10 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
           )}
         </div>
       }
-      <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
+
+      {postFeatures.showSubscriberFeature &&
+        <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
+      }
 
       {postFeatures.showSocialFeature &&
         <>

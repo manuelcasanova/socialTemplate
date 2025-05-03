@@ -217,21 +217,25 @@ export default function AdminUsers({ isNavOpen }) {
                           <>
                             <h4>Roles</h4>
                             <ul>
-                              {roles.map((role, index) => (
-                                <li key={index}>
-                                  <input
-                                    type="checkbox"
-                                    className="checkbox"
-                                    checked={user.roles.includes(role)}
-                                    onChange={(e) => {
-                                      setError("");  // Clear any previous error when the checkbox is clicked
-                                      handleRoleChange(user, role, e.target.checked); // Pass the full user object here
-                                    }}
-                                  />
-                                  {role}
-                                </li>
-                              ))}
+                              {/* {console.log('Filtered roles:', roles.filter(role => postFeatures.showSubscriberFeature || role !== "User_subscribed"))} */}
+                              {roles
+                                .filter(role => postFeatures.showSubscriberFeature || role !== "User_subscribed")
+                                .map((role, index) => (
+                                  <li key={index}>
+                                    <input
+                                      type="checkbox"
+                                      className="checkbox"
+                                      checked={user.roles.includes(role)}
+                                      onChange={(e) => {
+                                        setError("");  // Clear any previous error when the checkbox is clicked
+                                        handleRoleChange(user, role, e.target.checked); // Pass the full user object here
+                                      }}
+                                    />
+                                    {role}
+                                  </li>
+                                ))}
                             </ul>
+
                           </>
                         }
                         <h4>Last login</h4>

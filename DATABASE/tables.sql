@@ -209,6 +209,8 @@ CREATE TABLE global_provider_settings (
   allow_edit_email BOOLEAN NOT NULL DEFAULT TRUE,
   allow_edit_password BOOLEAN NOT NULL DEFAULT TRUE,
   allow_delete_my_user BOOLEAN NOT NULL DEFAULT TRUE,
-  allow_modify_profile_picture BOOLEAN NOT NULL DEFAULT TRUE
+  allow_modify_profile_picture BOOLEAN NOT NULL DEFAULT TRUE,
+
+  show_subscriber_feature BOOLEAN NOT NULL DEFAULT TRUE
 
 );
