@@ -29,6 +29,8 @@ export default function AdminUsers({ isNavOpen }) {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
+
   const loggedInUser = auth.userId
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -211,7 +213,7 @@ export default function AdminUsers({ isNavOpen }) {
                         <p><strong>E-mail:</strong> {user.email}</p>
                         <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
                         <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
-                        {postFeatures.allowManageRoles &&
+                        {(postFeatures.allowManageRoles || isSuperAdmin) &&
                           <>
                             <h4>Roles</h4>
                             <ul>
@@ -256,33 +258,34 @@ export default function AdminUsers({ isNavOpen }) {
                         )}
 
 
-                        {postFeatures.allowDeleteUsers && <>
-                          {
-                            !showConfirmDelete && !user.email.startsWith('deleted-') && (
-                              <div className="delete-user">
-                                <button
-                                  className="button-red"
-                                  onClick={handleShowDelete}
-                                >Delete user</button>
-                              </div>
-                            )
-                          }
+                        {(postFeatures.allowDeleteUsers || isSuperAdmin) &&
+                          <>
+                            {
+                              !showConfirmDelete && !user.email.startsWith('deleted-') && (
+                                <div className="delete-user">
+                                  <button
+                                    className="button-red"
+                                    onClick={handleShowDelete}
+                                  >Delete user</button>
+                                </div>
+                              )
+                            }
 
-                          {
-                            showConfirmDelete && !user.email.startsWith('deleted-') && (
-                              <div className="delete-confirmation">
-                                <p>Are you sure you want to delete this user? This action is permanent and cannot be undone.</p>
-                                <button className="button-white" onClick={handleShowDelete}>x</button>
-                                <button
-                                  className="button-red"
-                                  disabled={isLoading}
-                                  onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
-                                >{isLoading ? <LoadingSpinner /> : 'Confirm delete'}</button>
+                            {
+                              showConfirmDelete && !user.email.startsWith('deleted-') && (
+                                <div className="delete-confirmation">
+                                  <p>Are you sure you want to delete this user? This action is permanent and cannot be undone.</p>
+                                  <button className="button-white" onClick={handleShowDelete}>x</button>
+                                  <button
+                                    className="button-red"
+                                    disabled={isLoading}
+                                    onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
+                                  >{isLoading ? <LoadingSpinner /> : 'Confirm delete'}</button>
 
-                              </div>
-                            )
-                          }
-                        </>}
+                                </div>
+                              )
+                            }
+                          </>}
                       </div>
                     )}
                   </div>

@@ -106,6 +106,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState(null);
   const { userData, refetchUserData } = useUserApi(auth.userId || "Guest");
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const [successMessage, setSuccessMessage] = useState('');
   const logout = useLogout();
 
@@ -445,9 +446,9 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
           {!isTestSuperAdmin && (
 
-            postFeatures.showProfileFeature &&
+            (postFeatures.showProfileFeature || isSuperAdmin) &&
             <div className="profile-actions">
-              {postFeatures.allowEditUsername &&
+              {(postFeatures.allowEditUsername || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("username")}
@@ -456,7 +457,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   Edit Username
                 </button>
               }
-              {postFeatures.allowEditEmail &&
+              {(postFeatures.allowEditEmail || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("email")}
@@ -466,7 +467,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 </button>
               }
 
-              {postFeatures.allowEditPassword &&
+              {(postFeatures.allowEditPassword || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("password")}
@@ -474,7 +475,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   Edit Password
                 </button>
               }
-              {postFeatures.allowDeleteMyUser &&
+              {(postFeatures.allowDeleteMyUser || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-red"
                   onClick={handleDeleteClick}
