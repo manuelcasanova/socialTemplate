@@ -48,17 +48,17 @@ export const GlobalProvider = ({ children }) => {
 
 
   // Post-related features
-  const [showPostsFeature, setShowPostsFeature] = useState(); // Superadmin decides whether Posts are enabled
-  const [allowUserPost, setAllowUserPost] = useState(); // Registered users can post
-  const [allowAdminPost, setAllowAdminPost] = useState(); // Admins can post
-  const [allowPostInteractions, setAllowPostInteractions] = useState();
-  const [allowComments, setAllowComments] = useState(); // Comments on posts
-  const [allowPostReactions, setAllowPostReactions] = useState(); // Reactions to posts
-  const [allowCommentReactions, setAllowCommentReactions] = useState(); // Reactions to comments
-  const [allowDeletePosts, setAllowDeletePosts] = useState();
-  const [allowFlagPosts, setAllowFlagPosts] = useState();
-  const [allowDeleteComments, setAllowDeleteComments] = useState();
-  const [allowFlagComments, setAllowFlagComments] = useState();
+  const [showPostsFeature, setShowPostsFeature] = useState(false); // Superadmin decides whether Posts are enabled
+  const [allowUserPost, setAllowUserPost] = useState(false); // Registered users can post
+  const [allowAdminPost, setAllowAdminPost] = useState(false); // Admins can post
+  const [allowPostInteractions, setAllowPostInteractions] = useState(false);
+  const [allowComments, setAllowComments] = useState(false); // Comments on posts
+  const [allowPostReactions, setAllowPostReactions] = useState(false); // Reactions to posts
+  const [allowCommentReactions, setAllowCommentReactions] = useState(false); // Reactions to comments
+  const [allowDeletePosts, setAllowDeletePosts] = useState(false);
+  const [allowFlagPosts, setAllowFlagPosts] = useState(false);
+  const [allowDeleteComments, setAllowDeleteComments] = useState(false);
+  const [allowFlagComments, setAllowFlagComments] = useState(false);
 
   // Toggle functions
 
@@ -363,9 +363,9 @@ export const GlobalProvider = ({ children }) => {
   }, [auth]);
 
   // Messages-related features
-  const [showMessagesFeature, setShowMessagesFeature] = useState();
-  const [allowSendMessages, setAllowSendMessages] = useState();
-  const [allowDeleteMessages, setAllowDeleteMessages] = useState();
+  const [showMessagesFeature, setShowMessagesFeature] = useState(false);
+  const [allowSendMessages, setAllowSendMessages] = useState(false);
+  const [allowDeleteMessages, setAllowDeleteMessages] = useState(false);
 
   const toggleShowMessagesFeature = async () => {
     // Prevent changes if post interactions are disabled
@@ -441,9 +441,9 @@ export const GlobalProvider = ({ children }) => {
   // ------- START SOCIAL SETTINGS ------- //
 
   // Social-related features
-  const [showSocialFeature, setShowSocialFeature] = useState();
-  const [allowFollow, setAllowFollow] = useState();
-  const [allowMute, setAllowMute] = useState();
+  const [showSocialFeature, setShowSocialFeature] = useState(false);
+  const [allowFollow, setAllowFollow] = useState(false);
+  const [allowMute, setAllowMute] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -523,8 +523,8 @@ export const GlobalProvider = ({ children }) => {
 
   // ------- START ADMIN SETTINGS ------- //
 
-  const [allowManageRoles, setAllowManageRoles] = useState();
-  const [allowDeleteUsers, setAllowDeleteUsers] = useState();
+  const [allowManageRoles, setAllowManageRoles] = useState(false);
+  const [allowDeleteUsers, setAllowDeleteUsers] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -575,12 +575,12 @@ export const GlobalProvider = ({ children }) => {
 
     // ------- START PROFILE SETTINGS ------- //
 
-    const [showProfileFeature, setShowProfileFeature] = useState();
-    const [allowEditUsername, setAllowEditUsername] = useState();
-    const [allowEditEmail, setAllowEditEmail] = useState();
-    const [allowEditPassword, setAllowEditPassword] = useState();
-    const [allowDeleteMyUser, setAllowDeleteMyUser] = useState();
-    const [allowModifyProfilePicture, setAllowModifyProfilePicture] = useState();
+    const [showProfileFeature, setShowProfileFeature] = useState(false);
+    const [allowEditUsername, setAllowEditUsername] = useState(false);
+    const [allowEditEmail, setAllowEditEmail] = useState(false);
+    const [allowEditPassword, setAllowEditPassword] = useState(false);
+    const [allowDeleteMyUser, setAllowDeleteMyUser] = useState(false);
+    const [allowModifyProfilePicture, setAllowModifyProfilePicture] = useState(false);
 
     useEffect(() => {
       const fetchSettings = async () => {

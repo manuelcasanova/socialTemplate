@@ -359,47 +359,47 @@ export default function AdminSetup({ isNavOpen }) {
           </div>
         </>}
 
-        <h4 className='admin-setup-subtitle'>ADMINISTRATORS</h4>
+      <h4 className='admin-setup-subtitle'>ADMINISTRATORS</h4>
 
-        <div className='admin-setup-line'>
-            <div className="toggle-container">
-              <div className="toggle-wrapper">
-                <input
-                  type="checkbox"
-                  id="AllowManageRoles"
-                  className="toggle-checkbox"
-                  checked={postFeatures.allowManageRoles}
-                  onChange={postFeatures.toggleAllowManageRoles}
-                />
-                <label htmlFor="AllowManageRoles" className="toggle-label">
-                  <span className="toggle-circle"></span>
-                </label>
-              </div>
-            </div>
-            <div className='admin-setup-line-text'>Admins Can Manage Roles</div>
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="AllowManageRoles"
+              className="toggle-checkbox"
+              checked={postFeatures.allowManageRoles}
+              onChange={postFeatures.toggleAllowManageRoles}
+            />
+            <label htmlFor="AllowManageRoles" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
           </div>
+        </div>
+        <div className='admin-setup-line-text'>Admins Can Manage Roles</div>
+      </div>
 
-          <div className='admin-setup-line'>
-            <div className="toggle-container">
-              <div className="toggle-wrapper">
-                <input
-                  type="checkbox"
-                  id="AllowDeleteUsers"
-                  className="toggle-checkbox"
-                  checked={postFeatures.allowDeleteUsers}
-                  onChange={postFeatures.toggleAllowDeleteUsers}
-                />
-                <label htmlFor="AllowDeleteUsers" className="toggle-label">
-                  <span className="toggle-circle"></span>
-                </label>
-              </div>
-            </div>
-            <div className='admin-setup-line-text'>Admins Can Delete Users</div>
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="AllowDeleteUsers"
+              className="toggle-checkbox"
+              checked={postFeatures.allowDeleteUsers}
+              onChange={postFeatures.toggleAllowDeleteUsers}
+            />
+            <label htmlFor="AllowDeleteUsers" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
           </div>
+        </div>
+        <div className='admin-setup-line-text'>Admins Can Delete Users</div>
+      </div>
 
-          <h4 className='admin-setup-subtitle'>PROFILE</h4>
+      <h4 className='admin-setup-subtitle'>PROFILE</h4>
 
-          <div className='admin-setup-line'>
+      <div className='admin-setup-line'>
         <div className="toggle-container">
           <div className="toggle-wrapper">
             <input
@@ -414,7 +414,7 @@ export default function AdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        {postFeatures.showEditProfileFeature ?
+        {postFeatures.showProfileFeature ?
           <div className='admin-setup-line-text'>Disable Edit Profile</div>
           :
           <div className='admin-setup-line-text'>Enable Edit Profile</div>
@@ -422,6 +422,8 @@ export default function AdminSetup({ isNavOpen }) {
 
       </div>
 
+      {postFeatures.showProfileFeature &&
+        <>
           <div className='admin-setup-line'>
             <div className="toggle-container">
               <div className="toggle-wrapper">
@@ -511,7 +513,7 @@ export default function AdminSetup({ isNavOpen }) {
             </div>
             <div className='admin-setup-line-text'>Users Can Delete Their Account</div>
           </div>
-
+        </>}
     </div>
 
   )
