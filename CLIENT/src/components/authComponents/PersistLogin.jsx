@@ -16,45 +16,36 @@ const PersistLogin = () => {
 
         const verifyRefreshToken = async () => {
             try {
-                // await new Promise(resolve => setTimeout(resolve, 2000));
-
                 await refresh();
             }
             catch (err) {
                 if (err?.response?.status === 401) {
-                    // console.log('No valid refresh token — user not logged in yet.');
+                    console.warn('No valid refresh token — user not logged in.');
                 } else {
                     console.error('Error verifying refresh token:', err);
                 }
             }
             finally {
-                isMounted && setIsLoading(false);
+                if (isMounted) setIsLoading(false);
             }
         }
 
-        // persist added here AFTER tutorial video
-        // Avoids unwanted call to verifyRefreshToken
-        !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
+        if (!auth?.accessToken && persist) {
+            verifyRefreshToken();
+        } else {
+            setIsLoading(false);
+        }
 
-        return () => isMounted = false;
-    }, [])
+        return () => {
+            isMounted = false;
+        };
+    }, [auth?.accessToken, persist]);
 
-    useEffect(() => {
-        //console.log(`isLoading: ${isLoading}`)
-        //console.log(`aT: ${JSON.stringify(auth?.accessToken)}`)
-    }, [isLoading])
+    if (!persist) {
+        return <Outlet />;
+    }
 
-    return (
-        <>
-            {!persist
-                ? <Outlet />
-                : isLoading
-                    ?
-                    <LoadingSpinner />
-                    : <Outlet />
-            }
-        </>
-    )
-}
+    return isLoading ? <LoadingSpinner /> : <Outlet />;
+};
 
 export default PersistLogin
