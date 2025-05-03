@@ -400,6 +400,29 @@ export default function AdminSetup({ isNavOpen }) {
           <h4 className='admin-setup-subtitle'>PROFILE</h4>
 
           <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="ShowEditProfileFeature"
+              className="toggle-checkbox"
+              checked={postFeatures.showProfileFeature}
+              onChange={postFeatures.toggleShowProfileFeature}
+            />
+            <label htmlFor="ShowEditProfileFeature" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        {postFeatures.showEditProfileFeature ?
+          <div className='admin-setup-line-text'>Disable Edit Profile</div>
+          :
+          <div className='admin-setup-line-text'>Enable Edit Profile</div>
+        }
+
+      </div>
+
+          <div className='admin-setup-line'>
             <div className="toggle-container">
               <div className="toggle-wrapper">
                 <input
@@ -451,6 +474,42 @@ export default function AdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Edit their Password</div>
+          </div>
+
+          <div className='admin-setup-line'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowEditProfileImage"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowModifyProfilePicture}
+                  onChange={postFeatures.toggleAllowEditProfileImage}
+                />
+                <label htmlFor="AllowEditProfileImage" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Users Can Change Their Profile Image</div>
+          </div>
+
+          <div className='admin-setup-line'>
+            <div className="toggle-container">
+              <div className="toggle-wrapper">
+                <input
+                  type="checkbox"
+                  id="AllowDeleteMyUser"
+                  className="toggle-checkbox"
+                  checked={postFeatures.allowDeleteMyUser}
+                  onChange={postFeatures.toggleAllowDeleteMyUser}
+                />
+                <label htmlFor="AllowDeleteMyUser" className="toggle-label">
+                  <span className="toggle-circle"></span>
+                </label>
+              </div>
+            </div>
+            <div className='admin-setup-line-text'>Users Can Delete Their Account</div>
           </div>
 
     </div>

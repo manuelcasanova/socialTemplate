@@ -178,6 +178,13 @@ router.route('/global-provider/toggleAllowDeleteUsers')
     settingsController.toggleAllowDeleteUsers
   );
 
+    // Show profile feature
+router.route('/global-provider/toggleShowProfileFeature')
+.put(
+  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+  settingsController.toggleShowProfileFeature
+);
+
   // Allow Edit username
 router.route('/global-provider/toggleAllowEditUsername')
 .put(

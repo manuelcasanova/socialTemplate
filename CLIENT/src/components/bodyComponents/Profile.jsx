@@ -389,7 +389,10 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
           <h2>{userData?.username || "Guest"}</h2>
           <div className="profile-details">
             {!isPictureModalVisible &&
-              <div className="profile-picture" onClick={handlePictureClick}>
+              <div className="profile-picture"
+                onClick={postFeatures.allowModifyProfilePicture ? handlePictureClick : undefined}
+                style={{ cursor: postFeatures.allowModifyProfilePicture ? 'pointer' : 'default' }}
+              >
                 {imageExists ? (
                   <img
                     src={`${profilePictureUrl}?key=${profilePictureKey}`}
@@ -406,7 +409,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
               </div>
             }
 
-            {isPictureModalVisible && !isTestSuperAdmin && (
+
+            {postFeatures.allowModifyProfilePicture && isPictureModalVisible && !isTestSuperAdmin && (
               <div className="picture-modal">
                 <h3>Change your profile picture</h3>
 
@@ -430,13 +434,10 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                     {error}
                   </div>
                 )}
-
                 <button className="button-red" onClick={handleCloseModal}>x</button>
-
-
               </div>
-
             )}
+
 
           </div>
 
@@ -444,6 +445,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
           {!isTestSuperAdmin && (
 
+            postFeatures.showProfileFeature &&
             <div className="profile-actions">
               {postFeatures.allowEditUsername &&
                 <button
@@ -472,13 +474,14 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   Edit Password
                 </button>
               }
-
-              <button
-                className="profile-actions-button button-red"
-                onClick={handleDeleteClick}
-              >
-                Delete Account
-              </button>
+              {postFeatures.allowDeleteMyUser &&
+                <button
+                  className="profile-actions-button button-red"
+                  onClick={handleDeleteClick}
+                >
+                  Delete Account
+                </button>
+              }
               {showConfirmDelete &&
                 <div className="delete-confirmation">
                   <p>Are you sure you want to delete your account?</p>
@@ -497,6 +500,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 </div>
               }
             </div>
+
+
           )}
           {!isTestSuperAdmin && (
             <div className="update-input">
