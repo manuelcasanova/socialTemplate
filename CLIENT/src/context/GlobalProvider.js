@@ -17,7 +17,7 @@ export const GlobalProvider = ({ children }) => {
       const response = await axiosPrivate.get('/settings/global-provider');
       return response.data;
     } catch (err) {
-      if (err?.response?.status === 401) {
+      if (err?.response?.status === 401 || err?.response?.status === 403) {
         return null;
       } else {
         console.error('Failed to fetch global provider settings:', err);
