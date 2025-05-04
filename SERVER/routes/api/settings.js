@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const settingsController = require('../../controllers/settingsController');
-const fetchRoles = require('../../config/fetchRoles');
+const {fetchRoles} = require('../../config/fetchRoles');
 const verifyRoles = require('../../middleware/verifyRoles');
 
 router.route('/global-provider')

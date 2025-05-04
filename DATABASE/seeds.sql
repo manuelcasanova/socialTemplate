@@ -1,10 +1,13 @@
 -- Insert roles with hierarchical structure
 INSERT INTO roles (role_name) VALUES 
-  ('User_not_subscribed'),    
-  ('User_subscribed'),           
-  ('Moderator'),                 
-  ('Admin'),                     
-  ('SuperAdmin');               
+  ('SuperAdmin'),
+  ('Admin'),
+  ('Moderator'),
+  ('User_subscribed'),
+  ('User_not_subscribed');
+
+  INSERT INTO roles (role_name, is_system_role) VALUES 
+  ('Private Level 1', false);      
 
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 

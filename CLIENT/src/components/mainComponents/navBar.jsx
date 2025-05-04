@@ -233,6 +233,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
                 </div>
               )}
               <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
+              <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>Admin roles</div>
               {auth.roles && auth.roles.includes('SuperAdmin') && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
                   Role change log

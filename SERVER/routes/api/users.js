@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const usersController = require('../../controllers/usersController');
-const fetchRoles = require('../../config/fetchRoles');
+const {fetchRoles} = require('../../config/fetchRoles');
 const verifyRoles = require('../../middleware/verifyRoles');
 const multer = require('multer');
 

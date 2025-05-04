@@ -12,4 +12,15 @@ const fetchRoles = async () => {
   }
 };
 
-module.exports = fetchRoles;
+const fetchCustomRoles = async () => {
+  try {
+    const result = await pool.query('SELECT * FROM roles');
+    return result.rows
+  } catch (err) {
+    console.error('Error fetching custom roles:', err);
+    return []; 
+  }
+};
+
+
+module.exports = {fetchRoles, fetchCustomRoles};

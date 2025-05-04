@@ -58,6 +58,7 @@ import HiddenComments from './components/bodyComponents/moderatorComponents/Hidd
 import ModeratorsCommentsHistory from './components/bodyComponents/moderatorComponents/ModeratorCommentsHistory';
 
 import AdminSetup from './components/bodyComponents/adminComponents/AdminSetup';
+import AdminRoles from './components/bodyComponents/rolesComponents/AdminRoles';
 
 
 function App() {
@@ -203,6 +204,10 @@ function App() {
           {/* Admin-specific routes */}
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
             <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+            <Route path="/admin/roles" element={<AdminRoles isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>

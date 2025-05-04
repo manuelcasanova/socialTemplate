@@ -229,15 +229,15 @@ const handleNewUser = async (req, res) => {
 // Function to return the role_ids for a given role
 const getRoleAssignments = (role) => {
     const roleAssignments = {
-        user_not_subscribed: [1], // All roles for User 1: inherits everything
-        user_subscribed: [1, 2],           // User Subscribed: inherits User_subscribed, Moderator, Admin
-        moderator: [1, 2, 3],                    // Moderator: inherits Moderator, User_subscribed
-        admin: [1, 2, 3, 4],                        // Admin: inherits Admin, User_subscribed
-        superadmin: [1, 2, 3, 4, 5],          // SuperAdmin: inherits all roles
+        user_not_subscribed: [5], 
+        user_subscribed: [4],     
+        moderator: [3],                  
+        admin: [2],                  
+        superadmin: [1]
     };
 
     // Return the role ids based on the given role
-    return roleAssignments[role] || [1]; // Default to 'user_not_subscribed' if no match found
+    return roleAssignments[role] || [6]; // Default to 'user_not_subscribed' if no match found
 };
 
 
