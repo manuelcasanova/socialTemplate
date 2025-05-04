@@ -12,8 +12,14 @@ const verifyJWT = (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
             if (err) {
-                console.log('JWT error:', err);
-                return res.sendStatus(403); //invalid token
+                console.log('JWT error:', err.name, err.message);
+                if (err.name === 'TokenExpiredError') {
+                    return res.status(401).json({ error: 'Token expired' });
+                } else if (err.name === 'JsonWebTokenError') {
+                    return res.status(401).json({ error: 'Invalid token' });
+                } else {
+                    return res.sendStatus(403); 
+                }
 
             }
             req.user = decoded.UserInfo.username;

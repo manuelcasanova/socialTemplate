@@ -29,6 +29,7 @@ export const GlobalProvider = ({ children }) => {
   // ------- START POSTS SETTINGS ------- //
 
   useEffect(() => {
+    if (!auth?.accessToken) return; 
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -353,6 +354,7 @@ export const GlobalProvider = ({ children }) => {
   // ------- END POSTS SETTINGS ------- START MESSAGES SETTINGS //
 
   useEffect(() => {
+    if (!auth?.accessToken) return; 
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -450,6 +452,7 @@ export const GlobalProvider = ({ children }) => {
   const [allowMute, setAllowMute] = useState(false);
 
   useEffect(() => {
+    if (!auth?.accessToken) return; 
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -531,6 +534,7 @@ export const GlobalProvider = ({ children }) => {
   const [allowDeleteUsers, setAllowDeleteUsers] = useState(false);
 
   useEffect(() => {
+    if (!auth?.accessToken) return; 
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -587,6 +591,7 @@ export const GlobalProvider = ({ children }) => {
   const [allowModifyProfilePicture, setAllowModifyProfilePicture] = useState(false);
 
   useEffect(() => {
+    if (!auth?.accessToken) return; 
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -740,6 +745,7 @@ export const GlobalProvider = ({ children }) => {
 
 
   useEffect(() => {
+    if (!auth?.accessToken) return; 
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
