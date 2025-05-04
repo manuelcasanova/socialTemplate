@@ -391,19 +391,21 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
           <div className="profile-details">
             {!isPictureModalVisible &&
               <div className="profile-picture"
-                onClick={postFeatures.allowModifyProfilePicture ? handlePictureClick : undefined}
-                style={{ cursor: postFeatures.allowModifyProfilePicture ? 'pointer' : 'default' }}
+                onClick={(postFeatures.allowModifyProfilePicture || isSuperAdmin) ? handlePictureClick : undefined}
+                style={{ cursor: (postFeatures.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
               >
                 {imageExists ? (
                   <img
                     src={`${profilePictureUrl}?key=${profilePictureKey}`}
                     alt="Profile"
+                    style={{ cursor: (postFeatures.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
                   />
                 ) : (
                   <img
                     className="user-row-social-small-img"
                     src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
                     alt="Profile"
+                    style={{ cursor: (postFeatures.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
                   />
 
                 )}
@@ -411,7 +413,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
             }
 
 
-            {postFeatures.allowModifyProfilePicture && isPictureModalVisible && !isTestSuperAdmin && (
+            {(postFeatures.allowModifyProfilePicture || isSuperAdmin) && isPictureModalVisible && !isTestSuperAdmin  && (
               <div className="picture-modal">
                 <h3>Change your profile picture</h3>
 
