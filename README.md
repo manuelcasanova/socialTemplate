@@ -1,10 +1,10 @@
 *** INTRODUCTION ***
 
-Here’s a template for a full-stack web development project that provides a solid foundation for any application.
+This full-stack web development project provides a versatile template for building applications with a broad range of functionalities. 
 
-It features user login and logout functionality, a database connection for user management, social features for user interaction and messaging, role-based access controls for different subpages, and a basic layout complete with a navigation bar.
+It features user login and logout functionality, a database connection for user management, social features for user interaction and messaging, role-based access controls, and a robust profile management system. Additionally, it includes features like post creation, moderation, and subscriptions for premium access, allowing admins to easily toggle functionalities and control the app's complexity based on the needs of the community. The app's flexible structure is designed to accommodate both basic and advanced configurations, making it suitable for simple community platforms or more complex social networks.
 
-It is built using a PostgreSQL database, with ExpressJS and Node.js powering the backend, and ReactJS handling the frontend.
+Built using a PostgreSQL database, ExpressJS and Node.js on the backend, and ReactJS for the frontend, this template supports a variety of use cases, from simple user interactions to more intricate social networking systems. With role-based access, content moderation tools, and detailed user activity logs, it provides a solid foundation for secure and scalable application development.
 
 *** FEATURES ***
 
@@ -54,6 +54,8 @@ Passwords are encrypted before being stored, and the app developers do not have 
 
 If the user doesn't receive the email, accidentally deletes it, or the activation window expires, they can request a new verification email from the sign-in page.
 
+Additionally, users can sign up using their Google account, providing a convenient and secure alternative registration method.
+
 *** Password Recovery ***
 
 If the user forgets their password, they can easily recover it by requesting a password reset email.
@@ -98,9 +100,88 @@ The app provides a range of social connection features to enhance user interacti
 
 The app supports private messaging, allowing users to send direct messages to one another. To initiate a conversation, you must first be approved as a followee. Once a conversation is started, it remains accessible even if the other user unfollows or mutes you (or vice-versa). However, both you and the other user have the option to hide or unhide conversations with muted individuals, giving you control over the visibility of these interactions.
 
+*** Posts Feature ***
+
+The app includes a social posting feature similar to a Facebook wall, where users can create posts to share with others. These posts can be reacted to (e.g., likes) and commented on by other users. Comments themselves can also receive reactions. To maintain a respectful environment, both posts and comments can be reported as inappropriate. Moderators have the ability to review reported content and determine whether it violates community guidelines. Importantly, moderators do not delete posts or comments — instead, a warning message is displayed to inform viewers that the content has been flagged, allowing them to proceed with discretion. Users retain full control over their content and may delete their own posts or comments at any time. All moderation actions are logged, including who reviewed the report, what decision was made, and when. Admins can access this moderation history, including a list of reported content and its status.
+
+*** App Settings ***
+
+The app includes an App Settings section designed exclusively for SuperAdmins, giving them centralized control over various features of the platform. This allows for quick and flexible customization of the app’s functionality without altering the codebase. SuperAdmins can toggle entire features on or off — such as private messaging, posting, profile editing, social connections, or the subscriber section — depending on the desired complexity of the app. This is especially useful for tailoring the app to different use cases, whether it be a lightweight community or a fully featured social platform. Additionally, this system is ideal for managing premium features: SuperAdmins can easily unlock access to specific features for paying subscribers.
+
+Beyond global toggles, App Settings offers fine-grained control over individual permissions. For instance, the Posts feature can be active while restricting posting to Admins only, disabling comments or reactions, or allowing users to report content but not delete it. Below is a breakdown of the configurable options:
+
+POSTS
+
+Disable Posts
+
+Admins Can Post
+
+Users Can Post
+
+Enable Post Interactions
+
+Reactions on Posts
+
+Report Posts
+
+Delete Posts
+
+Comments on Posts
+
+Reactions on Comments
+
+Report Comments
+
+Delete Comments
+
+DIRECT MESSAGING
+
+Disable Messaging
+
+Users Can Message
+
+Users Can Delete Messages
+
+SOCIAL CONNECTIONS
+
+Disable Social Features
+
+Enable Users Following
+
+Enable Muting
+
+ADMINISTRATORS
+
+Admins Can Manage Roles
+
+Admins Can Delete Users
+
+PROFILE
+
+Disable Edit Profile
+
+Users Can Edit Their Username
+
+Users Can Edit Their Email
+
+Users Can Edit Their Password
+
+Users Can Change Their Profile Image
+
+Users Can Delete Their Account
+
+SUBSCRIBER
+
+Disable Subscriber Feature
+
+These settings give SuperAdmins powerful tools to shape the user experience and enforce the app's policies or subscription structure as needed.
+
+
 *** ENVIRONMENTAL VARIABLES ***
 
   *** Backend ***
+
+NODE_ENV=development
 
   #PORT
 PORT=
@@ -133,3 +214,11 @@ RESET_EMAIL =
 # BACKEND URL
 
 REACT_APP_BACKEND_URL=https://...
+
+REACT_APP_FIREBASE_API_KEY=
+REACT_APP_FIREBASE_AUTH_DOMAIN=
+REACT_APP_FIREBASE_PROJECT_ID=
+REACT_APP_FIREBASE_STORAGE_BUCKET=
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=
+REACT_APP_FIREBASE_APP_ID=
+REACT_APP_FIREBASE_MEASUREMENT_ID=
