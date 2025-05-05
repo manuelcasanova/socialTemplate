@@ -19,6 +19,10 @@ export default function AdminRoles({ isNavOpen }) {
   const [roleName, setRoleName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeMenuId, setActiveMenuId] = useState(null);
+  const [editRoleId, setEditRoleId] = useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+
   const [showConfirmDelete, setShowConfirmDelete] = useState();
   const [showEdit, setShowEdit] = useState();
   const [showEllipsisMenu, setShowEllipsisMenu] = useState(false);
@@ -92,41 +96,37 @@ export default function AdminRoles({ isNavOpen }) {
               .filter(role => !role.is_system_role)
               .map(role => (
                 <li className="admin-roles-line" key={role.role_id}>
-
-                  {showEdit && <div style={{ marginRight: '5px' }}>Edit role name</div>}
+                  {editRoleId === role.role_id && (
+                    <div style={{ marginRight: '5px' }}>Edit role name</div>
+                  )}
 
                   <FontAwesomeIcon
                     icon={faEllipsisV}
                     style={{ cursor: 'pointer', marginRight: '10px' }}
-                    onClick={() => setShowEllipsisMenu(prev => !prev)}
+                    onClick={() =>
+                      setActiveMenuId(prev => (prev === role.role_id ? null : role.role_id))
+                    }
                   />
 
+                  {editRoleId !== role.role_id && (
+                    <div style={{ marginRight: '5px' }}>{role.role_name}</div>
+                  )}
 
-                  {!showEdit &&
-                    <div
-                      style={{ marginRight: '5px' }}
-                    >
-                      {role.role_name}
-                    </div>
-                  }
-
-                  {!showEllipsisMenu && (
+                  {activeMenuId === role.role_id && (
                     <>
-
-                      {!showEdit &&
+                      {editRoleId !== role.role_id && (
                         <button
                           className="button-white button-smaller"
-                          onClick={handleShowEdit}
+                          onClick={() => setEditRoleId(role.role_id)}
                         >
                           Edit
                         </button>
-                      }
+                      )}
 
-                      {showEdit &&
+                      {editRoleId === role.role_id && (
                         <div>
                           <input
                             type="text"
-                            // ref={inputRef}
                             autoComplete="off"
                             onChange={(e) => setRoleName(e.target.value)}
                             value={roleName}
@@ -136,22 +136,32 @@ export default function AdminRoles({ isNavOpen }) {
                           <button
                             onClick={handleEditRole}
                             className="button-white button-smaller"
-                          >OK</button>
+                          >
+                            OK
+                          </button>
                           <button
-                            onClick={handleShowEdit}
-                            className="button-red button-smaller"
-                          >x</button>
-                        </div>
-                      }
+                            onClick={() => {
+                              setEditRoleId(null);
+                              setActiveMenuId(null);
+                            }}
 
-                      {!showConfirmDelete && !showEdit &&
+                            className="button-red button-smaller"
+                          >
+                            x
+                          </button>
+                        </div>
+                      )}
+
+                      {confirmDeleteId !== role.role_id && editRoleId !== role.role_id && (
                         <button
                           className="button-red button-smaller"
-                          onClick={handleShowConfirmDelete}
-                        >Delete</button>
-                      }
+                          onClick={() => setConfirmDeleteId(role.role_id)}
+                        >
+                          Delete
+                        </button>
+                      )}
 
-                      {showConfirmDelete &&
+                      {confirmDeleteId === role.role_id && (
                         <div>
                           <button
                             className="button-red button-smaller"
@@ -161,16 +171,19 @@ export default function AdminRoles({ isNavOpen }) {
                           </button>
                           <button
                             className="button-white button-smaller"
-                            onClick={handleShowConfirmDelete}
-                          >x</button>
-
+                            onClick={() => {
+                              setConfirmDeleteId(null);
+                              setActiveMenuId(null);
+                            }}
+                          >
+                            x
+                          </button>
                         </div>
-                      }
-
+                      )}
                     </>
                   )}
-
                 </li>
+
               ))}
           </ul>
         )}
@@ -180,7 +193,7 @@ export default function AdminRoles({ isNavOpen }) {
           <ul>
             {systemRoles
               .map(role => (
-                <li className="admin-roles-line"  key={role}>{role}</li>
+                <li className="admin-roles-line" key={role}>{role}</li>
               ))}
           </ul>
         )}
