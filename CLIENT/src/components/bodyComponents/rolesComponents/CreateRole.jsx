@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react"
+import { axiosPrivate } from "../../../api/axios";
 
 
-export default function CreateRole() {
+export default function CreateRole({ onRoleCreated }) {
 
   const inputRef = useRef(null);
   const [newRoleName, setNewRoleName] = useState("")
@@ -14,7 +15,27 @@ export default function CreateRole() {
   }, [showInput]);
 
 
-  const handleShowInput = () => { setShowInput(prev => !prev) }
+  const handleShowInput = () => {
+    setShowInput(prev => !prev)
+    setNewRoleName("");
+  }
+
+  const handleCreateRole = async () => {
+    if (!newRoleName.trim()) return;
+
+    try {
+      const response = await axiosPrivate.post("/roles", { role_name: newRoleName.trim() });
+
+      // Call the callback to update the parent state
+      if (onRoleCreated) {
+        onRoleCreated(response.data);
+      }
+      setNewRoleName("");
+      setShowInput(false);
+    } catch (error) {
+      console.error("Error creating role:", error);
+    }
+  };
 
   return (
     <>
@@ -36,10 +57,18 @@ export default function CreateRole() {
             autoComplete="off"
             onChange={(e) => setNewRoleName(e.target.value)}
             value={newRoleName}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleCreateRole();
+              }
+            }}
             placeholder='Aa'
             required
           />
-          <button className="button-white button-smaller">Create</button>
+          <button
+            className="button-white button-smaller"
+            onClick={handleCreateRole}
+          >Create</button>
           <button
             className="button-red button-smaller"
             onClick={handleShowInput}

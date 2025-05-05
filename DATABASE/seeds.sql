@@ -6,12 +6,6 @@ INSERT INTO roles (role_name) VALUES
   ('User_subscribed'),
   ('User_not_subscribed');
 
-  INSERT INTO roles (role_name, is_system_role) VALUES 
-  ('Private Level 1', false),
-  ('Private Level 2', false),
-  ('Private Level 3', false)
-  ;      
-
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 
   ('Superadministrator User', 'superadmin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg'),

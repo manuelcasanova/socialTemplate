@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+//Hooks
+import { axiosPrivate } from "../../../api/axios";
 
 // Util functions
 import { fetchCustomRoles, fetchRoles } from "./fetchRoles";
@@ -22,25 +25,74 @@ export default function AdminRoles({ isNavOpen }) {
   const [activeMenuId, setActiveMenuId] = useState(null);
   const [editRoleId, setEditRoleId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const inputRef = useRef(null);
+  const [showInput, setShowInput] = useState(false)
 
-  const [showConfirmDelete, setShowConfirmDelete] = useState();
-  const [showEdit, setShowEdit] = useState();
-  const [showEllipsisMenu, setShowEllipsisMenu] = useState(false);
+  useEffect(() => {
+    if (editRoleId && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editRoleId]);
+  
+  const handleDeleteRole = async () => {
+    if (!confirmDeleteId) return;
+  
+    try {
+      setIsLoading(true);
+  
+      await axiosPrivate.delete(`/roles/${confirmDeleteId}`);
+  
+      // Remove from state
+      setCustomRoles(prevRoles =>
+        prevRoles.filter(role => role.role_id !== confirmDeleteId)
+      );
+  
+      setConfirmDeleteId(null);
+      setActiveMenuId(null);
+      setError(null);
+    } catch (error) {
+      console.error("Error deleting role:", error);
+      setError("Failed to delete the role. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
 
-  const handleShowConfirmDelete = () => {
-    setShowConfirmDelete(prev => !prev)
-  }
-  const handleShowEdit = () => {
-    setShowEdit(prev => !prev)
-  }
-
-  const handleDeleteRole = () => {
-    console.log("Dummy - Delete role")
-  }
-
-  const handleEditRole = () => {
-    console.log("Dummy - Edit role")
-  }
+  const handleEditRole = async () => {
+    if (!roleName.trim() || !editRoleId) {
+      setError("Role name cannot be empty.");
+      return;
+    }
+  
+    try {
+      setIsLoading(true);
+  
+      const response = await axiosPrivate.put(`/roles/${editRoleId}`, {
+        role_name: roleName.trim(),
+      });
+  
+      const updatedRole = response.data;
+  
+      // Update local state
+      setCustomRoles(prevRoles =>
+        prevRoles.map(role =>
+          role.role_id === updatedRole.role_id ? updatedRole : role
+        )
+      );
+  
+      setEditRoleId(null);
+      setActiveMenuId(null);
+      setRoleName('');
+      setError(null);
+    } catch (error) {
+      console.error("Error updating role:", error);
+      setError("Failed to update the role. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
 
   useEffect(() => {
     const getRoles = async () => {
@@ -78,6 +130,10 @@ export default function AdminRoles({ isNavOpen }) {
     getRoles();
   }, []);
 
+  const handleRoleCreated = (newRole) => {
+    setCustomRoles((prevRoles) => [...prevRoles, newRole]);
+  };
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-roles">
@@ -88,7 +144,9 @@ export default function AdminRoles({ isNavOpen }) {
 
         <h3>Custom Roles</h3>
 
-        <CreateRole />
+        <CreateRole onRoleCreated={handleRoleCreated}/>
+
+{customRoles.length === 0 && <div>There are no custom roles yet. Create one.</div>}
 
         {!isLoading && !error && customRoles && (
           <ul>
@@ -128,7 +186,13 @@ export default function AdminRoles({ isNavOpen }) {
                           <input
                             type="text"
                             autoComplete="off"
+                            ref={inputRef}
                             onChange={(e) => setRoleName(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleEditRole();
+                              }
+                            }}
                             value={roleName}
                             placeholder={`${role.role_name}`}
                             required
