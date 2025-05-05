@@ -7,6 +7,9 @@ import { fetchCustomRoles } from "./fetchRoles";
 import Error from "../Error";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
+//Styling
+import '../../../css/AdminRoles.css'
+
 export default function AdminRoles({ isNavOpen }) {
   const [roles, setRoles] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -17,7 +20,6 @@ export default function AdminRoles({ isNavOpen }) {
       try {
         setIsLoading(true);
         const data = await fetchCustomRoles();
-        console.log("data", data)
         setRoles(data);
         setError(null);
       } catch (err) {
@@ -33,17 +35,34 @@ export default function AdminRoles({ isNavOpen }) {
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-      <div className="admin-users">
+      <div className="admin-roles">
         <h2>Admin Roles</h2>
         {isLoading && <LoadingSpinner />}
         {error && <Error message={error} />}
-        {/* {!isLoading && !error && roles && (
+
+
+        <h3>Custom Roles</h3>
+        {!isLoading && !error && roles && (
           <ul>
-            {roles.map(role => (
-              <li key={role.id}>{role.name}</li>
-            ))}
+            {roles
+              .filter(role => !role.is_system_role)
+              .map(role => (
+                <li key={role.role_id}>{role.role_name}</li>
+              ))}
           </ul>
-        )} */}
+        )}
+
+        <h3>System Roles</h3>
+        {!isLoading && !error && roles && (
+          <ul>
+            {roles
+              .filter(role => role.is_system_role)
+              .map(role => (
+                <li key={role.role_id}>{role.role_name}</li>
+              ))}
+          </ul>
+        )}
+
       </div>
     </div>
   );

@@ -58,20 +58,3 @@
     }
 }
 
-
-/* For screens larger than 1025px (large screens) */
-@media (min-width: 1025px) {
-    /* Add space for the navbar by adjusting margin/padding */
-    .admin-users {
- 
-    }
-  
-    .admin-users h2 {
-
-    }
-  
-    .table-wrapper {
-
-    }
-  }
-  
