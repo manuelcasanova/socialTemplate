@@ -8,6 +8,10 @@ import { useGlobal } from "../../../context/GlobalProvider";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 
+//Util functions
+
+import { fetchCustomRoles } from "../../bodyComponents/rolesComponents/fetchRoles";
+
 //Styling
 import '../../../css/AdminUsers.css';
 
@@ -23,6 +27,7 @@ export default function AdminUsers({ isNavOpen }) {
   const { postFeatures } = useGlobal();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [customRoles, setCustomRoles] = useState([]);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({});
   const [expandedUserId, setExpandedUserId] = useState(null);
@@ -38,6 +43,32 @@ export default function AdminUsers({ isNavOpen }) {
   useEffect(() => {
     setError(null); // Clear error when filters change
   }, [filters]);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetchCustomRoles();
+        setCustomRoles(response);
+      } catch (err) {
+        console.error("Error fetching roles:", err);
+
+        let errorMsg = "Failed to fetch roles.";
+        if (err.response?.data?.error) {
+          errorMsg += ` ${err.response.data.error}`;
+        } else if (err.message) {
+          errorMsg += ` ${err.message}`;
+        }
+
+        setError(errorMsg);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRoles();
+  }, []);
+
 
   useEffect(() => {
     const fetchUsersAndRoles = async () => {

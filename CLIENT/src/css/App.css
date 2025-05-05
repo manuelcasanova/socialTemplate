@@ -411,6 +411,10 @@
   opacity: 0.6;
 }
 
+.margin-bottom-2em {
+  margin-bottom: 2em;
+}
+
 /* Info buttons and messages */
 
 .info-button {

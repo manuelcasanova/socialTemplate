@@ -3,7 +3,7 @@ const pool  = require('./db')
 
 const fetchRoles = async () => {
   try {
-    const result = await pool.query('SELECT role_name FROM roles');
+    const result = await pool.query('SELECT role_name FROM roles WHERE is_system_role = true');
     const rolesList = result.rows.map(row => row.role_name);
     return rolesList;
   } catch (err) {
@@ -14,7 +14,7 @@ const fetchRoles = async () => {
 
 const fetchCustomRoles = async () => {
   try {
-    const result = await pool.query('SELECT * FROM roles');
+    const result = await pool.query('SELECT * FROM roles WHERE is_system_role = false');
     return result.rows
   } catch (err) {
     console.error('Error fetching custom roles:', err);

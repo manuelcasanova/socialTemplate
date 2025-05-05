@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   justify-content: start;
-  padding-top: 3em;
+  padding-top: 1em;
   width: 100%;
   max-width: 100vw; 
   box-sizing: border-box;
@@ -55,6 +55,42 @@ position: sticky;
 .admin-roles th, .admin-roles td {
   padding: 0.5em; /* Adjust padding for better spacing */
   border-bottom: 1px solid black;
+}
+
+.admin-roles-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid grey;
+  padding: 1em 0em;
+}
+
+.admin-roles-line button {
+  margin-left: 1em;
+}
+
+.admin-roles-line input {
+  padding: 5px;
+}
+
+li {
+  list-style-type: none;
+}
+
+.create-role-row {
+display: flex;
+flex-direction: row;
+max-width: 50%;
+margin-bottom: 2em;
+}
+
+.create-role-row input {
+  flex: 1;
+  padding: 5px;
+}
+
+.create-role-row button {
+  margin-left: 0.5rem; /* spacing between input and button */
 }
 
 @media (max-width: 580px) {
