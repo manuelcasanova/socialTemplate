@@ -2,28 +2,45 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useGlobal } from '../../context/GlobalProvider';
+import axios from '../../api/axios';
 
 //Components
 import Profile from '../navbarComponents/Profile';
 import Logo from '../navbarComponents/Logo';
 import FollowNotification from '../navbarComponents/FollowNotification';
 
+//Hooks
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useLogout from '../../hooks/useLogout';
 import useAuth from '../../hooks/useAuth';
 
+//Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faEnvelope, faCog } from '@fortawesome/free-solid-svg-icons';
+
 
 const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages }) => {
 
   const { postFeatures } = useGlobal();
+
+
+//Dummy customRoles
+const customRoles = [{
+  "role_id": 20,
+  "role_name": "Role 2"
+}]
+console.log("customRoles", customRoles)
+console.log("customRoles length", customRoles.length)
+
+
   const { auth } = useAuth();
   const loggedInUser = auth.userId
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const logout = useLogout();
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const signOut = async () => {
     setIsFollowNotification(false)
@@ -35,7 +52,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     admin: false,
     profile: false,
     social: false,
-    moderator: false
+    moderator: false,
+    protectedRoutes: false
   });
 
   // Fetch follow notifications when the component mounts
@@ -98,7 +116,6 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
     // Close dropdowns whenever navigating
     setShowSections({ admin: false, profile: false });
-
   };
 
   // Toggle individual dropdown sections and close others
@@ -111,6 +128,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       social: section === 'social' ? !prevState.social : false,
       posts: section === 'posts' ? !prevState.posts : false,
       moderator: section === 'moderator' ? !prevState.moderator : false,
+      protectedRoutes: section === 'protected_routes' ? !prevState.protectedRoutes : false,
     }));
   };
 
@@ -128,6 +146,27 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
       <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
+
+      {customRoles && customRoles.length > 0 &&
+        <div className='nav-item-with-dropdown'>
+          <div className='nav-item' onClick={() => toggleSection('protected_routes')}>Protected Routes
+            {showSections.protectedRoutes ? '▲' : '▼'
+            }
+          </div>
+          {showSections.protectedRoutes && (
+            <>
+
+              {customRoles && customRoles.length > 0 && customRoles.map(role => (
+                <div key={role.role_id} className="subitem">
+                  {role.role_name}
+                </div>
+              ))}
+
+
+            </>
+          )}
+        </div>
+      }
 
       {postFeatures.showPostsFeature &&
         <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>

@@ -63,6 +63,7 @@ app.use('/forgot-password', require('./routes/auth/forgot-password'));
 app.use('/verify-email', require('./routes/auth/verify-email'));
 app.use('/resend-verification-email', require('./routes/auth/auth'));
 
+app.use('/roles/rolesForNavbar', require('./routes/public/rolesForNavbar')); 
 
 app.use(verifyJWT);
 
