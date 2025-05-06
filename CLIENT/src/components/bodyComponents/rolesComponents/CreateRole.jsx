@@ -61,16 +61,17 @@ export default function CreateRole({ onRoleCreated }) {
     <>
       {!showInput &&
         <button
-          className="button-white margin-bottom-2em"
-          style={{ alignSelf: 'start' }}
+          className="button-white"
+          style={{ alignSelf: 'start', marginTop: '1em' }}
           onClick={handleShowInput}
         >
           Create role
         </button>}
       {showInput &&
-        <div className="create-role-row">
+        <div className="create-role-row"
+        style={{marginTop: '2em', marginBottom: '0px'}}
+        >
           <input
-
             className="input-field"
             type="text"
             ref={inputRef}

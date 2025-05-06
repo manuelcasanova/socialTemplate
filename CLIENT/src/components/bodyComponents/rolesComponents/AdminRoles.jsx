@@ -162,9 +162,9 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
         <h2>Admin Roles</h2>
         {isLoading && <LoadingSpinner />}
 
-        <h3>Custom Roles</h3>
-
         <CreateRole onRoleCreated={handleRoleCreated} />
+
+        <h3>Custom Roles</h3>
 
         {(customRoles === null || customRoles.length === 0) && <div>There are no custom roles yet. Create one.</div>}
 
