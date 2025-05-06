@@ -2,9 +2,10 @@ import { useEffect, useState, useRef } from "react";
 
 //Hooks
 import { axiosPrivate } from "../../../api/axios";
+import axios from "../../../api/axios";
 
 // Util functions
-import { fetchCustomRoles, fetchRoles } from "./fetchRoles";
+import { fetchRoles } from "./fetchRoles";
 
 // Components
 import Error from "../Error";
@@ -16,8 +17,8 @@ import '../../../css/AdminRoles.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 
-export default function AdminRoles({ isNavOpen }) {
-  const [customRoles, setCustomRoles] = useState(null);
+export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
+
   const [systemRoles, setSystemRoles] = useState(null);
   const [roleName, setRoleName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -36,13 +37,31 @@ export default function AdminRoles({ isNavOpen }) {
     }
   }, [editRoleId]);
 
+  useEffect(() => {
+    const getRoles = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get('/custom-roles-public');
+        setCustomRoles(response.data);
+        setError(null);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to fetch customRoles');
+        setCustomRoles(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getRoles();
+  }, []);
+
   const handleDeleteRole = async () => {
     if (!confirmDeleteId) return;
 
     try {
       setIsLoading(true);
 
-      await axiosPrivate.delete(`/roles/${confirmDeleteId}`);
+      await axiosPrivate.delete(`/custom-roles-private/${confirmDeleteId}`);
 
       // Remove from state
       setCustomRoles(prevRoles =>
@@ -76,11 +95,10 @@ export default function AdminRoles({ isNavOpen }) {
       return;
     }
 
-
     try {
       setIsLoading(true);
 
-      const response = await axiosPrivate.put(`/roles/${editRoleId}`, {
+      const response = await axiosPrivate.put(`/custom-roles-private/${editRoleId}`, {
         role_name: trimmedName,
       });
 
@@ -106,25 +124,6 @@ export default function AdminRoles({ isNavOpen }) {
       setIsLoading(false);
     }
   };
-
-
-  useEffect(() => {
-    const getRoles = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchCustomRoles();
-        setCustomRoles(data);
-        setError(null);
-      } catch (err) {
-        setError(err.message || "Failed to fetch customRoles");
-        setCustomRoles(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getRoles();
-  }, []);
 
   useEffect(() => {
     const getRoles = async () => {

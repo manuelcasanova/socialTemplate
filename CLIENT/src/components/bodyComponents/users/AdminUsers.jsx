@@ -7,10 +7,7 @@ import { useGlobal } from "../../../context/GlobalProvider";
 //Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
-
-//Util functions
-
-import { fetchCustomRoles } from "../../bodyComponents/rolesComponents/fetchRoles";
+import axios from "../../../api/axios";
 
 //Styling
 import '../../../css/AdminUsers.css';
@@ -48,26 +45,27 @@ export default function AdminUsers({ isNavOpen }) {
     const fetchRoles = async () => {
       setIsLoading(true);
       try {
-        const response = await fetchCustomRoles();
-        setCustomRoles(response);
+        const response = await axios.get('/custom-roles-public');
+        setCustomRoles(response.data);
       } catch (err) {
         console.error("Error fetching roles:", err);
-
+  
         let errorMsg = "Failed to fetch roles.";
         if (err.response?.data?.error) {
           errorMsg += ` ${err.response.data.error}`;
         } else if (err.message) {
           errorMsg += ` ${err.message}`;
         }
-
+  
         setError(errorMsg);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchRoles();
   }, []);
+  
 
 
   useEffect(() => {

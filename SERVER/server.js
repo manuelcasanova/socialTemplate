@@ -63,7 +63,7 @@ app.use('/forgot-password', require('./routes/auth/forgot-password'));
 app.use('/verify-email', require('./routes/auth/verify-email'));
 app.use('/resend-verification-email', require('./routes/auth/auth'));
 
-app.use('/roles/rolesForNavbar', require('./routes/public/rolesForNavbar')); 
+app.use('/custom-roles-public', require('./routes/public/customRoles')); 
 
 app.use(verifyJWT);
 
@@ -76,6 +76,7 @@ app.use('/reports-comments', require('./routes/api/reports-comments'));
 app.use('/roles', require('./routes/api/roles'));
 app.use('/log-events', require('./routes/api/log-events'));
 app.use('/settings', require('./routes/api/settings'));
+app.use('/custom-roles-private', require('./routes/api/customRolesPrivate'));
 
 
 // app.use('/login-history', (req, res, next) => {

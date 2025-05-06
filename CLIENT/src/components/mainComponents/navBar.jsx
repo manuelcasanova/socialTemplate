@@ -19,18 +19,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faEnvelope, faCog } from '@fortawesome/free-solid-svg-icons';
 
 
-const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages }) => {
+const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages, customRoles }) => {
 
   const { postFeatures } = useGlobal();
 
-
-//Dummy customRoles
-const customRoles = [{
-  "role_id": 20,
-  "role_name": "Role 2"
-}]
-console.log("customRoles", customRoles)
-console.log("customRoles length", customRoles.length)
+// console.log("customRoles", customRoles)
+// console.log("customRoles length", customRoles.length)
 
 
   const { auth } = useAuth();

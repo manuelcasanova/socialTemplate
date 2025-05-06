@@ -67,6 +67,8 @@ function App() {
   const [isFollowNotification, setIsFollowNotification] = useState(false);
   const [hasNewMessages, setHasNewMessages] = useState(false)
 
+  const [customRoles, setCustomRoles] = useState(null);
+
   // Update screenWidth on window resize
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
@@ -88,7 +90,7 @@ function App() {
 
     <div className="app">
 
-      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} />
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} customRoles={customRoles} />
 
       <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
@@ -207,7 +209,7 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-            <Route path="/admin/roles" element={<AdminRoles isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} />} />
+            <Route path="/admin/roles" element={<AdminRoles isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} customRoles={customRoles} setCustomRoles={setCustomRoles} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>

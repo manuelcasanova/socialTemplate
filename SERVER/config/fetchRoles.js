@@ -12,15 +12,4 @@ const fetchRoles = async () => {
   }
 };
 
-const fetchCustomRoles = async () => {
-  try {
-    const result = await pool.query('SELECT * FROM roles WHERE is_system_role = false');
-    return result.rows
-  } catch (err) {
-    console.error('Error fetching custom roles:', err);
-    return []; 
-  }
-};
-
-
-module.exports = {fetchRoles, fetchCustomRoles};
+module.exports = {fetchRoles};

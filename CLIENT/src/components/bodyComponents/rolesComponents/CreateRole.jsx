@@ -38,7 +38,7 @@ export default function CreateRole({ onRoleCreated }) {
     }
 
     try {
-      const response = await axiosPrivate.post("/roles", { role_name: trimmedName });
+      const response = await axiosPrivate.post("/custom-roles-private", { role_name: trimmedName });
 
       // Call the callback to update the parent state
       if (onRoleCreated) {
