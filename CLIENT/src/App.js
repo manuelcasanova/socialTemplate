@@ -59,6 +59,7 @@ import ModeratorsCommentsHistory from './components/bodyComponents/moderatorComp
 
 import AdminSetup from './components/bodyComponents/adminComponents/AdminSetup';
 import AdminRoles from './components/bodyComponents/rolesComponents/AdminRoles';
+import RolePage from './components/bodyComponents/RolePage';
 
 
 function App() {
@@ -67,7 +68,7 @@ function App() {
   const [isFollowNotification, setIsFollowNotification] = useState(false);
   const [hasNewMessages, setHasNewMessages] = useState(false)
 
-  const [customRoles, setCustomRoles] = useState(null);
+  const [customRoles, setCustomRoles] = useState([]);
 
   // Update screenWidth on window resize
   useEffect(() => {
@@ -108,6 +109,23 @@ function App() {
 
         {/* Protected Routes */}
         <Route element={<PersistLogin />}>
+
+          {customRoles?.map(role => {
+            const routePath = `/protected-routes/${role.role_name.toLowerCase()}`;
+            const allowedRoles = ['SuperAdmin', 'Admin', 'Moderator'
+              , role.role_name
+            ];
+
+            return (
+              <Route element={<RequireAuth allowedRoles={['SuperAdmin', 'Admin', 'Moderator', `${role.role_name}`]} />}>
+                <Route
+                  path={routePath}
+                  element={<RolePage role={role} isNavOpen={isNavOpen} />}
+                />
+              </Route>
+            );
+          })}
+
           <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed']} />}>
             <Route path="/user" element={<User isNavOpen={isNavOpen} />} />
           </Route>

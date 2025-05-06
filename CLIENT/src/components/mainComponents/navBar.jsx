@@ -23,8 +23,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
   const { postFeatures } = useGlobal();
 
-// console.log("customRoles", customRoles)
-// console.log("customRoles length", customRoles.length)
+  // console.log("customRoles", customRoles)
+  // console.log("customRoles length", customRoles.length)
 
 
   const { auth } = useAuth();
@@ -99,6 +99,19 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   }, [isNavOpen]); // This effect runs every time `isNavOpen` changes
 
 
+  const handleNavigateProtected = (roleName) => {
+    navigate(`/protected-routes/${roleName.toLowerCase()}`);
+
+    // Only toggle the navbar (close it) if the screen width is <= 580px
+    if (isNavOpen && window.innerWidth <= 580) {
+      toggleNav(); // Close the navbar when a link is clicked in mobile view
+    }
+
+    // Close dropdowns whenever navigating
+    setShowSections({ admin: false, profile: false, protectedRoutes: false });
+
+  };
+
   // Navigate to a specific path
   const handleNavigate = (path) => {
     navigate(path);
@@ -109,7 +122,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     }
 
     // Close dropdowns whenever navigating
-    setShowSections({ admin: false, profile: false });
+    setShowSections({ admin: false, profile: false, protectedRoutes: false });
   };
 
   // Toggle individual dropdown sections and close others
@@ -151,7 +164,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
             <>
 
               {customRoles && customRoles.length > 0 && customRoles.map(role => (
-                <div key={role.role_id} className="subitem">
+                <div 
+                key={role.role_id} 
+                className="subitem"
+                onClick={() => handleNavigateProtected(role.role_name)}
+                >
                   {role.role_name}
                 </div>
               ))}
