@@ -28,7 +28,17 @@ router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { role_name } = req.body;
 
-  if (!role_name || !role_name.trim()) {
+
+  const trimmedName = role_name.trim();
+  const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
+
+  if (!roleNameRegex.test(trimmedName)) {
+    return res.status(400).json({
+      message: 'Role name must be 1–25 characters long and contain only letters, numbers, spaces, hyphens, or underscores.'
+    });
+  }
+
+  if (!role_name || !trimmedName) {
     return res.status(400).json({ message: 'Role name is required.' });
   }
 
@@ -36,7 +46,7 @@ router.put('/:id', async (req, res) => {
 
     const result = await db.query(
       'UPDATE roles SET role_name = $1 WHERE role_id = $2 RETURNING *',
-      [role_name.trim(), id]
+      [trimmedName, id]
     );
 
     if (result.rowCount === 0) {
@@ -78,11 +88,20 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ message: 'Role name is required.' });
   }
 
+  const trimmedName = role_name.trim();
+  const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
+
+  if (!roleNameRegex.test(trimmedName)) {
+    return res.status(400).json({
+      message: 'Role name must be 1–25 characters long and contain only letters, numbers, spaces, hyphens, or underscores.'
+    });
+  }
+
   try {
 
     const result = await db.query(
       'INSERT INTO roles (role_name, is_system_role) VALUES ($1, $2) RETURNING *',
-      [role_name.trim(), false] 
+      [trimmedName, false] 
     );
 
     res.status(201).json(result.rows[0]);

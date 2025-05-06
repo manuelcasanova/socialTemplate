@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS global_provider_settings;
 
 CREATE TABLE roles (
   role_id SERIAL PRIMARY KEY NOT NULL,
-  role_name VARCHAR(50) UNIQUE NOT NULL,
+  role_name VARCHAR(25) UNIQUE NOT NULL,
   is_system_role BOOLEAN DEFAULT TRUE
-);
+); 
 
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY NOT NULL,

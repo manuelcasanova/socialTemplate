@@ -22,31 +22,33 @@ export default function AdminRoles({ isNavOpen }) {
   const [roleName, setRoleName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [regexError, setRegexError] = useState("");
   const [activeMenuId, setActiveMenuId] = useState(null);
   const [editRoleId, setEditRoleId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const inputRef = useRef(null);
   const [showInput, setShowInput] = useState(false)
+  const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
 
   useEffect(() => {
     if (editRoleId && inputRef.current) {
       inputRef.current.focus();
     }
   }, [editRoleId]);
-  
+
   const handleDeleteRole = async () => {
     if (!confirmDeleteId) return;
-  
+
     try {
       setIsLoading(true);
-  
+
       await axiosPrivate.delete(`/roles/${confirmDeleteId}`);
-  
+
       // Remove from state
       setCustomRoles(prevRoles =>
         prevRoles.filter(role => role.role_id !== confirmDeleteId)
       );
-  
+
       setConfirmDeleteId(null);
       setActiveMenuId(null);
       setError(null);
@@ -57,42 +59,54 @@ export default function AdminRoles({ isNavOpen }) {
       setIsLoading(false);
     }
   };
-  
+
 
   const handleEditRole = async () => {
-    if (!roleName.trim() || !editRoleId) {
+
+    const trimmedName = roleName.trim();
+
+    if (!trimmedName || !editRoleId) {
       setError("Role name cannot be empty.");
       return;
     }
-  
+
+    if (!roleNameRegex.test(trimmedName)) {
+      // Instead of setError, just display the message
+      setRegexError("Role name must be 1-25 characters and can include letters, numbers, spaces, hyphens, and underscores.");
+      return;
+    }
+
+
     try {
       setIsLoading(true);
-  
+
       const response = await axiosPrivate.put(`/roles/${editRoleId}`, {
-        role_name: roleName.trim(),
+        role_name: trimmedName,
       });
-  
+
       const updatedRole = response.data;
-  
+
       // Update local state
       setCustomRoles(prevRoles =>
         prevRoles.map(role =>
           role.role_id === updatedRole.role_id ? updatedRole : role
         )
       );
-  
+
       setEditRoleId(null);
       setActiveMenuId(null);
       setRoleName('');
       setError(null);
+      setRegexError(null); 
     } catch (error) {
       console.error("Error updating role:", error);
-      setError("Failed to update the role. Please try again.");
+      const message = error.response?.data?.message || "Failed to update the role. Please try again.";
+      setError(message);
     } finally {
       setIsLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
     const getRoles = async () => {
@@ -134,19 +148,26 @@ export default function AdminRoles({ isNavOpen }) {
     setCustomRoles((prevRoles) => [...prevRoles, newRole]);
   };
 
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <Error isNavOpen={isNavOpen} error={error} />
+  }
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-roles">
         <h2>Admin Roles</h2>
         {isLoading && <LoadingSpinner />}
-        {error && <Error message={error} />}
-
 
         <h3>Custom Roles</h3>
 
-        <CreateRole onRoleCreated={handleRoleCreated}/>
+        <CreateRole onRoleCreated={handleRoleCreated} />
 
-{customRoles.length === 0 && <div>There are no custom roles yet. Create one.</div>}
+        {(customRoles === null || customRoles.length === 0) && <div>There are no custom roles yet. Create one.</div>}
 
         {!isLoading && !error && customRoles && (
           <ul>
@@ -200,6 +221,7 @@ export default function AdminRoles({ isNavOpen }) {
                           <button
                             onClick={handleEditRole}
                             className="button-white button-smaller"
+                            disabled={!roleName.trim()} 
                           >
                             OK
                           </button>
@@ -207,6 +229,7 @@ export default function AdminRoles({ isNavOpen }) {
                             onClick={() => {
                               setEditRoleId(null);
                               setActiveMenuId(null);
+                              setRegexError(null);
                             }}
 
                             className="button-red button-smaller"
@@ -250,6 +273,10 @@ export default function AdminRoles({ isNavOpen }) {
 
               ))}
           </ul>
+        )}
+
+        {regexError && (
+          <p style={{ color: 'red', marginTop: '0.5em' }}>{regexError}</p>
         )}
 
         <h3>System Roles</h3>

@@ -7,6 +7,7 @@ export default function CreateRole({ onRoleCreated }) {
   const inputRef = useRef(null);
   const [newRoleName, setNewRoleName] = useState("")
   const [showInput, setShowInput] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (showInput && inputRef.current) {
@@ -18,13 +19,26 @@ export default function CreateRole({ onRoleCreated }) {
   const handleShowInput = () => {
     setShowInput(prev => !prev)
     setNewRoleName("");
+    setErrorMessage("");
   }
 
   const handleCreateRole = async () => {
-    if (!newRoleName.trim()) return;
+
+    const trimmedName = newRoleName.trim();
+    const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
+
+    if (!trimmedName) {
+      setErrorMessage("Role name is required.");
+      return;
+    }
+
+    if (!roleNameRegex.test(trimmedName)) {
+      setErrorMessage("Role name must be 1–25 characters and can only include letters, numbers, spaces, hyphens, and underscores.");
+      return;
+    }
 
     try {
-      const response = await axiosPrivate.post("/roles", { role_name: newRoleName.trim() });
+      const response = await axiosPrivate.post("/roles", { role_name: trimmedName });
 
       // Call the callback to update the parent state
       if (onRoleCreated) {
@@ -32,8 +46,14 @@ export default function CreateRole({ onRoleCreated }) {
       }
       setNewRoleName("");
       setShowInput(false);
+      setErrorMessage("");
     } catch (error) {
       console.error("Error creating role:", error);
+      if (error.response?.data?.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("An unexpected error occurred.");
+      }
     }
   };
 
@@ -68,6 +88,11 @@ export default function CreateRole({ onRoleCreated }) {
           <button
             className="button-white button-smaller"
             onClick={handleCreateRole}
+            disabled={!newRoleName.trim()}
+            style={{
+              opacity: !newRoleName.trim() ? 0.5 : 1,
+              cursor: !newRoleName.trim() ? "not-allowed" : "pointer"
+            }}
           >Create</button>
           <button
             className="button-red button-smaller"
@@ -75,6 +100,11 @@ export default function CreateRole({ onRoleCreated }) {
           >X</button>
         </div>
       }
+
+      {errorMessage && (
+        <p style={{ color: 'red' }}>{errorMessage}</p>
+      )}
+
     </>
   )
 }
