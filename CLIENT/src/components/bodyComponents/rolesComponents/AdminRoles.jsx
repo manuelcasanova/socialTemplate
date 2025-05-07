@@ -15,7 +15,7 @@ import CreateRole from "./CreateRole";
 //Styling
 import '../../../css/AdminRoles.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisV, faWarning, faInfo } from "@fortawesome/free-solid-svg-icons";
 
 export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
@@ -30,6 +30,11 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   const inputRef = useRef(null);
   const [showInput, setShowInput] = useState(false)
   const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
+  const [showCustomRolesInfo, setCustomRolesInfo] = useState(false);
+
+  const handleShowCustomRolesInfo = () => {
+    setCustomRolesInfo(prev => !prev)
+  }
 
   useEffect(() => {
     if (editRoleId && inputRef.current) {
@@ -115,7 +120,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       setActiveMenuId(null);
       setRoleName('');
       setError(null);
-      setRegexError(null); 
+      setRegexError(null);
     } catch (error) {
       console.error("Error updating role:", error);
       const message = error.response?.data?.message || "Failed to update the role. Please try again.";
@@ -164,7 +169,22 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
         <CreateRole onRoleCreated={handleRoleCreated} />
 
-        <h3>Custom Roles</h3>
+        <div className="custom-roles-title">
+          <h3>Custom Roles</h3>
+          <FontAwesomeIcon
+            className="fa-info"
+            icon={faInfo}
+            onClick={() =>
+              handleShowCustomRolesInfo()
+            }
+          />
+        </div>
+        {showCustomRolesInfo &&
+          <h4>
+            These roles are linked to a protected route (accessible via the navbar) and can be accessed by SuperAdmins, Admins, Moderators, and users assigned this role.
+          </h4>
+        }
+
 
         {(customRoles === null || customRoles.length === 0) && <div>There are no custom roles yet. Create one.</div>}
 
@@ -192,7 +212,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
                   {activeMenuId === role.role_id && (
                     <>
-                      {editRoleId !== role.role_id && (
+                      {editRoleId !== role.role_id && confirmDeleteId !== role.role_id && (
                         <button
                           className="button-white button-smaller"
                           onClick={() => setEditRoleId(role.role_id)}
@@ -220,7 +240,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                           <button
                             onClick={handleEditRole}
                             className="button-white button-smaller"
-                            disabled={!roleName.trim()} 
+                            disabled={!roleName.trim()}
                           >
                             OK
                           </button>
@@ -248,7 +268,17 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                       )}
 
                       {confirmDeleteId === role.role_id && (
-                        <div>
+                        <div className="confirm-delete-role">
+
+                          <FontAwesomeIcon
+                            icon={faWarning}
+                            style={{ marginLeft: '1em' }}
+                          />
+                          <div>
+                            Warning: Depending on your app configuration, this action may not be possible.
+                            For example: "Cannot delete this role because there are items linked to it," or
+                            "Warning: Deleting this role will also remove all associated items."
+                          </div>
                           <button
                             className="button-red button-smaller"
                             onClick={handleDeleteRole}

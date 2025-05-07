@@ -2,9 +2,11 @@ import './css/App.css';
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
+//Hooks
+import axios from './api/axios';
+
 //Context
 import { useGlobal } from '../src/context/GlobalProvider';
-
 
 //Components
 
@@ -77,13 +79,25 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [profilePictureKey, setProfilePictureKey] = useState(0);
 
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
   };
+
+  useEffect(() => {
+    const fetchCustomRoles = async () => {
+      try {
+        const response = await axios.get('/custom-roles-public');
+        setCustomRoles(response.data); 
+      } catch (err) {
+        console.error('Failed to fetch custom roles', err);
+      }
+    };
+  
+    fetchCustomRoles();
+  }, []);
 
   const { postFeatures } = useGlobal();
 
@@ -223,7 +237,7 @@ function App() {
 
           {/* Admin-specific routes */}
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-            <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} />} />
+            <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} customRoles={customRoles} setCustomRoles={setCustomRoles} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>

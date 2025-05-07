@@ -19,12 +19,11 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 
 
-export default function AdminUsers({ isNavOpen }) {
+export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
   const axiosPrivate = useAxiosPrivate();
   const { postFeatures } = useGlobal();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [customRoles, setCustomRoles] = useState([]);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({});
   const [expandedUserId, setExpandedUserId] = useState(null);
@@ -40,33 +39,6 @@ export default function AdminUsers({ isNavOpen }) {
   useEffect(() => {
     setError(null); // Clear error when filters change
   }, [filters]);
-
-  useEffect(() => {
-    const fetchRoles = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get('/custom-roles-public');
-        setCustomRoles(response.data);
-      } catch (err) {
-        console.error("Error fetching roles:", err);
-  
-        let errorMsg = "Failed to fetch roles.";
-        if (err.response?.data?.error) {
-          errorMsg += ` ${err.response.data.error}`;
-        } else if (err.message) {
-          errorMsg += ` ${err.message}`;
-        }
-  
-        setError(errorMsg);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-  
-    fetchRoles();
-  }, []);
-  
-
 
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
@@ -132,19 +104,6 @@ export default function AdminUsers({ isNavOpen }) {
     }
 
   };
-
-  // const handleDeleteUser = async (userId, loggedInUser) => {
-  //   try {
-
-  //     console.log('User ID:', userId);
-  //     console.log('Logged In User:', loggedInUser);
-
-  //   } catch (error) {
-  //     console.error("Error deleting user", error);
-  //     setError(`${error.response?.data?.error || 'An error occurred'}`);
-  //   }
-  // };
-
   const handleDeleteUser = async (userId, loggedInUser) => {
     setIsLoading(true)
     try {
@@ -247,7 +206,24 @@ export default function AdminUsers({ isNavOpen }) {
                             <h4>Roles</h4>
                             <ul>
                               {/* {console.log('Filtered roles:', roles.filter(role => postFeatures.showSubscriberFeature || role !== "User_subscribed"))} */}
-                              {roles
+                              {[...new Set([
+                                ...roles.filter(role => postFeatures.showSubscriberFeature || role !== "User_subscribed"),
+                                ...(customRoles?.map(r => r.role_name) || [])
+                              ])].map((role, index) => (
+                                <li key={index}>
+                                  <input
+                                    type="checkbox"
+                                    className="checkbox"
+                                    checked={user.roles.includes(role)}
+                                    onChange={(e) => {
+                                      setError("");  // Clear any previous error when the checkbox is clicked
+                                      handleRoleChange(user, role, e.target.checked); // Pass the full user object here
+                                    }}
+                                  />
+                                  {role}
+                                </li>
+                              ))}
+                              {/* {roles
                                 .filter(role => postFeatures.showSubscriberFeature || role !== "User_subscribed")
                                 .map((role, index) => (
                                   <li key={index}>
@@ -262,7 +238,7 @@ export default function AdminUsers({ isNavOpen }) {
                                     />
                                     {role}
                                   </li>
-                                ))}
+                                ))} */}
                             </ul>
 
                           </>
