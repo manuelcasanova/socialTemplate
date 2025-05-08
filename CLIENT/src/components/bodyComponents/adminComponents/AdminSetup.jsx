@@ -1,13 +1,29 @@
+import { useState } from 'react';
+
 //Context
 import { useGlobal } from '../../../context/GlobalProvider';
 
 //Styling
 import '../../../css/AdminSetup.css'
 
+//Components
+import Error from './../../bodyComponents/Error'
+import LoadingSpinner from './../../loadingSpinner/LoadingSpinner'
+
 export default function AdminSetup({ isNavOpen }) {
 
-  const { postFeatures } = useGlobal();
+  const { postFeatures, error, isLoading } = useGlobal();
   // console.log("postFeatures in AdminSetup.jsx", postFeatures)
+  // console.log("error in AdminSetup", error)
+  // console.log("isLoading", isLoading)
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <Error isNavOpen={isNavOpen} error={error} />
+  }
 
   return (
     <div className={`admin-setup-container ${isNavOpen ? 'body-squeezed' : 'body'}`}>
@@ -515,7 +531,7 @@ export default function AdminSetup({ isNavOpen }) {
           </div>
         </>}
 
-        <h4 className='admin-setup-subtitle'>SUBSCRIBER</h4>
+      <h4 className='admin-setup-subtitle'>SUBSCRIBER</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">

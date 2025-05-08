@@ -11,6 +11,8 @@ const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
 
   const { auth } = useAuth();
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getGlobalProviderSettings = async () => {
     try {
@@ -29,28 +31,34 @@ export const GlobalProvider = ({ children }) => {
   // ------- START POSTS SETTINGS ------- //
 
   useEffect(() => {
-    if (!auth?.accessToken) return; 
+    if (!auth?.accessToken) return;
     const fetchSettings = async () => {
-      const settings = await getGlobalProviderSettings();
+      setIsLoading(true);
+      try {
+        const settings = await getGlobalProviderSettings();
 
-      if (settings) {
-        setShowPostsFeature(settings?.show_posts_feature ?? false);
-        setAllowUserPost(settings?.allow_user_post ?? false);
-        setAllowAdminPost(settings?.allow_admin_post ?? false);
-        setAllowPostInteractions(settings?.allow_post_interactions ?? false);
-        setAllowComments(settings?.allow_comments ?? false);
-        setAllowPostReactions(settings?.allow_post_reactions ?? false);
-        setAllowCommentReactions(settings?.allow_comment_reactions ?? false);
-        setAllowDeletePosts(settings?.allow_delete_posts ?? false);
-        setAllowFlagPosts(settings?.allow_flag_posts ?? false);
-        setAllowDeleteComments(settings?.allow_delete_comments ?? false);
-        setAllowFlagComments(settings?.allow_flag_comments ?? false);
+        if (settings) {
+          setShowPostsFeature(settings?.show_posts_feature ?? false);
+          setAllowUserPost(settings?.allow_user_post ?? false);
+          setAllowAdminPost(settings?.allow_admin_post ?? false);
+          setAllowPostInteractions(settings?.allow_post_interactions ?? false);
+          setAllowComments(settings?.allow_comments ?? false);
+          setAllowPostReactions(settings?.allow_post_reactions ?? false);
+          setAllowCommentReactions(settings?.allow_comment_reactions ?? false);
+          setAllowDeletePosts(settings?.allow_delete_posts ?? false);
+          setAllowFlagPosts(settings?.allow_flag_posts ?? false);
+          setAllowDeleteComments(settings?.allow_delete_comments ?? false);
+          setAllowFlagComments(settings?.allow_flag_comments ?? false);
+        }
+      } catch (err) {
+        setError(err); // set error to be consumed by components
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchSettings();
-  }, [auth]);
-
+  }, [auth?.accessToken]);
 
   // Post-related features
   const [showPostsFeature, setShowPostsFeature] = useState(false); // Superadmin decides whether Posts are enabled
@@ -131,6 +139,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update showPostsFeature setting:', err);
       setShowPostsFeature(prev => !prev); // Revert the state if the API request fails
+      setError(err.message)
     }
   };
 
@@ -146,6 +155,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowUserPost setting:', err);
       setAllowUserPost(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -160,6 +170,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowAdminPost setting:', err);
       setAllowAdminPost(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -210,6 +221,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowPostInteractions setting:', err);
       setAllowPostInteractions(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -251,6 +263,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowComments setting:', err);
       setAllowComments(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -266,6 +279,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowPostReactions setting:', err);
       setAllowPostReactions(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -282,6 +296,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowCommentReactions setting:', err);
       setAllowCommentReactions(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -297,6 +312,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowDeletePosts setting:', err);
       setAllowDeletePosts(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -312,6 +328,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowFlagPosts setting:', err);
       setAllowFlagPosts(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -330,6 +347,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowFlagComments setting:', err);
       setAllowFlagComments(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -348,13 +366,14 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowDeleteComments setting:', err);
       setAllowDeleteComments(prev => !prev);
+      setError(err.message)
     }
   };
 
   // ------- END POSTS SETTINGS ------- START MESSAGES SETTINGS //
 
   useEffect(() => {
-    if (!auth?.accessToken) return; 
+    if (!auth?.accessToken) return;
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -366,7 +385,7 @@ export const GlobalProvider = ({ children }) => {
     };
 
     fetchSettings();
-  }, [auth]);
+  }, [auth?.accessToken]);
 
   // Messages-related features
   const [showMessagesFeature, setShowMessagesFeature] = useState(false);
@@ -406,6 +425,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update showMessagesFeature setting:', err);
       setShowMessagesFeature(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -423,6 +443,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowSendMessages setting:', err);
       setAllowSendMessages(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -439,6 +460,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowDeleteMessages setting:', err);
       setAllowDeleteMessages(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -452,7 +474,7 @@ export const GlobalProvider = ({ children }) => {
   const [allowMute, setAllowMute] = useState(false);
 
   useEffect(() => {
-    if (!auth?.accessToken) return; 
+    if (!auth?.accessToken) return;
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -465,7 +487,7 @@ export const GlobalProvider = ({ children }) => {
     };
 
     fetchSettings();
-  }, [auth]);
+  }, [auth?.accessToken]);
 
 
   const toggleShowSocialFeature = async () => {
@@ -493,6 +515,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update showSocialFeature setting:', err);
       setShowSocialFeature(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -508,6 +531,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowFollow setting:', err);
       setAllowFollow(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -523,6 +547,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowMute setting:', err);
       setAllowMute(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -534,7 +559,7 @@ export const GlobalProvider = ({ children }) => {
   const [allowDeleteUsers, setAllowDeleteUsers] = useState(false);
 
   useEffect(() => {
-    if (!auth?.accessToken) return; 
+    if (!auth?.accessToken) return;
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -545,7 +570,7 @@ export const GlobalProvider = ({ children }) => {
     };
 
     fetchSettings();
-  }, [auth]);
+  }, [auth?.accessToken]);
 
 
   const toggleAllowManageRoles = async () => {
@@ -560,6 +585,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowManageRoles setting:', err);
       setAllowManageRoles(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -575,6 +601,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowDeleteUsers setting:', err);
       setAllowDeleteUsers(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -591,12 +618,12 @@ export const GlobalProvider = ({ children }) => {
   const [allowModifyProfilePicture, setAllowModifyProfilePicture] = useState(false);
 
   useEffect(() => {
-    if (!auth?.accessToken) return; 
+    if (!auth?.accessToken) return;
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
       if (settings) {
-        setShowProfileFeature(settings?.show_profile_feature  ?? false);
+        setShowProfileFeature(settings?.show_profile_feature ?? false);
         setAllowEditUsername(settings?.allow_edit_username ?? false);
         setAllowEditEmail(settings?.allow_edit_email ?? false);
         setAllowEditPassword(settings?.allow_edit_password ?? false);
@@ -605,7 +632,7 @@ export const GlobalProvider = ({ children }) => {
       }
     };
     fetchSettings();
-  }, [auth]);
+  }, [auth?.accessToken]);
 
   const toggleShowProfileFeature = async () => {
     const newValue = !showProfileFeature;
@@ -655,6 +682,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update showProfileFeature setting:', err);
       setShowProfileFeature(prev => !prev); // Revert the state if the API request fails
+      setError(err.message)
     }
   };
 
@@ -671,6 +699,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowEditUsername setting:', err);
       setAllowEditUsername(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -686,6 +715,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowEditEmail setting:', err);
       setAllowEditEmail(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -701,6 +731,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowEditPassword setting:', err);
       setAllowEditPassword(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -716,6 +747,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowModifyProfilePicture setting:', err);
       setAllowModifyProfilePicture(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -731,6 +763,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update allowDeleteMyUser setting:', err);
       setAllowDeleteMyUser(prev => !prev);
+      setError(err.message)
     }
   };
 
@@ -745,7 +778,7 @@ export const GlobalProvider = ({ children }) => {
 
 
   useEffect(() => {
-    if (!auth?.accessToken) return; 
+    if (!auth?.accessToken) return;
     const fetchSettings = async () => {
       const settings = await getGlobalProviderSettings();
 
@@ -754,7 +787,7 @@ export const GlobalProvider = ({ children }) => {
       }
     };
     fetchSettings();
-  }, [auth]);
+  }, [auth?.accessToken]);
 
 
   const toggleShowSubscriberFeature = async () => {
@@ -769,12 +802,14 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to update showSubscriberFeature setting:', err);
       setShowSubscriberFeature(prev => !prev);
+      setError(err.message)
     }
   };
 
   // ------- END SUBSCRIBER SETTINGS ------- //
 
   const postFeatures = {
+
     showPostsFeature,
 
     allowUserPost,
@@ -885,7 +920,9 @@ export const GlobalProvider = ({ children }) => {
 
   return (
     <GlobalContext.Provider value={{
-      postFeatures
+      postFeatures,
+      error,
+      isLoading
     }}>
       {children}
     </GlobalContext.Provider>
