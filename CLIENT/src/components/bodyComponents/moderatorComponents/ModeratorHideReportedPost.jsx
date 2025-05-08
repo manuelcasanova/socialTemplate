@@ -63,13 +63,13 @@ export default function ModeratorHideReportedPost({ postId, refreshData, setRepo
   }
 };
 
-    if (isLoading) {
-      return (
-        <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-          <LoadingSpinner />
-        </div>
-      )
-    }
+if (isLoading) {
+  return (
+    <td colSpan={1}>
+      <LoadingSpinner />
+    </td>
+  );
+}
   
   return (
     <td>
