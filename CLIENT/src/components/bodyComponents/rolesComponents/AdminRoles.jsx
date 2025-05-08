@@ -128,6 +128,8 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       console.error("Error creating role:", error);
       if (error.response?.data?.message) {
         setErrorMessage(error.response.data.message);
+      } else if (error.message === 'Network Error') {
+        setError('Network Error')
       } else {
         setErrorMessage("An unexpected error occurred.");
       }
@@ -176,7 +178,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
         <h2>Admin Roles</h2>
         {isLoading && <LoadingSpinner />}
 
-        <CreateRole onRoleCreated={handleRoleCreated} />
+        <CreateRole onRoleCreated={handleRoleCreated} isNavOpen={isNavOpen} error={error} setError={setError} />
 
         <div className="custom-roles-title">
           <h3>Custom Roles</h3>

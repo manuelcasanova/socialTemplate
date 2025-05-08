@@ -1,13 +1,18 @@
 import { useState, useEffect, useRef } from "react"
 import { axiosPrivate } from "../../../api/axios";
 
+//Components 
+import Error from "../Error";
+import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
-export default function CreateRole({ onRoleCreated }) {
+
+export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }) {
 
   const inputRef = useRef(null);
   const [newRoleName, setNewRoleName] = useState("")
   const [showInput, setShowInput] = useState(false)
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (showInput && inputRef.current) {
@@ -51,11 +56,21 @@ export default function CreateRole({ onRoleCreated }) {
       console.error("Error creating role:", error);
       if (error.response?.data?.message) {
         setErrorMessage(error.response.data.message);
+      } else if (error.message === 'Network Error') {
+        setError('Network Error')
       } else {
         setErrorMessage("An unexpected error occurred.");
       }
     }
   };
+
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+  
+    if (error) {
+      return <Error isNavOpen={isNavOpen} error={error} />
+    }
 
   return (
     <>

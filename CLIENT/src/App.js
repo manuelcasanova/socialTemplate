@@ -90,12 +90,12 @@ function App() {
     const fetchCustomRoles = async () => {
       try {
         const response = await axios.get('/custom-roles-public');
-        setCustomRoles(response.data); 
+        setCustomRoles(response.data);
       } catch (err) {
         console.error('Failed to fetch custom roles', err);
       }
     };
-  
+
     fetchCustomRoles();
   }, []);
 
@@ -131,7 +131,7 @@ function App() {
             ];
 
             return (
-              <Route element={<RequireAuth allowedRoles={['SuperAdmin', 'Admin', 'Moderator', `${role.role_name}`]} />}>
+              <Route key={role.role_name} element={<RequireAuth allowedRoles={['SuperAdmin', 'Admin', 'Moderator', `${role.role_name}`]} />}>
                 <Route
                   path={routePath}
                   element={<RolePage role={role} isNavOpen={isNavOpen} />}
