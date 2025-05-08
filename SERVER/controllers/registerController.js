@@ -93,7 +93,7 @@ const handleNewUser = async (req, res) => {
 
         // Insert the user-role associations into the 'user_roles' table
         const roleQueries = roleAssignments.map(role_id => {
-            return pool.query('INSERT INTO user_roles (user_id, role_id) VALUES ($1, $2)', [newUserId, role_id]);
+            return pool.query('INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES ($1, $2, $3)', [newUserId, role_id, newUserId]);
         });
 
         // Wait for all the role assignments to be executed
@@ -294,7 +294,7 @@ const handleGoogleSignUp = async (req, res) => {
       // Handle user roles and verification (can be skipped or modified as needed)
       const roleAssignments = getRoleAssignments('user_not_subscribed');
       const roleQueries = roleAssignments.map(role_id => {
-        return pool.query('INSERT INTO user_roles (user_id, role_id) VALUES ($1, $2)', [newUserId, role_id]);
+        return pool.query('INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES ($1, $2, $3)', [newUserId, role_id, newUserId]);
       });
   
       await Promise.all(roleQueries);
