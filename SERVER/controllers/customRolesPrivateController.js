@@ -5,14 +5,29 @@ const updateCustomRole = async (req, res) => {
   const { id } = req.params;
   const { role_name } = req.body;
 
-  if (!role_name || !/^[A-Za-z0-9 _-]{1,25}$/.test(role_name)) {
+  const trimmedName = role_name.trim();
+
+  if (!role_name || !/^[A-Za-z0-9 _-]{1,25}$/.test(trimmedName)) {
     return res.status(400).json({ message: 'Invalid role name.' });
   }
 
   try {
+    // Check if the role name already exists (case-insensitive)
+    const existing = await pool.query(
+      'SELECT * FROM roles WHERE LOWER(role_name) = LOWER($1)',
+      [trimmedName]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(409).json({
+        error: 'ROLE_EXISTS',
+        message: 'A role with this name already exists.'
+      });
+    }
+
     const { rows } = await pool.query(
       'UPDATE roles SET role_name = $1 WHERE role_id = $2 RETURNING *',
-      [role_name.trim(), id]
+      [trimmedName, id]
     );
 
     if (rows.length === 0) {
@@ -65,6 +80,20 @@ const createCustomRole = async (req, res) => {
   }
 
   try {
+
+    // Check if the role name already exists (case-insensitive)
+    const existing = await pool.query(
+      'SELECT * FROM roles WHERE LOWER(role_name) = LOWER($1)',
+      [trimmedName]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(409).json({
+        error: 'ROLE_EXISTS',
+        message: 'A role with this name already exists.'
+      });
+    }
+
     const result = await pool.query(
       'INSERT INTO roles (role_name, is_system_role) VALUES ($1, $2) RETURNING *',
       [trimmedName, false]

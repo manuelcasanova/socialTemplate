@@ -23,6 +23,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   const [roleName, setRoleName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const [regexError, setRegexError] = useState("");
   const [activeMenuId, setActiveMenuId] = useState(null);
   const [editRoleId, setEditRoleId] = useState(null);
@@ -76,6 +77,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       setConfirmDeleteId(null);
       setActiveMenuId(null);
       setError(null);
+      setErrorMessage("");
     } catch (error) {
       console.error("Error deleting role:", error);
       setError("Failed to delete the role. Please try again.");
@@ -120,11 +122,15 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       setActiveMenuId(null);
       setRoleName('');
       setError(null);
+      setErrorMessage("");
       setRegexError(null);
     } catch (error) {
-      console.error("Error updating role:", error);
-      const message = error.response?.data?.message || "Failed to update the role. Please try again.";
-      setError(message);
+      console.error("Error creating role:", error);
+      if (error.response?.data?.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("An unexpected error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -149,8 +155,11 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   }, []);
 
   const handleRoleCreated = (newRole) => {
-    setCustomRoles((prevRoles) => [...prevRoles, newRole]);
+    setCustomRoles((prevRoles) =>
+      [...prevRoles, newRole].sort((a, b) => a.role_name.localeCompare(b.role_name))
+    );
   };
+
 
 
   if (isLoading) {
@@ -194,17 +203,21 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
               .filter(role => !role.is_system_role)
               .map(role => (
                 <li className="admin-roles-line" key={role.role_id}>
-                  {editRoleId === role.role_id && (
-                    <div style={{ marginRight: '5px' }}>Edit role name</div>
-                  )}
 
                   <FontAwesomeIcon
                     icon={faEllipsisV}
                     style={{ cursor: 'pointer', marginRight: '10px' }}
-                    onClick={() =>
+                    onClick={() => {
                       setActiveMenuId(prev => (prev === role.role_id ? null : role.role_id))
+                      setConfirmDeleteId(null);
+                      setEditRoleId(null);
+                    }
                     }
                   />
+
+                  {editRoleId === role.role_id && (
+                    <div style={{ marginRight: '5px' }}>Edit role name</div>
+                  )}
 
                   {editRoleId !== role.role_id && (
                     <div style={{ marginRight: '5px' }}>{role.role_name}</div>
@@ -249,12 +262,19 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                               setEditRoleId(null);
                               setActiveMenuId(null);
                               setRegexError(null);
+                              setErrorMessage("");
+                              setRoleName("");
                             }}
 
                             className="button-red button-smaller"
                           >
                             x
                           </button>
+
+                          {errorMessage && (
+                            <p style={{ color: 'red' }}>{errorMessage}</p>
+                          )}
+
                         </div>
                       )}
 
@@ -303,6 +323,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
               ))}
           </ul>
         )}
+
 
         {regexError && (
           <p style={{ color: 'red', marginTop: '0.5em' }}>{regexError}</p>
