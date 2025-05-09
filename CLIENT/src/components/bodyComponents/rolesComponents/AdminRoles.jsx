@@ -222,6 +222,9 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
               .map(role => (
                 <li className="admin-roles-line" key={role.role_id}>
 
+
+                  {(postFeatures.allowAdminEditCustomRole || postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) && (
+
                     <FontAwesomeIcon
                       icon={faEllipsisV}
                       style={{ cursor: 'pointer', marginRight: '10px' }}
@@ -232,6 +235,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                       }
                       }
                     />
+                  )}
 
                   {(postFeatures.allowAdminEditCustomRole || isSuperAdmin) && <>
                     {editRoleId === role.role_id && (
