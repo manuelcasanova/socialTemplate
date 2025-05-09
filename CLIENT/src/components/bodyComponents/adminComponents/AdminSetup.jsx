@@ -392,7 +392,7 @@ export default function AdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        <div className='admin-setup-line-text'>Admins Can Manage Roles</div>
+        <div className='admin-setup-line-text'>Admins Can Manage User's Roles</div>
       </div>
 
       <div className='admin-setup-line'>
@@ -554,6 +554,80 @@ export default function AdminSetup({ isNavOpen }) {
           <div className='admin-setup-line-text'>Enable Subscriber Feature</div>
         }
 
+      </div>
+
+      <h4 className='admin-setup-subtitle'>CUSTOM ROLES</h4>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="EnableCustomRolesFeature"
+              className="toggle-checkbox"
+              checked={postFeatures.showCustomRolesFeature}
+              onChange={postFeatures.toggleShowCustomRolesFeature}
+            />
+            <label htmlFor="EnableCustomRolesFeature" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>Enable Custom Roles Feature</div>
+      </div>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="AllowAdminCreateCustomRole"
+              className="toggle-checkbox"
+              checked={postFeatures.allowAdminCreateCustomRole}
+              onChange={postFeatures.toggleAllowAdminCreateCustomRole}
+            />
+            <label htmlFor="AllowAdminCreateCustomRole" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>Admins Can Create a Custom Role</div>
+      </div>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="AllowAdminEditCustomRole"
+              className="toggle-checkbox"
+              checked={postFeatures.allowAdminEditCustomRole}
+              onChange={postFeatures.toggleAllowAdminEditCustomRole}
+            />
+            <label htmlFor="AllowAdminEditCustomRole" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>Admins Can Edit a Custom Role</div>
+      </div>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="AllowAdminDeleteCustomRole"
+              className="toggle-checkbox"
+              checked={postFeatures.allowAdminDeleteCustomRole}
+              onChange={postFeatures.toggleAllowAdminDeleteCustomRole}
+            />
+            <label htmlFor="AllowAdminDeleteCustomRole" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>Admins Can Delete a Custom Role</div>
       </div>
 
     </div>

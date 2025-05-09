@@ -37,7 +37,12 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_delete_my_user,
         allow_modify_profile_picture,
 
-        show_subscriber_feature
+        show_subscriber_feature,
+
+        show_manage_roles_feature,
+        allow_admin_create_custom_role,
+        allow_admin_edit_custom_role,
+        allow_admin_delete_custom_role
 
       FROM global_provider_settings
     `);
@@ -702,6 +707,122 @@ const toggleShowSubscriberFeature = async (req, res) => {
   }
 };
 
+const toggleShowCustomRolesFeature = async (req, res) => {
+  try {
+    const { show_manage_roles_feature } = req.body;
+
+    if (typeof show_manage_roles_feature !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for show_manage_roles_feature. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET show_manage_roles_feature = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [show_manage_roles_feature]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowAdminCreateCustomRole = async (req, res) => {
+  try {
+    const { allow_admin_create_custom_role } = req.body;
+
+    if (typeof allow_admin_create_custom_role !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_admin_create_custom_role. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET allow_admin_create_custom_role = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [allow_admin_create_custom_role]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowAdminEditCustomRole = async (req, res) => {
+  try {
+    const { allow_admin_edit_custom_role } = req.body;
+
+    if (typeof allow_admin_edit_custom_role !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_admin_edit_custom_role. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET allow_admin_edit_custom_role = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [allow_admin_edit_custom_role]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleAllowAdminDeleteCustomRole = async (req, res) => {
+  try {
+    const { allow_admin_delete_custom_role } = req.body;
+    
+    if (typeof allow_admin_delete_custom_role !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for allow_admin_delete_custom_role. Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET allow_admin_delete_custom_role = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [allow_admin_delete_custom_role]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 module.exports = {
   getGlobalProviderSettings,
@@ -738,7 +859,12 @@ module.exports = {
   toggleAllowDeleteMyUser,
   toggleAllowModifyProfilePicture,
 
-  toggleShowSubscriberFeature
+  toggleShowSubscriberFeature,
+
+  toggleShowCustomRolesFeature,
+  toggleAllowAdminCreateCustomRole,
+  toggleAllowAdminEditCustomRole,
+  toggleAllowAdminDeleteCustomRole
 
 };
 

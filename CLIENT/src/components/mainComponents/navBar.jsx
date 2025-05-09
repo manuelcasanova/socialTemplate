@@ -23,7 +23,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
   const { postFeatures } = useGlobal();
 
-    // console.log("customRoles", customRoles)
+  // console.log("customRoles", customRoles)
   // console.log("customRoles length", customRoles.length)
 
 
@@ -164,10 +164,10 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
             <>
 
               {customRoles && customRoles.length > 0 && customRoles.map(role => (
-                <div 
-                key={role.role_id} 
-                className="subitem"
-                onClick={() => handleNavigateProtected(role.role_name)}
+                <div
+                  key={role.role_id}
+                  className="subitem"
+                  onClick={() => handleNavigateProtected(role.role_name)}
                 >
                   {role.role_name}
                 </div>
@@ -283,7 +283,10 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
                 </div>
               )}
               <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
-              <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>Admin roles</div>
+
+              {postFeatures.showCustomRolesFeature &&
+                <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>Admin roles</div>}
+
               {auth.roles && auth.roles.includes('SuperAdmin') && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
                   Role change log

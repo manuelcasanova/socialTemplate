@@ -212,6 +212,11 @@ CREATE TABLE global_provider_settings (
   allow_delete_my_user BOOLEAN NOT NULL DEFAULT TRUE,
   allow_modify_profile_picture BOOLEAN NOT NULL DEFAULT TRUE,
 
-  show_subscriber_feature BOOLEAN NOT NULL DEFAULT TRUE
+  show_subscriber_feature BOOLEAN NOT NULL DEFAULT TRUE,
+
+  show_manage_roles_feature BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_admin_create_custom_role BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_admin_edit_custom_role BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_admin_delete_custom_role BOOLEAN NOT NULL DEFAULT TRUE
 
 );

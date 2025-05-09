@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const settingsController = require('../../controllers/settingsController');
-const {fetchRoles} = require('../../config/fetchRoles');
+const { fetchRoles } = require('../../config/fetchRoles');
 const verifyRoles = require('../../middleware/verifyRoles');
 
 router.route('/global-provider')
@@ -127,21 +127,21 @@ router.route('/global-provider/toggleShowMessagesFeature')
     settingsController.toggleShowMessagesFeature
   );
 
-    // Allow Send Messages
+// Allow Send Messages
 
 router.route('/global-provider/toggleAllowSendMessages')
-.put(
-  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-  settingsController.toggleAllowSendMessages
-);
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowSendMessages
+  );
 
-  // Allow Delete Messages
+// Allow Delete Messages
 
 router.route('/global-provider/toggleAllowDeleteMessages')
-.put(
-  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-  settingsController.toggleAllowDeleteMessages
-);
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowDeleteMessages
+  );
 
 // Show Social Feature
 router.route('/global-provider/toggleShowSocialFeature')
@@ -164,12 +164,12 @@ router.route('/global-provider/toggleAllowMute')
     settingsController.toggleAllowMute
   );
 
-  // Allow Manage Roles (Admin)
+// Allow Manage Roles (Admin)
 router.route('/global-provider/toggleAllowManageRoles')
-.put(
-  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-  settingsController.toggleAllowManageRoles
-);
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowManageRoles
+  );
 
 // Allow Delete Users (Admin)
 router.route('/global-provider/toggleAllowDeleteUsers')
@@ -178,52 +178,105 @@ router.route('/global-provider/toggleAllowDeleteUsers')
     settingsController.toggleAllowDeleteUsers
   );
 
-    // Show profile feature
+// Show profile feature
 router.route('/global-provider/toggleShowProfileFeature')
-.put(
-  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-  settingsController.toggleShowProfileFeature
-);
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleShowProfileFeature
+  );
 
-  // Allow Edit username
+// Allow Edit username
 router.route('/global-provider/toggleAllowEditUsername')
-.put(
-  (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-  settingsController.toggleAllowEditUsername
-);
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowEditUsername
+  );
 
-  // Allow Edit email
-  router.route('/global-provider/toggleAllowEditEmail')
+// Allow Edit email
+router.route('/global-provider/toggleAllowEditEmail')
   .put(
     (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
     settingsController.toggleAllowEditEmail
   );
 
-  // Allow Edit password
-    router.route('/global-provider/toggleAllowEditPassword')
-    .put(
-      (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-      settingsController.toggleAllowEditPassword
-    );
+// Allow Edit password
+router.route('/global-provider/toggleAllowEditPassword')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowEditPassword
+  );
 
-    
-  // Allow Delete my user
-  router.route('/global-provider/toggleAllowDeleteMyUser')
+
+// Allow Delete my user
+router.route('/global-provider/toggleAllowDeleteMyUser')
   .put(
     (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
     settingsController.toggleAllowDeleteMyUser
   );
 
 
-  // Allow Edit profile image
-    router.route('/global-provider/toggleAllowModifyProfilePicture')
-    .put(
-      (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
-      settingsController.toggleAllowModifyProfilePicture
-    );
+// Allow Edit profile image
+router.route('/global-provider/toggleAllowModifyProfilePicture')
+  .put(
+    (req, res, next) => verifyRoles('SuperAdmin')(req, res, next),
+    settingsController.toggleAllowModifyProfilePicture
+  );
 
-    //Show subscriber feature
+//Show subscriber feature
 router.route('/global-provider/toggleShowSubscriberFeature')
+  .put(
+    async (req, res, next) => {
+      try {
+        verifyRoles('SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    settingsController.toggleShowSubscriberFeature
+  );
+
+
+//Show admin custom roles feature
+router.route('/global-provider/toggleShowCustomRolesFeature')
+  .put(
+    async (req, res, next) => {
+      try {
+        verifyRoles('SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    settingsController.toggleShowCustomRolesFeature
+  );
+
+//Allow Admin Create Custom Role
+router.route('/global-provider/toggleAllowAdminCreateCustomRole')
+  .put(
+    async (req, res, next) => {
+      try {
+        verifyRoles('SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    settingsController.toggleAllowAdminCreateCustomRole
+  );
+
+//Allow Admin Edit Custom Role
+router.route('/global-provider/toggleAllowAdminEditCustomRole')
+  .put(
+    async (req, res, next) => {
+      try {
+        verifyRoles('SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    settingsController.toggleAllowAdminEditCustomRole
+  );
+
+  //Allow Admin Delete Custom Role
+router.route('/global-provider/toggleAllowAdminDeleteCustomRole')
 .put(
   async (req, res, next) => {
     try {
@@ -232,8 +285,7 @@ router.route('/global-provider/toggleShowSubscriberFeature')
       next(err);
     }
   },
-  settingsController.toggleShowSubscriberFeature
+  settingsController.toggleAllowAdminDeleteCustomRole
 );
-  
 
 module.exports = router;

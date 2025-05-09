@@ -808,6 +808,128 @@ export const GlobalProvider = ({ children }) => {
 
   // ------- END SUBSCRIBER SETTINGS ------- //
 
+
+  // ------- START CUSTOM ROLES SETTINGS ------- //
+
+
+  const [showCustomRolesFeature, setShowCustomRolesFeature] = useState(false);
+  const [allowAdminCreateCustomRole, setAllowAdminCreateCustomRole] = useState(false)
+  const [allowAdminEditCustomRole, setAllowAdminEditCustomRole] = useState(false)
+  const [allowAdminDeleteCustomRole, setAllowAdminDeleteCustomRole] = useState(false)
+
+
+
+  useEffect(() => {
+    if (!auth?.accessToken) return;
+    const fetchSettings = async () => {
+      const settings = await getGlobalProviderSettings();
+
+      if (settings) {
+        setShowCustomRolesFeature(settings?.show_manage_roles_feature ?? false);
+      }
+    };
+    fetchSettings();
+  }, [auth?.accessToken]);
+
+
+  const toggleShowCustomRolesFeature = async () => {
+
+    const newValue = !showCustomRolesFeature;
+    setShowCustomRolesFeature(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleShowCustomRolesFeature', {
+        show_manage_roles_feature: newValue
+      });
+
+      // If turning off, reset related settings
+      if (!newValue) {
+
+        setAllowAdminCreateCustomRole(false);
+        setAllowAdminEditCustomRole(false);
+        setAllowAdminDeleteCustomRole(false);
+
+        // Update the database with all related settings
+
+        await axiosPrivate.put('/settings/global-provider/toggleAllowAdminCreateCustomRole', { allow_admin_create_custom_role: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowAdminEditCustomROle', { allow_admin_edit_custom_role: false });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowAdminDeleteCustomROle', { allow_admin_delete_custom_role: false });
+
+      } else {
+        setAllowAdminCreateCustomRole(true);
+        setAllowAdminEditCustomRole(true);
+        setAllowAdminDeleteCustomRole(true);
+
+        // Update the database with all related settings
+
+        await axiosPrivate.put('/settings/global-provider/toggleAllowAdminCreateCustomRole', { allow_admin_create_custom_role: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowAdminEditCustomRole', { allow_admin_edit_custom_role: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowAdminDeleteCustomRole', { allow_admin_delete_custom_role: true });
+      }
+
+    } catch (err) {
+      console.error('Failed to update showCustomRolesFeature setting:', err);
+      setShowSubscriberFeature(prev => !prev);
+      setError(err.message)
+    }
+  };
+
+  const toggleAllowAdminCreateCustomRole = async () => {
+    if (!showCustomRolesFeature) return;
+
+    const newValue = !allowAdminCreateCustomRole;
+    setAllowAdminCreateCustomRole(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowAdminCreateCustomRole', {
+        allow_admin_create_custom_role: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowAdminCreateCustomRole setting:', err);
+      setAllowSendMessages(prev => !prev);
+      setError(err.message)
+    }
+  };
+
+  const toggleAllowAdminEditCustomRole = async () => {
+    if (!showCustomRolesFeature) return;
+
+    const newValue = !allowAdminEditCustomRole;
+    setAllowAdminEditCustomRole(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowAdminEditCustomRole', {
+        allow_admin_edit_custom_role: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowAdminEditCustomRole setting:', err);
+      setAllowSendMessages(prev => !prev);
+      setError(err.message)
+    }
+  };
+
+  const toggleAllowAdminDeleteCustomRole = async () => {
+    if (!showCustomRolesFeature) return;
+
+    const newValue = !allowAdminDeleteCustomRole;
+    setAllowAdminDeleteCustomRole(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleAllowAdminDeleteCustomRole', {
+        allow_admin_delete_custom_role: newValue
+      });
+
+    } catch (err) {
+      console.error('Failed to update allowAdminDeleteCustomRole setting:', err);
+      setAllowSendMessages(prev => !prev);
+      setError(err.message)
+    }
+  };
+
+
+
+  // ------- END CUSTOM ROLES SETTINGS ------- //
+
+
+
   const postFeatures = {
 
     showPostsFeature,
@@ -844,6 +966,11 @@ export const GlobalProvider = ({ children }) => {
 
     showSubscriberFeature,
 
+    showCustomRolesFeature,
+    allowAdminCreateCustomRole,
+    allowAdminEditCustomRole,
+    allowAdminDeleteCustomRole,
+
     setShowPostsFeature,
 
     setAllowUserPost,
@@ -878,6 +1005,11 @@ export const GlobalProvider = ({ children }) => {
 
     setShowSubscriberFeature,
 
+    setShowCustomRolesFeature,
+    setAllowAdminCreateCustomRole,
+    setAllowAdminEditCustomRole,
+    setAllowAdminDeleteCustomRole,
+
     toggleShowPostsFeature,
     toggleAllowUserPost,
     toggleAllowAdminPost,
@@ -909,7 +1041,12 @@ export const GlobalProvider = ({ children }) => {
     toggleAllowEditProfileImage,
     toggleAllowDeleteMyUser,
 
-    toggleShowSubscriberFeature
+    toggleShowSubscriberFeature,
+
+    toggleShowCustomRolesFeature,
+    toggleAllowAdminCreateCustomRole,
+    toggleAllowAdminEditCustomRole,
+    toggleAllowAdminDeleteCustomRole
   };
 
   // console.log("postFeatures in Global Provider", postFeatures)

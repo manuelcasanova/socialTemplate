@@ -3,9 +3,13 @@ import { useEffect, useState, useRef } from "react";
 //Hooks
 import { axiosPrivate } from "../../../api/axios";
 import axios from "../../../api/axios";
+import useAuth from "../../../hooks/useAuth";
 
 // Util functions
 import { fetchRoles } from "./fetchRoles";
+
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
 
 // Components
 import Error from "../Error";
@@ -18,6 +22,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV, faWarning, faInfo } from "@fortawesome/free-solid-svg-icons";
 
 export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
+
+  const { auth } = useAuth();
+  const { postFeatures } = useGlobal();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
 
   const [systemRoles, setSystemRoles] = useState(null);
   const [roleName, setRoleName] = useState("");
@@ -178,7 +186,9 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
         <h2>Admin Roles</h2>
         {isLoading && <LoadingSpinner />}
 
-        <CreateRole onRoleCreated={handleRoleCreated} isNavOpen={isNavOpen} error={error} setError={setError} />
+        {(postFeatures.allowAdminCreateCustomRole || isSuperAdmin) &&
+          <CreateRole onRoleCreated={handleRoleCreated} isNavOpen={isNavOpen} error={error} setError={setError} />
+        }
 
         <div className="custom-roles-title">
           <h3>Custom Roles</h3>
@@ -197,7 +207,13 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
         }
 
 
-        {(customRoles === null || customRoles.length === 0) && <div>There are no custom roles yet. Create one.</div>}
+        {(customRoles === null || customRoles.length === 0) && (
+          <div>
+            There are no custom roles yet.{' '}
+            {postFeatures.allowAdminCreateCustomRole && 'Create one.'}
+          </div>
+        )}
+
 
         {!isLoading && !error && customRoles && (
           <ul>
@@ -206,28 +222,32 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
               .map(role => (
                 <li className="admin-roles-line" key={role.role_id}>
 
-                  <FontAwesomeIcon
-                    icon={faEllipsisV}
-                    style={{ cursor: 'pointer', marginRight: '10px' }}
-                    onClick={() => {
-                      setActiveMenuId(prev => (prev === role.role_id ? null : role.role_id))
-                      setConfirmDeleteId(null);
-                      setEditRoleId(null);
-                    }
-                    }
-                  />
+                    <FontAwesomeIcon
+                      icon={faEllipsisV}
+                      style={{ cursor: 'pointer', marginRight: '10px' }}
+                      onClick={() => {
+                        setActiveMenuId(prev => (prev === role.role_id ? null : role.role_id))
+                        setConfirmDeleteId(null);
+                        setEditRoleId(null);
+                      }
+                      }
+                    />
 
-                  {editRoleId === role.role_id && (
-                    <div style={{ marginRight: '5px' }}>Edit role name</div>
-                  )}
+                  {(postFeatures.allowAdminEditCustomRole || isSuperAdmin) && <>
+                    {editRoleId === role.role_id && (
+                      <div style={{ marginRight: '5px' }}>Edit role name</div>
+                    )}
+                  </>}
 
                   {editRoleId !== role.role_id && (
                     <div style={{ marginRight: '5px' }}>{role.role_name}</div>
                   )}
 
+
                   {activeMenuId === role.role_id && (
                     <>
-                      {editRoleId !== role.role_id && confirmDeleteId !== role.role_id && (
+
+                      {(postFeatures.allowAdminEditCustomRole || isSuperAdmin) && editRoleId !== role.role_id && confirmDeleteId !== role.role_id && (
                         <button
                           className="button-white button-smaller"
                           onClick={() => setEditRoleId(role.role_id)}
@@ -236,7 +256,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                         </button>
                       )}
 
-                      {editRoleId === role.role_id && (
+                      {(postFeatures.allowAdminEditCustomRole || isSuperAdmin) && editRoleId === role.role_id && (
                         <div>
                           <input
                             type="text"
@@ -280,7 +300,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                         </div>
                       )}
 
-                      {confirmDeleteId !== role.role_id && editRoleId !== role.role_id && (
+                      {(postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) && confirmDeleteId !== role.role_id && editRoleId !== role.role_id && (
                         <button
                           className="button-red button-smaller"
                           onClick={() => setConfirmDeleteId(role.role_id)}
@@ -289,7 +309,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                         </button>
                       )}
 
-                      {confirmDeleteId === role.role_id && (
+                      {(postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) && confirmDeleteId === role.role_id && (
                         <div className="confirm-delete-role">
 
                           <FontAwesomeIcon

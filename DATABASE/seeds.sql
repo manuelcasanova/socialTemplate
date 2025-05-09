@@ -9,9 +9,8 @@ INSERT INTO roles (role_name) VALUES
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 
   ('Superadministrator User', 'superadmin@example.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg')
-  -- ,
-  -- ,
-  -- ('Manuel Casanova', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg');
+  ,
+  ('Manuel Casanova', 'manucasanova@hotmail.com', '$2b$10$EKTRqOF2yxxWcpXC5gtzheoB0Jgr59odbVjgTxTlu196sDXYmU7lq', true, true, true, 'admin_pic.jpg');
   ;
 
   
@@ -38,12 +37,12 @@ VALUES
 (1, 3, 1),
 (1, 4, 1),
 (1, 5, 1)
--- ,
--- (2, 1, 1),
--- (2, 2, 2),
--- (2, 3, 2),
--- (2, 4, 2),
--- (2, 5, 2)
+,
+(2, 1, 1),
+(2, 2, 2),
+(2, 3, 2),
+(2, 4, 2),
+(2, 5, 2)
 ;
 
 INSERT INTO global_provider_settings (
@@ -72,11 +71,16 @@ INSERT INTO global_provider_settings (
   allow_edit_password,
   allow_delete_my_user,
   allow_modify_profile_picture,
-  show_subscriber_feature
+  show_subscriber_feature,
+  show_manage_roles_feature,
+  allow_admin_create_custom_role,
+  allow_admin_edit_custom_role,
+  allow_admin_delete_custom_role
+
 ) VALUES (
   false, false, false, false, false, false, false, false, false, false, false,
   false, false, false, false, false, false, false, false, false, false, false,
-  false, false, false, false
+  false, false, false, false, false, false, false, false
 );
 
 
