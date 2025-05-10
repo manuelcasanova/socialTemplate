@@ -235,6 +235,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                       }
                       }
                     />
+
                   )}
 
                   {(postFeatures.allowAdminEditCustomRole || isSuperAdmin) && <>
@@ -251,97 +252,107 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                   {activeMenuId === role.role_id && (
                     <>
 
-                      {(postFeatures.allowAdminEditCustomRole || isSuperAdmin) && editRoleId !== role.role_id && confirmDeleteId !== role.role_id && (
-                        <button
-                          className="button-white button-smaller"
-                          onClick={() => setEditRoleId(role.role_id)}
-                        >
-                          Edit
-                        </button>
-                      )}
+                      {
+                        (postFeatures.allowAdminEditCustomRole || isSuperAdmin) &&
 
-                      {(postFeatures.allowAdminEditCustomRole || isSuperAdmin) && editRoleId === role.role_id && (
-                        <div>
-                          <input
-                            type="text"
-                            autoComplete="off"
-                            ref={inputRef}
-                            onChange={(e) => setRoleName(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                handleEditRole();
-                              }
-                            }}
-                            value={roleName}
-                            placeholder={`${role.role_name}`}
-                            required
-                          />
+                        editRoleId !== role.role_id && confirmDeleteId !== role.role_id && (
                           <button
-                            onClick={handleEditRole}
                             className="button-white button-smaller"
-                            disabled={!roleName.trim()}
+                            onClick={() => setEditRoleId(role.role_id)}
                           >
-                            OK
+                            Edit
                           </button>
-                          <button
-                            onClick={() => {
-                              setEditRoleId(null);
-                              setActiveMenuId(null);
-                              setRegexError(null);
-                              setErrorMessage("");
-                              setRoleName("");
-                            }}
+                        )}
 
-                            className="button-red button-smaller"
-                          >
-                            x
-                          </button>
-
-                          {errorMessage && (
-                            <p style={{ color: 'red' }}>{errorMessage}</p>
-                          )}
-
-                        </div>
-                      )}
-
-                      {(postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) && confirmDeleteId !== role.role_id && editRoleId !== role.role_id && (
-                        <button
-                          className="button-red button-smaller"
-                          onClick={() => setConfirmDeleteId(role.role_id)}
-                        >
-                          Delete
-                        </button>
-                      )}
-
-                      {(postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) && confirmDeleteId === role.role_id && (
-                        <div className="confirm-delete-role">
-
-                          <FontAwesomeIcon
-                            icon={faWarning}
-                            style={{ marginLeft: '1em' }}
-                          />
+                      {
+                        (postFeatures.allowAdminEditCustomRole || isSuperAdmin) &&
+                        editRoleId === role.role_id && (
                           <div>
-                            Warning: Depending on your app configuration, this action may not be possible.
-                            For example: "Cannot delete this role because there are items linked to it," or
-                            "Warning: Deleting this role will also remove all associated items."
+                            <input
+                              type="text"
+                              autoComplete="off"
+                              ref={inputRef}
+                              onChange={(e) => setRoleName(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleEditRole();
+                                }
+                              }}
+                              value={roleName}
+                              placeholder={`${role.role_name}`}
+                              required
+                            />
+                            <button
+                              onClick={handleEditRole}
+                              className="button-white button-smaller"
+                              disabled={!roleName.trim()}
+                            >
+                              OK
+                            </button>
+                            <button
+                              onClick={() => {
+                                setEditRoleId(null);
+                                setActiveMenuId(null);
+                                setRegexError(null);
+                                setErrorMessage("");
+                                setRoleName("");
+                              }}
+
+                              className="button-red button-smaller"
+                            >
+                              x
+                            </button>
+
+                            {errorMessage && (
+                              <p style={{ color: 'red' }}>{errorMessage}</p>
+                            )}
+
                           </div>
+                        )}
+
+                      {
+                        (postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) &&
+
+                        confirmDeleteId !== role.role_id && editRoleId !== role.role_id && (
                           <button
                             className="button-red button-smaller"
-                            onClick={handleDeleteRole}
+                            onClick={() => setConfirmDeleteId(role.role_id)}
                           >
-                            Confirm delete
+                            Delete
                           </button>
-                          <button
-                            className="button-white button-smaller"
-                            onClick={() => {
-                              setConfirmDeleteId(null);
-                              setActiveMenuId(null);
-                            }}
-                          >
-                            x
-                          </button>
-                        </div>
-                      )}
+                        )}
+
+                      {
+                        (postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) &&
+                        confirmDeleteId === role.role_id && (
+                          <div className="confirm-delete-role">
+
+                            <FontAwesomeIcon
+                              icon={faWarning}
+                              style={{ marginLeft: '1em' }}
+                            />
+                            <div>
+                              Warning: Depending on your app configuration, this action may not be possible.
+                              For example: "Cannot delete this role because there are items linked to it," or
+                              "Warning: Deleting this role will also remove all associated items."
+                            </div>
+                            <button
+                              className="button-red button-smaller"
+                              onClick={handleDeleteRole}
+                            >
+                              Confirm delete
+                            </button>
+                            <button
+                              className="button-white button-smaller"
+                              onClick={() => {
+                                setConfirmDeleteId(null);
+                                setActiveMenuId(null);
+                              }}
+                            >
+                              x
+                            </button>
+                          </div>
+                        )}
                     </>
                   )}
                 </li>
