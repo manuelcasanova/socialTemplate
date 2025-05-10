@@ -22,9 +22,11 @@ const verifyJWT = (req, res, next) => {
                 }
 
             }
-            req.user = decoded.UserInfo.username;
+            // console.log("decoded", decoded)
+            req.email = decoded.UserInfo.email;
             req.roles = decoded.UserInfo.roles;
             next();
+            // console.log("req.email", req.email)
         }
     );
 }
