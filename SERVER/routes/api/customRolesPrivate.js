@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const {
-  createCustomRole,
-  updateCustomRole,
-  deleteCustomRole
-} = require('../../controllers/customRolesPrivateController');
+const { createCustomRole, updateCustomRole, deleteCustomRole } = require('../../controllers/customRolesPrivateController');
+const verifyRoles = require('../../middleware/verifyRoles');
 
-// Create a new custom role
-router.post('/', createCustomRole);
+const allowedRoles = ['Admin', 'SuperAdmin'];
 
-// Update a custom role
-router.put('/:id', updateCustomRole);
+router.post('/', verifyRoles(...allowedRoles), createCustomRole);
 
-// Delete a custom role
-router.delete('/:id', deleteCustomRole);
+router.put('/:id', verifyRoles(...allowedRoles), updateCustomRole);
 
+router.delete('/:id', verifyRoles(...allowedRoles), deleteCustomRole);
 
 module.exports = router;
