@@ -18,7 +18,7 @@ const SIGNIN_URL = '/auth';
 // const DEFAULT_EMAIL = '@example.com';
 const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
 // const DEFAULT_EMAIL = '';
-const DEFAULT_PASSWORD = 'Password1!';  // Hardcoded default password for development
+const DEFAULT_PASSWORD = 'G7m!pLz@92aT';  // Hardcoded default password for development
 // const DEFAULT_PASSWORD = '';
 
 const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
@@ -213,6 +213,26 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                             value={email}
                             required
                         />
+
+                        {/* Remove on production */}
+
+                        <div className="trust-device">
+                            <input
+                                type="checkbox"
+                                id="persist"
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setEmail('superadmin@example.com');
+                                    } else {
+                                        setEmail('manucasanova@hotmail.com');
+                                    }
+                                }}
+                            />
+                            <label htmlFor="persist">Login as superadmin</label>
+                        </div>
+
+                        {/* End remove on production */}
+
                         <label htmlFor="password">Password:</label>
                         <input
                             className="input-field"

@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useGlobal } from '../../context/GlobalProvider';
-import axios from '../../api/axios';
 
 //Components
 import Profile from '../navbarComponents/Profile';
@@ -25,7 +24,6 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
   // console.log("customRoles", customRoles)
   // console.log("customRoles length", customRoles.length)
-
 
   const { auth } = useAuth();
   const loggedInUser = auth.userId

@@ -11,7 +11,7 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 import '../../../css/Posts.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faMagnifyingGlass, faLock, faEarth, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faLock, faEarth, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -19,7 +19,6 @@ import Error from "../Error";
 import FilterUsername from "../socialComponents/FilterUsername";
 import WritePost from "./WritePost";
 import PostInteractions from "./PostInteractions";
-import PostDelete from "./PostDelete";
 
 //Util functions
 import { fetchPosts } from "./util_functions/FetchPosts";
