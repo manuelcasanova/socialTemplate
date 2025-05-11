@@ -314,7 +314,9 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                             {message.is_deleted ? `This message was deleted` : message.content}
                           </p>
                           {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
-                          {!message.is_deleted && isSender && postFeatures.allowDeleteMessages && (
+                          {!message.is_deleted && isSender && 
+                          postFeatures.allowDeleteMessages && 
+                          (
                             <FontAwesomeIcon
                               className="delete-chat-messsage"
                               icon={faTrashAlt}
