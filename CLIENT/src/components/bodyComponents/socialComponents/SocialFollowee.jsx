@@ -44,6 +44,7 @@ const profilePictureExists = async (userId) => {
 
 export default function SocialFollowee({ isNavOpen }) {
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
   const { postFeatures } = useGlobal();
   const navigate = useNavigate();
@@ -81,9 +82,13 @@ export default function SocialFollowee({ isNavOpen }) {
   }, [filters, filterUsername]);
 
   useEffect(() => {
+    postFeatures.showSocialFeature &&
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
+    postFeatures.allowMute &&
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
+    postFeatures.allowFollow &&
     fetchFollowee(filters, setFollowee, setIsLoading, setError, loggedInUser);
+    postFeatures.allowFollow &&
     fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
 
@@ -218,6 +223,7 @@ export default function SocialFollowee({ isNavOpen }) {
                           followersAndFollowee={followersAndFollowee}
                           setFollowersAndFollowee={setFollowersAndFollowee}
                           userLoggedInObject={auth}
+                          isSuperAdmin={isSuperAdmin}
                         />
 
                         <MuteUserButton
@@ -225,6 +231,7 @@ export default function SocialFollowee({ isNavOpen }) {
                           userLoggedin={loggedInUser}
                           setMutedUsers={setMutedUsers}
                           onMutedChange={handleMutedChanges}
+                          isSuperAdmin={isSuperAdmin}
                         />
 
                       </>}

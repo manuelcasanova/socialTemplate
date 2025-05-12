@@ -45,6 +45,7 @@ const profilePictureExists = async (userId) => {
 
 export default function SocialAllUsers({ isNavOpen }) {
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
   const { postFeatures } = useGlobal();
   const navigate = useNavigate();
@@ -88,9 +89,16 @@ export default function SocialAllUsers({ isNavOpen }) {
   }, [filters]);
 
   useEffect(() => {
+  
+    postFeatures.showSocialFeature &&
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
-    fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
-    fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
+
+    postFeatures.allowMute &&
+      fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
+
+    postFeatures.allowFollow &&
+      fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
+
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
 
   // Check if profile picture exists for each user and store the result
@@ -223,6 +231,8 @@ export default function SocialAllUsers({ isNavOpen }) {
                         followersAndFollowee={followersAndFollowee}
                         setFollowersAndFollowee={setFollowersAndFollowee}
                         userLoggedInObject={auth}
+                        setError={setError}
+                        isSuperAdmin={isSuperAdmin}
                       />
 
                       <MuteUserButton
@@ -231,6 +241,8 @@ export default function SocialAllUsers({ isNavOpen }) {
                         // isMuted={isMuted} 
                         setMutedUsers={setMutedUsers}
                         onMutedChange={handleMutedChanges}
+                        setError={setError}
+                        isSuperAdmin={isSuperAdmin}
                       />
                     </>
                   }

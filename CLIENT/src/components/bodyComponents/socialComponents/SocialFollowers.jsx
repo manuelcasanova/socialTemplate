@@ -45,6 +45,7 @@ const profilePictureExists = async (userId) => {
 
 export default function SocialFollowers({ isNavOpen }) {
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
   const { postFeatures } = useGlobal();
   const navigate = useNavigate();
@@ -82,10 +83,14 @@ export default function SocialFollowers({ isNavOpen }) {
   }, [filters, filterUsername]);
 
   useEffect(() => {
-    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
-    fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
-    fetchFollowers(filters, setFollowers, setIsLoading, setError, loggedInUser);
-    fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
+    postFeatures.showSocialFeature &&
+      fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
+    postFeatures.allowMute &&
+      fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
+    postFeatures.allowFollow &&
+      fetchFollowers(filters, setFollowers, setIsLoading, setError, loggedInUser);
+    postFeatures.allowFollow &&
+      fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
 
   // Check if profile picture exists for each user and store the result
@@ -218,6 +223,7 @@ export default function SocialFollowers({ isNavOpen }) {
                           followersAndFollowee={followersAndFollowee}
                           setFollowersAndFollowee={setFollowersAndFollowee}
                           userLoggedInObject={auth}
+                          isSuperAdmin={isSuperAdmin}
                         />
 
                         <MuteUserButton
@@ -225,6 +231,7 @@ export default function SocialFollowers({ isNavOpen }) {
                           userLoggedin={loggedInUser}
                           setMutedUsers={setMutedUsers}
                           onMutedChange={handleMutedChanges}
+                          isSuperAdmin={isSuperAdmin}
                         />
 
                       </>

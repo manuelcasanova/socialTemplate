@@ -1,19 +1,18 @@
 import React from 'react';
 
 //Hooks
-import { useState } from 'react';
 import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
 
 //Context
-
 import { useGlobal } from '../../../../context/GlobalProvider';
 
-const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject }) => {
+const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject, setError, isSuperAdmin }) => {
+
+  // console.log("userL ob", userLoggedInObject)
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const axiosPrivate = useAxiosPrivate()
-  const { postFeatures } = useGlobal();
-  const [error, setError] = useState(null);
+  const { postFeatures } = useGlobal()
 
   const amFollowingThem = followersAndFollowee.some(follower =>
     follower.follower_id === followerId && follower.followee_id === followeeId && follower.status === 'accepted'
@@ -183,7 +182,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
 
   return (
 
-    postFeatures.allowFollow &&
+    (postFeatures.allowFollow || isSuperAdmin ) &&
     <div className="user-info-buttons">
 
 
@@ -196,8 +195,6 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
       {pendingAcceptMe && <button onClick={handleCancelRequest}>Cancel request</button>}
 
       {pendingAcceptThem && <button onClick={() => { approveFollower(followeeId, followerId) }}>Approve request</button>}
-
-      {error && <div className="error-message">{error}</div>}
 
     </div>
 

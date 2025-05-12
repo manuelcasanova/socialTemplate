@@ -11,7 +11,8 @@ import { useGlobal } from "../../../../context/GlobalProvider";
 import { faBellSlash, faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedChange, handleRefresh }) => {
+const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedChange, handleRefresh, setError, isSuperAdmin }) => {
+
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { postFeatures } = useGlobal();
   const axiosPrivate = useAxiosPrivate()
@@ -22,6 +23,7 @@ const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedC
         onMutedChange();
       })
       .catch(error => {
+        setError(error)
         console.error('Error muting user:', error);
       });
   };
@@ -33,13 +35,13 @@ const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedC
         onMutedChange();
       })
       .catch(error => {
+        setError(error)
         console.error('Error unmuting user:', error);
       });
   };
 
   return (
-
-    postFeatures.allowMute &&
+    (postFeatures.allowMute || isSuperAdmin) &&
     <div className="user-info-buttons">
       {isMuted ? (
         <button title="Unmute user" onClick={unmuteUser}><FontAwesomeIcon icon={faBell}></FontAwesomeIcon></button>
