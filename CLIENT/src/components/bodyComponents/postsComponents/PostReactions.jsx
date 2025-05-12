@@ -5,6 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
 //Util functions
 import { fetchPostById } from "./util_functions/FetchPosts";
 import { formatDate } from "./util_functions/formatDate";
@@ -21,10 +24,9 @@ import Error from "../Error";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-
-
 export default function PostReactions({ isNavOpen }) {
 
+  const { postFeatures } = useGlobal();
   const navigate = useNavigate();
   const handleClose = () => navigate(-1);
   const { param } = useParams();
@@ -83,7 +85,9 @@ export default function PostReactions({ isNavOpen }) {
 
   useEffect(() => {
     fetchPostById(postId, setPost, setIsLoading, setError);
-    fetchPostReactionsData({ postId, setPostReactions, setError, setIsLoading, loggedInUserId })
+    if (postFeatures.allowComments) {
+      fetchPostReactionsData({ postId, setPostReactions, setError, setIsLoading, loggedInUserId })
+    }
   }, [postId]);
 
   useEffect(() => {

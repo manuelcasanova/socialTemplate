@@ -4,61 +4,122 @@ const postsController = require('../../controllers/postsController');
 const pool = require('../../config/db');
 const verifyRoles = require('../../middleware/verifyRoles');
 
+const checkPostFeatureAccess = (action) => {
+  return async (req, res, next) => {
+    try {
+      const settingsResult = await pool.query(`
+        SELECT 
+          show_posts_feature,
+          allow_user_post,
+          allow_post_interactions,
+          allow_comments,
+          allow_post_reactions,
+          allow_comment_reactions,
+          allow_delete_posts,
+          allow_delete_comments
+        FROM global_provider_settings
+        LIMIT 1;
+      `);
 
-// Dynamically check settings and determine allowed roles
-const checkPostFeatureAccess = async (req, res, next) => {
-  try {
-    // Fetch post-related settings
-    const settingsResult = await pool.query(`
-      SELECT 
-        show_posts_feature,
-        allow_user_post,
-        allow_post_interactions,
-        allow_comments,
-        allow_post_reactions,
-        allow_comment_reactions,
-        allow_delete_posts,
-        allow_delete_comments
-      FROM global_provider_settings
-      LIMIT 1;
-    `);
+      const settings = settingsResult.rows[0];
+      let allowedRoles = [];
 
-    const settings = settingsResult.rows[0];
+      // console.log("settings", settings)
+      // console.log("allowedRoles", allowedRoles)
 
-    // Determine if all features are enabled
-    const allPostSettingsEnabled = Object.values(settings).every(Boolean);
+      const fetchRoles = async () => {
+        const rolesResult = await pool.query(`SELECT role_name FROM roles`);
+        return rolesResult.rows.map(role => role.role_name);
+      };
 
-    let allowedRoles = [];
+      switch (action) {
+        // View posts always depends on show_posts_feature
+        case 'view-posts':
+          allowedRoles = settings.show_posts_feature
+            ? await fetchRoles()
+            : ['SuperAdmin'];
+          break;
 
-    if (allPostSettingsEnabled) {
-      // If all features enabled, get all role names from `roles` table
-      const rolesResult = await pool.query(`SELECT role_name FROM roles`);
-      allowedRoles = rolesResult.rows.map(role => role.role_name);
-    } else {
-      // Only SuperAdmin is allowed
-      allowedRoles = ['SuperAdmin'];
+        case 'write-posts':
+          allowedRoles = settings.allow_user_post
+            ? await fetchRoles()
+            : ['SuperAdmin'];
+          break;
+
+        case 'view-comments':
+          allowedRoles = settings.allow_comments
+            ? await fetchRoles()
+            : ['SuperAdmin'];
+          break;
+
+        case 'write-comments':
+          allowedRoles = settings.allow_comments
+            ? await fetchRoles()
+            : ['SuperAdmin'];
+          break;
+
+        case 'post-reactions-send':
+        case 'post-reactions-data':
+          allowedRoles = settings.allow_post_reactions
+            ? await fetchRoles()
+            : ['SuperAdmin'];
+          break;
+
+        case 'comment-reactions-send':
+        case 'comment-reactions-data':
+          allowedRoles = settings.allow_comment_reactions
+            ? await fetchRoles()
+            : ['SuperAdmin'];
+          break;
+
+        case 'delete-post':
+          allowedRoles = settings.allow_delete_posts
+            ? await fetchRoles()
+            : ['SuperAdmin'];
+          break;
+
+        case 'delete-comment':
+          allowedRoles = settings.allow_delete_comments
+            ? await fetchRoles()
+            : ['SuperAdmin'];
+          break;
+
+        default:
+          allowedRoles = ['SuperAdmin']; // Fallback
+      }
+
+      verifyRoles(...allowedRoles)(req, res, next);
+    } catch (err) {
+      next(err);
     }
-
-    verifyRoles(...allowedRoles)(req, res, next);
-  } catch (err) {
-    next(err);
-  }
+  };
 };
 
-// Routes
-router.get('/all', postsController.getAllPosts);
-router.get('/:postId', checkPostFeatureAccess, postsController.getPostsById);
-router.put('/delete/:id', checkPostFeatureAccess, postsController.markPostAsDeleted);
-router.put('/comments/delete/:id', checkPostFeatureAccess, postsController.markCommentAsDeleted);
-router.post('/send', checkPostFeatureAccess, postsController.writePost);
-router.get('/reactions/count', checkPostFeatureAccess, postsController.getPostReactionsCount);
-router.get('/comments/reactions/count', checkPostFeatureAccess, postsController.getPostCommentsReactionsCount);
-router.get('/comments/count', checkPostFeatureAccess, postsController.getPostCommentsCount);
-router.get('/comments/data', checkPostFeatureAccess, postsController.getPostComments);
-router.post('/comments/send', checkPostFeatureAccess, postsController.writePostComment);
-router.get('/reactions/data', checkPostFeatureAccess, postsController.getPostReactionsData);
-router.get('/comments/reactions/data', checkPostFeatureAccess, postsController.getPostCommentsReactionsData);
-router.post('/reactions/send', checkPostFeatureAccess, postsController.sendReaction);
-router.post('/comments/reactions/send', checkPostFeatureAccess, postsController.sendCommentReaction);
+
+// Posts
+router.get('/all', checkPostFeatureAccess('view-posts'), postsController.getAllPosts);
+router.get('/:postId', checkPostFeatureAccess('view-posts'), postsController.getPostsById);
+router.post('/send', checkPostFeatureAccess('write-posts'), postsController.writePost);
+
+// Comments
+router.get('/comments/data', checkPostFeatureAccess('view-comments'), postsController.getPostComments);
+router.get('/comments/count', checkPostFeatureAccess('view-comments'), postsController.getPostCommentsCount);
+router.post('/comments/send', checkPostFeatureAccess('write-comments'), postsController.writePostComment);
+
+// Post Reactions
+router.get('/reactions/data', checkPostFeatureAccess('post-reactions-data'), postsController.getPostReactionsData);
+router.get('/reactions/count', checkPostFeatureAccess('post-reactions-data'), postsController.getPostReactionsCount);
+router.post('/reactions/send', checkPostFeatureAccess('post-reactions-send'), postsController.sendReaction);
+
+// Comment Reactions
+router.get('/comments/reactions/data', checkPostFeatureAccess('comment-reactions-data'), postsController.getPostCommentsReactionsData);
+router.get('/comments/reactions/count', checkPostFeatureAccess('comment-reactions-data'), postsController.getPostCommentsReactionsCount);
+router.post('/comments/reactions/send', checkPostFeatureAccess('comment-reactions-send'), postsController.sendCommentReaction);
+
+// Delete
+router.put('/delete/:id', checkPostFeatureAccess('delete-post'), postsController.markPostAsDeleted);
+router.put('/comments/delete/:id', checkPostFeatureAccess('delete-comment'), postsController.markCommentAsDeleted);
+
+
 
 module.exports = router;

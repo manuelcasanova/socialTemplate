@@ -44,7 +44,7 @@ const fetchPostComments = async ({postId, setPostComments, setError, setIsLoadin
     setPostComments(data);
 
   } catch (err) {
-    let errorMsg = "Failed to fetch comments count.";
+    let errorMsg = "Failed to fetch comments data.";
     if (err.response?.data?.error) {
       errorMsg += ` ${err.response.data.error}`;
     } else if (err.message) {

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 
 //hooks
 import { axiosPrivate } from '../../../api/axios';
+import useAuth from '../../../hooks/useAuth';
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner"
@@ -23,11 +24,14 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostCommentsInteractions({ commentId, commentDate, commentCommenter, loggedInUserId, hideFlag, setError, setPostComments }) {
 
+  const {auth} = useAuth()
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
+
   const { postFeatures } = useGlobal();
   const navigate = useNavigate();
   const [reactionsCount, setReactionsCount] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [errMsg, setErrMsg] = useState("");
+  // const [errMsg, setErrMsg] = useState("");
   const [reactOption, setReactOption] = useState(false)
   const [selectedReaction, setSelectedReaction] = useState(null);
   const [showEllipsisMenu, setShowEllipsisMenu] = useState(false);
@@ -44,7 +48,9 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
   };
 
   useEffect(() => {
-    fetchPostCommentsReactionsCount({ commentId, setReactionsCount, setError, setIsLoading, loggedInUserId })
+    if (postFeatures.allowCommentReactions) {
+      fetchPostCommentsReactionsCount({ commentId, setReactionsCount, setError, setIsLoading, loggedInUserId })
+    }
   }, [])
 
   const sendReactionToBackend = async (reactionType) => {
@@ -66,15 +72,15 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
     } catch (err) {
       console.log(err);
       if (!err?.response) {
-        setErrMsg('No Server Response');
+        setError('No Server Response');
       } else if (err.response?.status === 403) {
-        setErrMsg('Forbidden: You are not allowed to react');
+        setError('Forbidden: You are not allowed to react');
       } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized: Please log in');
+        setError('Unauthorized: Please log in');
       } else if (err.response?.status === 400) {
-        setErrMsg('Bad Request: Please try again');
+        setError('Bad Request: Please try again');
       } else {
-        setErrMsg('Attempt Failed');
+        setError('Attempt Failed');
       }
       errRef.current?.focus();
     } finally {
@@ -87,7 +93,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
     <div className="post-comment-interactions">
       <div className="post-comment-date">{formatDate(commentDate)}</div>
 
-      {postFeatures.allowCommentReactions && <>
+      {(postFeatures.allowCommentReactions || isSuperAdmin) && <>
         <div className="post-comment-react"
           onClick={handleShowReactOptions}>
           {!reactOption && (
@@ -124,19 +130,21 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
 
         </div>
 
+
+
         <div className='post-interactions-top-left-reaction'
           onClick={() => navigate(`/posts/comments/reactions/${commentId}`)}
         >
+
 
           <div className='post-interactions-text'>
             {isLoading ? <LoadingSpinner /> : `${reactionsCount ?? 0}`}
           </div>
           <FontAwesomeIcon icon={faSmile} />
         </div>
-      </>}
+      </>} 
 
-
-      {(postFeatures.allowDeleteComments || postFeatures.allowFlagComments) && (
+      {(postFeatures.allowDeleteComments || postFeatures.allowFlagComments || isSuperAdmin) && (
         <>
 
           {!showEllipsisMenu && (
@@ -146,10 +154,10 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
           )}
           {showEllipsisMenu && (
             <div className="post-menu-dropdown">
-              {postFeatures.allowDeleteComments &&
+              {(postFeatures.allowDeleteComments || isSuperAdmin ) &&
                 <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
               }
-              {postFeatures.allowFlagComments &&
+              {(postFeatures.allowFlagComments || isSuperAdmin  )&&
                 <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
               }
               <FontAwesomeIcon icon={faXmark}

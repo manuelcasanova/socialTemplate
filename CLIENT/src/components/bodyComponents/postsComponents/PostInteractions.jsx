@@ -31,10 +31,10 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 export default function PostInteractions({ postId, isNavOpen, postContent, postSender, loggedInUser, setPosts, hideFlag, setError }) {
 
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const { postFeatures } = useGlobal();
-  // console.log("postFeatures", postFeatures)
+  // console.log("postFeatures", postFeatures.allowComments)
   const loggedInUserId = auth.userId
-  // console.log("loggedInUserId in PostInteractions", loggedInUserId)
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
@@ -56,8 +56,16 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   };
 
   useEffect(() => {
-    fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount, loggedInUserId })
-    fetchPostCommentsCount({ postId, setIsLoading, setError, setCommentsCount, loggedInUserId })
+    //HERE
+
+    if (postFeatures.allowPostReactions) {
+      fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount, loggedInUserId })
+    }
+
+    if (postFeatures.allowComments) {
+      fetchPostCommentsCount({ postId, setIsLoading, setError, setCommentsCount, loggedInUserId })
+    }
+
   }, [])
 
   const sendReactionToBackend = async (reactionType) => {
@@ -120,8 +128,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
               </div>
             </div>
           }
-
-          {postFeatures.allowComments &&
+          {(postFeatures.allowComments || isSuperAdmin )&&
             <div className='post-interactions-top-right-comments'
               onClick={() => navigate(`/posts/${postId}`)}>
               <div className='post-interactions-text'
@@ -179,7 +186,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             </div>
           }
 
-          {(postFeatures.allowDeletePosts || postFeatures.allowFlagPosts) && (
+          {(postFeatures.allowDeletePosts || postFeatures.allowFlagPosts || isSuperAdmin) && (
             <>
               <div className='post-interactions-bottom-left-reaction'>
                 {!showEllipsisMenu && (

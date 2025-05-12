@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+//Hooks
+import useAuth from '../../../hooks/useAuth';
+
 //Context
 import { useGlobal } from '../../../context/GlobalProvider';
 
@@ -13,6 +16,8 @@ import LoadingSpinner from './../../loadingSpinner/LoadingSpinner'
 export default function AdminSetup({ isNavOpen }) {
 
   const { postFeatures, error, isLoading } = useGlobal();
+  const {auth} = useAuth();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
   // console.log("postFeatures in AdminSetup.jsx", postFeatures)
   // console.log("error in AdminSetup", error)
   // console.log("isLoading", isLoading)
@@ -187,7 +192,7 @@ export default function AdminSetup({ isNavOpen }) {
             <div className='admin-setup-line-text'>Comments on Posts</div>
           </div>
 
-          {postFeatures.allowComments &&
+          {(postFeatures.allowComments || isSuperAdmin) &&
             <>
               <div className='admin-setup-subline2'>
                 <div className="toggle-container">

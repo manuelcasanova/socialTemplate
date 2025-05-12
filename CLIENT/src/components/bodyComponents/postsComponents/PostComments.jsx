@@ -5,6 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
 //Util functions
 import { fetchPostById } from "./util_functions/FetchPosts";
 import { formatDate } from "./util_functions/formatDate";
@@ -24,10 +27,12 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostComments({ isNavOpen }) {
 
+  const { postFeatures } = useGlobal();
   const navigate = useNavigate();
   const handleClose = () => navigate(-1);
   const { param } = useParams();
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const loggedInUserId = auth.userId
   const axiosPrivate = useAxiosPrivate();
   const loggedInUser = auth.userId;
@@ -146,6 +151,7 @@ export default function PostComments({ isNavOpen }) {
     } catch (err) {
       console.log(err)
       if (!err?.response) {
+
         setError('Server is unreachable. Please try again later.');
         setErrMsg('No Server Response');
       } else if (err.response?.status === 403) {
@@ -197,7 +203,10 @@ export default function PostComments({ isNavOpen }) {
 
   useEffect(() => {
     fetchPostById(postId, setPost, setIsLoading, setError);
-    fetchPostComments({ postId, setPostComments, setError, setIsLoading, loggedInUserId })
+    {
+      (postFeatures.allowComments || isSuperAdmin) &&
+        fetchPostComments({ postId, setPostComments, setError, setIsLoading, loggedInUserId })
+    }
   }, [postId]);
 
   useEffect(() => {
@@ -317,6 +326,7 @@ export default function PostComments({ isNavOpen }) {
   }
 
   if (error) {
+    console.log("error if error", error)
     return <Error isNavOpen={isNavOpen} error={error} />;
   }
 
@@ -434,113 +444,117 @@ export default function PostComments({ isNavOpen }) {
               />
             </div>
           )}
-          <div className="centered-container centered-container-post flex-row">
-            <input
-              placeholder="Aa"
-              ref={inputRef}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                setNewMessage(inputValue);
-              }}
-              onKeyDown={handleKeyDown}
-              value={newMessage}
-              required></input>
-            <button
-              onClick={handleSubmit}
-              className="button-white white"
-              style={{ width: '100px', margin: 'auto' }}
-              disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
-            >
-              <FontAwesomeIcon
-                icon={faPaperPlane}
-                title='Send'
-              />
-            </button>
-          </div>
+          {(postFeatures.allowComments || isSuperAdmin) &&
+            <div className="centered-container centered-container-post flex-row">
+              <input
+                placeholder="Aa"
+                ref={inputRef}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  setNewMessage(inputValue);
+                }}
+                onKeyDown={handleKeyDown}
+                value={newMessage}
+                required></input>
+              <button
+                onClick={handleSubmit}
+                className="button-white white"
+                style={{ width: '100px', margin: 'auto' }}
+                disabled={!newMessage || newMessage.length > MAX_CHAR_LIMIT}
+              >
+                <FontAwesomeIcon
+                  icon={faPaperPlane}
+                  title='Send'
+                />
+              </button>
+            </div>
+          }
 
 
-          <div className="centered-container centered-container-post">
-            {postComments.map((comment) => (
-              < div key={comment.id}>
-                <div className="post-comment-container" key={comment.id}>
-                  <div className="post-comment-image">
-                    {imageExistsMap[comment.commenter] ? (
-                      <img
-                        className="user-row-social-small-img"
-                        style={{ marginRight: "0px" }}
-                        src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg`}
-                        alt="User"
-                        onClick={() => handleImageClick(comment.commenter)}
-                      />
+          {(postFeatures.allowComments || isSuperAdmin) &&
+            <div className="centered-container centered-container-post">
+              {postComments.map((comment) => (
+                < div key={comment.id}>
+                  <div className="post-comment-container" key={comment.id}>
+                    <div className="post-comment-image">
+                      {imageExistsMap[comment.commenter] ? (
+                        <img
+                          className="user-row-social-small-img"
+                          style={{ marginRight: "0px" }}
+                          src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg`}
+                          alt="User"
+                          onClick={() => handleImageClick(comment.commenter)}
+                        />
 
-                    ) : (
-                      <img
-                        className="user-row-social-small-img"
-                        style={{ marginRight: "0px" }}
-                        src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                        alt="User"
-                        onClick={() => handleImageClick(comment.commenter)}
-                      />
-                    )}
+                      ) : (
+                        <img
+                          className="user-row-social-small-img"
+                          style={{ marginRight: "0px" }}
+                          src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                          alt="User"
+                          onClick={() => handleImageClick(comment.commenter)}
+                        />
+                      )}
+                    </div>
+                    <div className="post-comment-name-content">
+                      <div
+                        style={{ fontWeight: 'bold' }}
+                        onClick={() => {
+                          if (comment.commenter === loggedInUser) {
+                            navigate("/profile/myaccount");
+                          } else {
+                            navigate(`/social/users/${comment.commenter}`);
+                          }
+                        }}
+                      >{comment.username}</div>
+                      {inappropriateComments.has(comment.id) ? (
+                        <div>
+                          <p style={{ fontStyle: 'italic', color: 'darkred' }}>
+                            This comment has been reviewed and hidden for being inappropriate.
+                          </p>
+                          {auth?.roles?.includes("Moderator") && (
+                            <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
+                              <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
+                              <p style={{ color: 'black' }}>{comment.content}</p>
+                            </div>
+                          )}
+                        </div>
+                      ) : flaggedComments.has(comment.id) ? (
+                        <div>
+                          <p style={{ fontStyle: 'italic' }}>
+                            This comment has been reported and is pending moderator review.
+                          </p>
+                          <button
+                            className="button-white white button-smaller"
+                            onClick={() => {
+                              const updated = new Set(flaggedComments);
+                              updated.delete(comment.id);
+                              setFlaggedComments(updated);
+                            }}
+                          >
+                            Click to view
+                          </button>
+                        </div>
+                      ) : (
+                        <div>{comment.content}</div>
+                      )}
+
+                    </div>
                   </div>
-                  <div className="post-comment-name-content">
-                    <div
-                      style={{ fontWeight: 'bold' }}
-                      onClick={() => {
-                        if (comment.commenter === loggedInUser) {
-                          navigate("/profile/myaccount");
-                        } else {
-                          navigate(`/social/users/${comment.commenter}`);
-                        }
-                      }}
-                    >{comment.username}</div>
-                    {inappropriateComments.has(comment.id) ? (
-                      <div>
-                        <p style={{ fontStyle: 'italic', color: 'darkred' }}>
-                          This comment has been reviewed and hidden for being inappropriate.
-                        </p>
-                        {auth?.roles?.includes("Moderator") && (
-                          <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
-                            <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
-                            <p style={{ color: 'black' }}>{comment.content}</p>
-                          </div>
-                        )}
-                      </div>
-                    ) : flaggedComments.has(comment.id) ? (
-                      <div>
-                        <p style={{ fontStyle: 'italic' }}>
-                          This comment has been reported and is pending moderator review.
-                        </p>
-                        <button
-                          className="button-white white button-smaller"
-                          onClick={() => {
-                            const updated = new Set(flaggedComments);
-                            updated.delete(comment.id);
-                            setFlaggedComments(updated);
-                          }}
-                        >
-                          Click to view
-                        </button>
-                      </div>
-                    ) : (
-                      <div>{comment.content}</div>
-                    )}
 
-                  </div>
+                  <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} commentCommenter={comment.commenter} loggedInUserId={loggedInUserId} hideFlag={inappropriateComments.has(comment.id)} setError={setError} setPostComments={setPostComments} />
+
+
                 </div>
+              ))
 
-                <PostCommentsInteractions commentId={comment.id} commentDate={comment.date} commentCommenter={comment.commenter} loggedInUserId={loggedInUserId} hideFlag={inappropriateComments.has(comment.id)} setError={setError} setPostComments={setPostComments} />
-
-
-              </div>
-            ))
-
-            }
+              }
 
 
 
 
-          </div>
+            </div>
+          }
         </div>
       </div>
 

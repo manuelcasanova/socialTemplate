@@ -4,7 +4,7 @@ const fetchPostReactionsCount = async ({postId, setReactionsCount, setError, set
   setIsLoading(true);
 
   try {
-    // console.log("hit FetchPostReactions.jsx")
+    // console.log("hit FetchPostReactionsCount.jsx")
     const { data } = await axiosPrivate.get(`/posts/reactions/count`, { 
       params: { 
         postId,
@@ -15,7 +15,7 @@ const fetchPostReactionsCount = async ({postId, setReactionsCount, setError, set
     setReactionsCount(data);
 
   } catch (err) {
-    let errorMsg = "Failed to fetch reactions count.";
+    let errorMsg = "Failed to fetch post reactions count.";
     if (err.response?.data?.error) {
       errorMsg += ` ${err.response.data.error}`;
     } else if (err.message) {
