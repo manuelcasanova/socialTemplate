@@ -152,7 +152,7 @@ const markPostAsDeleted = async (req, res) => {
 // Function to create a new post
 const writePost = async (req, res) => {
   const { content, visibility, loggedInUser } = req.body; // Destructure the incoming data
-
+console.log("hit here")
   try {
     // Validate input fields
     if (!content || !visibility || !loggedInUser) {

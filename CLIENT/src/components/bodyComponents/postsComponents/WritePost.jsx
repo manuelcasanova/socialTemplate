@@ -5,11 +5,10 @@ import { axiosPrivate } from "../../../api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faLock, faEarth, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 
-export default function WritePost({ loggedInUser, setNewPostSubmitted }) {
+export default function WritePost({ loggedInUser, setNewPostSubmitted, setError }) {
   const inputRef = useRef(null);
   const [content, setContent] = useState("");
   const [visibility, setVisibility] = useState("public");
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const MAX_CHAR_LIMIT = 5000;
 
@@ -136,7 +135,7 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted }) {
         <FontAwesomeIcon icon={faPaperPlane} />
       </button>
 
-      {error && <div className="error-message">{error}</div>}
+      {/* {error && <div className="error-message">{error}</div>} */}
       {content.length > MAX_CHAR_LIMIT && (
         <div className="char-count">
           {content.length} / {MAX_CHAR_LIMIT} characters

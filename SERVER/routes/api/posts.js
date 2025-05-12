@@ -11,6 +11,7 @@ const checkPostFeatureAccess = (action) => {
         SELECT 
           show_posts_feature,
           allow_user_post,
+          allow_admin_post,
           allow_post_interactions,
           allow_comments,
           allow_post_reactions,
@@ -22,6 +23,7 @@ const checkPostFeatureAccess = (action) => {
       `);
 
       const settings = settingsResult.rows[0];
+
       let allowedRoles = [];
 
       // console.log("settings", settings)
@@ -40,11 +42,17 @@ const checkPostFeatureAccess = (action) => {
             : ['SuperAdmin'];
           break;
 
-        case 'write-posts':
-          allowedRoles = settings.allow_user_post
-            ? await fetchRoles()
-            : ['SuperAdmin'];
-          break;
+          case 'write-posts':
+            if (settings.allow_user_post && settings.allow_admin_post) {
+              allowedRoles = await fetchRoles();
+            } else if (!settings.allow_user_post && settings.allow_admin_post) {
+              allowedRoles = ['Admin', 'SuperAdmin'];
+            } else if (!settings.allow_user_post && !settings.allow_admin_post) {
+              allowedRoles = ['SuperAdmin'];
+            } else {
+              allowedRoles = await fetchRoles(); // fallback in case both true
+            }
+            break;
 
         case 'view-comments':
           allowedRoles = settings.allow_comments

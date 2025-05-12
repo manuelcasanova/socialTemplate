@@ -167,7 +167,8 @@ function App() {
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
                 <Route path="/moderator/hidden/comments/" element={<HiddenComments isNavOpen={isNavOpen} />} />
               </Route>
-            </>}
+            </>
+            }
 
           <Route element={<RequireAuth allowedRoles={['User_subscribed']} />}>
             <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />

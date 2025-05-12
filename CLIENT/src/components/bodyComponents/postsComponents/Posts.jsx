@@ -241,13 +241,16 @@ export default function Posts({ isNavOpen }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-posts">
 
-        {(isAdmin && postFeatures.allowAdminPost) ||
-          (!isAdmin && postFeatures.allowUserPost) ? (
+        {(isAdmin && postFeatures.allowAdminPost) || 
+          (!isAdmin && postFeatures.allowUserPost) ? ( 
+
           <WritePost
             loggedInUser={loggedInUser}
             setNewPostSubmitted={setNewPostSubmitted}
+            setError={setError}
           />
-        ) : null}
+
+        ) : null} 
 
         <div className="write-post-container">
 

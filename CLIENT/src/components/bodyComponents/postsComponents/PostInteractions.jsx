@@ -33,7 +33,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const { postFeatures } = useGlobal();
-  // console.log("postFeatures", postFeatures.allowComments)
+  console.log("postFeatures", postFeatures.allowPostReactions)
   const loggedInUserId = auth.userId
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
@@ -56,13 +56,11 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   };
 
   useEffect(() => {
-    //HERE
-
-    if (postFeatures.allowPostReactions) {
+    if (postFeatures.allowPostReactions || isSuperAdmin) {
       fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount, loggedInUserId })
     }
 
-    if (postFeatures.allowComments) {
+    if (postFeatures.allowComments || isSuperAdmin) {
       fetchPostCommentsCount({ postId, setIsLoading, setError, setCommentsCount, loggedInUserId })
     }
 
@@ -81,7 +79,9 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
       handleShowReactOptions();
 
+      if (postFeatures.allowPostReactions || isSuperAdmin) {
       fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount });
+      }
 
 
     } catch (err) {
@@ -119,7 +119,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
         <div className="post-interactions-top">
 
-          {postFeatures.allowPostReactions &&
+          {
+          (postFeatures.allowPostReactions || isSuperAdmin )&&
             <div className='post-interactions-top-left-reaction'
               onClick={() => navigate(`/posts/reactions/${postId}`)}>
               <FontAwesomeIcon icon={faSmile} />
@@ -128,7 +129,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
               </div>
             </div>
           }
-          {(postFeatures.allowComments || isSuperAdmin )&&
+          {(postFeatures.allowComments || isSuperAdmin ) &&
             <div className='post-interactions-top-right-comments'
               onClick={() => navigate(`/posts/${postId}`)}>
               <div className='post-interactions-text'
@@ -144,7 +145,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
         <div className="post-interactions-bottom">
 
-          {postFeatures.allowPostReactions &&
+          {
+          (postFeatures.allowPostReactions || isSuperAdmin )&&
             <div className='post-interactions-bottom-left-reaction'
               onClick={handleShowReactOptions}>
 
@@ -186,7 +188,10 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             </div>
           }
 
-          {(postFeatures.allowDeletePosts || postFeatures.allowFlagPosts || isSuperAdmin) && (
+          {(
+            postFeatures.allowDeletePosts || 
+          postFeatures.allowFlagPosts || 
+          isSuperAdmin) && (
             <>
               <div className='post-interactions-bottom-left-reaction'>
                 {!showEllipsisMenu && (
@@ -196,11 +201,13 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
                 )}
                 {showEllipsisMenu && (
                   <div className="post-menu-dropdown">
-                    {postFeatures.allowDeletePosts &&
-                      <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} />
+                    {
+                    (postFeatures.allowDeletePosts || isSuperAdmin ) &&
+                      <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} setError={setError} />
                     }
 
-                    {postFeatures.allowFlagPosts &&
+                    {
+                    (postFeatures.allowFlagPosts || isSuperAdmin )&&
                       <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
                     }
                     <FontAwesomeIcon icon={faXmark}

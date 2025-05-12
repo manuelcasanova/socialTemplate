@@ -10,11 +10,10 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
 
-export default function PostDelete({setPosts, postId, postSender, loggedInUser, isNavOpen}) {
+export default function PostDelete({setPosts, postId, postSender, loggedInUser, isNavOpen, setError}) {
 
     const [postIdToDelete, setPostIdToDelete] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState(null);
 
   const handlePostDelete = (postId) => {
     // Function to delete a post (soft delete)
@@ -37,10 +36,6 @@ export default function PostDelete({setPosts, postId, postSender, loggedInUser, 
       return <LoadingSpinner />;
     }
   
-    if (error) {
-      return <Error isNavOpen={isNavOpen} error={error} />;
-    }
-
   return (
     <>    {loggedInUser === postSender && (
       <div className="post-actions">
