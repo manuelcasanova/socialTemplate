@@ -319,6 +319,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
     const payload = {
       userId, // The logged-in user's ID
+      editMode,
       [editMode]: inputValue, // The field being updated (username, email, or password)
     };
 
@@ -391,7 +392,11 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
           <div className="profile-details">
             {!isPictureModalVisible &&
               <div className="profile-picture"
-                onClick={(postFeatures.allowModifyProfilePicture || isSuperAdmin) ? handlePictureClick : undefined}
+                onClick={
+                  (postFeatures.allowModifyProfilePicture || isSuperAdmin) ?
+                    handlePictureClick
+                    : undefined
+                }
                 style={{ cursor: (postFeatures.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
               >
                 {imageExists ? (
@@ -413,33 +418,36 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
             }
 
 
-            {(postFeatures.allowModifyProfilePicture || isSuperAdmin) && isPictureModalVisible && !isTestSuperAdmin  && (
-              <div className="picture-modal">
-                <h3>Change your profile picture</h3>
+            {
+              (postFeatures.allowModifyProfilePicture || isSuperAdmin) &&
 
-                {/* Hidden file input */}
-                <input
-                  type="file"
-                  id="profile-picture-input"
-                  onChange={handleFileChange}
-                />
+              isPictureModalVisible && !isTestSuperAdmin && (
+                <div className="picture-modal">
+                  <h3>Change your profile picture</h3>
 
-                {/* Custom label for file input */}
-                <label className="button-white" htmlFor="profile-picture-input">
-                  Choose File
-                </label>
+                  {/* Hidden file input */}
+                  <input
+                    type="file"
+                    id="profile-picture-input"
+                    onChange={handleFileChange}
+                  />
 
-                {/* Text for chosen file */}
-                <span className="file-name">{fileName || "No file chosen"}</span>
+                  {/* Custom label for file input */}
+                  <label className="button-white" htmlFor="profile-picture-input">
+                    Choose File
+                  </label>
 
-                {error && (
-                  <div className="profile-input-instructions">
-                    {error}
-                  </div>
-                )}
-                <button className="button-red" onClick={handleCloseModal}>x</button>
-              </div>
-            )}
+                  {/* Text for chosen file */}
+                  <span className="file-name">{fileName || "No file chosen"}</span>
+
+                  {error && (
+                    <div className="profile-input-instructions">
+                      {error}
+                    </div>
+                  )}
+                  <button className="button-red" onClick={handleCloseModal}>x</button>
+                </div>
+              )}
 
 
           </div>
@@ -450,7 +458,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
             (postFeatures.showProfileFeature || isSuperAdmin) &&
             <div className="profile-actions">
-              {(postFeatures.allowEditUsername || isSuperAdmin) &&
+              {
+                (postFeatures.allowEditUsername || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("username")}
@@ -459,17 +468,18 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   Edit Username
                 </button>
               }
-              {(postFeatures.allowEditEmail || isSuperAdmin) &&
+              {
+                (postFeatures.allowEditEmail || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("email")}
-                // disabled={editMode === "email" && !isInputValid} // Disable if regex fails
                 >
                   Edit Email
                 </button>
               }
 
-              {(postFeatures.allowEditPassword || isSuperAdmin) &&
+              {
+                (postFeatures.allowEditPassword || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("password")}
@@ -477,7 +487,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   Edit Password
                 </button>
               }
-              {(postFeatures.allowDeleteMyUser || isSuperAdmin) &&
+              {
+                (postFeatures.allowDeleteMyUser || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-red"
                   onClick={handleDeleteClick}

@@ -4,6 +4,7 @@ const usersController = require('../../controllers/usersController');
 const {fetchRoles} = require('../../config/fetchRoles');
 const verifyRoles = require('../../middleware/verifyRoles');
 const multer = require('multer');
+const pool = require('../../config/db')
 
 // Set up multer for file upload
 const upload = multer({
@@ -20,8 +21,33 @@ const upload = multer({
   },
 });
 
+// Modify profile picture route with permission check
 router.route('/upload-profile-picture/:userId')
-  .post(upload.single('profilePicture'), usersController.uploadProfilePicture);
+  .post(
+    async (req, res, next) => {
+      try {
+        const settingsResult = await pool.query(`
+          SELECT allow_modify_profile_picture FROM global_provider_settings LIMIT 1;
+        `);
+        const { allow_modify_profile_picture } = settingsResult.rows[0];
+
+        let allowedRoles;
+
+        if (allow_modify_profile_picture) {
+          const roles = await fetchRoles();
+          allowedRoles = roles;
+        } else {
+          allowedRoles = ['SuperAdmin'];
+        }
+
+        verifyRoles(...allowedRoles)(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    upload.single('profilePicture'),
+    usersController.uploadProfilePicture
+  );
 
 router.route('/')
   .get(
@@ -67,13 +93,51 @@ router.route('/')
 
 
 
-// Update user information (any logged-in user can update their own info)
+// Update username
 router.route('/update')
   .put(
     async (req, res, next) => {
       try {
-        const rolesList = await fetchRoles();
-        verifyRoles(...rolesList)(req, res, next);
+        const { editMode } = req.body;
+
+        // Map edit modes to their corresponding setting column
+        const settingKeyMap = {
+          username: 'allow_edit_username',
+          email: 'allow_edit_email',
+          password: 'allow_edit_password',
+          profilePicture: 'allow_modify_profile_picture',
+        };
+
+        const settingKey = settingKeyMap[editMode];
+
+        if (!settingKey) {
+          return res.status(400).json({ message: 'Invalid edit mode.' });
+        }
+
+        const settingsResult = await pool.query(`
+          SELECT 
+            allow_edit_username, 
+            allow_edit_email, 
+            allow_edit_password,
+            allow_modify_profile_picture
+          FROM global_provider_settings
+          LIMIT 1;
+        `);
+
+        const settings = settingsResult.rows[0];
+
+        const isAllowed = settings[settingKey];
+
+        let allowedRoles = [];
+
+        if (isAllowed) {
+          const roles = await fetchRoles();
+          allowedRoles = roles;
+        } else {
+          allowedRoles = ['SuperAdmin'];
+        }
+
+        verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {
         next(err);
       }
@@ -81,19 +145,36 @@ router.route('/update')
     usersController.updateUser
   );
 
+
+
 //Soft delete user account 
+// Soft delete user account 
 router.route('/softdelete/:userId')
   .put(
     async (req, res, next) => {
       try {
-        const rolesList = await fetchRoles();
-        verifyRoles(...rolesList)(req, res, next);
+        const settingsResult = await pool.query(`
+          SELECT allow_delete_my_user FROM global_provider_settings LIMIT 1;
+        `);
+        const { allow_delete_my_user } = settingsResult.rows[0];
+
+        let allowedRoles;
+
+        if (allow_delete_my_user) {
+          const rolesResult = await fetchRoles();
+          allowedRoles = rolesResult;
+        } else {
+          allowedRoles = ['SuperAdmin'];
+        }
+
+        verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {
         next(err); 
       }
     },
     usersController.softDeleteUser 
   );
+
 
 //Hard delete user account
 router.route('/harddelete/:userId')
