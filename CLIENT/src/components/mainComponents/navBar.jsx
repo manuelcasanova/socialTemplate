@@ -21,6 +21,7 @@ import { faSignOutAlt, faEnvelope, faCog } from '@fortawesome/free-solid-svg-ico
 const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages, customRoles }) => {
 
   const { postFeatures } = useGlobal();
+  // console.log(postFeatures)
 
   // console.log("customRoles", customRoles)
   // console.log("customRoles length", customRoles.length)
@@ -69,6 +70,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     };
 
     if (loggedInUser) {
+      //HERE
+      postFeatures.showSocialFeature && postFeatures.allowFollow &&
       fetchFollowNotifications();
     }
   }, [loggedInUser, axiosPrivate]);

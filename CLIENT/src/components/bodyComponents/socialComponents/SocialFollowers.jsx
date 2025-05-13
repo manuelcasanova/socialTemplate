@@ -224,6 +224,7 @@ export default function SocialFollowers({ isNavOpen }) {
                           setFollowersAndFollowee={setFollowersAndFollowee}
                           userLoggedInObject={auth}
                           isSuperAdmin={isSuperAdmin}
+                          setError={setError}
                         />
 
                         <MuteUserButton
@@ -232,6 +233,7 @@ export default function SocialFollowers({ isNavOpen }) {
                           setMutedUsers={setMutedUsers}
                           onMutedChange={handleMutedChanges}
                           isSuperAdmin={isSuperAdmin}
+                          setError={setError}
                         />
 
                       </>

@@ -204,6 +204,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                           followersAndFollowee={followersAndFollowee}
                           setFollowersAndFollowee={setFollowersAndFollowee}
                           userLoggedInObject={auth}
+                          setError={setError}
                         />
 
 

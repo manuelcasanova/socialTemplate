@@ -209,6 +209,7 @@ export default function SocialOneUser({ isNavOpen }) {
                   followersAndFollowee={followersAndFollowee}
                   setFollowersAndFollowee={setFollowersAndFollowee}
                   userLoggedInObject={auth}
+                  setError={setError}
                 />
 
 
@@ -217,6 +218,7 @@ export default function SocialOneUser({ isNavOpen }) {
                 userLoggedin={loggedInUser} 
                 onMutedChange={handleMutedChanges} 
                 setMutedUsers={setMutedUsers}
+                setError={setError}
                   isMuted={mutedUsers.some(mute =>
                     (mute.muter === user.user_id && mute.mutee === loggedInUser) ||
                     (mute.muter === loggedInUser && mute.mutee === user.user_id)
