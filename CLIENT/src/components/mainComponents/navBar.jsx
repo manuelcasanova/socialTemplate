@@ -70,9 +70,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     };
 
     if (loggedInUser) {
-      //HERE
       postFeatures.showSocialFeature && postFeatures.allowFollow &&
-      fetchFollowNotifications();
+        fetchFollowNotifications();
     }
   }, [loggedInUser, axiosPrivate]);
 
@@ -184,7 +183,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
       }
 
-      {auth.roles && auth.roles.includes('Moderator') && postFeatures.showPostsFeature &&
+      {auth.roles && auth.roles.includes('Moderator') &&
+        postFeatures.showPostsFeature &&
         <div className='nav-item-with-dropdown'>
           <div className='nav-item' onClick={() => toggleSection('moderator')}>Moderator
             {showSections.moderator ? '▲' : '▼'
@@ -209,6 +209,15 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               <div className="subitem" onClick={() => handleNavigate('/moderator/hidden/comments')}>
                 Hidden comments
               </div>
+
+              <div className="subitem" onClick={() => handleNavigate('/moderator/posts/history')}>
+                Moderation History (Posts)
+              </div>
+
+              <div className="subitem" onClick={() => handleNavigate('/moderator/comments/history')}>
+                Moderation History (Comments)
+              </div>
+
             </>
           )}
         </div>
@@ -296,16 +305,6 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               {auth.roles && auth.roles.includes('SuperAdmin') && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
                   Login history
-                </div>
-              )}
-              {auth.roles && auth.roles.includes('SuperAdmin') && postFeatures.showPostsFeature && (
-                <div className="subitem" onClick={() => handleNavigate('/moderator/posts/history')}>
-                  Moderation History (Posts)
-                </div>
-              )}
-              {auth.roles && auth.roles.includes('SuperAdmin') && postFeatures.showPostsFeature && (
-                <div className="subitem" onClick={() => handleNavigate('/moderator/comments/history')}>
-                  Moderation History (Comments)
                 </div>
               )}
             </>

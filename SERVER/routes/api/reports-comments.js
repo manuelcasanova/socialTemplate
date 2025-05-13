@@ -103,7 +103,7 @@ router.route('/has-hidden')
 
 router.route('/comment-report-history')
   .get(
-    checkCommentSettingAccess('flag', ['SuperAdmin', 'Moderator']),
+    checkCommentSettingAccess('flag', ['Moderator']),
     reportsCommentsController.getCommentReportHistory
   );
 

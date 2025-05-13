@@ -144,7 +144,8 @@ function App() {
             <Route path="/user" element={<User isNavOpen={isNavOpen} />} />
           </Route>
 
-          {postFeatures.showPostsFeature &&
+          {
+            postFeatures.showPostsFeature &&
             <>
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
                 <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
@@ -168,7 +169,7 @@ function App() {
                 <Route path="/moderator/hidden/comments/" element={<HiddenComments isNavOpen={isNavOpen} />} />
               </Route>
             </>
-            }
+          }
 
           <Route element={<RequireAuth allowedRoles={['User_subscribed']} />}>
             <Route path="/subscriber" element={<Subscriber isNavOpen={isNavOpen} />} />
@@ -209,9 +210,9 @@ function App() {
                 <Route path="posts/" element={<Posts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
               </Route>
 
-                <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
-                  <Route path="posts/:param" element={<PostComments isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
-                </Route>
+              <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>
+                <Route path="posts/:param" element={<PostComments isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              </Route>
 
 
               <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed', 'Moderator', 'Admin', 'SuperAdmin']} />}>

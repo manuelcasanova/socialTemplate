@@ -42,7 +42,7 @@ router.get('/has-hidden', checkPostReportAccess('flag'), reportsController.hasHi
 router.get('/hidden-posts', checkPostReportAccess('flag'), reportsController.getHiddenPosts);
 
 // Moderator/SuperAdmin routes
-router.get('/post-report-history', checkPostReportAccess('flag', ['SuperAdmin', 'Moderator']), reportsController.getPostReportHistory);
+router.get('/post-report-history', checkPostReportAccess('flag', ['Moderator']), reportsController.getPostReportHistory);
 router.get('/post-report', checkPostReportAccess('flag', ['Moderator']), reportsController.getPostReport);
 router.put('/post/ok/:postId', checkPostReportAccess('flag', ['Moderator']), reportsController.reportPostOk);
 router.post('/post/ok/history', checkPostReportAccess('flag', ['Moderator']), reportsController.addReportHistory);
