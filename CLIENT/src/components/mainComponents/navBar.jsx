@@ -297,16 +297,14 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               {postFeatures.showCustomRolesFeature &&
                 <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>Admin roles</div>}
 
-              {auth.roles && auth.roles.includes('SuperAdmin') && (
-                <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
-                  Role change log
-                </div>
-              )}
-              {auth.roles && auth.roles.includes('SuperAdmin') && (
-                <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
-                  Login history
-                </div>
-              )}
+              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
+                Role change log
+              </div>
+
+              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
+                Login history
+              </div>
+
             </>
           )}
 

@@ -9,7 +9,7 @@ router.route('/')
   .get(
     async (req, res, next) => {
       try {
-        verifyRoles('SuperAdmin')(req, res, next); 
+        verifyRoles('SuperAdmin', 'Admin')(req, res, next); 
       } catch (err) {
         next(err);
       }

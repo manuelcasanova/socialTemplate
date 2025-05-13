@@ -197,43 +197,43 @@ function App() {
           </Route>
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
             </Route>
           )}
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route path="social/following" element={<SocialFollowee isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
             </Route>
           )}
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route path="social/followers" element={<SocialFollowers isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
             </Route>
           )}
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route path="social/muted" element={<SocialMuted isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
             </Route>
           )}
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} />} />
             </Route>
           )}
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route path="social/users/:userId" element={<SocialOneUser isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
             </Route>
           )}
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
             </Route>
           )}
@@ -242,26 +242,26 @@ function App() {
           {postFeatures.showPostsFeature &&
             <>
               {!loadingRoles && (
-                <Route element={<RequireAuth allowedRoles={roles} />}>
+                <Route element={<RequireAuth allowedRoles={allRoles} />}>
                   <Route path="posts/" element={<Posts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
                 </Route>
               )}
 
               {!loadingRoles && (
-                <Route element={<RequireAuth allowedRoles={roles} />}>
+                <Route element={<RequireAuth allowedRoles={allRoles} />}>
                   <Route path="posts/:param" element={<PostComments isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
                 </Route>
               )}
 
 
               {!loadingRoles && (
-                <Route element={<RequireAuth allowedRoles={roles} />}>
+                <Route element={<RequireAuth allowedRoles={allRoles} />}>
                   <Route path="posts/reactions/:param" element={<PostReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
                 </Route>
               )}
 
               {!loadingRoles && (
-                <Route element={<RequireAuth allowedRoles={roles} />}>
+                <Route element={<RequireAuth allowedRoles={allRoles} />}>
                   <Route path="posts/comments/reactions/:param" element={<PostCommentReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
                 </Route>
               )}
@@ -269,13 +269,13 @@ function App() {
           }
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages} />} />
             </Route>
           )}
 
           {!loadingRoles && (
-            <Route element={<RequireAuth allowedRoles={roles} />}>
+            <Route element={<RequireAuth allowedRoles={allRoles} />}>
               <Route path="profile/myaccount" element={<Profile isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />} />
             </Route>
           )}
@@ -293,11 +293,11 @@ function App() {
             <Route path="/admin/superadmin/setup" element={<AdminSetup isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
             <Route path="/admin/superadmin/rolechangelog" element={<RoleChangeLog isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
             <Route path="/admin/superadmin/loginhistory" element={<LoginHistory isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
           </Route>
 
