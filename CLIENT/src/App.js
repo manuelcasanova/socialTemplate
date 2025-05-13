@@ -72,21 +72,24 @@ function App() {
   const [customRoles, setCustomRoles] = useState([]);
 
   const [allRoles, setAllRoles] = useState([])
-  const [loadingRoles, setLoadingRoles] = useState(true);
+
+  const [loadingRoles, setLoadingRoles] = useState(false);
+  console.log(loadingRoles)
 
   useEffect(() => {
-    // Replace with your actual API endpoint
-    fetch('/public/allRoles')
-      .then(response => response.json())
-      .then(data => {
-        // assuming the response is an array of role names
-        setAllRoles(data);
+    const fetchAllRoles = async () => {
+      setLoadingRoles(true);
+      try {
+        const response = await axios.get('/all-roles-public');
+        setAllRoles(response.data);
+      } catch (err) {
+        console.error('Failed to fetch all roles', err);
+      } finally {
         setLoadingRoles(false);
-      })
-      .catch(error => {
-        console.error('Error fetching roles:', error);
-        setLoadingRoles(false);
-      });
+      }
+    };
+
+    fetchAllRoles();
   }, []);
 
   // Update screenWidth on window resize
