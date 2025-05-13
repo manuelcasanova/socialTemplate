@@ -181,7 +181,16 @@ router.route('/harddelete/:userId')
   .delete(
     async (req, res, next) => {
       try {
-        verifyRoles('Admin', 'SuperAdmin')(req, res, next);
+        const settingsResult = await pool.query(`
+          SELECT allow_delete_users FROM global_provider_settings LIMIT 1;
+        `);
+        const { allow_delete_users } = settingsResult.rows[0];
+
+        const allowedRoles = allow_delete_users
+          ? ['Admin', 'SuperAdmin']
+          : ['SuperAdmin'];
+
+        verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {
         next(err);
       }
