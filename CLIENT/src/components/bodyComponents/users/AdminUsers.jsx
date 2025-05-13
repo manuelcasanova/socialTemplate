@@ -201,7 +201,8 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                         <p><strong>E-mail:</strong> {user.email}</p>
                         <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
                         <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
-                        {(postFeatures.allowManageRoles || isSuperAdmin) &&
+                        {
+                          (postFeatures.allowManageRoles || isSuperAdmin) &&
                           <>
                             <h4>Roles</h4>
                             <ul>

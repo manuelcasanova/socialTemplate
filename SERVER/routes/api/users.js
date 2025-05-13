@@ -189,18 +189,28 @@ router.route('/harddelete/:userId')
     usersController.adminVersionSoftDeleteUser
   );
 
-//Update roles (by admin)
+// Update roles (by admin or superadmin only if feature is enabled)
 router.route('/:user_id/roles')
   .put(
     async (req, res, next) => {
       try {
-        verifyRoles('Admin', 'SuperAdmin')(req, res, next);
+        const settingsResult = await pool.query(`
+          SELECT allow_manage_roles FROM global_provider_settings LIMIT 1;
+        `);
+        const { allow_manage_roles } = settingsResult.rows[0];
+
+        const allowedRoles = allow_manage_roles
+          ? ['Admin', 'SuperAdmin']
+          : ['SuperAdmin'];
+
+        verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {
         next(err);
       }
     },
-    usersController.updateRoles 
+    usersController.updateRoles
   );
+
 
 router.route('/subscribe')
   .post(
