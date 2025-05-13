@@ -64,6 +64,7 @@ app.use('/verify-email', require('./routes/auth/verify-email'));
 app.use('/resend-verification-email', require('./routes/auth/auth'));
 
 app.use('/custom-roles-public', require('./routes/public/customRoles')); 
+app.use('/all-roles-public', require('./routes/public/allRoles')); 
 
 app.use(verifyJWT);
 

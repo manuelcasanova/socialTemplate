@@ -33,7 +33,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const { postFeatures } = useGlobal();
-  console.log("postFeatures", postFeatures.allowPostReactions)
+  // console.log("postFeatures", postFeatures.allowPostReactions)
   const loggedInUserId = auth.userId
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
