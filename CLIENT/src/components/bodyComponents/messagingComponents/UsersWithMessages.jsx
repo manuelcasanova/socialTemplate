@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 //Hooks
 
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 
 //Styling
@@ -41,7 +40,6 @@ function processUsername(username) {
 
 export default function UsersWithMessages({ isNavOpen }) {
   const { auth } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +48,6 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [mutedUsers, setMutedUsers] = useState([]);
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [filterUsername, setFilterUsername] = useState("");
-  const [filters, setFilters] = useState("")
   const [hideMuted, setHideMuted] = useState(true);
   const loggedInUser = auth.userId;
   const [imageExistsMap, setImageExistsMap] = useState({});
@@ -67,12 +64,12 @@ export default function UsersWithMessages({ isNavOpen }) {
 
   useEffect(() => {
     fetchNewMessagesNotification(loggedInUser, setUsersWithNewMessages, setIsLoading, setError)
-  }, [])
+  }, [loggedInUser])
 
   useEffect(() => {
     fetchUsersWithMessages(loggedInUser, setUsers, setIsLoading, setError, filterUsername, hideMuted);
     // Fetch muted users (optional depending on your app's structure)
-    fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
+    fetchMutedUsers("", setMutedUsers, setIsLoading, setError, loggedInUser)
   }, [loggedInUser, filterUsername, hideMuted, hasMutedChanges]);
 
   // Reset the error message whenever filters change
@@ -175,30 +172,31 @@ export default function UsersWithMessages({ isNavOpen }) {
 
 
 
-{showLargePicture === user.user_id && (
-  <div
-    className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
-    onClick={() => setShowLargePicture(null)}
-  >
-    <img
-      className='users-all-picture-large'
-      onClick={() => setShowLargePicture(null)}
-      src={imageExistsMap[user.user_id]
-        ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
-        : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-      onError={(e) => {
-        // Prevent infinite loop in case of repeated errors
-        e.target.onerror = null;
+                  {showLargePicture === user.user_id && (
+                    <div
+                      className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+                      onClick={() => setShowLargePicture(null)}
+                    >
+                      <img
+                        className='users-all-picture-large'
+                        onClick={() => setShowLargePicture(null)}
+                        src={imageExistsMap[user.user_id]
+                          ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
+                          : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                        alt={`${user.username || 'User'}`}
+                        onError={(e) => {
+                          // Prevent infinite loop in case of repeated errors
+                          e.target.onerror = null;
 
-        // Check if the fallback image has already been set to avoid infinite loop
-        if (e.target.src !== `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`) {
-          // Fall back to the default user image if the profile picture fails
-          e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
-        }
-      }}
-    />
-  </div>
-)}
+                          // Check if the fallback image has already been set to avoid infinite loop
+                          if (e.target.src !== `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`) {
+                            // Fall back to the default user image if the profile picture fails
+                            e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
 
                   {/* 
 {console.log("user user id", user.user_id)}
