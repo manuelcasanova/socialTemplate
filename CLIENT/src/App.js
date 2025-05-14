@@ -74,7 +74,7 @@ function App() {
   const [allRoles, setAllRoles] = useState([])
 
   const [loadingRoles, setLoadingRoles] = useState(false);
-  console.log(loadingRoles)
+  // console.log(loadingRoles)
 
   useEffect(() => {
     const fetchAllRoles = async () => {

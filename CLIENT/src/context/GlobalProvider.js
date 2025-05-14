@@ -663,14 +663,14 @@ export const GlobalProvider = ({ children }) => {
       } else {
         // If enabling: set all related settings to true
         setAllowEditUsername(true);
-        setAllowEditEmail(true);
+        setAllowEditEmail(false);
         setAllowEditPassword(true);
         setAllowModifyProfilePicture(true);
         setAllowDeleteMyUser(true);
 
 
         await axiosPrivate.put('/settings/global-provider/toggleAllowEditUsername', { allow_edit_username: true });
-        await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', { allow_edit_email: true });
+        await axiosPrivate.put('/settings/global-provider/toggleAllowEditEmail', { allow_edit_email: false });
         await axiosPrivate.put('/settings/global-provider/toggleAllowEditPassword', { allow_edit_password: true });
         await axiosPrivate.put('/settings/global-provider/toggleAllowModifyProfilePicture', { allow_modify_profile_picture: true });
         await axiosPrivate.put('/settings/global-provider/toggleAllowDeleteMyUser', { allow_delete_my_user: true });

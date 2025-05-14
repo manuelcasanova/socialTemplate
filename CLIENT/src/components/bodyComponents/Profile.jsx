@@ -49,23 +49,6 @@ const validateInput = (editMode, value, confirmPwd = "") => {
   } else if (editMode === "email") {
     regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     errorMessage = "Must be a valid email address. Special characters allowed: . - _";
-  } else if (editMode === "password") {
-    regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,24}$/;
-    errorMessage = "8 to 24 characters. Must include uppercase and lowercase letters, a number, and a special character. Allowed: !@#$%^&*.";
-  } else if (editMode === "matchPwd") {
-    if (!value || !confirmPwd) {
-      errorMessage = "Both password fields must be filled.";
-      return { valid: false, message: errorMessage };
-    }
-    if (value !== confirmPwd) {
-      errorMessage = "Passwords must match.";
-      return { valid: false, message: errorMessage };
-    }
-    const regexValidation = validateInput("password", value);
-    if (!regexValidation.valid) {
-      return { valid: false, message: regexValidation.message };
-    }
-    return { valid: true };
   } else if (editMode === "matchEmail") {
     if (value !== confirmPwd) {
       errorMessage = "Emails must match.";
@@ -250,8 +233,6 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const placeholderText = {
     username: "Enter new username",
     email: "Enter new email",
-    password: "Enter new password",
-    matchPwd: "Confirm new password",
   }[editMode];
 
   const handleInputChange = (e) => {
@@ -265,20 +246,13 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
     setInputValue(value);
 
-    if (editMode === "password") {
-      const regexValidation = validateInput("password", value);
-      const matchValidation = validateInput("matchPwd", value, confirmPwd);
-
-      setIsInputValid(regexValidation.valid && matchValidation.valid);
-      setError(regexValidation.valid ? matchValidation.message : regexValidation.message);
-    } else if (editMode === "email") {
+    if (editMode === "email") {
       const emailValidation = validateInput("email", value);
       const matchEmailValidation = validateInput("matchEmail", value, confirmEmail);
 
       setIsInputValid(emailValidation.valid && matchEmailValidation.valid);
       setError(emailValidation.valid ? matchEmailValidation.message : emailValidation.message);
     }
-
 
     else if (editMode) {
       const validation = validateInput(editMode, value);
@@ -296,17 +270,6 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     setError(matchEmailValidation.message);
   };
 
-  const handleConfirmPwdChange = (e) => {
-    const value = e.target.value;
-    setConfirmPwd(value);
-
-    if (editMode === "password") {
-      const matchValidation = validateInput("matchPwd", inputValue, value);
-      setIsInputValid(matchValidation.valid);
-      setError(matchValidation.valid ? "" : matchValidation.message);
-    }
-  };
-
   const handleUpdate = async () => {
     const validation = validateInput(editMode, inputValue, confirmPwd);
 
@@ -320,7 +283,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     const payload = {
       userId, // The logged-in user's ID
       editMode,
-      [editMode]: inputValue, // The field being updated (username, email, or password)
+      [editMode]: inputValue, // The field being updated (username, email)
     };
 
     try {
@@ -482,7 +445,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 (postFeatures.allowEditPassword || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
-                  onClick={() => handleEditButtonClick("password")}
+                  onClick={() => navigate(`/resetpassword`)}
                 >
                   Edit Password
                 </button>
@@ -554,42 +517,6 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                         onChange={handleConfirmEmailChange}
                         placeholder="Confirm new email"
                       />
-                    </>
-                  )}
-
-                  {/* For password edit mode */}
-                  {editMode === "password" && (
-                    <>
-                      {/* Enter new password field with visibility toggle */}
-                      <div className="password-container">
-                        <input
-                          ref={inputRef}
-                          type={isNewPasswordVisible ? "text" : "password"}
-                          placeholder={placeholderText}
-                          value={inputValue}
-                          onChange={handleInputChange}
-                        />
-                        <FontAwesomeIcon
-                          icon={isNewPasswordVisible ? faEyeSlash : faEye}
-                          onClick={toggleNewPasswordVisibility}
-                          className="toggle-password-icon"
-                        />
-                      </div>
-
-                      {/* Confirm new password field with visibility toggle */}
-                      <div className="password-container">
-                        <input
-                          type={isConfirmPasswordVisible ? "text" : "password"}
-                          placeholder="Confirm new password"
-                          value={confirmPwd}
-                          onChange={handleConfirmPwdChange}
-                        />
-                        <FontAwesomeIcon
-                          icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
-                          onClick={toggleConfirmPasswordVisibility}
-                          className="toggle-password-icon"
-                        />
-                      </div>
                     </>
                   )}
 

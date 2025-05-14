@@ -16,11 +16,17 @@ import LoadingSpinner from './../../loadingSpinner/LoadingSpinner'
 export default function AdminSetup({ isNavOpen }) {
 
   const { postFeatures, error, isLoading } = useGlobal();
-  const {auth} = useAuth();
+  const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   // console.log("postFeatures in AdminSetup.jsx", postFeatures)
   // console.log("error in AdminSetup", error)
   // console.log("isLoading", isLoading)
+
+  const [showInfoMessage, setShowInfoMessage] = useState(false)
+
+  const handleShowInfoMessage = () => {
+    setShowInfoMessage(prev => !prev)
+  }
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -479,7 +485,13 @@ export default function AdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Edit their Email</div>
+           
+            <div
+              onClick={handleShowInfoMessage}
+              className='info-button'>i</div>
           </div>
+
+          {showInfoMessage && <div className='info-message' style={{marginBottom: '1em'}}>Users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.</div>}
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
