@@ -21,10 +21,15 @@ const checkSocialAccess = (action) => {
         FROM global_provider_settings LIMIT 1;
       `);
 
+      // console.log('action', action)
+
       const settings = result.rows[0];
+      // console.log('settings', settings)
       let allowedRoles = [];
 
       const roles = await fetchRoles();
+
+      // console.log('roles', roles)
 
       if (
         !settings.show_social_feature && !settings.show_posts_feature && !settings.show_messages_feature) {
@@ -32,7 +37,8 @@ const checkSocialAccess = (action) => {
       } else {
         if (action === 'mute' && settings.show_messages_feature) {
           allowedRoles = roles;
-        } else {  
+        } 
+        else {  
           switch (action) {
             case 'follow':
               allowedRoles = settings.allow_follow ? roles : ['SuperAdmin'];
@@ -45,6 +51,8 @@ const checkSocialAccess = (action) => {
           }
         }
       }
+
+      // console.log('allowedRoles', allowedRoles)
 
         verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {

@@ -249,28 +249,31 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
                 <>
                   <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>All users</div>
 
-                  <div className="subitem" onClick={() => handleNavigate('/social/following')}>
-                    Following
-                  </div>
+                  {postFeatures.allowFollow &&
+                    <>
+                      <div className="subitem" onClick={() => handleNavigate('/social/following')}>
+                        Following
+                      </div>
 
 
-                  <div className="subitem" onClick={() => handleNavigate('/social/followers')}>
-                    Followers
-                  </div>
+                      <div className="subitem" onClick={() => handleNavigate('/social/followers')}>
+                        Followers
+                      </div>
 
-                  <div className="subitem" onClick={() => {
-                    setIsFollowNotification(false);
-                    handleNavigate('/social/pending')
-                  }}
-                  >
-                    {isFollowNotification ? <div className='with-notification-text'>Pending requests</div> :
-                      <div>Pending requests</div>}
-                    {isFollowNotification && <FollowNotification />}
-                  </div>
+                      <div className="subitem" onClick={() => {
+                        setIsFollowNotification(false);
+                        handleNavigate('/social/pending')
+                      }}
+                      >
+                        {isFollowNotification ? <div className='with-notification-text'>Pending requests</div> :
+                          <div>Pending requests</div>}
+                        {isFollowNotification && <FollowNotification />}
+                      </div>
 
-                  <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
-                    Muted
-                  </div>
+                      <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
+                        Muted
+                      </div>
+                    </>}
 
                 </>
               )}
