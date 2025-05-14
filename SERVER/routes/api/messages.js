@@ -10,6 +10,7 @@ const checkMessageFeatureAccess = (action) => {
     try {
       const settingsResult = await pool.query(`
         SELECT 
+         show_social_feature, 
           show_messages_feature,
           allow_send_messages,
           allow_delete_messages
@@ -20,19 +21,37 @@ const checkMessageFeatureAccess = (action) => {
       const settings = settingsResult.rows[0];
       let allowedRoles = [];
 
-      if (!settings.show_messages_feature) {
+      if (!settings.show_social_feature && !settings.show_messages_feature) {
         allowedRoles = ['SuperAdmin'];
-      } else if (action === 'view' && settings.show_messages_feature) {
-        const rolesResult = await pool.query(`SELECT role_name FROM roles`);
-        allowedRoles = rolesResult.rows.map(role => role.role_name);
-      } else if (action === 'send' && settings.allow_send_messages) {
-        const rolesResult = await pool.query(`SELECT role_name FROM roles`);
-        allowedRoles = rolesResult.rows.map(role => role.role_name);
-      } else if (action === 'delete' && settings.allow_delete_messages) {
-        const rolesResult = await pool.query(`SELECT role_name FROM roles`);
-        allowedRoles = rolesResult.rows.map(role => role.role_name);
       } else {
-        allowedRoles = ['SuperAdmin'];
+        switch (action) {
+          case 'view':
+            if (settings.show_messages_feature) {
+              const rolesResult = await pool.query(`SELECT role_name FROM roles`);
+              allowedRoles = rolesResult.rows.map(role => role.role_name);
+            } else {
+              allowedRoles = ['SuperAdmin'];
+            }
+            break;
+          case 'send':
+            if (settings.show_messages_feature && settings.allow_send_messages) {
+              const rolesResult = await pool.query(`SELECT role_name FROM roles`);
+              allowedRoles = rolesResult.rows.map(role => role.role_name);
+            } else {
+              allowedRoles = ['SuperAdmin'];
+            }
+            break;
+          case 'delete':
+            if (settings.show_messages_feature && settings.allow_delete_messages) {
+              const rolesResult = await pool.query(`SELECT role_name FROM roles`);
+              allowedRoles = rolesResult.rows.map(role => role.role_name);
+            } else {
+              allowedRoles = ['SuperAdmin'];
+            }
+            break;
+          default:
+            allowedRoles = ['SuperAdmin'];
+        }
       }
 
       // Middleware composition: call verifyRoles and run it as middleware
@@ -45,25 +64,25 @@ const checkMessageFeatureAccess = (action) => {
 
 router.route('/all')
   .get(
-    checkMessageFeatureAccess('view'), 
+    checkMessageFeatureAccess('view'),
     messagesController.getMessagesById
   );
 
 router.route('/send')
   .post(
-    checkMessageFeatureAccess('send'), 
+    checkMessageFeatureAccess('send'),
     messagesController.sendMessage
   );
 
 router.route('/getnewmessagesnotification')
   .get(
-    checkMessageFeatureAccess('view'), 
+    checkMessageFeatureAccess('view'),
     messagesController.getNewMessagesNotification
   );
 
 router.route('/:id')
   .put(
-    checkMessageFeatureAccess('delete'), 
+    checkMessageFeatureAccess('delete'),
     messagesController.markMessageAsDeleted
   );
 
