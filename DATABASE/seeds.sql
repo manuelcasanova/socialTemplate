@@ -9,8 +9,8 @@ INSERT INTO roles (role_name) VALUES
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 
   ('Superadministrator User', 'superadmin@example.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, true, 'admin_pic.jpg')
-  ,
-  ('Manuel Casanova', 'manucasanova@hotmail.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, true, 'admin_pic.jpg');
+  -- ,
+  -- ('Manuel Casanova', 'manucasanova@hotmail.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, true, 'admin_pic.jpg');
   ;
 
   
@@ -37,11 +37,11 @@ VALUES
 (1, 3, 1),
 (1, 4, 1),
 (1, 5, 1)
-,
-(2, 2, 1),
-(2, 3, 2),
-(2, 4, 2),
-(2, 5, 2)
+-- ,
+-- (2, 2, 1),
+-- (2, 3, 2),
+-- (2, 4, 2),
+-- (2, 5, 2)
 ;
 
 INSERT INTO global_provider_settings (

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const socialController = require('../../controllers/socialController');
-const {fetchRoles} = require('../../config/fetchRoles');
+const { fetchRoles } = require('../../config/fetchRoles');
 const verifyRoles = require('../../middleware/verifyRoles');
 const pool = require('../../config/db');
 
@@ -10,7 +10,7 @@ const checkSocialAccess = (action) => {
   return async (req, res, next) => {
     try {
       const result = await pool.query(`
-        SELECT show_social_feature, allow_follow, allow_mute 
+        SELECT show_social_feature, allow_follow, allow_mute, show_posts_feature 
         FROM global_provider_settings LIMIT 1;
       `);
 
@@ -19,7 +19,8 @@ const checkSocialAccess = (action) => {
 
       const roles = await fetchRoles();
 
-      if (!settings.show_social_feature) {
+
+      if (!settings.show_social_feature && !settings.show_posts_feature) {
         allowedRoles = ['SuperAdmin'];
       } else {
         switch (action) {
