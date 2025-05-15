@@ -76,13 +76,13 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
 
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
-    {postFeatures.allow_mute &&
+    {postFeatures.allowMute &&
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
     }
-    {postFeatures.allow_follow &&
+    {postFeatures.allowFollow &&
     fetchPending(filters, setPendingRequests, setIsLoading, setError, loggedInUser);
     }
-    {postFeatures.allow_follow &&
+    {postFeatures.allowFollow &&
     fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
     }
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
