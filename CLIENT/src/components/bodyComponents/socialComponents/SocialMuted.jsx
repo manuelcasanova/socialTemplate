@@ -40,7 +40,7 @@ const profilePictureExists = async (userId) => {
 };
 
 export default function SocialMuted({ isNavOpen }) {
-  const postFeatures = useGlobal();
+  const { postFeatures } = useGlobal();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [error, setError] = useState(null);
@@ -75,8 +75,8 @@ export default function SocialMuted({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
     {
-      postFeatures.allow_mute &&
-      fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
+      postFeatures.allowMute &&
+        fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
     }
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
 
