@@ -27,6 +27,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   // console.log("customRoles length", customRoles.length)
 
   const { auth } = useAuth();
+  const isSuperAdmin = auth?.roles?.includes('SuperAdmin');
+  const isAdminNotSuperAdmin = auth?.roles?.includes('Admin') && !auth.roles.includes('SuperAdmin');
+
   const loggedInUser = auth.userId
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -292,11 +295,18 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
           </div>
           {showSections.admin && (
             <>
-              {auth.roles && auth.roles.includes('SuperAdmin') && (
+              {isSuperAdmin && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/setup')}>
                   <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Settings
                 </div>
               )}
+
+              {isAdminNotSuperAdmin && (
+                <div className="subitem" onClick={() => handleNavigate('/admin/admin/setup')}>
+                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Settings
+                </div>
+              )}
+
               <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
 
               {postFeatures.showCustomRolesFeature &&

@@ -59,6 +59,7 @@ import ModeratorComments from './components/bodyComponents/moderatorComponents/M
 import HiddenComments from './components/bodyComponents/moderatorComponents/HiddenComments';
 import ModeratorsCommentsHistory from './components/bodyComponents/moderatorComponents/ModeratorCommentsHistory';
 
+import SuperAdminSetup from './components/bodyComponents/adminComponents/SuperAdminSetup';
 import AdminSetup from './components/bodyComponents/adminComponents/AdminSetup';
 import AdminRoles from './components/bodyComponents/rolesComponents/AdminRoles';
 import RolePage from './components/bodyComponents/RolePage';
@@ -293,7 +294,11 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['SuperAdmin']} />}>
-            <Route path="/admin/superadmin/setup" element={<AdminSetup isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
+            <Route path="/admin/superadmin/setup" element={<SuperAdminSetup isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['Admin']} />}>
+            <Route path="/admin/admin/setup" element={<AdminSetup isNavOpen={isNavOpen} allowedRoles={['Admin']} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
