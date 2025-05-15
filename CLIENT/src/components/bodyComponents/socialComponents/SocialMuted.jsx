@@ -6,10 +6,12 @@ import { useState, useEffect, useRef } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 
+//Context
+import { useGlobal } from "../../../context/GlobalProvider";
+
 //Styling
 
 import '../../../css/AdminUsers.css';
-
 
 //Components
 // import filterUsers
@@ -24,6 +26,7 @@ import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
+
 // Function to check if profile picture exists for each user
 const profilePictureExists = async (userId) => {
   const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
@@ -37,6 +40,7 @@ const profilePictureExists = async (userId) => {
 };
 
 export default function SocialMuted({ isNavOpen }) {
+  const postFeatures = useGlobal();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [error, setError] = useState(null);
@@ -70,7 +74,10 @@ export default function SocialMuted({ isNavOpen }) {
 
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
-    fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
+    {
+      postFeatures.allow_mute &&
+      fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
+    }
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
 
   // Check if profile picture exists for each user and store the result
@@ -158,7 +165,7 @@ export default function SocialMuted({ isNavOpen }) {
 
 
 
-{showLargePicture === user.user_id && (
+                  {showLargePicture === user.user_id && (
                     <div
                       className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
                       onClick={() => setShowLargePicture(null)}
