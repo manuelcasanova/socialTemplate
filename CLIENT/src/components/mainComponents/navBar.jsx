@@ -270,10 +270,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
                         {isFollowNotification && <FollowNotification />}
                       </div>
 
-                      <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
-                        Muted
-                      </div>
                     </>}
+
+                  <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
+                    Muted
+                  </div>
+
 
                 </>
               )}
