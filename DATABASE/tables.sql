@@ -220,3 +220,36 @@ CREATE TABLE global_provider_settings (
   allow_admin_delete_custom_role BOOLEAN NOT NULL DEFAULT TRUE
 
 );
+
+CREATE TABLE admin_settings (
+  id SERIAL PRIMARY KEY,
+  show_posts_feature BOOLEAN NOT NULL DEFAULT TRUE,
+  
+  allow_user_post BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_admin_post BOOLEAN NOT NULL DEFAULT TRUE,
+  
+  allow_post_interactions BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_comments BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_post_reactions BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_comment_reactions BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_delete_posts BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_flag_posts BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_delete_comments BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_flag_comments BOOLEAN NOT NULL DEFAULT TRUE,
+
+  show_messages_feature BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_send_messages BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_delete_messages BOOLEAN NOT NULL DEFAULT TRUE,
+
+  show_social_feature BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_follow BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_mute BOOLEAN NOT NULL DEFAULT TRUE,
+
+  show_profile_feature BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_edit_username BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_edit_email BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_edit_password BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_delete_my_user BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_modify_profile_picture BOOLEAN NOT NULL DEFAULT TRUE,
+
+);

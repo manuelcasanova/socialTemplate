@@ -13,7 +13,7 @@ import '../../../css/AdminSetup.css'
 import Error from '../Error'
 import LoadingSpinner from '../../loadingSpinner/LoadingSpinner'
 
-export default function AdminSetup({ isNavOpen }) {
+export default function SuperAdminSetup({ isNavOpen }) {
 
   const { postFeatures, error, isLoading } = useGlobal();
   const { auth } = useAuth();

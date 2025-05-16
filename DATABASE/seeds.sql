@@ -82,6 +82,37 @@ INSERT INTO global_provider_settings (
   false, false, false, false, false, false, false, false
 );
 
+INSERT INTO admin_settings (
+  show_posts_feature,
+  allow_user_post,
+  allow_admin_post,
+  allow_post_interactions,
+  allow_comments,
+  allow_post_reactions,
+  allow_comment_reactions,
+  allow_delete_posts,
+  allow_flag_posts,
+  allow_delete_comments,
+  allow_flag_comments,
+  show_messages_feature,
+  allow_send_messages,
+  allow_delete_messages,
+  show_social_feature,
+  allow_follow,
+  allow_mute,
+  show_profile_feature,
+  allow_edit_username,
+  allow_edit_email,
+  allow_edit_password,
+  allow_delete_my_user,
+  allow_modify_profile_picture
+
+) VALUES (
+  false, false, false, false, false, false, false, false, false, false, false,
+  false, false, false, false, false, false, false, false, false, false, false,
+  false
+);
+
 
 -- INSERT INTO posts (sender, content, date, visibility, is_deleted)
 -- VALUES
