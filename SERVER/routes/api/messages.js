@@ -8,9 +8,8 @@ const pool = require('../../config/db');
 const checkMessageFeatureAccess = (action) => {
   return async (req, res, next) => {
     try {
-      const settingsResult = await pool.query(`
+      const globalSettingsResult = await pool.query(`
         SELECT 
-         show_social_feature, 
           show_messages_feature,
           allow_send_messages,
           allow_delete_messages
@@ -18,10 +17,28 @@ const checkMessageFeatureAccess = (action) => {
         LIMIT 1;
       `);
 
-      const settings = settingsResult.rows[0];
+      const adminSettingsResult = await pool.query(`
+        SELECT 
+          show_messages_feature,
+          allow_send_messages,
+          allow_delete_messages
+        FROM admin_settings
+        LIMIT 1;
+      `);
+
+      const global = globalSettingsResult.rows[0] || {};
+      const admin = adminSettingsResult.rows[0] || {};
+
+      // Combine settings using logical AND (both must be true)
+      const settings = {
+        show_messages_feature: global.show_messages_feature && admin.show_messages_feature,
+        allow_send_messages: global.allow_send_messages && admin.allow_send_messages,
+        allow_delete_messages: global.allow_delete_messages && admin.allow_delete_messages
+      };
+
       let allowedRoles = [];
 
-      if (!settings.show_social_feature && !settings.show_messages_feature) {
+      if (!settings.show_messages_feature) {
         allowedRoles = ['SuperAdmin'];
       } else {
         switch (action) {
@@ -34,7 +51,7 @@ const checkMessageFeatureAccess = (action) => {
             }
             break;
           case 'send':
-            if (settings.show_messages_feature && settings.allow_send_messages) {
+            if (settings.allow_send_messages) {
               const rolesResult = await pool.query(`SELECT role_name FROM roles`);
               allowedRoles = rolesResult.rows.map(role => role.role_name);
             } else {
@@ -42,7 +59,7 @@ const checkMessageFeatureAccess = (action) => {
             }
             break;
           case 'delete':
-            if (settings.show_messages_feature && settings.allow_delete_messages) {
+            if (settings.allow_delete_messages) {
               const rolesResult = await pool.query(`SELECT role_name FROM roles`);
               allowedRoles = rolesResult.rows.map(role => role.role_name);
             } else {
@@ -54,9 +71,9 @@ const checkMessageFeatureAccess = (action) => {
         }
       }
 
-      // Middleware composition: call verifyRoles and run it as middleware
       return verifyRoles(...allowedRoles)(req, res, next);
     } catch (err) {
+      console.error('Error checking message access:', err);
       next(err);
     }
   };
