@@ -7,6 +7,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 //Context
 import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Util functions
 import { fetchPostById } from "./util_functions/FetchPosts";
@@ -28,6 +29,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 export default function PostComments({ isNavOpen }) {
 
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
   const handleClose = () => navigate(-1);
   const { param } = useParams();
@@ -204,7 +206,7 @@ export default function PostComments({ isNavOpen }) {
   useEffect(() => {
     fetchPostById(postId, setPost, setIsLoading, setError);
     {
-      (postFeatures.allowComments || isSuperAdmin) &&
+      (postFeatures.allowComments && adminSettings.allowComments || isSuperAdmin) &&
         fetchPostComments({ postId, setPostComments, setError, setIsLoading, loggedInUserId })
     }
   }, [postId]);
@@ -444,7 +446,7 @@ export default function PostComments({ isNavOpen }) {
               />
             </div>
           )}
-          {(postFeatures.allowComments || isSuperAdmin) &&
+          {(postFeatures.allowComments && adminSettings.allowComments || isSuperAdmin) &&
             <div className="centered-container centered-container-post flex-row">
               <input
                 placeholder="Aa"

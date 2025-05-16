@@ -1,26 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const reportsCommentsController = require('../../controllers/reportsCommentsController')
+const reportsCommentsController = require('../../controllers/reportsCommentsController');
 const verifyRoles = require('../../middleware/verifyRoles');
 const pool = require('../../config/db');
 
-
-// Dynamic comment settings middleware
+// Dynamic comment settings middleware with dual-source validation
 const checkCommentSettingAccess = (action, intendedRoles) => {
   return async (req, res, next) => {
     try {
-      const settingsResult = await pool.query(`
-        SELECT 
-          allow_flag_comments,
-          allow_delete_comments
-        FROM global_provider_settings
-        LIMIT 1;
-      `);
-      const settings = settingsResult.rows[0];
+      const [globalResult, adminResult] = await Promise.all([
+        pool.query(`
+          SELECT 
+            allow_flag_comments,
+            allow_delete_comments
+          FROM global_provider_settings
+          LIMIT 1;
+        `),
+        pool.query(`
+          SELECT 
+            allow_flag_comments,
+            allow_delete_comments
+          FROM admin_settings
+          LIMIT 1;
+        `)
+      ]);
+
+      const global = globalResult.rows[0];
+      const admin = adminResult.rows[0];
+
+      const featureEnabled = (feature) => {
+        return global[feature] && admin[feature];
+      };
 
       const settingMap = {
-        'flag': settings.allow_flag_comments,
-        'delete': settings.allow_delete_comments
+        'flag': featureEnabled('allow_flag_comments'),
+        'delete': featureEnabled('allow_delete_comments')
       };
 
       let allowedRoles = [];
@@ -43,7 +57,7 @@ const checkCommentSettingAccess = (action, intendedRoles) => {
   };
 };
 
-
+// Routes
 router.route('/comment-report')
   .get(
     checkCommentSettingAccess('flag', ['SuperAdmin', 'Moderator']),

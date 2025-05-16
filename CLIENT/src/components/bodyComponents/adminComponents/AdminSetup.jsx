@@ -66,23 +66,6 @@ export default function SuperAdminSetup({ isNavOpen }) {
 
       {adminSettings.showPostsFeature &&
         <>
-          <div className='admin-setup-subline'>
-            <div className="toggle-container">
-              <div className="toggle-wrapper">
-                <input
-                  type="checkbox"
-                  id="AllowAdminPost"
-                  className="toggle-checkbox"
-                  checked={adminSettings.allowAdminPost}
-                  onChange={adminSettings.toggleAllowAdminPost}
-                />
-                <label htmlFor="AllowAdminPost" className="toggle-label">
-                  <span className="toggle-circle"></span>
-                </label>
-              </div>
-            </div>
-            <div className='admin-setup-line-text'>Admins Can Post</div>
-          </div>
 
           <div className='admin-setup-subline'>
             <div className="toggle-container">

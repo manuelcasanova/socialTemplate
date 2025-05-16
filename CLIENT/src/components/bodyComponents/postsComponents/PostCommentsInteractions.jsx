@@ -1,5 +1,6 @@
 //Context
 import { useGlobal } from '../../../context/GlobalProvider';
+import { useGlobalAdminSettings } from '../../../context/AdminSettingsProvider';
 
 //Util functions
 import { formatDate } from "./util_functions/formatDate"
@@ -28,6 +29,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
 
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
   const [reactionsCount, setReactionsCount] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +50,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
   };
 
   useEffect(() => {
-    if (postFeatures.allowCommentReactions) {
+    if (postFeatures.allowCommentReactions && adminSettings.allowCommentReactions) {
       fetchPostCommentsReactionsCount({ commentId, setReactionsCount, setError, setIsLoading, loggedInUserId })
     }
   }, [])

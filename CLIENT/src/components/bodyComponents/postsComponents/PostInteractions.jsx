@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 //Context
 import { useGlobal } from '../../../context/GlobalProvider';
+import { useGlobalAdminSettings } from '../../../context/AdminSettingsProvider';
 
 //hooks
 import useAuth from '../../../hooks/useAuth';
@@ -33,7 +34,9 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const { postFeatures } = useGlobal();
-  // console.log("postFeatures", postFeatures.allowPostReactions)
+  const { adminSettings } = useGlobalAdminSettings();
+  console.log("superadmin allow comments", postFeatures.allowComments, 'admim', adminSettings.allowComments)
+console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', adminSettings.showPostsFeature)
   const loggedInUserId = auth.userId
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
@@ -56,11 +59,11 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   };
 
   useEffect(() => {
-    if (postFeatures.allowPostReactions || isSuperAdmin) {
+    if (postFeatures.allowPostReactions && adminSettings.allowPostReactions  || isSuperAdmin) {
       fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount, loggedInUserId })
     }
 
-    if (postFeatures.allowComments || isSuperAdmin) {
+    if (postFeatures.allowComments && adminSettings.allowComments || isSuperAdmin) {
       fetchPostCommentsCount({ postId, setIsLoading, setError, setCommentsCount, loggedInUserId })
     }
 
@@ -202,11 +205,13 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
                 {showEllipsisMenu && (
                   <div className="post-menu-dropdown">
                     {
+                    
                     (postFeatures.allowDeletePosts || isSuperAdmin ) &&
                       <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} setError={setError} />
                     }
 
                     {
+                    
                     (postFeatures.allowFlagPosts || isSuperAdmin )&&
                       <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
                     }

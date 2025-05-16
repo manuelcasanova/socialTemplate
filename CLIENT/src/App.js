@@ -7,6 +7,7 @@ import axios from './api/axios';
 
 //Context
 import { useGlobal } from '../src/context/GlobalProvider';
+import { useGlobalAdminSettings } from './context/AdminSettingsProvider';
 
 //Components
 
@@ -121,6 +122,7 @@ function App() {
   }, []);
 
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
 
   return (
 
@@ -243,7 +245,8 @@ function App() {
           )}
 
 
-          {postFeatures.showPostsFeature &&
+          {
+          //  postFeatures.showPostsFeature && adminSettings.showPostsFeature && 
             <>
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>

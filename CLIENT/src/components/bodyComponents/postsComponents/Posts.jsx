@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 //Context
 import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -42,6 +43,7 @@ export default function Posts({ isNavOpen }) {
   const { auth } = useAuth();
   const isAdmin = auth.roles.includes('Admin');
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
   const loggedInUser = auth.userId;
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -73,6 +75,7 @@ export default function Posts({ isNavOpen }) {
   const topPostRef = useRef(null);
   const [loadMore, setLoadMore] = useState(false)
   const [newPostSubmitted, setNewPostSubmitted] = useState(false);
+
 
   useEffect(() => {
     const checkReports = async () => {
@@ -229,6 +232,7 @@ export default function Posts({ isNavOpen }) {
     }
   };
 
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -241,8 +245,8 @@ export default function Posts({ isNavOpen }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-posts">
 
-        {(isAdmin && postFeatures.allowAdminPost) || 
-          (!isAdmin && postFeatures.allowUserPost) ? ( 
+        {(isAdmin && postFeatures.allowAdminPost) ||
+          (!isAdmin && postFeatures.allowUserPost) ? (
 
           <WritePost
             loggedInUser={loggedInUser}
@@ -250,7 +254,7 @@ export default function Posts({ isNavOpen }) {
             setError={setError}
           />
 
-        ) : null} 
+        ) : null}
 
         <div className="write-post-container">
 
@@ -386,7 +390,8 @@ export default function Posts({ isNavOpen }) {
                     <p>{post.content}</p>
                   )}
 
-                  {postFeatures.allowPostInteractions &&
+                  {
+                  // HERE postFeatures.allowPostInteractions &&
                     <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} setError={setError} />
                   }
 
@@ -441,6 +446,12 @@ export default function Posts({ isNavOpen }) {
 
       )}
 
+
+
     </div>
+
+
   );
+
+
 }

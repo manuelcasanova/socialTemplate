@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 // context/AdminSettingsProvider.js
 import { createContext, useContext, useEffect, useState } from 'react';
 
-const GlobalContext = createContext();
+const AdminSettingsContext = createContext();
 
 
 export const AdminSettingsProvider = ({ children }) => {
@@ -40,7 +40,6 @@ export const AdminSettingsProvider = ({ children }) => {
         if (settings) {
           setShowPostsFeature(settings?.show_posts_feature ?? false);
           setAllowUserPost(settings?.allow_user_post ?? false);
-          setAllowAdminPost(settings?.allow_admin_post ?? false);
           setAllowPostInteractions(settings?.allow_post_interactions ?? false);
           setAllowComments(settings?.allow_comments ?? false);
           setAllowPostReactions(settings?.allow_post_reactions ?? false);
@@ -63,7 +62,6 @@ export const AdminSettingsProvider = ({ children }) => {
   // Post-related features
   const [showPostsFeature, setShowPostsFeature] = useState(false); // Superadmin decides whether Posts are enabled
   const [allowUserPost, setAllowUserPost] = useState(false); // Registered users can post
-  const [allowAdminPost, setAllowAdminPost] = useState(false); // Admins can post
   const [allowPostInteractions, setAllowPostInteractions] = useState(false);
   const [allowComments, setAllowComments] = useState(false); // Comments on posts
   const [allowPostReactions, setAllowPostReactions] = useState(false); // Reactions to posts
@@ -86,7 +84,6 @@ export const AdminSettingsProvider = ({ children }) => {
 
       // If the posts feature is being disabled, reset the other two settings
       if (!newValue) {
-        setAllowAdminPost(false);
         setAllowUserPost(false);
         setAllowPostInteractions(false);
         setAllowComments(false);
@@ -98,7 +95,6 @@ export const AdminSettingsProvider = ({ children }) => {
         setAllowFlagComments(false)
 
         // Update the database with the new values for the other settings
-        await axiosPrivate.put('/admin-settings/global-provider/toggleAllowAdminPost', { allow_admin_post: false });
         await axiosPrivate.put('/admin-settings/global-provider/toggleAllowUserPost', { allow_user_post: false });
         await axiosPrivate.put('/admin-settings/global-provider/toggleAllowPostInteractions', { allow_post_interactions: false });
         await axiosPrivate.put('/admin-settings/global-provider/toggleAllowComments', { allow_comments: false });
@@ -110,7 +106,6 @@ export const AdminSettingsProvider = ({ children }) => {
         await axiosPrivate.put('/admin-settings/global-provider/toggleAllowFlagComments', { allow_flag_comments: false });
       } else {
         // If enabling: set all related settings to true
-        setAllowAdminPost(true);
         setAllowUserPost(true);
         setAllowPostInteractions(true);
         setAllowComments(true);
@@ -121,7 +116,6 @@ export const AdminSettingsProvider = ({ children }) => {
         setAllowDeleteComments(true);
         setAllowFlagComments(true);
 
-        await axiosPrivate.put('/admin-settings/global-provider/toggleAllowAdminPost', { allow_admin_post: true });
         await axiosPrivate.put('/admin-settings/global-provider/toggleAllowUserPost', { allow_user_post: true });
         await axiosPrivate.put('/admin-settings/global-provider/toggleAllowPostInteractions', { allow_post_interactions: true });
         await axiosPrivate.put('/admin-settings/global-provider/toggleAllowComments', { allow_comments: true });
@@ -159,20 +153,6 @@ export const AdminSettingsProvider = ({ children }) => {
     }
   };
 
-  const toggleAllowAdminPost = async () => {
-    if (!showPostsFeature) return;
-    const newValue = !allowAdminPost;
-    setAllowAdminPost(newValue);
-    try {
-      await axiosPrivate.put('/admin-settings/global-provider/toggleAllowAdminPost', {
-        allow_admin_post: newValue
-      });
-    } catch (err) {
-      console.error('Failed to update allowAdminPost setting:', err);
-      setAllowAdminPost(prev => !prev);
-      setError(err.message)
-    }
-  };
 
   const toggleAllowPostInteractions = async () => {
     if (!showPostsFeature) return;
@@ -722,7 +702,6 @@ export const AdminSettingsProvider = ({ children }) => {
     showPostsFeature,
 
     allowUserPost,
-    allowAdminPost,
 
     allowPostInteractions,
     allowComments,
@@ -751,7 +730,6 @@ export const AdminSettingsProvider = ({ children }) => {
     setShowPostsFeature,
 
     setAllowUserPost,
-    setAllowAdminPost,
 
     setAllowPostInteractions,
     setAllowComments,
@@ -779,7 +757,6 @@ export const AdminSettingsProvider = ({ children }) => {
 
     toggleShowPostsFeature,
     toggleAllowUserPost,
-    toggleAllowAdminPost,
 
     toggleAllowPostInteractions,
     toggleAllowComments,
@@ -814,14 +791,14 @@ export const AdminSettingsProvider = ({ children }) => {
   // console.log("allowEditEmail", allowEditEmail)
 
   return (
-    <GlobalContext.Provider value={{
+    <AdminSettingsContext.Provider value={{
       adminSettings,
       error,
       isLoading
     }}>
       {children}
-    </GlobalContext.Provider>
+    </AdminSettingsContext.Provider>
   );
 };
 
-export const useGlobalAdminSettings = () => useContext(GlobalContext);
+export const useGlobalAdminSettings = () => useContext(AdminSettingsContext);

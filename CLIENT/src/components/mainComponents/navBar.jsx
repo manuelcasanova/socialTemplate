@@ -1,7 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+
+//Context
 import { useGlobal } from '../../context/GlobalProvider';
+import { useGlobalAdminSettings } from '../../context/AdminSettingsProvider';
 
 //Components
 import Profile from '../navbarComponents/Profile';
@@ -21,6 +24,11 @@ import { faSignOutAlt, faEnvelope, faCog } from '@fortawesome/free-solid-svg-ico
 const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages, customRoles }) => {
 
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
+
+  // console.log("Superadmin comment reactions", postFeatures.allowCommentReactions, 'Admin comment reaction', adminSettings.allowCommentReactions)
+
+
   // console.log(postFeatures)
 
   // console.log("customRoles", customRoles)
@@ -182,7 +190,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         </div>
       }
 
-      {postFeatures.showPostsFeature &&
+      {
+      // HERE // postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
         <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
       }
 

@@ -9,12 +9,16 @@ const verifyRoles = require('../../middleware/verifyRoles');
 const checkPostReportAccess = (action, intendedRoles = 'dynamic') => {
   return async (req, res, next) => {
     try {
-      const result = await pool.query(`
-        SELECT allow_flag_posts FROM global_provider_settings LIMIT 1;
-      `);
-      const settings = result.rows[0];
+      // Query both settings based on the action
+      const globalResult = await pool.query(`SELECT ${action} FROM global_provider_settings LIMIT 1;`);
+      const adminResult = await pool.query(`SELECT ${action} FROM admin_settings LIMIT 1;`);
 
-      const settingEnabled = settings.allow_flag_posts;
+      const globalSetting = globalResult.rows[0]?.[action] ?? false;
+      const adminSetting = adminResult.rows[0]?.[action] ?? false;
+
+      const settingEnabled = globalSetting && adminSetting;
+
+      // console.log(`[checkPostReportAccess] action=${action}, global=${globalSetting}, admin=${adminSetting}`);
 
       let allowedRoles = [];
 
@@ -31,23 +35,26 @@ const checkPostReportAccess = (action, intendedRoles = 'dynamic') => {
 
       verifyRoles(...allowedRoles)(req, res, next);
     } catch (err) {
+      console.error('checkPostReportAccess error:', err.message);
       next(err);
     }
   };
 };
 
-router.post('/reportpost', checkPostReportAccess('flag'), reportsController.reportPost);
-router.get('/has-reported', checkPostReportAccess('flag'), reportsController.hasReported);
-router.get('/has-hidden', checkPostReportAccess('flag'), reportsController.hasHidden);
-router.get('/hidden-posts', checkPostReportAccess('flag'), reportsController.getHiddenPosts);
 
-// Moderator/SuperAdmin routes
-router.get('/post-report-history', checkPostReportAccess('flag', ['Moderator']), reportsController.getPostReportHistory);
-router.get('/post-report', checkPostReportAccess('flag', ['Moderator']), reportsController.getPostReport);
-router.put('/post/ok/:postId', checkPostReportAccess('flag', ['Moderator']), reportsController.reportPostOk);
-router.post('/post/ok/history', checkPostReportAccess('flag', ['Moderator']), reportsController.addReportHistory);
-router.put('/post/inappropriate/:postId', checkPostReportAccess('flag', ['Moderator']), reportsController.reportPostInappropriate);
-router.post('/post/inappropriate/history', checkPostReportAccess('flag', ['Moderator']), reportsController.addReportHistory);
+router.post('/reportpost', checkPostReportAccess('allow_flag_posts'), reportsController.reportPost);
+router.get('/has-reported', checkPostReportAccess('allow_flag_posts'), reportsController.hasReported);
+router.get('/has-hidden', checkPostReportAccess('allow_flag_posts'), reportsController.hasHidden);
+router.get('/hidden-posts', checkPostReportAccess('allow_flag_posts'), reportsController.getHiddenPosts);
+
+// Moderator routes
+router.get('/post-report-history', checkPostReportAccess('allow_flag_posts', ['Moderator']), reportsController.getPostReportHistory);
+router.get('/post-report', checkPostReportAccess('allow_flag_posts', ['Moderator']), reportsController.getPostReport);
+router.put('/post/ok/:postId', checkPostReportAccess('allow_flag_posts', ['Moderator']), reportsController.reportPostOk);
+router.post('/post/ok/history', checkPostReportAccess('allow_flag_posts', ['Moderator']), reportsController.addReportHistory);
+router.put('/post/inappropriate/:postId', checkPostReportAccess('allow_flag_posts', ['Moderator']), reportsController.reportPostInappropriate);
+router.post('/post/inappropriate/history', checkPostReportAccess('allow_flag_posts', ['Moderator']), reportsController.addReportHistory);
+
 
 
 module.exports = router;

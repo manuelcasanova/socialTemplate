@@ -7,27 +7,46 @@ const verifyRoles = require('../../middleware/verifyRoles');
 const checkPostFeatureAccess = (action) => {
   return async (req, res, next) => {
     try {
-      const settingsResult = await pool.query(`
-        SELECT 
-          show_posts_feature,
-          allow_user_post,
-          allow_admin_post,
-          allow_post_interactions,
-          allow_comments,
-          allow_post_reactions,
-          allow_comment_reactions,
-          allow_delete_posts,
-          allow_delete_comments
-        FROM global_provider_settings
-        LIMIT 1;
-      `);
+      // Fetch global and admin settings
+      const [globalResult, adminResult] = await Promise.all([
+        pool.query(`
+          SELECT 
+            show_posts_feature,
+            allow_user_post,
+            allow_admin_post,
+            allow_post_interactions,
+            allow_comments,
+            allow_post_reactions,
+            allow_comment_reactions,
+            allow_delete_posts,
+            allow_delete_comments
+          FROM global_provider_settings
+          LIMIT 1;
+        `),
+        pool.query(`
+          SELECT 
+            show_posts_feature,
+            allow_user_post,
+            allow_admin_post,
+            allow_post_interactions,
+            allow_comments,
+            allow_post_reactions,
+            allow_comment_reactions,
+            allow_delete_posts,
+            allow_delete_comments
+          FROM admin_settings
+          LIMIT 1;
+        `)
+      ]);
 
-      const settings = settingsResult.rows[0];
+      const global = globalResult.rows[0];
+      const admin = adminResult.rows[0];
+
+      const featureEnabled = (feature) => {
+        return global[feature] && admin[feature];
+      };
 
       let allowedRoles = [];
-
-      // console.log("settings", settings)
-      // console.log("allowedRoles", allowedRoles)
 
       const fetchRoles = async () => {
         const rolesResult = await pool.query(`SELECT role_name FROM roles`);
@@ -35,65 +54,64 @@ const checkPostFeatureAccess = (action) => {
       };
 
       switch (action) {
-        // View posts always depends on show_posts_feature
         case 'view-posts':
-          allowedRoles = settings.show_posts_feature
+          allowedRoles = featureEnabled('show_posts_feature')
             ? await fetchRoles()
             : ['SuperAdmin'];
           break;
 
-          case 'write-posts':
-            if (settings.allow_user_post && settings.allow_admin_post) {
-              allowedRoles = await fetchRoles();
-            } else if (!settings.allow_user_post && settings.allow_admin_post) {
-              allowedRoles = ['Admin', 'SuperAdmin'];
-            } else if (!settings.allow_user_post && !settings.allow_admin_post) {
-              allowedRoles = ['SuperAdmin'];
-            } else {
-              allowedRoles = await fetchRoles(); // fallback in case both true
-            }
-            break;
+        case 'write-posts':
+          const userCanPost = featureEnabled('allow_user_post');
+          const adminCanPost = featureEnabled('allow_admin_post');
+
+          if (userCanPost && adminCanPost) {
+            allowedRoles = await fetchRoles();
+          } else if (!userCanPost && adminCanPost) {
+            allowedRoles = ['Admin', 'SuperAdmin'];
+          } else if (!userCanPost && !adminCanPost) {
+            allowedRoles = ['SuperAdmin'];
+          } else if (userCanPost && !adminCanPost) {
+            // All roles minus Admins (assuming that's what you want)
+            const allRoles = await fetchRoles();
+            allowedRoles = allRoles.filter(role => role !== 'Admin'); // Keep SuperAdmin
+          }
+          break;
 
         case 'view-comments':
-          allowedRoles = settings.allow_comments
-            ? await fetchRoles()
-            : ['SuperAdmin'];
-          break;
-
         case 'write-comments':
-          allowedRoles = settings.allow_comments
+          allowedRoles = featureEnabled('allow_comments')
             ? await fetchRoles()
             : ['SuperAdmin'];
           break;
 
         case 'post-reactions-send':
         case 'post-reactions-data':
-          allowedRoles = settings.allow_post_reactions
+          allowedRoles = featureEnabled('allow_post_reactions')
             ? await fetchRoles()
             : ['SuperAdmin'];
           break;
 
         case 'comment-reactions-send':
         case 'comment-reactions-data':
-          allowedRoles = settings.allow_comment_reactions
+          allowedRoles = featureEnabled('allow_comment_reactions')
             ? await fetchRoles()
             : ['SuperAdmin'];
           break;
 
         case 'delete-post':
-          allowedRoles = settings.allow_delete_posts
+          allowedRoles = featureEnabled('allow_delete_posts')
             ? await fetchRoles()
             : ['SuperAdmin'];
           break;
 
         case 'delete-comment':
-          allowedRoles = settings.allow_delete_comments
+          allowedRoles = featureEnabled('allow_delete_comments')
             ? await fetchRoles()
             : ['SuperAdmin'];
           break;
 
         default:
-          allowedRoles = ['SuperAdmin']; // Fallback
+          allowedRoles = ['SuperAdmin'];
       }
 
       verifyRoles(...allowedRoles)(req, res, next);
@@ -102,7 +120,6 @@ const checkPostFeatureAccess = (action) => {
     }
   };
 };
-
 
 // Posts
 router.get('/all', checkPostFeatureAccess('view-posts'), postsController.getAllPosts);
@@ -127,7 +144,5 @@ router.post('/comments/reactions/send', checkPostFeatureAccess('comment-reaction
 // Delete
 router.put('/delete/:id', checkPostFeatureAccess('delete-post'), postsController.markPostAsDeleted);
 router.put('/comments/delete/:id', checkPostFeatureAccess('delete-comment'), postsController.markCommentAsDeleted);
-
-
 
 module.exports = router;
