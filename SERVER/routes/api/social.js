@@ -35,10 +35,10 @@ const checkSocialAccess = (action) => {
         allow_mute: global.allow_mute && admin.allow_mute,
       };
 
-      console.log('settings in middleware:', settings);
+      // console.log('settings in middleware:', settings);
 
       const roles = await fetchRoles();
-      console.log('roles:', roles);
+      // console.log('roles:', roles);
 
       let allowedRoles = [];
 

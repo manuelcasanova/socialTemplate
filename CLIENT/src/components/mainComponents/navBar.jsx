@@ -191,7 +191,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {
-      // HERE // postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
+    postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
         <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
       }
 
@@ -334,7 +334,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
         </div>
       }
-      {postFeatures.showMessagesFeature &&
+      {
+      postFeatures.showMessagesFeature && adminSettings.showMessagesFeature &&
         <>
           {auth.roles && !hasNewMessages &&
             < div className="nav-item" onClick={() => handleNavigate('/messages')}>

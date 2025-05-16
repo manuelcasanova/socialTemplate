@@ -26,21 +26,26 @@ router.route('/upload-profile-picture/:userId')
   .post(
     async (req, res, next) => {
       try {
-        const settingsResult = await pool.query(`
-          SELECT allow_modify_profile_picture FROM global_provider_settings LIMIT 1;
-        `);
-        const { allow_modify_profile_picture } = settingsResult.rows[0];
+        const [globalResult, adminResult] = await Promise.all([
+          pool.query(`SELECT allow_modify_profile_picture FROM global_provider_settings LIMIT 1;`),
+          pool.query(`SELECT allow_modify_profile_picture FROM admin_settings LIMIT 1;`)
+        ]);
+
+        const globalAllow = globalResult.rows[0]?.allow_modify_profile_picture;
+        const adminAllow = adminResult.rows[0]?.allow_modify_profile_picture;
+
+        const isAllowed = globalAllow && adminAllow;
 
         let allowedRoles;
 
-        if (allow_modify_profile_picture) {
+        if (isAllowed) {
           const roles = await fetchRoles();
           allowedRoles = roles;
         } else {
           allowedRoles = ['SuperAdmin'];
         }
 
-        verifyRoles(...allowedRoles)(req, res, next);
+        return verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {
         next(err);
       }
@@ -48,6 +53,7 @@ router.route('/upload-profile-picture/:userId')
     upload.single('profilePicture'),
     usersController.uploadProfilePicture
   );
+
 
 router.route('/')
   .get(
@@ -93,14 +99,13 @@ router.route('/')
 
 
 
-// Update username
+// Update user profile
 router.route('/update')
   .put(
     async (req, res, next) => {
       try {
         const { editMode } = req.body;
 
-        // Map edit modes to their corresponding setting column
         const settingKeyMap = {
           username: 'allow_edit_username',
           email: 'allow_edit_email',
@@ -114,19 +119,33 @@ router.route('/update')
           return res.status(400).json({ message: 'Invalid edit mode.' });
         }
 
-        const settingsResult = await pool.query(`
-          SELECT 
-            allow_edit_username, 
-            allow_edit_email, 
-            allow_edit_password,
-            allow_modify_profile_picture
-          FROM global_provider_settings
-          LIMIT 1;
-        `);
+        // Fetch from both global and admin settings
+        const [globalResult, adminResult] = await Promise.all([
+          pool.query(`
+            SELECT 
+              allow_edit_username, 
+              allow_edit_email, 
+              allow_edit_password,
+              allow_modify_profile_picture
+            FROM global_provider_settings
+            LIMIT 1;
+          `),
+          pool.query(`
+            SELECT 
+              allow_edit_username, 
+              allow_edit_email, 
+              allow_edit_password,
+              allow_modify_profile_picture
+            FROM admin_settings
+            LIMIT 1;
+          `)
+        ]);
 
-        const settings = settingsResult.rows[0];
+        const globalSettings = globalResult.rows[0] || {};
+        const adminSettings = adminResult.rows[0] || {};
 
-        const isAllowed = settings[settingKey];
+        // Allow only if both global and admin say true
+        const isAllowed = globalSettings[settingKey] && adminSettings[settingKey];
 
         let allowedRoles = [];
 
@@ -137,7 +156,7 @@ router.route('/update')
           allowedRoles = ['SuperAdmin'];
         }
 
-        verifyRoles(...allowedRoles)(req, res, next);
+        return verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {
         next(err);
       }
@@ -147,27 +166,31 @@ router.route('/update')
 
 
 
+
 //Soft delete user account 
-// Soft delete user account 
 router.route('/softdelete/:userId')
   .put(
     async (req, res, next) => {
       try {
-        const settingsResult = await pool.query(`
-          SELECT allow_delete_my_user FROM global_provider_settings LIMIT 1;
-        `);
-        const { allow_delete_my_user } = settingsResult.rows[0];
+        const [globalResult, adminResult] = await Promise.all([
+          pool.query(`SELECT allow_delete_my_user FROM global_provider_settings LIMIT 1;`),
+          pool.query(`SELECT allow_delete_my_user FROM admin_settings LIMIT 1;`)
+        ]);
+
+        const globalAllow = globalResult.rows[0]?.allow_delete_my_user;
+        const adminAllow = adminResult.rows[0]?.allow_delete_my_user;
+
+        const isAllowed = globalAllow && adminAllow;
 
         let allowedRoles;
 
-        if (allow_delete_my_user) {
-          const rolesResult = await fetchRoles();
-          allowedRoles = rolesResult;
+        if (isAllowed) {
+          allowedRoles = await fetchRoles();
         } else {
           allowedRoles = ['SuperAdmin'];
         }
 
-        verifyRoles(...allowedRoles)(req, res, next);
+        return verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {
         next(err); 
       }
