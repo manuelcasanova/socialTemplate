@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 //Context
 import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Hooks
 
@@ -48,6 +49,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -90,13 +92,13 @@ export default function SocialAllUsers({ isNavOpen }) {
 
   useEffect(() => {
   
-    postFeatures.showSocialFeature &&
+    postFeatures.showSocialFeature && adminSettings.showSocialFeature &&
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
 
-    postFeatures.allowMute &&
+    postFeatures.allowMute && adminSettings.allowMute && 
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
 
-    postFeatures.allowFollow &&
+    postFeatures.allowFollow && adminSettings.allowFollow &&
       fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
 
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);

@@ -8,6 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 
 //Context
 import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Styling
 
@@ -41,6 +42,7 @@ const profilePictureExists = async (userId) => {
 
 export default function SocialMuted({ isNavOpen }) {
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [error, setError] = useState(null);
@@ -75,7 +77,7 @@ export default function SocialMuted({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
     {
-      postFeatures.allowMute &&
+      postFeatures.allowMute && adminSettings.allowMute &&
         fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
     }
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);

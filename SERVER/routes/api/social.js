@@ -9,57 +9,74 @@ const pool = require('../../config/db');
 const checkSocialAccess = (action) => {
   return async (req, res, next) => {
     try {
-      const result = await pool.query(`
-        SELECT 
-         show_social_feature, 
-          allow_follow, 
-          allow_mute, 
-          show_posts_feature,
-          show_messages_feature,
-          allow_send_messages,
-          allow_delete_messages
-        FROM global_provider_settings LIMIT 1;
-      `);
+      const [globalResult, adminResult] = await Promise.all([
+        pool.query(`
+          SELECT 
+            show_social_feature, 
+            allow_follow, 
+            allow_mute
+          FROM global_provider_settings LIMIT 1;
+        `),
+        pool.query(`
+          SELECT 
+            show_social_feature, 
+            allow_follow, 
+            allow_mute
+          FROM admin_settings LIMIT 1;
+        `)
+      ]);
 
-      // console.log('action', action)
+      const global = globalResult.rows[0] || {};
+      const admin = adminResult.rows[0] || {};
 
-      const settings = result.rows[0];
-      // console.log('settings', settings)
-      let allowedRoles = [];
+      const settings = {
+        show_social_feature: global.show_social_feature && admin.show_social_feature,
+        allow_follow: global.allow_follow && admin.allow_follow,
+        allow_mute: global.allow_mute && admin.allow_mute,
+      };
+
+      console.log('settings in middleware:', settings);
 
       const roles = await fetchRoles();
+      console.log('roles:', roles);
 
-      // console.log('roles', roles)
+      let allowedRoles = [];
 
-      if (
-        !settings.show_social_feature && !settings.show_posts_feature && !settings.show_messages_feature) {
+      if (!settings.show_social_feature) {
         allowedRoles = ['SuperAdmin'];
       } else {
-        if (action === 'mute' && settings.show_messages_feature) {
-          allowedRoles = roles;
-        } 
-        else {  
-          switch (action) {
-            case 'follow':
-              allowedRoles = settings.allow_follow ? roles : ['SuperAdmin'];
-              break;
-            case 'mute':
-              allowedRoles = settings.allow_mute ? roles : ['SuperAdmin'];
-              break;
-            default:
+        switch (action) {
+          case 'follow':
+            if (settings.allow_follow) {
               allowedRoles = roles;
-          }
+            } else {
+              allowedRoles = ['SuperAdmin'];
+            }
+            break;
+
+          case 'mute':
+            if (settings.allow_mute) {
+              allowedRoles = roles;
+            } else {
+              allowedRoles = ['SuperAdmin'];
+            }
+            break;
+
+          default:
+            allowedRoles = roles;
         }
       }
 
-      // console.log('allowedRoles', allowedRoles)
+      // console.log('allowedRoles:', allowedRoles);
+      // console.log(`Access check for action "${action}": allowedRoles =`, allowedRoles);
 
-        verifyRoles(...allowedRoles)(req, res, next);
-      } catch (err) {
-        next(err);
-      }
-    };
+      return verifyRoles(...allowedRoles)(req, res, next);
+    } catch (err) {
+      console.error('Error checking social access:', err);
+      next(err);
+    }
   };
+};
 
 
   // Define routes with corresponding access requirement

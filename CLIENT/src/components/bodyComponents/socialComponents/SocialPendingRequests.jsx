@@ -7,6 +7,7 @@ import useAuth from "../../../hooks/useAuth";
 
 //Context
 import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Styling
 
@@ -43,6 +44,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({});
@@ -76,13 +78,13 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
 
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
-    {postFeatures.allowMute &&
+    {postFeatures.allowMute && adminSettings.allowMute &&
     fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
     }
-    {postFeatures.allowFollow &&
+    {postFeatures.allowFollow && adminSettings.allowFollow &&
     fetchPending(filters, setPendingRequests, setIsLoading, setError, loggedInUser);
     }
-    {postFeatures.allowFollow &&
+    {postFeatures.allowFollow && adminSettings.allowFollow &&
     fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
     }
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
