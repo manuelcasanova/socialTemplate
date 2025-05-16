@@ -5,6 +5,7 @@ import useAuth from '../../../hooks/useAuth';
 
 //Context
 import { useGlobalAdminSettings } from '../../../context/AdminSettingsProvider';
+import { useGlobal } from '../../../context/GlobalProvider';
 
 //Styling
 import '../../../css/AdminSetup.css'
@@ -16,13 +17,20 @@ import LoadingSpinner from '../../loadingSpinner/LoadingSpinner'
 export default function SuperAdminSetup({ isNavOpen }) {
 
   const { adminSettings, error, isLoading } = useGlobalAdminSettings();
+  const { postFeatures } = useGlobal();
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
-  // console.log("adminSettings in AdminSetup.jsx", adminSettings)
-  // console.log("error in AdminSetup", error)
-  // console.log("isLoading", isLoading)
 
   const [showInfoMessage, setShowInfoMessage] = useState(false)
+
+  const accessRestrictionNote = (
+    <div
+      className="admin-setup-note"
+      style={{ color: 'gray', fontSize: '0.85em', marginLeft: '1em' }}
+    >
+      Access to this feature is restricted to upgraded subscriptions or authorized higher-level admins.
+    </div>
+  );
 
   const handleShowInfoMessage = () => {
     setShowInfoMessage(prev => !prev)
@@ -48,8 +56,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
               type="checkbox"
               id="ShowPostsFeature"
               className="toggle-checkbox"
-              checked={adminSettings.showPostsFeature}
-              onChange={adminSettings.toggleShowPostsFeature}
+              checked={postFeatures.showPostsFeature === false ? false : adminSettings.showPostsFeature}
+              onChange={postFeatures.showPostsFeature === false ? undefined : adminSettings.toggleShowPostsFeature}
+              disabled={postFeatures.showPostsFeature === false}
             />
             <label htmlFor="ShowPostsFeature" className="toggle-label">
               <span className="toggle-circle"></span>
@@ -61,6 +70,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>Enable Posts</div>
         }
+        {postFeatures.showPostsFeature === false && accessRestrictionNote}
 
       </div>
 
@@ -74,8 +84,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowUserPost"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowUserPost}
-                  onChange={adminSettings.toggleAllowUserPost}
+                  checked={postFeatures.allowUserPost === false ? false : adminSettings.allowUserPost}
+                  onChange={postFeatures.allowUserPost === false ? undefined : adminSettings.toggleAllowUserPost}
+                  disabled={postFeatures.allowUserPost === false}
                 />
                 <label htmlFor="AllowUserPost" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -83,6 +94,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Post</div>
+            {postFeatures.allowUserPost === false && accessRestrictionNote}
           </div>
 
         </>}
@@ -95,8 +107,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 type="checkbox"
                 id="AllowPostInteractions"
                 className="toggle-checkbox"
-                checked={adminSettings.allowPostInteractions}
-                onChange={adminSettings.toggleAllowPostInteractions}
+                checked={postFeatures.allowPostInteractions === false ? false : adminSettings.allowPostInteractions}
+                onChange={postFeatures.allowPostInteractions === false ? undefined : adminSettings.toggleAllowPostInteractions}
+                disabled={postFeatures.allowPostInteractions === false}
               />
               <label htmlFor="AllowPostInteractions" className="toggle-label">
                 <span className="toggle-circle"></span>
@@ -104,6 +117,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
             </div>
           </div>
           <div className='admin-setup-line-text'>Enable Post Interactions</div>
+          {postFeatures.allowPostInteractions === false && accessRestrictionNote}
         </div>
       }
 
@@ -116,8 +130,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowPostReactions"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowPostReactions}
-                  onChange={adminSettings.toggleAllowPostReactions}
+                  checked={postFeatures.allowPostReactions === false ? false : adminSettings.allowPostReactions}
+                  onChange={postFeatures.allowPostReactions === false ? undefined : adminSettings.toggleAllowPostReactions}
+                  disabled={postFeatures.allowPostReactions === false}
                 />
                 <label htmlFor="AllowPostReactions" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -125,6 +140,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Reactions on Posts</div>
+            {postFeatures.allowPostReactions === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-subline'>
@@ -134,8 +150,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowFlagPosts"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowFlagPosts}
-                  onChange={adminSettings.toggleAllowFlagPosts}
+                  checked={postFeatures.allowFlagPosts === false ? false : adminSettings.allowFlagPosts}
+                  onChange={postFeatures.allowFlagPosts === false ? undefined : adminSettings.toggleAllowFlagPosts}
+                  disabled={postFeatures.allowFlagPosts === false}
                 />
                 <label htmlFor="AllowFlagPosts" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -143,6 +160,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Report Posts</div>
+            {postFeatures.allowFlagPosts === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-subline'>
@@ -152,8 +170,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowDeletePosts"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowDeletePosts}
-                  onChange={adminSettings.toggleAllowDeletePosts}
+                  checked={postFeatures.allowDeletePosts === false ? false : adminSettings.allowDeletePosts}
+                  onChange={postFeatures.allowDeletePosts === false ? undefined : adminSettings.toggleAllowDeletePosts}
+                  disabled={postFeatures.allowDeletePosts === false}
                 />
                 <label htmlFor="AllowDeletePosts" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -161,6 +180,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Delete posts</div>
+            {postFeatures.allowDeletePosts === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-subline'>
@@ -170,8 +190,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowComments"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowComments}
-                  onChange={adminSettings.toggleAllowComments}
+                  checked={postFeatures.allowComments === false ? false : adminSettings.allowComments}
+                  onChange={postFeatures.allowComments === false ? undefined : adminSettings.toggleAllowComments}
+                  disabled={postFeatures.allowComments === false}
                 />
                 <label htmlFor="AllowComments" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -179,6 +200,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Comments on Posts</div>
+            {postFeatures.allowComments === false && accessRestrictionNote}
           </div>
 
           {(adminSettings.allowComments || isSuperAdmin) &&
@@ -190,8 +212,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                       type="checkbox"
                       id="AllowCommentsReactions"
                       className="toggle-checkbox"
-                      checked={adminSettings.allowCommentReactions}
-                      onChange={adminSettings.toggleAllowCommentReactions}
+                      checked={postFeatures.allowCommentReactions === false ? false : adminSettings.allowCommentReactions}
+                      onChange={postFeatures.allowCommentReactions === false ? undefined : adminSettings.toggleAllowCommentReactions}
+                      disabled={postFeatures.allowCommentReactions === false}
                     />
                     <label htmlFor="AllowCommentsReactions" className="toggle-label">
                       <span className="toggle-circle"></span>
@@ -199,6 +222,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   </div>
                 </div>
                 <div className='admin-setup-line-text'>Reactions on comments</div>
+                {postFeatures.allowCommentReactions === false && accessRestrictionNote}
               </div>
 
               <div className='admin-setup-subline2'>
@@ -208,8 +232,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                       type="checkbox"
                       id="AllowFlagComments"
                       className="toggle-checkbox"
-                      checked={adminSettings.allowFlagComments}
-                      onChange={adminSettings.toggleAllowFlagComments}
+                      checked={postFeatures.allowFlagComments === false ? false : adminSettings.allowFlagComments}
+                      onChange={postFeatures.allowFlagComments === false ? undefined : adminSettings.toggleAllowFlagComments}
+                      disabled={postFeatures.allowFlagComments === false}
                     />
                     <label htmlFor="AllowFlagComments" className="toggle-label">
                       <span className="toggle-circle"></span>
@@ -217,6 +242,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   </div>
                 </div>
                 <div className='admin-setup-line-text'>Report comments</div>
+                {postFeatures.allowFlagComments === false && accessRestrictionNote}
               </div>
 
               <div className='admin-setup-subline2'>
@@ -226,8 +252,19 @@ export default function SuperAdminSetup({ isNavOpen }) {
                       type="checkbox"
                       id="AllowDeleteComments"
                       className="toggle-checkbox"
-                      checked={adminSettings.allowDeleteComments}
-                      onChange={adminSettings.toggleAllowDeleteComments}
+
+                      checked={
+                        postFeatures.allowDeleteComments === false
+                          ? false // Force false when disallowed
+                          : adminSettings.allowDeleteComments
+                      }
+                      onChange={
+                        postFeatures.allowDeleteComments === false
+                          ? undefined // Prevent changes
+                          : adminSettings.toggleAllowDeleteComments
+                      }
+                      disabled={postFeatures.allowDeleteComments === false}
+
                     />
                     <label htmlFor="AllowDeleteComments" className="toggle-label">
                       <span className="toggle-circle"></span>
@@ -235,6 +272,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   </div>
                 </div>
                 <div className='admin-setup-line-text'>Delete comments</div>
+
+                {postFeatures.allowDeleteComments === false && accessRestrictionNote}
+
               </div>
 
             </>
@@ -252,8 +292,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
               type="checkbox"
               id="ShowMessagessFeature"
               className="toggle-checkbox"
-              checked={adminSettings.showMessagesFeature}
-              onChange={adminSettings.toggleShowMessagesFeature}
+              checked={postFeatures.showMessagesFeature === false ? false : adminSettings.showMessagesFeature}
+              onChange={postFeatures.showMessagesFeature === false ? undefined : adminSettings.toggleShowMessagesFeature}
+              disabled={postFeatures.showMessagesFeature === false}
             />
             <label htmlFor="ShowMessagessFeature" className="toggle-label">
               <span className="toggle-circle"></span>
@@ -265,6 +306,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>Enable Messaging</div>
         }
+        {postFeatures.showMessagesFeature === false && accessRestrictionNote}
       </div>
 
       {adminSettings.showMessagesFeature &&
@@ -276,8 +318,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowSendMessages"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowSendMessages}
-                  onChange={adminSettings.toggleAllowSendMessages}
+                  checked={postFeatures.allowSendMessages === false ? false : adminSettings.allowSendMessages}
+                  onChange={postFeatures.allowSendMessages === false ? undefined : adminSettings.toggleAllowSendMessages}
+                  disabled={postFeatures.allowSendMessages === false}
                 />
                 <label htmlFor="AllowSendMessages" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -285,6 +328,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Message</div>
+            {postFeatures.allowSendMessages === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-line'>
@@ -294,8 +338,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowDeleteMessages"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowDeleteMessages}
-                  onChange={adminSettings.toggleAllowDeleteMessages}
+                  checked={postFeatures.allowDeleteMessages === false ? false : adminSettings.allowDeleteMessages}
+                  onChange={postFeatures.allowDeleteMessages === false ? undefined : adminSettings.toggleAllowDeleteMessages}
+                  disabled={postFeatures.allowDeleteMessages === false}
                 />
                 <label htmlFor="AllowDeleteMessages" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -303,6 +348,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users can delete messages</div>
+            {postFeatures.allowDeleteMessages === false && accessRestrictionNote}
           </div>
         </>}
 
@@ -315,8 +361,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
               type="checkbox"
               id="ShowSocialFeature"
               className="toggle-checkbox"
-              checked={adminSettings.showSocialFeature}
-              onChange={adminSettings.toggleShowSocialFeature}
+              checked={postFeatures.showSocialFeature === false ? false : adminSettings.showSocialFeature}
+              onChange={postFeatures.showSocialFeature === false ? undefined : adminSettings.toggleShowSocialFeature}
+              disabled={postFeatures.showSocialFeature === false}
             />
             <label htmlFor="ShowSocialFeature" className="toggle-label">
               <span className="toggle-circle"></span>
@@ -328,6 +375,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>Enable Social Features</div>
         }
+        {postFeatures.showSocialFeature === false && accessRestrictionNote}
       </div>
 
       {adminSettings.showSocialFeature &&
@@ -339,8 +387,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowFollow"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowFollow}
-                  onChange={adminSettings.toggleAllowFollow}
+                  checked={postFeatures.allowFollow === false ? false : adminSettings.allowFollow}
+                  onChange={postFeatures.allowFollow === false ? undefined : adminSettings.toggleAllowFollow}
+                  disabled={postFeatures.allowFollow === false}
                 />
                 <label htmlFor="AllowFollow" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -348,6 +397,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Enable users following</div>
+            {postFeatures.allowFollow === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-line'>
@@ -357,8 +407,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowMute"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowMute}
-                  onChange={adminSettings.toggleAllowMute}
+                  checked={postFeatures.allowMute === false ? false : adminSettings.allowMute}
+                  onChange={postFeatures.allowMute === false ? undefined : adminSettings.toggleAllowMute}
+                  disabled={postFeatures.allowMute === false}
                 />
                 <label htmlFor="AllowMute" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -366,6 +417,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Enable muting</div>
+            {postFeatures.allowMute === false && accessRestrictionNote}
           </div>
         </>}
 
@@ -378,8 +430,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
               type="checkbox"
               id="ShowEditProfileFeature"
               className="toggle-checkbox"
-              checked={adminSettings.showProfileFeature}
-              onChange={adminSettings.toggleShowProfileFeature}
+              checked={postFeatures.showProfileFeature === false ? false : adminSettings.showProfileFeature}
+              onChange={postFeatures.showProfileFeature === false ? undefined : adminSettings.toggleShowProfileFeature}
+              disabled={postFeatures.showProfileFeature === false}
             />
             <label htmlFor="ShowEditProfileFeature" className="toggle-label">
               <span className="toggle-circle"></span>
@@ -391,6 +444,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>Enable Edit Profile</div>
         }
+        {postFeatures.showProfileFeature === false && accessRestrictionNote}
 
       </div>
 
@@ -403,8 +457,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowEditUsername"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowEditUsername}
-                  onChange={adminSettings.toggleAllowEditUsername}
+                  checked={postFeatures.allowEditUsername === false ? false : adminSettings.allowEditUsername}
+                  onChange={postFeatures.allowEditUsername === false ? undefined : adminSettings.toggleAllowEditUsername}
+                  disabled={postFeatures.allowEditUsername === false}
                 />
                 <label htmlFor="AllowEditUsername" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -412,6 +467,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Edit their Username</div>
+            {postFeatures.allowEditUsername === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-line'>
@@ -421,8 +477,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowEditEmail"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowEditEmail}
-                  onChange={adminSettings.toggleAllowEditEmail}
+                  checked={postFeatures.allowEditEmail === false ? false : adminSettings.allowEditEmail}
+                  onChange={postFeatures.allowEditEmail === false ? undefined : adminSettings.toggleAllowEditEmail}
+                  disabled={postFeatures.allowEditEmail === false}
                 />
                 <label htmlFor="AllowEditEmail" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -430,13 +487,14 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Edit their Email</div>
-           
+            {postFeatures.allowEditEmail === false && accessRestrictionNote}
+
             <div
               onClick={handleShowInfoMessage}
               className='info-button'>i</div>
           </div>
 
-          {showInfoMessage && <div className='info-message' style={{marginBottom: '1em'}}>Users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.</div>}
+          {showInfoMessage && <div className='info-message' style={{ marginBottom: '1em' }}>Users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.</div>}
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
@@ -445,8 +503,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowEditPassword"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowEditPassword}
-                  onChange={adminSettings.toggleAllowEditPassword}
+                  checked={postFeatures.allowEditPassword === false ? false : adminSettings.allowEditPassword}
+                  onChange={postFeatures.allowEditPassword === false ? undefined : adminSettings.toggleAllowEditPassword}
+                  disabled={postFeatures.allowEditPassword === false}
                 />
                 <label htmlFor="AllowEditPassword" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -454,6 +513,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Edit their Password</div>
+            {postFeatures.allowEditPassword === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-line'>
@@ -463,8 +523,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowEditProfileImage"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowModifyProfilePicture}
-                  onChange={adminSettings.toggleAllowEditProfileImage}
+                  checked={postFeatures.allowModifyProfilePicture === false ? false : adminSettings.allowModifyProfilePicture}
+                  onChange={postFeatures.allowModifyProfilePicture === false ? undefined : adminSettings.toggleAllowEditProfileImage}
+                  disabled={postFeatures.allowModifyProfilePicture === false}
                 />
                 <label htmlFor="AllowEditProfileImage" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -472,6 +533,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Change their Profile Image</div>
+            {postFeatures.allowModifyProfilePicture === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-line'>
@@ -481,8 +543,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                   type="checkbox"
                   id="AllowDeleteMyUser"
                   className="toggle-checkbox"
-                  checked={adminSettings.allowDeleteMyUser}
-                  onChange={adminSettings.toggleAllowDeleteMyUser}
+                  checked={postFeatures.allowDeleteMyUser === false ? false : adminSettings.allowDeleteMyUser}
+                  onChange={postFeatures.allowDeleteMyUser === false ? undefined : adminSettings.toggleAllowDeleteMyUser}
+                  disabled={postFeatures.allowDeleteMyUser === false}
                 />
                 <label htmlFor="AllowDeleteMyUser" className="toggle-label">
                   <span className="toggle-circle"></span>
@@ -490,6 +553,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Delete their Account</div>
+            {postFeatures.allowDeleteMyUser === false && accessRestrictionNote}
           </div>
         </>}
 
