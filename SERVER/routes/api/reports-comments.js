@@ -5,7 +5,7 @@ const verifyRoles = require('../../middleware/verifyRoles');
 const pool = require('../../config/db');
 
 // Dynamic comment settings middleware with dual-source validation
-const checkCommentSettingAccess = (action, intendedRoles) => {
+const checkCommentSettingAccess = (action, intendedRoles, options = {}) => {
   return async (req, res, next) => {
     try {
       const [globalResult, adminResult] = await Promise.all([
@@ -39,7 +39,7 @@ const checkCommentSettingAccess = (action, intendedRoles) => {
 
       let allowedRoles = [];
 
-      if (settingMap[action]) {
+      if (settingMap[action] || options.alwaysAllow) {
         if (intendedRoles === 'dynamic') {
           const rolesResult = await pool.query(`SELECT role_name FROM roles`);
           allowedRoles = rolesResult.rows.map(role => role.role_name);
@@ -84,7 +84,7 @@ router.route('/comment/ok/history')
 
 router.route('/has-reported')
   .get(
-    checkCommentSettingAccess('flag', 'dynamic'),
+    checkCommentSettingAccess('flag', 'dynamic', { alwaysAllow: true }),
     reportsCommentsController.hasReported
   );
 
@@ -111,7 +111,7 @@ router.route('/comment/inappropriate/history')
 
 router.route('/has-hidden')
   .get(
-    checkCommentSettingAccess('flag', 'dynamic'),
+    checkCommentSettingAccess('flag', 'dynamic', { alwaysAllow: true }),
     reportsCommentsController.hasHidden
   );
 

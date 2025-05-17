@@ -35,8 +35,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const { postFeatures } = useGlobal();
   const { adminSettings } = useGlobalAdminSettings();
-  console.log("superadmin allow comments", postFeatures.allowComments, 'admim', adminSettings.allowComments)
-console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', adminSettings.showPostsFeature)
+//   console.log("superadmin allow comments", postFeatures.allowComments, 'admim', adminSettings.allowComments)
+// console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', adminSettings.showPostsFeature)
   const loggedInUserId = auth.userId
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
@@ -82,7 +82,7 @@ console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', 
 
       handleShowReactOptions();
 
-      if (postFeatures.allowPostReactions || isSuperAdmin) {
+      if (postFeatures.allowPostReactions  || isSuperAdmin) {
       fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount });
       }
 
@@ -123,7 +123,7 @@ console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', 
         <div className="post-interactions-top">
 
           {
-          (postFeatures.allowPostReactions || isSuperAdmin )&&
+          ((postFeatures.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin ) &&
             <div className='post-interactions-top-left-reaction'
               onClick={() => navigate(`/posts/reactions/${postId}`)}>
               <FontAwesomeIcon icon={faSmile} />
@@ -132,7 +132,7 @@ console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', 
               </div>
             </div>
           }
-          {(postFeatures.allowComments || isSuperAdmin ) &&
+          {((postFeatures.allowComments && adminSettings.allowComments) || isSuperAdmin) &&
             <div className='post-interactions-top-right-comments'
               onClick={() => navigate(`/posts/${postId}`)}>
               <div className='post-interactions-text'
@@ -149,7 +149,7 @@ console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', 
         <div className="post-interactions-bottom">
 
           {
-          (postFeatures.allowPostReactions || isSuperAdmin )&&
+          ((postFeatures.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin )&&
             <div className='post-interactions-bottom-left-reaction'
               onClick={handleShowReactOptions}>
 
@@ -206,13 +206,13 @@ console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', 
                   <div className="post-menu-dropdown">
                     {
                     
-                    (postFeatures.allowDeletePosts || isSuperAdmin ) &&
+                    ((postFeatures.allowDeletePosts && adminSettings.allowDeletePosts) || isSuperAdmin ) &&
                       <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} setError={setError} />
                     }
 
                     {
                     
-                    (postFeatures.allowFlagPosts || isSuperAdmin )&&
+                    ((postFeatures.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin )&&
                       <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
                     }
                     <FontAwesomeIcon icon={faXmark}

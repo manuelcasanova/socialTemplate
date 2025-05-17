@@ -209,7 +209,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                             f.follower_id === user.user_id ||
                             f.followee_id === user.user_id &&
                             f.status === "accepted"
-                          ) && postFeatures.showMessagesFeature && (
+                          ) && postFeatures.showMessagesFeature && adminSettings.showMessagesFeature && (
 
                             <button
                               onClick={() => navigate(`/messages/${user.user_id}`)}

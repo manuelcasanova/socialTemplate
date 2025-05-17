@@ -5,6 +5,7 @@ import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 //Context
 
 import { useGlobal } from "../../../../context/GlobalProvider";
+import { useGlobalAdminSettings } from "../../../../context/AdminSettingsProvider";
 
 //Styling
 
@@ -15,6 +16,7 @@ const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedC
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
   const axiosPrivate = useAxiosPrivate()
   const muteUser = () => {
     axiosPrivate.post(`${BACKEND}/social/users/mute`, { userLoggedin, userId })
@@ -41,7 +43,7 @@ const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedC
   };
 
   return (
-    (postFeatures.allowMute || isSuperAdmin) &&
+    (postFeatures.allowMute && adminSettings.allowMute || isSuperAdmin) &&
     <div className="user-info-buttons">
       {isMuted ? (
         <button title="Unmute user" onClick={unmuteUser}><FontAwesomeIcon icon={faBell}></FontAwesomeIcon></button>

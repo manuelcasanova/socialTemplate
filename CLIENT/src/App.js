@@ -168,7 +168,7 @@ function App() {
           </Route>
 
           {
-            postFeatures.showPostsFeature &&
+            postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
             <>
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
                 <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
@@ -246,7 +246,7 @@ function App() {
 
 
           {
-          //  postFeatures.showPostsFeature && adminSettings.showPostsFeature && 
+            postFeatures.showPostsFeature && adminSettings.showPostsFeature && 
             <>
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>

@@ -26,10 +26,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   const { postFeatures } = useGlobal();
   const { adminSettings } = useGlobalAdminSettings();
 
+  // console.log('adminSettings', adminSettings)
+
   // console.log("Superadmin comment reactions", postFeatures.allowCommentReactions, 'Admin comment reaction', adminSettings.allowCommentReactions)
 
 
-  // console.log(postFeatures)
+  // console.log(postFeatures.showSocialFeature, adminSettings.showSocialFeature)
 
   // console.log("customRoles", customRoles)
   // console.log("customRoles length", customRoles.length)
@@ -81,7 +83,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     };
 
     if (loggedInUser) {
-      postFeatures.showSocialFeature && postFeatures.allowFollow &&
+      postFeatures.showSocialFeature && adminSettings.showSocialFeature && postFeatures.allowFollow && adminSettings.allowFollow &&
         fetchFollowNotifications();
     }
   }, [loggedInUser, axiosPrivate]);
@@ -191,12 +193,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {
-    postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
+        postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
         <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
       }
 
       {auth.roles && auth.roles.includes('Moderator') &&
-        postFeatures.showPostsFeature &&
+        postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
         <div className='nav-item-with-dropdown'>
           <div className='nav-item' onClick={() => toggleSection('moderator')}>Moderator
             {showSections.moderator ? '▲' : '▼'
@@ -239,7 +241,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
       }
 
-      {postFeatures.showSocialFeature &&
+      {
+        ((postFeatures.showSocialFeature && adminSettings.showSocialFeature) || isSuperAdmin ) &&
         <>
           {
             auth.roles && <div className='nav-item-with-dropdown'>
@@ -261,7 +264,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
                 <>
                   <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>All users</div>
 
-                  {postFeatures.allowFollow &&
+                  {postFeatures.allowFollow && adminSettings.allowFollow &&
                     <>
                       <div className="subitem" onClick={() => handleNavigate('/social/following')}>
                         Following
@@ -335,7 +338,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         </div>
       }
       {
-      postFeatures.showMessagesFeature && adminSettings.showMessagesFeature &&
+        postFeatures.showMessagesFeature && adminSettings.showMessagesFeature &&
         <>
           {auth.roles && !hasNewMessages &&
             < div className="nav-item" onClick={() => handleNavigate('/messages')}>

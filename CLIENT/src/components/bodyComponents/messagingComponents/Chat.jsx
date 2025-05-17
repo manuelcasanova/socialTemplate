@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 
 //Context
 import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 // Hooks
 import useAuth from "../../../hooks/useAuth";
@@ -38,6 +39,8 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   const { userId } = useParams();
   const { auth } = useAuth();
   const { postFeatures } = useGlobal();
+  const { adminSettings } = useGlobalAdminSettings();
+  // console.log('adminSettings in Chat', adminSettings)
   const axiosPrivate = useAxiosPrivate();
   const loggedInUser = auth.userId;
   const navigate = useNavigate();
@@ -242,7 +245,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
           </h2>
 
 
-          {postFeatures.allowSendMessages &&
+          {postFeatures.allowSendMessages && adminSettings.allowSendMessages && 
             <div className="users-messaging-send">
               <input
                 placeholder="Aa"
@@ -315,7 +318,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                           </p>
                           {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
                           {!message.is_deleted && isSender && 
-                          postFeatures.allowDeleteMessages && 
+                          postFeatures.allowDeleteMessages && adminSettings.allowDeleteMessages &&  
                           (
                             <FontAwesomeIcon
                               className="delete-chat-messsage"

@@ -95,7 +95,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
     <div className="post-comment-interactions">
       <div className="post-comment-date">{formatDate(commentDate)}</div>
 
-      {(postFeatures.allowCommentReactions || isSuperAdmin) && <>
+      {((postFeatures.allowCommentReactions && adminSettings.allowCommentReactions) || isSuperAdmin) && <>
         <div className="post-comment-react"
           onClick={handleShowReactOptions}>
           {!reactOption && (
@@ -156,10 +156,10 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
           )}
           {showEllipsisMenu && (
             <div className="post-menu-dropdown">
-              {(postFeatures.allowDeleteComments || isSuperAdmin ) &&
+              {((postFeatures.allowDeleteComments && adminSettings.allowDeleteComments) || isSuperAdmin) &&
                 <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
               }
-              {(postFeatures.allowFlagComments || isSuperAdmin  )&&
+              {((postFeatures.allowFlagComments && adminSettings.allowFlagComments)|| isSuperAdmin) &&
                 <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
               }
               <FontAwesomeIcon icon={faXmark}

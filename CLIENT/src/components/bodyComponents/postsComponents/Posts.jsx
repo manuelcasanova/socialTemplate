@@ -246,7 +246,7 @@ export default function Posts({ isNavOpen }) {
       <div className="admin-posts">
 
         {(isAdmin && postFeatures.allowAdminPost) ||
-          (!isAdmin && postFeatures.allowUserPost) ? (
+          (!isAdmin && postFeatures.allowUserPost && adminSettings.allowUserPost) ? (
 
           <WritePost
             loggedInUser={loggedInUser}
