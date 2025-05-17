@@ -177,7 +177,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Delete posts</div>
+            <div className='admin-setup-line-text'>Delete Posts</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -215,7 +215,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Reactions on comments</div>
+                <div className='admin-setup-line-text'>Reactions on Comments</div>
               </div>
 
               <div className='admin-setup-subline2'>
@@ -233,7 +233,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Report comments</div>
+                <div className='admin-setup-line-text'>Report Comments</div>
               </div>
 
               <div className='admin-setup-subline2'>
@@ -251,7 +251,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Delete comments</div>
+                <div className='admin-setup-line-text'>Delete Comments</div>
               </div>
 
             </>
@@ -301,7 +301,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Users Can Message</div>
+            <div className='admin-setup-line-text'>Users Can Send Messages</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -319,7 +319,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Users can delete messages</div>
+            <div className='admin-setup-line-text'>Users Can Delete Messages</div>
           </div>
         </>}
 
@@ -364,7 +364,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Enable users following</div>
+            <div className='admin-setup-line-text'>Enable Users Following</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -382,7 +382,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Enable muting</div>
+            <div className='admin-setup-line-text'>Enable Muting</div>
           </div>
         </>}
 
@@ -491,7 +491,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               className='info-button'>i</div>
           </div>
 
-          {showInfoMessage && <div className='info-message' style={{marginBottom: '1em'}}>Users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.</div>}
+          {showInfoMessage && <div className='info-message' style={{marginBottom: '1em'}}>If active, users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.</div>}
 
           <div className='admin-setup-line'>
             <div className="toggle-container">

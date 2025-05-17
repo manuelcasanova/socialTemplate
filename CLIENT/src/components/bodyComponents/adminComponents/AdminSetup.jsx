@@ -22,6 +22,37 @@ export default function SuperAdminSetup({ isNavOpen }) {
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
 
   const [showInfoMessage, setShowInfoMessage] = useState(false)
+  const [showAccessRestrictionNote, setShowAccessRestrictionNote] = useState({
+    allowEditUsername: false,
+    allowEditEmail: false,
+    allowDeleteMyUser: false,
+    showPostsFeature: false,
+    allowUserPost: false,
+    allowPostInteractions: false,
+    allowPostReactions: false,
+    allowFlagPosts: false,
+    allowDeletePosts: false,
+    allowComments: false,
+    allowCommentReactions: false,
+    allowFlagComments: false,
+    allowDeleteComments: false,
+    showMessagesFeature: false,
+    allowSendMessages: false,
+    allowDeleteMessages: false,
+    showSocialFeature: false,
+    allowFollow: false,
+    allowMute: false,
+    showProfileFeature: false,
+    allowEditPassword: false,
+  });
+
+  const handleShowAccessRestrictionNote = (field) => {
+    setShowAccessRestrictionNote(prev => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
 
   const accessRestrictionNote = (
     <div
@@ -51,7 +82,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
-          <div className="toggle-wrapper">
+          <div className="toggle-wrapper"
+            onClick={() => {
+              if (postFeatures.showPostsFeature === false) {
+                handleShowAccessRestrictionNote('showPostsFeature');
+              }
+            }}
+          >
             <input
               type="checkbox"
               id="ShowPostsFeature"
@@ -70,7 +107,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>Enable Posts</div>
         }
-        {postFeatures.showPostsFeature === false && accessRestrictionNote}
+        {showAccessRestrictionNote.showPostsFeature && postFeatures.showPostsFeature === false && accessRestrictionNote}
 
       </div>
 
@@ -79,7 +116,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
 
           <div className='admin-setup-subline'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowUserPost === false) {
+                    handleShowAccessRestrictionNote('allowUserPost');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowUserPost"
@@ -94,7 +137,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Post</div>
-            {postFeatures.allowUserPost === false && accessRestrictionNote}
+            {showAccessRestrictionNote.allowUserPost && postFeatures.allowUserPost === false && accessRestrictionNote}
           </div>
 
         </>}
@@ -102,7 +145,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
       {adminSettings.showPostsFeature &&
         <div className='admin-setup-line'>
           <div className="toggle-container">
-            <div className="toggle-wrapper">
+            <div className="toggle-wrapper"
+              onClick={() => {
+                if (postFeatures.allowPostInteractions === false) {
+                  handleShowAccessRestrictionNote('allowPostInteractions');
+                }
+              }}
+            >
               <input
                 type="checkbox"
                 id="AllowPostInteractions"
@@ -117,7 +166,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
             </div>
           </div>
           <div className='admin-setup-line-text'>Enable Post Interactions</div>
-          {postFeatures.allowPostInteractions === false && accessRestrictionNote}
+          {showAccessRestrictionNote.allowPostInteractions && postFeatures.allowPostInteractions === false && accessRestrictionNote}
         </div>
       }
 
@@ -125,7 +174,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
         <>
           <div className='admin-setup-subline'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowPostReactions === false) {
+                    handleShowAccessRestrictionNote('allowPostReactions');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowPostReactions"
@@ -140,12 +195,18 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Reactions on Posts</div>
-            {postFeatures.allowPostReactions === false && accessRestrictionNote}
+            {showAccessRestrictionNote.allowPostReactions && postFeatures.allowPostReactions === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-subline'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowFlagPosts === false) {
+                    handleShowAccessRestrictionNote('allowFlagPosts');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowFlagPosts"
@@ -160,12 +221,18 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Report Posts</div>
-            {postFeatures.allowFlagPosts === false && accessRestrictionNote}
+            {showAccessRestrictionNote.allowFlagPosts && postFeatures.allowFlagPosts === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-subline'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowDeletePosts === false) {
+                    handleShowAccessRestrictionNote('allowDeletePosts');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowDeletePosts"
@@ -179,13 +246,19 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Delete posts</div>
-            {postFeatures.allowDeletePosts === false && accessRestrictionNote}
+            <div className='admin-setup-line-text'>Delete Posts</div>
+            {showAccessRestrictionNote.allowDeletePosts && postFeatures.allowDeletePosts === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-subline'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowComments === false) {
+                    handleShowAccessRestrictionNote('allowComments');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowComments"
@@ -200,14 +273,20 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Comments on Posts</div>
-            {postFeatures.allowComments === false && accessRestrictionNote}
+            {showAccessRestrictionNote.allowComments && postFeatures.allowComments === false && accessRestrictionNote}
           </div>
 
           {(adminSettings.allowComments || isSuperAdmin) &&
             <>
               <div className='admin-setup-subline2'>
                 <div className="toggle-container">
-                  <div className="toggle-wrapper">
+                  <div className="toggle-wrapper"
+                    onClick={() => {
+                      if (postFeatures.allowCommentReactions === false) {
+                        handleShowAccessRestrictionNote('allowCommentReactions');
+                      }
+                    }}
+                  >
                     <input
                       type="checkbox"
                       id="AllowCommentsReactions"
@@ -221,13 +300,19 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Reactions on comments</div>
-                {postFeatures.allowCommentReactions === false && accessRestrictionNote}
+                <div className='admin-setup-line-text'>Reactions on Comments</div>
+                {showAccessRestrictionNote.allowCommentReactions && postFeatures.allowCommentReactions === false && accessRestrictionNote}
               </div>
 
               <div className='admin-setup-subline2'>
                 <div className="toggle-container">
-                  <div className="toggle-wrapper">
+                  <div className="toggle-wrapper"
+                    onClick={() => {
+                      if (postFeatures.allowFlagComments === false) {
+                        handleShowAccessRestrictionNote('allowFlagComments');
+                      }
+                    }}
+                  >
                     <input
                       type="checkbox"
                       id="AllowFlagComments"
@@ -241,13 +326,19 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Report comments</div>
-                {postFeatures.allowFlagComments === false && accessRestrictionNote}
+                <div className='admin-setup-line-text'>Report Comments</div>
+                {showAccessRestrictionNote.allowFlagComments && postFeatures.allowFlagComments === false && accessRestrictionNote}
               </div>
 
               <div className='admin-setup-subline2'>
                 <div className="toggle-container">
-                  <div className="toggle-wrapper">
+                  <div className="toggle-wrapper"
+                    onClick={() => {
+                      if (postFeatures.allowDeleteComments === false) {
+                        handleShowAccessRestrictionNote('allowDeleteComments');
+                      }
+                    }}
+                  >
                     <input
                       type="checkbox"
                       id="AllowDeleteComments"
@@ -271,9 +362,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>Delete comments</div>
+                <div className='admin-setup-line-text'>Delete Comments</div>
 
-                {postFeatures.allowDeleteComments === false && accessRestrictionNote}
+                {showAccessRestrictionNote.allowDeleteComments && postFeatures.allowDeleteComments === false && accessRestrictionNote}
 
               </div>
 
@@ -287,7 +378,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
-          <div className="toggle-wrapper">
+          <div className="toggle-wrapper"
+            onClick={() => {
+              if (postFeatures.showMessagesFeature === false) {
+                handleShowAccessRestrictionNote('showMessagesFeature');
+              }
+            }}
+          >
             <input
               type="checkbox"
               id="ShowMessagessFeature"
@@ -306,14 +403,20 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>Enable Messaging</div>
         }
-        {postFeatures.showMessagesFeature === false && accessRestrictionNote}
+        {showAccessRestrictionNote.showMessagesFeature && postFeatures.showMessagesFeature === false && accessRestrictionNote}
       </div>
 
       {adminSettings.showMessagesFeature &&
         <>
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowSendMessages === false) {
+                    handleShowAccessRestrictionNote('allowSendMessages');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowSendMessages"
@@ -327,13 +430,19 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Users Can Message</div>
-            {postFeatures.allowSendMessages === false && accessRestrictionNote}
+            <div className='admin-setup-line-text'>Users Can Send Messages</div>
+            {showAccessRestrictionNote.allowSendMessages && postFeatures.allowSendMessages === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowDeleteMessages === false) {
+                    handleShowAccessRestrictionNote('allowDeleteMessages');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowDeleteMessages"
@@ -347,8 +456,8 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Users can delete messages</div>
-            {postFeatures.allowDeleteMessages === false && accessRestrictionNote}
+            <div className='admin-setup-line-text'>Users Can Delete Messages</div>
+            {showAccessRestrictionNote.allowDeleteMessages && postFeatures.allowDeleteMessages === false && accessRestrictionNote}
           </div>
         </>}
 
@@ -356,7 +465,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
-          <div className="toggle-wrapper">
+          <div className="toggle-wrapper"
+            onClick={() => {
+              if (postFeatures.showSocialFeature === false) {
+                handleShowAccessRestrictionNote('showSocialFeature');
+              }
+            }}
+          >
             <input
               type="checkbox"
               id="ShowSocialFeature"
@@ -375,14 +490,20 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>Enable Social Features</div>
         }
-        {postFeatures.showSocialFeature === false && accessRestrictionNote}
+            {showAccessRestrictionNote.showSocialFeature && postFeatures.showSocialFeature === false && accessRestrictionNote}
       </div>
 
       {adminSettings.showSocialFeature &&
         <>
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowFollow === false) {
+                    handleShowAccessRestrictionNote('allowFollow');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowFollow"
@@ -396,13 +517,19 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Enable users following</div>
-            {postFeatures.allowFollow === false && accessRestrictionNote}
+            <div className='admin-setup-line-text'>Enable Users Following</div>
+            {showAccessRestrictionNote.allowFollow && postFeatures.allowFollow === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowMute === false) {
+                    handleShowAccessRestrictionNote('allowMute');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowMute"
@@ -416,8 +543,8 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>Enable muting</div>
-            {postFeatures.allowMute === false && accessRestrictionNote}
+            <div className='admin-setup-line-text'>Enable Muting</div>
+            {showAccessRestrictionNote.allowMute && postFeatures.allowMute === false && accessRestrictionNote}
           </div>
         </>}
 
@@ -425,7 +552,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
-          <div className="toggle-wrapper">
+          <div className="toggle-wrapper"
+            onClick={() => {
+              if (postFeatures.showProfileFeature === false) {
+                handleShowAccessRestrictionNote('showProfileFeature');
+              }
+            }}
+          >
             <input
               type="checkbox"
               id="ShowEditProfileFeature"
@@ -444,7 +577,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>Enable Edit Profile</div>
         }
-        {postFeatures.showProfileFeature === false && accessRestrictionNote}
+            {showAccessRestrictionNote.showProfileFeature && postFeatures.showProfileFeature === false && accessRestrictionNote}
 
       </div>
 
@@ -452,7 +585,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
         <>
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowEditUsername === false) {
+                    handleShowAccessRestrictionNote('allowEditUsername');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowEditUsername"
@@ -467,12 +606,19 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Edit their Username</div>
-            {postFeatures.allowEditUsername === false && accessRestrictionNote}
+            {showAccessRestrictionNote.allowEditUsername && postFeatures.allowEditUsername === false && accessRestrictionNote}
+
           </div>
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowEditEmail === false) {
+                    handleShowAccessRestrictionNote('allowEditEmail');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowEditEmail"
@@ -487,18 +633,31 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Edit their Email</div>
-            {postFeatures.allowEditEmail === false && accessRestrictionNote}
+
+            {showAccessRestrictionNote.allowEditEmail && postFeatures.allowEditEmail === false && accessRestrictionNote}
+
+
 
             <div
               onClick={handleShowInfoMessage}
               className='info-button'>i</div>
           </div>
 
-          {showInfoMessage && <div className='info-message' style={{ marginBottom: '1em' }}>Users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.</div>}
+          {showInfoMessage && 
+          // <div className='info-message' style={{ marginBottom: '1em' }}>
+                  <div className="admin-setup-note"
+                  style={{ color: 'gray', fontSize: '0.85em', marginLeft: '1em', marginBottom: '1em' }}>
+            If active, users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.</div>}
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowEditPassword === false) {
+                    handleShowAccessRestrictionNote('allowEditPassword');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowEditPassword"
@@ -513,12 +672,19 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Edit their Password</div>
-            {postFeatures.allowEditPassword === false && accessRestrictionNote}
+            {showAccessRestrictionNote.allowEditPassword && postFeatures.allowEditPassword === false && accessRestrictionNote}
+
           </div>
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowModifyProfilePicture === false) {
+                    handleShowAccessRestrictionNote('allowModifyProfilePicture');
+                  }
+                }}
+              >
                 <input
                   type="checkbox"
                   id="AllowEditProfileImage"
@@ -533,12 +699,17 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Change their Profile Image</div>
-            {postFeatures.allowModifyProfilePicture === false && accessRestrictionNote}
+            {showAccessRestrictionNote.allowModifyProfilePicture && postFeatures.allowModifyProfilePicture === false && accessRestrictionNote}
           </div>
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
-              <div className="toggle-wrapper">
+              <div className="toggle-wrapper"
+                onClick={() => {
+                  if (postFeatures.allowDeleteMyUser === false) {
+                    handleShowAccessRestrictionNote('allowDeleteMyUser');
+                  }
+                }}>
                 <input
                   type="checkbox"
                   id="AllowDeleteMyUser"
@@ -553,10 +724,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>Users Can Delete their Account</div>
-            {postFeatures.allowDeleteMyUser === false && accessRestrictionNote}
+            {showAccessRestrictionNote.allowDeleteMyUser && postFeatures.allowDeleteMyUser === false && accessRestrictionNote}
           </div>
         </>}
-
     </div>
 
   )
