@@ -192,8 +192,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
           }
 
           {(
-            postFeatures.allowDeletePosts || 
-          postFeatures.allowFlagPosts || 
+            adminSettings.allowDeletePosts || adminSettings.allowFlagPosts ||
           isSuperAdmin) && (
             <>
               <div className='post-interactions-bottom-left-reaction'>
