@@ -77,7 +77,7 @@ export default function SocialMuted({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
     {
-      postFeatures.allowMute && adminSettings.allowMute &&
+      // postFeatures.allowMute && adminSettings.allowMute && (Comment in if you prefer to not show the list of muted users if allowMute is false)
         fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
     }
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);

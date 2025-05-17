@@ -83,7 +83,8 @@ const checkSocialAccess = (action) => {
   const routes = [
     { path: '/users/all', method: 'get', handler: socialController.getAllUsers, access: 'default' },
     { path: '/users/username', method: 'get', handler: socialController.getUsernameByUserId, access: 'default' },
-    { path: '/users/muted', method: 'get', handler: socialController.getMutedUsers, access: 'mute' },
+    //For users/muted change access: 'mute' if prefer to not show the list of muted users if settings allowMute is false
+    { path: '/users/muted', method: 'get', handler: socialController.getMutedUsers, access: 'default' },
     { path: '/users/mute', method: 'post', handler: socialController.muteUser, access: 'mute' },
     { path: '/users/unmute', method: 'post', handler: socialController.unmuteUser, access: 'mute' },
     { path: '/users/followee', method: 'get', handler: socialController.getFolloweeData, access: 'follow' },
