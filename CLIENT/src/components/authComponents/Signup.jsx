@@ -242,8 +242,6 @@ export default function Signup({ isNavOpen, screenWidth }) {
     }
   };
 
-  const handleClose = () => navigate('/');
-
   const renderInput = (id, label, type, validation) => (
     <>
       <label htmlFor={id}>
@@ -287,7 +285,9 @@ export default function Signup({ isNavOpen, screenWidth }) {
 
   return (
     <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
-  
+
+      {console.log("isNavOpen", isNavOpen)}
+
       {/* Check if not showing email sign-up and success is true */}
       {!showEmailSignUp && success && (
         <section className='signup-success'>
@@ -297,35 +297,33 @@ export default function Signup({ isNavOpen, screenWidth }) {
           </div>
         </section>
       )}
-  
+
       {/* If not showing email sign-up and success is false */}
       {!showEmailSignUp && !success && (
         <div className='centered-section'>
           <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-          <button className="close-button" onClick={handleClose}>✖</button>
-  
-          <button className="google-signup-btn" onClick={handleGoogleSignUp}>
-            <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
-            Sign up with Google
-          </button>
-  
+
           <button className="google-signup-btn" onClick={handleShowEmailSignup}>
             <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
             Sign up with Email
           </button>
-  
+
+          <button className="google-signup-btn" onClick={handleGoogleSignUp}>
+            <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
+            Sign up with Google
+          </button>
+
           <div className='have-an-account'>
             <p>Already have an account?</p>
             <p><Link to="/signin">Sign In</Link></p>
           </div>
         </div>
       )}
-  
+
       {/* If showing email sign-up */}
       {showEmailSignUp && (
         <div className='centered-section transparent'>
-          <button className="close-button" onClick={handleClose}>✖</button>
-  
+
           {success ? (
             <section className='signup-success'>
               <div className="success-message">
@@ -336,7 +334,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
           ) : (
             <section className="centered-section">
               <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-  
+
               {/* Render the Restore Button if restoreAction is true */}
               {restoreAction && (
                 <div className="restore-action">
@@ -359,14 +357,16 @@ export default function Signup({ isNavOpen, screenWidth }) {
                   >Create a New Account</button>
                 </div>
               )}
-  
+              <div className='close-button-container'>
+                <button className="close-button-2" onClick={() => handleShowEmailSignup()}>✖</button>
+              </div>
               <div className="signup-title">Sign Up</div>
               <form className="signup-form" onSubmit={handleSubmit}>
                 {renderInput("user", "Name", "text", "name")}
                 {renderInput("email", "Email", "text", "email")}
                 {renderInput("pwd", "Password", "password", "pwd")}
                 {renderInput("matchPwd", "Confirm Password", "password", "match")}
-  
+
                 <button className='button-auth' disabled={!Object.values(validity).every(Boolean) || isSubmitting}>
                   {loading ? (
                     <div className="spinner">
@@ -377,12 +377,12 @@ export default function Signup({ isNavOpen, screenWidth }) {
                   )}
                 </button>
               </form>
-  
+
               <button className="google-signup-btn" onClick={() => handleShowEmailSignup()}>
                 <FontAwesomeIcon icon={faKey} style={{ marginRight: "10px" }} />
                 Sign up through a partner
               </button>
-  
+
               <div className='have-an-account'>
                 <p>Already have an account?</p>
                 <p><Link to="/signin">Sign In</Link></p>

@@ -12,6 +12,7 @@ import { auth } from '../../firebase'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 
 const SIGNIN_URL = '/auth';
@@ -38,15 +39,22 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
     const [check, toggleCheck] = useToggle('persist', false);
     const [isLoading, setIsLoading] = useState(false);
     const [isVerified, setIsVerified] = useState(true);
+    const [showSignUpWithEmail, setShowSignUpWithEmail] = useState(false);
+    console.log(showSignUpWithEmail)
+    const handleShowSignUpWithEmail = () => setShowSignUpWithEmail(prev => !prev)
 
     // Password ref to access password value directly without state
     const passwordRef = useRef();
 
     useEffect(() => {
-        if (process.env.NODE_ENV === 'development' && passwordRef.current) {
-            passwordRef.current.value = DEFAULT_PASSWORD;  // Set the default password
+        if (
+            process.env.NODE_ENV === 'development' &&
+            showSignUpWithEmail &&
+            passwordRef.current
+        ) {
+            passwordRef.current.value = DEFAULT_PASSWORD;
         }
-    }, []);
+    }, [showSignUpWithEmail]);
 
     useEffect(() => {
         userRef.current?.focus();
@@ -146,8 +154,6 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
         }
     };
 
-    const handleClose = () => navigate('/');
-
     const handleResendVerification = async () => {
         setIsLoading(true);
         try {
@@ -175,7 +181,13 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
     return (
         <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
             <div className='centered-section'>
-                <button className="close-button" onClick={handleClose}>✖</button>
+
+                {showSignUpWithEmail &&
+                    <div className='close-button-container'>
+                        <button className="close-button-2" onClick={handleShowSignUpWithEmail}>✖</button>
+                    </div>
+                }
+
                 <section className="centered-section">
                     <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
                         {successMsg}
@@ -197,66 +209,86 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                     )}
 
 
-                    <div className="signup-title">Sign In</div>
 
+                    {/* <div className="signup-title">Sign In</div> */}
 
-                    <form className="signup-form" onSubmit={handleSubmit}>
+                    {showSignUpWithEmail &&
+                        <form className="signup-form" onSubmit={handleSubmit}>
 
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            className="input-field"
-                            type="text"
-                            id="email"
-                            ref={userRef}
-                            autoComplete="off"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                            required
-                        />
+                            {/* Remove on production */}
 
-                        {/* Remove on production */}
+                            <div className="trust-device">
+                                <input
+                                    type="checkbox"
+                                    id="persist"
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setEmail('superadmin@example.com');
+                                        } else {
+                                            setEmail('manucasanova@hotmail.com');
+                                        }
+                                    }}
+                                />
+                                <label htmlFor="persist">Login as superadmin</label>
+                            </div>
 
-                        <div className="trust-device">
+                            {/* End remove on production */}
+
+                            <label htmlFor="email">Email:</label>
                             <input
-                                type="checkbox"
-                                id="persist"
-                                onChange={(e) => {
-                                    if (e.target.checked) {
-                                        setEmail('superadmin@example.com');
-                                    } else {
-                                        setEmail('manucasanova@hotmail.com');
-                                    }
-                                }}
+                                className="input-field"
+                                type="text"
+                                id="email"
+                                ref={userRef}
+                                autoComplete="off"
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                                required
                             />
-                            <label htmlFor="persist">Login as superadmin</label>
-                        </div>
 
-                        {/* End remove on production */}
+                            <label htmlFor="password">Password:</label>
+                            <input
+                                className="input-field"
+                                type="password"
+                                id="password"
+                                ref={passwordRef}
+                                required
+                            />
 
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            className="input-field"
-                            type="password"
-                            id="password"
-                            ref={passwordRef}
-                            required
-                        />
-                        <button className="button-auth" disabled={isLoading}>
-                            {isLoading ? <LoadingSpinner /> : 'Sign In'}
-                        </button>
-                        <div className="trust-device">
-                            <input type="checkbox" id="persist" onChange={toggleCheck} checked={check} />
-                            <label htmlFor="persist">Trust This Device</label>
-                        </div>
-                    </form>
-
-                    <div>
-                        {isLoading ? <LoadingSpinner /> :
-                            <button className="google-signup-btn" onClick={handleGoogleLogin} disabled={isLoading}>
-                                <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
-                                Sign in with Google
+                            <button
+                                className="button-auth"
+                                disabled={isLoading}>
+                                {isLoading ? <LoadingSpinner /> : 'Sign In'}
                             </button>
-                        }
+
+                        </form>
+                    }
+
+                    {!showSignUpWithEmail &&
+                        <>
+                            <button
+                                className="google-signup-btn"
+                                onClick={handleShowSignUpWithEmail}
+                                disabled={isLoading}>
+                                <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
+                                {isLoading ? <LoadingSpinner /> : 'Sign In with Email'}
+                            </button>
+
+
+                            <div>
+                                {isLoading ? <LoadingSpinner /> :
+                                    <button className="google-signup-btn" onClick={handleGoogleLogin} disabled={isLoading}>
+                                        <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
+                                        Sign in with Google
+                                    </button>
+                                }
+                            </div>
+                        </>
+                    }
+
+                    <div className="trust-device">
+                        <input type="checkbox" id="persist" onChange={toggleCheck} checked={check} />
+                        <label htmlFor="persist">Trust This Device</label>
                     </div>
 
                     <div className="have-an-account">
