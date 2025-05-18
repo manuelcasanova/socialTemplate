@@ -77,10 +77,12 @@ export default function SocialMuted({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
     {
-      // postFeatures.allowMute && adminSettings.allowMute && (Comment in if you prefer to not show the list of muted users if allowMute is false)
-        fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
+      // postFeatures.allowMute && adminSettings.allowMute && (Comment in if you prefer to not show the list of muted users if allowMute is false. Comment in as well the dependency array)
+      fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
     }
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername
+    //, postFeatures, adminSettings
+  ]);
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -105,6 +107,9 @@ export default function SocialMuted({ isNavOpen }) {
     setShowInfo(prev => !prev)
   }
 
+  if (!postFeatures || !adminSettings) {
+    return <LoadingSpinner />;
+  }
 
   if (isLoading) {
     <LoadingSpinner />

@@ -48,7 +48,7 @@ export default function SocialFollowee({ isNavOpen }) {
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
   const { postFeatures } = useGlobal();
-  const { adminSettings} = useGlobalAdminSettings();
+  const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,15 +84,19 @@ export default function SocialFollowee({ isNavOpen }) {
   }, [filters, filterUsername]);
 
   useEffect(() => {
-    postFeatures.showSocialFeature && adminSettings.showSocialFeature &&
-    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
-    postFeatures.allowMute && adminSettings.allowMute &&
-    fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
-    postFeatures.allowFollow && adminSettings.allowFollow &&
-    fetchFollowee(filters, setFollowee, setIsLoading, setError, loggedInUser);
-    postFeatures.allowFollow && adminSettings.allowFollow &&
-    fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
+    if (postFeatures.showSocialFeature && adminSettings.showSocialFeature) {
+      fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
+    }
+    if (postFeatures.allowMute && adminSettings.allowMute) {
+      fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
+    }
+    if (postFeatures.allowFollow && adminSettings.allowFollow) {
+      fetchFollowee(filters, setFollowee, setIsLoading, setError, loggedInUser);
+    }
+    if (postFeatures.allowFollow && adminSettings.allowFollow) {
+      fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
+    }
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, adminSettings, postFeatures]);
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -112,6 +116,11 @@ export default function SocialFollowee({ isNavOpen }) {
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
   };
+
+  if (!postFeatures || !adminSettings) {
+    return <LoadingSpinner />;
+  }
+
 
   if (isLoading) {
     return <LoadingSpinner />;

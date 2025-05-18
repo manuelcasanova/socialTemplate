@@ -91,17 +91,22 @@ export default function SocialAllUsers({ isNavOpen }) {
   }, [filters]);
 
   useEffect(() => {
-  
-    postFeatures.showSocialFeature && adminSettings.showSocialFeature &&
-    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
 
-    postFeatures.allowMute && adminSettings.allowMute && 
+    if (!postFeatures || !adminSettings) return;
+
+    if (postFeatures.showSocialFeature && adminSettings.showSocialFeature) {
+      fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
+    }
+
+    if (postFeatures.allowMute && adminSettings.allowMute) {
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
+    }
 
-    postFeatures.allowFollow && adminSettings.allowFollow &&
+    if (postFeatures.allowFollow && adminSettings.allowFollow) {
       fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
+    }
 
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, postFeatures, adminSettings]);
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -121,6 +126,10 @@ export default function SocialAllUsers({ isNavOpen }) {
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
   };
+
+  if (!postFeatures || !adminSettings) {
+    return <LoadingSpinner />;
+  }
 
   if (isLoading) {
     return <LoadingSpinner />;

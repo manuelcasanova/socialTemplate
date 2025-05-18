@@ -12,7 +12,7 @@ export const AdminSettingsProvider = ({ children }) => {
 
   const { auth } = useAuth();
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getGlobalAdminSettings = async () => {
     try {

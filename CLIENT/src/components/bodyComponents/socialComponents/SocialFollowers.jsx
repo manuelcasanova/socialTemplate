@@ -85,15 +85,19 @@ export default function SocialFollowers({ isNavOpen }) {
   }, [filters, filterUsername]);
 
   useEffect(() => {
-    postFeatures.showSocialFeature && adminSettings.showSocialFeature &&
+    if (postFeatures.showSocialFeature && adminSettings.showSocialFeature) {
       fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
-    postFeatures.allowMute &&  adminSettings.allowMute &&
+    }
+    if (postFeatures.allowMute && adminSettings.allowMute) {
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
-    postFeatures.allowFollow && adminSettings.allowFollow &&
+    }
+    if (postFeatures.allowFollow && adminSettings.allowFollow) {
       fetchFollowers(filters, setFollowers, setIsLoading, setError, loggedInUser);
-    postFeatures.allowFollow && adminSettings.allowFollow &&
+    }
+    if (postFeatures.allowFollow && adminSettings.allowFollow) {
       fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
+    }
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, adminSettings, postFeatures]);
 
   // Check if profile picture exists for each user and store the result
   useEffect(() => {
@@ -113,6 +117,10 @@ export default function SocialFollowers({ isNavOpen }) {
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
   };
+
+  if (!postFeatures || !adminSettings) {
+    return <LoadingSpinner />;
+  }
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -203,7 +211,7 @@ export default function SocialFollowers({ isNavOpen }) {
                               f.follower_id === user.user_id ||
                               f.followee_id === user.user_id &&
                               f.status === "accepted"
-                            ) && postFeatures.showMessagesFeature && adminSettings.showMessagesFeature &&  (
+                            ) && postFeatures.showMessagesFeature && adminSettings.showMessagesFeature && (
                               <button
                                 onClick={() => navigate(`/messages/${user.user_id}`)}
                               >

@@ -123,9 +123,14 @@ function App() {
     fetchCustomRoles();
   }, []);
 
-  const { postFeatures } = useGlobal();
-  const { adminSettings } = useGlobalAdminSettings();
+const { postFeatures, isLoading: loadingPostFeatures } = useGlobal();
+const { adminSettings, isLoading: loadingAdminSettings } = useGlobalAdminSettings();
 
+if (loadingPostFeatures || loadingAdminSettings) {
+  return <LoadingSpinner />;
+}
+
+  
   return (
 
     <div className="app">
@@ -136,7 +141,6 @@ function App() {
 
 
       <Routes>
-
         {/* Public routes */}
         <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} />} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />

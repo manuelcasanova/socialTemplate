@@ -78,16 +78,16 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
 
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
-    {postFeatures.allowMute && adminSettings.allowMute &&
-    fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
+    if (postFeatures.allowMute && adminSettings.allowMute) {
+      fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
     }
-    {postFeatures.allowFollow && adminSettings.allowFollow &&
-    fetchPending(filters, setPendingRequests, setIsLoading, setError, loggedInUser);
+    if (postFeatures.allowFollow && adminSettings.allowFollow) {
+      fetchPending(filters, setPendingRequests, setIsLoading, setError, loggedInUser);
     }
-    {postFeatures.allowFollow && adminSettings.allowFollow &&
-    fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
+    if (postFeatures.allowFollow && adminSettings.allowFollow) {
+      fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
     }
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername]);
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, adminSettings, postFeatures]);
 
   useEffect(() => {
     // Focus the input field after the component mounts
@@ -115,6 +115,10 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
   };
+
+  if (!postFeatures || !adminSettings) {
+    return <LoadingSpinner />;
+  }
 
   if (isLoading) {
     return <LoadingSpinner />;
