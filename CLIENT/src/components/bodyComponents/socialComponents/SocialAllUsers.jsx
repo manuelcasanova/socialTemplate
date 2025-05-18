@@ -32,18 +32,6 @@ import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowe
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-// Function to check if profile picture exists for each user
-const profilePictureExists = async (userId) => {
-  const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
-  try {
-    const response = await fetch(imageUrl, { method: 'HEAD' });
-    return response.ok;
-  } catch (error) {
-    console.error("Error checking image existence:", error);
-    return false;
-  }
-};
-
 export default function SocialAllUsers({ isNavOpen }) {
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
@@ -74,8 +62,11 @@ export default function SocialAllUsers({ isNavOpen }) {
     mutedUsers.some(mute => (mute.muter === userId || mute.mutee === userId) && mute.mute)
   );
 
+  // console.log("users", users)
+  // console.log("usersExceptMe", usersExceptMe)
+  // console.log("allUsersMutedOrMe", allUsersMutedOrMe)
+
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
-  const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null)
 
   useEffect(() => {
@@ -107,21 +98,6 @@ export default function SocialAllUsers({ isNavOpen }) {
     }
 
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername, postFeatures, adminSettings]);
-
-  // Check if profile picture exists for each user and store the result
-  useEffect(() => {
-    const checkImages = async () => {
-      const result = {};
-      for (const user of users) {
-        result[user.user_id] = await profilePictureExists(user.user_id);
-      }
-      setImageExistsMap(result);
-    };
-
-    if (users.length > 0) {
-      checkImages();
-    }
-  }, [users]);
 
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
@@ -158,24 +134,17 @@ export default function SocialAllUsers({ isNavOpen }) {
 
                 <div className="user-row-social" key={user.user_id}>
                   <div className="user-info">
-                    {imageExistsMap[user.user_id] ? (
-                      <img
-                        className="user-row-social-small-img"
-                        onClick={() => setShowLargePicture(user.user_id)}
-                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-                        alt="Profile"
-                      />
 
-                    ) : (
-
-                      <img
-                        className="user-row-social-small-img"
-                        onClick={() => setShowLargePicture(user.user_id)}
-                        src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                        alt="Profile"
-                      />
-
-                    )}
+                    <img
+                      className="user-row-social-small-img"
+                      onClick={() => setShowLargePicture(user.user_id)}
+                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                      }}
+                      alt="Profile"
+                    />
 
 
 
@@ -185,21 +154,13 @@ export default function SocialAllUsers({ isNavOpen }) {
                         onClick={() => setShowLargePicture(null)}
                       >
                         <img
-                          className='users-all-picture-large'
-                          onClick={() => setShowLargePicture(null)}
-                          src={imageExistsMap[user.user_id]
-                            ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
-                            : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                          className="users-all-picture-large"
+                          src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                           onError={(e) => {
-                            // Prevent infinite loop in case of repeated errors
                             e.target.onerror = null;
-
-                            // Check if the fallback image has already been set to avoid infinite loop
-                            if (e.target.src !== `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`) {
-                              // Fall back to the default user image if the profile picture fails
-                              e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
-                            }
+                            e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
                           }}
+                          alt="Large Profile"
                         />
                       </div>
                     )}
