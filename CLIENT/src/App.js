@@ -11,6 +11,8 @@ import { useGlobalAdminSettings } from './context/AdminSettingsProvider';
 
 //Components
 
+import LoadingSpinner from './components/loadingSpinner/LoadingSpinner';
+
 import Unauthorized from './components/authComponents/Unauthorized';
 import PersistLogin from './components/authComponents/PersistLogin';
 import RequireAuth from './components/authComponents/RequireAuth';
@@ -168,7 +170,7 @@ function App() {
           </Route>
 
           {
-            postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
+            // postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
             <>
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
                 <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
@@ -246,7 +248,7 @@ function App() {
 
 
           {
-            postFeatures.showPostsFeature && adminSettings.showPostsFeature && 
+            // postFeatures.showPostsFeature && adminSettings.showPostsFeature && 
             <>
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>
