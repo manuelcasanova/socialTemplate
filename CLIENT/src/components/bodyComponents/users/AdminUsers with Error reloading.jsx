@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 //Context
 import { useGlobal } from "../../../context/GlobalProvider";
@@ -7,14 +7,16 @@ import { useGlobal } from "../../../context/GlobalProvider";
 //Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
+import axios from "../../../api/axios";
 
 //Styling
 import '../../../css/AdminUsers.css';
 
 //Components
 
-// import FilterAdminUsers from "./FilterAdminUsers";
+import FilterAdminUsers from "./FilterAdminUsers";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
+
 
 
 export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
@@ -23,7 +25,6 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState(null);
-  const prevError = useRef(null);
   const [filters, setFilters] = useState({ is_active: true });
   // console.log('filters', filters)
   const [expandedUserId, setExpandedUserId] = useState(null);
@@ -40,9 +41,9 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
   console.log("Users:", users);
 
   // Reset the error message whenever filters change
-  // useEffect(() => {
-  //   setError(null); 
-  // }, [filters]);
+  useEffect(() => {
+    setError(null); // Clear error when filters change
+  }, [filters]);
 
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
@@ -84,25 +85,11 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
     setExpandedUserId((prevId) => (prevId === userId ? null : userId));
   };
 
-  // const handleShowDelete = () => {
-  //   setShowConfirmDelete(prev => !prev)
-  // }
+  const handleShowDelete = () => {
+    setShowConfirmDelete(prev => !prev)
+  }
 
   const handleRoleChange = useCallback(async (user, role, checked) => {
-
-    if (role === 'Admin' || role === 'SuperAdmin') {
-      if (!isSuperAdmin) {
-        const errorMsg = "You do not have permission to modify Admin or SuperAdmin roles.";
-        
-        // Only set error if it's different from the previous one
-        if (errorMsg !== prevError.current) {
-          prevError.current = errorMsg; // Store the error in the ref
-          setError(errorMsg);  // Update the state to show the error message
-        }
-        return;
-      }
-    }
-
     try {
       await axiosPrivate.put(`/users/${user.user_id}/roles`, {
         roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
@@ -117,54 +104,54 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
             : u
         )
       );
-      prevError.current = null; 
     } catch (error) {
       console.error("Error updating roles", error);
       const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
-      if (errorMsg !== prevError.current) {
-        prevError.current = errorMsg; // Store the error in the ref
-        setError(errorMsg);  // Update the state to show the error message
+      
+      // Only set the error if it's different from the current one
+      if (errorMsg !== error) {
+        setError(errorMsg);
       }
     }
-  }, [isSuperAdmin]); 
+  }, []); // Memoized function to avoid re-creation on each render
   
 
-  // const handleDeleteUser = async (userId, loggedInUser) => {
-  //   setIsLoading(true)
-  //   try {
+  const handleDeleteUser = async (userId, loggedInUser) => {
+    setIsLoading(true)
+    try {
 
 
-  //     setTimeout(async () => {
-  //       try {
+      setTimeout(async () => {
+        try {
 
 
-  //         setError(null)
-  //         const response = await axiosPrivate.delete(`/users/harddelete/${userId}`, {
-  //           data: { loggedInUser },
-  //         });
+          setError(null)
+          const response = await axiosPrivate.delete(`/users/harddelete/${userId}`, {
+            data: { loggedInUser },
+          });
 
-  //         // Forget any expanded user details and re-render the list normally." This resolves the issue where the list would remain empty after deleting a user. UI doesn't look for the expanded details of a non-existing user. 
-  //         setExpandedUserId(null)
+          // Forget any expanded user details and re-render the list normally." This resolves the issue where the list would remain empty after deleting a user. UI doesn't look for the expanded details of a non-existing user. 
+          setExpandedUserId(null)
 
-  //         setShowConfirmDelete(false)
+          setShowConfirmDelete(false)
 
-  //         setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== userId));
+          setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== userId));
 
-  //       } catch (error) {
-  //         console.error("Error updating roles", error);
-  //         const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
-  //         setError(errorMsg);
+        } catch (error) {
+          console.error("Error updating roles", error);
+          const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
+          setError(errorMsg);
 
 
-  //       } finally {
-  //         setIsLoading(false);
-  //       }
-  //     }, 1000);
-  //   } catch (error) {
-  //     console.error("Error initiating delete action", error);
-  //     setIsLoading(false); // Stop loading if something goes wrong before timeout
-  //   }
-  // };
+        } finally {
+          setIsLoading(false);
+        }
+      }, 1000);
+    } catch (error) {
+      console.error("Error initiating delete action", error);
+      setIsLoading(false); // Stop loading if something goes wrong before timeout
+    }
+  };
 
 
   return (
@@ -172,11 +159,11 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
       <div className="admin-users">
         <h2>Admin Users</h2>
         {error && <p className="error-message">{error}</p>}
-        {/* <FilterAdminUsers
+        <FilterAdminUsers
           roles={roles}
           setFilters={setFilters}
           setExpandedUserId={setExpandedUserId}
-        /> */}
+        />
         {isLoading ? (
           <LoadingSpinner />
         ) :
@@ -223,9 +210,9 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                         <p>
                           <strong>Username:</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
                         </p>
-                        {/* <p><strong>E-mail:</strong> {user.email}</p>
+                        <p><strong>E-mail:</strong> {user.email}</p>
                         <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
-                        <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p> */}
+                        <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p>
                         {
                           (postFeatures.allowManageRoles || isSuperAdmin) &&
                           <>
@@ -269,9 +256,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
 
                           </>
                         }
-
-
-                        {/* <h4>Last login</h4>
+                        <h4>Last login</h4>
                         {user.login_history.length > 0 ? (
                           <ul>
                             <li>
@@ -292,10 +277,10 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                           </ul>
                         ) : (
                           <p>No login history available</p>
-                        )} */}
+                        )}
 
 
-                        {/* {
+                        {
                           (postFeatures.allowDeleteUsers || isSuperAdmin) &&
                           <>
                             {
@@ -323,9 +308,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                                 </div>
                               )
                             }
-                          </>} */}
-
-
+                          </>}
                       </div>
                     )}
                   </div>
