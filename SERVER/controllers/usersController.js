@@ -394,17 +394,17 @@ const hardDeleteUser = async (req, res) => {
         if (
             !userCurrentRoles.includes('Admin') &&
             !userCurrentRoles.includes('SuperAdmin')) {
-            return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can hard delete a user' });
+            return res.status(401).json({ error: 'Permission denied: Only Admin or SuperAdmin can hard delete a user' });
         }
 
         // Permission denied if Deleter and Deletee are the same user.
         if (Number(userId) === loggedInUser) {
-            return res.status(403).json({ error: 'Permission denied: You cannot delete your own account here. Do it from "My account"' });
+            return res.status(401).json({ error: 'Permission denied: You cannot delete your own account here. Do it from "My account"' });
         }
 
         // Permission denied if Deleter is not a SuperAdmin and Deletee is a Superadmin.
         if (userToDeleteRoleNames.includes('SuperAdmin') && !userCurrentRoles.includes('SuperAdmin')) {
-            return res.status(403).json({ error: 'Permission denied: Only a SuperAdmin can delete a SuperAdmin.' });
+            return res.status(401).json({ error: 'Permission denied: Only a SuperAdmin can delete a SuperAdmin.' });
         }
 
         // Permission denied if Deleter is a Superadmin and Deletee is also a Superadmin, unless the Deleter granted Superadmin status to the Deletee.
@@ -424,7 +424,7 @@ const hardDeleteUser = async (req, res) => {
         if (userToDeleteRoleNames.includes('SuperAdmin') && userCurrentRoles.includes('SuperAdmin')) {
             if (assignedByUser !== loggedInUser && loggedInUser !== 1
             ) {
-                return res.status(403).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
+                return res.status(401).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
             }
 
             // Perform the hard delete (delete user from the database)
@@ -616,7 +616,7 @@ const updateRoles = async (req, res) => {
 
 
         if (!loggedInUserRoles.includes('Admin') && !loggedInUserRoles.includes('SuperAdmin')) {
-            return res.status(403).json({ error: 'Permission denied: Only Admin or SuperAdmin can update roles' });
+            return res.status(401).json({ error: 'Permission denied: Only Admin or SuperAdmin can update roles' });
         }
 
         // Step 7: Check if logged-in user is an Admin and is trying to modify another Admin
@@ -630,7 +630,7 @@ const updateRoles = async (req, res) => {
 
             // If both loggedInUser and the user being modified are Admins, prevent the modification
             if (userRoles.includes('Admin') && loggedInUser !== userId) {
-                return res.status(403).json({
+                return res.status(401).json({
                     error: 'Admins cannot modify other Admins\' roles'
                 });
             }
@@ -654,7 +654,7 @@ const updateRoles = async (req, res) => {
         // Step 10: Prevent Admins from assigning "SuperAdmin"
         if (roles.includes('SuperAdmin')) {
             if (!loggedInUserRoles.includes('SuperAdmin')) {
-                return res.status(403).json({ error: 'Only SuperAdmin can assign SuperAdmin role' });
+                return res.status(401).json({ error: 'Only SuperAdmin can assign SuperAdmin role' });
             }
         }
 
@@ -664,7 +664,7 @@ const updateRoles = async (req, res) => {
             // Allow the logged-in user to modify their own roles
             if (loggedInUser !== userId) {
                 if (!loggedInUserRoles.includes('SuperAdmin')) {
-                    return res.status(403).json({ error: 'Only SuperAdmin can assign Admin role to others' });
+                    return res.status(401).json({ error: 'Only SuperAdmin can assign Admin role to others' });
                 }
             }
         }
@@ -689,7 +689,7 @@ const updateRoles = async (req, res) => {
             // Prevent self-revocation of SuperAdmin role
             if (loggedInUser === userId) {
                 if (rolesToAdd.includes('SuperAdmin') || rolesToRemove.includes('SuperAdmin')) {
-                    return res.status(403).json({ error: 'You cannot revoke your own SuperAdmin role' });
+                    return res.status(401).json({ error: 'You cannot revoke your own SuperAdmin role' });
                 }
             }
 
@@ -699,7 +699,7 @@ const updateRoles = async (req, res) => {
 
             // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.
             if (assignedByUser !== loggedInUser && loggedInUser !== userId && loggedInUser !== 1) {
-                return res.status(403).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
+                return res.status(401).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
             }
 
         }
@@ -711,7 +711,7 @@ const updateRoles = async (req, res) => {
         if (rolesToRemove.includes('Admin') && loggedInUser === userId) {
             // Check if logged-in user is not a SuperAdmin
             if (!loggedInUserRoles.includes('SuperAdmin')) {
-                return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
+                return res.status(401).json({ error: 'You cannot revoke your own Admin role' });
             }
         }
 
@@ -768,7 +768,7 @@ const updateRoles = async (req, res) => {
         const updatedUserRoles = updatedUserRolesResult.rows.map(row => row.role_name);
 
         if (updatedUserRoles.includes('SuperAdmin') && !loggedInUserRoles.includes('SuperAdmin')) {
-            return res.status(403).json({ error: 'Only a SuperAdmin can assign or retain the SuperAdmin role' });
+            return res.status(401).json({ error: 'Only a SuperAdmin can assign or retain the SuperAdmin role' });
         }
 
         // Step 17: Log role changes in role_change_logs
