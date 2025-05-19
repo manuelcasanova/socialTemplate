@@ -153,7 +153,7 @@ export default function PostCommentReactions({ isNavOpen }) {
 
               postCommentReactions.map((reaction) => (
                 <div key={reaction.id}>
-                  <div className="row-reaction" key={reaction.id}>
+                  <div className="row-reaction">
                     {imageExistsMap[reaction.user_id] ? (
                       <img
                         className="user-row-social-small-img"
