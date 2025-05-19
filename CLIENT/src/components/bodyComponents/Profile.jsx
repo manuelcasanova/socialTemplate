@@ -431,7 +431,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 </button>
               }
               {
-                (postFeatures.allowEditEmail && adminSettings.allowEditEmail || isSuperAdmin) &&
+                ((postFeatures.allowEditEmail && adminSettings.allowEditEmail) || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("email")}
