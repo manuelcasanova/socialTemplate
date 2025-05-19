@@ -22,7 +22,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
   const { postFeatures } = useGlobal();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
   const prevError = useRef(null);
   const [filters, setFilters] = useState({ is_active: true });
   // console.log('filters', filters)
@@ -35,9 +35,9 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
   const loggedInUser = auth.userId
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-  console.log("Rendering AdminUsers component...");
-  console.log("Current error state:", error);
-  console.log("Users:", users);
+  // console.log("Rendering AdminUsers component...");
+  // console.log("Current error state:", error);
+  // console.log("Users:", users);
 
   // Reset the error message whenever filters change
   // useEffect(() => {
@@ -90,10 +90,11 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
 
   const handleRoleChange = useCallback(async (user, role, checked) => {
 
+    //This is a workaround. Originally it was managed by the backend (and still is). We are getting the error response but somehow it triggers a rerender, instead of just showing the error response message.
     if (role === 'Admin' || role === 'SuperAdmin') {
       if (!isSuperAdmin) {
         const errorMsg = "You do not have permission to modify Admin or SuperAdmin roles.";
-        
+
         // Only set error if it's different from the previous one
         if (errorMsg !== prevError.current) {
           prevError.current = errorMsg; // Store the error in the ref
@@ -108,7 +109,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
         roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
         loggedInUser
       });
-  
+
       // Update state only if needed
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
@@ -117,17 +118,18 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
             : u
         )
       );
-      prevError.current = null; 
+      prevError.current = null;
     } catch (error) {
       console.error("Error updating roles", error);
       const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
+      console.log('errorMsg', errorMsg)
       if (errorMsg !== prevError.current) {
         prevError.current = errorMsg; // Store the error in the ref
         setError(errorMsg);  // Update the state to show the error message
       }
     }
-  }, [isSuperAdmin]); 
-  
+  }, [isSuperAdmin]);
+
 
   // const handleDeleteUser = async (userId, loggedInUser) => {
   //   setIsLoading(true)
@@ -231,40 +233,33 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                           <>
                             <h4>Roles</h4>
                             <ul>
-                              {/* {console.log('Filtered roles:', roles.filter(role => postFeatures.showSubscriberFeature || role !== "User_subscribed"))} */}
+
                               {[...new Set([
-                                ...roles.filter(role => postFeatures.showSubscriberFeature || role !== "User_subscribed"),
-                                ...(customRoles?.map(r => r.role_name) || [])
+                                ...roles,
+                                ...(customRoles?.map(r => r.role_name) || []),
+                                ...(isSuperAdmin ? ['SuperAdmin'] : []),  // Only include SuperAdmin if the user is a SuperAdmin
                               ])].map((role, index) => (
-                                <li key={index}>
+                                <li key={index} className={role === 'SuperAdmin' || role === 'Admin' ? 'disabled-role' : ''}>
                                   <input
                                     type="checkbox"
                                     className="checkbox"
                                     checked={user.roles.includes(role)}
+                                    disabled={!(isSuperAdmin || role !== 'SuperAdmin' && role !== 'Admin')} // Disable for non-SuperAdmins only on SuperAdmin/Admin roles
                                     onChange={(e) => {
-                                      setError("");  // Clear any previous error when the checkbox is clicked
-                                      handleRoleChange(user, role, e.target.checked); // Pass the full user object here
+                                      if (isSuperAdmin || (role !== 'SuperAdmin' && role !== 'Admin')) {
+                                        setError("");  // Clear any previous error when the checkbox is clicked
+                                        handleRoleChange(user, role, e.target.checked); // Handle the role change
+                                      }
                                     }}
                                   />
-                                  {role}
+                                  <span className={role === 'SuperAdmin' || role === 'Admin' ? 'disabled-role-text' : ''}>
+                                    {role}
+                                  </span>
                                 </li>
                               ))}
-                              {/* {roles
-                                .filter(role => postFeatures.showSubscriberFeature || role !== "User_subscribed")
-                                .map((role, index) => (
-                                  <li key={index}>
-                                    <input
-                                      type="checkbox"
-                                      className="checkbox"
-                                      checked={user.roles.includes(role)}
-                                      onChange={(e) => {
-                                        setError("");  // Clear any previous error when the checkbox is clicked
-                                        handleRoleChange(user, role, e.target.checked); // Pass the full user object here
-                                      }}
-                                    />
-                                    {role}
-                                  </li>
-                                ))} */}
+
+
+
                             </ul>
 
                           </>

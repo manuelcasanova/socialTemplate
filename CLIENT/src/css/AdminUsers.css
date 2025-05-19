@@ -250,6 +250,13 @@ font-size: 1rem;
   justify-content: center;
 }
 
+/* Disabled checkboxes */
+
+.disabled-role input[type="checkbox"]:disabled {
+  cursor: not-allowed; 
+}
+
+
 
 @media (max-width: 580px) {
 
