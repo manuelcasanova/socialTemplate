@@ -826,6 +826,9 @@ export const GlobalProvider = ({ children }) => {
 
       if (settings) {
         setShowCustomRolesFeature(settings?.show_manage_roles_feature ?? false);
+        setAllowAdminCreateCustomRole(settings?.allow_admin_create_custom_role ?? false);
+        setAllowAdminEditCustomRole(settings?.allow_admin_edit_custom_role ?? false);
+        setAllowAdminDeleteCustomRole(settings?.allow_admin_delete_custom_role ?? false);
       }
     };
     fetchSettings();
