@@ -888,7 +888,7 @@ export const GlobalProvider = ({ children }) => {
 
     } catch (err) {
       console.error('Failed to update allowAdminCreateCustomRole setting:', err);
-      setAllowSendMessages(prev => !prev);
+      setAllowAdminCreateCustomRole(prev => !prev);
       setError(err.message)
     }
   };
@@ -905,7 +905,7 @@ export const GlobalProvider = ({ children }) => {
 
     } catch (err) {
       console.error('Failed to update allowAdminEditCustomRole setting:', err);
-      setAllowSendMessages(prev => !prev);
+      setAllowAdminEditCustomRole(prev => !prev);
       setError(err.message)
     }
   };
@@ -922,7 +922,7 @@ export const GlobalProvider = ({ children }) => {
 
     } catch (err) {
       console.error('Failed to update allowAdminDeleteCustomRole setting:', err);
-      setAllowSendMessages(prev => !prev);
+      setAllowAdminDeleteCustomRole(prev => !prev);
       setError(err.message)
     }
   };
