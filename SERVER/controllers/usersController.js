@@ -693,9 +693,6 @@ const updateRoles = async (req, res) => {
                 }
             }
 
-            if (userId === 1) {
-                return res.status(404).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
-            }
 
             // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.
             if (assignedByUser !== loggedInUser && loggedInUser !== userId && loggedInUser !== 1) {
