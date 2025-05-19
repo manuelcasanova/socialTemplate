@@ -286,8 +286,6 @@ export default function Signup({ isNavOpen, screenWidth }) {
   return (
     <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
 
-      {console.log("isNavOpen", isNavOpen)}
-
       {/* Check if not showing email sign-up and success is true */}
       {!showEmailSignUp && success && (
         <section className='signup-success'>

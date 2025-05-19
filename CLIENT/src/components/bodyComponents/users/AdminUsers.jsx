@@ -25,7 +25,8 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({ is_active: true });
+  // console.log('filters', filters)
   const [expandedUserId, setExpandedUserId] = useState(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

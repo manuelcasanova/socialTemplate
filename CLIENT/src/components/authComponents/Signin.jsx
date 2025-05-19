@@ -40,7 +40,6 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isVerified, setIsVerified] = useState(true);
     const [showSignUpWithEmail, setShowSignUpWithEmail] = useState(false);
-    console.log(showSignUpWithEmail)
     const handleShowSignUpWithEmail = () => setShowSignUpWithEmail(prev => !prev)
 
     // Password ref to access password value directly without state

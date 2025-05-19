@@ -24,8 +24,8 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
       username,
       role,
       is_active: isActive,
-      user_id: userId || undefined, // Set filter if userId is not empty
-      email: email || undefined // Set filter if email is not empty
+      user_id: userId || '', // Set filter if userId is not empty
+      email: email || '' // Set filter if email is not empty
     });
   };
 
