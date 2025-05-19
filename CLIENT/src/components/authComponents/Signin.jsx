@@ -265,23 +265,25 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
 
                     {!showSignUpWithEmail &&
                         <>
-                            <button
-                                className="google-signup-btn"
-                                onClick={handleShowSignUpWithEmail}
-                                disabled={isLoading}>
-                                <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
-                                {isLoading ? <LoadingSpinner /> : 'Sign In with Email'}
-                            </button>
+
+                            {isLoading ? <LoadingSpinner /> :
+                                <>
+                                    <button
+                                        className="google-signup-btn"
+                                        onClick={handleShowSignUpWithEmail}
+                                        disabled={isLoading}>
+                                        <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
+                                        {'Sign In with Email'}
+                                    </button>
 
 
-                            <div>
-                                {isLoading ? <LoadingSpinner /> :
                                     <button className="google-signup-btn" onClick={handleGoogleLogin} disabled={isLoading}>
                                         <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
                                         Sign in with Google
                                     </button>
-                                }
-                            </div>
+
+                                </>
+                            }
                         </>
                     }
 
