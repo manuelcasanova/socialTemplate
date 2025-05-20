@@ -83,10 +83,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const [error, setError] = useState("");
   const [criticalError, setCriticalError] = useState(false);
   const [isInputValid, setIsInputValid] = useState(false);
-  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [fileName, setFileName] = useState("");
-  const [file, setFile] = useState(null);
   const { userData, refetchUserData } = useUserApi(auth.userId || "Guest");
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const [successMessage, setSuccessMessage] = useState('');
@@ -131,7 +128,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       setConfirmEmail("");
       setIsPictureModalVisible(true);
       setFileName("");  // Clear filename if user clicks to update
-      setFile(null);     // Reset file if the modal is opened
+           // Reset file if the modal is opened
     }
   };
 
@@ -150,20 +147,15 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(selectedFile.type)) {
       setError("Unsupported file format. Please upload a JPG, PNG or WEBP image.");
-      setFile(null);
-      setFileName("");
       return;
     }
 
     if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
       setError(`File size exceeds ${MAX_FILE_SIZE_MB}MB. Please choose a smaller image.`);
-      setFile(null);
-      setFileName("");
       return;
     }
 
     if (selectedFile) {
-      setFile(selectedFile);
       setFileName(selectedFile.name || "No file chosen");
 
       // Automatically upload the file
@@ -196,7 +188,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const handleCloseModal = () => {
     setIsPictureModalVisible(false);
     setFileName("");  // Reset filename if modal is closed without uploading
-    setFile(null);     // Reset file if modal is closed
+         // Reset file if modal is closed
   };
 
 
@@ -331,18 +323,6 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     }
   };
 
-  const toggleNewPasswordVisibility = () => {
-    setIsNewPasswordVisible(!isNewPasswordVisible);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
-  };
-
-  //  if (criticalError) {
-  //     return <Error isNavOpen={isNavOpen} error={error} />
-  //   }
-
   if (criticalError) return <Error isNavOpen={isNavOpen} error="A server error occurred. Please try again later." />;
 
 
@@ -355,24 +335,24 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
             {!isPictureModalVisible &&
               <div className="profile-picture"
                 onClick={
-                  (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ?
+                  ((superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture) || isSuperAdmin) ?
                     handlePictureClick
                     : undefined
                 }
-                style={{ cursor: (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
+                style={{ cursor: ((superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture) || isSuperAdmin) ? 'pointer' : 'default' }}
               >
                 {imageExists ? (
                   <img
                     src={`${profilePictureUrl}?key=${profilePictureKey}`}
                     alt="Profile"
-                    style={{ cursor: (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
+                    style={{ cursor: ((superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture) || isSuperAdmin) ? 'pointer' : 'default' }}
                   />
                 ) : (
                   <img
                     className="user-row-social-small-img"
                     src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
                     alt="Profile"
-                    style={{ cursor: (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
+                    style={{ cursor: ((superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture) || isSuperAdmin) ? 'pointer' : 'default' }}
                   />
 
                 )}
@@ -381,7 +361,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
 
             {
-              (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) &&
+              ((superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture) || isSuperAdmin) &&
 
               isPictureModalVisible && !isTestSuperAdmin && (
                 <div className="picture-modal">
@@ -418,10 +398,10 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
           {!isTestSuperAdmin && (
 
-            (superAdminSettings.showProfileFeature && adminSettings.showProfileFeature || isSuperAdmin) &&
+            ((superAdminSettings.showProfileFeature && adminSettings.showProfileFeature) || isSuperAdmin) &&
             <div className="profile-actions">
               {
-                (superAdminSettings.allowEditUsername && adminSettings.allowEditUsername || isSuperAdmin) &&
+                ((superAdminSettings.allowEditUsername && adminSettings.allowEditUsername) || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("username")}
@@ -441,7 +421,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
               }
 
               {
-                (superAdminSettings.allowEditPassword && adminSettings.allowEditPassword || isSuperAdmin) &&
+                ((superAdminSettings.allowEditPassword && adminSettings.allowEditPassword) || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => navigate(`/resetpassword`)}
@@ -450,7 +430,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 </button>
               }
               {
-                (superAdminSettings.allowDeleteMyUser && adminSettings.allowDeleteMyUser || isSuperAdmin) &&
+                ((superAdminSettings.allowDeleteMyUser && adminSettings.allowDeleteMyUser) || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-red"
                   onClick={handleDeleteClick}

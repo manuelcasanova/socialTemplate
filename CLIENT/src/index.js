@@ -5,7 +5,7 @@ import App from './App';
 import { AuthProvider } from './context/AuthProvider';
 import { SuperAdminSettingsProvider } from './context/SuperAdminSettingsProvider';
 import { AdminSettingsProvider } from './context/AdminSettingsProvider';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
