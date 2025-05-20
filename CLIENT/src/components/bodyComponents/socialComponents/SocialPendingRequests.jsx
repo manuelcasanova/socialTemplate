@@ -6,7 +6,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Styling
@@ -43,7 +43,7 @@ const profilePictureExists = async (userId) => {
 export default function SocialPendingRequests({ isNavOpen, isFollowingNotification, setIsFollowNotification }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,16 +78,16 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
 
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
-    if (postFeatures.allowMute && adminSettings.allowMute) {
+    if (superAdminSettings.allowMute && adminSettings.allowMute) {
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
     }
-    if (postFeatures.allowFollow && adminSettings.allowFollow) {
+    if (superAdminSettings.allowFollow && adminSettings.allowFollow) {
       fetchPending(filters, setPendingRequests, setIsLoading, setError, loggedInUser);
     }
-    if (postFeatures.allowFollow && adminSettings.allowFollow) {
+    if (superAdminSettings.allowFollow && adminSettings.allowFollow) {
       fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
     }
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, adminSettings, postFeatures]);
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, adminSettings, superAdminSettings]);
 
   useEffect(() => {
     // Focus the input field after the component mounts
@@ -116,7 +116,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
     setHasMutedChanges(prevState => !prevState);
   };
 
-  if (!postFeatures || !adminSettings) {
+  if (!superAdminSettings || !adminSettings) {
     return <LoadingSpinner />;
   }
 
@@ -152,7 +152,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
 
-        {(filteredPending.length === 0 || !postFeatures.allowFollow) ? (
+        {(filteredPending.length === 0 || !superAdminSettings.allowFollow) ? (
           <p>No pending requests.</p>
         ) : (
           <div className="users-container">

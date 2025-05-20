@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 
 //Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -19,7 +19,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
   const axiosPrivate = useAxiosPrivate();
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState('');
@@ -216,7 +216,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                         <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
                         <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p> */}
                         {
-                          (postFeatures.allowManageRoles || isSuperAdmin) &&
+                          (superAdminSettings.allowManageRoles || isSuperAdmin) &&
                           <>
                             <h4>Roles</h4>
                             <ul>
@@ -278,7 +278,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
 
 
                         {
-                          (postFeatures.allowDeleteUsers || isSuperAdmin) &&
+                          (superAdminSettings.allowDeleteUsers || isSuperAdmin) &&
                           <>
                             {
                               !showConfirmDelete && !user.email.startsWith('deleted-') && (

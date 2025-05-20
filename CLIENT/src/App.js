@@ -6,7 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import axios from './api/axios';
 
 //Context
-import { useGlobal } from '../src/context/GlobalProvider';
+import { useGlobalSuperAdminSettings } from './context/SuperAdminSettingsProvider';
 import { useGlobalAdminSettings } from './context/AdminSettingsProvider';
 
 //Components
@@ -123,7 +123,7 @@ function App() {
     fetchCustomRoles();
   }, []);
 
-const { postFeatures, isLoading: loadingPostFeatures } = useGlobal();
+const { superAdminSettings, isLoading: loadingPostFeatures } = useGlobalSuperAdminSettings();
 const { adminSettings, isLoading: loadingAdminSettings } = useGlobalAdminSettings();
 
 if (loadingPostFeatures || loadingAdminSettings) {
@@ -174,7 +174,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
           </Route>
 
           {
-            // postFeatures.showPostsFeature && adminSettings.showPostsFeature &&
+            // superAdminSettings.showPostsFeature && adminSettings.showPostsFeature &&
             <>
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
                 <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
@@ -252,7 +252,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
 
           {
-            // postFeatures.showPostsFeature && adminSettings.showPostsFeature && 
+            // superAdminSettings.showPostsFeature && adminSettings.showPostsFeature && 
             <>
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>

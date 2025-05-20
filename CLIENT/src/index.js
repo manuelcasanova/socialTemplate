@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './css/index.css';
 import App from './App';
 import { AuthProvider } from './context/AuthProvider';
-import { GlobalProvider } from './context/GlobalProvider';
+import { SuperAdminSettingsProvider } from './context/SuperAdminSettingsProvider';
 import { AdminSettingsProvider } from './context/AdminSettingsProvider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
@@ -13,11 +13,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
       <AuthProvider>
-        <GlobalProvider>
+        <SuperAdminSettingsProvider>
           <AdminSettingsProvider>
             <App />
           </AdminSettingsProvider>
-        </GlobalProvider>
+        </SuperAdminSettingsProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

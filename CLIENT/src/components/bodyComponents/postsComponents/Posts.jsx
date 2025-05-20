@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Hooks
@@ -42,7 +42,7 @@ const profilePictureExists = async (userId) => {
 export default function Posts({ isNavOpen }) {
   const { auth } = useAuth();
   const isAdmin = auth.roles.includes('Admin');
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const loggedInUser = auth.userId;
   const axiosPrivate = useAxiosPrivate();
@@ -245,8 +245,8 @@ export default function Posts({ isNavOpen }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-posts">
 
-        {(isAdmin && postFeatures.allowAdminPost) ||
-          (!isAdmin && postFeatures.allowUserPost && adminSettings.allowUserPost) ? (
+        {(isAdmin && superAdminSettings.allowAdminPost) ||
+          (!isAdmin && superAdminSettings.allowUserPost && adminSettings.allowUserPost) ? (
 
           <WritePost
             loggedInUser={loggedInUser}
@@ -391,7 +391,7 @@ export default function Posts({ isNavOpen }) {
                   )}
 
                   {
-                  // HERE postFeatures.allowPostInteractions &&
+                  // HERE superAdminSettings.allowPostInteractions &&
                     <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} setError={setError} />
                   }
 

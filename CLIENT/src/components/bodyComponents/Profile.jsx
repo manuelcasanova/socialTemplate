@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { axiosPrivate } from "../../api/axios";
 
 //Context
-import { useGlobal } from "../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../context/AdminSettingsProvider"
 
 //Hooks
@@ -69,7 +69,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
 
 export default function Profile({ isNavOpen, profilePictureKey, setProfilePictureKey }) {
   const { auth } = useAuth();
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const isTestSuperAdmin = auth.userId === 1;
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
@@ -355,24 +355,24 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
             {!isPictureModalVisible &&
               <div className="profile-picture"
                 onClick={
-                  (postFeatures.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ?
+                  (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ?
                     handlePictureClick
                     : undefined
                 }
-                style={{ cursor: (postFeatures.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
+                style={{ cursor: (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
               >
                 {imageExists ? (
                   <img
                     src={`${profilePictureUrl}?key=${profilePictureKey}`}
                     alt="Profile"
-                    style={{ cursor: (postFeatures.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
+                    style={{ cursor: (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
                   />
                 ) : (
                   <img
                     className="user-row-social-small-img"
                     src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
                     alt="Profile"
-                    style={{ cursor: (postFeatures.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
+                    style={{ cursor: (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) ? 'pointer' : 'default' }}
                   />
 
                 )}
@@ -381,7 +381,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
 
             {
-              (postFeatures.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) &&
+              (superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture || isSuperAdmin) &&
 
               isPictureModalVisible && !isTestSuperAdmin && (
                 <div className="picture-modal">
@@ -418,10 +418,10 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
           {!isTestSuperAdmin && (
 
-            (postFeatures.showProfileFeature && adminSettings.showProfileFeature || isSuperAdmin) &&
+            (superAdminSettings.showProfileFeature && adminSettings.showProfileFeature || isSuperAdmin) &&
             <div className="profile-actions">
               {
-                (postFeatures.allowEditUsername && adminSettings.allowEditUsername || isSuperAdmin) &&
+                (superAdminSettings.allowEditUsername && adminSettings.allowEditUsername || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("username")}
@@ -431,7 +431,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 </button>
               }
               {
-                ((postFeatures.allowEditEmail && adminSettings.allowEditEmail) || isSuperAdmin) &&
+                ((superAdminSettings.allowEditEmail && adminSettings.allowEditEmail) || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("email")}
@@ -441,7 +441,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
               }
 
               {
-                (postFeatures.allowEditPassword && adminSettings.allowEditPassword || isSuperAdmin) &&
+                (superAdminSettings.allowEditPassword && adminSettings.allowEditPassword || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-white"
                   onClick={() => navigate(`/resetpassword`)}
@@ -450,7 +450,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 </button>
               }
               {
-                (postFeatures.allowDeleteMyUser && adminSettings.allowDeleteMyUser || isSuperAdmin) &&
+                (superAdminSettings.allowDeleteMyUser && adminSettings.allowDeleteMyUser || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-red"
                   onClick={handleDeleteClick}

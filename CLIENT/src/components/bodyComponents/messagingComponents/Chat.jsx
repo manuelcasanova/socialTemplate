@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 // Hooks
@@ -38,7 +38,7 @@ const profilePictureExists = async (userId) => {
 export default function Chat({ isNavOpen, setHasNewMessages }) {
   const { userId } = useParams();
   const { auth } = useAuth();
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   // console.log('adminSettings in Chat', adminSettings)
   const axiosPrivate = useAxiosPrivate();
@@ -245,7 +245,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
           </h2>
 
 
-          {postFeatures.allowSendMessages && adminSettings.allowSendMessages && 
+          {superAdminSettings.allowSendMessages && adminSettings.allowSendMessages && 
             <div className="users-messaging-send">
               <input
                 placeholder="Aa"
@@ -318,7 +318,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                           </p>
                           {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
                           {!message.is_deleted && isSender && 
-                          postFeatures.allowDeleteMessages && adminSettings.allowDeleteMessages &&  
+                          superAdminSettings.allowDeleteMessages && adminSettings.allowDeleteMessages &&  
                           (
                             <FontAwesomeIcon
                               className="delete-chat-messsage"

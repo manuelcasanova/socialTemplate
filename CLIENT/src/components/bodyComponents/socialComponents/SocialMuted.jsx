@@ -7,7 +7,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Styling
@@ -41,7 +41,7 @@ const profilePictureExists = async (userId) => {
 };
 
 export default function SocialMuted({ isNavOpen }) {
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
@@ -77,11 +77,11 @@ export default function SocialMuted({ isNavOpen }) {
   useEffect(() => {
     fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
     {
-      // postFeatures.allowMute && adminSettings.allowMute && (Comment in if you prefer to not show the list of muted users if allowMute is false. Comment in as well the dependency array)
+      // superAdminSettings.allowMute && adminSettings.allowMute && (Comment in if you prefer to not show the list of muted users if allowMute is false. Comment in as well the dependency array)
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
     }
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername
-    //, postFeatures, adminSettings
+    //, superAdminSettings, adminSettings
   ]);
 
   // Check if profile picture exists for each user and store the result
@@ -107,7 +107,7 @@ export default function SocialMuted({ isNavOpen }) {
     setShowInfo(prev => !prev)
   }
 
-  if (!postFeatures || !adminSettings) {
+  if (!superAdminSettings || !adminSettings) {
     return <LoadingSpinner />;
   }
 

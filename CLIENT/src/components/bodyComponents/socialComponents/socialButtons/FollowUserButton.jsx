@@ -4,7 +4,7 @@ import React from 'react';
 import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
 
 //Context
-import { useGlobal } from '../../../../context/GlobalProvider';
+import { useGlobalSuperAdminSettings } from '../../../../context/SuperAdminSettingsProvider';
 import { useGlobalAdminSettings } from '../../../../context/AdminSettingsProvider';
 
 const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject, setError, isSuperAdmin }) => {
@@ -13,7 +13,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const axiosPrivate = useAxiosPrivate();
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
 
   const amFollowingThem = followersAndFollowee.some(follower =>
@@ -184,7 +184,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
 
   return (
 
-    (postFeatures.allowFollow && adminSettings.allowFollow || isSuperAdmin ) &&
+    (superAdminSettings.allowFollow && adminSettings.allowFollow || isSuperAdmin ) &&
     <div className="user-info-buttons">
 
 

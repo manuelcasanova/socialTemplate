@@ -9,7 +9,7 @@ import useAuth from "../../../hooks/useAuth";
 import { fetchRoles } from "./fetchRoles";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 
 // Components
 import Error from "../Error";
@@ -24,7 +24,7 @@ import { faEllipsisV, faWarning, faInfo } from "@fortawesome/free-solid-svg-icon
 export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
   const { auth } = useAuth();
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
 
   const [systemRoles, setSystemRoles] = useState(null);
@@ -186,7 +186,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
         <h2>Admin Roles</h2>
         {isLoading && <LoadingSpinner />}
 
-        {(postFeatures.allowAdminCreateCustomRole || isSuperAdmin) &&
+        {(superAdminSettings.allowAdminCreateCustomRole || isSuperAdmin) &&
           <CreateRole onRoleCreated={handleRoleCreated} isNavOpen={isNavOpen} error={error} setError={setError} />
         }
 
@@ -210,7 +210,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
         {(customRoles === null || customRoles.length === 0) && (
           <div>
             There are no custom roles yet.{' '}
-            {postFeatures.allowAdminCreateCustomRole && 'Create one.'}
+            {superAdminSettings.allowAdminCreateCustomRole && 'Create one.'}
           </div>
         )}
 
@@ -223,7 +223,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                 <li className="admin-roles-line" key={role.role_id}>
 
 
-                  {(postFeatures.allowAdminEditCustomRole || postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) && (
+                  {(superAdminSettings.allowAdminEditCustomRole || superAdminSettings.allowAdminDeleteCustomRole || isSuperAdmin) && (
 
                     <FontAwesomeIcon
                       icon={faEllipsisV}
@@ -238,7 +238,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
                   )}
 
-                  {(postFeatures.allowAdminEditCustomRole || isSuperAdmin) && <>
+                  {(superAdminSettings.allowAdminEditCustomRole || isSuperAdmin) && <>
                     {editRoleId === role.role_id && (
                       <div style={{ marginRight: '5px' }}>Edit role name</div>
                     )}
@@ -253,7 +253,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                     <>
 
                       {
-                        (postFeatures.allowAdminEditCustomRole || isSuperAdmin) &&
+                        (superAdminSettings.allowAdminEditCustomRole || isSuperAdmin) &&
 
                         editRoleId !== role.role_id && confirmDeleteId !== role.role_id && (
                           <button
@@ -265,7 +265,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                         )}
 
                       {
-                        (postFeatures.allowAdminEditCustomRole || isSuperAdmin) &&
+                        (superAdminSettings.allowAdminEditCustomRole || isSuperAdmin) &&
                         editRoleId === role.role_id && (
                           <div>
                             <input
@@ -311,7 +311,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                         )}
 
                       {
-                        (postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) &&
+                        (superAdminSettings.allowAdminDeleteCustomRole || isSuperAdmin) &&
 
                         confirmDeleteId !== role.role_id && editRoleId !== role.role_id && (
                           <button
@@ -323,7 +323,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                         )}
 
                       {
-                        (postFeatures.allowAdminDeleteCustomRole || isSuperAdmin) &&
+                        (superAdminSettings.allowAdminDeleteCustomRole || isSuperAdmin) &&
                         confirmDeleteId === role.role_id && (
                           <div className="confirm-delete-role">
 

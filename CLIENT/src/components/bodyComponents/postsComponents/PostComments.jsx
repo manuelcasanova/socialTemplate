@@ -6,7 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Util functions
@@ -28,7 +28,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostComments({ isNavOpen }) {
 
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
   const handleClose = () => navigate(-1);
@@ -206,7 +206,7 @@ export default function PostComments({ isNavOpen }) {
   useEffect(() => {
     fetchPostById(postId, setPost, setIsLoading, setError);
     {
-      (postFeatures.allowComments && adminSettings.allowComments || isSuperAdmin) &&
+      (superAdminSettings.allowComments && adminSettings.allowComments || isSuperAdmin) &&
         fetchPostComments({ postId, setPostComments, setError, setIsLoading, loggedInUserId })
     }
   }, [postId]);
@@ -446,7 +446,7 @@ export default function PostComments({ isNavOpen }) {
               />
             </div>
           )}
-          {(postFeatures.allowComments && adminSettings.allowComments || isSuperAdmin) &&
+          {(superAdminSettings.allowComments && adminSettings.allowComments || isSuperAdmin) &&
             <div className="centered-container centered-container-post flex-row">
               <input
                 placeholder="Aa"
@@ -473,7 +473,7 @@ export default function PostComments({ isNavOpen }) {
           }
 
 
-          {(postFeatures.allowComments || isSuperAdmin) &&
+          {(superAdminSettings.allowComments || isSuperAdmin) &&
             <div className="centered-container centered-container-post">
               {postComments.map((comment) => (
                 < div key={comment.id}>

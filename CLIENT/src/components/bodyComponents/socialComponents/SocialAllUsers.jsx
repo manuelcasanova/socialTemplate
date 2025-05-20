@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Hooks
@@ -36,7 +36,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -83,27 +83,27 @@ export default function SocialAllUsers({ isNavOpen }) {
 
   useEffect(() => {
 
-    if (!postFeatures || !adminSettings) return;
+    if (!superAdminSettings || !adminSettings) return;
 
-    if (postFeatures.showSocialFeature && adminSettings.showSocialFeature) {
+    if (superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) {
       fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
     }
 
-    if (postFeatures.allowMute && adminSettings.allowMute) {
+    if (superAdminSettings.allowMute && adminSettings.allowMute) {
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
     }
 
-    if (postFeatures.allowFollow && adminSettings.allowFollow) {
+    if (superAdminSettings.allowFollow && adminSettings.allowFollow) {
       fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
     }
 
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, postFeatures, adminSettings]);
+  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, superAdminSettings, adminSettings]);
 
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
   };
 
-  if (!postFeatures || !adminSettings) {
+  if (!superAdminSettings || !adminSettings) {
     return <LoadingSpinner />;
   }
 
@@ -179,7 +179,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                             f.follower_id === user.user_id ||
                             f.followee_id === user.user_id &&
                             f.status === "accepted"
-                          ) && postFeatures.showMessagesFeature && adminSettings.showMessagesFeature && (
+                          ) && superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature && (
 
                             <button
                               onClick={() => navigate(`/messages/${user.user_id}`)}

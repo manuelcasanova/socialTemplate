@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 //Context
-import { useGlobal } from '../../../context/GlobalProvider';
+import { useGlobalSuperAdminSettings } from '../../../context/SuperAdminSettingsProvider';
 import { useGlobalAdminSettings } from '../../../context/AdminSettingsProvider';
 
 //hooks
@@ -33,10 +33,10 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
-//   console.log("superadmin allow comments", postFeatures.allowComments, 'admim', adminSettings.allowComments)
-// console.log("superadmin posts feature", postFeatures.showPostsFeature, 'admim', adminSettings.showPostsFeature)
+//   console.log("superadmin allow comments", superAdminSettings.allowComments, 'admim', adminSettings.allowComments)
+// console.log("superadmin posts feature", superAdminSettings.showPostsFeature, 'admim', adminSettings.showPostsFeature)
   const loggedInUserId = auth.userId
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
@@ -59,11 +59,11 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   };
 
   useEffect(() => {
-    if (postFeatures.allowPostReactions && adminSettings.allowPostReactions  || isSuperAdmin) {
+    if (superAdminSettings.allowPostReactions && adminSettings.allowPostReactions  || isSuperAdmin) {
       fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount, loggedInUserId })
     }
 
-    if (postFeatures.allowComments && adminSettings.allowComments || isSuperAdmin) {
+    if (superAdminSettings.allowComments && adminSettings.allowComments || isSuperAdmin) {
       fetchPostCommentsCount({ postId, setIsLoading, setError, setCommentsCount, loggedInUserId })
     }
 
@@ -82,7 +82,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
       handleShowReactOptions();
 
-      if (postFeatures.allowPostReactions  || isSuperAdmin) {
+      if (superAdminSettings.allowPostReactions  || isSuperAdmin) {
       fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount });
       }
 
@@ -123,7 +123,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
         <div className="post-interactions-top">
 
           {
-          ((postFeatures.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin ) &&
+          ((superAdminSettings.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin ) &&
             <div className='post-interactions-top-left-reaction'
               onClick={() => navigate(`/posts/reactions/${postId}`)}>
               <FontAwesomeIcon icon={faSmile} />
@@ -132,7 +132,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
               </div>
             </div>
           }
-          {((postFeatures.allowComments && adminSettings.allowComments) || isSuperAdmin) &&
+          {((superAdminSettings.allowComments && adminSettings.allowComments) || isSuperAdmin) &&
             <div className='post-interactions-top-right-comments'
               onClick={() => navigate(`/posts/${postId}`)}>
               <div className='post-interactions-text'
@@ -149,7 +149,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
         <div className="post-interactions-bottom">
 
           {
-          ((postFeatures.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin )&&
+          ((superAdminSettings.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin )&&
             <div className='post-interactions-bottom-left-reaction'
               onClick={handleShowReactOptions}>
 
@@ -205,13 +205,13 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
                   <div className="post-menu-dropdown">
                     {
                     
-                    ((postFeatures.allowDeletePosts && adminSettings.allowDeletePosts) || isSuperAdmin ) &&
+                    ((superAdminSettings.allowDeletePosts && adminSettings.allowDeletePosts) || isSuperAdmin ) &&
                       <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} setError={setError} />
                     }
 
                     {
                     
-                    ((postFeatures.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin )&&
+                    ((superAdminSettings.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin )&&
                       <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
                     }
                     <FontAwesomeIcon icon={faXmark}

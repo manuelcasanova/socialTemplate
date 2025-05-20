@@ -1,5 +1,5 @@
 //Context
-import { useGlobal } from '../../../context/GlobalProvider';
+import { useGlobalSuperAdminSettings } from '../../../context/SuperAdminSettingsProvider';
 import { useGlobalAdminSettings } from '../../../context/AdminSettingsProvider';
 
 //Util functions
@@ -28,7 +28,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
   const {auth} = useAuth()
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
 
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
   const [reactionsCount, setReactionsCount] = useState();
@@ -50,7 +50,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
   };
 
   useEffect(() => {
-    if (postFeatures.allowCommentReactions && adminSettings.allowCommentReactions) {
+    if (superAdminSettings.allowCommentReactions && adminSettings.allowCommentReactions) {
       fetchPostCommentsReactionsCount({ commentId, setReactionsCount, setError, setIsLoading, loggedInUserId })
     }
   }, [])
@@ -95,7 +95,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
     <div className="post-comment-interactions">
       <div className="post-comment-date">{formatDate(commentDate)}</div>
 
-      {((postFeatures.allowCommentReactions && adminSettings.allowCommentReactions) || isSuperAdmin) && <>
+      {((superAdminSettings.allowCommentReactions && adminSettings.allowCommentReactions) || isSuperAdmin) && <>
         <div className="post-comment-react"
           onClick={handleShowReactOptions}>
           {!reactOption && (
@@ -146,7 +146,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
         </div>
       </>} 
 
-      {(postFeatures.allowDeleteComments || postFeatures.allowFlagComments || isSuperAdmin) && (
+      {(superAdminSettings.allowDeleteComments || superAdminSettings.allowFlagComments || isSuperAdmin) && (
         <>
 
           {!showEllipsisMenu && (
@@ -156,10 +156,10 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
           )}
           {showEllipsisMenu && (
             <div className="post-menu-dropdown">
-              {((postFeatures.allowDeleteComments && adminSettings.allowDeleteComments) || isSuperAdmin) &&
+              {((superAdminSettings.allowDeleteComments && adminSettings.allowDeleteComments) || isSuperAdmin) &&
                 <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
               }
-              {((postFeatures.allowFlagComments && adminSettings.allowFlagComments)|| isSuperAdmin) &&
+              {((superAdminSettings.allowFlagComments && adminSettings.allowFlagComments)|| isSuperAdmin) &&
                 <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
               }
               <FontAwesomeIcon icon={faXmark}

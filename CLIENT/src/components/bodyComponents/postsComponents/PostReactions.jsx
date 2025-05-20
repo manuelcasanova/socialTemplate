@@ -6,7 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 //Context
-import { useGlobal } from "../../../context/GlobalProvider";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 
 //Util functions
 import { fetchPostById } from "./util_functions/FetchPosts";
@@ -26,7 +26,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostReactions({ isNavOpen }) {
 
-  const { postFeatures } = useGlobal();
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
   const navigate = useNavigate();
   const handleClose = () => navigate(-1);
   const { param } = useParams();
@@ -85,7 +85,7 @@ export default function PostReactions({ isNavOpen }) {
 
   useEffect(() => {
     fetchPostById(postId, setPost, setIsLoading, setError);
-    if (postFeatures.allowComments) {
+    if (superAdminSettings.allowComments) {
       fetchPostReactionsData({ postId, setPostReactions, setError, setIsLoading, loggedInUserId })
     }
   }, [postId]);

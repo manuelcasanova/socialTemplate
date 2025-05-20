@@ -5,10 +5,10 @@ import useAuth from '../hooks/useAuth';
 // context/GlobalProvider.js
 import { createContext, useContext, useEffect, useState } from 'react';
 
-const GlobalContext = createContext();
+const SuperAdminSettingsContext = createContext();
 
 
-export const GlobalProvider = ({ children }) => {
+export const SuperAdminSettingsProvider = ({ children }) => {
 
   const { auth } = useAuth();
   const [error, setError] = useState(null);
@@ -933,7 +933,7 @@ export const GlobalProvider = ({ children }) => {
 
 
 
-  const postFeatures = {
+  const superAdminSettings = {
 
     showPostsFeature,
 
@@ -1052,21 +1052,21 @@ export const GlobalProvider = ({ children }) => {
     toggleAllowAdminDeleteCustomRole
   };
 
-  // console.log("postFeatures in Global Provider", postFeatures)
+  // console.log("superAdminSettings in Global Provider", superAdminSettings)
   // console.log("allowManageRoles", allowManageRoles)
   // console.log("allowModifyProfilePicture", allowModifyProfilePicture)
   // console.log("showProfileFeature", showProfileFeature)
   // console.log("allowEditEmail", allowEditEmail)
 
   return (
-    <GlobalContext.Provider value={{
-      postFeatures,
+    <SuperAdminSettingsContext.Provider value={{
+      superAdminSettings,
       error,
       isLoading
     }}>
       {children}
-    </GlobalContext.Provider>
+    </SuperAdminSettingsContext.Provider>
   );
 };
 
-export const useGlobal = () => useContext(GlobalContext);
+export const useGlobalSuperAdminSettings = () => useContext(SuperAdminSettingsContext);
