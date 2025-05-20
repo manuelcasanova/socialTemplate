@@ -39,6 +39,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   const { auth } = useAuth();
   const isSuperAdmin = auth?.roles?.includes('SuperAdmin');
   const isAdminNotSuperAdmin = auth?.roles?.includes('Admin') && !auth.roles.includes('SuperAdmin');
+  const isAdminAndSuperAdmin = auth?.roles?.includes('Admin') && auth.roles.includes('SuperAdmin');
 
   const loggedInUser = auth.userId
   const axiosPrivate = useAxiosPrivate();
@@ -242,7 +243,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {
-        ((superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) || isSuperAdmin ) &&
+        ((superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) || isSuperAdmin) &&
         <>
           {
             auth.roles && <div className='nav-item-with-dropdown'>
@@ -309,13 +310,19 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
             <>
               {isSuperAdmin && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/setup')}>
-                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Settings
+                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Super Admin Settings
                 </div>
               )}
 
               {isAdminNotSuperAdmin && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/admin/setup')}>
                   <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Settings
+                </div>
+              )}
+
+              {isAdminAndSuperAdmin && (
+                <div className="subitem" onClick={() => handleNavigate('/admin/admin/setup')}>
+                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Admin Settings
                 </div>
               )}
 
