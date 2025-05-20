@@ -96,9 +96,10 @@
   color: var(--color1);
   cursor: pointer;
 
-  white-space: nowrap; 
+  /* white-space: nowrap;  */
   overflow: hidden; 
   text-overflow: ellipsis; 
+  text-align: center;
 }
 
 .with-notification-text {
@@ -471,6 +472,11 @@ max-width: 10px;
 
 .fa-info:hover {
   cursor: pointer;
+}
+
+.nav-item-with-dropdown-open {
+background-color: var(--color9);
+filter: brightness(1.4); 
 }
 
 /* Mobile Styles */

@@ -169,7 +169,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
 
       {customRoles && customRoles.length > 0 &&
-        <div className='nav-item-with-dropdown'>
+        <div className={`nav-item-with-dropdown ${showSections.protectedRoutes ? 'nav-item-with-dropdown-open' : ''}`}>
           <div className='nav-item' onClick={() => toggleSection('protected_routes')}>Protected Routes
             {showSections.protectedRoutes ? '▲' : '▼'
             }
@@ -200,7 +200,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
       {auth.roles && auth.roles.includes('Moderator') &&
         superAdminSettings.showPostsFeature && adminSettings.showPostsFeature &&
-        <div className='nav-item-with-dropdown'>
+        <div className={`nav-item-with-dropdown ${showSections.moderator ? 'nav-item-with-dropdown-open' : ''}`}>
           <div className='nav-item' onClick={() => toggleSection('moderator')}>Moderator
             {showSections.moderator ? '▲' : '▼'
             }
@@ -246,7 +246,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         ((superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) || isSuperAdmin) &&
         <>
           {
-            auth.roles && <div className='nav-item-with-dropdown'>
+            auth.roles && <div className={`nav-item-with-dropdown ${showSections.social ? 'nav-item-with-dropdown-open' : ''}`}>
               {/* <div className='nav-item' onClick={() => toggleSection('social')}>Users */}
 
               <div className='nav-item' onClick={() => toggleSection('social')}>
@@ -301,7 +301,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) &&
-        <div className='nav-item-with-dropdown'>
+        <div className={`nav-item-with-dropdown ${showSections.admin ? 'nav-item-with-dropdown-open' : ''}`}>
           <div className='nav-item' onClick={() => toggleSection('admin')}>Admin
             {showSections.admin ? '▲' : '▼'
             }
@@ -356,12 +356,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
           {auth.roles && hasNewMessages &&
             <div className='nav-item'
               onClick={() => {
-                navigate(`/messages/`);
+                handleNavigate(`/messages/`);
               }}
             >
               <div className="new-message-bell-container"
                 onClick={() => {
-                  navigate(`/messages/`);
+                  handleNavigate(`/messages/`);
                 }}
               >
 
