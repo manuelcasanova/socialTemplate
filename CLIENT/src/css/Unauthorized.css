@@ -8,14 +8,12 @@
   background-color: var(--color8);  
   color: var(--color0);
   text-align: center;
-  padding: 20px;
   box-sizing: border-box;
 }
 
 .unauthorized-title {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 20px;
   color: var(--color2);
 }
 

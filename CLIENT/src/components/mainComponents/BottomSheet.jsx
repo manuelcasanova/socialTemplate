@@ -8,7 +8,7 @@ const BottomSheet = ({ isOpen, onClose, children }) => {
     <>
       <div className="bottom-sheet-overlay" onClick={onClose} />
       <div className="bottom-sheet">
-        <div className="bottom-sheet-handle" />
+        <div className="bottom-sheet-handle" onClick={onClose} />
         {children}
       </div>
     </>

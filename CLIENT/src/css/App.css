@@ -143,7 +143,7 @@
 /* New message notification */
 
 .faBell-new-message {
-  margin: 0em 0.5em 0em 0.5em;
+  margin-right: 0.5em;
   position: relative;
 }
 
@@ -271,7 +271,7 @@
   cursor: pointer;
   transition: transform 0.3s ease;
   max-width: 100%;
-  max-height: 100%;
+  max-height: 2.5em;
 }
 
 .profile-image:hover {
@@ -486,27 +486,33 @@
 }
 
 .nav-item-with-dropdown-open {
-  background-color: var(--color1);
   filter: brightness(1.4);
 }
 
 /* Mobile Styles */
 @media (max-width: 580px) {
 
+
+.body-squeezed {
+  margin-top: 0px;
+}
+
   .navbar {
-    width: 0%;
+    display: none;
+    /* width: 0%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: auto; */
   }
 
   .navbar-open {
-    width: 100%;
+    display: none;
+    /* width: 100%;
     height: 100%;
     padding-top: 1em;
-    /* padding-bottom: 5em; */
-    z-index: 999;
+     padding-bottom: 5em; 
+    z-index: 999; */
   }
 
   .navbar-bottom {
@@ -532,11 +538,34 @@
     gap: 0.5em;
     width: 100%;
     justify-content: space-evenly;
+    align-items: center;
   }
 
   .navbar-bottom-container div {
     cursor: pointer;
   }
+
+/* For the container of the small image */
+.navbar-bottom-small-img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem; /* Adjust this to match the size of the FA icons */
+  height: 2rem; /* Same as above */
+  overflow: hidden; /* Prevents the image from overflowing */
+  
+  box-sizing: border-box; /* Ensures padding doesn't affect width/height */
+}
+
+/* For the small image inside the container */
+.navbar-bottom-small-img {
+  width: 100%; /* Fills the container */
+  height: 100%; /* Fills the container */
+  object-fit: contain; /* Keeps the aspect ratio intact */
+  border-radius: 50%;
+}
+
+
 
   .body {
     position: relative;
@@ -562,10 +591,6 @@
     /* position: relative; */
   }
 
-
-  .body-squeezed {
-    display: none;
-  }
 
   .footer {
     display: none;
@@ -598,7 +623,13 @@
 @media (min-width: 581px) and (max-width: 1024px) {
 
   .hamburger-container {
-    background-color: red;
+    display: block;
+    width: 25%;
+    min-height: 2.5em;
+  }
+
+  .hamburger-container-open {
+    background-color: var(--color15);
   }
 
   .navbar {
@@ -607,7 +638,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    margin-top: 2.1em;
+    margin-top: 2.5em;
   }
 
   .navbar-open {
@@ -615,6 +646,7 @@
     height: 100%;
     /* padding-top: 3em; */
     padding-bottom: 2em;
+    background-color: var(--color15);
   }
 
   .navbar-bottom {

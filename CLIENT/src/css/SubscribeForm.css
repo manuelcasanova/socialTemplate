@@ -93,7 +93,7 @@ button.subscribe-button:disabled {
   background: none;
   border: none;
   font-size: 24px;
-  color: var(--color1);
+  color: var(--color0);
   cursor: pointer;
   transition: color 0.3s, transform 0.2s ease-in-out;
   margin-left: auto;

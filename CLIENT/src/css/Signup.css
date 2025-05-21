@@ -2,7 +2,7 @@
 .signup-title {
   display: flex;
   justify-content: center;
-  color: var(--color1); 
+  color: var(--color0); 
 }
 
 /* Signup Form */
@@ -14,7 +14,7 @@
 
 .signup-form label {
   margin-top: 0.5em;
-  color: var(--color1); 
+  color: var(--color0); 
 }
 
 .signup-form input {
@@ -42,7 +42,6 @@
   max-width: 350px;
   flex-direction: column;
   align-items: center;
-  background-color: var(--color9);
   margin: auto;
   padding: 1em;
   display: flex;
@@ -50,6 +49,7 @@
   margin-top: auto;
   margin-bottom: auto;
   border-radius: 5%;
+  /* border: 1px solid black; */
 }
 
 .transparent {
@@ -113,7 +113,7 @@
 }
 
 .have-an-account a {
-  color: var(--color1);
+  color: var(--color0);
 }
 
 /* Signup Success */
@@ -161,7 +161,7 @@
 /* Trust Device */
 .trust-device {
   margin: 4em 0em 1em 0em;
-  color: var(--color1);
+  color: var(--color0);
 }
 
 .trust-device input {
@@ -175,9 +175,10 @@
   padding: 10px 20px;
   font-size: 16px;
   text-align: center;
-  background-color: #1E90FF; /* DodgerBlue */
-  color: white;
-  border: none;
+  /* background-color: #1E90FF;  */
+  background-color: white;
+  color: black;
+  border: 1px solid;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -194,7 +195,7 @@
 }
 
 .button-auth:active {
-  background-color: #1874CD; /* Even darker blue */
+
   transform: translateY(0);
 }
 
@@ -224,19 +225,3 @@ width: 100%;
 
 /* Google button */
 
-.google-signup-btn {
-  /* background-color: #4285F4;  */
-  background-color: transparent;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.google-signup-btn :hover {
-  background-color: transparent;
-}

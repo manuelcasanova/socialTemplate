@@ -46,7 +46,6 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   const navigate = useNavigate();
   const logout = useLogout();
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -94,7 +93,6 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   useEffect(() => {
     const handleResize = () => {
       setIsLargeScreen(window.innerWidth >= 1025);
-      setIsSmallScreen(window.innerWidth <= 580);
     };
 
     // Check screen size on mount
@@ -167,11 +165,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         <Logo handleNavigate={handleNavigate} />
       )}
 
-      {!isLargeScreen && (
-        <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
+      {(
+        !isLargeScreen && <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
       )}
 
-      {!isSmallScreen && <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>}
+      {<div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>}
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
 
       {customRoles && customRoles.length > 0 &&
@@ -200,7 +198,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {
-        superAdminSettings.showPostsFeature && adminSettings.showPostsFeature && !isSmallScreen &&
+        superAdminSettings.showPostsFeature && adminSettings.showPostsFeature &&
         <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
       }
 
@@ -334,8 +332,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
               <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
 
-              {superAdminSettings.showCustomRolesFeature &&
-                <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>Admin roles</div>}
+
+              <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>Admin roles</div>
 
               <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
                 Role change log
@@ -353,7 +351,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       {
         superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature &&
         <>
-          {auth.roles && !hasNewMessages && !isSmallScreen &&
+          {auth.roles && !hasNewMessages &&
             < div className="nav-item" onClick={() => handleNavigate('/messages')}>
               <FontAwesomeIcon icon={faEnvelope} />
             </div>

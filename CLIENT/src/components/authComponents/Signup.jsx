@@ -301,12 +301,12 @@ export default function Signup({ isNavOpen, screenWidth }) {
         <div className='centered-section'>
           <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
-          <button className="google-signup-btn" onClick={handleShowEmailSignup}>
+          <button className="button-white" style={{marginBottom: '2em'}} onClick={handleShowEmailSignup}>
             <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
             Sign up with Email
           </button>
 
-          <button className="google-signup-btn" onClick={handleGoogleSignUp}>
+          <button className="button-white" onClick={handleGoogleSignUp}>
             <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
             Sign up with Google
           </button>
@@ -376,7 +376,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
                 </button>
               </form>
 
-              <button className="google-signup-btn" onClick={() => handleShowEmailSignup()}>
+              <button className="button-white" onClick={() => handleShowEmailSignup()}>
                 <FontAwesomeIcon icon={faKey} style={{ marginRight: "10px" }} />
                 Sign up through a partner
               </button>

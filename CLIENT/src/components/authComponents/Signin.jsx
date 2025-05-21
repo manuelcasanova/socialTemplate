@@ -187,7 +187,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                     </div>
                 }
 
-                <section className="centered-section">
+               
                     <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
                         {successMsg}
                     </p>
@@ -269,7 +269,8 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                             {isLoading ? <LoadingSpinner /> :
                                 <>
                                     <button
-                                        className="google-signup-btn"
+                                        className="button-white"
+                                        style={{marginBottom: '2em'}}
                                         onClick={handleShowSignUpWithEmail}
                                         disabled={isLoading}>
                                         <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
@@ -277,7 +278,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                                     </button>
 
 
-                                    <button className="google-signup-btn" onClick={handleGoogleLogin} disabled={isLoading}>
+                                    <button className="button-white" onClick={handleGoogleLogin} disabled={isLoading}>
                                         <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
                                         Sign in with Google
                                     </button>
@@ -300,7 +301,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
                         <p>Forgot password?</p>
                         <Link to="/resetpassword">Reset</Link>
                     </div>
-                </section>
+            
             </div>
         </div >
 

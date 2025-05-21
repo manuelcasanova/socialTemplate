@@ -38,7 +38,7 @@ export default function Profile ({toggleSection, showSections, handleNavigate, p
   return (
     
     <div className='nav-item-with-dropdown'>
-    <div className='nav-item-logo'   onClick={() => {
+    <div className='nav-item'   onClick={() => {
     if (!isLargeScreen) {
       handleNavigate('/profile/myaccount');
     } else {
