@@ -46,6 +46,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   const navigate = useNavigate();
   const logout = useLogout();
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -93,6 +94,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   useEffect(() => {
     const handleResize = () => {
       setIsLargeScreen(window.innerWidth >= 1025);
+      setIsSmallScreen(window.innerWidth <= 580);
     };
 
     // Check screen size on mount
@@ -165,7 +167,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
       )}
 
-      <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>
+{!isSmallScreen && <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>}
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
 
       {customRoles && customRoles.length > 0 &&
@@ -194,7 +196,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {
-        superAdminSettings.showPostsFeature && adminSettings.showPostsFeature &&
+        superAdminSettings.showPostsFeature && adminSettings.showPostsFeature && !isSmallScreen && 
         <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
       }
 
@@ -347,7 +349,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       {
         superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature &&
         <>
-          {auth.roles && !hasNewMessages &&
+          {auth.roles && !hasNewMessages && !isSmallScreen && 
             < div className="nav-item" onClick={() => handleNavigate('/messages')}>
               <FontAwesomeIcon icon={faEnvelope} />
             </div>

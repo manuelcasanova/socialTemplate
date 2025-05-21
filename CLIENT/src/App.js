@@ -18,6 +18,7 @@ import PersistLogin from './components/authComponents/PersistLogin';
 import RequireAuth from './components/authComponents/RequireAuth';
 
 import Navbar from './components/mainComponents/navBar';
+import NavBarBottom from './components/mainComponents/navBarBottom';
 import Hamburger from './components/mainComponents/hamburger';
 
 import Home from './components/bodyComponents/Home';
@@ -322,6 +323,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
         <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
       </Routes>
       <Footer isNavOpen={isNavOpen} />
+      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav}/>
 
     </div>
 

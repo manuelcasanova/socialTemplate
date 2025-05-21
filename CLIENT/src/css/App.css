@@ -97,8 +97,8 @@
   cursor: pointer;
 
   /* white-space: nowrap;  */
-  overflow: hidden; 
-  text-overflow: ellipsis; 
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: center;
 }
 
@@ -131,10 +131,12 @@
 
 .notification-dot {
   position: absolute;
-  top: -5px; /* Adjust this value to position the dot closer/further */
-  right: 5px; /* Adjust this value to position the dot closer/further */
-  width: 10px; 
-  height: 10px; 
+  top: -5px;
+  /* Adjust this value to position the dot closer/further */
+  right: 5px;
+  /* Adjust this value to position the dot closer/further */
+  width: 10px;
+  height: 10px;
   background-color: red;
   border-radius: 50%;
 }
@@ -153,10 +155,12 @@
 
 .new-message-notification-dot {
   position: absolute;
-  top: -5px; /* Adjust this value to position the dot closer/further */
-  right: 5px; /* Adjust this value to position the dot closer/further */
-  width: 10px; 
-  height: 10px; 
+  top: -5px;
+  /* Adjust this value to position the dot closer/further */
+  right: 5px;
+  /* Adjust this value to position the dot closer/further */
+  width: 10px;
+  height: 10px;
   background-color: red;
   border-radius: 50%;
 }
@@ -198,10 +202,12 @@
   position: relative;
   width: 30px;
   height: 15px;
-  background-color: #ccc;  /* Light grey background (off) */
-  border-radius: 50px;     /* Rounded corners */
+  background-color: #ccc;
+  /* Light grey background (off) */
+  border-radius: 50px;
+  /* Rounded corners */
   transition: background-color 0.3s;
-  
+
 }
 
 /* The circle that moves */
@@ -212,19 +218,22 @@
   transform: translateY(-50%);
   width: 10px;
   height: 10px;
-  background-color: white;  /* White circle for contrast */
+  background-color: white;
+  /* White circle for contrast */
   border-radius: 50%;
   transition: 0.3s;
 }
 
 /* When checkbox is checked, the background color changes */
-.toggle-checkbox:checked + .toggle-label {
-  background-color: #333; /* Dark grey background (on) */
+.toggle-checkbox:checked+.toggle-label {
+  background-color: #333;
+  /* Dark grey background (on) */
 }
 
 /* When checkbox is checked, move the circle to the right */
-.toggle-checkbox:checked + .toggle-label .toggle-circle {
-  left: 15px; /* Move circle to the right */
+.toggle-checkbox:checked+.toggle-label .toggle-circle {
+  left: 15px;
+  /* Move circle to the right */
 }
 
 /* End reusable toggle button */
@@ -301,8 +310,9 @@
   margin-top: auto;
 }
 
+
 .footer-container {
-  flex-direction: column  ;
+  flex-direction: column;
 }
 
 /* Button red */
@@ -419,7 +429,7 @@
 /* Info buttons and messages */
 
 .info-button {
-  margin: 10px; 
+  margin: 10px;
   background-color: var(--color9);
   color: white;
   padding: 10px;
@@ -427,11 +437,13 @@
   border-radius: 50%;
   cursor: pointer;
   font-size: 16px;
-max-height: 10px;
-max-width: 10px;
+  max-height: 10px;
+  max-width: 10px;
   display: flex;
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  justify-content: center;
+  /* Center horizontally */
 }
 
 .info-message {
@@ -475,8 +487,8 @@ max-width: 10px;
 }
 
 .nav-item-with-dropdown-open {
-background-color: var(--color9);
-filter: brightness(1.4); 
+  background-color: var(--color9);
+  filter: brightness(1.4);
 }
 
 /* Mobile Styles */
@@ -494,30 +506,65 @@ filter: brightness(1.4);
     width: 100%;
     height: 100%;
     padding-top: 3em;
-    padding-bottom: 2em;
-    z-index: 1001;
+    padding-bottom: 5em;
+    z-index: 999;
   }
 
-.body {
-  position: relative;
-  padding: 0.5em;
-  padding-top: 2.5em;  
-  /* margin-left: 2.5em; */
-  background-color: var(--color1);
-}
+  .navbar-bottom {
+    padding: 1em;
+    background-color: var(--color9);
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    margin-top: auto;
+
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+  }
+
+  .navbar-bottom-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+
+  .body {
+    position: relative;
+    padding: 0.5em;
+    /* padding-top: 2.5em; */
+    padding-bottom: 5em;
+    /* margin-left: 2.5em; */
+    background-color: var(--color1);
+  }
+
+  .hamburger-container {
+    /* width: 100%;
+    background-color: var(--color1);
+    position: fixed;
+    z-index: 1000; */
+  }
 
 .hamburger-container {
-  width: 100%;
-  background-color: var(--color1) ;
-  position: fixed;  
-  z-index: 1000;
+  display: none;
 }
 
-.hamburger {
-  position: relative;
-}
+  .hamburger {
+    /* position: relative; */
+  }
+
 
   .body-squeezed {
+    display: none;
+  }
+
+  .footer {
     display: none;
   }
 
@@ -557,6 +604,11 @@ filter: brightness(1.4);
     padding-bottom: 2em;
   }
 
+  .navbar-bottom {
+    display: none;
+  }
+
+
   .nav-item,
   .subitem {
     padding-top: 10%;
@@ -589,15 +641,20 @@ filter: brightness(1.4);
 /* Desktop Styles */
 @media (min-width: 1025px) {
 
-.body {
-  margin-top: 40px;
-  padding: 1em;
-  
-}
+  .body {
+    margin-top: 40px;
+    padding: 1em;
 
-.navbar {
-  height: 40px;
-}
+  }
+
+  .navbar {
+    height: 40px;
+  }
+
+  .navbar-bottom {
+    display: none;
+  }
+
 
   .nav-item {
     flex: 1;
