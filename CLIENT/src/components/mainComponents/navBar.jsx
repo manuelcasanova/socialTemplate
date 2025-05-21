@@ -124,7 +124,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     }
 
     // Close dropdowns whenever navigating
-    setShowSections({ admin: false, profile: false, protectedRoutes: false });
+    if (isNavOpen && window.innerWidth > 1024) {
+      setShowSections({ admin: false, profile: false, protectedRoutes: false });
+    }
 
   };
 
@@ -138,7 +140,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     }
 
     // Close dropdowns whenever navigating
-    setShowSections({ admin: false, profile: false, protectedRoutes: false });
+    if (isNavOpen && window.innerWidth > 1024) {
+      setShowSections({ admin: false, profile: false, protectedRoutes: false });
+    }
   };
 
   // Toggle individual dropdown sections and close others
@@ -167,12 +171,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
       )}
 
-{!isSmallScreen && <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>}
+      {!isSmallScreen && <div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>}
       <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
 
       {customRoles && customRoles.length > 0 &&
         <div className={`nav-item-with-dropdown ${showSections.protectedRoutes ? 'nav-item-with-dropdown-open' : ''}`}>
-          <div className='nav-item' onClick={() => toggleSection('protected_routes')}>Protected Routes
+          <div className='nav-item' onClick={() => toggleSection('protected_routes')}>Roles
             {showSections.protectedRoutes ? '▲' : '▼'
             }
           </div>
@@ -196,7 +200,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {
-        superAdminSettings.showPostsFeature && adminSettings.showPostsFeature && !isSmallScreen && 
+        superAdminSettings.showPostsFeature && adminSettings.showPostsFeature && !isSmallScreen &&
         <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
       }
 
@@ -349,7 +353,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       {
         superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature &&
         <>
-          {auth.roles && !hasNewMessages && !isSmallScreen && 
+          {auth.roles && !hasNewMessages && !isSmallScreen &&
             < div className="nav-item" onClick={() => handleNavigate('/messages')}>
               <FontAwesomeIcon icon={faEnvelope} />
             </div>

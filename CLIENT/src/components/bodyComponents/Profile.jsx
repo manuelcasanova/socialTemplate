@@ -67,7 +67,7 @@ const validateInput = (editMode, value, confirmPwd = "") => {
   return { valid: true };
 };
 
-export default function Profile({ isNavOpen, profilePictureKey, setProfilePictureKey }) {
+export default function Profile({ isNavOpen, profilePictureKey, setProfilePictureKey, isLargeScreen }) {
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();

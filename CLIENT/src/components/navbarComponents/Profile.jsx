@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import ProfileImage from "./ProfileImage"
 import useLogout from "../../hooks/useLogout";
 import { useNavigate } from 'react-router-dom'
@@ -12,16 +13,38 @@ export default function Profile ({toggleSection, showSections, handleNavigate, p
 
   const logout = useLogout();
   const navigate = useNavigate();
+  const [isLargeScreen, setIsLargeScreen] = useState();
 
   const signOut = async () => {
     await logout();
     navigate('/');
   }
+
+  useEffect(() => {
+      const handleResize = () => {
+        setIsLargeScreen(window.innerWidth >= 1025);
+      };
+  
+      // Check screen size on mount
+      handleResize();
+  
+      // Add event listener to detect resize
+      window.addEventListener('resize', handleResize);
+  
+      // Cleanup event listener on unmount
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
   
   return (
     
     <div className='nav-item-with-dropdown'>
-    <div className='nav-item-logo' onClick={() => toggleSection('profile')}>
+    <div className='nav-item-logo'   onClick={() => {
+    if (!isLargeScreen) {
+      handleNavigate('/profile/myaccount');
+    } else {
+      toggleSection('profile');
+    }
+  }}>
       <ProfileImage profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey}/>
       {/* {showSections.profile ? '▲' : '▼'} */}
     </div>
