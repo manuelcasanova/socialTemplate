@@ -14,7 +14,7 @@ import useAuth from '../../hooks/useAuth';
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faSignInAlt, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import BottomSheet from './BottomSheet';
@@ -27,6 +27,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { auth } = useAuth();
+  // console.log('auth', auth)
   const isSuperAdmin = auth?.roles?.includes('SuperAdmin');
   const isAdminNotSuperAdmin = auth?.roles?.includes('Admin') && !auth.roles.includes('SuperAdmin');
   const isAdminAndSuperAdmin = auth?.roles?.includes('Admin') && auth.roles.includes('SuperAdmin');
@@ -50,6 +51,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
     if (isNavOpen && window.innerWidth <= 580) {
       toggleNav();
     }
+
+    setActiveSheet(null)
   };
 
   const fetchCustomRoles = async () => {
@@ -122,8 +125,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
 
         return adminItems;
 
-        default:
-          return []; 
+      default:
+        return [];
     }
   };
 
@@ -247,18 +250,23 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
             {(() => {
               const ellipsisItems = [];
 
-              if (superAdminSettings.showSubscriberFeature) ellipsisItems.push('Subscriber');
+              if (superAdminSettings?.showSubscriberFeature) {
+                ellipsisItems.push({ label: 'Subscriber', icon: null });
+              }
 
-
-              if (isModerator && adminSettings.showPostsFeature) {
-                ellipsisItems.push('Moderator');
+              if (isModerator && adminSettings?.showPostsFeature) {
+                ellipsisItems.push({ label: 'Moderator', icon: null });
               }
 
               if (isAdminNotSuperAdmin || isAdminAndSuperAdmin || isSuperAdmin) {
-                ellipsisItems.push('Admin');
+                ellipsisItems.push({ label: 'Admin', icon: null });
               }
 
-              ellipsisItems.push('Logout');
+              if (auth && Object.keys(auth).length > 0) {
+                ellipsisItems.push({ label: 'Logout', icon: faSignOutAlt });
+              } else {
+                ellipsisItems.push({ label: 'Sign In', icon: faSignInAlt });
+              }
 
               return ellipsisItems.map((item, index) => (
                 <li
@@ -269,40 +277,39 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px'
+                    gap: '8px',
                   }}
                   onClick={() => {
-                    if (['Moderator', 'Users', 'Admin'].includes(item)) {
-                      setSubSection(item.toLowerCase());
-                    } else if (item === 'Logout') {
+                    const label = item.label;
+
+                    if (['Moderator', 'Users', 'Admin'].includes(label)) {
+                      setSubSection(label.toLowerCase());
+                    } else if (label === 'Logout') {
                       logout();
                       setActiveSheet(null);
                       handleNavigate('/');
+                    } else if (label === 'Sign In') {
+                      setActiveSheet(null);
+                      handleNavigate('/signin');
                     } else {
-                      handleNavigate(`/${item.toLowerCase()}`);
+                      handleNavigate(`/${label.toLowerCase()}`);
                       setActiveSheet(null);
                     }
                   }}
                 >
-                  {item === 'Logout' ? (
-                    <>
-                      <FontAwesomeIcon icon={faSignOutAlt} />
-                      <span>Logout</span>
-                    </>
-                  ) : (
-                    item
-                  )}
+                  {item.icon && <FontAwesomeIcon icon={item.icon} />}
+                  <span>{item.label}</span>
                 </li>
               ));
             })()}
-
-
           </ul>
         )}
 
         {subSection && (
           <div>
-            <button onClick={() => setSubSection(null)} className='back-button button-white button-smaller'>← Back</button>
+            <button onClick={() => setSubSection(null)} className='back-button button-white button-smaller'>
+              ← Back
+            </button>
             <h4 style={{ textTransform: 'capitalize' }}>{subSection}</h4>
             <ul>
               {getSubItemsForSection(subSection).map((item, idx) => (
@@ -321,8 +328,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
             </ul>
           </div>
         )}
-
       </BottomSheet>
+
 
 
 
