@@ -64,12 +64,12 @@ const handleLogin = async (req, res) => {
                 const accessToken = jwt.sign(
                     { "UserInfo": { "email": foundEmail[0].email, "roles": roles } },
                     process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: '5m' }
+                    { expiresIn: '5m' } //5m
                 );
                 const refreshToken = jwt.sign(
                     { "username": foundEmail[0].username },
                     process.env.REFRESH_TOKEN_SECRET,
-                    { expiresIn: '24h' }
+                    { expiresIn: '24h' } //24h
                 );
 
                 // Save refreshToken with current user
@@ -270,12 +270,12 @@ const handleFirebaseLogin = async (req, res) => {
         const accessToken = jwt.sign(
             { "UserInfo": { "email": email, "roles": roles } },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '5m' }
+            { expiresIn: '5m' } //5m
         );
         const refreshToken = jwt.sign(
             { "username": user.username },
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: '24h' }
+            { expiresIn: '24h' } //24h
         );
 
         // Save refresh token in the database

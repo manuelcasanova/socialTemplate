@@ -43,7 +43,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   const isAdminNotSuperAdmin = auth?.roles?.includes('Admin') && !auth.roles.includes('SuperAdmin');
   const isAdminAndSuperAdmin = auth?.roles?.includes('Admin') && auth.roles.includes('SuperAdmin');
 
-  const loggedInUser = auth.userId
+  const loggedInUser = auth?.userId
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const logout = useLogout();
@@ -171,6 +171,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   if (error) {
     return <Error isNavOpen={isNavOpen} error={error} />
   }
+
+  if (!auth) return null;
+
 
   return (
     <div className={`navbar ${isNavOpen ? 'navbar-open' : ''}`} data-testid="navbar">

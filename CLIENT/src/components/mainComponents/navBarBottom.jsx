@@ -14,7 +14,7 @@ import useAuth from '../../hooks/useAuth';
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faUnlock, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import BottomSheet from './BottomSheet';
@@ -131,6 +131,9 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
     return <LoadingSpinner />
   }
 
+  if (!auth) return null;
+
+
   return (
     <>
       <footer className='navbar-bottom'>
@@ -144,7 +147,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
           <div onClick={() => {
             setActiveSheet(null)
             handleNavigate('/user')
-          }}>   <FontAwesomeIcon icon={faUnlock} /></div>
+          }}>   <FontAwesomeIcon icon={faUser} /></div>
 
           <div
             onClick={async () => {
@@ -180,7 +183,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
 
             <img
               className="navbar-bottom-small-img"
-              src={`${BACKEND}/media/profile_pictures/${auth.userId}/profilePicture.jpg`}
+              src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg`}
               alt="Profile"
               onError={(e) => {
                 e.target.onerror = null;

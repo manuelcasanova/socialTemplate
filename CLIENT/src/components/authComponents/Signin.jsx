@@ -24,6 +24,13 @@ const DEFAULT_PASSWORD = 'G7m!pLz@92aT';  // Hardcoded default password for deve
 
 const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
 
+    function useQuery() {
+        return new URLSearchParams(useLocation().search);
+      }
+      const query = useQuery();
+const message = query.get('message'); // returns "Session expired. Please sign in again."
+
+
     const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -181,6 +188,8 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
     return (
         <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
             <div className='centered-section'>
+
+            {message && <p style={{ color: 'red', marginBottom: '1em' }}>{message}</p>}
 
                 {showSignUpWithEmail &&
                     <div className='close-button-container'>

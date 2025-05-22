@@ -5,7 +5,7 @@ import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
     const refresh = useRefreshToken();
-    const { auth } = useAuth();
+    const { auth, setAuth } = useAuth();
     useEffect(() => {
 
         const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -18,25 +18,59 @@ const useAxiosPrivate = () => {
             }, (error) => Promise.reject(error)
         );
 
+        // const responseIntercept = axiosPrivate.interceptors.response.use(
+        //     response => response,
+        //     async (error) => {
+        //         const prevRequest = error?.config;
+        //         if (error?.response?.status === 403 && !prevRequest?.sent) {
+        //             prevRequest.sent = true;
+        //             const newAccessToken = await refresh();
+        //             prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+        //             return axiosPrivate(prevRequest);
+        //         }
+        //         return Promise.reject(error);
+        //     }
+        // );
+
         const responseIntercept = axiosPrivate.interceptors.response.use(
             response => response,
-            async (error) => {
+            async error => {
                 const prevRequest = error?.config;
-                if (error?.response?.status === 403 && !prevRequest?.sent) {
+
+                const status = error?.response?.status;
+
+                // Handle both 401 (Unauthorized) and 403 (Forbidden) cases
+                if ((status === 401 || status === 403) && !prevRequest?.sent) {
                     prevRequest.sent = true;
-                    const newAccessToken = await refresh();
-                    prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    return axiosPrivate(prevRequest);
+
+                    try {
+                        const newAccessToken = await refresh();
+                        prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                        return axiosPrivate(prevRequest);
+                    } catch (refreshError) {
+                        console.error('Refresh token failed:', refreshError);
+                        setAuth(null);
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('refreshToken');
+                      
+                        // Wait before redirecting to give components time to unmount cleanly
+                        setTimeout(() => {
+                          window.location.href = '/signin?message=Session expired. Please sign in again.';
+                        }, 100);
+                        return Promise.reject(refreshError);
+                      }
                 }
+
                 return Promise.reject(error);
             }
         );
+
 
         return () => {
             axiosPrivate.interceptors.request.eject(requestIntercept);
             axiosPrivate.interceptors.response.eject(responseIntercept);
         }
-    }, [auth, refresh])
+    }, [auth, setAuth, refresh])
 
     return axiosPrivate;
 }
