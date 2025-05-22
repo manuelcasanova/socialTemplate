@@ -14,7 +14,7 @@ import useAuth from '../../hooks/useAuth';
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faLock, faNewspaper, faEnvelope, faUser, faEllipsisH, faSignOutAlt, faUnlock, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faUnlock, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import BottomSheet from './BottomSheet';
@@ -43,15 +43,6 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
   const [subSection, setSubSection] = useState(null);
   const logout = useLogout();
 
-
-  const [showSections, setShowSections] = useState({
-    admin: false,
-    profile: false,
-    social: false,
-    moderator: false,
-    protectedRoutes: false
-  });
-
   // Navigate to a specific path
   const handleNavigate = (path) => {
     navigate(path);
@@ -59,7 +50,6 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
     if (isNavOpen && window.innerWidth <= 580) {
       toggleNav();
     }
-    setShowSections({ admin: false, profile: false, protectedRoutes: false });
   };
 
   const fetchCustomRoles = async () => {
@@ -132,6 +122,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
 
         return adminItems;
 
+        default:
+          return []; 
     }
   };
 

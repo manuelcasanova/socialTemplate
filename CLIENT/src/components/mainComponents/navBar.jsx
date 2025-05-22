@@ -10,6 +10,8 @@ import { useGlobalAdminSettings } from '../../context/AdminSettingsProvider';
 import Profile from '../navbarComponents/Profile';
 import Logo from '../navbarComponents/Logo';
 import FollowNotification from '../navbarComponents/FollowNotification';
+import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
+import Error from '../bodyComponents/Error';
 
 //Hooks
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
@@ -70,6 +72,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       return;
     }
     const fetchFollowNotifications = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
         const response = await axiosPrivate.get(`/social/users/follownotifications`, { params: { userId: loggedInUser } })
         if (response.data.length > 0) {
@@ -80,6 +84,9 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       } catch (error) {
         console.error('Error fetching follow notifications:', error);
         setIsFollowNotification(false);
+        setError('Failed to fetch follow notifications.');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -157,6 +164,13 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     }));
   };
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <Error isNavOpen={isNavOpen} error={error} />
+  }
 
   return (
     <div className={`navbar ${isNavOpen ? 'navbar-open' : ''}`} data-testid="navbar">

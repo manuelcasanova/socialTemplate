@@ -1,6 +1,5 @@
 import '../../css/Signup.css';
 
-import { useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle, faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +15,6 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 
 export default function Signup({ isNavOpen, screenWidth }) {
-  const navigate = useNavigate();
 
   const regexPatterns = {
     //username: /^[A-z][A-z0-9-_]{3,23}$/,
@@ -50,9 +48,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSoftDeleted, setIsSoftDeleted] = useState(false);  // New state to track soft-deleted email
   const [restoreAction, setRestoreAction] = useState(false);
-  const [userIdToRestore, setUserIdToRestore] = useState(null);
   const [showEmailSignUp, setShowEmailSignUp] = useState(false);
 
   const userRef = useRef();
@@ -84,7 +80,8 @@ export default function Signup({ isNavOpen, screenWidth }) {
     }
 
     setErrMsg('');
-  }, [formData]);
+  }, [formData, regexPatterns.email, regexPatterns.password, regexPatterns.username, validity.name, validity.email, validity.pwd, validity.match]);
+
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -137,7 +134,6 @@ export default function Signup({ isNavOpen, screenWidth }) {
         // Allow user to either restore or create a new account
         setErrMsg(response.data.message);
         setRestoreAction(true);
-        setUserIdToRestore(response.data.userId);
       } else if (response.data.success) {
         setSuccess(true);  // Handle success case if applicable
         setFormData({ user: '', email: '', pwd: '', matchPwd: '' });
@@ -157,7 +153,6 @@ export default function Signup({ isNavOpen, screenWidth }) {
             // Allow user to either restore or proceed with new account creation
             setErrMsg(err.response.data.message);
             setRestoreAction(true); // Enable restore action
-            setUserIdToRestore(err.response.data.userId); // Store the user ID for restoration
           } else {
             setErrMsg(err.response.data.message || 'An error occurred during signup.');
           }
@@ -232,7 +227,6 @@ export default function Signup({ isNavOpen, screenWidth }) {
 
       if (response.data.success) {
         setSuccess(true);
-        setIsSoftDeleted(false); // Hide the restore option after success
       }
     } catch (err) {
       setErrMsg('Error restoring account.');

@@ -156,8 +156,9 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
     const handleResendVerification = async () => {
         setIsLoading(true);
         try {
+
             const csrfToken = getCsrfToken();
-            const response = await axios.post('/auth/resend-verification-email', {
+            await axios.post('/auth/resend-verification-email', {
                 email: email.trim().toLowerCase(),
             }, {
                 headers: {
