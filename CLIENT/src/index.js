@@ -5,6 +5,7 @@ import App from './App';
 import { AuthProvider } from './context/AuthProvider';
 import { SuperAdminSettingsProvider } from './context/SuperAdminSettingsProvider';
 import { AdminSettingsProvider } from './context/AdminSettingsProvider';
+import { ScreenSizeProvider } from './context/ScreenSizeContext';
 import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
@@ -15,7 +16,9 @@ root.render(
       <AuthProvider>
         <SuperAdminSettingsProvider>
           <AdminSettingsProvider>
-            <App />
+            <ScreenSizeProvider>
+              <App />
+            </ScreenSizeProvider>
           </AdminSettingsProvider>
         </SuperAdminSettingsProvider>
       </AuthProvider>

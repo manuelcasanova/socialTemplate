@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 
 //Hooks
 
@@ -8,6 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 //Context
 import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
+import ScreenSizeContext from "../../../context/ScreenSizeContext";
 
 //Styling
 
@@ -47,6 +48,9 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   const { adminSettings } = useGlobalAdminSettings();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { screenSize } = useContext(ScreenSizeContext);
+  const { isSmartphone, isTablet, isDesktop, width } = screenSize;
+
   const [filters, setFilters] = useState({});
   const loggedInUser = auth.userId;
   const [users, setUsers] = useState([]);
@@ -181,7 +185,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                       )}
 
                       {showLargePicture === user.user_id && (
-                        <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(null)}>
+                        <div className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(null)}>
                           <img
                             className='users-all-picture-large'
                             onClick={() => setShowLargePicture(null)}

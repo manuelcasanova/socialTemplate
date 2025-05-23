@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Hooks
@@ -8,6 +8,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 //Context
 import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
+import ScreenSizeContext from "../../../context/ScreenSizeContext";
 
 //Util functions
 import { fetchPostById } from "./util_functions/FetchPosts";
@@ -46,6 +47,8 @@ export default function PostComments({ isNavOpen }) {
   const [isInappropriate, setIsInappropriate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { screenSize } = useContext(ScreenSizeContext);
+  const { isSmartphone, isTablet, isDesktop, width } = screenSize;
   const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
   const [newMessage, setNewMessage] = useState("")
@@ -431,7 +434,7 @@ export default function PostComments({ isNavOpen }) {
 
           {showLargePicture && (
             <div
-              className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+              className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
               onClick={() => setShowLargePicture(null)}
             >
               <img

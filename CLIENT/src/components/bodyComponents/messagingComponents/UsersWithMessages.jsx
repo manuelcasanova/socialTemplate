@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 
 //Hooks
@@ -8,6 +8,10 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 
 import '../../../css/AdminUsers.css';
+
+//Context
+import ScreenSizeContext from "../../../context/ScreenSizeContext";
+
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -43,6 +47,9 @@ export default function UsersWithMessages({ isNavOpen }) {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { screenSize } = useContext(ScreenSizeContext);
+  const { isSmartphone, isTablet, isDesktop, width } = screenSize;
+
   const [users, setUsers] = useState([]);
   const [usersWithNewMessages, setUsersWithNewMessages] = useState([]);
   const [mutedUsers, setMutedUsers] = useState([]);
@@ -174,7 +181,7 @@ export default function UsersWithMessages({ isNavOpen }) {
 
                   {showLargePicture === user.user_id && (
                     <div
-                      className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+                      className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
                       onClick={() => setShowLargePicture(null)}
                     >
                       <img

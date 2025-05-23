@@ -1,9 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
+import ScreenSizeContext from "../../../context/ScreenSizeContext";
 
 // Hooks
 import useAuth from "../../../hooks/useAuth";
@@ -53,6 +54,9 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   };
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { screenSize } = useContext(ScreenSizeContext);
+  const { isSmartphone, isTablet, isDesktop, width } = screenSize;
+
   const [filters, setFilters] = useState({});
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -220,7 +224,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
           {/* Displaying Large Picture when clicked */}
           {showLargePicture && (
             // <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(false)}>
-            <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+            <div className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
               onClick={() => setShowLargePicture(false)}>
 
 

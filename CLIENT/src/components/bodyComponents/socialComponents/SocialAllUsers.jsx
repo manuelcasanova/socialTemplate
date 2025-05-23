@@ -1,10 +1,11 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
+import ScreenSizeContext from "../../../context/ScreenSizeContext";
 
 //Hooks
 
@@ -33,6 +34,7 @@ import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowe
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function SocialAllUsers({ isNavOpen }) {
+
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
@@ -41,6 +43,9 @@ export default function SocialAllUsers({ isNavOpen }) {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { screenSize } = useContext(ScreenSizeContext);
+  const { isSmartphone, isTablet, isDesktop, width } = screenSize;
+
   const [filters, setFilters] = useState({});
   const loggedInUser = auth.userId
   const [users, setUsers] = useState([]);
@@ -150,7 +155,7 @@ export default function SocialAllUsers({ isNavOpen }) {
 
                     {showLargePicture === user.user_id && (
                       <div
-                        className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+                        className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
                         onClick={() => setShowLargePicture(null)}
                       >
                         <img

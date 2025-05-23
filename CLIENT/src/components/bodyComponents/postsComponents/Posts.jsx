@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
+import ScreenSizeContext from "../../../context/ScreenSizeContext";
 
 //Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -49,6 +50,8 @@ export default function Posts({ isNavOpen }) {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { screenSize } = useContext(ScreenSizeContext);
+  const { isSmartphone, isTablet, isDesktop, width } = screenSize;
   const [filters, setFilters] = useState({});
   const [posts, setPosts] = useState([]);
   const [flaggedPosts, setFlaggedPosts] = useState(new Set());
@@ -404,7 +407,7 @@ export default function Posts({ isNavOpen }) {
 
       {showLargePicture && (
         <div
-          className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`}
+          className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
           onClick={() => setShowLargePicture(null)}
         >
           <img
