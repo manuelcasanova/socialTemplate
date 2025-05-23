@@ -34,9 +34,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
   const isModerator = auth?.roles?.includes('Moderator');
 
   const { adminSettings, isLoading } = useGlobalAdminSettings();
-  const superAdminSettings = useGlobalSuperAdminSettings();
-
-  // console.log(adminSettings)
+  const { superAdminSettings } = useGlobalSuperAdminSettings();
 
   const navigate = useNavigate();
   const [activeSheet, setActiveSheet] = useState(null);
@@ -268,7 +266,9 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
                 ellipsisItems.push({ label: 'Sign In', icon: faSignInAlt });
               }
 
+
               return ellipsisItems.map((item, index) => (
+          
                 <li
                   key={index}
                   style={{

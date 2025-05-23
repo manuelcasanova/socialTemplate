@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS post_comments_reports CASCADE;
 DROP TABLE IF EXISTS post_comment_report_history;
 
 DROP TABLE IF EXISTS global_provider_settings;
+DROP TABLE IF EXISTS admin_settings;
 
 
 CREATE TABLE roles (
@@ -250,6 +251,6 @@ CREATE TABLE admin_settings (
   allow_edit_email BOOLEAN NOT NULL DEFAULT TRUE,
   allow_edit_password BOOLEAN NOT NULL DEFAULT TRUE,
   allow_delete_my_user BOOLEAN NOT NULL DEFAULT TRUE,
-  allow_modify_profile_picture BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_modify_profile_picture BOOLEAN NOT NULL DEFAULT TRUE
 
 );
