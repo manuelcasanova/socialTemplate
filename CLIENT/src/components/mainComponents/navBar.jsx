@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 //Context
 import { useGlobalSuperAdminSettings } from '../../context/SuperAdminSettingsProvider';
@@ -64,6 +64,33 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
     moderator: false,
     protectedRoutes: false
   });
+
+  const navbarRef = useRef();
+
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      isLargeScreen &&
+      navbarRef.current &&
+      !navbarRef.current.contains(event.target)
+    ) {
+      setShowSections({
+        admin: false,
+        profile: false,
+        social: false,
+        moderator: false,
+        protectedRoutes: false,
+        posts: false,
+      });
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [isLargeScreen]);
+
 
   // Fetch follow notifications when the component mounts
   useEffect(() => {
@@ -176,7 +203,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
 
   return (
-    <div className={`navbar ${isNavOpen ? 'navbar-open' : ''}`} data-testid="navbar">
+    <div ref={navbarRef} className={`navbar ${isNavOpen ? 'navbar-open' : ''}`} data-testid="navbar">
 
       {isLargeScreen && (
         <Logo handleNavigate={handleNavigate} />
