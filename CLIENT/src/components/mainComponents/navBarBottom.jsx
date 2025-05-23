@@ -14,7 +14,7 @@ import useAuth from '../../hooks/useAuth';
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faSignInAlt, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faSignInAlt, faUser, faUsers, faJedi } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import BottomSheet from './BottomSheet';
@@ -25,7 +25,7 @@ import RedNotification from '../navbarComponents/RedNotification';
 //Util functions
 import useLogout from '../../hooks/useLogout';
 
-const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification }) => {
+const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification, hasNewMessages, setHasNewMessages }) => {
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { auth } = useAuth();
@@ -166,10 +166,20 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
             handleNavigate('/posts')
           }}>   <FontAwesomeIcon icon={faNewspaper} /></div>}
 
-          {adminSettings.showMessagesFeature && <div onClick={() => {
+          {adminSettings.showMessagesFeature && !hasNewMessages && <div onClick={() => {
             setActiveSheet(null)
             handleNavigate('/messages')
           }}>   <FontAwesomeIcon icon={faEnvelope} /></div>}
+
+          {adminSettings.showMessagesFeature && hasNewMessages && <div className="new-message-bell-container" onClick={() => {
+            setActiveSheet(null)
+            handleNavigate('/messages')
+          }}>
+            <FontAwesomeIcon
+              className="faBell-new-message"
+              icon={faEnvelope} />
+            <span className="new-message-notification-dot"></span>
+          </div>}
 
 
           {/* HERE IS FOLLOW NOTIFICATION CONDITIONAL DISPLAY */}
@@ -247,10 +257,10 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
               }}
             >
 
-               <span>{item.label}</span>
-              {isFollowNotification && item.label === 'Pending requests' &&<RedNotification />}
-              
-           
+              <span>{item.label}</span>
+              {isFollowNotification && item.label === 'Pending requests' && <RedNotification />}
+
+
             </li>
           ))}
         </ul>
@@ -338,7 +348,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
                     setActiveSheet(null);
                     setSubSection(null);
                   }}
-                >               
+                >
                   {item.label}
                 </li>
               ))}
