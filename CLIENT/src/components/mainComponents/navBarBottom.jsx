@@ -19,11 +19,13 @@ import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faS
 //Components
 import BottomSheet from './BottomSheet';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
+import SmallFollowNotification from '../navbarComponents/SmallFollowNotification';
+import RedNotification from '../navbarComponents/RedNotification';
 
 //Util functions
 import useLogout from '../../hooks/useLogout';
 
-const NavBarBottom = ({ isNavOpen, toggleNav }) => {
+const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification }) => {
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { auth } = useAuth();
@@ -93,6 +95,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
           userItems.push(
             { label: 'Following', path: '/social/following' },
             { label: 'Followers', path: '/social/followers' },
+            // HERE? Pending Requests notification
             { label: 'Pending requests', path: '/social/pending' }
           );
         }
@@ -168,10 +171,19 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
             handleNavigate('/messages')
           }}>   <FontAwesomeIcon icon={faEnvelope} /></div>}
 
-          {adminSettings.showSocialFeature && <div onClick={() => {
-            setActiveSheet(null)
-            setActiveSheet('users');
-          }}> <FontAwesomeIcon icon={faUsers} /></div>}
+
+          {/* HERE IS FOLLOW NOTIFICATION CONDITIONAL DISPLAY */}
+          {adminSettings.showSocialFeature && <div
+            onClick={() => {
+              setActiveSheet(null)
+              setActiveSheet('users');
+            }}>
+            {!isFollowNotification ?
+              <FontAwesomeIcon icon={faUsers} />
+              :
+              <SmallFollowNotification />
+            }
+          </div>}
 
 
           <div
@@ -234,7 +246,11 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
                 setActiveSheet(null);
               }}
             >
-              {item.label}
+
+               <span>{item.label}</span>
+              {isFollowNotification && item.label === 'Pending requests' &&<RedNotification />}
+              
+           
             </li>
           ))}
         </ul>
@@ -268,7 +284,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
 
 
               return ellipsisItems.map((item, index) => (
-          
+
                 <li
                   key={index}
                   style={{
@@ -285,6 +301,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
                     if (['Moderator', 'Users', 'Admin'].includes(label)) {
                       setSubSection(label.toLowerCase());
                     } else if (label === 'Logout') {
+                      setIsFollowNotification(false);
                       logout();
                       setActiveSheet(null);
                       handleNavigate('/');
@@ -321,7 +338,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav }) => {
                     setActiveSheet(null);
                     setSubSection(null);
                   }}
-                >
+                >               
                   {item.label}
                 </li>
               ))}

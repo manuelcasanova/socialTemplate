@@ -323,7 +323,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
         <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
       </Routes>
       <Footer isNavOpen={isNavOpen} />
-      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav}/>
+      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification}/>
 
     </div>
 

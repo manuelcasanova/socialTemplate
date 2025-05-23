@@ -140,6 +140,21 @@
   border-radius: 50%;
 }
 
+.notification-dot-only-container {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-dot-only {
+  position: absolute;
+  top: -20px;
+  left: 0.5em;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
 /* New message notification */
 
 .faBell-new-message {
