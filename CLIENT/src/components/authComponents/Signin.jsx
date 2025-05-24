@@ -7,7 +7,7 @@ import axios from '../../api/axios';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import '../../css/Signup.css'
 
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -78,6 +78,17 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
             ?.split('=')[1];
     };
 
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("User signed in:", user);
+                // Optionally auto-login user here
+            }
+        });
+    
+        return () => unsubscribe();
+    }, []);
+
     const handleGoogleLogin = async () => {
         const provider = new GoogleAuthProvider();
         setIsLoading(true);
@@ -86,6 +97,8 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
             // Sign in using Google provider
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
+        
+            if (!user) throw new Error("No user object returned from Firebase.");
 
             // Get user details
             const { email, displayName, uid } = user;
@@ -100,11 +113,16 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
 
             navigate(from, { replace: true });
         } catch (error) {
-            // console.error('Error during Google login:', error);
-            if (error.response && error.response.data && error.response.data.error) {
-                setErrMsg(error.response.data.error);
+            console.error("Google Sign-In Error", error);
+    
+            if (error.code === 'auth/popup-closed-by-user') {
+                setErrMsg('Google sign-in was canceled.');
+            } else if (error.code === 'auth/cancelled-popup-request') {
+                setErrMsg('Only one popup request allowed at a time.');
+            } else if (error.code === 'auth/popup-blocked') {
+                setErrMsg('Popup blocked by browser.');
             } else {
-                setErrMsg('Failed to sign in with Google.');
+                setErrMsg(error.message || 'Failed to sign in with Google.');
             }
         } finally {
             setIsLoading(false);
