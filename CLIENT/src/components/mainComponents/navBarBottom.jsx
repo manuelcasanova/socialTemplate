@@ -114,7 +114,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
           adminItems.push({ label: 'Super Admin Settings', path: '/admin/superadmin/setup' });
         }
 
-        if (isAdminNotSuperAdmin || isAdminAndSuperAdmin) {
+        if (isAdminNotSuperAdmin || isAdminAndSuperAdmin  || isSuperAdmin) {
           adminItems.push(
             { label: 'Admin Settings', path: '/admin/admin/setup' },
             { label: 'Admin Users', path: '/admin/users' },
