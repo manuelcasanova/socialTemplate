@@ -54,7 +54,12 @@ export default function Signup({ isNavOpen, screenWidth }) {
   const userRef = useRef();
   const errRef = useRef();
 
-  const handleShowEmailSignup = () => { setShowEmailSignUp(prev => !prev) }
+  const handleShowEmailSignup = () => { setShowEmailSignUp(prev => !prev)
+setErrMsg('')
+setRestoreAction(false);
+setFormData('');
+
+   }
 
   useEffect(() => {
     if (!success && userRef.current) {
@@ -79,7 +84,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
       setValidity(newValidity);
     }
 
-    setErrMsg('');
+
   }, [formData, regexPatterns.email, regexPatterns.password, regexPatterns.username, validity.name, validity.email, validity.pwd, validity.match]);
 
 
@@ -97,6 +102,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
       ...prev,
       [id]: id === 'email' ? value.toLowerCase() : (id === 'user' ? capitalizeFirstLetter(value) : value)
     }));
+    setErrMsg('');
   };
 
   const handleFocusChange = (id, status) => {
@@ -178,7 +184,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
       ...prev,
       restoreAction
     }));
-
+setErrMsg('');
   }
 
   const handleGoogleSignUp = async () => {
@@ -215,6 +221,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
   const handleRestoreAccount = async () => {
     // Call an API to restore the account or reactivate the email
     setLoading(true);
+    setErrMsg('')
     try {
       const response = await axios.post(
         '/restore-account', // Replace with your backend endpoint for account restoration
@@ -328,10 +335,10 @@ export default function Signup({ isNavOpen, screenWidth }) {
               <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
               {/* Render the Restore Button if restoreAction is true */}
-              {restoreAction && (
+              {restoreAction && !loading && !isSubmitting && (
                 <div className="restore-action">
                   <button
-                    className="button-auth"
+                    className="button-white button-smaller"
                     onClick={handleRestoreAccount}
                     disabled={isSubmitting || loading}
                   >
@@ -344,8 +351,9 @@ export default function Signup({ isNavOpen, screenWidth }) {
                     )}
                   </button>
                   <button
-                    className="button-auth"
+                    className="button-white button-smaller"
                     onClick={handleIgnoreRestoreAccount}
+                    disabled={isSubmitting || loading}
                   >Create a New Account</button>
                 </div>
               )}

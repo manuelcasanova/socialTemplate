@@ -26,9 +26,9 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
 
     function useQuery() {
         return new URLSearchParams(useLocation().search);
-      }
-      const query = useQuery();
-const message = query.get('message'); // returns "Session expired. Please sign in again."
+    }
+    const query = useQuery();
+    const message = query.get('message'); // returns "Session expired. Please sign in again."
 
 
     const { setAuth } = useAuth();
@@ -189,7 +189,7 @@ const message = query.get('message'); // returns "Session expired. Please sign i
         <div className={`body ${isNavOpen && screenWidth < 1025 ? 'body-squeezed' : ''}`}>
             <div className='centered-section'>
 
-            {message && <p style={{ color: 'red', marginBottom: '1em' }}>{message}</p>}
+                {message && <p style={{ color: 'red', marginBottom: '1em' }}>{message}</p>}
 
                 {showSignUpWithEmail &&
                     <div className='close-button-container'>
@@ -197,121 +197,121 @@ const message = query.get('message'); // returns "Session expired. Please sign i
                     </div>
                 }
 
-               
-                    <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
-                        {successMsg}
-                    </p>
-                    {/* Display error message with existing styling */}
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
-                        {errMsg}
-                    </p>
-                    {!isVerified && (
+
+                <p ref={errRef} className={successMsg ? "success-message-green" : "offscreen"} aria-live="assertive">
+                    {successMsg}
+                </p>
+                {/* Display error message with existing styling */}
+                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                    {errMsg}
+                </p>
+                {!isVerified && (
+
+                    <button
+                        className="button-auth button-resend-verification"
+                        onClick={handleResendVerification}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <LoadingSpinner /> : 'Resend Verification Email'}
+                    </button>
+
+                )}
+
+
+
+                {/* <div className="signup-title">Sign In</div> */}
+
+                {showSignUpWithEmail &&
+                    <form className="signup-form" onSubmit={handleSubmit}>
+
+                        {/* Remove on production */}
+
+                        <div className="trust-device">
+                            <input
+                                type="checkbox"
+                                id="persist"
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setEmail('superadmin@example.com');
+                                    } else {
+                                        setEmail('manucasanova@hotmail.com');
+                                    }
+                                }}
+                            />
+                            <label htmlFor="persist">Login as superadmin</label>
+                        </div>
+
+                        {/* End remove on production */}
+
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            className="input-field"
+                            type="text"
+                            id="email"
+                            ref={userRef}
+                            autoComplete="off"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                            required
+                        />
+
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            className="input-field"
+                            type="password"
+                            id="password"
+                            ref={passwordRef}
+                            required
+                        />
 
                         <button
-                            className="button-auth button-resend-verification"
-                            onClick={handleResendVerification}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? <LoadingSpinner /> : 'Resend Verification Email'}
+                            className="button-auth"
+                            disabled={isLoading}>
+                            {isLoading ? <LoadingSpinner /> : 'Sign In'}
                         </button>
 
-                    )}
+                    </form>
+                }
+
+                {!showSignUpWithEmail &&
+                    <>
+
+                        {isLoading ? <LoadingSpinner /> :
+                            <>
+                                <button
+                                    className="button-white"
+                                    style={{ marginBottom: '2em' }}
+                                    onClick={handleShowSignUpWithEmail}
+                                    disabled={isLoading}>
+                                    <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
+                                    {'Sign In with Email'}
+                                </button>
 
 
+                                <button className="button-white" onClick={handleGoogleLogin} disabled={isLoading}>
+                                    <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
+                                    Sign in with Google
+                                </button>
 
-                    {/* <div className="signup-title">Sign In</div> */}
+                            </>
+                        }
+                    </>
+                }
 
-                    {showSignUpWithEmail &&
-                        <form className="signup-form" onSubmit={handleSubmit}>
+                <div className="trust-device">
+                    <input type="checkbox" id="persist" onChange={toggleCheck} checked={check} />
+                    <label htmlFor="persist">Trust This Device</label>
+                </div>
 
-                            {/* Remove on production */}
+                <div className="have-an-account">
+                    <p>Need an Account?</p>
+                    <Link to="/signup">Sign Up</Link>
+                </div>
+                <div className="have-an-account">
+                    <p>Forgot password?</p>
+                    <Link to="/resetpassword">Reset</Link>
+                </div>
 
-                            <div className="trust-device">
-                                <input
-                                    type="checkbox"
-                                    id="persist"
-                                    onChange={(e) => {
-                                        if (e.target.checked) {
-                                            setEmail('superadmin@example.com');
-                                        } else {
-                                            setEmail('manucasanova@hotmail.com');
-                                        }
-                                    }}
-                                />
-                                <label htmlFor="persist">Login as superadmin</label>
-                            </div>
-
-                            {/* End remove on production */}
-
-                            <label htmlFor="email">Email:</label>
-                            <input
-                                className="input-field"
-                                type="text"
-                                id="email"
-                                ref={userRef}
-                                autoComplete="off"
-                                onChange={(e) => setEmail(e.target.value)}
-                                value={email}
-                                required
-                            />
-
-                            <label htmlFor="password">Password:</label>
-                            <input
-                                className="input-field"
-                                type="password"
-                                id="password"
-                                ref={passwordRef}
-                                required
-                            />
-
-                            <button
-                                className="button-auth"
-                                disabled={isLoading}>
-                                {isLoading ? <LoadingSpinner /> : 'Sign In'}
-                            </button>
-
-                        </form>
-                    }
-
-                    {!showSignUpWithEmail &&
-                        <>
-
-                            {isLoading ? <LoadingSpinner /> :
-                                <>
-                                    <button
-                                        className="button-white"
-                                        style={{marginBottom: '2em'}}
-                                        onClick={handleShowSignUpWithEmail}
-                                        disabled={isLoading}>
-                                        <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
-                                        {'Sign In with Email'}
-                                    </button>
-
-
-                                    <button className="button-white" onClick={handleGoogleLogin} disabled={isLoading}>
-                                        <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
-                                        Sign in with Google
-                                    </button>
-
-                                </>
-                            }
-                        </>
-                    }
-
-                    <div className="trust-device">
-                        <input type="checkbox" id="persist" onChange={toggleCheck} checked={check} />
-                        <label htmlFor="persist">Trust This Device</label>
-                    </div>
-
-                    <div className="have-an-account">
-                        <p>Need an Account?</p>
-                        <Link to="/signup">Sign Up</Link>
-                    </div>
-                    <div className="have-an-account">
-                        <p>Forgot password?</p>
-                        <Link to="/resetpassword">Reset</Link>
-                    </div>
-            
             </div>
         </div >
 

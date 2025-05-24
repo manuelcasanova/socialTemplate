@@ -6,10 +6,18 @@
 }
 
 /* Signup Form */
-.signup-form, .restore-action {
+.signup-form {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.restore-action {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 1em;
+  margin-bottom: 1em;
 }
 
 .signup-form label {
