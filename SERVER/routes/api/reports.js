@@ -55,10 +55,4 @@ router.post('/post/ok/history', checkPostReportAccess('allow_flag_posts', ['Mode
 router.put('/post/inappropriate/:postId', checkPostReportAccess('allow_flag_posts', ['Moderator']), reportsController.reportPostInappropriate);
 router.post('/post/inappropriate/history', checkPostReportAccess('allow_flag_posts', ['Moderator']), reportsController.addReportHistory);
 
-router.get(
-  '/any-post-reported', 
-  checkPostReportAccess('allow_flag_posts', ['Moderator'], { alwaysAllow: true }), 
-  reportsController.checkIfAnyReported
-);
-
 module.exports = router;

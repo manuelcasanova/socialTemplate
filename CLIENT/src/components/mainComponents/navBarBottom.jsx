@@ -14,7 +14,7 @@ import useAuth from '../../hooks/useAuth';
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faSignInAlt, faUser, faUsers, faJedi } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faLock, faNewspaper, faEnvelope, faEllipsisH, faSignOutAlt, faSignInAlt, faUser, faUsers, faJedi, faCircle } from "@fortawesome/free-solid-svg-icons";
 
 //Components
 import BottomSheet from './BottomSheet';
@@ -25,7 +25,9 @@ import RedNotification from '../navbarComponents/RedNotification';
 //Util functions
 import useLogout from '../../hooks/useLogout';
 
-const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification, hasNewMessages, setHasNewMessages }) => {
+const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification, hasNewMessages, hasPostReports, setHasPostReports, hasCommentsReports, setHasCommentsReports }) => {
+
+  // console.log(hasPostReports, hasCommentsReports)
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { auth } = useAuth();
@@ -73,13 +75,14 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
       case 'moderator':
         return [
           { label: 'Moderator', path: '/moderator' },
-          { label: 'Moderate posts', path: '/moderator/posts' },
-          { label: 'Moderate comments', path: '/moderator/comments' },
+          { label: 'Moderate posts', path: '/moderator/posts', showDot: hasPostReports },
+          { label: 'Moderate comments', path: '/moderator/comments', showDot: hasCommentsReports },
           { label: 'Hidden posts', path: '/moderator/hidden/posts' },
           { label: 'Hidden comments', path: '/moderator/hidden/comments' },
           { label: 'Post moderation history', path: '/moderator/posts/history' },
           { label: 'Comment moderation history', path: '/moderator/comments/history' },
         ];
+
       case 'users':
         const userItems = [];
 
@@ -114,7 +117,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
           adminItems.push({ label: 'Super Admin Settings', path: '/admin/superadmin/setup' });
         }
 
-        if (isAdminNotSuperAdmin || isAdminAndSuperAdmin  || isSuperAdmin) {
+        if (isAdminNotSuperAdmin || isAdminAndSuperAdmin || isSuperAdmin) {
           adminItems.push(
             { label: 'Admin Settings', path: '/admin/admin/setup' },
             { label: 'Admin Users', path: '/admin/users' },
@@ -219,11 +222,30 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
           </div>
 
-          <div
-            onClick={() => {
-              setActiveSheet(null)
-              setActiveSheet('ellipsis');
-            }}> <FontAwesomeIcon icon={faEllipsisH} /></div>
+
+
+          {(hasPostReports || hasCommentsReports) ?
+            <div
+              className="bell-container"
+              onClick={() => {
+                setActiveSheet(null)
+                setActiveSheet('ellipsis');
+              }}>
+
+              <FontAwesomeIcon
+                className="faBell-follow-request"
+                icon={faEllipsisH} />
+              <span className="notification-dot"></span>
+            </div>
+            :
+            <div
+              onClick={() => {
+                setActiveSheet(null)
+                setActiveSheet('ellipsis');
+              }}>
+              <FontAwesomeIcon icon={faEllipsisH} />
+            </div>
+          }
         </div>
       </footer >
 
@@ -242,6 +264,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
           ))}
         </ul>
       </BottomSheet>
+
+      
 
       {/* Bottom sheet for social options */}
       <BottomSheet isOpen={activeSheet === 'users'} onClose={() => setActiveSheet(null)}>
@@ -292,7 +316,6 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
                 ellipsisItems.push({ label: 'Sign In', icon: faSignInAlt });
               }
 
-
               return ellipsisItems.map((item, index) => (
 
                 <li
@@ -324,8 +347,15 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
                     }
                   }}
                 >
-                  {item.icon && <FontAwesomeIcon icon={item.icon} />}
+
+
+
+                   {item.icon && <FontAwesomeIcon icon={item.icon} />}
                   <span>{item.label}</span>
+
+                  {(hasPostReports || hasCommentsReports) && (isModerator && adminSettings?.showPostsFeature) && item.label === 'Moderator' && <div className='in-line-red-dot'></div>}
+ 
+
                 </li>
               ));
             })()}
@@ -342,14 +372,18 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
               {getSubItemsForSection(subSection).map((item, idx) => (
                 <li
                   key={idx}
-                  style={{ padding: '10px 0', borderBottom: '1px solid #eee', cursor: 'pointer' }}
+                  style={{ padding: '10px 0', borderBottom: '1px solid #eee', cursor: 'pointer',  display: 'flex',
+                   }}
                   onClick={() => {
+                    item.label === 'Moderate posts' && setHasPostReports(false)
+                    item.label === 'Moderate comments' && setHasCommentsReports(false)
                     handleNavigate(item.path);
                     setActiveSheet(null);
                     setSubSection(null);
                   }}
                 >
-                  {item.label}
+                   <span>{item.label}</span>
+                   {item.showDot && <span className="in-line-red-dot" />}
                 </li>
               ))}
             </ul>

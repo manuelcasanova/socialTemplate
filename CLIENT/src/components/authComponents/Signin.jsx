@@ -258,13 +258,13 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
                                 id="persist"
                                 onChange={(e) => {
                                     if (e.target.checked) {
-                                        setEmail('superadmin@example.com');
+                                        setEmail('admin@example.com');
                                     } else {
                                         setEmail('manucasanova@hotmail.com');
                                     }
                                 }}
                             />
-                            <label htmlFor="persist">Login as superadmin</label>
+                            <label htmlFor="persist">Login as Admin</label>
                         </div>
 
                         {/* End remove on production */}
