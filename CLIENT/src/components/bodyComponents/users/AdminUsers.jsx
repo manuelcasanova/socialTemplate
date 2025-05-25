@@ -13,7 +13,7 @@ import '../../../css/AdminUsers.css';
 
 //Components
 
-// import FilterAdminUsers from "./FilterAdminUsers";
+import FilterAdminUsers from "./FilterAdminUsers";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 
@@ -165,11 +165,11 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
       <div className="admin-users">
         <h2>Admin Users</h2>
         {error && <p className="error-message">{error}</p>}
-        {/* <FilterAdminUsers
+         <FilterAdminUsers
           roles={roles}
           setFilters={setFilters}
           setExpandedUserId={setExpandedUserId}
-        /> */}
+        /> 
         {isLoading ? (
           <LoadingSpinner />
         ) :
