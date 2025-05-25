@@ -214,16 +214,25 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       )}
 
       {<div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>}
-      <div className='nav-item' onClick={() => handleNavigate('/user')}>User</div>
+   
 
       {customRoles && customRoles.length > 0 &&
         <div className={`nav-item-with-dropdown ${showSections.protectedRoutes ? 'nav-item-with-dropdown-open' : ''}`}>
-          <div className='nav-item' onClick={() => toggleSection('protected_routes')}>Roles
+          <div className='nav-item' onClick={() => toggleSection('protected_routes')}>Protected
             {showSections.protectedRoutes ? '▲' : '▼'
             }
           </div>
           {showSections.protectedRoutes && (
+
+
             <>
+
+        <ul
+        onClick={() => handleNavigate('/user')}
+
+         className='subitem'
+         >Accessible to all registered users</ul>
+
 
               {customRoles && customRoles.length > 0 && customRoles.map(role => (
                 <div

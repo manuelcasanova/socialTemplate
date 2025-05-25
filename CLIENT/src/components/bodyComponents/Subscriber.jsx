@@ -88,13 +88,14 @@ export default function Subscriber({ isNavOpen }) {
         <div className="interaction-box">
           <h3>Would you like to keep exploring the app?</h3>
           <ul>
-            <li><strong>Sign In as a Super Administrator:</strong> Log in with the email "admin@example.com" and password G7m!pLz@92aT.</li>
-            <li><strong>Check out the super admin features:</strong>
+            <li><strong>Sign In as an Administrator:</strong> Log in with the email "admin@example.com" and password G7m!pLz@92aT.</li>
+            <li><strong>Check out the admin features:</strong>
               <ul>
                 <li>- Modify user roles in the 'Admin Users' section and use the filter to search by username or ID.</li>
                 <li>- View the login history and audit logs to track changes to user roles.</li>
                 <li>- Find your user and update its roles, such as becoming a moderator, administrator, or superadministrator.</li>
-                <li>- As a superadministrator, attempt to revoke your own SuperAdmin role or modify another SuperAdmin's roles.</li>
+                <li>- As an administrator, attempt to revoke your own Admin role or modify another Admin's roles.</li>
+                <li>- Create, edit, and delete roles. Then test access behavior with various role permissions.</li>
 
               </ul>
             </li>

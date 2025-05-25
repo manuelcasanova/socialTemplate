@@ -111,7 +111,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
         return userItems;
       case 'admin':
-        const adminItems = [];
+        const adminItems = [   { label: 'Explore admin scenerios', path: '/admin/admin' }];
 
         if (isSuperAdmin) {
           adminItems.push({ label: 'Super Admin Settings', path: '/admin/superadmin/setup' });
@@ -150,11 +150,6 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
             setActiveSheet(null)
           }}>
             <FontAwesomeIcon icon={faHome} /></div>
-
-          <div onClick={() => {
-            setActiveSheet(null)
-            handleNavigate('/user')
-          }}>   <FontAwesomeIcon icon={faUser} /></div>
 
           <div
             onClick={async () => {
@@ -251,12 +246,17 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
       {/* Bottom sheet for roles */}
       <BottomSheet isOpen={activeSheet === 'roles'} onClose={() => setActiveSheet(null)}>
-        <h4>Select a Role</h4>
+        <h4 style={{marginBottom: '0.5em'}}>Select a Protected Route</h4>
+        <ul
+        onClick={() => handleNavigate('/user')}
+         style={{cursor: 'pointer', marginBottom: '0.5em'}}
+         >Accessible to all registered users</ul>
+
         <ul>
           {customRoles?.map((role, index) => (
             <li
               key={role.role_id}
-              style={{ padding: '10px 0', borderBottom: '1px solid #eee', cursor: 'pointer' }}
+              style={{ paddingBottom: '10px', borderBottom: '1px solid #eee', cursor: 'pointer' }}
               onClick={() => handleNavigate(`/protected-routes/${role.role_name.toLowerCase()}`)}
             >
               {role.role_name}
