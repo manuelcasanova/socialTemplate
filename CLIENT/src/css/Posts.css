@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 500px;
   padding: 10px;
-  background-color: lightblue;
+  background-color: var(--color15);
   border-radius: 5px;
   display: flex;
   flex-direction: column;

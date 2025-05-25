@@ -603,13 +603,6 @@
   }
 
   .hamburger-container {
-    /* width: 100%;
-    background-color: var(--color1);
-    position: fixed;
-    z-index: 1000; */
-  }
-
-  .hamburger-container {
     display: none;
   }
 
