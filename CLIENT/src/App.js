@@ -74,8 +74,9 @@ function App() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [isFollowNotification, setIsFollowNotification] = useState(false);
   const [hasNewMessages, setHasNewMessages] = useState(false)
+  const [hasPostReports, setHasPostReports] = useState(false);
+  const [hasCommentsReports, setHasCommentsReports] = useState(false);
   const [customRoles, setCustomRoles] = useState([]);
-
   const [allRoles, setAllRoles] = useState([])
 
   const [loadingRoles, setLoadingRoles] = useState(false);
@@ -136,14 +137,14 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
     <div className="app">
 
-      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} customRoles={customRoles} />
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} customRoles={customRoles} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} />
 
       <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
 
       <Routes>
         {/* Public routes */}
-        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} />} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports}/>} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
         <Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
@@ -181,7 +182,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
                 <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
               </Route>
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-                <Route path="/moderator/posts" element={<ModeratorPosts isNavOpen={isNavOpen} />} />
+                <Route path="/moderator/posts" element={<ModeratorPosts isNavOpen={isNavOpen} setHasPostReports={setHasPostReports}/>} />
               </Route>
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
                 <Route path="/moderator/posts/history" element={<ModeratorPostsHistory isNavOpen={isNavOpen} />} />
@@ -323,7 +324,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
         <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
       </Routes>
       <Footer isNavOpen={isNavOpen} />
-      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} setHasNewMessages={setHasNewMessages}/>
+      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} setHasNewMessages={setHasNewMessages} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} />
 
     </div>
 

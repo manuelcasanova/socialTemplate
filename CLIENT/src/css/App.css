@@ -155,6 +155,17 @@
   border-radius: 50%;
 }
 
+.in-line-red-dot {
+  background-color: red;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  margin-right: 1px;
+  display: inline-block;   
+  aspect-ratio: 1 / 1;  
+}
+
 /* New message notification */
 
 .faBell-new-message {

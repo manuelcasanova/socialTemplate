@@ -22,7 +22,7 @@ const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
 const DEFAULT_PASSWORD = 'G7m!pLz@92aT';  // Hardcoded default password for development
 // const DEFAULT_PASSWORD = '';
 
-const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
+const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsReports, setHasPostReports }) => {
 
     function useQuery() {
         return new URLSearchParams(useLocation().search);
@@ -81,7 +81,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                console.log("User signed in:", user);
+                // console.log("User signed in:", user);
                 // Optionally auto-login user here
             }
         });
@@ -106,9 +106,12 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
             // Now you can send the Firebase user data to your backend for further processing, like storing tokens
             const response = await axios.post('/auth/firebase-login', { email, displayName, uid }, { withCredentials: true });
 
-            const { userId, roles, accessToken, hasNewMessages } = response.data;
+            const { userId, roles, accessToken, hasNewMessages, hasPostReports, hasCommentsReports } = response.data;
 
             setHasNewMessages(hasNewMessages);
+            setHasPostReports(hasPostReports);
+            setHasCommentsReports(hasCommentsReports);
+            
             setAuth({ userId, displayName, email, roles, accessToken });
 
             navigate(from, { replace: true });
@@ -165,8 +168,13 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages }) => {
 
         try {
             const response = await authenticateUser(password);
-            const { accessToken, userId, roles, hasNewMessages } = response?.data || {};
+            const { accessToken, userId, roles, hasNewMessages, hasPostReports, hasCommentsReports } = response?.data || {};
+
+            // console.log('response.data', response.data)
+
             setHasNewMessages(hasNewMessages)
+            setHasPostReports(hasPostReports);
+            setHasCommentsReports(hasCommentsReports);
             setAuth({ userId, user, email, roles, accessToken });
             resetUser();
             passwordRef.current.value = '';

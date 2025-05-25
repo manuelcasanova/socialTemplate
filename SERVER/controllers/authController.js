@@ -53,6 +53,20 @@ const handleLogin = async (req, res) => {
 
                 const hasNewMessages = unreadMessages.rows.length > 0;
 
+                const postReports = await pool.query(
+                    'SELECT 1 FROM post_reports WHERE status = $1 LIMIT 1',
+                    ['Reported']
+                );
+        
+                const hasPostReports = postReports.rows.length > 0;
+        
+                const commentsReports = await pool.query(
+                    'SELECT 1 FROM post_comments_reports WHERE status = $1 LIMIT 1',
+                    ['Reported']
+                );
+        
+                const hasCommentsReports = commentsReports.rows.length > 0;
+
                 // Insert login history with UTC time (ISO format)
                 await pool.query(
                     'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',
@@ -81,7 +95,7 @@ const handleLogin = async (req, res) => {
                 });
                 // console.log(`Does User ID ${userId} have new messages? ${hasNewMessages}`)
                 // Return the response with the access token, user ID, and roles
-                res.json({ userId, roles, accessToken, hasNewMessages });
+                res.json({ userId, roles, accessToken, hasNewMessages, hasPostReports, hasCommentsReports });
 
             } else {
                 res.status(401).json({ error: "Wrong email or password" });
@@ -288,6 +302,21 @@ const handleFirebaseLogin = async (req, res) => {
 
         const hasNewMessages = unreadMessages.rows.length > 0;
 
+        const postReports = await pool.query(
+            'SELECT 1 FROM post_reports WHERE status = $1 LIMIT 1',
+            ['Reported']
+        );
+
+        const hasPostReports = postReports.rows.length > 0;
+
+        const commentsReports = await pool.query(
+            'SELECT 1 FROM post_comments_reports WHERE status = $1 LIMIT 1',
+            ['Reported']
+        );
+
+        const hasCommentsReports = commentsReports.rows.length > 0;
+
+
         // Insert login history with UTC time (ISO format)
         await pool.query(
             'INSERT INTO login_history (user_id, login_time) VALUES ($1, $2)',
@@ -302,7 +331,7 @@ const handleFirebaseLogin = async (req, res) => {
         });
 
         // Send the response with the generated tokens
-        res.json({ userId, roles, accessToken, hasNewMessages });
+        res.json({ userId, roles, accessToken, hasNewMessages, hasPostReports, hasCommentsReports });
     } catch (error) {
         console.error('Error during Firebase login:', error);
         res.status(500).json({ error: 'Internal Server Error' });

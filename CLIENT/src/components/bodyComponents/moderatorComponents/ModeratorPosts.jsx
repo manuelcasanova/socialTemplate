@@ -10,7 +10,7 @@ import ModeratorOkReportedPost from "./ModeratorOkReportedPost";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
-export default function ModeratorPosts({ isNavOpen }) {
+export default function ModeratorPosts({ isNavOpen, setHasPostReports }) {
 
   const { auth } = useAuth();
   const loggedInUser = auth.userId;
@@ -29,6 +29,10 @@ export default function ModeratorPosts({ isNavOpen }) {
       // console.log("reportData", reportData)
       setReports(reportData);
 
+      // if (reportData = []) {
+      //   setHasPostReports(false)
+      // }
+
       const userIds = [...new Set(reportData.map(report => report.reported_by))];
 
       // console.log("userIds", userIds)
@@ -41,6 +45,9 @@ export default function ModeratorPosts({ isNavOpen }) {
         const user = res.data;
         usersMap[user.user_id] = user.username;
       });
+
+
+
 
       setUsers(usersMap);
     } catch (err) {

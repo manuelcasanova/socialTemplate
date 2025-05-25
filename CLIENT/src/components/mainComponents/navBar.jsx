@@ -23,7 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faEnvelope, faCog } from '@fortawesome/free-solid-svg-icons';
 
 
-const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages, customRoles }) => {
+const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages, customRoles, hasPostReports, hasCommentsReports, setHasPostReports, setHasCommentsReports }) => {
 
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
@@ -67,29 +67,29 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
   const navbarRef = useRef();
 
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (
-      isLargeScreen &&
-      navbarRef.current &&
-      !navbarRef.current.contains(event.target)
-    ) {
-      setShowSections({
-        admin: false,
-        profile: false,
-        social: false,
-        moderator: false,
-        protectedRoutes: false,
-        posts: false,
-      });
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isLargeScreen &&
+        navbarRef.current &&
+        !navbarRef.current.contains(event.target)
+      ) {
+        setShowSections({
+          admin: false,
+          profile: false,
+          social: false,
+          moderator: false,
+          protectedRoutes: false,
+          posts: false,
+        });
+      }
+    };
 
-  document.addEventListener('mousedown', handleClickOutside);
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-  };
-}, [isLargeScreen]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isLargeScreen]);
 
 
   // Fetch follow notifications when the component mounts
@@ -156,7 +156,7 @@ useEffect(() => {
     }
 
     // Close dropdowns whenever navigating
-    if (isNavOpen && window.innerWidth > 1024) {
+    if (window.innerWidth > 1024) {
       setShowSections({ admin: false, profile: false, protectedRoutes: false });
     }
 
@@ -172,7 +172,7 @@ useEffect(() => {
     }
 
     // Close dropdowns whenever navigating
-    if (isNavOpen && window.innerWidth > 1024) {
+    if (window.innerWidth > 1024) {
       setShowSections({ admin: false, profile: false, protectedRoutes: false });
     }
   };
@@ -250,6 +250,9 @@ useEffect(() => {
         superAdminSettings.showPostsFeature && adminSettings.showPostsFeature &&
         <div className={`nav-item-with-dropdown ${showSections.moderator ? 'nav-item-with-dropdown-open' : ''}`}>
           <div className='nav-item' onClick={() => toggleSection('moderator')}>Moderator
+            {(hasCommentsReports || hasPostReports) &&
+              <div className='in-line-red-dot'></div>
+            }
             {showSections.moderator ? '▲' : '▼'
             }
           </div>
@@ -257,12 +260,30 @@ useEffect(() => {
             <>
               <div className='subitem' onClick={() => handleNavigate('/moderator/')}>Moderator</div>
 
-              <div className="subitem" onClick={() => handleNavigate('/moderator/posts')}>
+              <div className="subitem" onClick={() => {
+                handleNavigate('/moderator/posts')
+                setHasPostReports(false)
+              }
+
+              }>
                 Moderate posts
+                {(hasPostReports) &&
+                  <div className='in-line-red-dot'></div>
+                }
               </div>
 
-              <div className="subitem" onClick={() => handleNavigate('/moderator/comments')}>
+
+              <div className="subitem" onClick={() => {
+                handleNavigate('/moderator/comments')
+                setHasCommentsReports(false)
+              }
+              }>
+
                 Moderate comments
+                {(hasCommentsReports) &&
+                  <div className='in-line-red-dot'></div>
+                }
+
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/moderator/hidden/posts')}>

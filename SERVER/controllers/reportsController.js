@@ -307,6 +307,26 @@ const reportPostInappropriate = async (req, res) => {
   }
 };
 
+//For notification purposes
+const checkIfAnyReported = async (req, res) => {
+  try {
+    const query = `
+      SELECT 1 FROM post_reports
+      WHERE status = 'Reported'
+      LIMIT 1;
+    `;
+
+    const { rows } = await pool.query(query);
+
+    const hasReported = rows.length > 0;
+
+    return res.status(200).json({ hasReported });
+  } catch (error) {
+    console.error('Error checking reported posts:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 module.exports = {
   reportPost,
@@ -318,4 +338,5 @@ module.exports = {
   addReportHistory,
   reportPostOk,
   reportPostInappropriate,
+  checkIfAnyReported
 };
