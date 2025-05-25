@@ -576,18 +576,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2rem; /* Adjust this to match the size of the FA icons */
-  height: 2rem; /* Same as above */
-  overflow: hidden; /* Prevents the image from overflowing */
+  width: 2rem;
+  height: 2rem; 
+  overflow: hidden; 
   
-  box-sizing: border-box; /* Ensures padding doesn't affect width/height */
+  box-sizing: border-box; 
 }
 
 /* For the small image inside the container */
 .navbar-bottom-small-img {
-  width: 100%; /* Fills the container */
-  height: 100%; /* Fills the container */
-  object-fit: contain; /* Keeps the aspect ratio intact */
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
   border-radius: 50%;
 }
 
