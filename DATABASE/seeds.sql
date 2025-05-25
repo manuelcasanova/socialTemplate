@@ -35,9 +35,9 @@ INSERT INTO users (username, email, password, is_verified, is_selected, is_activ
 
 INSERT INTO user_roles (user_id, role_id, assigned_by_user_id)
 VALUES
-(1, 2, 1),
-(1, 3, 1),
-(1, 5, 1),
+(1, 2, 2),
+(1, 3, 2),
+(1, 5, 2),
 (2, 1, 2),
 (2, 2, 2),
 (2, 3, 2),

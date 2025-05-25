@@ -422,7 +422,7 @@ const hardDeleteUser = async (req, res) => {
 
         // Allow only the user who assigned the SuperAdmin role to delete the account of another SuperAdmin.
         if (userToDeleteRoleNames.includes('SuperAdmin') && userCurrentRoles.includes('SuperAdmin')) {
-            if (assignedByUser !== loggedInUser && loggedInUser !== 1
+            if (assignedByUser !== loggedInUser
             ) {
                 return res.status(403).json({ error: 'SuperAdmins can only delete other Superadmin account if they assigned the SuperAdmin role to that user.' });
             }
@@ -695,7 +695,7 @@ const updateRoles = async (req, res) => {
 
 
             // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.
-            if (assignedByUser !== loggedInUser && loggedInUser !== userId && loggedInUser !== 1) {
+            if (assignedByUser !== loggedInUser && loggedInUser !== userId) {
                 return res.status(403).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
             }
 

@@ -114,10 +114,12 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
       console.error("Error updating roles", error);
       const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
       // console.log('errorMsg', errorMsg)
-      if (errorMsg !== prevError.current) {
-        prevError.current = errorMsg; // Store the error in the ref
-        setError(errorMsg);  // Update the state to show the error message
-      }
+      // if (errorMsg !== prevError.current) {
+      //   prevError.current = errorMsg; // Store the error in the ref
+      //   setError(errorMsg);  // Update the state to show the error message
+      // }
+      setError(errorMsg);
+prevError.current = errorMsg;
     }
   }, [isSuperAdmin]);
 
