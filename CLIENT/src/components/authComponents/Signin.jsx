@@ -1,18 +1,29 @@
 import { useRef, useState, useEffect } from 'react';
-import useAuth from '../../hooks/useAuth';
+
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+
+//Hooks
+import useAuth from '../../hooks/useAuth';
 import useInput from '../../hooks/useInput';
 import useToggle from '../../hooks/useToggle';
+
 import axios from '../../api/axios';
+
+//Components
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
+
+//Styling
 import '../../css/Signup.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+
+//Context
+import { useGlobalAdminSettings } from '../../context/AdminSettingsProvider';
 
 import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 
 const SIGNIN_URL = '/auth';
@@ -22,7 +33,10 @@ const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
 const DEFAULT_PASSWORD = 'G7m!pLz@92aT';  // Hardcoded default password for development
 // const DEFAULT_PASSWORD = '';
 
+
 const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsReports, setHasPostReports }) => {
+
+    const { adminSettings } = useGlobalAdminSettings();
 
     function useQuery() {
         return new URLSearchParams(useLocation().search);
@@ -337,10 +351,14 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
                     <p>Need an Account?</p>
                     <Link to="/signup">Sign Up</Link>
                 </div>
-                <div className="have-an-account">
-                    <p>Forgot password?</p>
-                    <Link to="/resetpassword">Reset</Link>
-                </div>
+
+              {adminSettings.allowEditPassword &&
+                    <div className="have-an-account">
+                        <p>Forgot password?</p>
+                        <Link to="/resetpassword">Reset</Link>
+                    </div>
+                    }
+                
 
             </div>
         </div >

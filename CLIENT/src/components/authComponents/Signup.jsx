@@ -25,9 +25,9 @@ export default function Signup({ isNavOpen, screenWidth }) {
 
   const [formData, setFormData] = useState({
     user: '',
-    email: '',
-    pwd: '',
-    matchPwd: ''
+    email: '@outlook.com',
+    pwd: 'G7m!pLz@92aT',
+    matchPwd: 'G7m!pLz@92aT'
   });
 
   const [validity, setValidity] = useState({
