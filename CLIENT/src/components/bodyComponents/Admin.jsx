@@ -6,8 +6,9 @@ export default function Admin({ isNavOpen }) {
         <h2>This page is private and accessible only to Administrators.</h2>
 
         <div className="interaction-box">
-          <li><strong>Explore admin scenarios:</strong>
+          <li>
             <ul>
+              <li><strong>Explore admin scenarios:</strong></li>
               <li>- Modify a user's allowed roles.</li>
               <li>- Delete a user account.</li>
               <li>- View the Login History and audit logs for role changes.</li>

@@ -6,8 +6,9 @@ export default function Moderator({ isNavOpen }) {
         <h2>This page is private and accessible only to Moderators.</h2>
 
         <div className="interaction-box">
-          <li><strong>Explore moderation scenarios:</strong>
+          <li>
             <ul>
+              <li><strong>Explore moderation scenarios:</strong></li>
               <li>- Report a post.</li>
               <li>- Mark the post as inappropriate and hide it from the Moderate Posts section.</li>
               <li>- Attempt to view the hidden post.</li>
