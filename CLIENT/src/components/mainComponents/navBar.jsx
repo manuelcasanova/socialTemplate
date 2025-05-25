@@ -377,6 +377,8 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
           </div>
           {showSections.admin && (
             <>
+              <div className='subitem' onClick={() => handleNavigate('/admin/admin')}>Admin</div>
+
               {isSuperAdmin && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/setup')}>
                   <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Super Admin Settings

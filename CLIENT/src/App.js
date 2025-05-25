@@ -207,7 +207,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
           </Route>
           <Route path="/subscribe" element={<SubscribeForm isNavOpen={isNavOpen} />} />
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-            <Route path="/admin" element={<Admin isNavOpen={isNavOpen} />} />
+            <Route path="/admin/admin" element={<Admin isNavOpen={isNavOpen} />} />
           </Route>
 
           {!loadingRoles && (
