@@ -35,35 +35,38 @@ const useAxiosPrivate = () => {
         const responseIntercept = axiosPrivate.interceptors.response.use(
             response => response,
             async error => {
-                const prevRequest = error?.config;
-
-                const status = error?.response?.status;
-
-                // Handle both 401 (Unauthorized) and 403 (Forbidden) cases
-                if ((status === 401 || status === 403) && !prevRequest?.sent) {
-                    prevRequest.sent = true;
-
-                    try {
-                        const newAccessToken = await refresh();
-                        prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                        return axiosPrivate(prevRequest);
-                    } catch (refreshError) {
-                        console.error('Refresh token failed:', refreshError);
-                        setAuth(null);
-                        localStorage.removeItem('authToken');
-                        localStorage.removeItem('refreshToken');
-                      
-                        // Wait before redirecting to give components time to unmount cleanly
-                        setTimeout(() => {
-                          window.location.href = '/signin?message=Session expired. Please sign in again.';
-                        }, 100);
-                        return Promise.reject(refreshError);
-                      }
+              const prevRequest = error?.config;
+              const status = error?.response?.status;
+          
+              // === 401 Unauthorized: handle token refresh ===
+              if (status === 401 && !prevRequest?.sent) {
+                prevRequest.sent = true;
+                try {
+                  const newAccessToken = await refresh();
+                  prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                  return axiosPrivate(prevRequest);
+                } catch (refreshError) {
+                  console.error('Refresh token failed:', refreshError);
+                  setAuth(null);
+                  console.log("👤 setAuth(null) was called");
+                  localStorage.removeItem('authToken');
+                  localStorage.removeItem('refreshToken');
+          
+                  // Redirect only for auth failure
+                  setTimeout(() => {
+                    window.location.href = '/signin?message=Session expired. Please sign in again.';
+                  }, 100);
+          
+                  return Promise.reject(refreshError);
                 }
-
-                return Promise.reject(error);
+              }
+          
+              // === 403 Forbidden: pass down to component ===
+              // This is likely a permission issue (not auth/session problem), so don't redirect
+              return Promise.reject(error);
             }
-        );
+          );
+          
 
 
         return () => {

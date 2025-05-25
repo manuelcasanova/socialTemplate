@@ -35,7 +35,6 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
   const loggedInUser = auth.userId
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-  // console.log("Rendering AdminUsers component...");
   // console.log("Current error state:", error);
   // console.log("Users:", users);
 
@@ -58,7 +57,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
 
         setUsers(usersResponse.data); // Set user data
         setRoles(rolesResponse.data); // Set roles from the server
-
+        prevError.current = null; // Clear previous error tracking
       } catch (err) {
         console.error("Error fetching users:", err);
 
@@ -69,7 +68,11 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
           errorMsg += ` ${err.message}`;
         }
 
+              // Prevent redundant setState
+      if (errorMsg !== prevError.current) {
+        prevError.current = errorMsg;
         setError(errorMsg);
+      }
       } finally {
         setIsLoading(false);
       }
@@ -107,9 +110,10 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
       );
       prevError.current = null;
     } catch (error) {
+      // console.log("Caught error status:", error?.response?.status);
       console.error("Error updating roles", error);
       const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
-      console.log('errorMsg', errorMsg)
+      // console.log('errorMsg', errorMsg)
       if (errorMsg !== prevError.current) {
         prevError.current = errorMsg; // Store the error in the ref
         setError(errorMsg);  // Update the state to show the error message
