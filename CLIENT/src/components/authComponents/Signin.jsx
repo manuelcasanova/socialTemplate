@@ -85,7 +85,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
                 // Optionally auto-login user here
             }
         });
-    
+
         return () => unsubscribe();
     }, []);
 
@@ -97,7 +97,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
             // Sign in using Google provider
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-        
+
             if (!user) throw new Error("No user object returned from Firebase.");
 
             // Get user details
@@ -111,19 +111,23 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
             setHasNewMessages(hasNewMessages);
             setHasPostReports(hasPostReports);
             setHasCommentsReports(hasCommentsReports);
-            
+
             setAuth({ userId, displayName, email, roles, accessToken });
 
             navigate(from, { replace: true });
         } catch (error) {
-            console.error("Google Sign-In Error", error);
-    
+            console.error("Google Sign-In Error", error.response.data.error);
+
             if (error.code === 'auth/popup-closed-by-user') {
                 setErrMsg('Google sign-in was canceled.');
             } else if (error.code === 'auth/cancelled-popup-request') {
                 setErrMsg('Only one popup request allowed at a time.');
             } else if (error.code === 'auth/popup-blocked') {
                 setErrMsg('Popup blocked by browser.');
+            }
+            else if (error.response?.status === 404 &&
+                error.response?.data.error === 'User not registered.') {
+                setErrMsg('User not registered. Please Sign Up');
             } else {
                 setErrMsg(error.message || 'Failed to sign in with Google.');
             }

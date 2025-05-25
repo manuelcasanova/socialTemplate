@@ -57,14 +57,14 @@ const handleLogin = async (req, res) => {
                     'SELECT 1 FROM post_reports WHERE status = $1 LIMIT 1',
                     ['Reported']
                 );
-        
+
                 const hasPostReports = postReports.rows.length > 0;
-        
+
                 const commentsReports = await pool.query(
                     'SELECT 1 FROM post_comments_reports WHERE status = $1 LIMIT 1',
                     ['Reported']
                 );
-        
+
                 const hasCommentsReports = commentsReports.rows.length > 0;
 
                 // Insert login history with UTC time (ISO format)
