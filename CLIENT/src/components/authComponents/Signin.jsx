@@ -130,21 +130,27 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
 
             navigate(from, { replace: true });
         } catch (error) {
-            console.error("Google Sign-In Error", error.response.data.error);
-
-            if (error.code === 'auth/popup-closed-by-user') {
+            console.error("Google Sign-In Error", error);
+        
+            const errorCode = error?.code;
+            const status = error?.response?.status;
+            const serverError = error?.response?.data?.error;
+            const message = error?.message;
+        
+            if (errorCode === 'auth/popup-closed-by-user') {
                 setErrMsg('Google sign-in was canceled.');
-            } else if (error.code === 'auth/cancelled-popup-request') {
+            } else if (errorCode === 'auth/cancelled-popup-request') {
                 setErrMsg('Only one popup request allowed at a time.');
-            } else if (error.code === 'auth/popup-blocked') {
+            } else if (errorCode === 'auth/popup-blocked') {
                 setErrMsg('Popup blocked by browser.');
-            }
-            else if (error.response?.status === 404 &&
-                error.response?.data.error === 'User not registered.') {
+            } else if (status === 404 && serverError === 'User not registered.') {
                 setErrMsg('User not registered. Please Sign Up');
+            } else if (!error.response) {
+                setErrMsg('Server is unreachable. Please check your connection or try again later.');
             } else {
-                setErrMsg(error.message || 'Failed to sign in with Google.');
+                setErrMsg(serverError || message || 'Failed to sign in with Google.');
             }
+        
         } finally {
             setIsLoading(false);
         }
