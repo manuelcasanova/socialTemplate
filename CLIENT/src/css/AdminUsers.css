@@ -99,22 +99,46 @@
 }
 
 .user-info-buttons button {
-  background-color: var(--color1);
-  color: var(--color9);
-  border: 1px solid var(--color9);
-  border-radius: 5px;
+  background-color: transparent;
+  color: black;
+  border: 1px solid black;
   padding: 2px 5px;
+  margin: 0px 5px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 1em;
-  margin-left: auto;
-  margin: 0.2em;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.user-info-buttons button:hover {
-  background-color: var(--color9);
-  color: var(--color1);
-  border: 1px solid var(--color9);
+
+.user-info-buttons button:active {
+  background-color: royalblue;
+  transform: scale(1);
 }
+
+.user-info-buttons button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 255, 0.7);
+}
+
+
+
+.user-info-buttons button:hover {
+  background-color: darkgrey;
+  transform: scale(1.05);
+  border: none;
+  color: black;
+}
+
+
+
+
+
+
+
+
+
 
 .user-info p {
   margin: 0;
