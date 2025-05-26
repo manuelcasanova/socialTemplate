@@ -196,7 +196,7 @@ export default function SocialMuted({ isNavOpen }) {
                           // Check if the fallback image has already been set to avoid infinite loop
                           if (e.target.src !== `${BACKEND}/media/profile_pictures/s/profilePicture.jpg`) {
                             // Fall back to the default user image if the profile picture fails
-                            e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                            e.target.src = '/images/profilePicture.jpg';
                           }
                         }}
                       />

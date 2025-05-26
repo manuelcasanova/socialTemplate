@@ -30,6 +30,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
   // console.log(hasPostReports, hasCommentsReports)
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
+  const FRONTEND = process.env.REACT_APP_FRONTEND_URL;
+
   const { auth } = useAuth();
   // console.log('auth', auth)
   const isSuperAdmin = auth?.roles?.includes('SuperAdmin');
@@ -111,7 +113,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
         return userItems;
       case 'admin':
-        const adminItems = [   { label: 'Explore admin scenerios', path: '/admin/admin' }];
+        const adminItems = [{ label: 'Explore admin scenerios', path: '/admin/admin' }];
 
         if (isSuperAdmin) {
           adminItems.push({ label: 'Super Admin Settings', path: '/admin/superadmin/setup' });
@@ -208,7 +210,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
               alt="Profile"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                e.target.src = '/images/profilePicture.jpg';
               }}
               onClick={() => {
                 setActiveSheet(null)
@@ -246,11 +248,11 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
       {/* Bottom sheet for roles */}
       <BottomSheet isOpen={activeSheet === 'roles'} onClose={() => setActiveSheet(null)}>
-        <h4 style={{marginBottom: '0.5em'}}>Select a Protected Route</h4>
+        <h4 style={{ marginBottom: '0.5em' }}>Select a Protected Route</h4>
         <ul
-        onClick={() => handleNavigate('/user')}
-         style={{cursor: 'pointer', marginBottom: '0.5em'}}
-         >Accessible to all registered users</ul>
+          onClick={() => handleNavigate('/user')}
+          style={{ cursor: 'pointer', marginBottom: '0.5em' }}
+        >Accessible to all registered users</ul>
 
         <ul>
           {customRoles?.map((role, index) => (
@@ -265,7 +267,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
         </ul>
       </BottomSheet>
 
-      
+
 
       {/* Bottom sheet for social options */}
       <BottomSheet isOpen={activeSheet === 'users'} onClose={() => setActiveSheet(null)}>
@@ -350,11 +352,11 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
 
 
-                   {item.icon && <FontAwesomeIcon icon={item.icon} />}
+                  {item.icon && <FontAwesomeIcon icon={item.icon} />}
                   <span>{item.label}</span>
 
                   {(hasPostReports || hasCommentsReports) && (isModerator && adminSettings?.showPostsFeature) && item.label === 'Moderator' && <div className='in-line-red-dot'></div>}
- 
+
 
                 </li>
               ));
@@ -372,8 +374,9 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
               {getSubItemsForSection(subSection).map((item, idx) => (
                 <li
                   key={idx}
-                  style={{ padding: '10px 0', borderBottom: '1px solid #eee', cursor: 'pointer',  display: 'flex',
-                   }}
+                  style={{
+                    padding: '10px 0', borderBottom: '1px solid #eee', cursor: 'pointer', display: 'flex',
+                  }}
                   onClick={() => {
                     item.label === 'Moderate posts' && setHasPostReports(false)
                     item.label === 'Moderate comments' && setHasCommentsReports(false)
@@ -382,8 +385,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
                     setSubSection(null);
                   }}
                 >
-                   <span>{item.label}</span>
-                   {item.showDot && <span className="in-line-red-dot" />}
+                  <span>{item.label}</span>
+                  {item.showDot && <span className="in-line-red-dot" />}
                 </li>
               ))}
             </ul>

@@ -120,7 +120,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
             // Now you can send the Firebase user data to your backend for further processing, like storing tokens
             const response = await axios.post('/auth/firebase-login', { email, displayName, uid }, { withCredentials: true });
 
-            const { userId, roles, accessToken, hasNewMessages, hasPostReports, hasCommentsReports } = response.data;
+            const { userId, roles, accessToken, hasNewMessages, hasPostReports, hasCommentsReports } = response?.data;
 
             setHasNewMessages(hasNewMessages);
             setHasPostReports(hasPostReports);

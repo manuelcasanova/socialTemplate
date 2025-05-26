@@ -146,7 +146,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                       src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                        e.target.src = '/images/profilePicture.jpg';
                       }}
                       alt="Profile"
                     />
@@ -163,7 +163,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                           src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                            e.target.src = '/images/profilePicture.jpg';
                           }}
                           alt="Large Profile"
                         />

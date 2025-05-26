@@ -444,7 +444,7 @@ export default function PostComments({ isNavOpen }) {
                 onError={(e) => {
                   // Fallback image handling
                   e.target.onerror = null;
-                  e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`;
+                  e.target.src = '/images/profilePicture.jpg';
                 }}
               />
             </div>

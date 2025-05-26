@@ -235,7 +235,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                 alt="Large Profile"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = `${BACKEND}/media/profile_pictures/profilePicture.jpg`; // Default fallback image
+                  e.target.src = '/images/profilePicture.jpg'; // Default fallback image
                 }}
               />
             </div>
