@@ -86,7 +86,7 @@ const SubscribeForm = ({ isNavOpen }) => {
 
                 // Update the roles to include "User_subscribed"
                 const updatedAuth = {
-                    ...auth, 
+                    ...auth,
                     roles: [...auth.roles, "User_subscribed"],
                 };
 
@@ -101,9 +101,13 @@ const SubscribeForm = ({ isNavOpen }) => {
                 setErrorMessage('Payment failed. Please try again.');
             }
         } catch (error) {
-            setErrorMessage(`Payment failed: ${error.response.data.error}`);
             console.error('Error processing payment:', error);
-        } finally {
+
+            const errorData = error?.response?.data?.error || 'An unexpected error occurred. Please try again.';
+
+            setErrorMessage(`Payment failed: ${errorData}`);
+        }
+        finally {
             setPaymentProcessing(false);
         }
     };
@@ -148,128 +152,128 @@ const SubscribeForm = ({ isNavOpen }) => {
 
     return (
         <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-                <div className="subscription-container">
-                    <div className="subscription-cards">
-                        {/* Left Card: Non-Subscribed Features */}
-                        <div className="subscription-card not-subscribed">
-                            <h3>Standard Plan (Free)</h3>
-                            <ul>
-                                <li>Feature 1</li>
-                                <li>Feature 2</li>
-                                <li>Feature 3</li>
-                                <li>Feature 4</li>
-                            </ul>
-                        </div>
-
-                        {/* Right Card: Subscribed Features / Subscribe Form */}
-                        <div className="subscription-card not-subscribed">
-                            <h3>Premium Plan (0$)</h3>
-
-                            <ul>
-                                <li>Feature 1</li>
-                                <li>Feature 2</li>
-                                <li>Feature 3</li>
-                                <li>Feature 4</li>
-                                <li>Exclusive Feature A</li>
-                                <li>Exclusive Feature B</li>
-                            </ul>
-
-
-
-
-                            {/* Show subscribe button if not subscribed */}
-                            {!showPaymentForm && (
-                                <button
-                                    onClick={() => setShowPaymentForm(true)}
-                                    className="subscribe-button"
-                                >
-                                    Subscribe Now
-                                </button>
-                            )}
-
-
-
-
-                        </div>
+            <div className="subscription-container">
+                <div className="subscription-cards">
+                    {/* Left Card: Non-Subscribed Features */}
+                    <div className="subscription-card not-subscribed">
+                        <h3>Standard Plan (Free)</h3>
+                        <ul>
+                            <li>Feature 1</li>
+                            <li>Feature 2</li>
+                            <li>Feature 3</li>
+                            <li>Feature 4</li>
+                        </ul>
                     </div>
 
-                    {/* Show the payment form if the button is clicked */}
-                    {showPaymentForm && (
-                        <div className="credit-card-form">
-                            <h3>Enter Credit Card Details</h3>
+                    {/* Right Card: Subscribed Features / Subscribe Form */}
+                    <div className="subscription-card not-subscribed">
+                        <h3>Premium Plan (0$)</h3>
 
+                        <ul>
+                            <li>Feature 1</li>
+                            <li>Feature 2</li>
+                            <li>Feature 3</li>
+                            <li>Feature 4</li>
+                            <li>Exclusive Feature A</li>
+                            <li>Exclusive Feature B</li>
+                        </ul>
+
+
+
+
+                        {/* Show subscribe button if not subscribed */}
+                        {!showPaymentForm && (
                             <button
-                                className="close-button"
-                                onClick={handleClosePaymentForm}
-                                aria-label="Close"
-                            >
-                                ✖
-                            </button>
-
-                            <form>
-                                <label>
-                                    Card Number
-                                    <input
-                                        type="number"
-                                        name="cardNumber"
-                                        value={cardDetails.cardNumber}
-                                        onChange={handleCardInputChange}
-                                        placeholder="4242 4242 4242 4242"
-                                        maxLength="19"
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Expiration Month
-                                    <input
-                                        type="number"
-                                        name="expMonth"
-                                        value={cardDetails.expMonth}
-                                        onChange={handleCardInputChange}
-                                        placeholder="MM"
-                                        maxLength="2"
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Expiration Year
-                                    <input
-                                        type="text"
-                                        name="expYear"
-                                        value={cardDetails.expYear}
-                                        onChange={handleCardInputChange}
-                                        placeholder="YY"
-                                        maxLength="4"
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    CVC
-                                    <input
-                                        type="text"
-                                        name="cvc"
-                                        value={cardDetails.cvc}
-                                        onChange={handleCardInputChange}
-                                        placeholder="123"
-                                        maxLength="4"
-                                        required
-                                    />
-                                </label>
-                            </form>
-
-                            <button
-                                onClick={processPayment}
-                                disabled={paymentProcessing}
+                                onClick={() => setShowPaymentForm(true)}
                                 className="subscribe-button"
                             >
-                                {paymentProcessing ? 'Processing...' : 'Confirm Payment'}
+                                Subscribe Now
                             </button>
+                        )}
 
-                            {errorMessage && <div className="error-message">{errorMessage}</div>}
-                            {successMessage && <div className="success-message">{successMessage}</div>}
-                        </div>
-                    )}
+
+
+
+                    </div>
                 </div>
+
+                {/* Show the payment form if the button is clicked */}
+                {showPaymentForm && (
+                    <div className="credit-card-form">
+                        <h3>Enter Credit Card Details</h3>
+
+                        <button
+                            className="close-button"
+                            onClick={handleClosePaymentForm}
+                            aria-label="Close"
+                        >
+                            ✖
+                        </button>
+
+                        <form>
+                            <label>
+                                Card Number
+                                <input
+                                    type="number"
+                                    name="cardNumber"
+                                    value={cardDetails.cardNumber}
+                                    onChange={handleCardInputChange}
+                                    placeholder="4242 4242 4242 4242"
+                                    maxLength="19"
+                                    required
+                                />
+                            </label>
+                            <label>
+                                Expiration Month
+                                <input
+                                    type="number"
+                                    name="expMonth"
+                                    value={cardDetails.expMonth}
+                                    onChange={handleCardInputChange}
+                                    placeholder="MM"
+                                    maxLength="2"
+                                    required
+                                />
+                            </label>
+                            <label>
+                                Expiration Year
+                                <input
+                                    type="text"
+                                    name="expYear"
+                                    value={cardDetails.expYear}
+                                    onChange={handleCardInputChange}
+                                    placeholder="YY"
+                                    maxLength="4"
+                                    required
+                                />
+                            </label>
+                            <label>
+                                CVC
+                                <input
+                                    type="text"
+                                    name="cvc"
+                                    value={cardDetails.cvc}
+                                    onChange={handleCardInputChange}
+                                    placeholder="123"
+                                    maxLength="4"
+                                    required
+                                />
+                            </label>
+                        </form>
+
+                        <button
+                            onClick={processPayment}
+                            disabled={paymentProcessing}
+                            className="subscribe-button"
+                        >
+                            {paymentProcessing ? 'Processing...' : 'Confirm Payment'}
+                        </button>
+
+                        {errorMessage && <div className="error-message">{errorMessage}</div>}
+                        {successMessage && <div className="success-message">{successMessage}</div>}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
