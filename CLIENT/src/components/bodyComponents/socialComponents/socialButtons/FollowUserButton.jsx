@@ -188,15 +188,20 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
     <div className="user-info-buttons">
 
 
-      {!amFollowingThem && !pendingAcceptMe && !amBeingFollowedByThem && <button onClick={handleFollow}>Follow</button>}
+      {!amFollowingThem && !pendingAcceptMe && !amBeingFollowedByThem && <button 
+      onClick={handleFollow}>Follow</button>}
 
-      {amFollowingThem && <button onClick={handleUnfollow}>Unfollow</button>}
+      {amFollowingThem && <button 
+      onClick={handleUnfollow}>Unfollow</button>}
 
-      {!amFollowingThem && amBeingFollowedByThem && !pendingAcceptMe && <button onClick={handleFollow}>Follow back</button>}
+      {!amFollowingThem && amBeingFollowedByThem && !pendingAcceptMe && <button 
+      onClick={handleFollow}>Follow back</button>}
 
-      {pendingAcceptMe && <button onClick={handleCancelRequest}>Cancel request</button>}
+      {pendingAcceptMe && <button 
+      onClick={handleCancelRequest}>Cancel request</button>}
 
-      {pendingAcceptThem && <button onClick={() => { approveFollower(followeeId, followerId) }}>Approve request</button>}
+      {pendingAcceptThem && <button 
+      onClick={() => { approveFollower(followeeId, followerId) }}>Approve request</button>}
 
     </div>
 

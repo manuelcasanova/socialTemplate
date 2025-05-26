@@ -227,7 +227,7 @@ export default function SocialFollowee({ isNavOpen }) {
                               </button>
                             )
                           }
-                        </div>
+                      
 
 
                         <FollowUserButton
@@ -249,7 +249,7 @@ export default function SocialFollowee({ isNavOpen }) {
                           isSuperAdmin={isSuperAdmin}
                           setError={setError}
                         />
-
+  </div>
                       </>}
                   </div>
                 );

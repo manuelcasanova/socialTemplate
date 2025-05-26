@@ -198,7 +198,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                             </button>
                           )
                         }
-                      </div>
+                    
 
 
                       <FollowUserButton
@@ -221,7 +221,9 @@ export default function SocialAllUsers({ isNavOpen }) {
                         setError={setError}
                         isSuperAdmin={isSuperAdmin}
                       />
+                        </div>
                     </>
+                    
                   }
 
                 </div>

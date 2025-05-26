@@ -211,8 +211,11 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                       </p>
                     </div>
 
+         
                     {loggedInUser !== user.user_id &&
-                      <>
+
+<div className="user-info-buttons">
+                      
                         <FollowUserButton
 
                           followeeId={user.user_id}
@@ -234,7 +237,9 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                           setMutedUsers={setMutedUsers}
                           onMutedChange={handleMutedChanges}
                         />
-                      </>
+                     
+                      </div>
+                   
                     }
                   </div>
                 );

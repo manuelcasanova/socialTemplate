@@ -155,7 +155,7 @@ export default function SocialMuted({ isNavOpen }) {
 
             mutedUsersWithName.map((user) =>
 
-              <div className="user-row-social" key={user.user_id}>
+              <div className="user-row-social" key={user.user_id} style={{flexDirection: 'row'}}>
                 <div className="user-info">
                   {imageExistsMap[user.user_id] ? (
                     <img
