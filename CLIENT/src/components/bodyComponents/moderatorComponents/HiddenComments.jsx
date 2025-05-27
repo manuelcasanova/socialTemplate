@@ -121,7 +121,7 @@ export default function HiddenComments({ isNavOpen }) {
                         : `UserId: ${log.reported_by}`}
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
-                   <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchHiddenComments} setReports={setReports} />
+                   <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchHiddenComments} setReports={setReports} setError={setError}/>
 
                   </tr>
                 ))}
