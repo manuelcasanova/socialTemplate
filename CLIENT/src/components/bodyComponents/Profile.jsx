@@ -471,6 +471,7 @@ const handleFileChange = async (e) => {
                 </button>
               }
               {
+                !showConfirmDelete &&
                 ((superAdminSettings.allowDeleteMyUser && adminSettings.allowDeleteMyUser) || isSuperAdmin) &&
                 <button
                   className="profile-actions-button button-red"
