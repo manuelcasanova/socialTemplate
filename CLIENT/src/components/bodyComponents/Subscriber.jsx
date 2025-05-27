@@ -93,7 +93,7 @@ export default function Subscriber({ isNavOpen }) {
               <ul>
                 <li>- Modify user roles in the 'Admin Users' section and use the filter to search by username or ID.</li>
                 <li>- View the login history and audit logs to track changes to user roles.</li>
-                <li>- Find your user and update its roles, such as becoming a moderator, administrator, or superadministrator.</li>
+                <li>- Find your user and update its roles, such as becoming a moderator or an administrator.</li>
                 <li>- As an administrator, attempt to revoke your own Admin role or modify another Admin's roles.</li>
                 <li>- Create, edit, and delete roles. Then test access behavior with various role permissions.</li>
 

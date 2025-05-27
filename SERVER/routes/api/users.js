@@ -87,7 +87,7 @@ router.route('/')
   .get(
     async (req, res, next) => {
       try {
-        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed')(req, res, next);
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
       } catch (err) {
         next(err);
       }
