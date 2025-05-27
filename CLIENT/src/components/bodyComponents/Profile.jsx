@@ -23,7 +23,7 @@ import Error from "./Error";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-const MAX_FILE_SIZE_MB = 0.2; // 200KB target
+const MAX_FILE_SIZE_MB = 0.1; // 100KB target
 const MAX_DIMENSION = 1024;   // Resize down to this if larger
 
 const profilePictureExists = async (userId) => {
@@ -162,8 +162,8 @@ const handleFileChange = async (e) => {
     };
 
     const compressedFile = await imageCompression(selectedFile, options);
-    console.log(`Original size: ${(selectedFile.size / 1024).toFixed(2)} KB`);
-    console.log(`Compressed size: ${(compressedFile.size / 1024).toFixed(2)} KB`);
+    // console.log(`Original size: ${(selectedFile.size / 1024).toFixed(2)} KB`);
+    // console.log(`Compressed size: ${(compressedFile.size / 1024).toFixed(2)} KB`);
 
     selectedFile = compressedFile;
     setFileName(selectedFile.name || "No file chosen");
@@ -386,12 +386,42 @@ const handleFileChange = async (e) => {
                   />
 
                   {/* Custom label for file input */}
-                  <label className="button-white" htmlFor="profile-picture-input">
+                  {/* <label className="button-white" htmlFor="profile-picture-input">
                     Choose File
-                  </label>
+                  </label> */}
 
                   {/* Text for chosen file */}
                   <span className="file-name">{fileName || "No file chosen"}</span>
+
+                  <div
+  onDrop={(e) => {
+    e.preventDefault();
+    handleFileChange({ target: { files: e.dataTransfer.files } });
+  }}
+  onDragOver={(e) => e.preventDefault()}
+  style={{
+    border: '2px dashed #ccc',
+    padding: '20px',
+    borderRadius: '8px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    marginBottom: '1rem',
+    backgroundColor: '#fafafa',
+  }}
+>
+  <p>Drag & drop an image here, or</p>
+  <input
+    type="file"
+    accept="image/jpeg,image/png,image/webp"
+    onChange={handleFileChange}
+    style={{ display: 'none' }}
+    id="file-upload"
+  />
+  <label htmlFor="file-upload" style={{ cursor: 'pointer', color: '#007bff' }}>
+    click to choose one
+  </label>
+</div>
+
 
                   {error && (
                     <div className="profile-input-instructions">
