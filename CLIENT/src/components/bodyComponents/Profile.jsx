@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { axiosPrivate } from "../../api/axios";
+import imageCompression from 'browser-image-compression';
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../context/SuperAdminSettingsProvider";
@@ -22,8 +23,8 @@ import Error from "./Error";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-const MAX_FILE_SIZE_MB = 1;
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+const MAX_FILE_SIZE_MB = 0.2; // 200KB target
+const MAX_DIMENSION = 1024;   // Resize down to this if larger
 
 const profilePictureExists = async (userId) => {
 
@@ -142,47 +143,57 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   };
 
   // Handle file selection and trigger upload automatically
-  const handleFileChange = async (e) => {
-    const selectedFile = e.target.files[0];
 
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(selectedFile.type)) {
-      setError("Unsupported file format. Please upload a JPG, PNG or WEBP image.");
-      return;
-    }
+const handleFileChange = async (e) => {
+  let selectedFile = e.target.files[0];
 
-    if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
-      setError(`File size exceeds ${MAX_FILE_SIZE_MB}MB. Please choose a smaller image.`);
-      return;
-    }
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(selectedFile.type)) {
+    setError("Unsupported file format. Please upload a JPG, PNG or WEBP image.");
+    return;
+  }
 
-    if (selectedFile) {
-      setFileName(selectedFile.name || "No file chosen");
+  try {
+    // Compress the file before upload
+    const options = {
+      maxSizeMB: MAX_FILE_SIZE_MB,
+      maxWidthOrHeight: MAX_DIMENSION,
+      useWebWorker: true,
+      fileType: 'image/webp', // Optional: smaller than PNG/JPEG
+    };
 
-      // Automatically upload the file
-      const formData = new FormData();
-      formData.append('profilePicture', selectedFile);
+    const compressedFile = await imageCompression(selectedFile, options);
+    console.log(`Original size: ${(selectedFile.size / 1024).toFixed(2)} KB`);
+    console.log(`Compressed size: ${(compressedFile.size / 1024).toFixed(2)} KB`);
 
-      try {
-        const response = await axiosPrivate.post(`/users/upload-profile-picture/${userId}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+    selectedFile = compressedFile;
+    setFileName(selectedFile.name || "No file chosen");
 
-        if (response?.data?.success) {
-          setIsPictureModalVisible(false);
-          setImageExists(true); // Assume the picture upload was successful
-          setProfilePictureKey((prevKey) => prevKey + 1);
-        } else {
-          console.error("Error uploading profile picture:", response?.data?.message);
-        }
-      } catch (error) {
-        console.error("Critical Error: Upload failed:", error);
-        setCriticalError(true);
+    const formData = new FormData();
+    formData.append('profilePicture', selectedFile);
 
+    const response = await axiosPrivate.post(
+      `/users/upload-profile-picture/${userId}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       }
+    );
+
+    if (response?.data?.success) {
+      setIsPictureModalVisible(false);
+      setImageExists(true);
+      setProfilePictureKey((prevKey) => prevKey + 1);
+    } else {
+      console.error("Error uploading profile picture:", response?.data?.message);
     }
-  };
+  } catch (error) {
+    console.error("Critical Error: Upload failed:", error);
+    setCriticalError(true);
+  }
+};
+
 
   // Handle the modal close button
   const handleCloseModal = () => {
