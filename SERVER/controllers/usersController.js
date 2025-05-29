@@ -569,6 +569,51 @@ const uploadProfilePicture = async (req, res) => {
     }
 };
 
+
+//This function will be used in constRoles, below, to transfer the assigned_by_user_id when a user's superadmin/admin is revoked.
+
+const transferAssignedRoles = async (demotedUserId, revokerUserId, client = pool) => {
+    try {
+        // 1. Fetch all affected role assignments
+        const { rows: assignedRoles } = await client.query(
+            `SELECT user_id, roles.role_name
+             FROM user_roles
+             INNER JOIN roles ON user_roles.role_id = roles.role_id
+             WHERE user_roles.assigned_by_user_id = $1
+               AND roles.role_name IN ('SuperAdmin', 'Admin')`,
+            [demotedUserId]
+        );
+
+        // 2. Update the assigned_by_user_id to the new owner
+        await client.query(
+            `UPDATE user_roles
+             SET assigned_by_user_id = $1
+             FROM roles
+             WHERE roles.role_id = user_roles.role_id
+               AND roles.role_name IN ('SuperAdmin', 'Admin')
+               AND user_roles.assigned_by_user_id = $2`,
+            [revokerUserId, demotedUserId]
+        );
+
+        // 3. Insert logs for accountability
+        const logPromises = assignedRoles.map(({ user_id, role_name }) => {
+            return client.query(
+                `INSERT INTO role_change_logs (user_that_modified, user_modified, role, action_type)
+                 VALUES ($1, $2, $3, $4)`,
+                [revokerUserId, user_id, role_name, 'transferred']
+            );
+        });
+
+        await Promise.all(logPromises);
+    } catch (err) {
+        console.error('Error transferring assigned role ownership:', err);
+        throw new Error('Failed to transfer role ownership');
+    }
+};
+
+
+
+
 //Update roles (done by admin or superadmin)
 
 const updateRoles = async (req, res) => {
@@ -692,6 +737,9 @@ const updateRoles = async (req, res) => {
                     return res.status(403).json({ error: 'You cannot revoke your own SuperAdmin role' });
                 }
             }
+
+            // Transfer ownership of roles assigned by this SuperAdmin
+            await transferAssignedRoles(userId, loggedInUser);
 
 
             // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.

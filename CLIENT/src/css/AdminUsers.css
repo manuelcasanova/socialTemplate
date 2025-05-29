@@ -295,6 +295,7 @@ button:hover {
 
   .user-info {
     /* justify-content: center; */
+    margin-bottom: 0.5em;
   }
 
   .user-info-buttons {

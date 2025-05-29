@@ -84,7 +84,7 @@ CREATE TABLE role_change_logs (
     timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of the action
     FOREIGN KEY (user_that_modified) REFERENCES users(user_id) ON DELETE SET NULL,
     FOREIGN KEY (user_modified) REFERENCES users(user_id) ON DELETE SET NULL,
-    action_type VARCHAR(20) CHECK (action_type IN ('assigned', 'unassigned')) NOT NULL
+    action_type VARCHAR(20) CHECK (action_type IN ('assigned', 'unassigned', 'transferred')) NOT NULL
 );
 
 CREATE TABLE subscriptions (
