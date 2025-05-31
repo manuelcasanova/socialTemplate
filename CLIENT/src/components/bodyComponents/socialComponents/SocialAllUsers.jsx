@@ -187,6 +187,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                           ) && superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature && (
 
                             <button
+                        
                               onClick={() => navigate(`/messages/${user.user_id}`)}
                             >
 
