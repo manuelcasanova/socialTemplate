@@ -71,15 +71,16 @@ export default function SocialFollowers({ isNavOpen }) {
   const [showLargePicture, setShowLargePicture] = useState(null);
 
   const [filterUsername, setFilterUsername] = useState("");
+   const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
 
   const inputRef = useRef(null);
 
-  // useEffect(() => {
-  //   // Focus the input field after the component mounts
-  //   if (inputRef.current) {
-  //     inputRef.current.focus();
-  //   }
-  // });
+  useEffect(() => {
+    // Focus the input field after the component mounts
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  });
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -88,7 +89,7 @@ export default function SocialFollowers({ isNavOpen }) {
 
   useEffect(() => {
     if (superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) {
-      fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
+      fetchUsers(filters, setUsers, setIsLoading, setError, submittedFilterUsername);
     }
     if (superAdminSettings.allowMute && adminSettings.allowMute) {
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
@@ -99,7 +100,7 @@ export default function SocialFollowers({ isNavOpen }) {
     if (superAdminSettings.allowFollow && adminSettings.allowFollow) {
       fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
     }
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, adminSettings, superAdminSettings]);
+  }, [axiosPrivate, filters, hasMutedChanges, submittedFilterUsername, adminSettings, superAdminSettings]);
 
 
   const handleMutedChanges = () => {
@@ -129,7 +130,7 @@ export default function SocialFollowers({ isNavOpen }) {
       <div className="admin-users">
         <h2>Social - Followers</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)}/>
 
         {filteredFollowee.length === 0 ? (
           <p>No users available or all users are muted.</p>

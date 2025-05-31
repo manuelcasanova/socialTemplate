@@ -186,7 +186,7 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
 
     (superAdminSettings.allowFollow && adminSettings.allowFollow || isSuperAdmin ) &&
     <div 
-    // className="user-info-buttons"
+    className="user-info-buttons"
     >
 
 

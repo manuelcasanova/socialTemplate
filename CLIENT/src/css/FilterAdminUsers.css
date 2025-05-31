@@ -37,7 +37,7 @@
 
 .filter-container input,
 .filter-container select {
-  font-size: 14px;
+  font-size: 16px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -96,7 +96,7 @@
 .custom-dropdown-option {
   padding: 10px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   box-sizing: border-box;
   color: grey;
 }

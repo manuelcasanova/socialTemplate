@@ -72,6 +72,7 @@ export default function SocialMuted({ isNavOpen }) {
   const [showLargePicture, setShowLargePicture] = useState(null)
 
   const [filterUsername, setFilterUsername] = useState("");
+  const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
 
   const inputRef = useRef(null);
 
@@ -81,12 +82,12 @@ export default function SocialMuted({ isNavOpen }) {
   }, [filters, filterUsername]);
 
   useEffect(() => {
-    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
+    fetchUsers(filters, setUsers, setIsLoading, setError, submittedFilterUsername)
     {
       // superAdminSettings.allowMute && adminSettings.allowMute && (Comment in if you prefer to not show the list of muted users if allowMute is false. Comment in as well the dependency array)
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser)
     }
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername
+  }, [axiosPrivate, filters, hasMutedChanges, submittedFilterUsername
     //, superAdminSettings, adminSettings
   ]);
 
@@ -133,7 +134,7 @@ export default function SocialMuted({ isNavOpen }) {
 
         )}
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         <div className="users-container">
           {mutedUsersWithName.length > 0 ? (
@@ -141,37 +142,37 @@ export default function SocialMuted({ isNavOpen }) {
 
             mutedUsersWithName.map((user) =>
 
-              <div className="user-row-social" key={user.user_id} style={{flexDirection: 'row'}}>
+              <div className="user-row-social" key={user.user_id} style={{ flexDirection: 'row' }}>
                 <div className="user-info">
+                  <img
+                    className="user-row-social-small-img"
+                    onClick={() => setShowLargePicture(user.user_id)}
+                    src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/images/profilePicture.jpg';
+                    }}
+                    alt="Profile"
+                  />
+
+
+
+                  {showLargePicture === user.user_id && (
+                    <div
+                      className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
+                      onClick={() => setShowLargePicture(null)}
+                    >
                       <img
-                        className="user-row-social-small-img"
-                        onClick={() => setShowLargePicture(user.user_id)}
+                        className="users-all-picture-large"
                         src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
                         }}
-                        alt="Profile"
+                        alt="Large Profile"
                       />
-
-
-
-                      {showLargePicture === user.user_id && (
-                        <div
-                          className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
-                          onClick={() => setShowLargePicture(null)}
-                        >
-                          <img
-                            className="users-all-picture-large"
-                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/images/profilePicture.jpg';
-                            }}
-                            alt="Large Profile"
-                          />
-                        </div>
-                      )}
+                    </div>
+                  )}
 
                   <p>
                     {user.username.startsWith('inactive') ? 'Inactive User' : user.username}

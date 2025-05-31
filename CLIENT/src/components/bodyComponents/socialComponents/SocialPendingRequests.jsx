@@ -66,6 +66,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   const [showLargePicture, setShowLargePicture] = useState(null);
 
   const [filterUsername, setFilterUsername] = useState("");
+    const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
 
   const inputRef = useRef(null);
 
@@ -80,7 +81,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   }, [filters, filterUsername]);
 
   useEffect(() => {
-    fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername);
+    fetchUsers(filters, setUsers, setIsLoading, setError, submittedFilterUsername);
     if (superAdminSettings.allowMute && adminSettings.allowMute) {
       fetchMutedUsers(filters, setMutedUsers, setIsLoading, setError, loggedInUser);
     }
@@ -90,14 +91,14 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
     if (superAdminSettings.allowFollow && adminSettings.allowFollow) {
       fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
     }
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, adminSettings, superAdminSettings]);
+  }, [axiosPrivate, filters, hasMutedChanges, submittedFilterUsername, adminSettings, superAdminSettings]);
 
-  // useEffect(() => {
-  //   // Focus the input field after the component mounts
-  //   if (inputRef.current) {
-  //     inputRef.current.focus();
-  //   }
-  // });
+  useEffect(() => {
+    // Focus the input field after the component mounts
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  });
 
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
@@ -137,7 +138,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
         <h2>Social - Pending Requests</h2>
 
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         {(filteredPending.length === 0 || !superAdminSettings.allowFollow) ? (
           <p>No pending requests.</p>

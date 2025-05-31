@@ -52,6 +52,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [followersAndFollowee, setFollowersAndFollowee] = useState([])
   const [mutedUsers, setMutedUsers] = useState([]);
   const [filterUsername, setFilterUsername] = useState("");
+  const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
   const inputRef = useRef(null);
   const usersExceptMe = users.filter(user => {
     // Filter out muted users
@@ -74,12 +75,12 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [showLargePicture, setShowLargePicture] = useState(null)
 
-  // useEffect(() => {
-  //   // Focus the input field after the component mounts
-  //   if (inputRef.current) {
-  //     inputRef.current.focus();
-  //   }
-  // });
+  useEffect(() => {
+    // Focus the input field after the component mounts
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  });
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -91,7 +92,7 @@ export default function SocialAllUsers({ isNavOpen }) {
     if (!superAdminSettings || !adminSettings) return;
 
     if (superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) {
-      fetchUsers(filters, setUsers, setIsLoading, setError, filterUsername)
+      fetchUsers(filters, setUsers, setIsLoading, setError, submittedFilterUsername)
     }
 
     if (superAdminSettings.allowMute && adminSettings.allowMute) {
@@ -102,7 +103,7 @@ export default function SocialAllUsers({ isNavOpen }) {
       fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser)
     }
 
-  }, [axiosPrivate, filters, hasMutedChanges, filterUsername, superAdminSettings, adminSettings]);
+  }, [axiosPrivate, filters, hasMutedChanges, submittedFilterUsername, superAdminSettings, adminSettings]);
 
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
@@ -126,7 +127,7 @@ export default function SocialAllUsers({ isNavOpen }) {
       <div className="admin-users">
         <h2>Social - All Users</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}  onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         {allUsersMutedOrMe ? (
           <p>No users available or all users are muted.</p>

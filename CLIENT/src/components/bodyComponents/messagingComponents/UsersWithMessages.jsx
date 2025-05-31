@@ -55,6 +55,7 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [mutedUsers, setMutedUsers] = useState([]);
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [filterUsername, setFilterUsername] = useState("");
+    const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
   const [hideMuted, setHideMuted] = useState(true);
   const loggedInUser = auth.userId;
 
@@ -77,7 +78,7 @@ export default function UsersWithMessages({ isNavOpen }) {
     fetchUsersWithMessages(loggedInUser, setUsers, setIsLoading, setError, filterUsername, hideMuted);
     // Fetch muted users (optional depending on your app's structure)
     fetchMutedUsers("", setMutedUsers, setIsLoading, setError, loggedInUser)
-  }, [loggedInUser, filterUsername, hideMuted, hasMutedChanges]);
+  }, [loggedInUser, submittedFilterUsername, hideMuted, hasMutedChanges]);
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -112,7 +113,7 @@ export default function UsersWithMessages({ isNavOpen }) {
       <div className="admin-users">
         <h2>Chats</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} />
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)}  />
 
 
         <div className="container-toggle-hide-chat-muted-users">
