@@ -57,7 +57,7 @@ export default function UsersWithMessages({ isNavOpen }) {
   const [filterUsername, setFilterUsername] = useState("");
   const [hideMuted, setHideMuted] = useState(true);
   const loggedInUser = auth.userId;
-  const [imageExistsMap, setImageExistsMap] = useState({});
+
   const [showLargePicture, setShowLargePicture] = useState(null)
   const inputRef = useRef(null);
   // console.log("users with new messages", usersWithNewMessages)
@@ -83,23 +83,6 @@ export default function UsersWithMessages({ isNavOpen }) {
   useEffect(() => {
     setError(null); // Clear error when filters change
   }, [filterUsername]);
-
-  // Check if profile picture exists for each user and store the result
-  useEffect(() => {
-    const checkImages = async () => {
-      const result = {};
-      for (const user of users) {
-        result[user.user_id] = await profilePictureExists(user.user_id);
-      }
-      setImageExistsMap(result);
-    };
-
-
-
-    if (users.length > 0) {
-      checkImages();
-    }
-  }, [users]);
 
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);

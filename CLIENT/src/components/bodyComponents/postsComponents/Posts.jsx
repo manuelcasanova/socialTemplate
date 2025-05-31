@@ -68,7 +68,6 @@ export default function Posts({ isNavOpen }) {
   const [filterUsername, setFilterUsername] = useState("");
   const inputRef = useRef(null);
 
-  const [imageExistsMap, setImageExistsMap] = useState({});
   const [showLargePicture, setShowLargePicture] = useState(null);
   const [page, setPage] = useState(1); // Track the current page
   const limit = 10 //How many posts to fetch per load
@@ -181,19 +180,7 @@ export default function Posts({ isNavOpen }) {
     }
   }, [newPostSubmitted, filters, filterUsername, loggedInUser, page]);
 
-  useEffect(() => {
-    const checkImages = async () => {
-      const result = {};
-      for (const user of users) {
-        result[user.user_id] = await profilePictureExists(user.user_id);
-      }
-      setImageExistsMap(result);
-    };
 
-    if (users.length > 0) {
-      checkImages();
-    }
-  }, [users]);
 
   const getUsernameById = (userId) => {
     const user = users.find(user => user.user_id === userId);

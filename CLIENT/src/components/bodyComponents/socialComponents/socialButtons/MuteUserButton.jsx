@@ -45,7 +45,7 @@ const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedC
   return (
     (superAdminSettings.allowMute && adminSettings.allowMute || isSuperAdmin) &&
     <div 
-    // className="user-info-buttons"
+    className="user-info-buttons"
     >
       {isMuted ? (
         <button title="Unmute user" onClick={unmuteUser}><FontAwesomeIcon icon={faBell}></FontAwesomeIcon></button>
