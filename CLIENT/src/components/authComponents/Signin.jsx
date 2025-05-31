@@ -28,7 +28,7 @@ import { auth } from '../../firebase'
 
 const SIGNIN_URL = '/auth';
 // const DEFAULT_EMAIL = '@example.com';
-const DEFAULT_EMAIL = 'manucasanova@hotmail.com';
+const DEFAULT_EMAIL = '';
 // const DEFAULT_EMAIL = '';
 const DEFAULT_PASSWORD = 'G7m!pLz@92aT';  // Hardcoded default password for development
 // const DEFAULT_PASSWORD = '';
@@ -66,15 +66,15 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
     // Password ref to access password value directly without state
     const passwordRef = useRef();
 
-    useEffect(() => {
-        if (
-            process.env.NODE_ENV === 'development' &&
-            showSignUpWithEmail &&
-            passwordRef.current
-        ) {
+useEffect(() => {
+    if (passwordRef.current) {
+        if (email.trim().toLowerCase() === 'admin@example.com') {
             passwordRef.current.value = DEFAULT_PASSWORD;
+        } else {
+            passwordRef.current.value = '';
         }
-    }, [showSignUpWithEmail]);
+    }
+}, [email]);
 
     useEffect(() => {
         userRef.current?.focus();
@@ -284,7 +284,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
                                     if (e.target.checked) {
                                         setEmail('admin@example.com');
                                     } else {
-                                        setEmail('manucasanova@hotmail.com');
+                                        setEmail('');
                                     }
                                 }}
                             />
