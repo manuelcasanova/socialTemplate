@@ -26,18 +26,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 const MAX_FILE_SIZE_MB = 0.1; // 100KB target
 const MAX_DIMENSION = 1024;   // Resize down to this if larger
 
-const profilePictureExists = async (userId) => {
 
-  const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
-
-  try {
-    const response = await fetch(imageUrl, { method: 'HEAD' });
-    return response.ok;
-  } catch (error) {
-    console.error("Error checking image existence:", error);
-    return false;
-  }
-};
 
 const validateInput = (editMode, value, confirmPwd = "") => {
   let regex, errorMessage;
@@ -110,13 +99,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
   const userId = auth.userId || "Guest";
 
-  useEffect(() => {
-    const checkImage = async () => {
-      const exists = await profilePictureExists(userId);
-      setImageExists(exists);
-    };
-    checkImage();
-  }, [userId]);
+
 
 
   const profilePictureUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
@@ -129,7 +112,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       setConfirmEmail("");
       setIsPictureModalVisible(true);
       setFileName("");  // Clear filename if user clicks to update
-           // Reset file if the modal is opened
+      // Reset file if the modal is opened
     }
   };
 
@@ -144,62 +127,62 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
   // Handle file selection and trigger upload automatically
 
-const handleFileChange = async (e) => {
-  let selectedFile = e.target.files[0];
+  const handleFileChange = async (e) => {
+    let selectedFile = e.target.files[0];
 
-  if (!['image/jpeg', 'image/png', 'image/webp'].includes(selectedFile.type)) {
-    setError("Unsupported file format. Please upload a JPG, PNG or WEBP image.");
-    return;
-  }
-
-  try {
-    // Compress the file before upload
-    const options = {
-      maxSizeMB: MAX_FILE_SIZE_MB,
-      maxWidthOrHeight: MAX_DIMENSION,
-      useWebWorker: true,
-      fileType: 'image/webp', // Optional: smaller than PNG/JPEG
-    };
-
-    const compressedFile = await imageCompression(selectedFile, options);
-    // console.log(`Original size: ${(selectedFile.size / 1024).toFixed(2)} KB`);
-    // console.log(`Compressed size: ${(compressedFile.size / 1024).toFixed(2)} KB`);
-
-    selectedFile = compressedFile;
-    setFileName(selectedFile.name || "No file chosen");
-
-    const formData = new FormData();
-    formData.append('profilePicture', selectedFile);
-
-    const response = await axiosPrivate.post(
-      `/users/upload-profile-picture/${userId}`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-
-    if (response?.data?.success) {
-      setIsPictureModalVisible(false);
-      setImageExists(true);
-      setProfilePictureKey((prevKey) => prevKey + 1);
-    } else {
-      console.error("Error uploading profile picture:", response?.data?.message);
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(selectedFile.type)) {
+      setError("Unsupported file format. Please upload a JPG, PNG or WEBP image.");
+      return;
     }
-  } catch (error) {
-    console.error("Critical Error: Upload failed:", error);
-    setCriticalError(true);
-  }
-};
+
+    try {
+      // Compress the file before upload
+      const options = {
+        maxSizeMB: MAX_FILE_SIZE_MB,
+        maxWidthOrHeight: MAX_DIMENSION,
+        useWebWorker: true,
+        fileType: 'image/webp', // Optional: smaller than PNG/JPEG
+      };
+
+      const compressedFile = await imageCompression(selectedFile, options);
+      // console.log(`Original size: ${(selectedFile.size / 1024).toFixed(2)} KB`);
+      // console.log(`Compressed size: ${(compressedFile.size / 1024).toFixed(2)} KB`);
+
+      selectedFile = compressedFile;
+      setFileName(selectedFile.name || "No file chosen");
+
+      const formData = new FormData();
+      formData.append('profilePicture', selectedFile);
+
+      const response = await axiosPrivate.post(
+        `/users/upload-profile-picture/${userId}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (response?.data?.success) {
+        setIsPictureModalVisible(false);
+        setImageExists(true);
+        setProfilePictureKey((prevKey) => prevKey + 1);
+      } else {
+        console.error("Error uploading profile picture:", response?.data?.message);
+      }
+    } catch (error) {
+      console.error("Critical Error: Upload failed:", error);
+      setCriticalError(true);
+    }
+  };
 
 
   // Handle the modal close button
   const handleCloseModal = () => {
     setIsPictureModalVisible(false);
     setFileName("");  // Reset filename if modal is closed without uploading
-         // Reset file if modal is closed
+    // Reset file if modal is closed
   };
 
 
@@ -352,21 +335,28 @@ const handleFileChange = async (e) => {
                 }
                 style={{ cursor: ((superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture) || isSuperAdmin) ? 'pointer' : 'default' }}
               >
-                {imageExists ? (
-                  <img
-                    src={`${profilePictureUrl}?key=${profilePictureKey}`}
-                    alt="Profile"
-                    style={{ cursor: ((superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture) || isSuperAdmin) ? 'pointer' : 'default' }}
-                  />
-                ) : (
-                  <img
-                    className="user-row-social-small-img"
-                    src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                    alt="Profile"
-                    style={{ cursor: ((superAdminSettings.allowModifyProfilePicture && adminSettings.allowModifyProfilePicture) || isSuperAdmin) ? 'pointer' : 'default' }}
-                  />
 
-                )}
+
+
+                <img
+                  src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
+                  alt="Profile"
+                  style={{
+                    cursor:
+                      (superAdminSettings.allowModifyProfilePicture &&
+                        adminSettings.allowModifyProfilePicture) ||
+                        isSuperAdmin
+                        ? 'pointer'
+                        : 'default',
+                  }}
+                  onError={(e) => {
+                    e.target.onerror = null; // prevent infinite loop
+                    e.target.src = '/images/profilePicture.jpg'; // fallback image
+                  }}
+                />
+
+
+
               </div>
             }
 
@@ -394,33 +384,33 @@ const handleFileChange = async (e) => {
                   <span className="file-name">{fileName || "No file chosen"}</span>
 
                   <div
-  onDrop={(e) => {
-    e.preventDefault();
-    handleFileChange({ target: { files: e.dataTransfer.files } });
-  }}
-  onDragOver={(e) => e.preventDefault()}
-  style={{
-    border: '2px dashed #ccc',
-    padding: '20px',
-    borderRadius: '8px',
-    textAlign: 'center',
-    cursor: 'pointer',
-    marginBottom: '1rem',
-    backgroundColor: '#fafafa',
-  }}
->
-  <p>Drag & drop an image here, or</p>
-  <input
-    type="file"
-    accept="image/jpeg,image/png,image/webp"
-    onChange={handleFileChange}
-    style={{ display: 'none' }}
-    id="file-upload"
-  />
-  <label htmlFor="file-upload" style={{ cursor: 'pointer', color: '#007bff' }}>
-    click to choose one
-  </label>
-</div>
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      handleFileChange({ target: { files: e.dataTransfer.files } });
+                    }}
+                    onDragOver={(e) => e.preventDefault()}
+                    style={{
+                      border: '2px dashed #ccc',
+                      padding: '20px',
+                      borderRadius: '8px',
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      marginBottom: '1rem',
+                      backgroundColor: '#fafafa',
+                    }}
+                  >
+                    <p>Drag & drop an image here, or</p>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handleFileChange}
+                      style={{ display: 'none' }}
+                      id="file-upload"
+                    />
+                    <label htmlFor="file-upload" style={{ cursor: 'pointer', color: '#007bff' }}>
+                      click to choose one
+                    </label>
+                  </div>
 
 
                   {error && (
