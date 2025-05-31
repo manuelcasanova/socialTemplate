@@ -92,12 +92,12 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
     }
   }, [axiosPrivate, filters, hasMutedChanges, filterUsername, adminSettings, superAdminSettings]);
 
-  useEffect(() => {
-    // Focus the input field after the component mounts
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  });
+  // useEffect(() => {
+  //   // Focus the input field after the component mounts
+  //   if (inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // });
 
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);

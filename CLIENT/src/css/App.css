@@ -515,6 +515,12 @@
   filter: brightness(1.4);
 }
 
+/* Mobile browsers automatically zoom in when focusing on an input field if the font size of the input is less than 16px. This is intended to make text easier to read and type. To avoid: */
+input, textarea, select {
+  font-size: 16px;
+}
+
+
 /* Mobile Styles */
 @media (max-width: 580px) {
 

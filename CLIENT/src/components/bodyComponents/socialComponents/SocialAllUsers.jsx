@@ -74,12 +74,12 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [showLargePicture, setShowLargePicture] = useState(null)
 
-  useEffect(() => {
-    // Focus the input field after the component mounts
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  });
+  // useEffect(() => {
+  //   // Focus the input field after the component mounts
+  //   if (inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // });
 
   // Reset the error message whenever filters change
   useEffect(() => {

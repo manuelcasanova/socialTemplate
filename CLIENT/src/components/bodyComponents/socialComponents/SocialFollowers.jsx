@@ -74,12 +74,12 @@ export default function SocialFollowers({ isNavOpen }) {
 
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    // Focus the input field after the component mounts
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  });
+  // useEffect(() => {
+  //   // Focus the input field after the component mounts
+  //   if (inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // });
 
   // Reset the error message whenever filters change
   useEffect(() => {
