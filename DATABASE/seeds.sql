@@ -38,15 +38,14 @@ VALUES
 (1, 2, 2),
 (1, 3, 2),
 (1, 5, 2),
+
+
 (2, 1, 2),
 (2, 2, 2),
 (2, 3, 2),
+(2, 4, 2),
 (2, 5, 2)
--- ,
--- (2, 2, 1),
--- (2, 3, 2),
--- (2, 4, 2),
--- (2, 5, 2)
+
 ;
 
 INSERT INTO global_provider_settings (
@@ -82,9 +81,9 @@ INSERT INTO global_provider_settings (
   allow_admin_delete_custom_role
 
 ) VALUES (
-  false, false, false, false, false, false, false, false, false, false, false,
-  false, false, false, false, false, false, false, false, false, false, false,
-  false, false, false, false, false, false, false, false
+  true, true, true, true, true, true, true, true, true, true, true,
+  true, true, true, true, true, true, true, true, true, true, false,
+  true, true, true, true, true, true, true, true
 );
 
 INSERT INTO admin_settings (
@@ -113,9 +112,9 @@ INSERT INTO admin_settings (
   allow_modify_profile_picture
 
 ) VALUES (
-  false, false, false, false, false, false, false, false, false, false, false,
-  false, false, false, false, false, false, false, false, false, false, false,
-  false
+  true, true, true, true, true, true, true, true, true, true, true,
+  true, true, true, true, true, true, true, true, false, true, true,
+  true
 );
 
 
