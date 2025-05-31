@@ -315,24 +315,16 @@ export default function Posts({ isNavOpen }) {
                 <div className="post-info">
                   <div className="post-header">
                     <div className="post-header-photo">
-                      {imageExistsMap[post.sender] ? (
-                        <img
-                          className="user-row-social-small-img"
-                          style={{ marginRight: "0px" }}
-                          src={`${BACKEND}/media/profile_pictures/${post.sender}/profilePicture.jpg`}
-                          alt="User"
-                          onClick={() => handleImageClick(post.sender)}
-                        />
-                      ) : (
-                        <img
-                          className="user-row-social-small-img"
-                          style={{ marginRight: "0px" }}
-                          src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                          alt="User"
-                          onClick={() => handleImageClick(post.sender)}
-                        />
-                      )}
-
+                      <img
+                        className="user-row-social-small-img"
+                        onClick={() => setShowLargePicture(post.sender)}
+                        src={`${BACKEND}/media/profile_pictures/${post.sender}/profilePicture.jpg`}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/images/profilePicture.jpg';
+                        }}
+                        alt="Profile"
+                      />
 
 
                     </div>
@@ -394,7 +386,7 @@ export default function Posts({ isNavOpen }) {
                   )}
 
                   {
-                  // HERE superAdminSettings.allowPostInteractions &&
+                    // HERE superAdminSettings.allowPostInteractions &&
                     <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} setError={setError} />
                   }
 

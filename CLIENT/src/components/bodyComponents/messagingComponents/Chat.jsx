@@ -61,7 +61,6 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("")
-  const [imageExists, setImageExists] = useState(false);
   const [showLargePicture, setShowLargePicture] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState(null);
   const inputRef = useRef(null);
@@ -83,17 +82,6 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
     setHasNewMessages(false);
   }, [filters, loggedInUser, userId]);
 
-  // Check if profile picture exists for the user
-  useEffect(() => {
-    const checkImage = async () => {
-      const result = await profilePictureExists(userId);
-      setImageExists(result);
-    };
-
-    if (userId) {
-      checkImage();
-    }
-  }, [userId]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -205,21 +193,17 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
 
         {/* Displaying the Profile Picture or Default Icon */}
         <div className="chat-one-user-info">
-          {imageExists ? (
-            <img
-              className="user-row-chat-small-img"
-              src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
-              alt="Profile"
-              onClick={() => setShowLargePicture(true)}
-            />
-          ) : (
-            <img
-              className="user-row-chat-small-img"
-              src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-              alt="Profile"
-              onClick={() => setShowLargePicture(true)}
-            />
-          )}
+          <img
+            className="user-row-chat-small-img"
+            src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
+            alt="Profile"
+            onClick={() => setShowLargePicture(true)}
+            onError={(e) => {
+              e.target.onerror = null; // prevent infinite loop
+              e.target.src = '/images/profilePicture.jpg';
+            }}
+          />
+
 
           {/* Displaying Large Picture when clicked */}
           {showLargePicture && (
@@ -229,7 +213,6 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
 
 
               <img
-
                 className="users-all-picture-large"
                 src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
                 alt="Large Profile"
@@ -249,7 +232,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
           </h2>
 
 
-          {superAdminSettings.allowSendMessages && adminSettings.allowSendMessages && 
+          {superAdminSettings.allowSendMessages && adminSettings.allowSendMessages &&
             <div className="users-messaging-send">
               <input
                 placeholder="Aa"
@@ -321,15 +304,15 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
                             {message.is_deleted ? `This message was deleted` : message.content}
                           </p>
                           {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
-                          {!message.is_deleted && isSender && 
-                          superAdminSettings.allowDeleteMessages && adminSettings.allowDeleteMessages &&  
-                          (
-                            <FontAwesomeIcon
-                              className="delete-chat-messsage"
-                              icon={faTrashAlt}
-                              onClick={() => handleShowConfirmDelete(message.id)} // Pass message.id here
-                            />
-                          )}
+                          {!message.is_deleted && isSender &&
+                            superAdminSettings.allowDeleteMessages && adminSettings.allowDeleteMessages &&
+                            (
+                              <FontAwesomeIcon
+                                className="delete-chat-messsage"
+                                icon={faTrashAlt}
+                                onClick={() => handleShowConfirmDelete(message.id)} // Pass message.id here
+                              />
+                            )}
                         </>
                       ) : (
                         <div className="confirm-delete-chat">

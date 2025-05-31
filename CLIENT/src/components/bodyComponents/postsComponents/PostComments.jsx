@@ -353,24 +353,16 @@ export default function PostComments({ isNavOpen }) {
           <div className="post-info post-info-modal">
             <div className="post-header">
               <div className="post-header-photo">
-                {imageExistsMap[postSender] ? (
-                  <img
-                    className="user-row-social-small-img"
-                    style={{ marginRight: "0px" }}
-                    src={`${BACKEND}/media/profile_pictures/${postSender}/profilePicture.jpg`}
-                    alt="User"
-                    onClick={() => handleImageClick(postSender)}
-                  />
-                ) : (
-                  <img
-                    className="user-row-social-small-img"
-                    style={{ marginRight: "0px" }}
-                    src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                    alt="User"
-                    onClick={() => handleImageClick(postSender)}
-                  />
-                )}
-
+                <img
+                  className="user-row-social-small-img"
+                  onClick={() => setShowLargePicture(postSender)}
+                  src={`${BACKEND}/media/profile_pictures/${postSender}/profilePicture.jpg`}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/images/profilePicture.jpg';
+                  }}
+                  alt="Profile"
+                />
 
 
               </div>
@@ -482,24 +474,16 @@ export default function PostComments({ isNavOpen }) {
                 < div key={comment.id}>
                   <div className="post-comment-container" key={comment.id}>
                     <div className="post-comment-image">
-                      {imageExistsMap[comment.commenter] ? (
-                        <img
-                          className="user-row-social-small-img"
-                          style={{ marginRight: "0px" }}
-                          src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg`}
-                          alt="User"
-                          onClick={() => handleImageClick(comment.commenter)}
-                        />
-
-                      ) : (
-                        <img
-                          className="user-row-social-small-img"
-                          style={{ marginRight: "0px" }}
-                          src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                          alt="User"
-                          onClick={() => handleImageClick(comment.commenter)}
-                        />
-                      )}
+                      <img
+                        className="user-row-social-small-img"
+                        onClick={() => setShowLargePicture(comment.commenter)}
+                        src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg`}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/images/profilePicture.jpg';
+                        }}
+                        alt="Profile"
+                      />
                     </div>
                     <div className="post-comment-name-content">
                       <div

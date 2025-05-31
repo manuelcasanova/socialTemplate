@@ -157,51 +157,35 @@ export default function SocialMuted({ isNavOpen }) {
 
               <div className="user-row-social" key={user.user_id} style={{flexDirection: 'row'}}>
                 <div className="user-info">
-                  {imageExistsMap[user.user_id] ? (
-                    <img
-                      className="user-row-social-small-img "
-                      onClick={() => setShowLargePicture(user.user_id)}
-                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
-                      alt="Profile"
-                    />
-
-                  ) : (
-
-                    <img
-                      className="user-row-social-small-img "
-                      onClick={() => setShowLargePicture(user.user_id)}
-                      src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                      alt="Profile"
-                    />
-
-                  )}
-
-
-
-                  {showLargePicture === user.user_id && (
-                    <div
-                      className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
-                      onClick={() => setShowLargePicture(null)}
-                    >
                       <img
-                        className='users-all-picture-large'
-                        onClick={() => setShowLargePicture(null)}
-                        src={imageExistsMap[user.user_id]
-                          ? `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`
-                          : `${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                        className="user-row-social-small-img"
+                        onClick={() => setShowLargePicture(user.user_id)}
+                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                         onError={(e) => {
-                          // Prevent infinite loop in case of repeated errors
                           e.target.onerror = null;
-
-                          // Check if the fallback image has already been set to avoid infinite loop
-                          if (e.target.src !== `${BACKEND}/media/profile_pictures/s/profilePicture.jpg`) {
-                            // Fall back to the default user image if the profile picture fails
-                            e.target.src = '/images/profilePicture.jpg';
-                          }
+                          e.target.src = '/images/profilePicture.jpg';
                         }}
+                        alt="Profile"
                       />
-                    </div>
-                  )}
+
+
+
+                      {showLargePicture === user.user_id && (
+                        <div
+                          className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
+                          onClick={() => setShowLargePicture(null)}
+                        >
+                          <img
+                            className="users-all-picture-large"
+                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/images/profilePicture.jpg';
+                            }}
+                            alt="Large Profile"
+                          />
+                        </div>
+                      )}
 
                   <p>
                     {user.username.startsWith('inactive') ? 'Inactive User' : user.username}

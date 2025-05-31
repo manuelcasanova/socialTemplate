@@ -106,18 +106,23 @@ margin-left: 90%;
   /* margin-bottom: 20px; */
 }
 
-.user-row-chat-small-img {
+.user-row-chat-small-img, .user-with-messages-row-chat-small-img {
   max-height: 4em;
   max-width: 4em;
-  margin: auto;
-  margin-bottom: 20px;
   width: 100px;
   height: 100px;
   object-fit: cover;
   border-radius: 50%;
   transition: transform 0.3s ease;
   cursor: pointer;
+}
 
+.user-row-chat-small-img {
+  margin: auto;
+}
+
+.user-with-messages-row-chat-small-img {
+  margin-right: 1em;
 }
 
 .messages-container {
