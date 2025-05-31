@@ -68,7 +68,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
 
 useEffect(() => {
     if (passwordRef.current) {
-        if (email.trim().toLowerCase() === 'admin@example.com') {
+        if (email.trim().toLowerCase() === 'admin@socialtemplate.manucasanova.com') {
             passwordRef.current.value = DEFAULT_PASSWORD;
         } else {
             passwordRef.current.value = '';
@@ -282,7 +282,7 @@ useEffect(() => {
                                 id="persist"
                                 onChange={(e) => {
                                     if (e.target.checked) {
-                                        setEmail('admin@example.com');
+                                        setEmail('admin@socialtemplate.manucasanova.com');
                                     } else {
                                         setEmail('');
                                     }
