@@ -444,11 +444,26 @@ const hardDeleteUser = async (req, res) => {
 
 const adminVersionSoftDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
+    const requestingUserId = req.body.loggedInUser
 
     try {
-
         if (userId === "1") {
             return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
+        }
+
+        // Step 0: Check if the user to be deleted is a SuperAdmin
+        const superAdminCheck = await pool.query(
+            'SELECT * FROM user_roles WHERE user_id = $1 AND role_id = 1',
+            [userId]
+        );
+
+        if (superAdminCheck.rows.length > 0) {
+            const assignedBy = superAdminCheck.rows[0].assigned_by_user_id;
+            if (parseInt(assignedBy) !== parseInt(requestingUserId)) {
+                return res.status(403).json({
+                    error: 'You are not authorized to delete this SuperAdmin because you did not assign their role.'
+                });
+            }
         }
 
         // Step 1: Fetch the current user's email, username

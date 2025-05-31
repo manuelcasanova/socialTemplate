@@ -68,7 +68,7 @@ export default function SocialMuted({ isNavOpen }) {
 
 
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
-  const [imageExistsMap, setImageExistsMap] = useState({});
+
   const [showLargePicture, setShowLargePicture] = useState(null)
 
   const [filterUsername, setFilterUsername] = useState("");
@@ -90,20 +90,6 @@ export default function SocialMuted({ isNavOpen }) {
     //, superAdminSettings, adminSettings
   ]);
 
-  // Check if profile picture exists for each user and store the result
-  useEffect(() => {
-    const checkImages = async () => {
-      const result = {};
-      for (const user of users) {
-        result[user.user_id] = await profilePictureExists(user.user_id);
-      }
-      setImageExistsMap(result);
-    };
-
-    if (users.length > 0) {
-      checkImages();
-    }
-  }, [users]);
 
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
