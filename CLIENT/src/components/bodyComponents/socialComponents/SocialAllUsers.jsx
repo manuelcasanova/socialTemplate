@@ -105,6 +105,15 @@ export default function SocialAllUsers({ isNavOpen }) {
 
   }, [axiosPrivate, filters, hasMutedChanges, submittedFilterUsername, superAdminSettings, adminSettings]);
 
+  useEffect(() => {
+  if (showLargePicture !== null) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+}, [showLargePicture]);
+
+
   const handleMutedChanges = () => {
     setHasMutedChanges(prevState => !prevState);
   };
@@ -125,7 +134,7 @@ export default function SocialAllUsers({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Social - All Users</h2>
+        <h2>Social - All Users - D</h2>
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}  onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
@@ -143,7 +152,10 @@ export default function SocialAllUsers({ isNavOpen }) {
 
                     <img
                       className="user-row-social-small-img"
-                      onClick={() => setShowLargePicture(user.user_id)}
+                      onClick={() => {
+                         if (inputRef.current) inputRef.current.blur();
+                        setShowLargePicture(user.user_id)}
+                        }
                       src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                       onError={(e) => {
                         e.target.onerror = null;

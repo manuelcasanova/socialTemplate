@@ -1,7 +1,42 @@
 .filter-wrapper {
+   position: relative;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   display: flex;
+}
+
+
+.input-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.filter-container-input-username {
+  width: 100%;
+  padding: 10px 40px 10px 10px; /* Padding right for the icon */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px; /* Position on the right inside the input */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #888; /* Adjust the color of the magnifying glass */
+  pointer-events: all; /* Ensures the icon doesn't block user input */
+  z-index: 10;
+}
+
+.search-icon:hover {
+  cursor: pointer;
 }
 
 .filter-toggle {
