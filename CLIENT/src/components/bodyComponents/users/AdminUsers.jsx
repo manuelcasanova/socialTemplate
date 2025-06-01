@@ -68,11 +68,11 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
           errorMsg += ` ${err.message}`;
         }
 
-              // Prevent redundant setState
-      if (errorMsg !== prevError.current) {
-        prevError.current = errorMsg;
-        setError(errorMsg);
-      }
+        // Prevent redundant setState
+        if (errorMsg !== prevError.current) {
+          prevError.current = errorMsg;
+          setError(errorMsg);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -119,7 +119,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
       //   setError(errorMsg);  // Update the state to show the error message
       // }
       setError(errorMsg);
-prevError.current = errorMsg;
+      prevError.current = errorMsg;
     }
   }, [isSuperAdmin]);
 
@@ -167,11 +167,11 @@ prevError.current = errorMsg;
       <div className="admin-users">
         <h2>Admin Users</h2>
         {error && <p className="error-message">{error}</p>}
-         <FilterAdminUsers
+        <FilterAdminUsers
           roles={roles}
           setFilters={setFilters}
           setExpandedUserId={setExpandedUserId}
-        /> 
+        />
         {isLoading ? (
           <LoadingSpinner />
         ) :
@@ -218,9 +218,9 @@ prevError.current = errorMsg;
                         <p>
                           <strong>Username:</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
                         </p>
-                        {/* <p><strong>E-mail:</strong> {user.email}</p>
+                        <p><strong>E-mail:</strong> {user.email}</p>
                         <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
-                        <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p> */}
+                        <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p> 
                         {
                           (superAdminSettings.allowManageRoles || isSuperAdmin) &&
                           <>

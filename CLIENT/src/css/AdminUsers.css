@@ -28,7 +28,7 @@
   /* Ensure it doesn't exceed screen width */
   box-sizing: border-box;
   /* Ensure padding doesn't push it out */
-  overflow-x: auto;
+  /* overflow-x: auto; */
 
   margin: auto;
   /* Vertically and horizontally center child elements */
@@ -100,7 +100,7 @@
 }
 
 .user-info-buttons button {
- 
+
   background-color: transparent;
   color: black;
   border: 1px solid black;
@@ -166,31 +166,37 @@
 .user-info-expanded {}
 
 .users-all-picture-large {
-  width: 40vw;
-  height: 40vw;
-  border-radius: 50%;
-  border: solid 1px var(--color0);
-  object-fit: cover;
-  object-position: center;
+  width: 50vw;
+  height: 50vw;
   max-width: 300px;
   max-height: 300px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  border: solid 1px var(--color0);
 }
 
 .large-picture {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  /* background-color: rgba(0, 0, 0, 0.7); */
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
+  overflow: hidden;
 }
+
 
 /*Override user-row-social img*/
 .large-picture img {
+  max-width: 90%;
+  /* Ensure the image is responsive */
+  max-height: 90%;
+  /* Keep the image within viewport */
   max-height: 300px;
 }
 
@@ -309,11 +315,14 @@ button:hover {
     flex-direction: column;
   }
 
-
-
   .user-info-buttons button {
     /* margin-left: 0; */
   }
+
+  .large-picture {
+  height: 90vh;
+}
+
 }
 
 @media (min-width: 581px) and (max-width: 1024px) {

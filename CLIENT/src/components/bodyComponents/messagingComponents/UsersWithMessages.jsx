@@ -63,12 +63,12 @@ export default function UsersWithMessages({ isNavOpen }) {
   const inputRef = useRef(null);
   // console.log("users with new messages", usersWithNewMessages)
 
-  useEffect(() => {
-    // Focus the input field after the component mounts
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  });
+  // useEffect(() => {
+  //   // Focus the input field after the component mounts
+  //   if (inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // });
 
   useEffect(() => {
     fetchNewMessagesNotification(loggedInUser, setUsersWithNewMessages, setIsLoading, setError)

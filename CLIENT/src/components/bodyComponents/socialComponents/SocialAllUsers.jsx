@@ -75,13 +75,6 @@ export default function SocialAllUsers({ isNavOpen }) {
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [showLargePicture, setShowLargePicture] = useState(null)
 
-  useEffect(() => {
-    // Focus the input field after the component mounts
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  });
-
   // Reset the error message whenever filters change
   useEffect(() => {
     setError(null); // Clear error when filters change
@@ -105,13 +98,14 @@ export default function SocialAllUsers({ isNavOpen }) {
 
   }, [axiosPrivate, filters, hasMutedChanges, submittedFilterUsername, superAdminSettings, adminSettings]);
 
-  useEffect(() => {
-  if (showLargePicture !== null) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
-  }
-}, [showLargePicture]);
+
+  const handleImageClick = (userId) => {
+  setShowLargePicture(userId);  // Show large picture modal
+};
+
+const closeModal = () => {
+  setShowLargePicture(null);  // Hide the large picture
+};
 
 
   const handleMutedChanges = () => {
@@ -134,9 +128,9 @@ export default function SocialAllUsers({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Social - All Users - D</h2>
+        <h2>Social - All Users</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef}  onSearch={() => setSubmittedFilterUsername(filterUsername)} />
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         {allUsersMutedOrMe ? (
           <p>No users available or all users are muted.</p>
@@ -152,10 +146,8 @@ export default function SocialAllUsers({ isNavOpen }) {
 
                     <img
                       className="user-row-social-small-img"
-                      onClick={() => {
-                         if (inputRef.current) inputRef.current.blur();
-                        setShowLargePicture(user.user_id)}
-                        }
+                    onClick={() => handleImageClick(user.user_id)}
+
                       src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
                       onError={(e) => {
                         e.target.onerror = null;
@@ -169,7 +161,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                     {showLargePicture === user.user_id && (
                       <div
                         className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
-                        onClick={() => setShowLargePicture(null)}
+                         onClick={() => closeModal()} 
                       >
                         <img
                           className="users-all-picture-large"
@@ -200,7 +192,7 @@ export default function SocialAllUsers({ isNavOpen }) {
                           ) && superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature && (
 
                             <button
-                        
+
                               onClick={() => navigate(`/messages/${user.user_id}`)}
                             >
 
@@ -212,32 +204,32 @@ export default function SocialAllUsers({ isNavOpen }) {
                             </button>
                           )
                         }
-                    
 
 
-                      <FollowUserButton
 
-                        followeeId={user.user_id}
-                        followerId={loggedInUser}
-                        followersAndFollowee={followersAndFollowee}
-                        setFollowersAndFollowee={setFollowersAndFollowee}
-                        userLoggedInObject={auth}
-                        setError={setError}
-                        isSuperAdmin={isSuperAdmin}
-                      />
+                        <FollowUserButton
 
-                      <MuteUserButton
-                        userId={user.user_id}
-                        userLoggedin={loggedInUser}
-                        // isMuted={isMuted} 
-                        setMutedUsers={setMutedUsers}
-                        onMutedChange={handleMutedChanges}
-                        setError={setError}
-                        isSuperAdmin={isSuperAdmin}
-                      />
-                        </div>
+                          followeeId={user.user_id}
+                          followerId={loggedInUser}
+                          followersAndFollowee={followersAndFollowee}
+                          setFollowersAndFollowee={setFollowersAndFollowee}
+                          userLoggedInObject={auth}
+                          setError={setError}
+                          isSuperAdmin={isSuperAdmin}
+                        />
+
+                        <MuteUserButton
+                          userId={user.user_id}
+                          userLoggedin={loggedInUser}
+                          // isMuted={isMuted} 
+                          setMutedUsers={setMutedUsers}
+                          onMutedChange={handleMutedChanges}
+                          setError={setError}
+                          isSuperAdmin={isSuperAdmin}
+                        />
+                      </div>
                     </>
-                    
+
                   }
 
                 </div>

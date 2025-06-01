@@ -66,13 +66,13 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
   const inputRef = useRef(null);
   const MAX_CHAR_LIMIT = 5000;
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }, 100);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (inputRef.current) {
+  //       inputRef.current.focus();
+  //     }
+  //   }, 100);
+  // }, []);
 
 
   // Fetch user data and messages
