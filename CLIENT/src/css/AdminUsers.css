@@ -166,8 +166,8 @@
 .user-info-expanded {}
 
 .users-all-picture-large {
-  width: 50vw;
-  height: 50vw;
+  width: 75vw;
+  height: 75vw;
   max-width: 300px;
   max-height: 300px;
   object-fit: cover;
@@ -182,7 +182,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  /* background-color: rgba(0, 0, 0, 0.7); */
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -193,11 +193,8 @@
 
 /*Override user-row-social img*/
 .large-picture img {
-  max-width: 90%;
-  /* Ensure the image is responsive */
-  max-height: 90%;
-  /* Keep the image within viewport */
-  max-height: 300px;
+max-width: 400px;
+  max-height: 400px;
 }
 
 
