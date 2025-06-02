@@ -25,7 +25,7 @@ const handlePost = async (req, res) => {
     } else {
 
       const secret = process.env.ACCESS_TOKEN_SECRET + oldUser[0].password;
-      const token = jwt.sign({ email: oldUser[0].email, id: oldUser[0].useruser_id }, secret, { expiresIn: '15m' });
+      const token = jwt.sign({ email: oldUser[0].email, id: oldUser[0].useruser_id }, secret, { expiresIn: '1h' });
       const link = `${BASE_URL}/forgot-password/${oldUser[0].user_id}/${token}`;
 
       // console.log("link", link)
@@ -39,13 +39,6 @@ const handlePost = async (req, res) => {
           pass: process.env.RESET_EMAIL_PASSWORD
         }
       });
-
-      // let mailOptions = {
-      //   from: process.env.RESET_EMAIL,
-      //   to: email,
-      //   subject: 'PASSWORD RESET FULLSTACK TEMPLATE',
-      //   text: `This link is valid for 15 minutes. Follow the instructions to enter a valid password: ${link} `
-      // };
 
       let mailOptions = {
         from: process.env.RESET_EMAIL,
@@ -122,7 +115,7 @@ const handlePost = async (req, res) => {
                     Hi there,
                   </p>
                   <p>
-                    We received a request to reset your password. This link is valid for 15 minutes. Please click the button below to set a new password.
+                    We received a request to reset your password. This link is valid for 1 hour. Please click the button below to set a new password.
                   </p>
                   <a href="${link}" class="reset-link">Reset Password</a>
                   <p>
