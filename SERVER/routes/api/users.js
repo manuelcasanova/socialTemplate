@@ -73,7 +73,7 @@ router.route('/')
     async (req, res, next) => {
       try {
         verifyRoles(
-        'Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed'
+        'Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_registered'
         // 'ForceError'
         )(req, res, next);
       } catch (err) {
@@ -87,7 +87,7 @@ router.route('/')
   .get(
     async (req, res, next) => {
       try {
-        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_not_subscribed')(req, res, next);
+        verifyRoles('Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_registered')(req, res, next);
       } catch (err) {
         next(err);
       }

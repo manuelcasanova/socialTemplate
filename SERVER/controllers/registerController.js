@@ -41,7 +41,7 @@ const handleNewUser = async (req, res) => {
     user = user.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 
     // Default role if not provided (if the role is user_subscribed, for example)
-    const userRole = role || 'user_not_subscribed'; // Default role can be 'user_not_subscribed'
+    const userRole = role || 'user_registered'; // Default role can be 'user_registered'
 
     try {
         // Encrypt the password
@@ -230,7 +230,7 @@ const handleNewUser = async (req, res) => {
 // Function to return the role_ids for a given role
 const getRoleAssignments = (role) => {
     const roleAssignments = {
-        user_not_subscribed: [5], 
+        user_registered: [5], 
         user_subscribed: [4],     
         moderator: [3],                  
         admin: [2],                  
@@ -238,7 +238,7 @@ const getRoleAssignments = (role) => {
     };
 
     // Return the role ids based on the given role
-    return roleAssignments[role] || [6]; // Default to 'user_not_subscribed' if no match found
+    return roleAssignments[role] || [6]; // Default to 'user_registered' if no match found
 };
 
 
@@ -293,7 +293,7 @@ const handleGoogleSignUp = async (req, res) => {
       const newUserId = userInsertResult.rows[0].user_id;
   
       // Handle user roles and verification (can be skipped or modified as needed)
-      const roleAssignments = getRoleAssignments('user_not_subscribed');
+      const roleAssignments = getRoleAssignments('user_registered');
       const roleQueries = roleAssignments.map(role_id => {
         return pool.query('INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES ($1, $2, $3)', [newUserId, role_id, newUserId]);
       });

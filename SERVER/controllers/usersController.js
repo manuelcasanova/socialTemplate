@@ -665,12 +665,40 @@ const updateRoles = async (req, res) => {
         );
         const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
 
+        
 
         // Step 5: Determine which roles need to be added and removed
         const rolesToAdd = roles.filter(role => !userCurrentRoles.includes(role));
         const rolesToRemove = userCurrentRoles.filter(role => !roles.includes(role));
 
         const loggedInUserRoles = loggedInUserRolesResult.rows.map(row => row.role_name);
+
+        // Step 5.5: Get current role IDs for the user
+        const userCurrentRoleIdsResult = await pool.query(
+            'SELECT role_id FROM user_roles WHERE user_id = $1',
+            [userId]
+        );
+        const userCurrentRoleIds = userCurrentRoleIdsResult.rows.map(row => row.role_id);
+
+        // Define the protected role ID
+        const PROTECTED_ROLE_ID = 5; // User_registered
+
+        // Check if the protected role is currently assigned
+        const hasProtectedRole = userCurrentRoleIds.includes(PROTECTED_ROLE_ID);
+
+        // Check if protected role is being removed
+        const rolesToRemoveIdsResult = await pool.query(
+            `SELECT role_id FROM roles WHERE role_name = ANY($1::text[])`,
+            [rolesToRemove]
+        );
+        const rolesToRemoveIds = rolesToRemoveIdsResult.rows.map(row => row.role_id);
+
+        if (hasProtectedRole && rolesToRemoveIds.includes(PROTECTED_ROLE_ID)) {
+            return res.status(403).json({
+                error: 'You cannot revoke the User_registered role as it would disable user access. To disable a user, please delete their account instead.'
+            });
+        }
+
 
         // Step 6: Prevent non admins/superadmins modifying roles
 
@@ -789,6 +817,7 @@ const updateRoles = async (req, res) => {
 
 
         }
+
 
 
         // Step 14: Remove existing roles from the user (only the roles that need to be removed)

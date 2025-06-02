@@ -4,7 +4,7 @@ INSERT INTO roles (role_name) VALUES
   ('Admin'),
   ('Moderator'),
   ('User_subscribed'),
-  ('User_not_subscribed');
+  ('User_registered');
 
 
 INSERT INTO users (username, email, password, is_verified, is_selected, is_active, profile_picture) VALUES 

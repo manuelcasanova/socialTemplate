@@ -171,7 +171,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
             );
           })}
 
-          <Route element={<RequireAuth allowedRoles={['User_not_subscribed', 'User_subscribed']} />}>
+          <Route element={<RequireAuth allowedRoles={['User_registered', 'User_subscribed']} />}>
             <Route path="/user" element={<User isNavOpen={isNavOpen} />} />
           </Route>
 
