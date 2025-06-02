@@ -17,7 +17,7 @@ import FilterAdminUsers from "./FilterAdminUsers";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 
-export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
+export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, profilePictureKey }) {
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const [users, setUsers] = useState([]);
@@ -196,7 +196,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                       <div className="user-details">
                         <div className="admin-profile-image-container">
                           <img
-                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                            src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                             alt={user.username.startsWith('inactive') ? 'Inactive User profile image' : `${user.username}'s profile image`}
 
                             className="admin-profile-image"

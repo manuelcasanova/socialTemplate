@@ -41,7 +41,7 @@ const profilePictureExists = async (userId) => {
   }
 };
 
-export default function SocialPendingRequests({ isNavOpen, isFollowingNotification, setIsFollowNotification }) {
+export default function SocialPendingRequests({ isNavOpen, isFollowingNotification, setIsFollowNotification, profilePictureKey }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -155,7 +155,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                       <img
                         className="user-row-social-small-img"
                         onClick={() => setShowLargePicture(user.user_id)}
-                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                        src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
@@ -170,7 +170,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                         >
                           <img
                             className="users-all-picture-large"
-                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                            src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = '/images/profilePicture.jpg';

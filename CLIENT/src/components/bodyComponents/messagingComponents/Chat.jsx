@@ -25,18 +25,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-const profilePictureExists = async (userId) => {
-  const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
-  try {
-    const response = await fetch(imageUrl, { method: 'HEAD' });
-    return response.ok;
-  } catch (error) {
-    console.error("Error checking image existence:", error);
-    return false;
-  }
-};
 
-export default function Chat({ isNavOpen, setHasNewMessages }) {
+export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }) {
   const { userId } = useParams();
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -195,7 +185,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
         <div className="chat-one-user-info">
           <img
             className="user-row-chat-small-img"
-            src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
+            src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg?v=${profilePictureKey}`}
             alt="Profile"
             onClick={() => setShowLargePicture(true)}
             onError={(e) => {
@@ -214,7 +204,7 @@ export default function Chat({ isNavOpen, setHasNewMessages }) {
 
               <img
                 className="users-all-picture-large"
-                src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
+                src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg?v=${profilePictureKey}`}
                 alt="Large Profile"
                 onError={(e) => {
                   e.target.onerror = null;

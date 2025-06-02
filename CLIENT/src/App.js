@@ -212,43 +212,43 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey}  />} />
             </Route>
           )}
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="social/following" element={<SocialFollowee isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              <Route path="social/following" element={<SocialFollowee isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="social/followers" element={<SocialFollowers isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              <Route path="social/followers" element={<SocialFollowers isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="social/muted" element={<SocialMuted isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              <Route path="social/muted" element={<SocialMuted isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} />} />
+              <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification}  profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="social/users/:userId" element={<SocialOneUser isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              <Route path="social/users/:userId" element={<SocialOneUser isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+              <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey}  />} />
             </Route>
           )}
 
@@ -285,7 +285,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages} />} />
+              <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages} profilePictureKey={profilePictureKey}  />} />
             </Route>
           )}
 
@@ -297,7 +297,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
           {/* Admin-specific routes */}
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-            <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} customRoles={customRoles} setCustomRoles={setCustomRoles} />} />
+            <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} customRoles={customRoles} setCustomRoles={setCustomRoles} profilePictureKey={profilePictureKey}  />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>

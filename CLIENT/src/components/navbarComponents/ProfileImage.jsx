@@ -10,7 +10,7 @@ export default function ProfileImage({ profilePictureKey, setProfilePictureKey }
 
 
   // Construct the URL for the profile picture
-  const profilePictureUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
+ const profilePictureUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg?v=${profilePictureKey}`;
 
   return (
     <div className="profile-image-container">

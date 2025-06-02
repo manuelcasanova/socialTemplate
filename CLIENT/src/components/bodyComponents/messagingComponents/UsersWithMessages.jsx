@@ -42,7 +42,7 @@ function processUsername(username) {
   }
 }
 
-export default function UsersWithMessages({ isNavOpen }) {
+export default function UsersWithMessages({ isNavOpen, profilePictureKey  }) {
   const { auth } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -144,7 +144,7 @@ export default function UsersWithMessages({ isNavOpen }) {
 
           <img
             className="user-with-messages-row-chat-small-img"
-            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+            src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
             alt="Profile"
             onClick={() => setShowLargePicture(user.user_id)}
             onError={(e) => {
@@ -153,7 +153,7 @@ export default function UsersWithMessages({ isNavOpen }) {
             }}
           />
 
-          
+         
 
 
 
@@ -166,7 +166,7 @@ export default function UsersWithMessages({ isNavOpen }) {
               <img
 
                 className="users-all-picture-large"
-                src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                 alt="Large Profile"
                 onError={(e) => {
                   e.target.onerror = null;

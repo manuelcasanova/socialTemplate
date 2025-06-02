@@ -33,7 +33,7 @@ import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowe
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function SocialAllUsers({ isNavOpen }) {
+export default function SocialAllUsers({ isNavOpen, profilePictureKey  }) {
 
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
@@ -148,7 +148,7 @@ const closeModal = () => {
                       className="user-row-social-small-img"
                     onClick={() => handleImageClick(user.user_id)}
 
-                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                      src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = '/images/profilePicture.jpg';
@@ -165,7 +165,7 @@ const closeModal = () => {
                       >
                         <img
                           className="users-all-picture-large"
-                          src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                          src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = '/images/profilePicture.jpg';

@@ -339,7 +339,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
 
                 <img
-                  src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`}
+                    src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg?v=${profilePictureKey}`}
                   alt="Profile"
                   style={{
                     cursor:

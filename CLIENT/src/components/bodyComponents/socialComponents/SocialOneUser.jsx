@@ -39,7 +39,7 @@ const profilePictureExists = async (userId) => {
   }
 };
 
-export default function SocialOneUser({ isNavOpen }) {
+export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -165,7 +165,7 @@ export default function SocialOneUser({ isNavOpen }) {
                 <img
                   className="user-row-social-small-img"
                   onClick={() => setShowLargePicture(user.user_id)}
-                  src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                  src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                   alt="Profile"
                 />
               ) : (
@@ -181,7 +181,7 @@ export default function SocialOneUser({ isNavOpen }) {
                 <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(null)}>
                   <img
                     className="users-all-picture-large"
-                    src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg`}
+                    src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = '/images/profilePicture.jpg';
