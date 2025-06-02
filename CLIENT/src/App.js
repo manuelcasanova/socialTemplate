@@ -106,7 +106,8 @@ function App() {
   }, []);
 
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [profilePictureKey, setProfilePictureKey] = useState(0);
+ const [profilePictureKey, setProfilePictureKey] = useState(Date.now());
+  // console.log(profilePictureKey, 'profilePictureKey')
 
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);

@@ -23,7 +23,6 @@ import MuteUserButton from "../socialComponents/socialButtons/MuteUserButton";
 //Util functions
 import fetchMutedUsers from "../socialComponents/util_functions/FetchMutedUsers";
 import fetchUsersWithMessages from "../socialComponents/util_functions/FetchUsersWithMessages";
-import { profilePictureExists } from "../../mainComponents/util_functions/ProfilePictureExists";
 import fetchNewMessagesNotification from "./util_functions/FetchNewMessagesNotification";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;

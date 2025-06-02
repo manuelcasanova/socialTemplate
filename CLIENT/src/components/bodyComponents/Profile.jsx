@@ -101,9 +101,6 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
 
 
-
-  const profilePictureUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
-
   const handlePictureClick = () => {
     if (!isTestSuperAdmin) {
       setError(""); // Hide any error message
@@ -167,7 +164,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       if (response?.data?.success) {
         setIsPictureModalVisible(false);
         setImageExists(true);
-        setProfilePictureKey((prevKey) => prevKey + 1);
+        setProfilePictureKey(Date.now());
       } else {
         console.error("Error uploading profile picture:", response?.data?.message);
       }

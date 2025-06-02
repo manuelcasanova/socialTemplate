@@ -9,7 +9,7 @@ INSERT INTO roles (role_name) VALUES
 
 INSERT INTO users (username, email, password, is_verified, is_active, profile_picture) VALUES 
   ('Mrs. Administrator', 'admin@socialtemplate.manucasanova.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, 'admin_pic.jpg'),
-  ('Manuel Casanova', 'manucasanova@hotmail.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, 'admin_pic.jpg')
+  ('Manuel Casanova', 'manuelcasanovafernandez@gmail.com', 'google_auth_token', true, true, 'admin_pic.jpg')
 
 
   -- ,

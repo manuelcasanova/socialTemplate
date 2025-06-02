@@ -4,13 +4,13 @@ import { useContext, useState, useEffect } from "react";
 import AuthContext from '../../context/AuthProvider';
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function ProfileImage({ profilePictureKey, setProfilePictureKey }) {
+export default function ProfileImage({profilePictureKey}) {
   const { auth } = useContext(AuthContext);
   const userId = auth.userId;
 
 
   // Construct the URL for the profile picture
- const profilePictureUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg?v=${profilePictureKey}`;
+  const profilePictureUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg?v=${profilePictureKey}`;
 
   return (
     <div className="profile-image-container">
