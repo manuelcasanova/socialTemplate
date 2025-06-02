@@ -232,13 +232,13 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                                 ...(customRoles?.map(r => r.role_name) || []),
                                 ...(isSuperAdmin ? ['SuperAdmin'] : []),  // Only include SuperAdmin if the user is a SuperAdmin
                               ])].map((role, index) => (
-                                <li key={index} className={role === 'SuperAdmin' || role === 'Admin' ? 'disabled-role' : ''}>
+                                <li key={index} className={role === 'SuperAdmin' || role === 'Admin' || role === 'User_registered' ? 'disabled-role' : ''}>
                                   <input
                                     type="checkbox"
                                     className="checkbox"
                                     checked={user.roles.includes(role)}
                                     disabled={
-                                      role === 'User_registered' || 
+                                      role === 'User_registered' || role === 'User_registered' || 
                                       !(isSuperAdmin || role !== 'SuperAdmin' && role !== 'Admin'
                                       )} 
                                     onChange={(e) => {
