@@ -25,7 +25,7 @@ import RedNotification from '../navbarComponents/RedNotification';
 //Util functions
 import useLogout from '../../hooks/useLogout';
 
-const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification, hasNewMessages, hasPostReports, setHasPostReports, hasCommentsReports, setHasCommentsReports }) => {
+const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification, hasNewMessages, hasPostReports, setHasPostReports, hasCommentsReports, setHasCommentsReports, profilePictureKey }) => {
 
   // console.log(hasPostReports, hasCommentsReports)
 
@@ -206,7 +206,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
             <img
               className="navbar-bottom-small-img"
-              src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg`}
+src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${profilePictureKey}`}
+
               alt="Profile"
               onError={(e) => {
                 e.target.onerror = null;

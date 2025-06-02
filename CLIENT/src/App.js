@@ -325,7 +325,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
         <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
       </Routes>
       <Footer isNavOpen={isNavOpen} />
-      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} setHasNewMessages={setHasNewMessages} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports}/>
+      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} setHasNewMessages={setHasNewMessages} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} profilePictureKey={profilePictureKey}/>
 
     </div>
 
