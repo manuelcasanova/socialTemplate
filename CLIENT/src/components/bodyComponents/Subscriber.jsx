@@ -88,7 +88,7 @@ export default function Subscriber({ isNavOpen }) {
         <div className="interaction-box">
           <h3>Would you like to keep exploring the app?</h3>
           <ul>
-            <li><strong>Sign In as an Administrator:</strong> Log in with the email "admin@example.com" and password G7m!pLz@92aT.</li>
+            <li><strong>Sign In as an Administrator:</strong> Log in with the email "admin@socialtemplate.manucasanova.com" and password G7m!pLz@92aT.</li>
             <li><strong>Check out the admin features:</strong>
               <ul>
                 <li>- Modify user roles in the 'Admin Users' section and use the filter to search by username or ID.</li>

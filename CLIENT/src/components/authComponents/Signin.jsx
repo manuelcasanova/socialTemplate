@@ -358,12 +358,10 @@ useEffect(() => {
                     <Link to="/signup">Sign Up</Link>
                 </div>
 
-              {adminSettings.allowEditPassword &&
                     <div className="have-an-account">
                         <p>Forgot password?</p>
                         <Link to="/resetpassword">Reset</Link>
                     </div>
-                    }
                 
 
             </div>
