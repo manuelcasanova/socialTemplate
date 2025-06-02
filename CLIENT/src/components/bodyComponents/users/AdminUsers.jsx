@@ -238,7 +238,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles }) {
                                     className="checkbox"
                                     checked={user.roles.includes(role)}
                                     disabled={
-                                      role === 'User_registered' || role === 'User_registered' || 
+                                      role === 'User_registered' || 
                                       !(isSuperAdmin || role !== 'SuperAdmin' && role !== 'Admin'
                                       )} 
                                     onChange={(e) => {

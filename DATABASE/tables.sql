@@ -37,7 +37,6 @@ CREATE TABLE users (
   password_reset_token VARCHAR(255),  -- for password reset functionality
   password_reset_expires TIMESTAMPTZ,  -- when the reset token expires, use TIMESTAMPTZ to store in UTC
   is_verified BOOLEAN DEFAULT false,  -- for email/phone verification
-  is_selected BOOLEAN DEFAULT false,
   is_active BOOLEAN DEFAULT true,
   refresh_token VARCHAR(255),
   profile_picture VARCHAR(255),
