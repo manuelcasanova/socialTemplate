@@ -206,7 +206,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
             <img
               className="navbar-bottom-small-img"
-src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${profilePictureKey}`}
+              src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${profilePictureKey}`}
 
               alt="Profile"
               onError={(e) => {
@@ -272,7 +272,7 @@ src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${p
 
       {/* Bottom sheet for social options */}
       <BottomSheet isOpen={activeSheet === 'users'} onClose={() => setActiveSheet(null)}>
-        <h4 style={{marginBottom: '1em'}}>Users</h4>
+        <h4 style={{ marginBottom: '1em' }}>Users</h4>
         <ul>
           {getSubItemsForSection('users').map((item, idx) => (
             <li
@@ -336,13 +336,18 @@ src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${p
 
                     if (['Moderator', 'Users', 'Admin'].includes(label)) {
                       setSubSection(label.toLowerCase());
-                    } else if (label === 'Logout') {
+                    }
+                    else if (label === 'Logout') {
                       setIsFollowNotification(false);
                       setHasCommentsReports(false);
                       setHasPostReports(false);
-                      logout();
                       setActiveSheet(null);
-                      handleNavigate('/');
+
+                      // Delay logout + navigation slightly to allow state update and re-render
+                      setTimeout(() => {
+                        logout();
+                        handleNavigate('/');
+                      }, 50); // ~1 frame
                     } else if (label === 'Sign In') {
                       setActiveSheet(null);
                       handleNavigate('/signin');
@@ -351,6 +356,8 @@ src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${p
                       setActiveSheet(null);
                     }
                   }}
+
+
                 >
 
 
