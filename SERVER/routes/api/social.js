@@ -14,14 +14,16 @@ const checkSocialAccess = (action) => {
           SELECT 
             show_social_feature, 
             allow_follow, 
-            allow_mute
+            allow_mute,
+            show_messages_feature
           FROM global_provider_settings LIMIT 1;
         `),
         pool.query(`
           SELECT 
             show_social_feature, 
             allow_follow, 
-            allow_mute
+            allow_mute,
+            show_messages_feature
           FROM admin_settings LIMIT 1;
         `)
       ]);
@@ -29,10 +31,14 @@ const checkSocialAccess = (action) => {
       const global = globalResult.rows[0] || {};
       const admin = adminResult.rows[0] || {};
 
+      // console.log('global', global)
+      // console.log('admin', admin)
+
       const settings = {
         show_social_feature: global.show_social_feature && admin.show_social_feature,
         allow_follow: global.allow_follow && admin.allow_follow,
         allow_mute: global.allow_mute && admin.allow_mute,
+        show_messages_feature: global.show_messages_feature && admin.show_messages_feature
       };
 
       // console.log('settings in middleware:', settings);
@@ -42,7 +48,7 @@ const checkSocialAccess = (action) => {
 
       let allowedRoles = [];
 
-      if (!settings.show_social_feature) {
+      if (!settings.show_social_feature && !settings.show_messages_feature) {
         allowedRoles = ['SuperAdmin'];
       } else {
         switch (action) {
@@ -55,7 +61,7 @@ const checkSocialAccess = (action) => {
             break;
 
           case 'mute':
-            if (settings.allow_mute) {
+            if (settings.allow_mute || settings.show_messages_feature) {
               allowedRoles = roles;
             } else {
               allowedRoles = ['SuperAdmin'];
