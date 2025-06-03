@@ -24,7 +24,7 @@ import Error from "../Error";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function PostReactions({ isNavOpen }) {
+export default function PostReactions({ isNavOpen, profilePictureKey }) {
 
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const navigate = useNavigate();
@@ -137,7 +137,7 @@ export default function PostReactions({ isNavOpen }) {
             >
               <img
                 className="users-all-picture-large"
-                src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
+                 src={ `${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
                 alt="Profile"
                 onError={(e) => {
                   // Fallback image handling
@@ -162,7 +162,7 @@ export default function PostReactions({ isNavOpen }) {
                       <img
                         className="user-row-social-small-img"
                         style={{ marginRight: "0px" }}
-                        src={`${BACKEND}/media/profile_pictures/${reaction.user_id}/profilePicture.jpg`}
+                         src={ `${BACKEND}/media/profile_pictures/${reaction.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                         alt="User"
                         onClick={() => handleImageClick(reaction.user_id)}
                       />

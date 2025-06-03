@@ -259,26 +259,26 @@ if (loadingPostFeatures || loadingAdminSettings) {
             <>
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>
-                  <Route path="posts/" element={<Posts isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+                  <Route path="posts/" element={<Posts isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
                 </Route>
               )}
 
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>
-                  <Route path="posts/:param" element={<PostComments isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+                  <Route path="posts/:param" element={<PostComments isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
                 </Route>
               )}
 
 
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>
-                  <Route path="posts/reactions/:param" element={<PostReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+                  <Route path="posts/reactions/:param" element={<PostReactions isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
                 </Route>
               )}
 
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>
-                  <Route path="posts/comments/reactions/:param" element={<PostCommentReactions isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
+                  <Route path="posts/comments/reactions/:param" element={<PostCommentReactions isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey}/>} />
                 </Route>
               )}
             </>

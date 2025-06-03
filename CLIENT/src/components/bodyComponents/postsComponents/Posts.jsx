@@ -30,7 +30,7 @@ import { formatDate } from "./util_functions/formatDate";
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 
-export default function Posts({ isNavOpen }) {
+export default function Posts({ isNavOpen, profilePictureKey }) {
   const { auth } = useAuth();
   const isAdmin = auth.roles.includes('Admin');
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -295,7 +295,7 @@ export default function Posts({ isNavOpen }) {
                       <img
                         className="user-row-social-small-img"
                         onClick={() => setShowLargePicture(post.sender)}
-                        src={`${BACKEND}/media/profile_pictures/${post.sender}/profilePicture.jpg`}
+                         src={ `${BACKEND}/media/profile_pictures/${post.sender}/profilePicture.jpg?v=${profilePictureKey}`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
@@ -381,7 +381,7 @@ export default function Posts({ isNavOpen }) {
         >
           <img
             className="users-all-picture-large"
-            src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
+             src={ `${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
             alt="Profile"
             onError={(e) => {
               // Fallback image handling

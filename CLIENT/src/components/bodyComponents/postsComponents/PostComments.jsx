@@ -27,7 +27,7 @@ import PostCommentsInteractions from "./PostCommentsInteractions";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function PostComments({ isNavOpen }) {
+export default function PostComments({ isNavOpen, profilePictureKey }) {
 
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
@@ -355,8 +355,8 @@ export default function PostComments({ isNavOpen }) {
               <div className="post-header-photo">
                 <img
                   className="user-row-social-small-img"
-                  onClick={() => setShowLargePicture(postSender)}
-                  src={`${BACKEND}/media/profile_pictures/${postSender}/profilePicture.jpg`}
+                  onClick={() => setShowLargePicture(postSender)}              
+ src={ `${BACKEND}/media/profile_pictures/${postSender}}/profilePicture.jpg?v=${profilePictureKey}`}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = '/images/profilePicture.jpg';
@@ -430,8 +430,8 @@ export default function PostComments({ isNavOpen }) {
               onClick={() => setShowLargePicture(null)}
             >
               <img
-                className="users-all-picture-large"
-                src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg`}
+                className="users-all-picture-large"              
+ src={ `${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
                 alt="Profile"
                 onError={(e) => {
                   // Fallback image handling
@@ -477,7 +477,7 @@ export default function PostComments({ isNavOpen }) {
                       <img
                         className="user-row-social-small-img"
                         onClick={() => setShowLargePicture(comment.commenter)}
-                        src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg`}
+ src={ `${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg?v=${profilePictureKey}`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
