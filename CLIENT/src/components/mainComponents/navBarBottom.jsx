@@ -338,6 +338,8 @@ src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${p
                       setSubSection(label.toLowerCase());
                     } else if (label === 'Logout') {
                       setIsFollowNotification(false);
+                      setHasCommentsReports(false);
+                      setHasPostReports(false);
                       logout();
                       setActiveSheet(null);
                       handleNavigate('/');
