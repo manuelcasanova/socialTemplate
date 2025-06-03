@@ -63,6 +63,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
 
 
   const postSender = post?.[0]?.sender;
+  console.log('postSender', postSender)
   const postDate = post?.[0]?.date;
   const postVisibility = post?.[0]?.visibility;
   const postContent = post?.[0]?.content;
@@ -179,33 +180,6 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
     }
   };
 
-  const profilePictureExists = async (userId) => {
-    const imageUrl = `${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg`;
-    try {
-      const response = await fetch(imageUrl, { method: 'HEAD' });
-      return response.ok;
-    } catch (error) {
-      console.error("Error checking image existence:", error);
-      return false;
-    }
-  };
-
-  useEffect(() => {
-    const checkSenderImage = async () => {
-      if (postSender) {
-        const exists = await profilePictureExists(postSender);
-        setImageExistsMap((prev) => ({ ...prev, [postSender]: exists }));
-      }
-    };
-
-    checkSenderImage();
-  }, [postSender]);
-
-
-
-  // console.log("postSenderId", postSender)
-
-
   useEffect(() => {
     fetchPostById(postId, setPost, setIsLoading, setError);
     {
@@ -306,25 +280,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
     }
   };
 
-  useEffect(() => {
-    const checkCommenterImages = async () => {
-      const newMap = { ...imageExistsMap };
 
-      for (const comment of postComments) {
-        const commenterId = comment.commenter;
-        if (newMap[commenterId] === undefined) {
-          const exists = await profilePictureExists(commenterId);
-          newMap[commenterId] = exists;
-        }
-      }
-
-      setImageExistsMap(newMap);
-    };
-
-    if (postComments.length > 0) {
-      checkCommenterImages();
-    }
-  }, [postComments]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -353,16 +309,25 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
           <div className="post-info post-info-modal">
             <div className="post-header">
               <div className="post-header-photo">
-                <img
-                  className="user-row-social-small-img"
-                  onClick={() => setShowLargePicture(postSender)}              
- src={ `${BACKEND}/media/profile_pictures/${postSender}}/profilePicture.jpg?v=${profilePictureKey}`}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '/images/profilePicture.jpg';
-                  }}
-                  alt="Profile"
-                />
+
+                {post && postSender ? (
+                  <img
+                    className="user-row-social-small-img"
+                    onClick={() => setShowLargePicture(postSender)}
+                    src={`${BACKEND}/media/profile_pictures/${postSender}/profilePicture.jpg?v=${profilePictureKey}`}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/images/profilePicture.jpg';
+                    }}
+                    alt="Profile"
+                  />
+                ) : (
+                  <img
+                    className="user-row-social-small-img"
+                    src="/images/profilePicture.jpg"
+                    alt="Profile"
+                  />
+                )}
 
 
               </div>
@@ -430,8 +395,8 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
               onClick={() => setShowLargePicture(null)}
             >
               <img
-                className="users-all-picture-large"              
- src={ `${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
+                className="users-all-picture-large"
+                src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
                 alt="Profile"
                 onError={(e) => {
                   // Fallback image handling
@@ -477,7 +442,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
                       <img
                         className="user-row-social-small-img"
                         onClick={() => setShowLargePicture(comment.commenter)}
- src={ `${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg?v=${profilePictureKey}`}
+                        src={`${BACKEND}/media/profile_pictures/${comment.commenter}/profilePicture.jpg?v=${profilePictureKey}`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';

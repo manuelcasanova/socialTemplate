@@ -252,14 +252,14 @@ src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${p
         <h4 style={{ marginBottom: '0.5em' }}>Select a Protected Route</h4>
         <ul
           onClick={() => handleNavigate('/user')}
-          style={{ cursor: 'pointer', marginBottom: '0.5em', borderBottom: '1px solid #eee' }}
+          style={{ cursor: 'pointer', paddingBottom: '10px', marginTop: '2em', borderBottom: '1px solid #eee' }}
         >Accessible to all registered users</ul>
 
         <ul>
           {customRoles?.map((role, index) => (
             <li
               key={role.role_id}
-              style={{ paddingBottom: '10px', borderBottom: '1px solid #eee', cursor: 'pointer' }}
+              style={{ padding: '10px 0px', borderBottom: '1px solid #eee', cursor: 'pointer' }}
               onClick={() => handleNavigate(`/protected-routes/${role.role_name.toLowerCase()}`)}
             >
               {role.role_name}
@@ -272,7 +272,7 @@ src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${p
 
       {/* Bottom sheet for social options */}
       <BottomSheet isOpen={activeSheet === 'users'} onClose={() => setActiveSheet(null)}>
-        <h4>Users</h4>
+        <h4 style={{marginBottom: '1em'}}>Users</h4>
         <ul>
           {getSubItemsForSection('users').map((item, idx) => (
             <li

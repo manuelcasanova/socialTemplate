@@ -62,6 +62,8 @@
   border-radius: 8px;
   border: 1px solid #ddd;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+display: flex;
+flex-wrap: wrap;
 }
 
 .interaction-box h3 {
@@ -80,6 +82,9 @@
   font-size: 1.1rem;
   margin-bottom: 8px;
   color: #444;
+   word-break: break-all; /* or 'break-word' */
+  overflow-wrap: break-word;
+ 
 }
 
 .interaction-box ul li strong {
