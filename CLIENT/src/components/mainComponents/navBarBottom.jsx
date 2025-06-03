@@ -252,7 +252,7 @@ src={`${BACKEND}/media/profile_pictures/${auth?.userId}/profilePicture.jpg?v=${p
         <h4 style={{ marginBottom: '0.5em' }}>Select a Protected Route</h4>
         <ul
           onClick={() => handleNavigate('/user')}
-          style={{ cursor: 'pointer', marginBottom: '0.5em' }}
+          style={{ cursor: 'pointer', marginBottom: '0.5em', borderBottom: '1px solid #eee' }}
         >Accessible to all registered users</ul>
 
         <ul>

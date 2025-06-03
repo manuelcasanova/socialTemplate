@@ -7,14 +7,11 @@ INSERT INTO roles (role_name) VALUES
   ('User_registered');
 
 
-INSERT INTO users (username, email, password, is_verified, is_active, profile_picture) VALUES 
-  ('Mrs. Administrator', 'admin@socialtemplate.manucasanova.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, 'admin_pic.jpg'),
-  ('Manuel Casanova', 'manuelcasanovafernandez@gmail.com', 'google_auth_token', true, true, 'admin_pic.jpg')
-
-
-  -- ,
-  -- ('Manuel Casanova', 'manucasanova@hotmail.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, 'admin_pic.jpg');
-  ;
+INSERT INTO users (username, email, password, is_verified, is_active) VALUES 
+  ('Mrs. Administrator', 'admin@socialtemplate.manucasanova.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true),
+  ('Manuel Casanova', 'manuelcasanovafernandez@gmail.com', 'google_auth_token', true, true),
+  ('Manuel Casanova', 'manucasanova@hotmail.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true);
+  
 
   
 -- INSERT INTO followers (follower_id, followee_id, status, lastmodification, newrequest) VALUES
@@ -44,7 +41,9 @@ VALUES
 (2, 2, 2),
 (2, 3, 2),
 (2, 4, 2),
-(2, 5, 2)
+(2, 5, 2),
+
+(3, 5, 2)
 
 ;
 
