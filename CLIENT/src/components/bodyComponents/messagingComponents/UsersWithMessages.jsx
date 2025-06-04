@@ -8,10 +8,12 @@ import useAuth from "../../../hooks/useAuth";
 //Styling
 
 import '../../../css/AdminUsers.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faTimes, faInfoCircle, faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
 
 //Context
 import ScreenSizeContext from "../../../context/ScreenSizeContext";
-
+import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
@@ -41,9 +43,11 @@ function processUsername(username) {
   }
 }
 
-export default function UsersWithMessages({ isNavOpen, profilePictureKey  }) {
+export default function UsersWithMessages({ isNavOpen, profilePictureKey }) {
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const navigate = useNavigate();
+  const { adminSettings } = useGlobalAdminSettings();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { screenSize } = useContext(ScreenSizeContext);
@@ -54,20 +58,15 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey  }) {
   const [mutedUsers, setMutedUsers] = useState([]);
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [filterUsername, setFilterUsername] = useState("");
-    const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
+  const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
   const [hideMuted, setHideMuted] = useState(true);
   const loggedInUser = auth.userId;
 
   const [showLargePicture, setShowLargePicture] = useState(null)
   const inputRef = useRef(null);
-  // console.log("users with new messages", usersWithNewMessages)
 
-  // useEffect(() => {
-  //   // Focus the input field after the component mounts
-  //   if (inputRef.current) {
-  //     inputRef.current.focus();
-  //   }
-  // });
+  const [showInfoMessage, setShowInfoMessage] = useState(false);
+  const handleShowInfoMessage = () => setShowInfoMessage(prev => !prev);
 
   useEffect(() => {
     fetchNewMessagesNotification(loggedInUser, setUsersWithNewMessages, setIsLoading, setError)
@@ -110,9 +109,27 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey  }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Chats</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)}  />
+        <h2
+          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          Chats
+          {adminSettings.showMessagesFeature && !adminSettings.showSocialFeature && !isSuperAdmin &&
+            <FontAwesomeIcon icon={faInfoCircle}
+              style={{ marginLeft: '10px', height: '15px', cursor: 'pointer' }}
+              onClick={handleShowInfoMessage}
+            />
+          }
+
+        </h2>
+
+        {showInfoMessage && adminSettings.showMessagesFeature && !adminSettings.showSocialFeature && !isSuperAdmin &&
+          <p
+            style={{ margin: '10px 0px' }}
+          >The social connections feature has been disabled by a higher-tier administrator. You can still message users you previously connected with, but messaging new users is no longer available.</p>
+        }
+
+
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
 
         <div className="container-toggle-hide-chat-muted-users">
@@ -141,39 +158,39 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey  }) {
               <div className="user-row-social" key={user.user_id}>
                 <div className="chat-user-info">
 
-          <img
-            className="user-with-messages-row-chat-small-img"
-            src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
-            alt="Profile"
-            onClick={() => setShowLargePicture(user.user_id)}
-            onError={(e) => {
-              e.target.onerror = null; // prevent infinite loop
-              e.target.src = '/images/profilePicture.jpg';
-            }}
-          />
-
-         
+                  <img
+                    className="user-with-messages-row-chat-small-img"
+                    src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                    alt="Profile"
+                    onClick={() => setShowLargePicture(user.user_id)}
+                    onError={(e) => {
+                      e.target.onerror = null; // prevent infinite loop
+                      e.target.src = '/images/profilePicture.jpg';
+                    }}
+                  />
 
 
 
-           {showLargePicture && (
-            // <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(false)}>
-            <div className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
-              onClick={() => setShowLargePicture(false)}>
 
 
-              <img
+                  {showLargePicture && (
+                    // <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(false)}>
+                    <div className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
+                      onClick={() => setShowLargePicture(false)}>
 
-                className="users-all-picture-large"
-                src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
-                alt="Large Profile"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/images/profilePicture.jpg'; // Default fallback image
-                }}
-              />
-            </div>
-          )}
+
+                      <img
+
+                        className="users-all-picture-large"
+                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                        alt="Large Profile"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/images/profilePicture.jpg'; // Default fallback image
+                        }}
+                      />
+                    </div>
+                  )}
 
                   {/* 
 {console.log("user user id", user.user_id)}
@@ -204,6 +221,6 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey  }) {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 }
