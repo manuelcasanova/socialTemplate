@@ -222,7 +222,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
 
 
 
-          {(hasPostReports || hasCommentsReports) ?
+          {((hasPostReports || hasCommentsReports) && isModerator) ?
             <div
               className="bell-container"
               onClick={() => {
