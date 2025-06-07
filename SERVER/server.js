@@ -12,7 +12,7 @@ const customJsonParser = require('./middleware/customJsonParser');
 const verifyJWT = require('./middleware/verifyJWT')
 
 const app = express();
-app.set('trust proxy', true);
+app.set('trust proxy', 1); // Trust only the first proxy
 const PORT = process.env.PORT || 3500;
 const pool = require('./config/db')
 const scheduleSubscriptionUpdates = require('./routes/subscriptionScheduler')
