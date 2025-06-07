@@ -63,7 +63,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
 
 
   const postSender = post?.[0]?.sender;
-  console.log('postSender', postSender)
+  // console.log('postSender', postSender)
   const postDate = post?.[0]?.date;
   const postVisibility = post?.[0]?.visibility;
   const postContent = post?.[0]?.content;
@@ -287,7 +287,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
   }
 
   if (error) {
-    console.log("error if error", error)
+    // console.log("error if error", error)
     return <Error isNavOpen={isNavOpen} error={error} />;
   }
 

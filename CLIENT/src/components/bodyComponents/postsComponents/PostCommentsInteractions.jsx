@@ -25,7 +25,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostCommentsInteractions({ commentId, commentDate, commentCommenter, loggedInUserId, hideFlag, setError, setPostComments }) {
 
-  const {auth} = useAuth()
+  const { auth } = useAuth()
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
 
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -144,7 +144,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
           </div>
           <FontAwesomeIcon icon={faSmile} />
         </div>
-      </>} 
+      </>}
 
       {(superAdminSettings.allowDeleteComments || superAdminSettings.allowFlagComments || isSuperAdmin) && (
         <>
@@ -159,7 +159,8 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
               {((superAdminSettings.allowDeleteComments && adminSettings.allowDeleteComments) || isSuperAdmin) &&
                 <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
               }
-              {((superAdminSettings.allowFlagComments && adminSettings.allowFlagComments)|| isSuperAdmin) &&
+              {((superAdminSettings.allowFlagComments && adminSettings.allowFlagComments) || isSuperAdmin) &&
+                (loggedInUserId !== commentCommenter) &&
                 <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
               }
               <FontAwesomeIcon icon={faXmark}

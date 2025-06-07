@@ -46,7 +46,9 @@ export default function FlagComment({commentId, loggedInUserId, hideFlag, isNavO
       setFlagged(true);
     } catch (err) {
       console.error("Error reporting comment:", err);
-      setError("Failed to report comment.");
+      const errorMessage =
+        err.response?.data?.error || "An unexpected error occurred.";
+      setError(errorMessage);
     }
   };
 

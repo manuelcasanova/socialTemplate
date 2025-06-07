@@ -19,12 +19,12 @@ const getCommentReport = async (req, res, next) => {
     WHERE cr.status = 'Reported'
     ORDER BY cr.reported_at DESC;
   `;
-  
+
     // Execute the query
     const { rows } = await pool.query(query);
-  
+
     if (rows.length === 0) {
-      return res.status(200).json([]); 
+      return res.status(200).json([]);
     }
 
     return res.status(200).json(rows);
@@ -186,6 +186,25 @@ const reportComment = async (req, res, next) => {
     // Begin transaction
     await pool.query('BEGIN');
 
+    // Check if the comment exists and retrieve its author
+    const commentQuery = `
+      SELECT commenter FROM posts_comments WHERE id = $1;
+    `;
+    const { rows: commentRows } = await pool.query(commentQuery, [comment_id]);
+
+    if (commentRows.length === 0) {
+      await pool.query('ROLLBACK');
+      return res.status(404).json({ error: 'Comment not found.' });
+    }
+
+    const commentAuthor = commentRows[0].commenter;
+
+    // Prevent users from reporting their own comments
+    if (commentAuthor === reported_by) {
+      await pool.query('ROLLBACK');
+      return res.status(400).json({ error: 'You cannot report your own comment.' });
+    }
+
     // Check if the comment_id already exists in post_comments_reports
     const existingPostQuery = `
       SELECT * FROM post_comments_reports WHERE comment_id = $1;
@@ -207,7 +226,7 @@ const reportComment = async (req, res, next) => {
       }
 
       // If the comment exists but hasn't been reported yet, update the record
-      const status = 'Reported'; 
+      const status = 'Reported';
       const reportedAt = new Date();
 
       const updateReportQuery = `
@@ -235,7 +254,7 @@ const reportComment = async (req, res, next) => {
 
     } else {
       // If no existing report found, create a new report
-      const status = 'Reported'; 
+      const status = 'Reported';
       const reportedAt = new Date();
 
       const insertReportQuery = `
@@ -286,7 +305,7 @@ const addReportHistory = async (req, res) => {
 
     const reportId = report.rows[0].id;
 
-// console.log ("addReportHistory reportId", reportId)
+    // console.log ("addReportHistory reportId", reportId)
 
     // Insert into history table
     await pool.query(
@@ -363,14 +382,14 @@ ORDER BY h.changed_at DESC;
 
 
 module.exports = {
-getCommentReport,
-getHiddenComments,
-reportCommentOk,
-addCommentReportHistory,
-hasReported,
-hasHidden,
-reportComment,
-reportCommentInappropriate,
-addReportHistory,
-getCommentReportHistory
+  getCommentReport,
+  getHiddenComments,
+  reportCommentOk,
+  addCommentReportHistory,
+  hasReported,
+  hasHidden,
+  reportComment,
+  reportCommentInappropriate,
+  addReportHistory,
+  getCommentReportHistory
 };
