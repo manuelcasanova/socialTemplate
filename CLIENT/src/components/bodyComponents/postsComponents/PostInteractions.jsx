@@ -210,9 +210,10 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
                     }
 
                     {
-                    
-                    ((superAdminSettings.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin )&&
+                    ((superAdminSettings.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin) && 
+                     (loggedInUserId !== postSender) &&
                       <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
+
                     }
                     <FontAwesomeIcon icon={faXmark}
                       onClick={() => setShowEllipsisMenu(prev => !prev)}

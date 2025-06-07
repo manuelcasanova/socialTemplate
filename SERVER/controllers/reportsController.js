@@ -9,8 +9,8 @@ const hasReported = async (req, res, next) => {
       return res.status(400).json({ error: 'post_id and user_id are required as query parameters.' });
     }
 
-// console.log("post_id", post_id)
-// console.log("user_id", user_id)
+    // console.log("post_id", post_id)
+    // console.log("user_id", user_id)
 
     const checkQuery = `
       SELECT 1 FROM post_reports
@@ -99,6 +99,15 @@ const reportPost = async (req, res, next) => {
     `;
     const { rows: existingPostRows } = await pool.query(existingPostQuery, [post_id]);
 
+    const postSenderIdQuery = `SELECT sender from posts where id = $1`
+    const { rows } = await pool.query(postSenderIdQuery, [post_id])
+
+    const postSenderId = rows[0]?.sender;
+
+    if (postSenderId === reported_by) {
+      return res.status(400).json({ err: 'You cannot report your own posts.' });
+    }
+
     // Check if any report exists for the post
     if (existingPostRows.length > 0) {
       // Check if the post is already reported or inappropriate
@@ -111,6 +120,8 @@ const reportPost = async (req, res, next) => {
         await pool.query('ROLLBACK');
         return res.status(400).json({ error: 'Cannot report a post marked as Inappropriate.' });
       }
+
+
 
       // Update the existing report if it's not already reported or inappropriate
       const updateReportQuery = `
@@ -208,9 +219,9 @@ const getPostReport = async (req, res, next) => {
 
     // Execute the query
     const { rows } = await pool.query(query);
-  
+
     if (rows.length === 0) {
-      return res.status(200).json([]); 
+      return res.status(200).json([]);
     }
 
 
@@ -265,7 +276,7 @@ const addReportHistory = async (req, res) => {
 
     const reportId = report.rows[0].id;
 
-// console.log ("addReportHistory reportId", reportId)
+    // console.log ("addReportHistory reportId", reportId)
 
     // Insert into history table
     await pool.query(

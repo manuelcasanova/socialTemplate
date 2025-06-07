@@ -8,7 +8,7 @@ import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
-export default function FlagPost({postId, loggedInUserId, hideFlag, isNavOpen, setError}) {
+export default function FlagPost({ postId, loggedInUserId, hideFlag, isNavOpen, setError }) {
 
   // console.log("postId in FlagPost", postId)
 
@@ -49,29 +49,31 @@ export default function FlagPost({postId, loggedInUserId, hideFlag, isNavOpen, s
       setFlagged(true);
     } catch (err) {
       console.error("Error reporting post:", err);
-      setError("Failed to report post.");
+      const errorMessage =
+        err.response?.data?.err || "An unexpected error occurred.";
+      setError(errorMessage);
     }
   };
 
-    if (isLoading) {
-      return <LoadingSpinner />;
-    }
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
-  
+
 
   return (
     <div className="post-actions">
-       {!hideFlag && (
-      <button
-        title="Report as inappropriate"
-        onClick={handleFlag}
-        disabled={flagged}
-        style={{ color: flagged ? "red" : "inherit" }}
-      >
-        <FontAwesomeIcon icon={faFlag} />
-        {flagged && <span style={{ marginLeft: "5px", cursor: 'default' }}>Reported. Pending review</span>}
-      </button>
-          )}
+      {!hideFlag && (
+        <button
+          title="Report as inappropriate"
+          onClick={handleFlag}
+          disabled={flagged}
+          style={{ color: flagged ? "red" : "inherit" }}
+        >
+          <FontAwesomeIcon icon={faFlag} />
+          {flagged && <span style={{ marginLeft: "5px", cursor: 'default' }}>Reported. Pending review</span>}
+        </button>
+      )}
     </div>
   )
 }
