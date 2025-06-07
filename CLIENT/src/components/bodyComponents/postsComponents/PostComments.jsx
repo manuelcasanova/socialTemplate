@@ -381,10 +381,14 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
                   Click to view
                 </button>
               </div>
+            ) : post?.[0]?.is_deleted ? (
+              <>
+                <p>*** DELETED POST ***</p>
+                <p style={{textDecoration: 'line-through'}}>{postContent}</p>
+              </>
             ) : (
               <p>{postContent}</p>
             )}
-
 
 
           </div>
