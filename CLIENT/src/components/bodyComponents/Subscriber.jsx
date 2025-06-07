@@ -11,8 +11,9 @@ export default function Subscriber({ isNavOpen }) {
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
 
-  const [isSubscribed, setIsSubscribed] = useState(null);
+  const [isSubscribed, setIsSubscribed] = useState(undefined);
   const [renewalDueDate, setRenewalDueDate] = useState(null)
+
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,8 +24,14 @@ export default function Subscriber({ isNavOpen }) {
     try {
       setLoading(true);
       const response = await axiosPrivate.get(`/users/subscriptions/status/${userId}`);
+
+    if (typeof response.data === 'object' && response.data !== null) {
       setIsSubscribed(response.data.isActive);
-      setRenewalDueDate(response.data.renewalDueDate)
+      setRenewalDueDate(response.data.renewalDueDate);
+    } else {
+      // Fallback if response is just `false` or malformed
+      setIsSubscribed(false);
+    }
     } catch (error) {
       console.error("Error retrieving subscription status:", error);
       setError("Failed to retrieve subscription status. Please try again later.");
@@ -71,7 +78,6 @@ export default function Subscriber({ isNavOpen }) {
   }
 
   const daysRemaining = renewalDueDate ? calculateDaysRemaining(renewalDueDate) : null;
-
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
