@@ -6,40 +6,58 @@ const getAllPosts = async (req, res) => {
   try {
     const loggedInUser = req.query.loggedInUser;
     const filteredUsername = req.query.filterUsername;
-    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
-    const limit = parseInt(req.query.limit) || 20; // Default to 20 posts per page if not provided
-    let offset = (page - 1) * limit;// Calculate the offset for pagination
-
-    // Ensure offset is an integer (avoid any BigInt confusion)
-    offset = Number(offset); // Explicitly cast to a number to avoid any type issues
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    let offset = (page - 1) * limit;
+    offset = Number(offset);
 
     if (!loggedInUser) {
       return res.status(400).json({ error: 'Missing or invalid loggedInUser ID.' });
     }
 
-    // Step 1: Resolve filteredUsername to filteredUserId using LIKE
+    // Step 1: Get all roles for the logged-in user
+    const roleResult = await pool.query(
+      `
+      SELECT r.role_name
+      FROM user_roles ur
+      JOIN roles r ON ur.role_id = r.role_id
+      WHERE ur.user_id = $1
+      `,
+      [loggedInUser]
+    );
+
+    const roles = roleResult.rows.map(row => row.role_name);
+    const isModerator = roles.includes('Moderator');
+
+    // Step 2: Username filter (optional)
     let filteredUserIdCondition = '';
-    let queryParams = [loggedInUser, offset, limit]; 
+    let queryParams = [loggedInUser, offset, limit];
 
     if (filteredUsername) {
-      // Use LIKE for partial matching on username
       filteredUserIdCondition = `
         AND sender IN (
           SELECT user_id 
           FROM users 
-          WHERE username LIKE $4
+          WHERE username ILIKE $4
         )
       `;
-      queryParams.push(`%${filteredUsername}%`); // Adds the wildcard to search partially
+      queryParams.push(`%${filteredUsername}%`);
     }
 
-    // Step 2: Modify the SQL query to include the filteredUserIdCondition if it exists
-    const query = `
-      SELECT * 
-      FROM posts
-      WHERE 
-        is_deleted = FALSE 
-        AND (
+    // Step 3: Visibility condition
+    let visibilityCondition;
+
+    if (isModerator) {
+      visibilityCondition = `
+        (
+          visibility = 'public'
+          OR visibility = 'followers'
+          OR (visibility = 'private' AND sender = $1)
+        )
+      `;
+    } else {
+      visibilityCondition = `
+        (
           visibility = 'public'
           OR (visibility = 'private' AND sender = $1)
           OR (
@@ -54,6 +72,16 @@ const getAllPosts = async (req, res) => {
             )
           )
         )
+      `;
+    }
+
+    // Step 4: Final query
+    const query = `
+      SELECT * 
+      FROM posts
+      WHERE 
+        is_deleted = FALSE 
+        AND ${visibilityCondition}
         AND NOT EXISTS (
           SELECT 1
           FROM muted
@@ -64,11 +92,11 @@ const getAllPosts = async (req, res) => {
         ${filteredUserIdCondition}
       ORDER BY date DESC
       LIMIT $3 OFFSET $2;
-      ;
     `;
 
     const result = await pool.query(query, queryParams);
     res.status(200).json(result.rows);
+
   } catch (error) {
     console.error('Error retrieving posts:', error);
     res.status(500).json({ error: 'Internal server error' });
