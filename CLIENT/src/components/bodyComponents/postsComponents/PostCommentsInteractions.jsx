@@ -146,30 +146,65 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
         </div>
       </>}
 
-      {(superAdminSettings.allowDeleteComments || superAdminSettings.allowFlagComments || isSuperAdmin) && (
-        <>
+{(adminSettings.allowDeleteComments || adminSettings.allowFlagComments || isSuperAdmin) && (
+  <>
+    {!showEllipsisMenu && (
+      <FontAwesomeIcon 
+        icon={faEllipsisH}
+        onClick={() => setShowEllipsisMenu(prev => !prev)}
+        style={{
+          display: 
+            // Case 1: If neither delete nor flag is allowed, hide the ellipsis
+            !(adminSettings.allowDeleteComments || adminSettings.allowFlagComments) 
+            ? 'none'  
+            // Case 2: If delete is allowed but flag is not, show ellipsis only if it's the user's own comment
+            : (adminSettings.allowDeleteComments && !adminSettings.allowFlagComments && loggedInUserId === commentCommenter) 
+            // Case 3: If flag is allowed, show ellipsis only if the logged-in user is not the commenter
+            || (adminSettings.allowFlagComments && loggedInUserId !== commentCommenter)
+            // Case 4: Show ellipsis for super admins regardless of permissions
+            || isSuperAdmin 
+            ? 'inline' 
+            : 'none'  // Default case: hide the ellipsis
+        }}
+      />
+    )}
 
-          {!showEllipsisMenu && (
-            <FontAwesomeIcon icon={faEllipsisH}
-              onClick={() => setShowEllipsisMenu(prev => !prev)}
-            />
-          )}
-          {showEllipsisMenu && (
-            <div className="post-menu-dropdown">
-              {((superAdminSettings.allowDeleteComments && adminSettings.allowDeleteComments) || isSuperAdmin) &&
-                <CommentDelete commentId={commentId} loggedInUserId={loggedInUserId} commentCommenter={commentCommenter} setError={setError} setPostComments={setPostComments} />
-              }
-              {((superAdminSettings.allowFlagComments && adminSettings.allowFlagComments) || isSuperAdmin) &&
-                (loggedInUserId !== commentCommenter) &&
-                <FlagComment commentId={commentId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
-              }
-              <FontAwesomeIcon icon={faXmark}
-                onClick={() => setShowEllipsisMenu(prev => !prev)}
-              />
-            </div>
-          )}
+    {showEllipsisMenu && (
+      <div className="post-menu-dropdown">
+        {/* Delete option (show if delete is allowed and it's the user's own comment) */}
+        {((superAdminSettings.allowDeleteComments && adminSettings.allowDeleteComments) || isSuperAdmin) && 
+          loggedInUserId === commentCommenter && 
+          <CommentDelete 
+            commentId={commentId} 
+            loggedInUserId={loggedInUserId} 
+            commentCommenter={commentCommenter} 
+            setError={setError} 
+            setPostComments={setPostComments} 
+          />
+        }
 
-        </>)}
+        {/* Flag option (show if flag is allowed and the commenter is not the logged-in user) */}
+        {((superAdminSettings.allowFlagComments && adminSettings.allowFlagComments) || isSuperAdmin) && 
+          loggedInUserId !== commentCommenter && 
+          <FlagComment 
+            commentId={commentId} 
+            loggedInUserId={loggedInUserId} 
+            hideFlag={hideFlag} 
+            setError={setError} 
+          />
+        }
+
+        <FontAwesomeIcon icon={faXmark} 
+          onClick={() => setShowEllipsisMenu(prev => !prev)} 
+        />
+      </div>
+    )}
+  </>
+)}
+
+
+
+
 
 
 
