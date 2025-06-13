@@ -224,7 +224,7 @@ useEffect(() => {
                 withCredentials: true,
             });
             // You can show a success message here if needed
-            setSuccessMsg('Verification email resent successfully!');
+            setSuccessMsg('The verification email has been successfully resent. It usually arrives within a few seconds, but depending on traffic, it may take up to several minutes—up to 30 minutes in some cases.');
             setErrMsg('');
         } catch (error) {
             // Handle error (e.g., invalid user, email mismatch, etc.)

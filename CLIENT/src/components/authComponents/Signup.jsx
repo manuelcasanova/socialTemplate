@@ -328,6 +328,7 @@ setErrMsg('');
               <div className="success-message">
                 <h2>All Set!</h2>
                 <p>Please check your inbox (or spam folder) to verify your account.</p>
+                <p>The verification email usually arrives within a few seconds, but depending on traffic, it may take up to several minutes, up to 30 minutes in some cases.</p>
               </div>
             </section>
           ) : (
