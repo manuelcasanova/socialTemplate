@@ -35,8 +35,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
-//   console.log("superadmin allow comments", superAdminSettings.allowComments, 'admim', adminSettings.allowComments)
-// console.log("superadmin posts feature", superAdminSettings.showPostsFeature, 'admim', adminSettings.showPostsFeature)
+  //   console.log("superadmin allow comments", superAdminSettings.allowComments, 'admim', adminSettings.allowComments)
+  // console.log("superadmin posts feature", superAdminSettings.showPostsFeature, 'admim', adminSettings.showPostsFeature)
   const loggedInUserId = auth.userId
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +59,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   };
 
   useEffect(() => {
-    if (superAdminSettings.allowPostReactions && adminSettings.allowPostReactions  || isSuperAdmin) {
+    if (superAdminSettings.allowPostReactions && adminSettings.allowPostReactions || isSuperAdmin) {
       fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount, loggedInUserId })
     }
 
@@ -82,8 +82,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
       handleShowReactOptions();
 
-      if (superAdminSettings.allowPostReactions  || isSuperAdmin) {
-      fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount });
+      if (superAdminSettings.allowPostReactions || isSuperAdmin) {
+        fetchPostReactionsCount({ postId, setIsLoading, setError, setReactionsCount });
       }
 
 
@@ -123,7 +123,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
         <div className="post-interactions-top">
 
           {
-          ((superAdminSettings.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin ) &&
+            ((superAdminSettings.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin) &&
             <div className='post-interactions-top-left-reaction'
               onClick={() => navigate(`/posts/reactions/${postId}`)}>
               <FontAwesomeIcon icon={faSmile} />
@@ -149,7 +149,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
         <div className="post-interactions-bottom">
 
           {
-          ((superAdminSettings.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin )&&
+            ((superAdminSettings.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin) &&
             <div className='post-interactions-bottom-left-reaction'
               onClick={handleShowReactOptions}>
 
@@ -191,38 +191,66 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             </div>
           }
 
-          {(
-            adminSettings.allowDeletePosts || adminSettings.allowFlagPosts ||
-          isSuperAdmin) && (
-            <>
-              <div className='post-interactions-bottom-left-reaction'>
-                {!showEllipsisMenu && (
-                  <FontAwesomeIcon icon={faEllipsisH}
-                    onClick={() => setShowEllipsisMenu(prev => !prev)}
-                  />
-                )}
-                {showEllipsisMenu && (
-                  <div className="post-menu-dropdown">
-                    {
-                    
-                    ((superAdminSettings.allowDeletePosts && adminSettings.allowDeletePosts) || isSuperAdmin ) &&
-                      <PostDelete setPosts={setPosts} postId={postId} postSender={postSender} loggedInUser={loggedInUser} setError={setError} />
-                    }
+       {(
+  adminSettings.allowDeletePosts || adminSettings.allowFlagPosts || isSuperAdmin
+) && (
+  <>
+    <div className='post-interactions-bottom-left-reaction'>
+      {!showEllipsisMenu && (
+        <FontAwesomeIcon 
+          icon={faEllipsisH}
+          onClick={() => setShowEllipsisMenu(prev => !prev)}
+          style={{
+            display: 
+              // Case 1: If neither delete nor flag is allowed, hide the ellipsis
+              !(adminSettings.allowDeletePosts || adminSettings.allowFlagPosts) 
+              ? 'none'  
+              // Case 2: If delete is allowed and it's the user's own post, show ellipsis
+              : (adminSettings.allowDeletePosts && loggedInUserId === postSender) 
+              // Case 3: If flag is allowed and it's not the user's own post, show ellipsis
+              || (adminSettings.allowFlagPosts && loggedInUserId !== postSender)
+              // Case 4: Show ellipsis for super admins regardless of permissions
+              || isSuperAdmin 
+              ? 'inline' 
+              : 'none'  // Default case: hide the ellipsis
+          }}
+        />
+      )}
 
-                    {
-                    ((superAdminSettings.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin) && 
-                     (loggedInUserId !== postSender) &&
-                      <FlagPost postId={postId} loggedInUserId={loggedInUserId} hideFlag={hideFlag} setError={setError} />
+      {showEllipsisMenu && (
+        <div className="post-menu-dropdown">
+          {/* Delete option (show if delete is allowed and it's the user's own post) */}
+          {((superAdminSettings.allowDeletePosts && adminSettings.allowDeletePosts) || isSuperAdmin) && 
+            loggedInUserId === postSender && 
+            <PostDelete 
+              setPosts={setPosts} 
+              postId={postId} 
+              postSender={postSender} 
+              loggedInUser={loggedInUser} 
+              setError={setError} 
+            />
+          }
 
-                    }
-                    <FontAwesomeIcon icon={faXmark}
-                      onClick={() => setShowEllipsisMenu(prev => !prev)}
-                    />
-                  </div>
-                )}
-              </div>
-            </>
-          )}
+          {/* Flag option (show if flag is allowed and the post is not the user's own post) */}
+          {((superAdminSettings.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin) && 
+            loggedInUserId !== postSender && 
+            <FlagPost 
+              postId={postId} 
+              loggedInUserId={loggedInUserId} 
+              hideFlag={hideFlag} 
+              setError={setError} 
+            />
+          }
+          <FontAwesomeIcon 
+            icon={faXmark}
+            onClick={() => setShowEllipsisMenu(prev => !prev)} 
+          />
+        </div>
+      )}
+    </div>
+  </>
+)}
+
 
 
         </div>
