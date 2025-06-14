@@ -560,20 +560,45 @@ const getUsersWithMessages = async (req, res) => {
     }
 
     // Case 2: If username is not provided, fetch users with whom messages have been exchanged
-    let query = `
-      SELECT u.user_id, u.username, 
-             MAX(um.date) AS last_message_date
-      FROM users u
-      JOIN user_messages um
-        ON (um.sender = u.user_id OR um.receiver = u.user_id)
-      LEFT JOIN muted m
-        ON (m.muter = $1 AND m.mutee = u.user_id)
-      WHERE (um.sender = $1 OR um.receiver = $1)
-        AND u.user_id != $1  -- Exclude your own user from the result
-       ${hideMuted === 'true' ? 'AND (m.mute = FALSE OR m.mute IS NULL)' : ''} -- Exclude muted users if hideMuted is true
-      GROUP BY u.user_id, u.username
-      ORDER BY last_message_date DESC;
-    `;
+    let query = 
+    
+    // `
+    //   SELECT u.user_id, u.username, 
+    //          MAX(um.date) AS last_message_date
+    //   FROM users u
+    //   JOIN user_messages um
+    //     ON (um.sender = u.user_id OR um.receiver = u.user_id)
+    //   LEFT JOIN muted m
+    //     ON (m.muter = $1 AND m.mutee = u.user_id)
+    //   WHERE (um.sender = $1 OR um.receiver = $1)
+    //     AND u.user_id != $1  -- Exclude your own user from the result
+    //    ${hideMuted === 'true' ? 'AND (m.mute = FALSE OR m.mute IS NULL)' : ''} -- Exclude muted users if hideMuted is true
+    //   GROUP BY u.user_id, u.username
+    //   ORDER BY last_message_date DESC;
+    // `;
+
+   ` SELECT 
+  u.user_id, 
+  u.username,
+  MAX(um.date) AS last_message_date
+FROM users u
+JOIN followers f 
+  ON f.followee_id = u.user_id
+  AND f.follower_id = $1
+  AND f.status = 'accepted'
+LEFT JOIN user_messages um
+  ON (
+    (um.sender = $1 AND um.receiver = u.user_id)
+    OR (um.receiver = $1 AND um.sender = u.user_id)
+  )
+LEFT JOIN muted m
+  ON (m.muter = $1 AND m.mutee = u.user_id)
+WHERE u.user_id != $1
+  ${hideMuted === 'true' ? 'AND (m.mute = FALSE OR m.mute IS NULL)' : ''}
+GROUP BY u.user_id, u.username
+ORDER BY 
+  MAX(um.date) DESC NULLS LAST;`
+
 
     const result = await pool.query(query, [userId]);
 

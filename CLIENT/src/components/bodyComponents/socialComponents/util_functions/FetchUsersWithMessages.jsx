@@ -10,7 +10,7 @@ const fetchUsersWithMessages = async (userId, setUsers, setIsLoading, setError, 
       hideMuted 
     } 
   });
-    setUsers(response.data); // Set the users who have exchanged messages
+    setUsers(response.data); // Set the users who have exchanged messages. Originally. Now, also adds at the bottom of the list the users that are connections even if no messages have been exchanged. Better UX.
   } catch (err) {
     console.error("Error fetching users:", err);
 
