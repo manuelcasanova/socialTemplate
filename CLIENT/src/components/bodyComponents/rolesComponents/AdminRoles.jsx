@@ -243,7 +243,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
                   {
                     (superAdminSettings.allowAdminEditCustomRole || superAdminSettings.allowAdminDeleteCustomRole || isSuperAdmin) &&
-                    role.created_by === userId || isSuperAdmin && (
+                    (role.created_by === userId || isSuperAdmin) && (
                       <FontAwesomeIcon
                         icon={faEllipsisV}
                         style={{ cursor: 'pointer', marginRight: '10px' }}

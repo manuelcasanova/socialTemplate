@@ -47,7 +47,7 @@ const getUsernameByUserId = async (req, res) => {
   try {
 
     const userId = Number(req.query.userId);
-// console.log("req.query", req.query)
+    // console.log("req.query", req.query)
     // Start the base query
     let query = `
             SELECT u.username
@@ -285,11 +285,11 @@ const getPendingSocialRequests = async (req, res, next) => {
 const followUser = async (req, res, next) => {
   try {
 
-    
+
     const followeeId = req.body.followeeId;
     const followerId = req.body.followerId;
 
-    const now = new Date(); 
+    const now = new Date();
 
     // console.log("now new Date", new Date())
 
@@ -542,7 +542,7 @@ const getUsersWithMessages = async (req, res) => {
                 WHERE follower_id = $1
                 AND status = 'accepted'
               ) 
-             OR u.user_id IN (
+             AND u.user_id IN (
                 SELECT follower_id 
                 FROM followers 
                 WHERE followee_id = $1
@@ -560,45 +560,36 @@ const getUsersWithMessages = async (req, res) => {
     }
 
     // Case 2: If username is not provided, fetch users with whom messages have been exchanged
-    let query = 
-    
-    // `
-    //   SELECT u.user_id, u.username, 
-    //          MAX(um.date) AS last_message_date
-    //   FROM users u
-    //   JOIN user_messages um
-    //     ON (um.sender = u.user_id OR um.receiver = u.user_id)
-    //   LEFT JOIN muted m
-    //     ON (m.muter = $1 AND m.mutee = u.user_id)
-    //   WHERE (um.sender = $1 OR um.receiver = $1)
-    //     AND u.user_id != $1  -- Exclude your own user from the result
-    //    ${hideMuted === 'true' ? 'AND (m.mute = FALSE OR m.mute IS NULL)' : ''} -- Exclude muted users if hideMuted is true
-    //   GROUP BY u.user_id, u.username
-    //   ORDER BY last_message_date DESC;
-    // `;
+    let query =
+      `
+  SELECT 
+    u.user_id, 
+    u.username,
+    MAX(um.date) AS last_message_date
+  FROM users u
+  JOIN followers f 
+    ON f.followee_id = u.user_id
+    AND f.follower_id = $1
+    AND f.status = 'accepted'  -- User must follow them
 
-   ` SELECT 
-  u.user_id, 
-  u.username,
-  MAX(um.date) AS last_message_date
-FROM users u
-JOIN followers f 
-  ON f.followee_id = u.user_id
-  AND f.follower_id = $1
-  AND f.status = 'accepted'
-LEFT JOIN user_messages um
-  ON (
-    (um.sender = $1 AND um.receiver = u.user_id)
-    OR (um.receiver = $1 AND um.sender = u.user_id)
-  )
-LEFT JOIN muted m
-  ON (m.muter = $1 AND m.mutee = u.user_id)
-WHERE u.user_id != $1
-  ${hideMuted === 'true' ? 'AND (m.mute = FALSE OR m.mute IS NULL)' : ''}
-GROUP BY u.user_id, u.username
-ORDER BY 
-  MAX(um.date) DESC NULLS LAST;`
+  JOIN followers f2
+    ON f2.follower_id = u.user_id
+    AND f2.followee_id = $1
+    AND f2.status = 'accepted'  -- They must follow back
 
+  LEFT JOIN user_messages um
+    ON (
+      (um.sender = $1 AND um.receiver = u.user_id)
+      OR (um.receiver = $1 AND um.sender = u.user_id)
+    )
+  LEFT JOIN muted m
+    ON (m.muter = $1 AND m.mutee = u.user_id)
+  WHERE u.user_id != $1  -- Exclude logged-in user
+    ${hideMuted === 'true' ? 'AND (m.mute = FALSE OR m.mute IS NULL)' : ''}
+  GROUP BY u.user_id, u.username
+  ORDER BY 
+    MAX(um.date) DESC NULLS LAST;
+`;
 
     const result = await pool.query(query, [userId]);
 
