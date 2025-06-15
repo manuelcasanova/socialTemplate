@@ -23,12 +23,6 @@ DROP TABLE IF EXISTS global_provider_settings;
 DROP TABLE IF EXISTS admin_settings;
 
 
-CREATE TABLE roles (
-  role_id SERIAL PRIMARY KEY NOT NULL,
-  role_name VARCHAR(25) UNIQUE NOT NULL,
-  is_system_role BOOLEAN DEFAULT TRUE
-); 
-
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY NOT NULL,
   username VARCHAR(255) NOT NULL,
@@ -42,6 +36,13 @@ CREATE TABLE users (
   profile_picture VARCHAR(255),
   location VARCHAR(255)
 );
+
+CREATE TABLE roles (
+  role_id SERIAL PRIMARY KEY NOT NULL,
+  role_name VARCHAR(25) UNIQUE NOT NULL,
+  is_system_role BOOLEAN DEFAULT TRUE,
+  created_by INTEGER REFERENCES users(user_id) ON DELETE SET NULL
+); 
 
 CREATE TABLE followers (
   follower_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
@@ -253,52 +254,3 @@ CREATE TABLE admin_settings (
   allow_modify_profile_picture BOOLEAN NOT NULL DEFAULT TRUE
 
 );
-
--- =======================
--- Grants to udokm633_manuelcasanova
--- =======================
-
--- Allow connecting to the database
-GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633_manuelcasanova;
-
--- Allow usage of the public schema
-GRANT USAGE ON SCHEMA public TO udokm633_manuelcasanova;
-
--- Grant all privileges on all existing tables with grant option
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633_manuelcasanova WITH GRANT OPTION;
-
--- Ensure all new tables in the schema grant all privileges by default with grant option
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT ALL PRIVILEGES ON TABLES TO udokm633_manuelcasanova WITH GRANT OPTION;
-
--- Grant all privileges on all existing sequences
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633_manuelcasanova;
-
--- Ensure all new sequences grant all privileges by default
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633_manuelcasanova;
-
-
--- =======================
--- Grants to udokm633
--- =======================
-
--- Allow connecting to the database
-GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633;
-
--- Allow usage of the public schema
-GRANT USAGE ON SCHEMA public TO udokm633;
-
--- Grant all privileges on all existing tables with grant option
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633 WITH GRANT OPTION;
-
--- Ensure all new tables in the schema grant all privileges by default with grant option
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT ALL PRIVILEGES ON TABLES TO udokm633 WITH GRANT OPTION;
-
--- Grant all privileges on all existing sequences
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633;
-
--- Ensure all new sequences grant all privileges by default
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633;

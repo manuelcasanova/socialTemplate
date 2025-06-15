@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { axiosPrivate } from "../../../api/axios";
+import useAuth from "../../../hooks/useAuth";
 
 //Components 
 import Error from "../Error";
@@ -8,6 +9,8 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }) {
 
+  const {auth} = useAuth()
+  const userId = auth.userId;
   const inputRef = useRef(null);
   const [newRoleName, setNewRoleName] = useState("")
   const [showInput, setShowInput] = useState(false)
@@ -43,7 +46,7 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
     }
 
     try {
-      const response = await axiosPrivate.post("/custom-roles-private", { role_name: trimmedName });
+      const response = await axiosPrivate.post("/custom-roles-private", { role_name: trimmedName, userId: userId  });
 
       // Call the callback to update the parent state
       if (onRoleCreated) {

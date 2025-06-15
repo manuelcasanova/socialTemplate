@@ -26,7 +26,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
-
+const userId = auth.userId;
   const [systemRoles, setSystemRoles] = useState(null);
   const [roleName, setRoleName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -75,7 +75,8 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
     try {
       setIsLoading(true);
 
-      await axiosPrivate.delete(`/custom-roles-private/${confirmDeleteId}`);
+          await axiosPrivate.delete(`/custom-roles-private/${confirmDeleteId}?userId=${userId}`);
+
 
       // Remove from state
       setCustomRoles(prevRoles =>
@@ -88,7 +89,10 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       setErrorMessage("");
     } catch (error) {
       console.error("Error deleting role:", error);
-      setError("Failed to delete the role. Please try again.");
+       const errorMessage = error?.response?.data?.message || "Failed to delete the role. Please try again.";
+  
+  setError(errorMessage); 
+   
     } finally {
       setIsLoading(false);
     }
