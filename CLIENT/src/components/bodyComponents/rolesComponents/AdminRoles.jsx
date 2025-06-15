@@ -26,7 +26,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
-const userId = auth.userId;
+  const userId = auth.userId;
   const [systemRoles, setSystemRoles] = useState(null);
   const [roleName, setRoleName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -75,32 +75,45 @@ const userId = auth.userId;
     try {
       setIsLoading(true);
 
-          await axiosPrivate.delete(`/custom-roles-private/${confirmDeleteId}?userId=${userId}`);
+      // Make the DELETE request
+      const response = await axiosPrivate.delete(`/custom-roles-private/${confirmDeleteId}?userId=${userId}`);
 
-
-      // Remove from state
+      // After successful deletion, update the state and handle the error message
       setCustomRoles(prevRoles =>
         prevRoles.filter(role => role.role_id !== confirmDeleteId)
       );
 
+      // Reset the confirmation and active menu
       setConfirmDeleteId(null);
       setActiveMenuId(null);
-      setError(null);
-      setErrorMessage("");
+
+      // Clear error when deletion is successful
+      setError(null);  // Reset error state in case it was used elsewhere
     } catch (error) {
       console.error("Error deleting role:", error);
-       const errorMessage = error?.response?.data?.message || "Failed to delete the role. Please try again.";
-  
-  setError(errorMessage); 
-   
+
+      // Set error message based on the error response
+      if (error.response?.data?.message) {
+        setError(error.response.data.message); // Use setError here
+      } else if (error.message === 'Network Error') {
+        setError('Network Error');  // Use setError here
+      } else {
+        setError("An unexpected error occurred.");  // Use setError here
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
 
-  const handleEditRole = async () => {
 
+
+
+
+
+
+
+  const handleEditRole = async () => {
     const trimmedName = roleName.trim();
 
     if (!trimmedName || !editRoleId) {
@@ -119,6 +132,7 @@ const userId = auth.userId;
 
       const response = await axiosPrivate.put(`/custom-roles-private/${editRoleId}`, {
         role_name: trimmedName,
+        userId: userId
       });
 
       const updatedRole = response.data;
@@ -137,7 +151,7 @@ const userId = auth.userId;
       setErrorMessage("");
       setRegexError(null);
     } catch (error) {
-      console.error("Error creating role:", error);
+      console.error("Error updating role:", error);
       if (error.response?.data?.message) {
         setErrorMessage(error.response.data.message);
       } else if (error.message === 'Network Error') {
@@ -206,7 +220,7 @@ const userId = auth.userId;
         </div>
         {showCustomRolesInfo &&
           <h4>
-            These roles are linked to a protected route (accessible via the navbar) and can be accessed by SuperAdmins, Admins, Moderators, and users assigned this role.
+            These roles are associated with a protected route (accessible through the navbar) and can be accessed by SuperAdmins, Admins, Moderators, and any users assigned to them. Only the role creators or higher-tier administrators can edit or delete these custom roles.
           </h4>
         }
 
@@ -227,20 +241,21 @@ const userId = auth.userId;
                 <li className="admin-roles-line" key={role.role_id}>
 
 
-                  {(superAdminSettings.allowAdminEditCustomRole || superAdminSettings.allowAdminDeleteCustomRole || isSuperAdmin) && (
+                  {
+                    (superAdminSettings.allowAdminEditCustomRole || superAdminSettings.allowAdminDeleteCustomRole || isSuperAdmin) &&
+                    role.created_by === userId && (
+                      <FontAwesomeIcon
+                        icon={faEllipsisV}
+                        style={{ cursor: 'pointer', marginRight: '10px' }}
+                        onClick={() => {
+                          setActiveMenuId(prev => (prev === role.role_id ? null : role.role_id));
+                          setConfirmDeleteId(null);
+                          setEditRoleId(null);
+                        }}
+                      />
+                    )
+                  }
 
-                    <FontAwesomeIcon
-                      icon={faEllipsisV}
-                      style={{ cursor: 'pointer', marginRight: '10px' }}
-                      onClick={() => {
-                        setActiveMenuId(prev => (prev === role.role_id ? null : role.role_id))
-                        setConfirmDeleteId(null);
-                        setEditRoleId(null);
-                      }
-                      }
-                    />
-
-                  )}
 
                   {(superAdminSettings.allowAdminEditCustomRole || isSuperAdmin) && <>
                     {editRoleId === role.role_id && (
@@ -309,6 +324,7 @@ const userId = auth.userId;
 
                             {errorMessage && (
                               <p style={{ color: 'red' }}>{errorMessage}</p>
+
                             )}
 
                           </div>
