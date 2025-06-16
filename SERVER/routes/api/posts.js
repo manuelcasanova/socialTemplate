@@ -69,7 +69,7 @@ const checkPostFeatureAccess = (action) => {
           } else if (!userCanPost && adminCanPost) {
             allowedRoles = ['Admin', 'SuperAdmin'];
           } else if (!userCanPost && !adminCanPost) {
-            allowedRoles = ['SuperAdmin'];
+            allowedRoles = ['SuperAdmin', 'Admin'];
           } else if (userCanPost && !adminCanPost) {
             // All roles minus Admins (assuming that's what you want)
             const allRoles = await fetchRoles();
