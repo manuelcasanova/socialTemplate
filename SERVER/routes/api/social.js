@@ -42,6 +42,12 @@ const checkSocialAccess = (action) => {
       };
 
       // console.log('settings in middleware:', settings);
+      
+       // Skip settings check for `getAllUsers` action
+      if (action === 'default' && req.path === '/users/all') {
+        // For `getAllUsers`, always allow access
+        return next();
+      }
 
       const roles = await fetchRoles();
       // console.log('roles:', roles);
