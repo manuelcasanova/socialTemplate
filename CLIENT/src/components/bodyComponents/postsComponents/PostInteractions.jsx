@@ -48,6 +48,11 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const [showEllipsisMenu, setShowEllipsisMenu] = useState(false);
   const errRef = useRef();
 
+  const canDelete = adminSettings.allowDeletePosts && loggedInUserId === postSender;
+const canFlag = adminSettings.allowFlagPosts && loggedInUserId !== postSender;
+const shouldShowEllipsis = canDelete || canFlag || isSuperAdmin;
+
+
   const handleShowReactOptions = () => {
     setReactOption(prevState => !prevState);
   };
@@ -200,20 +205,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
         <FontAwesomeIcon 
           icon={faEllipsisH}
           onClick={() => setShowEllipsisMenu(prev => !prev)}
-          style={{
-            display: 
-              // Case 1: If neither delete nor flag is allowed, hide the ellipsis
-              !(adminSettings.allowDeletePosts || adminSettings.allowFlagPosts) 
-              ? 'none'  
-              // Case 2: If delete is allowed and it's the user's own post, show ellipsis
-              : (adminSettings.allowDeletePosts && loggedInUserId === postSender) 
-              // Case 3: If flag is allowed and it's not the user's own post, show ellipsis
-              || (adminSettings.allowFlagPosts && loggedInUserId !== postSender)
-              // Case 4: Show ellipsis for super admins regardless of permissions
-              || isSuperAdmin 
-              ? 'inline' 
-              : 'none'  // Default case: hide the ellipsis
-          }}
+         style={{ display: shouldShowEllipsis ? 'inline' : 'none' }}
+
         />
       )}
 

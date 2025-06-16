@@ -90,6 +90,11 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
     }
   };
 
+ const canDelete = adminSettings.allowDeleteComments && loggedInUserId === commentCommenter;
+const canFlag = adminSettings.allowFlagComments && loggedInUserId !== commentCommenter;
+const shouldShowEllipsis = canDelete || canFlag || isSuperAdmin;
+
+
 
   return (
     <div className="post-comment-interactions">
@@ -146,26 +151,17 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
         </div>
       </>}
 
+
+
+
 {(adminSettings.allowDeleteComments || adminSettings.allowFlagComments || isSuperAdmin) && (
   <>
     {!showEllipsisMenu && (
       <FontAwesomeIcon 
         icon={faEllipsisH}
         onClick={() => setShowEllipsisMenu(prev => !prev)}
-        style={{
-          display: 
-            // Case 1: If neither delete nor flag is allowed, hide the ellipsis
-            !(adminSettings.allowDeleteComments || adminSettings.allowFlagComments) 
-            ? 'none'  
-            // Case 2: If delete is allowed but flag is not, show ellipsis only if it's the user's own comment
-            : (adminSettings.allowDeleteComments && !adminSettings.allowFlagComments && loggedInUserId === commentCommenter) 
-            // Case 3: If flag is allowed, show ellipsis only if the logged-in user is not the commenter
-            || (adminSettings.allowFlagComments && loggedInUserId !== commentCommenter)
-            // Case 4: Show ellipsis for super admins regardless of permissions
-            || isSuperAdmin 
-            ? 'inline' 
-            : 'none'  // Default case: hide the ellipsis
-        }}
+       style={{ display: shouldShowEllipsis ? 'inline' : 'none' }}
+
       />
     )}
 
