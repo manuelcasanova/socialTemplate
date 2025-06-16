@@ -781,14 +781,16 @@ const updateRoles = async (req, res) => {
                 }
             }
 
-            // Transfer ownership of roles assigned by this SuperAdmin
-            await transferAssignedRoles(userId, loggedInUser);
-
 
             // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.
             if (assignedByUser !== loggedInUser && loggedInUser !== userId) {
                 return res.status(403).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
             }
+
+
+            // Transfer ownership of roles assigned by this SuperAdmin
+            await transferAssignedRoles(userId, loggedInUser);
+
 
         }
 
