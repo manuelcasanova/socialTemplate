@@ -32,7 +32,7 @@
   font-size: 16px;
   color: #888; /* Adjust the color of the magnifying glass */
   pointer-events: all; /* Ensures the icon doesn't block user input */
-  z-index: 10;
+  /* z-index: 10; */
 }
 
 .search-icon:hover {

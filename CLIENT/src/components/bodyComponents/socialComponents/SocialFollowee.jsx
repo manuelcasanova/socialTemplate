@@ -33,7 +33,7 @@ import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowe
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 
-export default function SocialFollowee({ isNavOpen, profilePictureKey  }) {
+export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
@@ -58,7 +58,7 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey  }) {
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
   const [showLargePicture, setShowLargePicture] = useState(null);
   const [filterUsername, setFilterUsername] = useState("");
-    const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
+  const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
 
   const inputRef = useRef(null);
 
@@ -132,33 +132,33 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey  }) {
                 return (
                   <div className="user-row-social" key={follow.followee_id}>
                     <div className="user-info">
-                     <img
-                      className="user-row-social-small-img"
-                      onClick={() => setShowLargePicture(user.user_id)}
-                      src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = '/images/profilePicture.jpg';
-                      }}
-                      alt="Profile"
-                    />
+                      <img
+                        className="user-row-social-small-img"
+                        onClick={() => setShowLargePicture(user.user_id)}
+                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/images/profilePicture.jpg';
+                        }}
+                        alt="Profile"
+                      />
 
-                       {showLargePicture === user.user_id && (
-                      <div
-                        className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
-                        onClick={() => setShowLargePicture(null)}
-                      >
-                        <img
-                          className="users-all-picture-large"
-                          src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = '/images/profilePicture.jpg';
-                          }}
-                          alt="Large Profile"
-                        />
-                      </div>
-                    )}
+                      {showLargePicture === user.user_id && (
+                        <div
+                          className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
+                          onClick={() => setShowLargePicture(null)}
+                        >
+                          <img
+                            className="users-all-picture-large"
+                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/images/profilePicture.jpg';
+                            }}
+                            alt="Large Profile"
+                          />
+                        </div>
+                      )}
 
                       <p>
                         {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
@@ -172,14 +172,14 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey  }) {
                         <div className="user-info-buttons">
                           {
                             followersAndFollowee.some(f =>
-                              f.follower_id === user.user_id ||
-                              f.followee_id === user.user_id &&
-                              f.status === "accepted"
-                            ) && superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature && (
-                              <button
-                                onClick={() => navigate(`/messages/${user.user_id}`)}
-                              >
-
+                              f.follower_id === user.user_id && f.status === "accepted"
+                            ) &&
+                            followersAndFollowee.some(f =>
+                              f.followee_id === user.user_id && f.status === "accepted"
+                            ) &&
+                            superAdminSettings.showMessagesFeature &&
+                            adminSettings.showMessagesFeature && (
+                              <button onClick={() => navigate(`/messages/${user.user_id}`)}>
                                 <FontAwesomeIcon
                                   icon={faEnvelope}
                                   style={{ cursor: "pointer" }}
@@ -188,29 +188,31 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey  }) {
                               </button>
                             )
                           }
-                      
 
 
-                        <FollowUserButton
 
-                          followeeId={user.user_id}
-                          followerId={loggedInUser}
-                          followersAndFollowee={followersAndFollowee}
-                          setFollowersAndFollowee={setFollowersAndFollowee}
-                          userLoggedInObject={auth}
-                          isSuperAdmin={isSuperAdmin}
-                          setError={setError}
-                        />
 
-                        <MuteUserButton
-                          userId={user.user_id}
-                          userLoggedin={loggedInUser}
-                          setMutedUsers={setMutedUsers}
-                          onMutedChange={handleMutedChanges}
-                          isSuperAdmin={isSuperAdmin}
-                          setError={setError}
-                        />
-  </div>
+
+                          <FollowUserButton
+
+                            followeeId={user.user_id}
+                            followerId={loggedInUser}
+                            followersAndFollowee={followersAndFollowee}
+                            setFollowersAndFollowee={setFollowersAndFollowee}
+                            userLoggedInObject={auth}
+                            isSuperAdmin={isSuperAdmin}
+                            setError={setError}
+                          />
+
+                          <MuteUserButton
+                            userId={user.user_id}
+                            userLoggedin={loggedInUser}
+                            setMutedUsers={setMutedUsers}
+                            onMutedChange={handleMutedChanges}
+                            isSuperAdmin={isSuperAdmin}
+                            setError={setError}
+                          />
+                        </div>
                       </>}
                   </div>
                 );

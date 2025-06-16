@@ -99,6 +99,8 @@
   /* white-space: nowrap;  */
   overflow: hidden;
   text-overflow: ellipsis;
+
+
 }
 
 .with-notification-text {

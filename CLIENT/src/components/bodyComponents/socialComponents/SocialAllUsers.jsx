@@ -33,7 +33,7 @@ import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowe
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-export default function SocialAllUsers({ isNavOpen, profilePictureKey  }) {
+export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
 
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
@@ -50,6 +50,7 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey  }) {
   const loggedInUser = auth.userId
   const [users, setUsers] = useState([]);
   const [followersAndFollowee, setFollowersAndFollowee] = useState([])
+  //  console.log('f&f', followersAndFollowee)
   const [mutedUsers, setMutedUsers] = useState([]);
   const [filterUsername, setFilterUsername] = useState("");
   const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
@@ -100,12 +101,12 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey  }) {
 
 
   const handleImageClick = (userId) => {
-  setShowLargePicture(userId);  // Show large picture modal
-};
+    setShowLargePicture(userId);  // Show large picture modal
+  };
 
-const closeModal = () => {
-  setShowLargePicture(null);  // Hide the large picture
-};
+  const closeModal = () => {
+    setShowLargePicture(null);  // Hide the large picture
+  };
 
 
   const handleMutedChanges = () => {
@@ -146,9 +147,9 @@ const closeModal = () => {
 
                     <img
                       className="user-row-social-small-img"
-                    onClick={() => handleImageClick(user.user_id)}
+                      onClick={() => handleImageClick(user.user_id)}
 
-                      src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = '/images/profilePicture.jpg';
@@ -161,11 +162,11 @@ const closeModal = () => {
                     {showLargePicture === user.user_id && (
                       <div
                         className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
-                         onClick={() => closeModal()} 
+                        onClick={() => closeModal()}
                       >
                         <img
                           className="users-all-picture-large"
-                          src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                          src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = '/images/profilePicture.jpg';
@@ -185,17 +186,11 @@ const closeModal = () => {
                     <>
                       <div className="user-info-buttons">
                         {
-                          followersAndFollowee.some(f =>
-                            f.follower_id === user.user_id ||
-                            f.followee_id === user.user_id &&
-                            f.status === "accepted"
-                          ) && superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature && (
-
-                            <button
-
-                              onClick={() => navigate(`/messages/${user.user_id}`)}
-                            >
-
+                          followersAndFollowee.some(f => f.follower_id === user.user_id && f.status === "accepted") &&
+                          followersAndFollowee.some(f => f.followee_id === user.user_id && f.status === "accepted") &&
+                          superAdminSettings.showMessagesFeature &&
+                          adminSettings.showMessagesFeature && (
+                            <button onClick={() => navigate(`/messages/${user.user_id}`)}>
                               <FontAwesomeIcon
                                 icon={faEnvelope}
                                 style={{ cursor: "pointer" }}
@@ -204,6 +199,7 @@ const closeModal = () => {
                             </button>
                           )
                         }
+
 
 
 

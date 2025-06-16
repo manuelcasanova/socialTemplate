@@ -60,7 +60,7 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
   const [showLargePicture, setShowLargePicture] = useState(null);
 
   const [filterUsername, setFilterUsername] = useState("");
-   const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
+  const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
 
   const inputRef = useRef(null);
 
@@ -119,7 +119,7 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
       <div className="admin-users">
         <h2>Social - Followers</h2>
 
-        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)}/>
+        <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         {filteredFollowee.length === 0 ? (
           <p>No users available or all users are muted.</p>
@@ -136,7 +136,7 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
                       <img
                         className="user-row-social-small-img"
                         onClick={() => setShowLargePicture(user.user_id)}
-                        src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
@@ -151,7 +151,7 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
                         >
                           <img
                             className="users-all-picture-large"
-                            src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = '/images/profilePicture.jpg';
@@ -173,14 +173,14 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
                         <div className="user-info-buttons">
                           {
                             followersAndFollowee.some(f =>
-                              f.follower_id === user.user_id ||
-                              f.followee_id === user.user_id &&
-                              f.status === "accepted"
-                            ) && superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature && (
-                              <button
-                                onClick={() => navigate(`/messages/${user.user_id}`)}
-                              >
-
+                              f.follower_id === user.user_id && f.status === "accepted"
+                            ) &&
+                            followersAndFollowee.some(f =>
+                              f.followee_id === user.user_id && f.status === "accepted"
+                            ) &&
+                            superAdminSettings.showMessagesFeature &&
+                            adminSettings.showMessagesFeature && (
+                              <button onClick={() => navigate(`/messages/${user.user_id}`)}>
                                 <FontAwesomeIcon
                                   icon={faEnvelope}
                                   style={{ cursor: "pointer" }}
@@ -189,6 +189,7 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
                               </button>
                             )
                           }
+
 
 
                           <FollowUserButton
