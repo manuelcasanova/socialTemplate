@@ -92,7 +92,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
 
  const canDelete = adminSettings.allowDeleteComments && loggedInUserId === commentCommenter;
 const canFlag = adminSettings.allowFlagComments && loggedInUserId !== commentCommenter;
-const shouldShowEllipsis = canDelete || canFlag || isSuperAdmin;
+const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserId === commentCommenter);
 
 
 

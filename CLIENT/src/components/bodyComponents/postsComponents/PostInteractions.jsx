@@ -50,7 +50,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
   const canDelete = adminSettings.allowDeletePosts && loggedInUserId === postSender;
 const canFlag = adminSettings.allowFlagPosts && loggedInUserId !== postSender;
-const shouldShowEllipsis = canDelete || canFlag || isSuperAdmin;
+const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserId === postSender);
+
 
 
   const handleShowReactOptions = () => {
