@@ -56,6 +56,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
     return users.some(user => user.user_id === post.sender);
   });
   const [filterUsername, setFilterUsername] = useState("");
+  const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
   const inputRef = useRef(null);
 
   const [showLargePicture, setShowLargePicture] = useState(null);
@@ -67,6 +68,8 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
   const topPostRef = useRef(null);
   const [loadMore, setLoadMore] = useState(false)
   const [newPostSubmitted, setNewPostSubmitted] = useState(false);
+
+
 
 
   useEffect(() => {
@@ -242,9 +245,13 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
             filterUsername={filterUsername}
             setFilterUsername={setFilterUsername}
             inputRef={inputRef}
+            onSearch={() => {
+              setSearchQuery(filterUsername); // Apply filter on click or Enter key
+              setPage(1); // Reset pagination
+            }}
           />
 
-          <button
+          {/* <button
             className="button-white"
             onClick={() => {
               setSearchQuery(filterUsername); // Apply filter on click
@@ -252,7 +259,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
             }}
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
+          </button> */}
 
 
 
@@ -295,7 +302,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
                       <img
                         className="user-row-social-small-img"
                         onClick={() => setShowLargePicture(post.sender)}
-                         src={ `${BACKEND}/media/profile_pictures/${post.sender}/profilePicture.jpg?v=${profilePictureKey}`}
+                        src={`${BACKEND}/media/profile_pictures/${post.sender}/profilePicture.jpg?v=${profilePictureKey}`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
@@ -381,7 +388,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
         >
           <img
             className="users-all-picture-large"
-             src={ `${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
+            src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
             alt="Profile"
             onError={(e) => {
               // Fallback image handling
