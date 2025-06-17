@@ -44,7 +44,7 @@ const checkSocialAccess = (action) => {
       // console.log('settings in middleware:', settings);
       
        // Skip settings check for `getAllUsers` action
-      if (action === 'default' && req.path === '/users/all') {
+      if ((action === 'default' && req.path === '/users/all') || (action === 'follow' && req.path === '/users/followersAndFollowee')) {
         // For `getAllUsers`, always allow access
         return next();
       }

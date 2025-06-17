@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
+import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 
 //Hooks
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -44,6 +45,7 @@ export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
+  const { adminSettings } = useGlobalAdminSettings();
   const { userId } = useParams(); // Get the userId from the URL parameter
   const userIdNumber = Number(userId);
   const [error, setError] = useState(null);
@@ -100,16 +102,31 @@ export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
     fetchFollowersAndFollowee(filters, setFollowersAndFollowee, setIsLoading, setError, loggedInUser);
   }, [axiosPrivate, filters, userIdNumber]);
 
-  useEffect(() => {
-    fetchMutedUsers(filters, (rawMutedUsers) => {
-      const cleaned = rawMutedUsers.map(record => ({
-        user_id: record.muter,
-        muted_user_id: record.mutee,
-      }));
-      setMutedUsers(cleaned);
-    }, setIsLoading, setError, loggedInUser);
 
-  }, [filters, loggedInUser]);
+useEffect(() => {
+  if (!superAdminSettings.allowMute || !adminSettings.allowMute) {
+    return;
+  }
+
+  fetchMutedUsers(filters, (rawMutedUsers) => {
+    const cleaned = rawMutedUsers.map(record => ({
+      user_id: record.muter,
+      muted_user_id: record.mutee,
+    }));
+    setMutedUsers(cleaned);
+  }, setIsLoading, setError, loggedInUser);
+
+}, [
+  filters,
+  loggedInUser,
+  superAdminSettings.allowMute,
+  adminSettings.allowMute,
+  setMutedUsers,
+  setIsLoading,
+  setError
+]);
+
+
 
 
   // Check if profile picture exists for the user
@@ -165,7 +182,7 @@ export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
                 <img
                   className="user-row-social-small-img"
                   onClick={() => setShowLargePicture(user.user_id)}
-                  src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                  src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                   alt="Profile"
                 />
               ) : (
@@ -181,7 +198,7 @@ export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
                 <div className={`${isNavOpen ? 'large-picture-squeezed' : 'large-picture'}`} onClick={() => setShowLargePicture(null)}>
                   <img
                     className="users-all-picture-large"
-                    src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                    src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = '/images/profilePicture.jpg';
@@ -196,34 +213,43 @@ export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
 
             {loggedInUser !== user.user_id && (
               <div className="user-info-buttons">
-                {followersAndFollowee.some(f =>
-                  (f.follower_id === user.user_id || f.followee_id === user.user_id) && f.status === "accepted"
-                ) && superAdminSettings.showMessagesFeature && (
+                {followersAndFollowee.some(f => f.follower_id === user.user_id && f.status === "accepted") &&
+                  followersAndFollowee.some(f => f.followee_id === user.user_id && f.status === "accepted") &&
+                  superAdminSettings.showMessagesFeature &&
+                  adminSettings.showMessagesFeature && (
                     <button onClick={() => navigate(`/messages/${user.user_id}`)}>
                       <FontAwesomeIcon icon={faEnvelope} style={{ cursor: "pointer" }} title="This user follows you" />
                     </button>
                   )}
-                <FollowUserButton
-                  followeeId={user.user_id}
-                  followerId={loggedInUser}
-                  followersAndFollowee={followersAndFollowee}
-                  setFollowersAndFollowee={setFollowersAndFollowee}
-                  userLoggedInObject={auth}
-                  setError={setError}
-                />
+
+                {superAdminSettings.showSocialFeature && adminSettings.showSocialFeature &&
+                  <FollowUserButton
+                    followeeId={user.user_id}
+                    followerId={loggedInUser}
+                    followersAndFollowee={followersAndFollowee}
+                    setFollowersAndFollowee={setFollowersAndFollowee}
+                    userLoggedInObject={auth}
+                    setError={setError}
+                  />
+                }
 
 
-                <MuteUserButton 
-                userId={user.user_id} 
-                userLoggedin={loggedInUser} 
-                onMutedChange={handleMutedChanges} 
-                setMutedUsers={setMutedUsers}
-                setError={setError}
-                  isMuted={mutedUsers.some(mute =>
-                    (mute.muter === user.user_id && mute.mutee === loggedInUser) ||
-                    (mute.muter === loggedInUser && mute.mutee === user.user_id)
-                  )}
-                />
+                {superAdminSettings.showSocialFeature && adminSettings.showSocialFeature &&
+                  superAdminSettings.allowMute && adminSettings.allowMute &&
+                  <MuteUserButton
+                    userId={user.user_id}
+                    userLoggedin={loggedInUser}
+                    onMutedChange={handleMutedChanges}
+                    setMutedUsers={setMutedUsers}
+                    setError={setError}
+                    isMuted={mutedUsers.some(mute =>
+                      (mute.muter === user.user_id && mute.mutee === loggedInUser) ||
+                      (mute.muter === loggedInUser && mute.mutee === user.user_id)
+                    )}
+                  />
+                }
+
+
               </div>
             )}
           </div>
