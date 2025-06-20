@@ -36,7 +36,6 @@
       "repeatCommentActions": "Repite estas acciones para los comentarios en los posts."
     }
   },
-
   "navbar": {
     "home": "Inicio",
     "protected": "Protegido",
@@ -65,7 +64,6 @@
     "roleChangeLog": "Registro de cambios de roles",
     "loginHistory": "Historial de inicio de sesión"
   },
-
   "user": {
     "welcome": "¡Bienvenido! ¡Ahora eres un usuario registrado!",
     "privatePage": "Esta página es privada y accesible solo para usuarios que han iniciado sesión.",
@@ -80,7 +78,6 @@
       "adminRoles": "- Desde la sección de Administrador, crea, edita y elimina roles. Luego prueba acceder a las secciones correspondientes con usuarios que tengan o no tengan los permisos adecuados."
     }
   },
-
   "admin": {
     "privatePage": "Esta página es privada y accesible solo para administradores.",
     "exploreTitle": "Explora escenarios de administrador:",
@@ -91,7 +88,6 @@
       "adjustSettings": "- Ajusta la configuración y observa cómo se activan o desactivan las funciones. Algunas funciones pueden estar restringidas por administradores de nivel superior."
     }
   },
-
   "signin": {
     "sessionExpired": "La sesión ha expirado. Por favor, vuelve a iniciar sesión.",
     "signInWithEmail": "Iniciar sesión con email",
@@ -118,10 +114,55 @@
       "loginFailed": "Inicio de sesión fallido",
       "noServerResponse": "Sin respuesta del servidor"
     }
+  },
+  "resetPassword": {
+    "title": "Cambiar contraseña",
+    "placeholderEmail": "Introduce tu email",
+    "submit": "Enviar",
+    "signUpLink": "Regístrate",
+    "loadingMessage": "Por favor, espera. Puede tardar hasta un minuto.",
+    "successMessage": "Se ha enviado un correo con instrucciones para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada o carpeta de spam.",
+    "noServerResponse": "Sin respuesta del servidor",
+    "emailNotFound": "Este correo no fue encontrado en nuestra base de datos",
+    "unauthorized": "No autorizado",
+    "attemptFailed": "Intento fallido",
+    "unexpectedStatus": "Estado de respuesta inesperado: "
+  },
+  "profile": {
+    "myAccount": "Mi cuenta",
+    "signIn": "Iniciar sesión",
+    "signOut": "Cerrar sesión"
+  },
+  "signup": {
+    "allSet": "¡Listo!",
+    "signIn": "Iniciar sesión",
+    "signUpWithEmail": "Registrarse con email",
+    "signUpWithGoogle": "Registrarse con Google",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "pleaseCheckInbox": "Por favor revisa tu bandeja de entrada (o carpeta de spam) para verificar tu cuenta.",
+    "verificationEmailNote": "El correo de verificación suele llegar en unos segundos, pero dependiendo del tráfico, puede tardar hasta varios minutos, hasta 30 minutos en algunos casos.",
+    "restoreAccount": "Restaurar cuenta",
+    "createNewAccount": "Crear una cuenta nueva",
+    "signUpTitle": "Registrarse",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "signUpButton": "Registrarse",
+    "signUpThroughPartner": "Otros métodos para registrarse",
+    "validationMessages": {
+      "name": "De 4 a 24 caracteres. Debe comenzar con una letra. Se permiten letras, números, guiones bajos y guiones.",
+      "email": "Debe ser una dirección de correo electrónico válida. Se permiten caracteres especiales . - _",
+      "password": "De 8 a 24 caracteres. Debe incluir letras mayúsculas y minúsculas, un número y un carácter especial. Permitidos: !@#$%^&*.",
+      "confirmPassword": "Debe coincidir con la contraseña ingresada."
+    },
+    "errors": {
+      "invalidEntry": "Entrada inválida",
+      "usernameOrEmailTaken": "Nombre de usuario o correo electrónico ya en uso",
+      "noServerResponse": "Sin respuesta del servidor",
+      "errorRestoringAccount": "Error al restaurar la cuenta.",
+      "userEmailExists": "Ya existe un usuario con este correo electrónico.",
+      "googleSignupFailed": "Error en el registro con Google. Por favor intenta nuevamente."
+    }
   }
-
-
-
-
- 
 }

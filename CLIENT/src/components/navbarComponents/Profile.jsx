@@ -3,12 +3,15 @@ import ProfileImage from "./ProfileImage"
 import useLogout from "../../hooks/useLogout";
 import { useNavigate } from 'react-router-dom'
 import useAuth from "../../hooks/useAuth";
+import { useTranslation } from 'react-i18next';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; 
 
 export default function Profile ({toggleSection, showSections, handleNavigate, profilePictureKey, setProfilePictureKey}) {
-
+ 
+  const { t } = useTranslation();
   const {auth} = useAuth();
 
   const logout = useLogout();
@@ -50,14 +53,14 @@ export default function Profile ({toggleSection, showSections, handleNavigate, p
     </div>
     {showSections.profile && (
       <>
-        <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}>My account</div>
+        <div className='subitem' onClick={() => handleNavigate('/profile/myaccount')}> {t('profile.myAccount')}</div>
         {Object.keys(auth).length === 0 && 
         <>
-        <div className='subitem' onClick={() => handleNavigate('/signin')}>Sign in</div>
+        <div className='subitem' onClick={() => handleNavigate('/signin')}> {t('profile.signIn')}</div>
         </>
 }
         {Object.keys(auth).length > 0 && 
-      <div className="subitem" onClick={signOut}>
+      <div className="subitem" onClick={signOut} aria-label={t('profile.signOut')}>
       <FontAwesomeIcon icon={faSignOutAlt} />
     </div>
       }

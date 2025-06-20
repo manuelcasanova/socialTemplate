@@ -12,9 +12,11 @@ import { Link } from "react-router-dom";
 import { auth } from '../../firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
-
+import { useTranslation } from 'react-i18next';
 
 export default function Signup({ isNavOpen, screenWidth }) {
+
+  const { t } = useTranslation();
 
   const regexPatterns = {
     //username: /^[A-z][A-z0-9-_]{3,23}$/,
@@ -54,12 +56,13 @@ export default function Signup({ isNavOpen, screenWidth }) {
   const userRef = useRef();
   const errRef = useRef();
 
-  const handleShowEmailSignup = () => { setShowEmailSignUp(prev => !prev)
-setErrMsg('')
-setRestoreAction(false);
-setFormData('');
+  const handleShowEmailSignup = () => {
+    setShowEmailSignUp(prev => !prev)
+    setErrMsg('')
+    setRestoreAction(false);
+    setFormData('');
 
-   }
+  }
 
   useEffect(() => {
     if (!success && userRef.current) {
@@ -116,7 +119,7 @@ setFormData('');
     e.preventDefault();
 
     if (!Object.values(validity).every(Boolean)) {
-      setErrMsg("Invalid Entry");
+      setErrMsg(t('signup.errors.invalidEntry'));
       return;
     }
 
@@ -163,12 +166,12 @@ setFormData('');
             setErrMsg(err.response.data.message || 'An error occurred during signup.');
           }
         } else if (status === 409) {
-          setErrMsg('Username or Email Taken');
+            setErrMsg(t('signup.errors.usernameOrEmailTaken'));
         } else {
-          setErrMsg('No Server Response');
+            setErrMsg(t('signup.errors.noServerResponse'));
         }
       } else {
-        setErrMsg('No Server Response');
+          setErrMsg(t('signup.errors.noServerResponse'));
       }
       errRef.current.focus();
     } finally {
@@ -184,7 +187,7 @@ setFormData('');
       ...prev,
       restoreAction
     }));
-setErrMsg('');
+    setErrMsg('');
   }
 
   const handleGoogleSignUp = async () => {
@@ -206,9 +209,9 @@ setErrMsg('');
       console.error('Google Sign-Up Error:', err);
 
       if (err?.response?.status === 409) {
-        setErrMsg('User with this email already exists.');
+         setErrMsg(t('signup.errors.userEmailExists'));
       } else {
-        setErrMsg('Google Sign-Up failed. Please try again.');
+          setErrMsg(t('signup.errors.googleSignupFailed'));
       }
 
       errRef.current?.focus();
@@ -236,7 +239,7 @@ setErrMsg('');
         setSuccess(true);
       }
     } catch (err) {
-      setErrMsg('Error restoring account.');
+        setErrMsg(t('signup.errors.errorRestoringAccount'));
       errRef.current.focus();
     } finally {
       setLoading(false); // Stop the spinner after process is complete
@@ -276,10 +279,10 @@ setErrMsg('');
 
   const getValidationMessage = (id) => {
     const messages = {
-      user: "4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.",
-      email: "Must be a valid email address. Special characters allowed . - _",
-      pwd: "8 to 24 characters. Must include uppercase and lowercase letters, a number, and a special character. Allowed: !@#$%^&*.",
-      matchPwd: "Must match the first password input field."
+      user: t('signup.validationMessages.name'),
+      email: t('signup.validationMessages.email'),
+      pwd: t('signup.validationMessages.password'),
+      matchPwd: t('signup.validationMessages.confirmPassword'),
     };
     return messages[id];
   };
@@ -291,8 +294,8 @@ setErrMsg('');
       {!showEmailSignUp && success && (
         <section className='signup-success'>
           <div className="success-message">
-            <h2>All Set!</h2>
-            <p><Link to="/signin">Sign In</Link></p>
+            <h2>{t('signup.allSet')}</h2>
+            <p><Link to="/signin">{t('signup.signIn')}</Link></p>
           </div>
         </section>
       )}
@@ -302,19 +305,19 @@ setErrMsg('');
         <div className='centered-section'>
           <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
-          <button className="button-white" style={{marginBottom: '2em'}} onClick={handleShowEmailSignup}>
+          <button className="button-white" style={{ marginBottom: '2em' }} onClick={handleShowEmailSignup}>
             <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
-            Sign up with Email
+            {t('signup.signUpWithEmail')}
           </button>
 
           <button className="button-white" onClick={handleGoogleSignUp}>
             <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
-            Sign up with Google
+            {t('signup.signUpWithGoogle')}
           </button>
 
           <div className='have-an-account'>
-            <p>Already have an account?</p>
-            <p><Link to="/signin">Sign In</Link></p>
+            <p>{t('signup.alreadyHaveAccount')}</p>
+            <p><Link to="/signin">{t('signup.signIn')}</Link></p>
           </div>
         </div>
       )}
@@ -326,9 +329,9 @@ setErrMsg('');
           {success ? (
             <section className='signup-success'>
               <div className="success-message">
-                <h2>All Set!</h2>
-                <p>Please check your inbox (or spam folder) to verify your account.</p>
-                <p>The verification email usually arrives within a few seconds, but depending on traffic, it may take up to several minutes, up to 30 minutes in some cases.</p>
+                <h2>{t('signup.allSet')}</h2>
+                <p>{t('signup.pleaseCheckInbox')}</p>
+                <p>{t('signup.verificationEmailNote')}</p>
               </div>
             </section>
           ) : (
@@ -348,25 +351,25 @@ setErrMsg('');
                         <div className="spinner__circle"></div>
                       </div>
                     ) : (
-                      "Restore Account"
+                      t('signup.restoreAccount')
                     )}
                   </button>
                   <button
                     className="button-white button-smaller"
                     onClick={handleIgnoreRestoreAccount}
                     disabled={isSubmitting || loading}
-                  >Create a New Account</button>
+                  >{t('signup.createNewAccount')}</button>
                 </div>
               )}
               <div className='close-button-container'>
                 <button className="close-button-2" onClick={() => handleShowEmailSignup()}>✖</button>
               </div>
-              <div className="signup-title">Sign Up</div>
+              <div className="signup-title">{t('signup.signUpTitle')}</div>
               <form className="signup-form" onSubmit={handleSubmit}>
-                {renderInput("user", "Name", "text", "name")}
-                {renderInput("email", "Email", "text", "email")}
-                {renderInput("pwd", "Password", "password", "pwd")}
-                {renderInput("matchPwd", "Confirm Password", "password", "match")}
+                {renderInput("user", t('signup.name'), "text", "name")}
+                {renderInput("email", t('signup.email'), "text", "email")}
+                {renderInput("pwd", "Password", t('signup.password'), "pwd")}
+                {renderInput("matchPwd", t('signup.confirmPassword'), "password", "match")}
 
                 <button className='button-auth' disabled={!Object.values(validity).every(Boolean) || isSubmitting}>
                   {loading ? (
@@ -374,19 +377,19 @@ setErrMsg('');
                       <div className="spinner__circle"></div>
                     </div>
                   ) : (
-                    "Sign Up"
+                   t('signup.signUpTitle')
                   )}
                 </button>
               </form>
 
               <button className="button-white" onClick={() => handleShowEmailSignup()}>
                 <FontAwesomeIcon icon={faKey} style={{ marginRight: "10px" }} />
-                Sign up through a partner
+                {t('signup.signUpThroughPartner')}
               </button>
 
               <div className='have-an-account'>
-                <p>Already have an account?</p>
-                <p><Link to="/signin">Sign In</Link></p>
+                <p>{t('signup.alreadyHaveAccount')}</p>
+                <p><Link to="/signin">{t('signup.signIn')}</Link></p>
               </div>
             </section>
           )}

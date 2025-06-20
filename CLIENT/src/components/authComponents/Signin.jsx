@@ -104,7 +104,7 @@ useEffect(() => {
 
         return () => unsubscribe();
     }, []);
-
+console.log(t('resetPassword.title')); 
     const handleGoogleLogin = async () => {
         const provider = new GoogleAuthProvider();
         setIsLoading(true);
@@ -291,7 +291,7 @@ useEffect(() => {
                                     }
                                 }}
                             />
-                            <label htmlFor="persist">Login as Admin</label>
+                            <label htmlFor="persist">{t('signin.loginAsAdmin')}</label>
                         </div>
 
                         {/* End remove on production */}
@@ -308,7 +308,7 @@ useEffect(() => {
                             required
                         />
 
-                        <label htmlFor="password">Password:</label>
+                        <label htmlFor="password">{t('signin.password')}</label>
                         <input
                             className="input-field"
                             type="password"
@@ -320,7 +320,7 @@ useEffect(() => {
                         <button
                             className="button-auth"
                             disabled={isLoading}>
-                            {isLoading ? <LoadingSpinner /> : 'Sign In'}
+                            {isLoading ? <LoadingSpinner /> : t('signin.signInButton')}
                         </button>
 
                     </form>

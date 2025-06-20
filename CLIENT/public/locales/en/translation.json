@@ -112,7 +112,58 @@
       "serverUnreachable": "Server is unreachable. Please check your connection or try again later.",
       "googleFailed": "Failed to sign in with Google.",
       "loginFailed": "Login Failed",
+      "noServerResponse": "No Server Response"
+    }
+  },
+  "resetPassword": {
+    "title": "Change password",
+    "placeholderEmail": "Enter email",
+    "submit": "Submit",
+    "signUpLink": "Sign up",
+    "loadingMessage": "Please, wait. It may take up to a minute.",
+    "successMessage": "An email with instructions to reset your password has been sent. Please check your inbox or spam folder.",
+    "noServerResponse": "No Server Response",
+    "emailNotFound": "This email was not found in our database",
+    "unauthorized": "Unauthorized",
+    "attemptFailed": "Attempt Failed",
+    "unexpectedStatus": "Unexpected response status: "
+  },
+  "profile": {
+    "myAccount": "My account",
+    "signIn": "Sign in",
+    "signOut": "Sign out"
+  },
+
+  "signup": {
+    "allSet": "All Set!",
+    "signIn": "Sign In",
+    "signUpWithEmail": "Sign up with Email",
+    "signUpWithGoogle": "Sign up with Google",
+    "alreadyHaveAccount": "Already have an account?",
+    "pleaseCheckInbox": "Please check your inbox (or spam folder) to verify your account.",
+    "verificationEmailNote": "The verification email usually arrives within a few seconds, but depending on traffic, it may take up to several minutes, up to 30 minutes in some cases.",
+    "restoreAccount": "Restore Account",
+    "createNewAccount": "Create a New Account",
+    "signUpTitle": "Sign Up",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "signUpButton": "Sign Up",
+    "signUpThroughPartner": "Sign up through a partner",
+    "validationMessages": {
+      "name": "4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.",
+      "email": "Must be a valid email address. Special characters allowed . - _",
+      "password": "8 to 24 characters. Must include uppercase and lowercase letters, a number, and a special character. Allowed: !@#$%^&*.",
+      "confirmPassword": "Must match the first password input field."
+    },
+    "errors": {
+      "invalidEntry": "Invalid Entry",
+      "usernameOrEmailTaken": "Username or Email Taken",
       "noServerResponse": "No Server Response",
+      "errorRestoringAccount": "Error restoring account.",
+      "userEmailExists": "User with this email already exists.",
+      "googleSignupFailed": "Google Sign-Up failed. Please try again."
     }
   }
 }

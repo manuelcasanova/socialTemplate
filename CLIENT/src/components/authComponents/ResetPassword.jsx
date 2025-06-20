@@ -3,9 +3,12 @@ import '../../css/ResetPassword.css';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 
 export default function ResetPassword({isNavOpen}) {
+
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState()
   const axiosPrivate = useAxiosPrivate()
@@ -48,23 +51,23 @@ export default function ResetPassword({isNavOpen}) {
       );
 
       if (response.status === 200) {
-        setMsg('An email with instructions to reset your password has been sent. Please check your inbox or spam folder.');
+        setMsg(t('resetPassword.successMessage'));
         msgRef.current?.focus();
       } else {
-        setErrMsg('Unexpected response status: ' + response.status);
+        setErrMsg(t('resetPassword.unexpectedStatus', { status: response.status }));
         errRef.current?.focus();
       }
     } catch (err) {
       console.log(err)
       // Always learned !err but not sure what's the sense behind. 
       if (!err?.response) {
-        setErrMsg('No Server Response');
+        setErrMsg(t('resetPassword.noServerResponse'));
       } else if (err.response?.status === 403) {
         setErrMsg('This email was not found in our database');
       } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized');
+        setErrMsg(t('resetPassword.unauthorized'));
       } else {
-        setErrMsg('Attempt Failed');
+        setErrMsg(t('resetPassword.attemptFailed'));
       }
       errRef.current?.focus();
     } finally {
@@ -77,7 +80,7 @@ export default function ResetPassword({isNavOpen}) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
 <section className="section-reset">
   <form onSubmit={handleSubmit} className="form-reset">
-    <h3>Change password</h3>
+    <h3> {t('resetPassword.title')}</h3>
 
     {msg ? (
       // Success State: Show title and success message only
@@ -100,7 +103,7 @@ export default function ResetPassword({isNavOpen}) {
         </p>
         {loading ? (
           <div>
-            <p style={{ marginBottom: '1em' }}>Please, wait. It may take up to a minute.</p>
+            <p style={{ marginBottom: '1em' }}> {t('resetPassword.loadingMessage')}</p>
             <LoadingSpinner />
           </div>
         ) : (
@@ -111,19 +114,19 @@ export default function ResetPassword({isNavOpen}) {
               </label>
               <input
                 type="email"
-                placeholder="Enter email"
+                placeholder= {t('resetPassword.placeholderEmail')}
                 ref={emailRef}
                 onChange={(e) => setEmail(e.target.value.toLowerCase())}
               />
             </div>
             <div>
               <button type="submit" className="button-reset">
-                Submit
+                 {t('resetPassword.submit')}
               </button>
             </div>
             <p className="p-reset">
               <a className="a-reset" href="/signup">
-                Sign up
+                {t('resetPassword.signUpLink')}
               </a>
             </p>
           </>
