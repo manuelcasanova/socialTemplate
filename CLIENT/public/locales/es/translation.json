@@ -23,5 +23,48 @@
       "Prueba la adaptabilidad de la app en diferentes dispositivos: escritorio, tableta y móvil.",
       "Inicia sesión con o sin marcar la casilla “Confiar en este dispositivo” y luego recarga la página."
     ]
+  },
+  "moderator": {
+    "privatePage": "Esta página es privada y accesible solo para Moderadores.",
+    "exploreScenariosTitle": "Explora escenarios de moderación:",
+    "scenario": {
+      "reportPost": "Reporta un post.",
+      "markInappropriate": "Marca el post como inapropiado y ocúltalo a través de la sección de Moderación.",
+      "viewHiddenPost": "Intenta ver el post oculto.",
+      "restorePost": "Restaura el post desde la sección de Posts Ocultos.",
+      "reviewHistory": "Revisa el historial de moderación.",
+      "repeatCommentActions": "Repite estas acciones para los comentarios en los posts."
+    }
+  },
+
+  "navbar": {
+    "home": "Inicio",
+    "protected": "Protegido",
+    "accessibleToAll": "Accesible para todos los usuarios registrados",
+    "posts": "Publicaciones",
+    "moderator": "Moderador",
+    "moderatePosts": "Moderar posts",
+    "moderateComments": "Moderar comentarios",
+    "hiddenPosts": "Posts ocultos",
+    "hiddenComments": "Comentarios ocultos",
+    "moderationHistoryPosts": "Historial de moderación (posts)",
+    "moderationHistoryComments": "Historial de moderación (comentarios)",
+    "subscriber": "Suscriptor",
+    "users": "Usuarios",
+    "allUsers": "Todos los usuarios",
+    "following": "Siguiendo",
+    "followers": "Seguidores",
+    "pendingRequests": "Solicitudes pendientes",
+    "muted": "Silenciados",
+    "admin": "Administración",
+    "superAdminSettings": "Configuración de Super Administrador",
+    "settings": "Configuración",
+    "adminSettings": "Configuración de Administrador",
+    "adminUsers": "Administración de usuarios",
+    "adminRoles": "Roles de administrador",
+    "roleChangeLog": "Registro de cambios de roles",
+    "loginHistory": "Historial de inicio de sesión"
   }
+
+ 
 }

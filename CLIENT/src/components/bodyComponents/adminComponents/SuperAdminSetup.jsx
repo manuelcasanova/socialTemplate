@@ -39,6 +39,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
   return (
     <div className={`admin-setup-container ${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <h2 className='admin-setup-title'>App Settings</h2>
+      <p>
+        Note: Super Admins can modify both Super Admin and Admin settings. However, if a Super Admin setting is disabled, the corresponding Admin setting cannot be enabled or modified. To allow changes, the Super Admin setting must first be enabled in the Super Admin configuration section.
+      </p>
       <h4 className='admin-setup-subtitle'>POSTS</h4>
 
       <div className='admin-setup-line'>

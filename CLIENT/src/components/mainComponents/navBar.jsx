@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 //Context
 import { useGlobalSuperAdminSettings } from '../../context/SuperAdminSettingsProvider';
@@ -25,18 +26,10 @@ import { faSignOutAlt, faEnvelope, faCog } from '@fortawesome/free-solid-svg-ico
 
 const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages, customRoles, hasPostReports, hasCommentsReports, setHasPostReports, setHasCommentsReports }) => {
 
+  const { t } = useTranslation();
+
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
-
-  // console.log('adminSettings', adminSettings)
-
-  // console.log("Superadmin comment reactions", superAdminSettings.allowCommentReactions, 'Admin comment reaction', adminSettings.allowCommentReactions)
-
-
-  // console.log(superAdminSettings.showSocialFeature, adminSettings.showSocialFeature)
-
-  // console.log("customRoles", customRoles)
-  // console.log("customRoles length", customRoles.length)
 
   const { auth } = useAuth();
   const isSuperAdmin = auth?.roles?.includes('SuperAdmin');
@@ -213,12 +206,12 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
         !isLargeScreen && <Profile toggleSection={toggleSection} showSections={showSections} handleNavigate={handleNavigate} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} />
       )}
 
-      {<div className='nav-item' onClick={() => handleNavigate('/')}>Home</div>}
-   
+      {<div className='nav-item' onClick={() => handleNavigate('/')}>{t('navbar.home')}</div>}
 
-      {customRoles && customRoles.length > 0 &&
+
+      {/* {customRoles && customRoles.length > 0 && */}
         <div className={`nav-item-with-dropdown ${showSections.protectedRoutes ? 'nav-item-with-dropdown-open' : ''}`}>
-          <div className='nav-item' onClick={() => toggleSection('protected_routes')}>Protected
+          <div className='nav-item' onClick={() => toggleSection('protected_routes')}>{t('navbar.protected')}
             {showSections.protectedRoutes ? '▲' : '▼'
             }
           </div>
@@ -227,11 +220,11 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
             <>
 
-        <ul
-        onClick={() => handleNavigate('/user')}
+              <ul
+                onClick={() => handleNavigate('/user')}
 
-         className='subitem'
-         >Accessible to all registered users</ul>
+                className='subitem'
+              >{t('navbar.accessibleToAll')}</ul>
 
 
               {customRoles && customRoles.length > 0 && customRoles.map(role => (
@@ -248,17 +241,17 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
             </>
           )}
         </div>
-      }
+      {/* } */}
 
       {
         superAdminSettings.showPostsFeature && adminSettings.showPostsFeature &&
-        <div className='nav-item' onClick={() => handleNavigate('/posts')}>Posts</div>
+        <div className='nav-item' onClick={() => handleNavigate('/posts')}>{t('navbar.posts')}</div>
       }
 
       {auth.roles && auth.roles.includes('Moderator') &&
         superAdminSettings.showPostsFeature && adminSettings.showPostsFeature &&
         <div className={`nav-item-with-dropdown ${showSections.moderator ? 'nav-item-with-dropdown-open' : ''}`}>
-          <div className='nav-item' onClick={() => toggleSection('moderator')}>Moderator
+          <div className='nav-item' onClick={() => toggleSection('moderator')}>{t('navbar.moderator')}
             {(hasCommentsReports || hasPostReports) &&
               <div className='in-line-red-dot'></div>
             }
@@ -267,7 +260,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
           </div>
           {showSections.moderator && (
             <>
-              <div className='subitem' onClick={() => handleNavigate('/moderator/')}>Moderator</div>
+              <div className='subitem' onClick={() => handleNavigate('/moderator/')}>{t('navbar.moderator')}</div>
 
               <div className="subitem" onClick={() => {
                 handleNavigate('/moderator/posts')
@@ -275,7 +268,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               }
 
               }>
-                Moderate posts
+                {t('navbar.moderatePosts')}
                 {(hasPostReports) &&
                   <div className='in-line-red-dot'></div>
                 }
@@ -288,7 +281,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               }
               }>
 
-                Moderate comments
+                {t('navbar.moderateComments')}
                 {(hasCommentsReports) &&
                   <div className='in-line-red-dot'></div>
                 }
@@ -296,19 +289,19 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/moderator/hidden/posts')}>
-                Hidden posts
+                {t('navbar.hiddenPosts')}
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/moderator/hidden/comments')}>
-                Hidden comments
+                {t('navbar.hiddenComments')}
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/moderator/posts/history')}>
-                Moderation History (Posts)
+                {t('navbar.moderationHistoryPosts')}
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/moderator/comments/history')}>
-                Moderation History (Comments)
+                {t('navbar.moderationHistoryComments')}
               </div>
 
             </>
@@ -317,7 +310,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
       }
 
       {superAdminSettings.showSubscriberFeature &&
-        <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>Subscriber</div>
+        <div className='nav-item' onClick={() => handleNavigate('/subscriber')}>{t('navbar.subscriber')}</div>
       }
 
       {
@@ -330,7 +323,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               <div className='nav-item' onClick={() => toggleSection('social')}>
 
                 {isFollowNotification ? <div className='with-notification-text'>Users</div> :
-                  <div>Users</div>}
+                  <div>{t('navbar.users')}</div>}
 
                 {isFollowNotification ?
                   <FollowNotification />
@@ -341,17 +334,17 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               </div>
               {showSections.social && (
                 <>
-                  <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>All users</div>
+                  <div className='subitem' onClick={() => handleNavigate('/social/allusers')}>{t('navbar.allUsers')}</div>
 
                   {superAdminSettings.allowFollow && adminSettings.allowFollow &&
                     <>
                       <div className="subitem" onClick={() => handleNavigate('/social/following')}>
-                        Following
+                        {t('navbar.following')}
                       </div>
 
 
                       <div className="subitem" onClick={() => handleNavigate('/social/followers')}>
-                        Followers
+                        {t('navbar.followers')}
                       </div>
 
                       <div className="subitem" onClick={() => {
@@ -359,15 +352,15 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
                         handleNavigate('/social/pending')
                       }}
                       >
-                        {isFollowNotification ? <div className='with-notification-text'>Pending requests</div> :
-                          <div>Pending requests</div>}
+                        {isFollowNotification ? <div className='with-notification-text'>{t('navbar.pendingRequests')}</div> :
+                          <div>{t('navbar.pendingRequests')}</div>}
                         {isFollowNotification && <FollowNotification />}
                       </div>
 
                     </>}
 
                   <div className="subitem" onClick={() => handleNavigate('/social/muted')}>
-                    Muted
+                    {t('navbar.muted')}
                   </div>
 
 
@@ -380,43 +373,43 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
       {auth.roles && (auth.roles.includes('SuperAdmin') || auth.roles.includes('Admin')) &&
         <div className={`nav-item-with-dropdown ${showSections.admin ? 'nav-item-with-dropdown-open' : ''}`}>
-          <div className='nav-item' onClick={() => toggleSection('admin')}>Admin
+          <div className='nav-item' onClick={() => toggleSection('admin')}>{t('navbar.admin')}
             {showSections.admin ? '▲' : '▼'
             }
           </div>
           {showSections.admin && (
             <>
-              <div className='subitem' onClick={() => handleNavigate('/admin/admin')}>Admin</div>
+              <div className='subitem' onClick={() => handleNavigate('/admin/admin')}>{t('navbar.admin')}</div>
 
               {isSuperAdmin && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/setup')}>
-                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Super Admin Settings
+                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} />{t('navbar.superAdminSettings')}
                 </div>
               )}
 
               {isAdminNotSuperAdmin && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/admin/setup')}>
-                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Settings
+                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> {t('navbar.settings')}
                 </div>
               )}
 
               {isAdminAndSuperAdmin && (
                 <div className="subitem" onClick={() => handleNavigate('/admin/admin/setup')}>
-                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> Admin Settings
+                  <FontAwesomeIcon icon={faCog} style={{ marginRight: '10px' }} /> {t('navbar.adminSettings')}
                 </div>
               )}
 
-              <div className='subitem' onClick={() => handleNavigate('/admin/users')}>Admin users</div>
+              <div className='subitem' onClick={() => handleNavigate('/admin/users')}>{t('navbar.adminUsers')}</div>
 
 
-              <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>Admin roles</div>
+              <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>{t('navbar.adminRoles')}</div>
 
               <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
-                Role change log
+                {t('navbar.roleChangeLog')}
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
-                Login history
+                 {t('navbar.loginHistory')}
               </div>
 
             </>

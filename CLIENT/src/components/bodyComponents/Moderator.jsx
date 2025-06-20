@@ -1,32 +1,25 @@
+import { useTranslation } from 'react-i18next';
+
 export default function Moderator({ isNavOpen }) {
+  const { t } = useTranslation();
 
   return (
-    <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
+    <div className={isNavOpen ? 'body-squeezed' : 'body'}>
       <div className="centered-container">
-        <h2>This page is private and accessible only to Moderators.</h2>
+        <h2>{t('moderator.privatePage')}</h2>
 
         <div className="interaction-box">
-          <li>
-            <ul>
-              <li><strong>Explore moderation scenarios:</strong></li>
-              <li>- Report a post.</li>
-              <li>- Mark the post as inappropriate and hide it from the Moderate Posts section.</li>
-              <li>- Attempt to view the hidden post.</li>
-              <li>- Restore the post from the Hidden Posts section.</li>
-              <li>- Review the moderation history.</li>
-              <li>- Repeat these actions for comments on posts.</li>
-            </ul>
-          </li>
-
-
+          <ul>
+            <li><strong>{t('moderator.exploreScenariosTitle')}</strong></li>
+            <li>- {t('moderator.scenario.reportPost')}</li>
+            <li>- {t('moderator.scenario.markInappropriate')}</li>
+            <li>- {t('moderator.scenario.viewHiddenPost')}</li>
+            <li>- {t('moderator.scenario.restorePost')}</li>
+            <li>- {t('moderator.scenario.reviewHistory')}</li>
+            <li>- {t('moderator.scenario.repeatCommentActions')}</li>
+          </ul>
         </div>
       </div>
     </div>
-
-  )
+  );
 }
-
-
-
-
-

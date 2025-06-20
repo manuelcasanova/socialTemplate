@@ -23,5 +23,46 @@
       "Test the app’s responsiveness across devices: desktop, tablet, and mobile.",
       "Sign in with or without selecting the \"Trust this device\" checkbox, then try reloading the page."
     ]
+  },
+  "moderator": {
+    "privatePage": "This page is private and accessible only to Moderators.",
+    "exploreScenariosTitle": "Explore moderation scenarios:",
+    "scenario": {
+      "reportPost": "Report a post.",
+      "markInappropriate": "Mark the post as inappropriate and hide it from the Moderate Posts section.",
+      "viewHiddenPost": "Attempt to view the hidden post.",
+      "restorePost": "Restore the post from the Hidden Posts section.",
+      "reviewHistory": "Review the moderation history.",
+      "repeatCommentActions": "Repeat these actions for comments on posts."
+    }
+  },
+  
+  "navbar": {
+    "home": "Home",
+    "protected": "Protected",
+    "accessibleToAll": "Accessible to all registered users",
+    "posts": "Posts",
+    "moderator": "Moderator",
+    "moderatePosts": "Moderate posts",
+    "moderateComments": "Moderate comments",
+    "hiddenPosts": "Hidden posts",
+    "hiddenComments": "Hidden comments",
+    "moderationHistoryPosts": "Moderation History (Posts)",
+    "moderationHistoryComments": "Moderation History (Comments)",
+    "subscriber": "Subscriber",
+    "users": "Users",
+    "allUsers": "All users",
+    "following": "Following",
+    "followers": "Followers",
+    "pendingRequests": "Pending requests",
+    "muted": "Muted",
+    "admin": "Admin",
+    "superAdminSettings": "Super Admin Settings",
+    "settings": "Settings",
+    "adminSettings": "Admin Settings",
+    "adminUsers": "Admin users",
+    "adminRoles": "Admin roles",
+    "roleChangeLog": "Role change log",
+    "loginHistory": "Login history"
   }
 }
