@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 //Hooks
 import useAuth from '../../hooks/useAuth';
@@ -35,6 +35,8 @@ const DEFAULT_PASSWORD = 'G7m!pLz@92aT';  // Hardcoded default password for deve
 
 
 const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsReports, setHasPostReports }) => {
+
+  const { t } = useTranslation();
 
     const { adminSettings } = useGlobalAdminSettings();
 
@@ -138,17 +140,18 @@ useEffect(() => {
             const message = error?.message;
         
             if (errorCode === 'auth/popup-closed-by-user') {
-                setErrMsg('Google sign-in was canceled.');
+                setErrMsg(t('signin.popupClosed'));
+
             } else if (errorCode === 'auth/cancelled-popup-request') {
-                setErrMsg('Only one popup request allowed at a time.');
+                setErrMsg(t('signin.popupRequest'));
             } else if (errorCode === 'auth/popup-blocked') {
-                setErrMsg('Popup blocked by browser.');
+                setErrMsg(t('signin.popupBlocked'));
             } else if (status === 404 && serverError === 'User not registered.') {
-                setErrMsg('User not registered. Please Sign Up');
+                setErrMsg(t('signin.userNotRegistered'));
             } else if (!error.response) {
-                setErrMsg('Server is unreachable. Please check your connection or try again later.');
+                setErrMsg(t('signin.serverUnreachable'));
             } else {
-                setErrMsg(serverError || message || 'Failed to sign in with Google.');
+                setErrMsg(serverError || message || t('signin.serverUnreachable'));
             }
         
         } finally {
@@ -334,13 +337,13 @@ useEffect(() => {
                                     onClick={handleShowSignUpWithEmail}
                                     disabled={isLoading}>
                                     <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
-                                    {'Sign In with Email'}
+                                   {t('signin.signInWithEmail')}
                                 </button>
 
 
                                 <button className="button-white" onClick={handleGoogleLogin} disabled={isLoading}>
                                     <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
-                                    Sign in with Google
+                                    {t('signin.signInWithGoogle')}
                                 </button>
 
                             </>
@@ -350,17 +353,17 @@ useEffect(() => {
 
                 <div className="trust-device">
                     <input type="checkbox" id="persist" onChange={toggleCheck} checked={check} />
-                    <label htmlFor="persist">Trust This Device</label>
+                    <label htmlFor="persist">{t('signin.trustDevice')}</label>
                 </div>
 
                 <div className="have-an-account">
-                    <p>Need an Account?</p>
-                    <Link to="/signup">Sign Up</Link>
+                    <p>{t('signin.needAccount')}</p>
+                    <Link to="/signup">{t('signin.signUp')}</Link>
                 </div>
 
                     <div className="have-an-account">
-                        <p>Forgot password?</p>
-                        <Link to="/resetpassword">Reset</Link>
+                        <p>{t('signin.forgotPassword')}</p>
+                        <Link to="/resetpassword">{t('signin.reset')}</Link>
                     </div>
                 
 

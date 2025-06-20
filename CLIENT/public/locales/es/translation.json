@@ -64,7 +64,64 @@
     "adminRoles": "Roles de administrador",
     "roleChangeLog": "Registro de cambios de roles",
     "loginHistory": "Historial de inicio de sesión"
+  },
+
+  "user": {
+    "welcome": "¡Bienvenido! ¡Ahora eres un usuario registrado!",
+    "privatePage": "Esta página es privada y accesible solo para usuarios que han iniciado sesión.",
+    "whatsNext": "¿Qué sigue?",
+    "updateProfileTitle": "Actualiza tu perfil:",
+    "updateProfileDesc": "Haz clic en la imagen de perfil para editar tu foto, nombre de usuario, correo electrónico, contraseña o incluso eliminar tu cuenta.",
+    "subscribeTitle": "Suscríbete:",
+    "subscribeDesc": "Ve a la sección de Suscriptor y haz clic en \"Suscribirse ahora\" para obtener acceso completo (no se requiere tarjeta de crédito para fines de prueba, solo pulsa el botón).",
+    "testScenariosTitle": "Prueba escenarios reales:",
+    "scenario": {
+      "deleteAndSignup": "- Intenta eliminar tu cuenta y registrarte de nuevo con el mismo correo electrónico.",
+      "adminRoles": "- Desde la sección de Administrador, crea, edita y elimina roles. Luego prueba acceder a las secciones correspondientes con usuarios que tengan o no tengan los permisos adecuados."
+    }
+  },
+
+  "admin": {
+    "privatePage": "Esta página es privada y accesible solo para administradores.",
+    "exploreTitle": "Explora escenarios de administrador:",
+    "scenario": {
+      "modifyRoles": "- Modifica los roles permitidos de un usuario.",
+      "deleteUser": "- Elimina una cuenta de usuario.",
+      "viewHistory": "- Consulta el historial de inicio de sesión y los registros de cambios de roles.",
+      "adjustSettings": "- Ajusta la configuración y observa cómo se activan o desactivan las funciones. Algunas funciones pueden estar restringidas por administradores de nivel superior."
+    }
+  },
+
+  "signin": {
+    "sessionExpired": "La sesión ha expirado. Por favor, vuelve a iniciar sesión.",
+    "signInWithEmail": "Iniciar sesión con email",
+    "signInWithGoogle": "Iniciar sesión con Google",
+    "trustDevice": "Confiar en este dispositivo",
+    "loginAsAdmin": "Iniciar sesión como administrador",
+    "email": "Correo electrónico:",
+    "password": "Contraseña:",
+    "signInButton": "Iniciar sesión",
+    "resendVerification": "Reenviar correo de verificación",
+    "verificationResent": "El correo de verificación se ha reenviado correctamente. Normalmente llega en pocos segundos, pero dependiendo del tráfico, puede tardar hasta varios minutos (hasta 30 minutos en algunos casos).",
+    "resendVerificationFailed": "No se pudo reenviar el correo de verificación. Inténtalo de nuevo en 15 minutos.",
+    "needAccount": "¿Necesitas una cuenta?",
+    "signUp": "Regístrate",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "reset": "Restablecer",
+    "errors": {
+      "popupClosed": "El inicio de sesión con Google fue cancelado.",
+      "popupRequest": "Solo se permite una ventana emergente a la vez.",
+      "popupBlocked": "La ventana emergente fue bloqueada por el navegador.",
+      "userNotRegistered": "Usuario no registrado. Por favor, regístrate.",
+      "serverUnreachable": "El servidor no responde. Revisa tu conexión o inténtalo más tarde.",
+      "googleFailed": "No se pudo iniciar sesión con Google.",
+      "loginFailed": "Inicio de sesión fallido",
+      "noServerResponse": "Sin respuesta del servidor"
+    }
   }
+
+
+
 
  
 }

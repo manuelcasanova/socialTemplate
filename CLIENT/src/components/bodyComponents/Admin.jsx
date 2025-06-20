@@ -1,18 +1,22 @@
+import { useTranslation } from 'react-i18next';
+
 export default function Admin({ isNavOpen }) {
+
+  const { t } = useTranslation();
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="centered-container">
-        <h2>This page is private and accessible only to Administrators.</h2>
+        <h2>{t('admin.privatePage')}</h2>
 
         <div className="interaction-box">
           <li>
             <ul>
-              <li><strong>Explore admin scenarios:</strong></li>
-              <li>- Modify a user's allowed roles.</li>
-              <li>- Delete a user account.</li>
-              <li>- View the Login History and audit logs for role changes.</li>
-              <li>- Adjust settings and observe how features are enabled or disabled. Some features may be restricted by higher-tier administrators.</li>
+              <li><strong>{t('admin.exploreTitle')}</strong></li>
+              <li>{t('admin.scenario.modifyRoles')}</li>
+              <li>{t('admin.scenario.deleteUser')}</li>
+              <li>{t('admin.scenario.viewHistory')}</li>
+              <li>{t('admin.scenario.adjustSettings')}</li>
             </ul>
 
           </li>

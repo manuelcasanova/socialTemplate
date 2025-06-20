@@ -36,7 +36,6 @@
       "repeatCommentActions": "Repeat these actions for comments on posts."
     }
   },
-  
   "navbar": {
     "home": "Home",
     "protected": "Protected",
@@ -64,5 +63,56 @@
     "adminRoles": "Admin roles",
     "roleChangeLog": "Role change log",
     "loginHistory": "Login history"
+  },
+  "user": {
+    "welcome": "Welcome! You're now a registered user!",
+    "privatePage": "This page is private and accessible only to signed-in users.",
+    "whatsNext": "What's next?",
+    "updateProfileTitle": "Update your profile:",
+    "updateProfileDesc": "Click on the profile image to edit your picture, username, email, password, or even delete your account.",
+    "subscribeTitle": "Subscribe: ",
+    "subscribeDesc": "Head to the Subscriber section and click \"Subscribe Now\" to get full access (no credit card required for test purposies, just hit the button).",
+    "testScenariosTitle": "Test real-life scenarios:",
+    "scenario": {
+      "deleteAndSignup": "- Try deleting your account and signing up again with the same email.",
+      "adminRoles": "- From the Admin section, create, edit, and delete roles. Then test access behavior with various role permissions."
+    }
+  },
+  "admin": {
+    "privatePage": "This page is private and accessible only to Administrators.",
+    "exploreTitle": "Explore admin scenarios:",
+    "scenario": {
+      "modifyRoles": "- Modify a user's allowed roles.",
+      "deleteUser": "- Delete a user account.",
+      "viewHistory": "- View the Login History and audit logs for role changes.",
+      "adjustSettings": "- Adjust settings and observe how features are enabled or disabled. Some features may be restricted by higher-tier administrators."
+    }
+  },
+  "signin": {
+    "sessionExpired": "Session expired. Please sign in again.",
+    "signInWithEmail": "Sign In with Email",
+    "signInWithGoogle": "Sign in with Google",
+    "trustDevice": "Trust This Device",
+    "loginAsAdmin": "Login as Admin",
+    "email": "Email:",
+    "password": "Password:",
+    "signInButton": "Sign In",
+    "resendVerification": "Resend Verification Email",
+    "verificationResent": "The verification email has been successfully resent. It usually arrives within a few seconds, but depending on traffic, it may take up to several minutes—up to 30 minutes in some cases.",
+    "resendVerificationFailed": "Failed to resend verification email. Try again in 15 minutes.",
+    "needAccount": "Need an Account?",
+    "signUp": "Sign Up",
+    "forgotPassword": "Forgot password?",
+    "reset": "Reset",
+    "errors": {
+      "popupClosed": "Google sign-in was canceled.",
+      "popupRequest": "Only one popup request allowed at a time.",
+      "popupBlocked": "Popup blocked by browser.",
+      "userNotRegistered": "User not registered. Please Sign Up",
+      "serverUnreachable": "Server is unreachable. Please check your connection or try again later.",
+      "googleFailed": "Failed to sign in with Google.",
+      "loginFailed": "Login Failed",
+      "noServerResponse": "No Server Response",
+    }
   }
 }
