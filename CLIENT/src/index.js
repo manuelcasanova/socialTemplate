@@ -8,6 +8,8 @@ import { AdminSettingsProvider } from './context/AdminSettingsProvider';
 import { ScreenSizeProvider } from './context/ScreenSizeContext';
 import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
+import './i18n';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

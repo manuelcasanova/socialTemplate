@@ -1,0 +1,27 @@
+{
+  "home": {
+    "welcome": "Welcome to the public page",
+    "intro": "This template provides a solid foundation for any full-stack web development project:",
+    "secureLogin": "Secure login/logout functionality — Protect access with user authentication.",
+    "userMgmt": "User management with a database — Handle user data and roles with PostgreSQL.",
+    "roleAccess": "Role-based access control — Control access for different users across the app.",
+    "responsiveLayout": "Responsive layout with a navigation bar — A clean, mobile-friendly interface powered by ReactJS.",
+    "technologiesUsed": "Technologies used:",
+    "backend": "Backend:",
+    "backend-detail": "ExpressJs and NodeJS",
+    "frontend": "Frontend:",
+    "database": "Database:",
+    "getStartedTitle": "How to get started:",
+    "signUp": "Sign Up:",
+    "signUpCreate": "Create an account",
+    "signIn": "Sign In:",
+    "signInDesc": "Log in to access your account and dashboard. Visit the \"User\" section to explore more features.",
+    "exploreScenarios": "Explore scenarios:",
+    "scenarios": [
+      "After signing up, skip email verification and try to sign up again with the same email.",
+      "Try signing in with a forgotten password.",
+      "Test the app’s responsiveness across devices: desktop, tablet, and mobile.",
+      "Sign in with or without selecting the \"Trust this device\" checkbox, then try reloading the page."
+    ]
+  }
+}

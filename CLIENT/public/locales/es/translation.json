@@ -1,0 +1,27 @@
+{
+  "home": {
+    "welcome": "Bienvenido a la página pública",
+    "intro": "Esta plantilla proporciona una base sólida para cualquier proyecto de desarrollo web full-stack:",
+    "secureLogin": "Funcionalidad segura de inicio/cierre de sesión — Protege el acceso mediante autenticación de usuarios.",
+    "userMgmt": "Gestión de usuarios con base de datos — Maneja datos y roles de usuarios con PostgreSQL.",
+    "roleAccess": "Control de acceso basado en roles — Controla el acceso para diferentes usuarios en toda la app.",
+    "responsiveLayout": "Diseño adaptable con barra de navegación — Una interfaz limpia y compatible con dispositivos móviles, hecha con ReactJS.",
+    "technologiesUsed": "Tecnologías utilizadas:",
+    "backend": "Backend:",
+    "backend-detail": "ExpressJs y NodeJS",
+    "frontend": "Frontend:",
+    "database": "Base de datos:",
+    "getStartedTitle": "Cómo empezar:",
+    "signUp": "Registrarse:",
+    "signUpCreate": "Crea una cuenta",
+    "signIn": "Iniciar sesión:",
+    "signInDesc": "Inicia sesión para acceder a tu cuenta y panel. Visita la sección \"Usuario\" para explorar más funciones.",
+    "exploreScenarios": "Explora escenarios:",
+    "scenarios": [
+      "Después de registrarte, omite la verificación por correo electrónico e intenta registrarte nuevamente con el mismo correo.",
+      "Prueba a iniciar sesión con una contraseña olvidada.",
+      "Prueba la adaptabilidad de la app en diferentes dispositivos: escritorio, tableta y móvil.",
+      "Inicia sesión con o sin marcar la casilla “Confiar en este dispositivo” y luego recarga la página."
+    ]
+  }
+}

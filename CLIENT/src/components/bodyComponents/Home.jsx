@@ -1,49 +1,52 @@
-import React, { useState } from 'react';import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import '../../css/centeredContainer.css';
 
 export default function Home({ isNavOpen }) {
-
+  const { t } = useTranslation();
 
   return (
-    <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-
+    <div className={isNavOpen ? 'body-squeezed' : 'body'}>
       <div className="centered-container">
-        <h2>Welcome to the public page</h2>
+        <h2>{t('home.welcome')}</h2>
 
-        <p>This template provides a solid foundation for any full-stack web development project:</p>
+        <p>{t('home.intro')}</p>
 
         <ul>
-          <li><strong>Secure login/logout functionality</strong> — Protect access with user authentication.</li>
-          <li><strong>User management with a database</strong> — Handle user data and roles with PostgreSQL.</li>
-          <li><strong>Role-based access control</strong> — Control access for different users across the app.</li>
-          <li><strong>Responsive layout with a navigation bar</strong> — A clean, mobile-friendly interface powered by ReactJS.</li>
+          <li><strong>{t('home.secureLogin')}</strong></li>
+          <li><strong>{t('home.userMgmt')}</strong></li>
+          <li><strong>{t('home.roleAccess')}</strong></li>
+          <li><strong>{t('home.responsiveLayout')}</strong></li>
         </ul>
 
-        <p>Technologies used:</p>
+        <p>{t('home.technologiesUsed')}</p>
         <ul>
-          <li><strong>Backend:</strong> ExpressJS and Node.js</li>
-          <li><strong>Frontend:</strong> ReactJS</li>
-          <li><strong>Database:</strong> PostgreSQL</li>
+          <li><strong>{t('home.backend')}</strong>{t('home.backend-detail')}</li>
+          <li><strong>{t('home.frontend')}</strong> ReactJS</li>
+          <li><strong>{t('home.database')}</strong> PostgreSQL</li>
         </ul>
 
-
-          <div className="interaction-box">
-            <h3>How to get started:</h3>
-            <ul>
-              <li><strong>Sign Up:</strong> <Link to="/signup">Create an account</Link> to get started.</li>
-              <li><strong>Sign In:</strong> Log in to access your account and dashboard. Visit the "User" section to explore more features.</li>
-              <li><strong>Explore scenarios:</strong>
-                <ul>
-                  <li>- After signing up, skip email verification and try to sign up again with the same email.</li>
-                  <li>- Try signing in with a forgotten password.</li>
-                  <li>- Test the app’s responsiveness across devices: desktop, tablet, and mobile.</li>
-                  <li>- Sign in with or without selecting the "Trust this device" checkbox, then try reloading the page.</li>
-
-                </ul>
-              </li>
-            </ul>
-          </div>
-
+        <div className="interaction-box">
+          <h3>{t('home.getStartedTitle')}</h3>
+          <ul>
+            <li>
+              <strong>{t('home.signUp')}</strong>{' '}
+              <Link to="/signup">{t('home.signUpCreate')}</Link>
+            </li>
+            <li>
+              <strong>{t('home.signIn')}</strong> {t('home.signInDesc')}
+            </li>
+            <li>
+              <strong>{t('home.exploreScenarios')}</strong>
+              <ul>
+                {t('home.scenarios', { returnObjects: true }).map((scenario, index) => (
+                  <li key={index}>- {scenario}</li>
+                ))}
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
