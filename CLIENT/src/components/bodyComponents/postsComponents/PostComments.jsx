@@ -25,10 +25,15 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 import PostCommentsInteractions from "./PostCommentsInteractions";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostComments({ isNavOpen, profilePictureKey }) {
 
+   const { t, i18n } = useTranslation();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
@@ -349,7 +354,9 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
                   />
                 </div>
                 <p className="post-header-date">
-                  {formatDate(postDate)}
+          
+
+                  {formatDate(postDate, i18n.language || 'en-US', t)}
                 </p>
 
               </div>

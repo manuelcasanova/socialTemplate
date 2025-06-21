@@ -104,7 +104,7 @@ useEffect(() => {
 
         return () => unsubscribe();
     }, []);
-console.log(t('resetPassword.title')); 
+
     const handleGoogleLogin = async () => {
         const provider = new GoogleAuthProvider();
         setIsLoading(true);

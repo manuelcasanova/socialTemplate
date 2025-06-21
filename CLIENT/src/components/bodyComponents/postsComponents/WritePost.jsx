@@ -5,7 +5,11 @@ import { axiosPrivate } from "../../../api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faLock, faEarth, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 
+//Translation
+import { useTranslation } from "react-i18next";
+
 export default function WritePost({ loggedInUser, setNewPostSubmitted, setError }) {
+  const { t } = useTranslation();
   const inputRef = useRef(null);
   const [content, setContent] = useState("");
   const [visibility, setVisibility] = useState("public");
@@ -52,12 +56,12 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted, setError 
   const handleClick = async () => {
     try {
       if (!content.trim()) {
-        setError("Content cannot be empty!");
+        setError(t("writePost.errorEmpty"));
         return;
       }
 
       if (content.length > MAX_CHAR_LIMIT) {
-        setError(`Content exceeds the ${MAX_CHAR_LIMIT} character limit!`);
+        setError(t('writePost.errorTooLong', { limit: MAX_CHAR_LIMIT }));
         return;
       }
 
@@ -80,7 +84,7 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted, setError 
 
     } catch (error) {
       console.error("Error creating post:", error);
-      setError("Failed to create the post. Please try again.");
+      setError(t("writePost.errorFailed"));
     } finally {
       setIsLoading(false); // Set loading to false after the API call
     }
@@ -90,13 +94,13 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted, setError 
   const getVisibilityTooltip = () => {
     switch (visibility) {
       case "public":
-        return "Public";
+        return t("writePost.tooltip.public");
       case "private":
-        return "Only you";
+        return t("writePost.tooltip.private");
       case "followers":
-        return "Followers";
+        return t("writePost.tooltip.followers");
       default:
-        return "Public";
+        return t("writePost.tooltip.public");
     }
   };
 
@@ -107,8 +111,8 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted, setError 
     <div className="write-post-container">
 
       <button className="button-white" onClick={handleVisibilityClick}>
-        <FontAwesomeIcon icon={getVisibilityIcon()} 
-        title={getVisibilityTooltip()}
+        <FontAwesomeIcon icon={getVisibilityIcon()}
+          title={getVisibilityTooltip()}
         />
 
       </button>
@@ -117,7 +121,7 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted, setError 
         ref={inputRef}
         type="text"
         className="write-post-input"
-        placeholder="Got something to say?"
+        placeholder={t("writePost.placeholder")}
         value={content}
         onChange={(e) => setContent(e.target.value)}
         onKeyDown={(e) => {
@@ -135,13 +139,12 @@ export default function WritePost({ loggedInUser, setNewPostSubmitted, setError 
         <FontAwesomeIcon icon={faPaperPlane} />
       </button>
 
-      {/* {error && <div className="error-message">{error}</div>} */}
-      {content.length > MAX_CHAR_LIMIT && (
-        <div className="char-count">
-          {content.length} / {MAX_CHAR_LIMIT} characters
-        </div>
-      )}
-      
+     {content.length > MAX_CHAR_LIMIT && (
+  <div className="char-count">
+    {t('writePost.charCount', { count: content.length, limit: MAX_CHAR_LIMIT })}
+  </div>
+)}
+
     </div>
   )
 }

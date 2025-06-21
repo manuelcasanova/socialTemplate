@@ -5,6 +5,12 @@ import '../../css/centeredContainer.css';
 export default function Home({ isNavOpen }) {
   const { t } = useTranslation();
 
+  // Safely get scenarios
+  const scenarios = t('home.scenarios', { returnObjects: true });
+  const scenarioList = Array.isArray(scenarios) ? scenarios : [];
+
+  console.log('SCENARIOS:', scenarios); // Debug: see what t() returns
+
   return (
     <div className={isNavOpen ? 'body-squeezed' : 'body'}>
       <div className="centered-container">

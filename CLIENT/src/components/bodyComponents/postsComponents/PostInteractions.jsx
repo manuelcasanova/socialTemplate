@@ -13,7 +13,7 @@ import { axiosPrivate } from '../../../api/axios';
 
 import '../../../css/PostsComments.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan, faEllipsisH, faFlag, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan, faEllipsisH, faFlag, faXmark, faFaceAngry } from "@fortawesome/free-solid-svg-icons";
 
 // Components
 
@@ -27,10 +27,15 @@ import Error from '../Error';
 import { fetchPostReactionsCount } from './util_functions/FetchPostReactions';
 import { fetchPostCommentsCount } from './util_functions/FetchPostComments';
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostInteractions({ postId, isNavOpen, postContent, postSender, loggedInUser, setPosts, hideFlag, setError }) {
 
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -49,8 +54,8 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const errRef = useRef();
 
   const canDelete = adminSettings.allowDeletePosts && loggedInUserId === postSender;
-const canFlag = adminSettings.allowFlagPosts && loggedInUserId !== postSender;
-const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserId === postSender);
+  const canFlag = adminSettings.allowFlagPosts && loggedInUserId !== postSender;
+  const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserId === postSender);
 
 
 
@@ -97,15 +102,15 @@ const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserI
       console.log(err);
       let message = '';
       if (!err?.response) {
-        message = 'No Server Response';
+        message = t("postsInteractions.noServerResponse");
       } else if (err.response?.status === 403) {
-        message = 'Forbidden: You are not allowed to react';
+        message = t("postsInteractions.forbidden");
       } else if (err.response?.status === 401) {
-        message = 'Unauthorized: Please log in';
+        message = t("postsInteractions.unauthorized");
       } else if (err.response?.status === 400) {
-        message = 'Bad Request: Please try again';
+        message = t("postsInteractions.badRequest");
       } else {
-        message = 'Attempt Failed';
+        message = t("postsInteractions.attemptFailed");
       }
       setErrMsg(message);
       setError(message);
@@ -164,7 +169,7 @@ const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserI
                 <>
                   <FontAwesomeIcon icon={faSmile} />
                   <div className='post-interactions-text'>
-                    React
+                    {t("postsInteractions.react")}
                   </div>
                 </>
               )}
@@ -173,23 +178,27 @@ const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserI
 
               {reactOption && (
                 <div className="reaction-options">
-                  <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
+                  <div onClick={() => handleReactionSelect('remove-reaction')} title={t("postsInteractions.removeReaction")}>
                     <FontAwesomeIcon icon={faBan} />
                   </div>
-                  <div onClick={() => handleReactionSelect('like')} title="Like">
+                  <div onClick={() => handleReactionSelect('like')} title={t("postsInteractions.like")}>
                     <FontAwesomeIcon icon={faThumbsUp} />
                   </div>
-                  <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
+                  <div onClick={() => handleReactionSelect('dislike')} title={t("postsInteractions.dislike")}>
                     <FontAwesomeIcon icon={faThumbsDown} />
                   </div>
-                  <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
+                  <div onClick={() => handleReactionSelect('laugh')} title={t("postsInteractions.laugh")}>
                     <FontAwesomeIcon icon={faLaugh} />
                   </div>
-                  <div onClick={() => handleReactionSelect('cry')} title="Cry">
+
+                  <div onClick={() => handleReactionSelect('smile')} title={t("postsInteractions.smile")}>
+                    <FontAwesomeIcon icon={faSmile} />
+                  </div>
+                  <div onClick={() => handleReactionSelect('cry')} title={t("postsInteractions.cry")}>
                     <FontAwesomeIcon icon={faSadTear} />
                   </div>
-                  <div onClick={() => handleReactionSelect('smile')} title="Smile">
-                    <FontAwesomeIcon icon={faSmile} />
+                  <div onClick={() => handleReactionSelect('angry')} title={t("postsInteractions.angry")}>
+                    <FontAwesomeIcon icon={faFaceAngry} />
                   </div>
                 </div>
 
@@ -197,53 +206,53 @@ const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserI
             </div>
           }
 
-       {(
-  adminSettings.allowDeletePosts || adminSettings.allowFlagPosts || isSuperAdmin
-) && (
-  <>
-    <div className='post-interactions-bottom-left-reaction'>
-      {!showEllipsisMenu && (
-        <FontAwesomeIcon 
-          icon={faEllipsisH}
-          onClick={() => setShowEllipsisMenu(prev => !prev)}
-         style={{ display: shouldShowEllipsis ? 'inline' : 'none' }}
+          {(
+            adminSettings.allowDeletePosts || adminSettings.allowFlagPosts || isSuperAdmin
+          ) && (
+              <>
+                <div className='post-interactions-bottom-left-reaction'>
+                  {!showEllipsisMenu && (
+                    <FontAwesomeIcon
+                      icon={faEllipsisH}
+                      onClick={() => setShowEllipsisMenu(prev => !prev)}
+                      style={{ display: shouldShowEllipsis ? 'inline' : 'none' }}
 
-        />
-      )}
+                    />
+                  )}
 
-      {showEllipsisMenu && (
-        <div className="post-menu-dropdown">
-          {/* Delete option (show if delete is allowed and it's the user's own post) */}
-          {((superAdminSettings.allowDeletePosts && adminSettings.allowDeletePosts) || isSuperAdmin) && 
-            loggedInUserId === postSender && 
-            <PostDelete 
-              setPosts={setPosts} 
-              postId={postId} 
-              postSender={postSender} 
-              loggedInUser={loggedInUser} 
-              setError={setError} 
-            />
-          }
+                  {showEllipsisMenu && (
+                    <div className="post-menu-dropdown">
+                      {/* Delete option (show if delete is allowed and it's the user's own post) */}
+                      {((superAdminSettings.allowDeletePosts && adminSettings.allowDeletePosts) || isSuperAdmin) &&
+                        loggedInUserId === postSender &&
+                        <PostDelete
+                          setPosts={setPosts}
+                          postId={postId}
+                          postSender={postSender}
+                          loggedInUser={loggedInUser}
+                          setError={setError}
+                        />
+                      }
 
-          {/* Flag option (show if flag is allowed and the post is not the user's own post) */}
-          {((superAdminSettings.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin) && 
-            loggedInUserId !== postSender && 
-            <FlagPost 
-              postId={postId} 
-              loggedInUserId={loggedInUserId} 
-              hideFlag={hideFlag} 
-              setError={setError} 
-            />
-          }
-          <FontAwesomeIcon 
-            icon={faXmark}
-            onClick={() => setShowEllipsisMenu(prev => !prev)} 
-          />
-        </div>
-      )}
-    </div>
-  </>
-)}
+                      {/* Flag option (show if flag is allowed and the post is not the user's own post) */}
+                      {((superAdminSettings.allowFlagPosts && adminSettings.allowFlagPosts) || isSuperAdmin) &&
+                        loggedInUserId !== postSender &&
+                        <FlagPost
+                          postId={postId}
+                          loggedInUserId={loggedInUserId}
+                          hideFlag={hideFlag}
+                          setError={setError}
+                        />
+                      }
+                      <FontAwesomeIcon
+                        icon={faXmark}
+                        onClick={() => setShowEllipsisMenu(prev => !prev)}
+                      />
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
 
 
 

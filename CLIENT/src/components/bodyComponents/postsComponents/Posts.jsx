@@ -27,10 +27,14 @@ import { fetchPosts } from "./util_functions/FetchPosts";
 import fetchUsers from "../socialComponents/util_functions/FetchUsers";
 import { formatDate } from "./util_functions/formatDate";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 
 export default function Posts({ isNavOpen, profilePictureKey }) {
+  const { t, i18n } = useTranslation();
   const { auth } = useAuth();
   const isAdmin = auth.roles.includes('Admin');
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -178,12 +182,9 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
   const getUsernameById = (userId) => {
     const user = users.find(user => user.user_id === userId);
 
-    return user ? user.username : "Unknown User";
+    return user ? user.username : t('posts.unknownUser');
   };
 
-  const handleImageClick = (userId) => {
-    setShowLargePicture(userId);
-  };
 
   useEffect(() => {
   }, [posts]);
@@ -205,13 +206,13 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
   const getVisibilityTooltip = (visibility) => {
     switch (visibility) {
       case "public":
-        return "Public";
+        return t('posts.public');
       case "private":
-        return "Private";
+        return t('posts.private');
       case "followers":
-        return "Followers only";
+        return t('posts.followersOnly');
       default:
-        return "Public post";
+        return t('posts.publicPost');
     }
   };
 
@@ -251,18 +252,6 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
             }}
           />
 
-          {/* <button
-            className="button-white"
-            onClick={() => {
-              setSearchQuery(filterUsername); // Apply filter on click
-              setPage(1); // Reset pagination
-            }}
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button> */}
-
-
-
         </div>
 
         <div className="which-posts-container">
@@ -272,19 +261,19 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
               setShowMyPosts(false);
               setPage(1);
             }}
-          >All posts</button>
+          >{t('posts.allPosts')}</button>
           <button
             className="button-white"
             onClick={() => {
               setShowMyPosts(true); // Show only my posts
               setPage(1);
             }}
-          >My posts</button>
+          >{t('posts.myPosts')}</button>
         </div>
 
 
         {posts.length === 0 ? (
-          <p>No posts available</p>
+          <p>{t('posts.noPosts')}</p>
         ) : (
           <div className="posts-container">
             {filteredPosts.map((post, index) => (
@@ -307,7 +296,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
                         }}
-                        alt="Profile"
+                        alt={t('posts.profilePictureAlt')}
                       />
 
 
@@ -332,19 +321,19 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
                           title={getVisibilityTooltip(post.visibility)}
                         />
                       </div>
-                      <p className="post-header-date">{formatDate(post.date)}</p>
+                      <p className="post-header-date"> {formatDate(post.date, i18n.language || 'en-US', t)}</p>
                     </div>
                   </div>
 
                   {inappropriatePosts.has(post.id) ? (
                     <div>
                       <p style={{ fontStyle: 'italic', color: 'darkred' }}>
-                        This post has been reported and reviewed by a moderator. It was deemed inappropriate and has been hidden.
+                       {t('posts.hiddenByModerator')}
                       </p>
 
                       {auth?.roles?.includes("Moderator") && (
                         <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
-                          <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
+                          <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>{t('posts.originalForModerators')}</strong></p>
                           <p style={{ color: 'black' }}>{post.content}</p>
                         </div>
                       )}
@@ -352,8 +341,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
                   ) : flaggedPosts.has(post.id) ? (
                     <div>
                       <p style={{ fontStyle: 'italic' }}>
-                        This post has been reported and is pending moderator review.
-                        You can still see it by clicking here, but discretion is advised.
+                     {t('posts.reportedPendingReview')}
                       </p>
                       <button
                         className="button-white white button-smaller"
@@ -362,7 +350,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
                           updatedFlaggedPosts.delete(post.id);
                           setFlaggedPosts(updatedFlaggedPosts);
                         }}>
-                        Click to view
+                        {t('posts.clickToView')}
                       </button>
                     </div>
                   ) : (
@@ -406,20 +394,15 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
             style={{ marginTop: '0.5em', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
             onClick={loadMorePosts}
           >
-            Load More
+            {t('posts.loadMore')}
           </button>
 
           <button
             className="button-white"
             style={{ marginTop: '0.5em', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          // onClick={() => {
-          //   if (topPostRef.current) {
-          //     topPostRef.current.scrollIntoView({ behavior: 'smooth' });
-          //   }
-          // }}
           >
-            Go to Top
+            {t('posts.goToTop')}
           </button>
         </div>
 

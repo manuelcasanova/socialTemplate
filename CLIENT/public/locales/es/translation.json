@@ -195,5 +195,76 @@
       "userEmailExists": "Ya existe un usuario con este correo electrónico.",
       "googleSignupFailed": "Error en el registro con Google. Por favor intenta nuevamente."
     }
-  }
+  },
+  "posts": {
+    "allPosts": "Todas las publicaciones",
+    "myPosts": "Mis publicaciones",
+    "noPosts": "No hay publicaciones disponibles",
+    "reportedPendingReview": "Esta publicación ha sido reportada y está pendiente de revisión por un moderador. Aún puedes verla haciendo clic aquí, pero se recomienda discreción.",
+    "clickToView": "Hacer clic para ver",
+    "hiddenByModerator": "Esta publicación ha sido reportada y revisada por un moderador. Se consideró inapropiada y ha sido ocultada.",
+    "originalForModerators": "Mensaje original visible para moderadores:",
+    "loadMore": "Mostrar más",
+    "goToTop": "Ir arriba",
+    "public": "Pública",
+    "private": "Privada",
+    "followersOnly": "Solo seguidores",
+    "publicPost": "Publicación pública",
+    "unknownUser": "Usuario desconocido",
+    "profilePictureAlt": "Foto de perfil",
+    "lessThanMinuteAgo": "Hace menos de un minuto",
+    "minutesAgo_one": "Hace {{count}} minuto",
+    "minutesAgo_other": "Hace {{count}} minutos",
+    "hoursAgo_one": "Hace {{count}} hora",
+    "hoursAgo_other": "Hace {{count}} horas",
+    "yesterdayAt": "Ayer a las",
+    "at": "a las"
+  },
+  "postsInteractions": {
+  "react": "Reacciona",
+    "like": "Me gusta",
+  "dislike": "No me gusta",
+  "smile": "Sonrío",
+  "laugh": "Río",
+  "cry": "Lloro",
+  "angry": "Me enfada",
+  "removeReaction": "Quitar",
+  "comments": "Comentarios",
+  "reactions": "Reacciones",
+  "noServerResponse": "Sin respuesta del servidor",
+  "forbidden": "Prohibido: No se le permite reaccionar",
+  "unauthorized": "No autorizado: Por favor, inicie sesión",
+  "badRequest": "Solicitud incorrecta: Intente nuevamente",
+  "attemptFailed": "Intento fallido"
+},
+"postReactions": {
+  "noReactions": "Esta publicación no tiene reacciones.",
+  "commentNoReactions": "Este comentario no tiene reacciones.",
+  "close": "Cerrar",
+  "like": "Me gusta",
+  "dislike": "No me gusta",
+  "smile": "Sonrío",
+  "laugh": "Río",
+  "cry": "Lloro",
+  "angry": "Me enfada"
+},
+"writePost": {
+  "placeholder": "¿Tienes algo que decir?",
+  "tooltip": {
+    "public": "Público",
+    "private": "Solo tú",
+    "followers": "Seguidores"
+  },
+  "errorEmpty": "¡El contenido no puede estar vacío!",
+  "errorTooLong": "¡El contenido excede el límite de {{limit}} caracteres!",
+  "errorFailed": "No se pudo crear la publicación. Inténtalo de nuevo.",
+  "charCount": "{{count}} / {{limit}} caracteres"
+},
+"filterUsername": {
+  "placeholder": "Buscar por nombre de usuario",
+  "title": "Solo se permiten letras, números, guiones, guiones bajos, acentos circunflejos y espacios."
+}
+
+
+
 }

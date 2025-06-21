@@ -23,10 +23,15 @@ import '../../../css/Chat.css'
 import { faRefresh, faTrashAlt, faBan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 
 export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }) {
+   const { t, i18n } = useTranslation();
   const { userId } = useParams();
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -329,7 +334,12 @@ export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }
                     </div>
 
                     <div className="message-footer">
-                      <span className="message-date">{formatDate(message.date)}</span>
+                      <span className="message-date">
+
+{formatDate(message.date, i18n.language || 'en-US', t)}
+
+
+                      </span>
                     </div>
                   </div>
                 );

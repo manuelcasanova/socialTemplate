@@ -19,12 +19,17 @@ import CommentDelete from "./CommentDelete";
 
 //Styling
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faBan, faEllipsisH, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faFaceAngry, faBan, faEllipsisH, faXmark } from "@fortawesome/free-solid-svg-icons";
+
+//Translation
+import { useTranslation } from 'react-i18next';
+
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostCommentsInteractions({ commentId, commentDate, commentCommenter, loggedInUserId, hideFlag, setError, setPostComments }) {
 
+  const { t, i18n } = useTranslation();
   const { auth } = useAuth()
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
 
@@ -74,15 +79,15 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
     } catch (err) {
       console.log(err);
       if (!err?.response) {
-        setError('No Server Response');
+        setError(t("postsInteractions.noServerResponse"));
       } else if (err.response?.status === 403) {
-        setError('Forbidden: You are not allowed to react');
+        setError(t("postsInteractions.forbidden"));
       } else if (err.response?.status === 401) {
-        setError('Unauthorized: Please log in');
+        setError(t("postsInteractions.unauthorized"));
       } else if (err.response?.status === 400) {
-        setError('Bad Request: Please try again');
+        setError(t("postsInteractions.badRequest"));
       } else {
-        setError('Attempt Failed');
+        setError(t("postsInteractions.attemptFailed"));
       }
       errRef.current?.focus();
     } finally {
@@ -90,15 +95,18 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
     }
   };
 
- const canDelete = adminSettings.allowDeleteComments && loggedInUserId === commentCommenter;
-const canFlag = adminSettings.allowFlagComments && loggedInUserId !== commentCommenter;
-const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserId === commentCommenter);
+  const canDelete = adminSettings.allowDeleteComments && loggedInUserId === commentCommenter;
+  const canFlag = adminSettings.allowFlagComments && loggedInUserId !== commentCommenter;
+  const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserId === commentCommenter);
 
 
 
   return (
     <div className="post-comment-interactions">
-      <div className="post-comment-date">{formatDate(commentDate)}</div>
+      <div className="post-comment-date">
+
+        {formatDate(commentDate, i18n.language || 'en-US', t)}
+      </div>
 
       {((superAdminSettings.allowCommentReactions && adminSettings.allowCommentReactions) || isSuperAdmin) && <>
         <div className="post-comment-react"
@@ -106,31 +114,35 @@ const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserI
           {!reactOption && (
             <>
               <div className='post-interactions-text'>
-                React
+                {t("postsInteractions.react")}
               </div>
             </>
           )}
 
           {reactOption && (
             <div className="reaction-options-small">
-              <div onClick={() => handleReactionSelect('remove-reaction')} title="Remove">
+              <div onClick={() => handleReactionSelect('remove-reaction')} title={t("postsInteractions.removeReaction")}>
                 <FontAwesomeIcon icon={faBan} />
               </div>
-              <div onClick={() => handleReactionSelect('like')} title="Like">
+              <div onClick={() => handleReactionSelect('like')} title={t("postsInteractions.like")}>
                 <FontAwesomeIcon icon={faThumbsUp} />
               </div>
-              <div onClick={() => handleReactionSelect('dislike')} title="Dislike">
+              <div onClick={() => handleReactionSelect('dislike')} title={t("postsInteractions.dislike")}>
                 <FontAwesomeIcon icon={faThumbsDown} />
               </div>
-              <div onClick={() => handleReactionSelect('laugh')} title="Laugh">
+              <div onClick={() => handleReactionSelect('laugh')} title={t("postsInteractions.laugh")}>
                 <FontAwesomeIcon icon={faLaugh} />
               </div>
-              <div onClick={() => handleReactionSelect('cry')} title="Cry">
-                <FontAwesomeIcon icon={faSadTear} />
-              </div>
-              <div onClick={() => handleReactionSelect('smile')} title="Smile">
+              <div onClick={() => handleReactionSelect('smile')} title={t("postsInteractions.smile")}>
                 <FontAwesomeIcon icon={faSmile} />
               </div>
+              <div onClick={() => handleReactionSelect('cry')} title={t("postsInteractions.cry")}>
+                <FontAwesomeIcon icon={faSadTear} />
+              </div>
+              <div onClick={() => handleReactionSelect('angry')} title={t("postsInteractions.angry")}>
+                <FontAwesomeIcon icon={faFaceAngry} />
+              </div>
+
             </div>
 
           )}
@@ -154,49 +166,49 @@ const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserI
 
 
 
-{(adminSettings.allowDeleteComments || adminSettings.allowFlagComments || isSuperAdmin) && (
-  <>
-    {!showEllipsisMenu && (
-      <FontAwesomeIcon 
-        icon={faEllipsisH}
-        onClick={() => setShowEllipsisMenu(prev => !prev)}
-       style={{ display: shouldShowEllipsis ? 'inline' : 'none' }}
+      {(adminSettings.allowDeleteComments || adminSettings.allowFlagComments || isSuperAdmin) && (
+        <>
+          {!showEllipsisMenu && (
+            <FontAwesomeIcon
+              icon={faEllipsisH}
+              onClick={() => setShowEllipsisMenu(prev => !prev)}
+              style={{ display: shouldShowEllipsis ? 'inline' : 'none' }}
 
-      />
-    )}
+            />
+          )}
 
-    {showEllipsisMenu && (
-      <div className="post-menu-dropdown">
-        {/* Delete option (show if delete is allowed and it's the user's own comment) */}
-        {((superAdminSettings.allowDeleteComments && adminSettings.allowDeleteComments) || isSuperAdmin) && 
-          loggedInUserId === commentCommenter && 
-          <CommentDelete 
-            commentId={commentId} 
-            loggedInUserId={loggedInUserId} 
-            commentCommenter={commentCommenter} 
-            setError={setError} 
-            setPostComments={setPostComments} 
-          />
-        }
+          {showEllipsisMenu && (
+            <div className="post-menu-dropdown">
+              {/* Delete option (show if delete is allowed and it's the user's own comment) */}
+              {((superAdminSettings.allowDeleteComments && adminSettings.allowDeleteComments) || isSuperAdmin) &&
+                loggedInUserId === commentCommenter &&
+                <CommentDelete
+                  commentId={commentId}
+                  loggedInUserId={loggedInUserId}
+                  commentCommenter={commentCommenter}
+                  setError={setError}
+                  setPostComments={setPostComments}
+                />
+              }
 
-        {/* Flag option (show if flag is allowed and the commenter is not the logged-in user) */}
-        {((superAdminSettings.allowFlagComments && adminSettings.allowFlagComments) || isSuperAdmin) && 
-          loggedInUserId !== commentCommenter && 
-          <FlagComment 
-            commentId={commentId} 
-            loggedInUserId={loggedInUserId} 
-            hideFlag={hideFlag} 
-            setError={setError} 
-          />
-        }
+              {/* Flag option (show if flag is allowed and the commenter is not the logged-in user) */}
+              {((superAdminSettings.allowFlagComments && adminSettings.allowFlagComments) || isSuperAdmin) &&
+                loggedInUserId !== commentCommenter &&
+                <FlagComment
+                  commentId={commentId}
+                  loggedInUserId={loggedInUserId}
+                  hideFlag={hideFlag}
+                  setError={setError}
+                />
+              }
 
-        <FontAwesomeIcon icon={faXmark} 
-          onClick={() => setShowEllipsisMenu(prev => !prev)} 
-        />
-      </div>
-    )}
-  </>
-)}
+              <FontAwesomeIcon icon={faXmark}
+                onClick={() => setShowEllipsisMenu(prev => !prev)}
+              />
+            </div>
+          )}
+        </>
+      )}
 
 
 

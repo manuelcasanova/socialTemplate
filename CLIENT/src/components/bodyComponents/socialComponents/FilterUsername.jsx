@@ -2,7 +2,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 export default function FilterUsername({ filterUsername, setFilterUsername, inputRef, onSearch }) {
+
+  const { t } = useTranslation();
+
   return (
     <div className="filter-container chats-filter posts-filter">
       <div className="filter-wrapper posts-filter">
@@ -10,7 +16,7 @@ export default function FilterUsername({ filterUsername, setFilterUsername, inpu
           <input
             type="text"
             className="filter-container-input-username"
-            placeholder="Search by username"
+            placeholder={t('filterUsername.placeholder')}
             value={filterUsername}
             onChange={(e) => {
               const value = e.target.value;
@@ -27,7 +33,7 @@ export default function FilterUsername({ filterUsername, setFilterUsername, inpu
             }}
             // pattern="[a-zA-Z0-9-_^\s]+" 
             ref={inputRef}
-            title="Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+            title={t('filterUsername.title')}
           />
           <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" onClick={() => onSearch()} />
         </div>

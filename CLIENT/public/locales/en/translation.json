@@ -158,7 +158,7 @@
     "serverError": "A server error occurred. Please try again later.",
     "guest": "Guest",
     "confirmNewEmail": "Confirm new email",
-     "errorUploadingProfilePicture": "Error uploading profile picture: ",
+    "errorUploadingProfilePicture": "Error uploading profile picture: ",
     "criticalErrorUploadFailed": "Critical Error: Upload failed: ",
     "criticalErrorDeletionFailed": "Critical Error: Deletion failed: ",
     "criticalErrorUpdateFailed": "Critical Error: Update failed: ",
@@ -195,5 +195,77 @@
       "userEmailExists": "User with this email already exists.",
       "googleSignupFailed": "Google Sign-Up failed. Please try again."
     }
-  }
+  },
+  "posts": {
+    "allPosts": "All posts",
+    "myPosts": "My posts",
+    "noPosts": "No posts available",
+    "reportedPendingReview": "This post has been reported and is pending moderator review. You can still see it by clicking here, but discretion is advised.",
+    "clickToView": "Click to view",
+    "hiddenByModerator": "This post has been reported and reviewed by a moderator. It was deemed inappropriate and has been hidden.",
+    "originalForModerators": "Original message visible for moderators: ",
+    "loadMore": "Load More",
+    "goToTop": "Go to Top",
+    "public": "Public",
+    "private": "Private",
+    "followersOnly": "Followers only",
+    "publicPost": "Public post",
+    "unknownUser": "Unknown User",
+    "profilePictureAlt": "Profile image",
+    "lessThanMinuteAgo": "Less than a minute ago",
+    "minutesAgo": "{{count}} minute{{count !== 1 ? 's' : ''}} ago",
+    "hoursAgo": "{{count}} hour{{count !== 1 ? 's' : ''}} ago",
+    "yesterdayAt": "Yesterday at",
+    "at": "at",
+    "minutesAgo_zero": "Less than a minute ago",
+    "minutesAgo_one": "{{count}} minute ago",
+    "minutesAgo_other": "{{count}} minutes ago",
+    "hoursAgo_one": "{{count}} hour ago",
+    "hoursAgo_other": "{{count}} hours ago"
+  },
+  "postsInteractions": {
+    "react": "React",
+    "like": "Like",
+    "dislike": "Dislike",
+    "laugh": "Laugh",
+    "cry": "Cry",
+    "smile": "Smile",
+    "removeReaction": "Remove",
+    "comments": "Comments",
+    "reactions": "Reactions",
+    "noServerResponse": "No Server Response",
+    "forbidden": "Forbidden: You are not allowed to react",
+    "unauthorized": "Unauthorized: Please log in",
+    "badRequest": "Bad Request: Please try again",
+    "attemptFailed": "Attempt Failed"
+  },
+  "postReactions": {
+    "noReactions": "This post has no reactions.",
+    "commentNoReactions": "This comment has no reactions.",
+    "close": "Close",
+    "like": "Like",
+    "dislike": "Dislike",
+    "smile": "Smile",
+    "laugh": "Laugh",
+    "cry": "Cry",
+    "angry": "Angry"
+  },
+  "writePost": {
+  "placeholder": "Got something to say?",
+  "tooltip": {
+    "public": "Public",
+    "private": "Only you",
+    "followers": "Followers"
+  },
+  "errorEmpty": "Content cannot be empty!",
+  "errorTooLong": "Content exceeds the {{limit}} character limit!",
+  "errorFailed": "Failed to create the post. Please try again.",
+  "charCount": "{{count}} / {{limit}} characters"
+},
+"filterUsername": {
+  "placeholder": "Search by username",
+  "title": "Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+}
+
+
 }

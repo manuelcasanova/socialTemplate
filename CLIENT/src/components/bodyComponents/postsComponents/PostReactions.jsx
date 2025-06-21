@@ -22,10 +22,16 @@ import { faThumbsUp, faThumbsDown, faSmile, faLaugh, faSadTear, faFaceAngry } fr
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostReactions({ isNavOpen, profilePictureKey }) {
 
+  const { t } = useTranslation();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const navigate = useNavigate();
   const handleClose = () => navigate(-1);
@@ -137,7 +143,7 @@ export default function PostReactions({ isNavOpen, profilePictureKey }) {
             >
               <img
                 className="users-all-picture-large"
-                 src={ `${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
+                src={`${BACKEND}/media/profile_pictures/${showLargePicture}/profilePicture.jpg?v=${profilePictureKey}`}
                 alt="Profile"
                 onError={(e) => {
                   // Fallback image handling
@@ -151,7 +157,7 @@ export default function PostReactions({ isNavOpen, profilePictureKey }) {
           <div className="centered-container centered-container-reaction">
             {postReactions.length === 0 ? (
               <p style={{ textAlign: "center", fontStyle: "italic", color: "#666" }}>
-                This post has no reactions.
+                 {t("postReactions.noReactions")}
               </p>
             ) : (
 
@@ -162,7 +168,7 @@ export default function PostReactions({ isNavOpen, profilePictureKey }) {
                       <img
                         className="user-row-social-small-img"
                         style={{ marginRight: "0px" }}
-                         src={ `${BACKEND}/media/profile_pictures/${reaction.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                        src={`${BACKEND}/media/profile_pictures/${reaction.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                         alt="User"
                         onClick={() => handleImageClick(reaction.user_id)}
                       />
@@ -177,7 +183,8 @@ export default function PostReactions({ isNavOpen, profilePictureKey }) {
                     )}
 
                     <div>
-                      {reaction.reaction_type === "like" && <FontAwesomeIcon icon={faThumbsUp} />}
+                      {reaction.reaction_type === "like" && <FontAwesomeIcon icon={faThumbsUp} 
+                      />}
                       {reaction.reaction_type === "dislike" && <FontAwesomeIcon icon={faThumbsDown} />}
                       {reaction.reaction_type === "smile" && <FontAwesomeIcon icon={faSmile} />}
                       {reaction.reaction_type === "laugh" && <FontAwesomeIcon icon={faLaugh} />}
