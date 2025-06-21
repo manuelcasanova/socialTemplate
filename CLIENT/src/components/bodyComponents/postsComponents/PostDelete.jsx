@@ -9,11 +9,17 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
+//Translation
+import { useTranslation } from 'react-i18next';
 
-export default function PostDelete({setPosts, postId, postSender, loggedInUser, isNavOpen, setError}) {
 
-    const [postIdToDelete, setPostIdToDelete] = useState(null);
-    const [isLoading, setIsLoading] = useState(false)
+
+export default function PostDelete({ setPosts, postId, postSender, loggedInUser, isNavOpen, setError }) {
+
+  const { t } = useTranslation();
+
+  const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [isLoading, setIsLoading] = useState(false)
 
   const handlePostDelete = (postId) => {
     // Function to delete a post (soft delete)
@@ -24,18 +30,18 @@ export default function PostDelete({setPosts, postId, postSender, loggedInUser, 
         setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
         setPostIdToDelete(null); // Reset the deletion confirmation state
       } catch (err) {
-        console.error("Error deleting post:", err);
-        setError("Failed to delete post.");
+        console.error(t('postDelete.erroFailed'), err);
+        setError(t('postDelete.errorFailed'));
       }
     };
 
     deletePost();
   };
 
-    if (isLoading) {
-      return <LoadingSpinner />;
-    }
-  
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>    {loggedInUser === postSender && (
       <div className="post-actions">
@@ -47,14 +53,14 @@ export default function PostDelete({setPosts, postId, postSender, loggedInUser, 
                 handlePostDelete(postId);
               }}
             >
-              Confirm delete
+              {t('postDelete.confirmDelete')}
             </p>
             <p
               className="button-white"
               style={{ color: "black" }}
               onClick={() => setPostIdToDelete(null)} // Close confirmation modal
             >
-              Cancel
+              {t('postDelete.cancel')}
             </p>
           </div>
         )}
@@ -62,7 +68,7 @@ export default function PostDelete({setPosts, postId, postSender, loggedInUser, 
         {postIdToDelete !== postId && (
           <button
             onClick={() => setPostIdToDelete(postId)} // Show confirmation modal for this post
-            title="Delete Post"
+            title={t('postDelete.title')}
           >
             <FontAwesomeIcon icon={faTrashAlt} />
           </button>

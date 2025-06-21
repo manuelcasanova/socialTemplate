@@ -10,7 +10,6 @@ import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettings
 
 //Util functions
 import { fetchPostById } from "./util_functions/FetchPosts";
-import { formatDate } from "./util_functions/formatDate";
 import fetchSenderNameById from "./util_functions/FetchSenderNameById";
 import { fetchPostReactionsData } from "./util_functions/FetchPostReactions";
 

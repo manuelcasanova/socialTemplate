@@ -8,9 +8,13 @@ import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 export default function FlagComment({commentId, loggedInUserId, hideFlag, isNavOpen, setError}) {
 
-  // console.log("commentId in FlagPost", commentId)
+  const { t } = useTranslation();
 
   const [flagged, setFlagged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +51,7 @@ export default function FlagComment({commentId, loggedInUserId, hideFlag, isNavO
     } catch (err) {
       console.error("Error reporting comment:", err);
       const errorMessage =
-        err.response?.data?.error || "An unexpected error occurred.";
+        err.response?.data?.error || t('flagComment.errorUnexpected');
       setError(errorMessage);
     }
   };
@@ -61,13 +65,13 @@ export default function FlagComment({commentId, loggedInUserId, hideFlag, isNavO
     <div className="post-actions">
        {!hideFlag && (
       <button
-        title="Report as inappropriate"
+        title={t('flagComment.title')}
         onClick={handleFlag}
         disabled={flagged}
         style={{ color: flagged ? "red" : "inherit" }}
       >
         <FontAwesomeIcon icon={faFlag} />
-        {flagged && <span style={{ marginLeft: "5px", cursor: 'default' }}>Reported. Pending review</span>}
+        {flagged && <span style={{ marginLeft: "5px", cursor: 'default' }}>{t('flagComment.reported')}</span>}
       </button>
           )}
     </div>

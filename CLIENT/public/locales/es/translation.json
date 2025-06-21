@@ -38,7 +38,7 @@
   },
   "navbar": {
     "home": "Inicio",
-    "protected": "Protegido",
+    "protected": "Privado",
     "accessibleToAll": "Accesible para todos los usuarios registrados",
     "posts": "Publicaciones",
     "moderator": "Moderador",
@@ -263,7 +263,19 @@
 "filterUsername": {
   "placeholder": "Buscar por nombre de usuario",
   "title": "Solo se permiten letras, números, guiones, guiones bajos, acentos circunflejos y espacios."
+},
+"flagComment": {
+  "title": "Reportar como inapropiado",
+  "reported": "Reportado. Pendiente de revisión",
+  "errorUnexpected": "Ocurrió un error inesperado."
+},
+"postDelete": {
+  "title": "Eliminar publicación",
+  "confirmDelete": "Confirmar eliminación",
+  "cancel": "Cancelar",
+  "errorFailed": "No se pudo eliminar la publicación."
 }
+
 
 
 

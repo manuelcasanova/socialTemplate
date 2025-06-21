@@ -71,7 +71,7 @@
     "updateProfileTitle": "Update your profile:",
     "updateProfileDesc": "Click on the profile image to edit your picture, username, email, password, or even delete your account.",
     "subscribeTitle": "Subscribe: ",
-    "subscribeDesc": "Head to the Subscriber section and click \"Subscribe Now\" to get full access (no credit card required for test purposies, just hit the button).",
+    "subscribeDesc": "Head to the Subscriber section and click \"Subscribe Now\" to get full access (no credit card required for test purposes, just hit the button).",
     "testScenariosTitle": "Test real-life scenarios:",
     "scenario": {
       "deleteAndSignup": "- Try deleting your account and signing up again with the same email.",
@@ -119,7 +119,7 @@
     "title": "Change password",
     "placeholderEmail": "Enter email",
     "submit": "Submit",
-    "signUpLink": "Sign up",
+    "signUpLink": "Sign Up",
     "loadingMessage": "Please, wait. It may take up to a minute.",
     "successMessage": "An email with instructions to reset your password has been sent. Please check your inbox or spam folder.",
     "noServerResponse": "No Server Response",
@@ -167,8 +167,8 @@
   "signup": {
     "allSet": "All Set!",
     "signIn": "Sign In",
-    "signUpWithEmail": "Sign up with Email",
-    "signUpWithGoogle": "Sign up with Google",
+    "signUpWithEmail": "Sign Up with Email",
+    "signUpWithGoogle": "Sign Up with Google",
     "alreadyHaveAccount": "Already have an account?",
     "pleaseCheckInbox": "Please check your inbox (or spam folder) to verify your account.",
     "verificationEmailNote": "The verification email usually arrives within a few seconds, but depending on traffic, it may take up to several minutes, up to 30 minutes in some cases.",
@@ -180,7 +180,7 @@
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "signUpButton": "Sign Up",
-    "signUpThroughPartner": "Sign up through a partner",
+    "signUpThroughPartner": "Sign Up through a partner",
     "validationMessages": {
       "name": "4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.",
       "email": "Must be a valid email address. Special characters allowed . - _",
@@ -265,7 +265,21 @@
 "filterUsername": {
   "placeholder": "Search by username",
   "title": "Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+},
+"flagComment": {
+  "title": "Report as inappropriate",
+  "reported": "Reported. Pending review",
+  "errorUnexpected": "An unexpected error occurred."
+},
+
+"postDelete": {
+  "title": "Delete Post",
+  "confirmDelete": "Confirm delete",
+  "cancel": "Cancel",
+  "errorFailed": "Failed to delete post."
 }
+
+
 
 
 }
