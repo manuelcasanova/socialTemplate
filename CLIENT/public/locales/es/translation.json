@@ -128,11 +128,39 @@
     "attemptFailed": "Intento fallido",
     "unexpectedStatus": "Estado de respuesta inesperado: "
   },
+
   "profile": {
     "myAccount": "Mi cuenta",
     "signIn": "Iniciar sesión",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "editUsername": "Editar nombre de usuario",
+    "enterNewUsername": "Ingrese nuevo nombre de usuario",
+    "editEmail": "Editar email",
+    "enterNewEmail": "Ingrese nuevo correo electrónico",
+    "editPassword": "Editar contraseña",
+    "deleteAccount": "Eliminar cuenta",
+    "keepAccount": "Conservar cuenta",
+    "deleteConfirmationMessage": "¿Está seguro de que desea eliminar su cuenta?",
+    "changeProfilePicture": "Cambiar foto de perfil",
+    "noFileChosen": "Ningún archivo seleccionado",
+    "dragDropInstruction": "Arrastre y suelte una imagen aquí, o",
+    "clickToChoose": "haga clic para seleccionar una",
+    "update": "Actualizar",
+    "unsupportedFileFormat": "Formato de archivo no compatible. Por favor suba una imagen JPG, PNG o WEBP.",
+    "accountDeletedSuccess": "Cuenta eliminada correctamente. Redirigiendo a la página de inicio...",
+    "accountDeletionFailed": "La eliminación de la cuenta falló. Por favor, inténtelo de nuevo.",
+    "validation": {
+      "username": "De 4 a 24 caracteres. Debe comenzar con una letra. Se permiten letras, números, guiones bajos y guiones.",
+      "email": "Debe ser un correo electrónico válido. Se permiten caracteres especiales: . - _",
+      "emailsMustMatch": "Los correos electrónicos deben coincidir."
+    },
+    "updateFailed": "La actualización falló. Por favor, inténtelo de nuevo.",
+    "validationError": "Error de validación. Por favor, revise su información.",
+    "serverError": "Ocurrió un error en el servidor. Por favor, inténtelo de nuevo más tarde.",
+    "guest": "Invitado",
+    "confirmNewEmail": "Confirme nuevo correo electrónico"
   },
+
   "signup": {
     "allSet": "¡Listo!",
     "signIn": "Iniciar sesión",

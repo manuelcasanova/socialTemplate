@@ -131,9 +131,34 @@
   "profile": {
     "myAccount": "My account",
     "signIn": "Sign in",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "editUsername": "Edit Username",
+    "enterNewUsername": "Enter new username",
+    "editEmail": "Edit Email",
+    "enterNewEmail": "Enter new email",
+    "editPassword": "Edit Password",
+    "deleteAccount": "Delete Account",
+    "keepAccount": "Keep account",
+    "deleteConfirmationMessage": "Are you sure you want to delete your account?",
+    "changeProfilePicture": "Change your profile picture",
+    "noFileChosen": "No file chosen",
+    "dragDropInstruction": "Drag & drop an image here, or",
+    "clickToChoose": "click to choose one",
+    "update": "Update",
+    "unsupportedFileFormat": "Unsupported file format. Please upload a JPG, PNG or WEBP image.",
+    "accountDeletedSuccess": "Account deleted successfully. Redirecting to home page...",
+    "accountDeletionFailed": "Account deletion failed. Please try again.",
+    "validation": {
+      "username": "4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.",
+      "email": "Must be a valid email address. Special characters allowed: . - _",
+      "emailsMustMatch": "Emails must match."
+    },
+    "updateFailed": "Update failed. Please try again.",
+    "validationError": "Validation error. Please check your input.",
+    "serverError": "A server error occurred. Please try again later.",
+    "guest": "Guest",
+    "confirmNewEmail": "Confirm new email"
   },
-
   "signup": {
     "allSet": "All Set!",
     "signIn": "Sign In",

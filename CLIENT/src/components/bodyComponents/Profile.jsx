@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { axiosPrivate } from "../../api/axios";
 import imageCompression from 'browser-image-compression';
+import { useTranslation } from 'react-i18next';
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../context/SuperAdminSettingsProvider";
@@ -28,18 +29,19 @@ const MAX_DIMENSION = 1024;   // Resize down to this if larger
 
 
 
-const validateInput = (editMode, value, confirmPwd = "") => {
+const validateInput = (t, editMode, value, confirmPwd = "") => {
   let regex, errorMessage;
+  
 
   if (editMode === "username") {
     regex = /^[A-z][A-z0-9-_ ]{3,23}$/
-    errorMessage = "4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.";
+    errorMessage = t('profile.validation.name');
   } else if (editMode === "email") {
     regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    errorMessage = "Must be a valid email address. Special characters allowed: . - _";
+    errorMessage = t('profile.validation.email');
   } else if (editMode === "matchEmail") {
     if (value !== confirmPwd) {
-      errorMessage = "Emails must match.";
+      errorMessage = t('profile.validation.emailsMustMatch');
       return { valid: false, message: errorMessage };
     }
     const regexValidation = validateInput("email", value);
@@ -78,7 +80,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const [successMessage, setSuccessMessage] = useState('');
   const logout = useLogout();
-
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const signOut = async () => {
@@ -87,6 +89,15 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   }
 
   const inputRef = useRef(null);
+
+useEffect(() => {
+  // Reset inputs whenever editMode changes
+  setInputValue("");
+  setConfirmPwd("");
+  setConfirmEmail("");
+  setIsInputValid(false);
+  setError("");
+}, [editMode]);
 
   useEffect(() => {
     // Focus the input when the editMode changes
@@ -128,7 +139,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     let selectedFile = e.target.files[0];
 
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(selectedFile.type)) {
-      setError("Unsupported file format. Please upload a JPG, PNG or WEBP image.");
+      setError(t('profile.unsupportedFileFormat'));
       return;
     }
 
@@ -146,7 +157,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       // console.log(`Compressed size: ${(compressedFile.size / 1024).toFixed(2)} KB`);
 
       selectedFile = compressedFile;
-      setFileName(selectedFile.name || "No file chosen");
+      setFileName(selectedFile.name || t('profile.noFileChosen'));
 
       const formData = new FormData();
       formData.append('profilePicture', selectedFile);
@@ -193,14 +204,14 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       });
 
       if (response?.data?.success) {
-        setSuccessMessage('Account deleted successfully. Redirecting to home page...');
+        setSuccessMessage(t('profile.accountDeletedSuccess'));
 
         // Wait for 2 seconds and then navigate to /signin
         setTimeout(() => {
           signOut()
         }, 2000);
       } else {
-        setError(response?.data?.message || 'Account deletion failed. Please try again.');
+        setError(response?.data?.message || t('profile.accountDeletionFailed'));
       }
     } catch (error) {
       console.error("Critical Error: Deletion failed:", error);
@@ -213,8 +224,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
 
   const placeholderText = {
-    username: "Enter new username",
-    email: "Enter new email",
+    username: t('profile.enterNewUsername'),
+    email: t('profile.enterNewEmail'),
   }[editMode];
 
   const handleInputChange = (e) => {
@@ -229,15 +240,15 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     setInputValue(value);
 
     if (editMode === "email") {
-      const emailValidation = validateInput("email", value);
-      const matchEmailValidation = validateInput("matchEmail", value, confirmEmail);
+    const emailValidation = validateInput(t, "email", value);
+     const matchEmailValidation = validateInput(t, "matchEmail", value, confirmEmail);
 
       setIsInputValid(emailValidation.valid && matchEmailValidation.valid);
       setError(emailValidation.valid ? matchEmailValidation.message : emailValidation.message);
     }
 
     else if (editMode) {
-      const validation = validateInput(editMode, value);
+      const validation = validateInput(t, editMode, value);
       setIsInputValid(validation.valid);
       setError(validation.valid ? "" : validation.message);
     }
@@ -247,13 +258,13 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     const value = e.target.value;
     setConfirmEmail(value);
 
-    const matchEmailValidation = validateInput("matchEmail", inputValue, value);
+    const matchEmailValidation = validateInput(t, "matchEmail", inputValue, value);
     setIsInputValid(matchEmailValidation.valid);
     setError(matchEmailValidation.message);
   };
 
   const handleUpdate = async () => {
-    const validation = validateInput(editMode, inputValue, confirmPwd);
+    const validation = validateInput(t, editMode, inputValue, confirmPwd);
 
     if (!validation.valid) {
       setError(validation.message);
@@ -286,7 +297,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     } catch (error) {
       // Check if the error is a validation error from the backend (username or email already exists)
       if (error.response && error.response.status === 400) {
-        setError(error.response.data.message || 'Validation error. Please check your input.');
+        setError(error.response.data.message || t('profile.validationError'));
       } else {
         console.error("Critical Error: Update failed:", error);
         setCriticalError(true); // Only set critical error for actual server issues
@@ -314,14 +325,14 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     }
   };
 
-  if (criticalError) return <Error isNavOpen={isNavOpen} error="A server error occurred. Please try again later." />;
+  if (criticalError) return <Error isNavOpen={isNavOpen} error={t('profile.serverError')} />;
 
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       {!successMessage &&
         <div className="profile-container">
-          <h2>{userData?.username || "Guest"}</h2>
+          <h2>{userData?.username || t('profile.guest')}</h2>
           <div className="profile-details">
             {!isPictureModalVisible &&
               <div className="profile-picture"
@@ -336,7 +347,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
 
                 <img
-                    src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg?v=${profilePictureKey}`}
+                  src={`${BACKEND}/media/profile_pictures/${userId}/profilePicture.jpg?v=${profilePictureKey}`}
                   alt="Profile"
                   style={{
                     cursor:
@@ -363,7 +374,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
               isPictureModalVisible && !isTestSuperAdmin && (
                 <div className="picture-modal">
-                  <h3>Change your profile picture</h3>
+                  <h3> {t('profile.changeProfilePicture')}</h3>
 
                   {/* Hidden file input */}
                   <input
@@ -378,7 +389,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   </label> */}
 
                   {/* Text for chosen file */}
-                  <span className="file-name">{fileName || "No file chosen"}</span>
+                  <span className="file-name">{fileName ||  t('profile.noFileChosen')}</span>
 
                   <div
                     onDrop={(e) => {
@@ -396,7 +407,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                       backgroundColor: '#fafafa',
                     }}
                   >
-                    <p>Drag & drop an image here, or</p>
+                    <p> {t('profile.dragDropInstruction')}</p>
                     <input
                       type="file"
                       accept="image/jpeg,image/png,image/webp"
@@ -405,7 +416,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                       id="file-upload"
                     />
                     <label htmlFor="file-upload" style={{ cursor: 'pointer', color: '#007bff' }}>
-                      click to choose one
+                     { t('profile.clickToChoose')}
                     </label>
                   </div>
 
@@ -435,7 +446,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   onClick={() => handleEditButtonClick("username")}
                 // disabled={editMode === "username" && !isInputValid} // Disable if regex fails
                 >
-                  Edit Username
+                  {t('profile.editUsername')}
                 </button>
               }
               {
@@ -444,7 +455,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   className="profile-actions-button button-white"
                   onClick={() => handleEditButtonClick("email")}
                 >
-                  Edit Email
+                  {t('profile.editEmail')}
                 </button>
               }
 
@@ -454,7 +465,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   className="profile-actions-button button-white"
                   onClick={() => navigate(`/resetpassword`)}
                 >
-                  Edit Password
+                  {t('profile.editPassword')}
                 </button>
               }
               {
@@ -464,23 +475,23 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   className="profile-actions-button button-red"
                   onClick={handleDeleteClick}
                 >
-                  Delete Account
+                 {t('profile.deleteAccount')}
                 </button>
               }
               {showConfirmDelete &&
                 <div className="delete-confirmation">
-                  <p>Are you sure you want to delete your account?</p>
+                  <p> {t('profile.deleteConfirmationMessage')}</p>
                   <button
                     className="button-white"
                     onClick={() => setShowConfirmDelete(false)}
                   >
-                    Keep account
+                    {t('profile.keepAccount')}
                   </button>
                   <button
                     className="button-red"
                     onClick={handleConfirmDelete}
                   >
-                    Delete account
+                    {t('profile.deleteAccount')}
                   </button>
                 </div>
               }
@@ -523,7 +534,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                         type="email"
                         value={confirmEmail}
                         onChange={handleConfirmEmailChange}
-                        placeholder="Confirm new email"
+                        placeholder={t('profile.confirmNewEmail')}
                       />
                     </>
                   )}
@@ -537,7 +548,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                     className="button-white"
                     disabled={!isInputValid || inputValue.trim() === ""}
                   >
-                    Update
+                     {t('profile.update')}
                   </button>
 
 
