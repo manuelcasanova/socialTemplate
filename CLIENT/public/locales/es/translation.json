@@ -128,7 +128,6 @@
     "attemptFailed": "Intento fallido",
     "unexpectedStatus": "Estado de respuesta inesperado: "
   },
-
   "profile": {
     "myAccount": "Mi cuenta",
     "signIn": "Iniciar sesión",
@@ -158,9 +157,13 @@
     "validationError": "Error de validación. Por favor, revise su información.",
     "serverError": "Ocurrió un error en el servidor. Por favor, inténtelo de nuevo más tarde.",
     "guest": "Invitado",
-    "confirmNewEmail": "Confirme nuevo correo electrónico"
+    "confirmNewEmail": "Confirme nuevo correo electrónico",
+    "errorUploadingProfilePicture": "Error al subir la foto de perfil: ",
+    "criticalErrorUploadFailed": "Error crítico: Falló la subida: ",
+    "criticalErrorDeletionFailed": "Error crítico: Falló la eliminación: ",
+    "criticalErrorUpdateFailed": "Error crítico: Falló la actualización: ",
+    "testPurposesCannotModifyAccount": "Para fines de demostración, esta cuenta no se puede modificar ni eliminar"
   },
-
   "signup": {
     "allSet": "¡Listo!",
     "signIn": "Iniciar sesión",

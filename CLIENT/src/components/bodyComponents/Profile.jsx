@@ -35,7 +35,7 @@ const validateInput = (t, editMode, value, confirmPwd = "") => {
 
   if (editMode === "username") {
     regex = /^[A-z][A-z0-9-_ ]{3,23}$/
-    errorMessage = t('profile.validation.name');
+    errorMessage = t('profile.validation.username');
   } else if (editMode === "email") {
     regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     errorMessage = t('profile.validation.email');
@@ -76,7 +76,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const [criticalError, setCriticalError] = useState(false);
   const [isInputValid, setIsInputValid] = useState(false);
   const [fileName, setFileName] = useState("");
-  const { userData, refetchUserData } = useUserApi(auth.userId || "Guest");
+  const { userData, refetchUserData } = useUserApi(auth.userId || t('profile.guest'));
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const [successMessage, setSuccessMessage] = useState('');
   const logout = useLogout();
@@ -108,7 +108,7 @@ useEffect(() => {
 
   // console.log("userData", userData)
 
-  const userId = auth.userId || "Guest";
+  const userId = auth.userId || t('profile.guest');
 
 
 
@@ -153,9 +153,7 @@ useEffect(() => {
       };
 
       const compressedFile = await imageCompression(selectedFile, options);
-      // console.log(`Original size: ${(selectedFile.size / 1024).toFixed(2)} KB`);
-      // console.log(`Compressed size: ${(compressedFile.size / 1024).toFixed(2)} KB`);
-
+ 
       selectedFile = compressedFile;
       setFileName(selectedFile.name || t('profile.noFileChosen'));
 
@@ -177,10 +175,10 @@ useEffect(() => {
         setImageExists(true);
         setProfilePictureKey(Date.now());
       } else {
-        console.error("Error uploading profile picture:", response?.data?.message);
+        console.error(t('profile.errorUploadingProfilePicture'), response?.data?.message);
       }
     } catch (error) {
-      console.error("Critical Error: Upload failed:", error);
+      console.error(t('profile.criticalErrorUploadFailed'), error);
       setCriticalError(true);
     }
   };
@@ -196,7 +194,7 @@ useEffect(() => {
 
 
   const handleConfirmDelete = async () => {
-    setIsLoading(true); // Show the loading spinner
+    setIsLoading(true);
 
     try {
       // Make the DELETE request to the server
@@ -214,7 +212,7 @@ useEffect(() => {
         setError(response?.data?.message || t('profile.accountDeletionFailed'));
       }
     } catch (error) {
-      console.error("Critical Error: Deletion failed:", error);
+      console.error(t('profile.criticalErrorDeletionFailed'), error);
       setCriticalError(true);
 
     } finally {
@@ -235,7 +233,6 @@ useEffect(() => {
     if (editMode === "username") {
       value = value.charAt(0).toUpperCase() + value.slice(1);
     }
-
 
     setInputValue(value);
 
@@ -299,7 +296,7 @@ useEffect(() => {
       if (error.response && error.response.status === 400) {
         setError(error.response.data.message || t('profile.validationError'));
       } else {
-        console.error("Critical Error: Update failed:", error);
+        console.error(t('profile.criticalErrorUpdateFailed'), error);
         setCriticalError(true); // Only set critical error for actual server issues
       }
     } finally {
@@ -383,11 +380,6 @@ useEffect(() => {
                     onChange={handleFileChange}
                   />
 
-                  {/* Custom label for file input */}
-                  {/* <label className="button-white" htmlFor="profile-picture-input">
-                    Choose File
-                  </label> */}
-
                   {/* Text for chosen file */}
                   <span className="file-name">{fileName ||  t('profile.noFileChosen')}</span>
 
@@ -433,7 +425,7 @@ useEffect(() => {
 
           </div>
 
-          {isTestSuperAdmin && (<div>For test purposes, this account cannot be modified or deleted</div>)}
+          {isTestSuperAdmin && (<div>{t('profile.testPurposesCannotModifyAccount')}</div>)}
 
           {!isTestSuperAdmin && (
 
@@ -504,7 +496,7 @@ useEffect(() => {
               {!isLoading && editMode && !showConfirmDelete && (
                 <>
                   {(editMode === "email") && <div className="profile-info">
-                    <p>{userData?.email || "Guest"}</p>
+                    <p>{userData?.email || t('profile.guest')}</p>
                   </div>}
 
                   {/* For editing username */}

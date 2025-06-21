@@ -157,7 +157,12 @@
     "validationError": "Validation error. Please check your input.",
     "serverError": "A server error occurred. Please try again later.",
     "guest": "Guest",
-    "confirmNewEmail": "Confirm new email"
+    "confirmNewEmail": "Confirm new email",
+     "errorUploadingProfilePicture": "Error uploading profile picture: ",
+    "criticalErrorUploadFailed": "Critical Error: Upload failed: ",
+    "criticalErrorDeletionFailed": "Critical Error: Deletion failed: ",
+    "criticalErrorUpdateFailed": "Critical Error: Update failed: ",
+    "testPurposesCannotModifyAccount": "For test purposes, this account cannot be modified or deleted"
   },
   "signup": {
     "allSet": "All Set!",
