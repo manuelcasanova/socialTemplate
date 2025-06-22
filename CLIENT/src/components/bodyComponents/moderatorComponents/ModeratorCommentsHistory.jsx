@@ -7,8 +7,12 @@ import useAuth from "../../../hooks/useAuth";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 export default function ModeratorCommentsHistory({ isNavOpen }) {
 
+  const { t } = useTranslation();
   const auth = useAuth;
   const loggedInUser = auth.userId;
   const navigate = useNavigate()
@@ -41,18 +45,18 @@ export default function ModeratorCommentsHistory({ isNavOpen }) {
         console.error(err);
   
         if (!err?.response) {
-          setError('Server is unreachable. Please try again later.');
-        } else if (err.response?.status === 404) {
-          setError('No comment report history found');
-        } else if (err.response?.status === 403) {
-          setError('Access denied. You do not have permission to view this history.');
-        } else if (err.response?.status === 401) {
-          setError('Unauthorized. Please log in and try again.');
-        } else if (err.response?.status === 500) {
-          setError('Server error. Please try again later.');
-        } else {
-          setError('An unexpected error occurred. Please try again.');
-        }
+      setError(t('moderator.error.serverUnreachable'));
+    } else if (err.response?.status === 404) {
+      setError(t('moderator.error.noReportFound'));
+    } else if (err.response?.status === 403) {
+      setError(t('moderator.error.accessDenied'));
+    } else if (err.response?.status === 401) {
+      setError(t('moderator.error.unauthorized'));
+    } else if (err.response?.status === 500) {
+      setError(t('moderator.error.serverError'));
+    } else {
+      setError(t('moderator.error.somethingWentWrong'));
+    }
       }
     };
 
@@ -76,7 +80,7 @@ export default function ModeratorCommentsHistory({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Comment Moderation History</h2>
+        <h2>{t('moderator.commentModerationHistory')}</h2>
         {error && error !== "No comment report history found" && (
           <p className="error-message">{error}</p>
         )}
@@ -88,12 +92,12 @@ export default function ModeratorCommentsHistory({ isNavOpen }) {
               <thead>
                 <tr>
 
-                  <th>Post Id / Comment Id</th>
-                  <th>Comment content</th>
-                  <th>Status</th>
-                  <th>Note</th>
-                  <th>Performed by</th>
-                  <th>Performed at</th>
+                  <th>{t('moderator.postIdAndCommentId')}</th>
+                  <th>{t('moderator.commentContent')}</th>
+                  <th>{t('moderator.status')}</th>
+                  <th>{t('moderator.note')}</th>
+                  <th>{t('moderator.performedBy')}</th>
+                  <th>{t('moderator.performedAt')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,8 +113,8 @@ export default function ModeratorCommentsHistory({ isNavOpen }) {
                     <td>{log.note}</td>
                     <td>
                       {users[log.changed_by]
-                        ? `${users[log.changed_by]} (UserId: ${log.changed_by})`
-                        : `UserId: ${log.changed_by}`}
+                        ? `${users[log.changed_by]} (${t('moderator.userId')} ${log.changed_by})`
+                        : `${t('moderator.userId')} ${log.changed_by}`}
                     </td>
                     <td>{new Date(log.changed_at).toLocaleString('en-GB')}</td>
 

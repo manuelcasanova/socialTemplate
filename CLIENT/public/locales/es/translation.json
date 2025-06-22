@@ -34,7 +34,35 @@
       "restorePost": "Restaura el post desde la sección de Posts Ocultos.",
       "reviewHistory": "Revisa el historial de moderación.",
       "repeatCommentActions": "Repite estas acciones para los comentarios en los posts."
-    }
+    },
+    "reportsAwaitingAssessment": "Posts pendientes de evaluación",
+    "commentsAwaitingAssessment": "Comentarios pendientes de evaluación",
+    "postsHidden": "Posts ocultos (evaluados como inapropiados)",
+    "commentsHidden": "Comentarios ocultos (evaluados como inapropiados)",
+    "postModerationHistory": "Historial de moderación de posts",
+    "commentModerationHistory": "Historial de moderación de comentarios",
+    "postId": "ID de post",
+    "userId": "ID de usuario",
+    "noPostsFound": "No se encontraron publicaciones",
+    "noCommentsFound": "No se encontraron comentarios",
+    "noHistory": "No se encontró historial",
+    "postContent": "Contenido del post",
+    "status": "Estado",
+    "note": "Nota",
+    "hiddenBy": "Ocultado por",
+    "hiddenAt": "Ocultado en",
+    "reportedBy": "Reportado por",
+    "reportedAt": "Reportado en",
+    "performedBy": "Realizado por",
+    "performedAt": "Realizado en",
+    "unhide": "Aprobar",
+    "hide": "Ocultar",
+    "commentAndPostId": "ID Comentario/Post",
+    "postIdAndCommentId": "ID Post / Comentario",
+    "comment": "Comentario",
+    "commentContent": "Contenido del comentario",
+    "approveComment": "Aprobar comentario",
+    "approvePost": "Aprobar post"
   },
   "navbar": {
     "home": "Inicio",
@@ -303,7 +331,7 @@
     "profileAlt": "Foto de perfil",
     "largeProfileAlt": "Foto de perfil grande"
   },
-   "socialMuted": {
+  "socialMuted": {
     "title": "Usuarios Silenciados",
     "infoButton": "i",
     "infoMessage": "No puedes interactuar con los usuarios que has silenciado, y ellos tampoco podrán interactuar contigo.",
@@ -312,7 +340,7 @@
     "largeProfileAlt": "Foto de perfil grande",
     "noUsersFound": "No se encontraron usuarios silenciados"
   },
-    "followUserButton": {
+  "followUserButton": {
     "follow": "Seguir",
     "unfollow": "No seguir",
     "followBack": "Seguir",

@@ -10,9 +10,12 @@ import Error from "../Error"
 import ModeratorOkReportedComment from "./ModeratorOkReportedComment";
 import ModeratorHideReportedComment from "./ModeratorHideReportedComment";
 
+//Translation
+import { useTranslation } from 'react-i18next';
 
 export default function ModeratorComments({ isNavOpen }) {
 
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const loggedInUser = auth.userId;
   const navigate = useNavigate()
@@ -49,18 +52,18 @@ export default function ModeratorComments({ isNavOpen }) {
       console.error(err);
 
       if (!err?.response) {
-        setError('Server is unreachable. Please try again later.');
-      } else if (err.response?.status === 404) {
-        setError('No post report found');
-      } else if (err.response?.status === 403) {
-        setError('Access denied. You might not have permission to view this.');
-      } else if (err.response?.status === 401) {
-        setError('Unauthorized. Please log in and try again.');
-      } else if (err.response?.status === 500) {
-        setError('Server error. Please try again later.');
-      } else {
-        setError('Something went wrong. Please try again.');
-      }
+      setError(t('moderator.error.serverUnreachable'));
+    } else if (err.response?.status === 404) {
+      setError(t('moderator.error.noReportFound'));
+    } else if (err.response?.status === 403) {
+      setError(t('moderator.error.accessDenied'));
+    } else if (err.response?.status === 401) {
+      setError(t('moderator.error.unauthorized'));
+    } else if (err.response?.status === 500) {
+      setError(t('moderator.error.serverError'));
+    } else {
+      setError(t('moderator.error.somethingWentWrong'));
+    }
 
       errRef.current?.focus();
     }
@@ -80,8 +83,8 @@ export default function ModeratorComments({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Comments Awaiting Assessment</h2>
-        {error && error !== "No comments found" && (
+        <h2>{t('moderator.commentsAwaitingAssessment')}</h2>
+        {error && error !== t('moderator.noCommentsFound') && (
           <p className="error-message">{error}</p>
         )}
 
@@ -90,14 +93,14 @@ export default function ModeratorComments({ isNavOpen }) {
             <table>
               <thead>
                 <tr>
-                  <th>Comment/Post Id</th>
-                  <th>Comment</th>
-                  <th>Status</th>
-                  <th>Note</th>
-                  <th>Reported by</th>
-                  <th>Reported at</th>
-                  <th>Ok</th>
-                  <th>Hide</th>
+                  <th>{t('moderator.commentAndPostId')}</th>
+                  <th>{t('moderator.comment')}</th>
+                  <th>{t('moderator.status')}</th>
+                  <th>{t('moderator.note')}</th>
+                  <th>{t('moderator.reportedBy')}</th>
+                  <th>{t('moderator.reportedAt')}</th>
+                  <th>{t('moderator.unhide')}</th>
+                  <th>{t('moderator.hide')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,15 +128,15 @@ export default function ModeratorComments({ isNavOpen }) {
                         : `UserId: ${log.reported_by}`}
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
-                    <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} setError={setError}/>
-                    <ModeratorHideReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} setError={setError}/>
+                    <ModeratorOkReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} setError={setError} />
+                    <ModeratorHideReportedComment commentId={log.comment_id} refreshData={fetchReports} setReports={setReports} setError={setError} />
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         ) : (
-          <p>No post found.</p>
+          <p>{t('moderator.noPostsFound')}</p>
         )}
 
       </div>

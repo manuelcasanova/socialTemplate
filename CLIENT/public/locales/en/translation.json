@@ -34,6 +34,42 @@
       "restorePost": "Restore the post from the Hidden Posts section.",
       "reviewHistory": "Review the moderation history.",
       "repeatCommentActions": "Repeat these actions for comments on posts."
+    },
+    "reportsAwaitingAssessment": "Reports Awaiting Assessment",
+    "commentsAwaitingAssessment": "Comments Awaiting Assessment",
+    "postsHidden": "Posts Hiden (Assessed as Inappropriate)",
+    "commentsHidden": "Comments Hiden (Assessed as Inappropriate)",
+    "postModerationHistory": "Post Moderation History",
+    "commentModerationHistory": "Comment Moderation History",
+    "postId": "Post Id",
+    "userId": "User Id",
+    "noPostsFound": "No posts found",
+    "noCommentsFound": "No comments found",
+    "noHistory": "No report history found",
+    "postContent": "Post Content",
+    "status": "Status",
+    "note": "Note",
+    "hiddenBy": "Hidden by",
+    "hiddenAt": "Hidden at",
+    "reportedBy": "Reported by",
+    "reportedAt": "Reported at",
+    "performedBy": "Performed by",
+    "performedAt": "Performed at",
+    "unhide": "Unhide",
+    "hide": "Hide",
+    "commentAndPostId": "Comment/Post Id",
+    "postIdAndCommentId": "Post Id / Comment Id",
+    "comment": "Comment",
+    "commentContent": "Comment Content",
+    "approveComment": "Approve Comment",
+    "approvePost": "Approve Post",
+    "error": {
+      "serverUnreachable": "Server is unreachable. Please check your connection or try again later.",
+      "noReportFound": "No report found",
+      "accessDenied": "Access denied. You might not have permission to view this",
+      "unauthorized": "Unauthorized. Please log in and try again",
+      "serverError": "A server error occurred. Please try again later.",
+      "somethingWentWrong": "Something went wrong. Please try again."
     }
   },
   "navbar": {
@@ -298,14 +334,14 @@
     "profileAlt": "Profile picture",
     "largeProfileAlt": "Large profile picture"
   },
-    "socialPending": {
+  "socialPending": {
     "title": "Pending Requests",
     "noRequests": "No pending requests.",
     "inactiveUsers": "Inactive User",
     "profileAlt": "Profile",
     "largeProfileAlt": "Large Profile"
   },
-    "socialMuted": {
+  "socialMuted": {
     "title": "Muted Users",
     "infoButton": "i",
     "infoMessage": "You cannot interact with users you've muted, and they will not be able to interact with you either.",
@@ -314,7 +350,7 @@
     "largeProfileAlt": "Large Profile",
     "noUsersFound": "No muted users found"
   },
-   "followUserButton": {
+  "followUserButton": {
     "follow": "Follow",
     "unfollow": "Unfollow",
     "followBack": "Follow back",

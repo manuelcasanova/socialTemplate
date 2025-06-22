@@ -13,10 +13,13 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 //Components
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
+//Translation
+import { useTranslation } from 'react-i18next';
 
 export default function ModeratorOkReportedComment({ commentId, refreshData, setReports, isNavOpen, setError }) {
 const axiosPrivate = useAxiosPrivate();
 
+const { t } = useTranslation();
 const { auth } = useAuth();
 const [isLoading, setIsLoading] = useState(false);
   const errRef = useRef();
@@ -46,17 +49,17 @@ const handleApproveClick = async () => {
     console.error(err);
     
     if (!err?.response) {
-      setError('Server is unreachable. Please try again later.');
+      setError(t('moderator.error.serverUnreachable'));
     } else if (err.response?.status === 404) {
-      setError('No post report found');
+      setError(t('moderator.error.noReportFound'));
     } else if (err.response?.status === 403) {
-      setError('Access denied. You might not have permission to view this.');
+      setError(t('moderator.error.accessDenied'));
     } else if (err.response?.status === 401) {
-      setError('Unauthorized. Please log in and try again.');
+      setError(t('moderator.error.unauthorized'));
     } else if (err.response?.status === 500) {
-      setError('Server error. Please try again later.');
+      setError(t('moderator.error.serverError'));
     } else {
-      setError('Something went wrong. Please try again.');
+      setError(t('moderator.error.somethingWentWrong'));
     }
     errRef.current?.focus();
   }
@@ -77,7 +80,7 @@ const handleApproveClick = async () => {
   return (
 
       <td><FontAwesomeIcon 
-      title='Approve Comment' 
+      title={t('moderator.approveComment')}
       style={{ color: 'green', cursor: 'pointer' }} 
       icon={faCircleCheck} 
       onClick={handleApproveClick}

@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 
 const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject, setError, isSuperAdmin }) => {
 
-  // console.log("userL ob", userLoggedInObject)
   const { t } = useTranslation();
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const axiosPrivate = useAxiosPrivate();

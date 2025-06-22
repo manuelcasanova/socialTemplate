@@ -9,8 +9,12 @@ import ModeratorOkReportedPost from "./ModeratorOkReportedPost";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 export default function ModeratorPosts({ isNavOpen }) {
 
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const loggedInUser = auth.userId;
   const navigate = useNavigate()
@@ -45,18 +49,18 @@ export default function ModeratorPosts({ isNavOpen }) {
       console.error(err);
     
       if (!err?.response) {
-        setError('Server is unreachable. Please try again later.');
-      } else if (err.response?.status === 404) {
-        setError('No post report history found');
-      } else if (err.response?.status === 403) {
-        setError('Access denied. You do not have permission to view this history.');
-      } else if (err.response?.status === 401) {
-        setError('Unauthorized. Please log in and try again.');
-      } else if (err.response?.status === 500) {
-        setError('Server error. Please try again later.');
-      } else {
-        setError('An unexpected error occurred. Please try again.');
-      }
+      setError(t('moderator.error.serverUnreachable'));
+    } else if (err.response?.status === 404) {
+      setError(t('moderator.error.noReportFound'));
+    } else if (err.response?.status === 403) {
+      setError(t('moderator.error.accessDenied'));
+    } else if (err.response?.status === 401) {
+      setError(t('moderator.error.unauthorized'));
+    } else if (err.response?.status === 500) {
+      setError(t('moderator.error.serverError'));
+    } else {
+      setError(t('moderator.error.somethingWentWrong'));
+    }
     
       errRef.current?.focus();
     }
@@ -84,7 +88,7 @@ export default function ModeratorPosts({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Posts Hiden (Assessed as Inappropriate)</h2>
+        <h2>{t('moderator.postsHidden')}</h2>
         {error && error !== "No post report history found" && (
           <p className="error-message">{error}</p>
         )}
@@ -94,13 +98,13 @@ export default function ModeratorPosts({ isNavOpen }) {
             <table>
               <thead>
                 <tr>
-                  <th>Post Id</th>
-                  <th>Post Content</th>
-                  <th>Status</th>
-                  <th>Note</th>
-                  <th>Hidden by</th>
-                  <th>Hidden at</th>
-                  <th>Ok</th>
+                  <th>{t('moderator.postId')}</th>
+                  <th>{t('moderator.postContent')}</th>
+                  <th>{t('moderator.status')}</th>
+                  <th>{t('moderator.note')}</th>
+                  <th>{t('moderator.hiddenBy')}</th>
+                  <th>{t('moderator.hiddenAt')}</th>
+                  <th>{t('moderator.unhide')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,8 +129,8 @@ export default function ModeratorPosts({ isNavOpen }) {
                       }}
                     >
                       {users[log.reported_by]
-                        ? `${users[log.reported_by]} (UserId: ${log.reported_by})`
-                        : `UserId: ${log.reported_by}`}
+                        ? `${users[log.reported_by]} (${t('moderator.userId')} ${log.reported_by})`
+                        : `${t('moderator.userId')} ${log.reported_by}`}
                     </td>
                     <td>{new Date(log.reported_at).toLocaleString('en-GB')}</td>
                     <ModeratorOkReportedPost postId={log.post_id} refreshData={fetchHiddenPosts} setReports={setReports} setError={setError} />
@@ -137,7 +141,7 @@ export default function ModeratorPosts({ isNavOpen }) {
             </table>
           </div>
         ) : (
-          <p>No posts found.</p>
+          <p>{t('moderator.noPostsFound')}</p>
         )}
 
       </div>
