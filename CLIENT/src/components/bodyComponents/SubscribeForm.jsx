@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAuth from '../../hooks/useAuth';
-import Footer from '../mainComponents/footer';
+
+//Translation
+import { useTranslation } from 'react-i18next';
 
 import '../../css/SubscribeForm.css'
 
 const SubscribeForm = ({ isNavOpen }) => {
+    const { t } = useTranslation();
     const { auth, setAuth } = useAuth();
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [paymentProcessing, setPaymentProcessing] = useState(false);
@@ -98,14 +101,14 @@ const SubscribeForm = ({ isNavOpen }) => {
                 setShowPaymentForm(false);
                 navigate('/subscriber');
             } else {
-                setErrorMessage('Payment failed. Please try again.');
+                setErrorMessage(t('subscribeForm.paymentFailed'));
             }
         } catch (error) {
             console.error('Error processing payment:', error);
 
             const errorData = error?.response?.data?.error || 'An unexpected error occurred. Please try again.';
 
-            setErrorMessage(`Payment failed: ${errorData}`);
+            setErrorMessage(t('subscribeForm.paymentFailedDetail', { error: errorData }));
         }
         finally {
             setPaymentProcessing(false);
@@ -156,26 +159,26 @@ const SubscribeForm = ({ isNavOpen }) => {
                 <div className="subscription-cards">
                     {/* Left Card: Non-Subscribed Features */}
                     <div className="subscription-card not-subscribed">
-                        <h3>Standard Plan (Free)</h3>
+                        <h3>{t('subscribeForm.standardPlanTitle')}</h3>
                         <ul>
-                            <li>Feature 1</li>
-                            <li>Feature 2</li>
-                            <li>Feature 3</li>
-                            <li>Feature 4</li>
+                            <li>{t('subscribeForm.feature1')}</li>
+                            <li>{t('subscribeForm.feature2')}</li>
+                            <li>{t('subscribeForm.feature3')}</li>
+                            <li>{t('subscribeForm.feature4')}</li>
                         </ul>
                     </div>
 
                     {/* Right Card: Subscribed Features / Subscribe Form */}
                     <div className="subscription-card not-subscribed">
-                        <h3>Premium Plan (0$)</h3>
+                        <h3>{t('subscribeForm.premiumPlanTitle')}</h3>
 
                         <ul>
-                            <li>Feature 1</li>
-                            <li>Feature 2</li>
-                            <li>Feature 3</li>
-                            <li>Feature 4</li>
-                            <li>Exclusive Feature A</li>
-                            <li>Exclusive Feature B</li>
+                            <li>{t('subscribeForm.feature1')}</li>
+                            <li>{t('subscribeForm.feature2')}</li>
+                            <li>{t('subscribeForm.feature3')}</li>
+                            <li>{t('subscribeForm.feature4')}</li>
+                            <li>{t('subscribeForm.premiumFeatureA')}</li>
+                            <li>{t('subscribeForm.premiumFeatureB')}</li>
                         </ul>
 
 
@@ -187,7 +190,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                                 onClick={() => setShowPaymentForm(true)}
                                 className="subscribe-button"
                             >
-                                Subscribe Now
+                                {t('subscribeForm.subscribeNow')}
                             </button>
                         )}
 
@@ -200,7 +203,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                 {/* Show the payment form if the button is clicked */}
                 {showPaymentForm && (
                     <div className="credit-card-form">
-                        <h3>Enter Credit Card Details</h3>
+                        <h3>{t('subscribeForm.enterCardDetails')}</h3>
 
                         <button
                             className="close-button"
@@ -212,7 +215,7 @@ const SubscribeForm = ({ isNavOpen }) => {
 
                         <form>
                             <label>
-                                Card Number
+                                {t('subscribeForm.cardNumber')}
                                 <input
                                     type="number"
                                     name="cardNumber"
@@ -224,7 +227,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                                 />
                             </label>
                             <label>
-                                Expiration Month
+                                {t('subscribeForm.expMonth')}
                                 <input
                                     type="number"
                                     name="expMonth"
@@ -236,7 +239,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                                 />
                             </label>
                             <label>
-                                Expiration Year
+                                {t('subscribeForm.expYear')}
                                 <input
                                     type="text"
                                     name="expYear"
@@ -248,7 +251,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                                 />
                             </label>
                             <label>
-                                CVC
+                                {t('subscribeForm.cvc')}
                                 <input
                                     type="text"
                                     name="cvc"
@@ -266,7 +269,7 @@ const SubscribeForm = ({ isNavOpen }) => {
                             disabled={paymentProcessing}
                             className="subscribe-button"
                         >
-                            {paymentProcessing ? 'Processing...' : 'Confirm Payment'}
+                            {paymentProcessing ? t('subscribeForm.processing') : t('subscribeForm.confirmPayment')}
                         </button>
 
                         {errorMessage && <div className="error-message">{errorMessage}</div>}
