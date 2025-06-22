@@ -221,62 +221,106 @@
     "at": "a las"
   },
   "postsInteractions": {
-  "react": "Reacciona",
+    "react": "Reacciona",
     "like": "Me gusta",
-  "dislike": "No me gusta",
-  "smile": "Sonrío",
-  "laugh": "Río",
-  "cry": "Lloro",
-  "angry": "Me enfada",
-  "removeReaction": "Quitar",
-  "comments": "Comentarios",
-  "reactions": "Reacciones",
-  "noServerResponse": "Sin respuesta del servidor",
-  "forbidden": "Prohibido: No se le permite reaccionar",
-  "unauthorized": "No autorizado: Por favor, inicie sesión",
-  "badRequest": "Solicitud incorrecta: Intente nuevamente",
-  "attemptFailed": "Intento fallido"
-},
-"postReactions": {
-  "noReactions": "Esta publicación no tiene reacciones.",
-  "commentNoReactions": "Este comentario no tiene reacciones.",
-  "close": "Cerrar",
-  "like": "Me gusta",
-  "dislike": "No me gusta",
-  "smile": "Sonrío",
-  "laugh": "Río",
-  "cry": "Lloro",
-  "angry": "Me enfada"
-},
-"writePost": {
-  "placeholder": "¿Tienes algo que decir?",
-  "tooltip": {
-    "public": "Público",
-    "private": "Solo tú",
-    "followers": "Seguidores"
+    "dislike": "No me gusta",
+    "smile": "Sonrío",
+    "laugh": "Río",
+    "cry": "Lloro",
+    "angry": "Me enfada",
+    "removeReaction": "Quitar",
+    "comments": "Comentarios",
+    "reactions": "Reacciones",
+    "noServerResponse": "Sin respuesta del servidor",
+    "forbidden": "Prohibido: No se le permite reaccionar",
+    "unauthorized": "No autorizado: Por favor, inicie sesión",
+    "badRequest": "Solicitud incorrecta: Intente nuevamente",
+    "attemptFailed": "Intento fallido"
   },
-  "errorEmpty": "¡El contenido no puede estar vacío!",
-  "errorTooLong": "¡El contenido excede el límite de {{limit}} caracteres!",
-  "errorFailed": "No se pudo crear la publicación. Inténtalo de nuevo.",
-  "charCount": "{{count}} / {{limit}} caracteres"
-},
-"filterUsername": {
-  "placeholder": "Buscar por nombre de usuario",
-  "title": "Solo se permiten letras, números, guiones, guiones bajos, acentos circunflejos y espacios."
-},
-"flagComment": {
-  "title": "Reportar como inapropiado",
-  "reported": "Reportado. Pendiente de revisión",
-  "errorUnexpected": "Ocurrió un error inesperado."
-},
-"postDelete": {
-  "title": "Eliminar publicación",
-  "confirmDelete": "Confirmar eliminación",
-  "cancel": "Cancelar",
-  "errorFailed": "No se pudo eliminar la publicación."
-}
-
-
-
-
+  "postReactions": {
+    "noReactions": "Esta publicación no tiene reacciones.",
+    "commentNoReactions": "Este comentario no tiene reacciones.",
+    "close": "Cerrar",
+    "like": "Me gusta",
+    "dislike": "No me gusta",
+    "smile": "Sonrío",
+    "laugh": "Río",
+    "cry": "Lloro",
+    "angry": "Me enfada"
+  },
+  "writePost": {
+    "placeholder": "¿Tienes algo que decir?",
+    "tooltip": {
+      "public": "Público",
+      "private": "Solo tú",
+      "followers": "Seguidores"
+    },
+    "errorEmpty": "¡El contenido no puede estar vacío!",
+    "errorTooLong": "¡El contenido excede el límite de {{limit}} caracteres!",
+    "errorFailed": "No se pudo crear la publicación. Inténtalo de nuevo.",
+    "charCount": "{{count}} / {{limit}} caracteres"
+  },
+  "filterUsername": {
+    "placeholder": "Buscar por nombre de usuario",
+    "title": "Solo se permiten letras, números, guiones, guiones bajos, acentos circunflejos y espacios."
+  },
+  "flagComment": {
+    "title": "Reportar como inapropiado",
+    "reported": "Reportado. Pendiente de revisión",
+    "errorUnexpected": "Ocurrió un error inesperado."
+  },
+  "postDelete": {
+    "title": "Eliminar publicación",
+    "confirmDelete": "Confirmar eliminación",
+    "cancel": "Cancelar",
+    "errorFailed": "No se pudo eliminar la publicación."
+  },
+  "socialAllUsers": {
+    "title": "Todos los usuarios",
+    "noUsersOrMuted": "No hay usuarios disponibles o todos los usuarios están silenciados.",
+    "noUsersFound": "No se encontraron usuarios.",
+    "inactiveUser": "Usuario inactivo",
+    "messagesButtonTitle": "Este usuario te sigue"
+  },
+  "socialFollowee": {
+    "title": "Usuarios que sigues",
+    "noUsers": "No hay usuarios disponibles o todos los usuarios están silenciados.",
+    "inactiveUser": "Usuario inactivo",
+    "messagesButtonTitle": "Este usuario te sigue"
+  },
+  "socialFollowers": {
+    "title": "Seguidores",
+    "noUsers": "No hay usuarios disponibles o todos los usuarios están silenciados.",
+    "inactiveUser": "Usuario inactivo",
+    "messagesButtonTitle": "Este usuario te sigue",
+    "profileAlt": "Foto de perfil",
+    "largeProfileAlt": "Foto de perfil grande"
+  },
+  "socialPending": {
+    "title": "Solicitudes de conexión pendientes",
+    "noRequests": "No hay solicitudes pendientes.",
+    "inactiveUsers": "Usuario inactivo",
+    "profileAlt": "Foto de perfil",
+    "largeProfileAlt": "Foto de perfil grande"
+  },
+   "socialMuted": {
+    "title": "Usuarios Silenciados",
+    "infoButton": "i",
+    "infoMessage": "No puedes interactuar con los usuarios que has silenciado, y ellos tampoco podrán interactuar contigo.",
+    "inactiveUser": "Usuario Inactivo",
+    "profileAlt": "Foto de perfil",
+    "largeProfileAlt": "Foto de perfil grande",
+    "noUsersFound": "No se encontraron usuarios silenciados"
+  },
+    "followUserButton": {
+    "follow": "Seguir",
+    "unfollow": "No seguir",
+    "followBack": "Seguir",
+    "cancelRequest": "Cancelar solicitud",
+    "approveRequest": "Aprobar solicitud",
+    "errorSendFollow": "Error al enviar la solicitud de seguimiento. Por favor, inténtalo de nuevo más tarde.",
+    "errorUnfollow": "Error al intentar dejar de seguir. Por favor, inténtalo de nuevo más tarde.",
+    "errorApproveFollower": "Error al aprobar al seguidor. Por favor, inténtalo de nuevo más tarde.",
+    "errorCancelRequest": "Error al cancelar la solicitud de seguimiento. Por favor, inténtalo de nuevo más tarde."
+  }
 }

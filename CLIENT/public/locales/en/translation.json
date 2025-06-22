@@ -251,35 +251,78 @@
     "angry": "Angry"
   },
   "writePost": {
-  "placeholder": "Got something to say?",
-  "tooltip": {
-    "public": "Public",
-    "private": "Only you",
-    "followers": "Followers"
+    "placeholder": "Got something to say?",
+    "tooltip": {
+      "public": "Public",
+      "private": "Only you",
+      "followers": "Followers"
+    },
+    "errorEmpty": "Content cannot be empty!",
+    "errorTooLong": "Content exceeds the {{limit}} character limit!",
+    "errorFailed": "Failed to create the post. Please try again.",
+    "charCount": "{{count}} / {{limit}} characters"
   },
-  "errorEmpty": "Content cannot be empty!",
-  "errorTooLong": "Content exceeds the {{limit}} character limit!",
-  "errorFailed": "Failed to create the post. Please try again.",
-  "charCount": "{{count}} / {{limit}} characters"
-},
-"filterUsername": {
-  "placeholder": "Search by username",
-  "title": "Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
-},
-"flagComment": {
-  "title": "Report as inappropriate",
-  "reported": "Reported. Pending review",
-  "errorUnexpected": "An unexpected error occurred."
-},
-
-"postDelete": {
-  "title": "Delete Post",
-  "confirmDelete": "Confirm delete",
-  "cancel": "Cancel",
-  "errorFailed": "Failed to delete post."
-}
-
-
-
-
+  "filterUsername": {
+    "placeholder": "Search by username",
+    "title": "Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+  },
+  "flagComment": {
+    "title": "Report as inappropriate",
+    "reported": "Reported. Pending review",
+    "errorUnexpected": "An unexpected error occurred."
+  },
+  "postDelete": {
+    "title": "Delete Post",
+    "confirmDelete": "Confirm delete",
+    "cancel": "Cancel",
+    "errorFailed": "Failed to delete post."
+  },
+  "socialAllUsers": {
+    "title": "Social - All Users",
+    "noUsersOrMuted": "No users available or all users are muted.",
+    "noUsersFound": "No users found.",
+    "inactiveUser": "Inactive User",
+    "messagesButtonTitle": "This user follows you"
+  },
+  "socialFollowee": {
+    "title": "Following",
+    "noUsers": "No users available or all users are muted.",
+    "inactiveUser": "Inactive User",
+    "messagesButtonTitle": "This user follows you"
+  },
+  "socialFollowers": {
+    "title": "Followers",
+    "noUsers": "No users available or all users are muted.",
+    "inactiveUser": "Inactive User",
+    "messagesButtonTitle": "This user follows you",
+    "profileAlt": "Profile picture",
+    "largeProfileAlt": "Large profile picture"
+  },
+    "socialPending": {
+    "title": "Pending Requests",
+    "noRequests": "No pending requests.",
+    "inactiveUsers": "Inactive User",
+    "profileAlt": "Profile",
+    "largeProfileAlt": "Large Profile"
+  },
+    "socialMuted": {
+    "title": "Muted Users",
+    "infoButton": "i",
+    "infoMessage": "You cannot interact with users you've muted, and they will not be able to interact with you either.",
+    "inactiveUser": "Inactive User",
+    "profileAlt": "Profile",
+    "largeProfileAlt": "Large Profile",
+    "noUsersFound": "No muted users found"
+  },
+   "followUserButton": {
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "followBack": "Follow back",
+    "cancelRequest": "Cancel request",
+    "approveRequest": "Approve request",
+    "errorSendFollow": "Failed to send follow request. Please try again later.",
+    "errorUnfollow": "Failed to unfollow. Please try again later.",
+    "errorApproveFollower": "Failed to approve follower. Please try again later.",
+    "errorCancelRequest": "Failed to cancel follow request. Please try again later."
+  }
 }

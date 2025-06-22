@@ -27,9 +27,14 @@ import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 import fetchPending from "./util_functions/FetchPending";
 import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowee";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function SocialPendingRequests({ isNavOpen, isFollowingNotification, setIsFollowNotification, profilePictureKey }) {
+    const { t } = useTranslation();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -123,13 +128,13 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Social - Pending Requests</h2>
+        <h2>{t('socialPending.title')}</h2>
 
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         {(filteredPending.length === 0 || !superAdminSettings.allowFollow) ? (
-          <p>No pending requests.</p>
+          <p>{t('socialPending.noRequests')}</p>
         ) : (
           <div className="users-container">
             {filteredPending.map((pending) => {
@@ -148,7 +153,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
                         }}
-                        alt="Profile"
+                        alt={t('socialPending.profileAlt')}
                       />
 
                       {showLargePicture === user.user_id && (
@@ -163,13 +168,13 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                               e.target.onerror = null;
                               e.target.src = '/images/profilePicture.jpg';
                             }}
-                            alt="Large Profile"
+                            alt={t('socialPending.largeProfileAlt')}
                           />
                         </div>
                       )}
 
                       <p>
-                        {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                        {user.username.startsWith('inactive') ? t('socialPending.inactiveUsers') : user.username}
                       </p>
                     </div>
 

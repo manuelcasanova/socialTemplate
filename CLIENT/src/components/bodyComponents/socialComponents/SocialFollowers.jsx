@@ -31,10 +31,14 @@ import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 import fetchFollowers from "./util_functions/FetchFollowers";
 import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowee";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 
 export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
@@ -117,12 +121,12 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Social - Followers</h2>
+        <h2>{t('socialFollowers.title')}</h2>
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         {filteredFollowee.length === 0 ? (
-          <p>No users available or all users are muted.</p>
+          <p>{t('socialFollowers.noUsers')}</p>
         ) : (
           <div className="users-container">
             {filteredFollowee.map((follow) => {
@@ -141,7 +145,7 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
                         }}
-                        alt="Profile"
+                        alt={t('socialFollowers.profileAlt')}
                       />
 
                       {showLargePicture === user.user_id && (
@@ -156,13 +160,13 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
                               e.target.onerror = null;
                               e.target.src = '/images/profilePicture.jpg';
                             }}
-                            alt="Large Profile"
+                            alt={t('socialFollowers.largeProfileAlt')}
                           />
                         </div>
                       )}
 
                       <p>
-                        {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                        {user.username.startsWith('inactive') ? t('socialFollowers.inactiveUsers') : user.username}
                       </p>
                     </div>
 
@@ -184,7 +188,7 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
                                 <FontAwesomeIcon
                                   icon={faEnvelope}
                                   style={{ cursor: "pointer" }}
-                                  title="This user follows you"
+                                  title={t('socialFollowers.messagesButtonTitle')}
                                 />
                               </button>
                             )

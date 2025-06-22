@@ -7,10 +7,14 @@ import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
 import { useGlobalSuperAdminSettings } from '../../../../context/SuperAdminSettingsProvider';
 import { useGlobalAdminSettings } from '../../../../context/AdminSettingsProvider';
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, followeeId, followerId, userLoggedInObject, setError, isSuperAdmin }) => {
 
   // console.log("userL ob", userLoggedInObject)
-
+  const { t } = useTranslation();
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -31,11 +35,6 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
   const pendingAcceptThem = followersAndFollowee.some(follower =>
     follower.followee_id === followerId && follower.follower_id === followeeId && follower.status === 'pending'
   );
-
-  // console.log("amFollowingThem:", amFollowingThem);
-  // console.log("amBeingFollowedByThem:", amBeingFollowedByThem);
-  // console.log("pendingAcceptMe:", pendingAcceptMe);
-  // console.log("pendingAcceptThem:", pendingAcceptThem);
 
   const followUser = (followeeId, followerId) => {
 
@@ -72,8 +71,8 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
 
       })
       .catch(error => {
-        console.error('Error sending follow request:', error);
-        setError('Failed to send follow request. Please try again later.');
+        console.error(t('followUserButton.errorSendFollow'), error);
+        setError(t('followUserButton.errorSendFollow'));
       });
 
   };
@@ -105,8 +104,8 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
         setError(null);
       })
       .catch(error => {
-        console.error('Error sending unfollow request:', error);
-        setError('Failed to unfollow. Please try again later.');
+        console.error(t('followUserButton.errorUnfollow'), error);
+        setError(t('followUserButton.errorUnfollow'));
       });
   };
 
@@ -139,8 +138,8 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
 
       })
       .catch(error => {
-        console.error('Error approving follower:', error);
-        setError('Failed to approve follower. Please try again later.');
+        console.error(t('followUserButton.errorApproveFollower'), error);
+        setError(t('followUserButton.errorApproveFollower'));
       });
   };
 
@@ -164,8 +163,8 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
         setError(null);
       })
       .catch(error => {
-        console.error('Error canceling follow request:', error);
-        setError('Failed to cancel follow request. Please try again later.');
+        console.error(t('followUserButton.errorCancelRequest'), error);
+        setError(t('followUserButton.errorCancelRequest'));
       });
   };
 
@@ -184,26 +183,26 @@ const FollowUserButton = ({ followersAndFollowee, setFollowersAndFollowee, follo
 
   return (
 
-    (superAdminSettings.allowFollow && adminSettings.allowFollow || isSuperAdmin ) &&
-    <div 
-    className="user-info-buttons"
+    (superAdminSettings.allowFollow && adminSettings.allowFollow || isSuperAdmin) &&
+    <div
+      className="user-info-buttons"
     >
 
 
-      {!amFollowingThem && !pendingAcceptMe && !amBeingFollowedByThem && <button 
-      onClick={handleFollow}>Follow</button>}
+      {!amFollowingThem && !pendingAcceptMe && !amBeingFollowedByThem && <button
+        onClick={handleFollow}>{t('followUserButton.follow')}</button>}
 
-      {amFollowingThem && <button 
-      onClick={handleUnfollow}>Unfollow</button>}
+      {amFollowingThem && <button
+        onClick={handleUnfollow}>{t('followUserButton.unfollow')}</button>}
 
-      {!amFollowingThem && amBeingFollowedByThem && !pendingAcceptMe && <button 
-      onClick={handleFollow}>Follow back</button>}
+      {!amFollowingThem && amBeingFollowedByThem && !pendingAcceptMe && <button
+        onClick={handleFollow}>{t('followUserButton.followBack')}</button>}
 
-      {pendingAcceptMe && <button 
-      onClick={handleCancelRequest}>Cancel request</button>}
+      {pendingAcceptMe && <button
+        onClick={handleCancelRequest}>{t('followUserButton.cancelRequest')}</button>}
 
-      {pendingAcceptThem && <button 
-      onClick={() => { approveFollower(followeeId, followerId) }}>Approve request</button>}
+      {pendingAcceptThem && <button
+        onClick={() => { approveFollower(followeeId, followerId) }}>{t('followUserButton.approveRequest')}</button>}
 
     </div>
 

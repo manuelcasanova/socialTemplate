@@ -30,10 +30,14 @@ import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 import fetchFollowee from "./util_functions/FetchFollowee";
 import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowee";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 
 export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
@@ -61,14 +65,6 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
   const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
 
   const inputRef = useRef(null);
-
-  // useEffect(() => {
-  //   // Focus the input field after the component mounts
-  //   if (inputRef.current) {
-  //     inputRef.current.focus();
-  //   }
-  // });
-
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -116,12 +112,12 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Social - Following</h2>
+        <h2>{t('socialFollowee.title')}</h2>
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         {filteredFollowee.length === 0 ? (
-          <p>No users available or all users are muted.</p>
+          <p>{t('socialFollowee.noUsers')}</p>
         ) : (
           <div className="users-container">
             {filteredFollowee.map((follow) => {
@@ -161,7 +157,7 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
                       )}
 
                       <p>
-                        {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                        {user.username.startsWith('inactive') ? t('socialFollowee.inactiveUser') : user.username}
                       </p>
                     </div>
 
@@ -183,7 +179,7 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
                                 <FontAwesomeIcon
                                   icon={faEnvelope}
                                   style={{ cursor: "pointer" }}
-                                  title="This user follows you"
+                                  title={t('socialFollowee.messagesButtonTitle')}
                                 />
                               </button>
                             )

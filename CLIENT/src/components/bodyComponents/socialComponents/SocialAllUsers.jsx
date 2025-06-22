@@ -31,10 +31,14 @@ import fetchUsers from "./util_functions/FetchUsers";
 import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowee";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
 
+ const { t } = useTranslation();
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
@@ -129,12 +133,12 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>Social - All Users</h2>
+        <h2>{t('socialAllUsers.title')}</h2>
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         {allUsersMutedOrMe ? (
-          <p>No users available or all users are muted.</p>
+          <p>{t('socialAllUsers.noUsersOrMuted')}</p>
         ) : (
           <div className="users-container">
             {usersExceptMe.length > 0 ? (
@@ -178,7 +182,7 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
 
 
                     <p>
-                      {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                      {user.username.startsWith('inactive') ? t('socialAllUsers.inactiveUser') : user.username}
                     </p>
 
                   </div>
@@ -194,7 +198,7 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
                               <FontAwesomeIcon
                                 icon={faEnvelope}
                                 style={{ cursor: "pointer" }}
-                                title="This user follows you"
+                                title={t('socialAllUsers.messagesButtonTitle')}
                               />
                             </button>
                           )
@@ -232,7 +236,7 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
 
               )
             ) : (
-              <p>No users found</p>
+              <p>{t('socialAllUsers.noUsersFound')}</p>
             )}
           </div>
 

@@ -11,9 +11,6 @@ import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettings
 import { useGlobalAdminSettings } from "../../../context/AdminSettingsProvider";
 import ScreenSizeContext from "../../../context/ScreenSizeContext";
 
-
-
-
 //Styling
 
 import '../../../css/AdminUsers.css';
@@ -29,9 +26,14 @@ import FilterUsername from "./FilterUsername";
 import fetchUsers from "./util_functions/FetchUsers";
 import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function SocialMuted({ isNavOpen, profilePictureKey }) {
+  const { t } = useTranslation();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const { auth } = useAuth();
@@ -92,7 +94,7 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
   }
 
   if (isLoading) {
-    <LoadingSpinner />
+    return <LoadingSpinner />
   }
 
   if (error) {
@@ -104,11 +106,11 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
         <div className="muted-users-title">
-          <h2>Muted Users
+          <h2>{t('socialMuted.title')}
             <button
               className='info-button'
               onClick={handleShowInfo}
-            >i</button>
+            >{t('socialMuted.infoButton')}</button>
 
           </h2>
 
@@ -117,7 +119,7 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
         </div>
 
         {showInfo && (
-          <div className='info-message'>You cannot interact with users you've muted, and they will not be able to interact with you either.</div>
+          <div className='info-message'>{t('socialMuted.infoMessage')}</div>
 
         )}
 
@@ -134,12 +136,12 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
                   <img
                     className="user-row-social-small-img"
                     onClick={() => setShowLargePicture(user.user_id)}
-                    src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                    src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = '/images/profilePicture.jpg';
                     }}
-                    alt="Profile"
+                    alt={t('socialMuted.profileAlt')}
                   />
 
 
@@ -151,18 +153,18 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
                     >
                       <img
                         className="users-all-picture-large"
-                        src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
                         }}
-                        alt="Large Profile"
+                        alt={t('socialMuted.largeProfileAlt')}
                       />
                     </div>
                   )}
 
                   <p>
-                    {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                    {user.username.startsWith('inactive') ? t('socialMuted.inactiveUser') : user.username}
                   </p>
 
                 </div>
@@ -183,7 +185,7 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
 
             )
           ) : (
-            <p>No users found</p>
+            <p>{t('socialMuted.noUsersFound')}</p>
           )}
         </div>
 
