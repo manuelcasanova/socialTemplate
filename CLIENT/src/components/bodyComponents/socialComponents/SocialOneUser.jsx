@@ -26,6 +26,9 @@ import fetchUsers from "./util_functions/FetchUsers";
 import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowee";
 import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 // Function to check if profile picture exists for the user
@@ -41,6 +44,8 @@ const profilePictureExists = async (userId) => {
 };
 
 export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
+
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -103,28 +108,28 @@ export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
   }, [axiosPrivate, filters, userIdNumber]);
 
 
-useEffect(() => {
-  if (!superAdminSettings.allowMute || !adminSettings.allowMute) {
-    return;
-  }
+  useEffect(() => {
+    if (!superAdminSettings.allowMute || !adminSettings.allowMute) {
+      return;
+    }
 
-  fetchMutedUsers(filters, (rawMutedUsers) => {
-    const cleaned = rawMutedUsers.map(record => ({
-      user_id: record.muter,
-      muted_user_id: record.mutee,
-    }));
-    setMutedUsers(cleaned);
-  }, setIsLoading, setError, loggedInUser);
+    fetchMutedUsers(filters, (rawMutedUsers) => {
+      const cleaned = rawMutedUsers.map(record => ({
+        user_id: record.muter,
+        muted_user_id: record.mutee,
+      }));
+      setMutedUsers(cleaned);
+    }, setIsLoading, setError, loggedInUser);
 
-}, [
-  filters,
-  loggedInUser,
-  superAdminSettings.allowMute,
-  adminSettings.allowMute,
-  setMutedUsers,
-  setIsLoading,
-  setError
-]);
+  }, [
+    filters,
+    loggedInUser,
+    superAdminSettings.allowMute,
+    adminSettings.allowMute,
+    setMutedUsers,
+    setIsLoading,
+    setError
+  ]);
 
 
 
@@ -218,7 +223,7 @@ useEffect(() => {
                   superAdminSettings.showMessagesFeature &&
                   adminSettings.showMessagesFeature && (
                     <button onClick={() => navigate(`/messages/${user.user_id}`)}>
-                      <FontAwesomeIcon icon={faEnvelope} style={{ cursor: "pointer" }} title="This user follows you" />
+                      <FontAwesomeIcon icon={faEnvelope} style={{ cursor: "pointer" }} />
                     </button>
                   )}
 
@@ -254,7 +259,7 @@ useEffect(() => {
             )}
           </div>
         ) : (
-          <p>No info available</p>
+          <p>{t('socialOneUser.noInfoAvailable')}</p>
         )}
       </div>
     </div>

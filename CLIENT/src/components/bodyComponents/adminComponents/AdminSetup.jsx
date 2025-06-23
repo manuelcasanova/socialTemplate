@@ -64,7 +64,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
       className="admin-setup-note"
       style={{ color: 'gray', fontSize: '0.85em', marginLeft: '1em' }}
     >
-{t('appSetup.accessRestricted')}
+      {t('appSetup.accessRestricted')}
     </div>
   );
 
@@ -495,7 +495,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>{t('appSetup.enableSocial')}</div>
         }
-            {showAccessRestrictionNote.showSocialFeature && superAdminSettings.showSocialFeature === false && accessRestrictionNote}
+        {showAccessRestrictionNote.showSocialFeature && superAdminSettings.showSocialFeature === false && accessRestrictionNote}
       </div>
 
       {adminSettings.showSocialFeature &&
@@ -582,7 +582,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
           :
           <div className='admin-setup-line-text'>{t('appSetup.enableEditProfile')}</div>
         }
-            {showAccessRestrictionNote.showProfileFeature && superAdminSettings.showProfileFeature === false && accessRestrictionNote}
+        {showAccessRestrictionNote.showProfileFeature && superAdminSettings.showProfileFeature === false && accessRestrictionNote}
 
       </div>
 
@@ -648,11 +648,11 @@ export default function SuperAdminSetup({ isNavOpen }) {
               className='info-button'>i</div>
           </div>
 
-          {showInfoMessage && 
-          // <div className='info-message' style={{ marginBottom: '1em' }}>
-                  <div className="admin-setup-note"
-                  style={{ color: 'gray', fontSize: '0.85em', marginLeft: '1em', marginBottom: '1em' }}>
-            {t('appSetup.emailInfoMessage')}</div>}
+          {showInfoMessage &&
+            // <div className='info-message' style={{ marginBottom: '1em' }}>
+            <div className="admin-setup-note"
+              style={{ color: 'gray', fontSize: '0.85em', marginLeft: '1em', marginBottom: '1em' }}>
+              {t('appSetup.emailInfoMessage')}</div>}
 
           <div className='admin-setup-line'>
             <div className="toggle-container">

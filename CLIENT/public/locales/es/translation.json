@@ -570,5 +570,28 @@
     "cancel": "Cancelar",
     "noMessages": "Aún no hay mensajes.",
     "emptyWarning": "Por favor completa el campo de mensaje."
+  },
+  "error": {
+    "title": "Error",
+    "whatCanYouDo": "¿Qué puedes hacer?",
+    "suggestions": [
+      "Recarga la página.",
+      "Cierra el navegador e inicia sesión de nuevo.",
+      "Vuelve más tarde.",
+      "Si el problema persiste, contacta con el administrador web y proporciona este mensaje de error:"
+    ],
+    "messageLabel": "Mensaje de error"
+  },
+  "unauthorized": {
+    "title": "No autorizado",
+    "message": "No tienes acceso a la página solicitada.",
+    "goBack": "Volver"
+  },
+  "socialOneUser": {
+    "noInfoAvailable": "No hay información disponible"
+  },
+  "notFound": {
+    "title": "404 - Página no encontrada",
+    "message": "La página que buscas no existe."
   }
 }

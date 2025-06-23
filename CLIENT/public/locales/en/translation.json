@@ -403,7 +403,7 @@
   },
   "appSetup": {
     "appSettings": "App Settings",
-    "accessRestricted":  "Access to this feature is restricted to upgraded subscriptions or authorized higher-level admins.",
+    "accessRestricted": "Access to this feature is restricted to upgraded subscriptions or authorized higher-level admins.",
     "note": "Note: Super Admins can modify both Super Admin and Admin settings. However, if a Super Admin setting is disabled, the corresponding Admin setting cannot be enabled or modified. To allow changes, the Super Admin setting must first be enabled in the Super Admin configuration section.",
     "sectionPosts": "POSTS",
     "disablePosts": "Disable Posts",
@@ -550,19 +550,19 @@
     "toTime": "To time",
     "invalidUsername": "Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
   },
-    "usersWithMessages": {
+  "usersWithMessages": {
     "title": "Chats",
     "infoMessage": "The social connections feature has been disabled by a higher-tier administrator. You can still message users you previously connected with, but messaging new users is no longer available.",
     "hideMuted": "Hide muted",
     "noUsers": "No users with messages found or users are muted."
   },
-    "rolePage": {
+  "rolePage": {
     "title": "Access restricted: Only users with the “{{role}}” role can view this page.",
     "exploreAdminScenarios": "Explore admin scenarios:",
     "scenarioModifyRoles": "- Modify a user's allowed roles.",
     "scenarioManageRoles": "- From the Admin section, create, edit, and delete roles. Then test access behavior with various role permissions."
   },
-    "chat": {
+  "chat": {
     "close": "Close",
     "chatWithDeleted": "Chat with a user who deleted their account",
     "chatWithInactive": "Chat with {{username}} (inactive account)",
@@ -577,5 +577,28 @@
     "cancel": "Cancel",
     "noMessages": "No messages yet.",
     "emptyWarning": "Please fill out the message field."
+  },
+  "error": {
+    "title": "Error",
+    "whatCanYouDo": "What can you do?",
+    "suggestions": [
+      "Reload the page.",
+      "Close the browser and sign in again.",
+      "Come back later.",
+      "If the issue persists, contact the web administrator and provide this error message:"
+    ],
+    "messageLabel": "Error message"
+  },
+  "unauthorized": {
+    "title": "Unauthorized",
+    "message": "You do not have access to the requested page.",
+    "goBack": "Go Back"
+  },
+  "socialOneUser": {
+    "noInfoAvailable": "No info available"
+  },
+  "notFound": {
+    "title": "404 - Page Not Found",
+    "message": "The page you're looking for does not exist."
   }
 }
