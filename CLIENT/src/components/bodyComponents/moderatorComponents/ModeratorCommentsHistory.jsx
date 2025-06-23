@@ -124,7 +124,7 @@ export default function ModeratorCommentsHistory({ isNavOpen }) {
             </table>
           </div>
         ) : (
-          <p>No post report history found.</p>
+          <p>{t('moderator.noHistory')}</p>
         )}
 
       </div>

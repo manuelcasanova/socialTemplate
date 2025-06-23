@@ -339,7 +339,7 @@
     "profileAlt": "Foto de perfil",
     "largeProfileAlt": "Foto de perfil grande",
     "noUsersFound": "No se encontraron usuarios silenciados",
-     "muteUser": "Silencia a este usuario"
+    "muteUser": "Silencia a este usuario"
   },
   "followUserButton": {
     "follow": "Seguir",
@@ -393,6 +393,7 @@
   },
   "appSetup": {
     "appSettings": "Configuración de la App",
+    "accessRestricted": "El acceso a esta función está restringido a ciertas suscripciones o a administradores de nivel superior autorizados.",
     "note": "Nota: los Super Administradores pueden modificar tanto la configuración de Super Admin como la de Admin. Sin embargo, si una opción de Super Admin está deshabilitada, la correspondiente de Admin no podrá habilitarse ni modificarse. Para permitir cambios, primero debe habilitarse la opción en la sección de configuración de Super Admin.",
     "sectionPosts": "POSTS",
     "disablePosts": "Desactivar publicaciones",
@@ -460,7 +461,7 @@
     "showDetails": "+",
     "hideDetails": "−"
   },
-    "filterAdmin": {
+  "filterAdmin": {
     "toggleLabel": "Filtrar",
     "userIdPlaceholder": "ID",
     "usernamePlaceholder": "Nombre de usuario",
@@ -471,7 +472,7 @@
     "allRoles": "Todos los roles",
     "noRoles": "No hay roles disponibles"
   },
-    "adminRoles": {
+  "adminRoles": {
     "title": "Administrar Roles",
     "customRoles": "Roles Personalizados",
     "customRolesInfo": "Estos roles están asociados a una ruta protegida (accesible desde la barra de navegación) y pueden ser usados por SuperAdministradores, Administradores, Moderadores y cualquier usuario asignado. Solo los creadores del rol o administradores de nivel superior pueden editar o eliminar estos roles personalizados.",
@@ -488,9 +489,10 @@
     "warning": "Advertencia: Dependiendo de la configuración de tu aplicación, esta acción puede no ser posible. Por ejemplo: “No se puede eliminar este rol porque hay elementos vinculados a él” o “Eliminar este rol también eliminará todos los elementos asociados.”",
     "systemRoles": "Roles del Sistema",
     "create": "Crear",
-     "roleNameRequired": "El nombre del rol es obligatorio",
+    "roleNameRequired": "El nombre del rol es obligatorio",
     "roleNameRegex": "El nombre del rol debe tener entre 1 y 25 caracteres y solo puede incluir letras, números, espacios, guiones y guiones bajos."
-  },  "roleChangeLog": {
+  },
+  "roleChangeLog": {
     "title": "Registro de cambios de roles de usuario",
     "noLogs": "No se encontraron registros de cambios de roles.",
     "modifier": "Modificador",
@@ -502,7 +504,7 @@
     "actionTransferred": "transferido",
     "infoButtonTitle": "Mostrar detalles"
   },
-    "filterRoleChangeLog": {
+  "filterRoleChangeLog": {
     "modifierPlaceholder": "Usuario que realiza la modificación",
     "modifierIdPlaceholder": "ID del usuario que realiza la modificación",
     "recipientPlaceholder": "Nombre de usuario del destinatario",
@@ -515,7 +517,7 @@
     "noActions": "No hay acciones disponibles",
     "toggleFilter": "Mostrar/ocultar filtros"
   },
-    "loginHistory": {
+  "loginHistory": {
     "title": "Historial de accesos",
     "userId": "ID de usuario",
     "username": "Nombre de usuario",
@@ -547,13 +549,13 @@
     "hideMuted": "Ocultar silenciados",
     "noUsers": "No se encontraron usuarios con mensajes o están silenciados."
   },
-    "rolePage": {
+  "rolePage": {
     "title": "Acceso restringido: Solo los usuarios con el rol “{{role}}” pueden ver esta página.",
     "exploreAdminScenarios": "Explora escenarios de administrador:",
     "scenarioModifyRoles": "Modifica los roles permitidos de un usuario.",
     "scenarioManageRoles": "Desde la sección de Administrador, crea, edita y elimina roles. Luego prueba el comportamiento de acceso con varios permisos de rol."
   },
-    "chat": {
+  "chat": {
     "close": "Cerrar",
     "chatWithDeleted": "Chat con un usuario que eliminó su cuenta",
     "chatWithInactive": "Chat con {{username}} (cuenta inactiva)",

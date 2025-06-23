@@ -403,6 +403,7 @@
   },
   "appSetup": {
     "appSettings": "App Settings",
+    "accessRestricted":  "Access to this feature is restricted to upgraded subscriptions or authorized higher-level admins.",
     "note": "Note: Super Admins can modify both Super Admin and Admin settings. However, if a Super Admin setting is disabled, the corresponding Admin setting cannot be enabled or modified. To allow changes, the Super Admin setting must first be enabled in the Super Admin configuration section.",
     "sectionPosts": "POSTS",
     "disablePosts": "Disable Posts",

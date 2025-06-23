@@ -64,7 +64,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
       className="admin-setup-note"
       style={{ color: 'gray', fontSize: '0.85em', marginLeft: '1em' }}
     >
-      Access to this feature is restricted to upgraded subscriptions or authorized higher-level admins.
+{t('appSetup.accessRestricted')}
     </div>
   );
 
