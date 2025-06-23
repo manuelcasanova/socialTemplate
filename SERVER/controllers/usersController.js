@@ -183,7 +183,7 @@ const updateUser = async (req, res) => {
     let { username, email, password, userId } = req.body; // Destructure fields from the request body
 
     //Remove for production of a real application. Keep for testing.
-    if (userId === 1) {
+    if (userId === 2) {
         return res.status(400).json({ error: 'For test purposes, this account cannot be modified.' });
     }
 
@@ -287,8 +287,42 @@ const softDeleteUser = async (req, res) => {
 
     try {
 
-        if (userId === "1") {
+        if (userId === 2) {
             return res.status(400).json({ error: 'This account cannot be deleted, as it ensures at least one SuperAdmin remains.' });
+        }
+
+        // Step 0: Check if the user is SuperAdmin, to reassign control over other SuperAdmins or Admins to another SuperAdmin.
+
+        // Check if the user is SuperAdmin
+        const superAdminCheck = await pool.query(
+            'SELECT assigned_by_user_id FROM user_roles WHERE user_id = $1 AND role_id = 1',
+            [userId]
+        );
+
+        if (superAdminCheck.rows.length > 0) {
+            const originalAssignerId = superAdminCheck.rows[0].assigned_by_user_id;
+
+            // Transfer ownership of any roles assigned by this SuperAdmin (SuperAdmin or Admin)
+            const assignedUsers = await pool.query(
+                `SELECT ur.user_id, ur.role_id, r.role_name
+                 FROM user_roles ur
+                 JOIN roles r ON ur.role_id = r.role_id
+                 WHERE ur.assigned_by_user_id = $1 AND ur.role_id IN (1,2)`,
+                [userId]
+            );
+
+            for (const row of assignedUsers.rows) {
+                await pool.query(
+                    'UPDATE user_roles SET assigned_by_user_id = $1 WHERE user_id = $2 AND role_id = $3',
+                    [originalAssignerId, row.user_id, row.role_id]
+                );
+
+                await pool.query(
+                    `INSERT INTO role_change_logs (user_that_modified, user_modified, role, timestamp, action_type)
+                     VALUES ($1, $2, $3, NOW(), 'transferred')`,
+                    [originalAssignerId, row.user_id, row.role_name]
+                );
+            }
         }
 
         // Step 1: Fetch the current user's email, username
@@ -447,7 +481,7 @@ const adminVersionSoftDeleteUser = async (req, res) => {
     const requestingUserId = req.body.loggedInUser
 
     try {
-        if (userId === "1") {
+        if (userId === 2) {
             return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
         }
 
@@ -457,37 +491,37 @@ const adminVersionSoftDeleteUser = async (req, res) => {
             [userId]
         );
 
-if (superAdminCheck.rows.length > 0) {
-    const assignedBy = superAdminCheck.rows[0].assigned_by_user_id;
+        if (superAdminCheck.rows.length > 0) {
+            const assignedBy = superAdminCheck.rows[0].assigned_by_user_id;
 
-    if (parseInt(assignedBy) !== parseInt(requestingUserId)) {
-        return res.status(403).json({
-            error: 'You are not authorized to delete this SuperAdmin because you did not assign their role.'
-        });
-    }
+            if (parseInt(assignedBy) !== parseInt(requestingUserId)) {
+                return res.status(403).json({
+                    error: 'You are not authorized to delete this SuperAdmin because you did not assign their role.'
+                });
+            }
 
-    // Transfer ownership of any role assignments made by this SuperAdmin (for SuperAdmin or Admin roles)
-    const assignedUsers = await pool.query(
-        `SELECT ur.user_id, ur.role_id, r.role_name
+            // Transfer ownership of any role assignments made by this SuperAdmin (for SuperAdmin or Admin roles)
+            const assignedUsers = await pool.query(
+                `SELECT ur.user_id, ur.role_id, r.role_name
          FROM user_roles ur
          JOIN roles r ON ur.role_id = r.role_id
          WHERE ur.assigned_by_user_id = $1 AND ur.role_id IN (1, 2)`,
-        [userId]
-    );
+                [userId]
+            );
 
-    for (const row of assignedUsers.rows) {
-        await pool.query(
-            'UPDATE user_roles SET assigned_by_user_id = $1 WHERE user_id = $2 AND role_id = $3',
-            [requestingUserId, row.user_id, row.role_id]
-        );
+            for (const row of assignedUsers.rows) {
+                await pool.query(
+                    'UPDATE user_roles SET assigned_by_user_id = $1 WHERE user_id = $2 AND role_id = $3',
+                    [requestingUserId, row.user_id, row.role_id]
+                );
 
-        await pool.query(
-            `INSERT INTO role_change_logs (user_that_modified, user_modified, role, timestamp, action_type)
+                await pool.query(
+                    `INSERT INTO role_change_logs (user_that_modified, user_modified, role, timestamp, action_type)
              VALUES ($1, $2, $3, NOW(), 'transferred')`,
-            [requestingUserId, row.user_id, row.role_name]
-        );
-    }
-}
+                    [requestingUserId, row.user_id, row.role_name]
+                );
+            }
+        }
 
 
         // Step 1: Fetch the current user's email, username
