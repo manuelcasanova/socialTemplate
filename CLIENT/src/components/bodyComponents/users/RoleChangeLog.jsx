@@ -13,7 +13,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import '../../../css/RoleChangeLog.css'
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 export default function RoleChangeLog({ isNavOpen }) {
+  const { t } = useTranslation();
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);

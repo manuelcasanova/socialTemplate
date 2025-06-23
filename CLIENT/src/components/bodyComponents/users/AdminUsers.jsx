@@ -16,8 +16,12 @@ import '../../../css/AdminUsers.css';
 import FilterAdminUsers from "./FilterAdminUsers";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 
 export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, profilePictureKey }) {
+  const { t } = useTranslation();
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const [users, setUsers] = useState([]);

@@ -21,8 +21,13 @@ import '../../../css/AdminRoles.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV, faWarning, faInfo } from "@fortawesome/free-solid-svg-icons";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');

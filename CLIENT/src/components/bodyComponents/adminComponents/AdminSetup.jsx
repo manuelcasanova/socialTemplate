@@ -14,8 +14,13 @@ import '../../../css/AdminSetup.css'
 import Error from '../Error'
 import LoadingSpinner from '../../loadingSpinner/LoadingSpinner'
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 export default function SuperAdminSetup({ isNavOpen }) {
 
+  const { t } = useTranslation();
   const { adminSettings, error, isLoading } = useGlobalAdminSettings();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { auth } = useAuth();

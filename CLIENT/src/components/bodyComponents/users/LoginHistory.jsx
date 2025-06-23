@@ -7,7 +7,12 @@ import FilterLoginHistory from "./FilterLoginHistory";
 
 import '../../../css/RoleChangeLog.css'
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 export default function LoginHistory({ isNavOpen }) {
+  const { t } = useTranslation();
   const axiosPrivate = useAxiosPrivate();
   const [loginHistory, setLoginHistory] = useState([]);
   const [filters, setFilters] = useState({});
