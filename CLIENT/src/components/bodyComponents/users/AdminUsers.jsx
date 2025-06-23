@@ -16,12 +16,15 @@ import '../../../css/AdminUsers.css';
 import FilterAdminUsers from "./FilterAdminUsers";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
+//Util functions
+import {formatDate } from '../../bodyComponents/postsComponents/util_functions/formatDate'
+
 //Translation
 import { useTranslation } from 'react-i18next';
 
 
 export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, profilePictureKey }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const [users, setUsers] = useState([]);
@@ -65,7 +68,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
       } catch (err) {
         console.error("Error fetching users:", err);
 
-        let errorMsg = "Failed to fetch users.";
+        let errorMsg = t('adminUsers.errorFetching');
         if (err.response?.data?.error) {
           errorMsg += ` ${err.response.data.error}`;
         } else if (err.message) {
@@ -168,8 +171,8 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-      <div className="admin-users">
-        <h2>Admin Users</h2>
+      <div className="admin-users" style={{minHeight: '500px'}}>
+        <h2>{t('adminUsers.title')}</h2>
         {error && <p className="error-message">{error}</p>}
         <FilterAdminUsers
           roles={roles}
@@ -186,7 +189,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                   <div className="user-row" key={user.user_id}>
                     <div className="user-info">
                       {expandedUserId !== user.user_id && <p>
-                        {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                        {user.username.startsWith('inactive') ? t('adminUsers.inactiveUser') : user.username}
                       </p>}
                       <button onClick={() => handleViewMore(user.user_id)}
                         className={expandedUserId === user.user_id ? "user-info-expanded" : ""}
@@ -220,15 +223,15 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                           />
                         </div>
                         <p>
-                          <strong>Username:</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                          <strong>{t('adminUsers.usernameLabel')}</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
                         </p>
-                        <p><strong>E-mail:</strong> {user.email}</p>
-                        <p><strong>Verified:</strong> {user.is_verified ? "Yes" : "No"}</p>
-                        <p><strong>Active:</strong> {user.is_active ? "Yes" : "No"}</p> 
+                        <p><strong>{t('adminUsers.emailLabel')}</strong> {user.email}</p>
+                        <p><strong>{t('adminUsers.verifiedLabel')}</strong> {user.is_verified ? t('adminUsers.yes') : t('adminUsers.no')}</p>
+                        <p><strong>{t('adminUsers.activeLabel')}</strong> {user.is_active ? t('adminUsers.yes') : t('adminUsers.no')}</p> 
                         {
                           (superAdminSettings.allowManageRoles || isSuperAdmin) &&
                           <>
-                            <h4>Roles</h4>
+                            <h4>{t('adminUsers.rolesHeading')}</h4>
                             <ul>
 
                               {[...new Set([
@@ -266,28 +269,30 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                         }
 
 
-                        <h4>Last login</h4>
-                        {user.login_history.length > 0 ? (
-                          <ul>
-                            <li>
-                              {(() => {
-                                const lastLogin = new Date(user.login_history[user.login_history.length - 1]);
-                                return lastLogin.toLocaleString('en-US', {
-                                  weekday: 'long',  // Full name of the weekday (e.g., "Monday")
-                                  month: 'long',    // Full name of the month (e.g., "December")
-                                  day: 'numeric',   // Day of the month (e.g., "9")
-                                  year: 'numeric',  // Full year (e.g., "2024")
-                                  hour: '2-digit',  // Hour in 12-hour format (e.g., "5")
-                                  minute: '2-digit',// Minutes (e.g., "42")
-                                  hour12: true      // Use 12-hour clock with AM/PM
-                                });
-                              })()}
-                            </li>
-
-                          </ul>
-                        ) : (
-                          <p>No login history available</p>
-                        )}
+                        <h4>{t('adminUsers.lastLoginHeading')}</h4>
+                       {user.login_history.length > 0 ? (
+  <ul>
+    <li>
+      {(() => {
+        const lastLogin = new Date(
+          user.login_history[user.login_history.length - 1]
+        );
+        // Build an Intl.DateTimeFormat with the current locale:
+        return new Intl.DateTimeFormat(i18n.language, {
+          weekday: 'long',     // e.g. “Monday” / “lunes”
+          month:   'long',     // e.g. “December” / “diciembre”
+          day:     'numeric',  // e.g. “9”
+          year:    'numeric',  // e.g. “2024”
+          hour:    '2-digit',  // e.g. “05”
+          minute:  '2-digit',  // e.g. “42”
+          hour12:  !i18n.language.startsWith('es')
+        }).format(lastLogin);
+      })()}
+    </li>
+  </ul>
+) : (
+  <p>{t('adminUsers.noLoginHistory')}</p>
+)}
 
 
                         {
@@ -299,7 +304,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                                   <button
                                     className="button-red"
                                     onClick={handleShowDelete}
-                                  >Delete user</button>
+                                  >{t('adminUsers.deleteUser')}</button>
                                 </div>
                               )
                             }
@@ -307,13 +312,13 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                             {
                               showConfirmDelete && !user.email.startsWith('deleted-') && (
                                 <div className="delete-confirmation">
-                                  <p>Are you sure you want to delete this user? This action is permanent and cannot be undone.</p>
+                                  <p>{t('adminUsers.deleteConfirmation')}</p>
                                   <button className="button-white" onClick={handleShowDelete}>x</button>
                                   <button
                                     className="button-red"
                                     disabled={isLoading}
                                     onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
-                                  >{isLoading ? <LoadingSpinner /> : 'Confirm delete'}</button>
+                                  >{isLoading ? <LoadingSpinner /> : t('adminUsers.confirmDelete')}</button>
 
                                 </div>
                               )
@@ -327,7 +332,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                 ) : null
               )
             ) : (
-              <p>No users found</p>
+              <p>{t('adminUsers.noUsersFound')}</p>
             )}
           </div>
         }

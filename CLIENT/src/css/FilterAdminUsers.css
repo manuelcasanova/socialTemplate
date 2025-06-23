@@ -112,10 +112,12 @@
 /* For custom dropdown */
 .custom-dropdown {
   position: relative;
+  overflow: visible;
 }
 
 .custom-dropdown-menu {
   position: absolute;
+  overflow: visible;
   top: 100%;
   left: 0;
   right: 0;

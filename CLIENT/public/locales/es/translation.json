@@ -390,10 +390,10 @@
     "testRevokeSelf": "- Como administrador, intenta revocar tu propio rol de Admin o modificar el de otro Admin.",
     "manageRoles": "- Crea, edita y elimina roles. Luego prueba el comportamiento de acceso con distintos permisos."
   },
-  "superAdminSetup": {
+  "appSetup": {
     "appSettings": "Configuración de la App",
     "note": "Nota: los Super Administradores pueden modificar tanto la configuración de Super Admin como la de Admin. Sin embargo, si una opción de Super Admin está deshabilitada, la correspondiente de Admin no podrá habilitarse ni modificarse. Para permitir cambios, primero debe habilitarse la opción en la sección de configuración de Super Admin.",
-    "sectionPosts": "PUBLICACIONES",
+    "sectionPosts": "POSTS",
     "disablePosts": "Desactivar publicaciones",
     "enablePosts": "Activar publicaciones",
     "adminsCanPost": "Los administradores pueden publicar",
@@ -438,5 +438,36 @@
     "adminsCanCreateCustomRole": "Los admins pueden crear un rol personalizado",
     "adminsCanEditCustomRole": "Los admins pueden editar un rol personalizado",
     "adminsCanDeleteCustomRole": "Los admins pueden eliminar un rol personalizado"
+  },
+  "adminUsers": {
+    "title": "Administrar usuarios",
+    "errorFetching": "Error al obtener usuarios.",
+    "inactiveUser": "Usuario inactivo",
+    "usernameLabel": "Nombre de usuario:",
+    "emailLabel": "Correo electrónico:",
+    "verifiedLabel": "Verificado:",
+    "activeLabel": "Activo:",
+    "yes": "Sí",
+    "no": "No",
+    "rolesHeading": "Roles",
+    "lastLoginHeading": "Último inicio de sesión",
+    "noLoginHistory": "No hay historial de inicio de sesión disponible",
+    "deleteUser": "Eliminar usuario",
+    "deleteConfirmation": "¿Está seguro de que desea eliminar este usuario? Esta acción es permanente y no se puede deshacer.",
+    "confirmDelete": "Confirmar eliminación",
+    "noUsersFound": "No se encontraron usuarios",
+    "showDetails": "+",
+    "hideDetails": "−"
+  },
+    "filterAdmin": {
+    "toggleLabel": "Filtrar",
+    "userIdPlaceholder": "ID",
+    "usernamePlaceholder": "Nombre de usuario",
+    "emailPlaceholder": "Email",
+    "allStatuses": "Todos los estados",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "allRoles": "Todos los roles",
+    "noRoles": "No hay roles disponibles"
   }
 }

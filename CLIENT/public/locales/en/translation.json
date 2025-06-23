@@ -400,7 +400,7 @@
     "testRevokeSelf": "- As an administrator, attempt to revoke your own Admin role or modify another Admin's roles.",
     "manageRoles": "- Create, edit, and delete roles. Then test access behavior with various role permissions."
   },
-   "superAdminSetup": {
+   "appSetup": {
     "appSettings": "App Settings",
     "note":
       "Note: Super Admins can modify both Super Admin and Admin settings. However, if a Super Admin setting is disabled, the corresponding Admin setting cannot be enabled or modified. To allow changes, the Super Admin setting must first be enabled in the Super Admin configuration section.",
@@ -450,5 +450,36 @@
     "adminsCanCreateCustomRole": "Admins Can Create a Custom Role",
     "adminsCanEditCustomRole": "Admins Can Edit a Custom Role",
     "adminsCanDeleteCustomRole": "Admins Can Delete a Custom Role"
+  },
+    "adminUsers": {
+    "title": "Admin Users",
+    "errorFetching": "Failed to fetch users.",
+    "inactiveUser": "Inactive User",
+    "usernameLabel": "Username: ",
+    "emailLabel": "E-mail:",
+    "verifiedLabel": "Verified:",
+    "activeLabel": "Active:",
+    "yes": "Yes",
+    "no": "No",
+    "rolesHeading": "Roles",
+    "lastLoginHeading": "Last login",
+    "noLoginHistory": "No login history available",
+    "deleteUser": "Delete user",
+    "deleteConfirmation": "Are you sure you want to delete this user? This action is permanent and cannot be undone.",
+    "confirmDelete": "Confirm delete",
+    "noUsersFound": "No users found",
+    "showDetails": "+",
+    "hideDetails": "−"
+  },
+    "filterAdmin": {
+    "toggleLabel": "Filter",
+    "userIdPlaceholder": "User ID",
+    "usernamePlaceholder": "Username",
+    "emailPlaceholder": "Email",
+    "allStatuses": "All Statuses",
+    "active": "Active",
+    "inactive": "Inactive",
+    "allRoles": "All Roles",
+    "noRoles": "No roles available"
   }
 }

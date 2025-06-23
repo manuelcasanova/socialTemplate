@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 import '../../../css/FilterAdminUsers.css'
-import { resolvePath } from "react-router-dom";
+//Translation
+import { useTranslation } from 'react-i18next';
 
 export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId }) {
+    const { t, i18n } = useTranslation();
   const [username, setUsername] = useState("");
   const [role, setRole] = useState(""); // Role filter
   const [isActive, setIsActive] = useState(true); // Active status filter
@@ -136,7 +138,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
           <input
             type="number"
             className="filter-container-input-userid"
-            placeholder="User ID"
+            placeholder={t('filterAdmin.userIdPlaceholder')}
             value={userId}
             onChange={handleUserIdChange}
           />
@@ -145,7 +147,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
           <input
             type="text"
             className="filter-container-input-username"
-            placeholder="Username"
+            placeholder={t('filterAdmin.usernamePlaceholder')}
             value={username}
             onChange={handleUsernameChange}
             pattern="[a-zA-Z0-9-_^\s]+" // Optional, prevents invalid submission
@@ -156,7 +158,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
           <input
             type="email"
             className="filter-container-input-email"
-            placeholder="Email"
+            placeholder={t('filterAdmin.emailPlaceholder')}
             value={email}
             onChange={handleEmailChange}
           />
@@ -172,7 +174,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
               className="filter-container-select"
               onClick={toggleActiveStatusDropdown} // Use the toggle function
             >
-              {isActive === true ? "Active" : isActive === false ? "Inactive" : "All Statuses"}
+              {isActive === true ? t('filterAdmin.active') : isActive === false ? t('filterAdmin.inactive') : t('filterAdmin.allStatuses')}
             </div>
             {isActiveOpen && (
               <div className="custom-dropdown-menu">
@@ -184,7 +186,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
                     setIsActiveOpen(false); // Close the dropdown
                   }}
                 >
-                  All Statuses
+                  {t('filterAdmin.allStatuses')}
                 </div>
 
                 <div
@@ -194,7 +196,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
                     setIsActiveOpen(false);
                   }}
                 >
-                  Active
+                  {t('filterAdmin.active')}
                 </div>
                 <div
                   className="custom-dropdown-option"
@@ -203,7 +205,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
                     setIsActiveOpen(false);
                   }}
                 >
-                  Inactive
+                  {t('filterAdmin.inactive')}
                 </div>
               </div>
             )}
@@ -219,7 +221,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
               className="filter-container-select"
               onClick={toggleRoleDropdown} // Use the toggle function
             >
-              {role || "All Roles"}
+              {role || t('filterAdmin.allRoles')}
             </div>
             {isRoleOpen && roles.length > 0 && (
               <div className="custom-dropdown-menu">
@@ -231,7 +233,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
                     setIsRoleOpen(false); // Close the dropdown
                   }}
                 >
-                  All Roles
+                  {t('filterAdmin.allRoles')}
                 </div>
 
                 {roles.map((r, idx) => (
@@ -250,7 +252,7 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
             )}
             {isRoleOpen && roles.length === 0 && (
               <div className="custom-dropdown-menu">
-                <div className="custom-dropdown-option">No roles available</div>
+                <div className="custom-dropdown-option">{t('filterAdmin.noRoles')}</div>
               </div>
             )}
           </div>

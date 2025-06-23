@@ -43,11 +43,11 @@ export default function SuperAdminSetup({ isNavOpen }) {
 
   return (
     <div className={`admin-setup-container ${isNavOpen ? 'body-squeezed' : 'body'}`}>
-      <h2 className='admin-setup-title'>{t('superAdminSetup.appSettings')}</h2>
+      <h2 className='admin-setup-title'>{t('appSetup.appSettings')}</h2>
       <p>
-        {t('superAdminSetup.note')}
+        {t('appSetup.note')}
       </p>
-      <h4 className='admin-setup-subtitle'>{t('superAdminSetup.sectionPosts')}</h4>
+      <h4 className='admin-setup-subtitle'>{t('appSetup.sectionPosts')}</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -65,9 +65,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
           </div>
         </div>
         {superAdminSettings.showPostsFeature ?
-          <div className='admin-setup-line-text'>{t('superAdminSetup.disablePosts')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.disablePosts')}</div>
           :
-          <div className='admin-setup-line-text'>{t('superAdminSetup.enablePosts')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.enablePosts')}</div>
         }
 
       </div>
@@ -89,7 +89,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.adminsCanPost')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.adminsCanPost')}</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -107,7 +107,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.usersCanPost')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.usersCanPost')}</div>
           </div>
 
         </>}
@@ -128,7 +128,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </label>
             </div>
           </div>
-          <div className='admin-setup-line-text'>{t('superAdminSetup.enablePostInteractions')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.enablePostInteractions')}</div>
         </div>
       }
 
@@ -149,7 +149,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.reactionsOnPosts')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.reactionsOnPosts')}</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -167,7 +167,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.reportPosts')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.reportPosts')}</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -185,7 +185,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.deletePosts')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.deletePosts')}</div>
           </div>
 
           <div className='admin-setup-subline'>
@@ -203,7 +203,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.commentsOnPosts')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.commentsOnPosts')}</div>
           </div>
 
           {(superAdminSettings.allowComments || isSuperAdmin) &&
@@ -223,7 +223,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>{t('superAdminSetup.reactionsOnComments')}</div>
+                <div className='admin-setup-line-text'>{t('appSetup.reactionsOnComments')}</div>
               </div>
 
               <div className='admin-setup-subline2'>
@@ -241,7 +241,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>{t('superAdminSetup.reportComments')}</div>
+                <div className='admin-setup-line-text'>{t('appSetup.reportComments')}</div>
               </div>
 
               <div className='admin-setup-subline2'>
@@ -259,7 +259,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                     </label>
                   </div>
                 </div>
-                <div className='admin-setup-line-text'>{t('superAdminSetup.deleteComments')}</div>
+                <div className='admin-setup-line-text'>{t('appSetup.deleteComments')}</div>
               </div>
 
             </>
@@ -268,7 +268,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
         </>
       }
 
-      <h4 className='admin-setup-subtitle'>{t('superAdminSetup.sectionMessaging')}</h4>
+      <h4 className='admin-setup-subtitle'>{t('appSetup.sectionMessaging')}</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -286,9 +286,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
           </div>
         </div>
         {superAdminSettings.showMessagesFeature ?
-          <div className='admin-setup-line-text'>{t('superAdminSetup.disableMessaging')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.disableMessaging')}</div>
           :
-          <div className='admin-setup-line-text'>{t('superAdminSetup.enableMessaging')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.enableMessaging')}</div>
         }
       </div>
 
@@ -309,7 +309,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.usersCanSendMessages')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.usersCanSendMessages')}</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -327,11 +327,11 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.usersCanDeleteMessages')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.usersCanDeleteMessages')}</div>
           </div>
         </>}
 
-      <h4 className='admin-setup-subtitle'>{t('superAdminSetup.sectionSocial')}</h4>
+      <h4 className='admin-setup-subtitle'>{t('appSetup.sectionSocial')}</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -349,9 +349,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
           </div>
         </div>
         {superAdminSettings.showSocialFeature ?
-          <div className='admin-setup-line-text'>{t('superAdminSetup.disableSocial')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.disableSocial')}</div>
           :
-          <div className='admin-setup-line-text'>{t('superAdminSetup.enableSocial')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.enableSocial')}</div>
         }
       </div>
 
@@ -372,7 +372,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.enableUsersFollowing')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.enableUsersFollowing')}</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -390,11 +390,11 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.enableMuting')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.enableMuting')}</div>
           </div>
         </>}
 
-      <h4 className='admin-setup-subtitle'>{t('superAdminSetup.sectionAdmins')}</h4>
+      <h4 className='admin-setup-subtitle'>{t('appSetup.sectionAdmins')}</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -411,7 +411,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        <div className='admin-setup-line-text'>{t('superAdminSetup.manageRoles')}</div>
+        <div className='admin-setup-line-text'>{t('appSetup.manageRoles')}</div>
       </div>
 
       <div className='admin-setup-line'>
@@ -429,10 +429,10 @@ export default function SuperAdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        <div className='admin-setup-line-text'>{t('superAdminSetup.deleteUsers')}</div>
+        <div className='admin-setup-line-text'>{t('appSetup.deleteUsers')}</div>
       </div>
 
-      <h4 className='admin-setup-subtitle'>{t('superAdminSetup.sectionProfile')}</h4>
+      <h4 className='admin-setup-subtitle'>{t('appSetup.sectionProfile')}</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -450,9 +450,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
           </div>
         </div>
         {superAdminSettings.showProfileFeature ?
-          <div className='admin-setup-line-text'>{t('superAdminSetup.disableEditProfile')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.disableEditProfile')}</div>
           :
-          <div className='admin-setup-line-text'>{t('superAdminSetup.enableEditProfile')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.enableEditProfile')}</div>
         }
 
       </div>
@@ -474,7 +474,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.usersCanEditUsername')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.usersCanEditUsername')}</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -492,14 +492,14 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.usersCanEditEmail')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.usersCanEditEmail')}</div>
            
             <div
               onClick={handleShowInfoMessage}
               className='info-button'>i</div>
           </div>
 
-          {showInfoMessage && <div className='info-message' style={{marginBottom: '1em'}}>{t('superAdminSetup.emailInfoMessage')}</div>}
+          {showInfoMessage && <div className='info-message' style={{marginBottom: '1em'}}>{t('appSetup.emailInfoMessage')}</div>}
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
@@ -516,7 +516,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.usersCanEditPassword')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.usersCanEditPassword')}</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -534,7 +534,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.usersCanChangeProfileImage')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.usersCanChangeProfileImage')}</div>
           </div>
 
           <div className='admin-setup-line'>
@@ -552,11 +552,11 @@ export default function SuperAdminSetup({ isNavOpen }) {
                 </label>
               </div>
             </div>
-            <div className='admin-setup-line-text'>{t('superAdminSetup.usersCanDeleteAccount')}</div>
+            <div className='admin-setup-line-text'>{t('appSetup.usersCanDeleteAccount')}</div>
           </div>
         </>}
 
-      <h4 className='admin-setup-subtitle'>{t('superAdminSetup.sectionSubscriber')}</h4>
+      <h4 className='admin-setup-subtitle'>{t('appSetup.sectionSubscriber')}</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -574,14 +574,14 @@ export default function SuperAdminSetup({ isNavOpen }) {
           </div>
         </div>
         {superAdminSettings.showSubscriberFeature ?
-          <div className='admin-setup-line-text'>{t('superAdminSetup.disableSubscriberFeature')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.disableSubscriberFeature')}</div>
           :
-          <div className='admin-setup-line-text'>{t('superAdminSetup.enableSubscriberFeature')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.enableSubscriberFeature')}</div>
         }
 
       </div>
 
-      <h4 className='admin-setup-subtitle'>{t('superAdminSetup.sectionCustomRoles')}</h4>
+      <h4 className='admin-setup-subtitle'>{t('appSetup.sectionCustomRoles')}</h4>
 
       <div className='admin-setup-line'>
         <div className="toggle-container">
@@ -599,9 +599,9 @@ export default function SuperAdminSetup({ isNavOpen }) {
           </div>
         </div>
               {superAdminSettings.showCustomRolesFeature ?
-          <div className='admin-setup-line-text'>{t('superAdminSetup.enableCustomRoles')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.enableCustomRoles')}</div>
           :
-          <div className='admin-setup-line-text'>{t('superAdminSetup.disableCustomRoles')}</div>
+          <div className='admin-setup-line-text'>{t('appSetup.disableCustomRoles')}</div>
         }
       </div>
 
@@ -620,7 +620,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        <div className='admin-setup-line-text'>{t('superAdminSetup.adminsCanCreateCustomRole')}</div>
+        <div className='admin-setup-line-text'>{t('appSetup.adminsCanCreateCustomRole')}</div>
       </div>
 
       <div className='admin-setup-line'>
@@ -638,7 +638,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        <div className='admin-setup-line-text'>{t('superAdminSetup.adminsCanEditCustomRole')}</div>
+        <div className='admin-setup-line-text'>{t('appSetup.adminsCanEditCustomRole')}</div>
       </div>
 
       <div className='admin-setup-line'>
@@ -656,7 +656,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-        <div className='admin-setup-line-text'>{t('superAdminSetup.adminsCanDeleteCustomRole')}</div>
+        <div className='admin-setup-line-text'>{t('appSetup.adminsCanDeleteCustomRole')}</div>
       </div>
 
     </div>
