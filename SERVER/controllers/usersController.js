@@ -457,14 +457,38 @@ const adminVersionSoftDeleteUser = async (req, res) => {
             [userId]
         );
 
-        if (superAdminCheck.rows.length > 0) {
-            const assignedBy = superAdminCheck.rows[0].assigned_by_user_id;
-            if (parseInt(assignedBy) !== parseInt(requestingUserId)) {
-                return res.status(403).json({
-                    error: 'You are not authorized to delete this SuperAdmin because you did not assign their role.'
-                });
-            }
-        }
+if (superAdminCheck.rows.length > 0) {
+    const assignedBy = superAdminCheck.rows[0].assigned_by_user_id;
+
+    if (parseInt(assignedBy) !== parseInt(requestingUserId)) {
+        return res.status(403).json({
+            error: 'You are not authorized to delete this SuperAdmin because you did not assign their role.'
+        });
+    }
+
+    // Transfer ownership of any role assignments made by this SuperAdmin (for SuperAdmin or Admin roles)
+    const assignedUsers = await pool.query(
+        `SELECT ur.user_id, ur.role_id, r.role_name
+         FROM user_roles ur
+         JOIN roles r ON ur.role_id = r.role_id
+         WHERE ur.assigned_by_user_id = $1 AND ur.role_id IN (1, 2)`,
+        [userId]
+    );
+
+    for (const row of assignedUsers.rows) {
+        await pool.query(
+            'UPDATE user_roles SET assigned_by_user_id = $1 WHERE user_id = $2 AND role_id = $3',
+            [requestingUserId, row.user_id, row.role_id]
+        );
+
+        await pool.query(
+            `INSERT INTO role_change_logs (user_that_modified, user_modified, role, timestamp, action_type)
+             VALUES ($1, $2, $3, NOW(), 'transferred')`,
+            [requestingUserId, row.user_id, row.role_name]
+        );
+    }
+}
+
 
         // Step 1: Fetch the current user's email, username
         const userResult = await pool.query(
@@ -665,7 +689,7 @@ const updateRoles = async (req, res) => {
         );
         const userCurrentRoles = userCurrentRolesResult.rows.map(row => row.role_name);
 
-        
+
 
         // Step 5: Determine which roles need to be added and removed
         const rolesToAdd = roles.filter(role => !userCurrentRoles.includes(role));
