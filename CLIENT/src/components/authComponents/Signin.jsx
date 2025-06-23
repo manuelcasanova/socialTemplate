@@ -143,15 +143,15 @@ useEffect(() => {
                 setErrMsg(t('signin.popupClosed'));
 
             } else if (errorCode === 'auth/cancelled-popup-request') {
-                setErrMsg(t('signin.popupRequest'));
+                setErrMsg(t('signin.errors.popupRequest'));
             } else if (errorCode === 'auth/popup-blocked') {
-                setErrMsg(t('signin.popupBlocked'));
+                setErrMsg(t('signin.errors.popupBlocked'));
             } else if (status === 404 && serverError === 'User not registered.') {
-                setErrMsg(t('signin.userNotRegistered'));
+                setErrMsg(t('signin.errors.userNotRegistered'));
             } else if (!error.response) {
-                setErrMsg(t('signin.serverUnreachable'));
+                setErrMsg(t('signin.errors.serverUnreachable'));
             } else {
-                setErrMsg(serverError || message || t('signin.serverUnreachable'));
+                setErrMsg(serverError || message || t('signin.errors.serverUnreachable'));
             }
         
         } finally {

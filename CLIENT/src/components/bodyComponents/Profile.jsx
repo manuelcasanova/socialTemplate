@@ -63,7 +63,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
-  const isTestSuperAdmin = auth.userId === 1;
+  const isTestSuperAdmin = auth.userId === 2;
   const [isPictureModalVisible, setIsPictureModalVisible] = useState(false);
   const [imageExists, setImageExists] = useState(true);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);

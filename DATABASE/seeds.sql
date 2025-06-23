@@ -1,10 +1,16 @@
 
 
 INSERT INTO users (username, email, password, is_verified, is_active) VALUES 
-  ('Mrs. Administrator', 'admin@socialtemplate.manucasanova.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true),
-  ('Manuel Casanova', 'manuelcasanovafernandez@gmail.com', 'google_auth_token', true, true)
-  -- ,
-  -- ('Manuel Casanova Hotmail', 'manucasanova@hotmail.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
+
+ ('Manuel Casanova', 'manuelcasanovafernandez@gmail.com', 'google_auth_token', true, true)
+ ,
+   ('Mrs. Administrator', 'admin@socialtemplate.manucasanova.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true)
+ ,
+  ('Manuel Casanova Hotmail', 'manucasanova@hotmail.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
+    ,
+  ('Manuel Casanova Yahoo', 'manuelcasanovafernandez@yahoo.es', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
+    ,
+  ('Manuel Casanova Spanish', 'info@casanovaspanish.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
   ;
   
 -- Insert roles with hierarchical structure
@@ -35,19 +41,24 @@ INSERT INTO roles (role_name, created_by) VALUES
 
 INSERT INTO user_roles (user_id, role_id, assigned_by_user_id)
 VALUES
-(1, 2, 2),
-(1, 3, 2),
-(1, 5, 2),
 
+(1, 1, 1),
+(1, 2, 1),
+(1, 3, 1),
+(1, 4, 1),
+(1, 5, 1),
 
-(2, 1, 2),
-(2, 2, 2),
-(2, 3, 2),
-(2, 4, 2),
-(2, 5, 2)
--- ,
+(2, 2, 1),
+(2, 3, 1),
+(2, 5, 1)
 
--- (3, 5, 2)
+,
+
+(3, 1, 1),
+(3, 5, 3),
+
+(4, 1, 3),
+(4, 5, 4)
 
 ;
 
