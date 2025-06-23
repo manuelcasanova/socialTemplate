@@ -27,6 +27,9 @@ import fetchMutedUsers from "../socialComponents/util_functions/FetchMutedUsers"
 import fetchUsersWithMessages from "../socialComponents/util_functions/FetchUsersWithMessages";
 import fetchNewMessagesNotification from "./util_functions/FetchNewMessagesNotification";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 
@@ -44,6 +47,7 @@ function processUsername(username) {
 }
 
 export default function UsersWithMessages({ isNavOpen, profilePictureKey }) {
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const navigate = useNavigate();
@@ -112,7 +116,7 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey }) {
 
         <h2
           style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          Chats
+          {t('usersWithMessages.title')}
           {adminSettings.showMessagesFeature && !adminSettings.showSocialFeature && !isSuperAdmin &&
             <FontAwesomeIcon icon={faInfoCircle}
               style={{ marginLeft: '10px', height: '15px', cursor: 'pointer' }}
@@ -125,7 +129,7 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey }) {
         {showInfoMessage && adminSettings.showMessagesFeature && !adminSettings.showSocialFeature && !isSuperAdmin &&
           <p
             style={{ margin: '10px 0px' }}
-          >The social connections feature has been disabled by a higher-tier administrator. You can still message users you previously connected with, but messaging new users is no longer available.</p>
+          >{t('usersWithMessages.infoMessage')}</p>
         }
 
 
@@ -135,7 +139,7 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey }) {
         <div className="container-toggle-hide-chat-muted-users">
           <div className="details-toggle-hide-chat-muted-users">
             <div className="toggle-hide-chat-muted-users-text">
-              Hide muted
+              {t('usersWithMessages.hideMuted')}
             </div>
 
             <input
@@ -217,7 +221,7 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey }) {
               </div>
             ))
           ) : (
-            <p>No users with messages found or users are muted.</p>
+            <p>{t('usersWithMessages.noUsers')}</p>
           )}
         </div>
       </div>

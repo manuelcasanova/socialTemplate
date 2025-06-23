@@ -12,7 +12,13 @@ import { useGlobalAdminSettings } from "../../../../context/AdminSettingsProvide
 import { faBellSlash, faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
 const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedChange, handleRefresh, setError, isSuperAdmin }) => {
+
+
+  const { t } = useTranslation();
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -50,7 +56,7 @@ const MuteUserButton = ({ userId, userLoggedin, isMuted, setMutedUsers, onMutedC
       {isMuted ? (
         <button title="Unmute user" onClick={unmuteUser}><FontAwesomeIcon icon={faBell}></FontAwesomeIcon></button>
       ) : (
-        <button title="Mute user" onClick={muteUser}> <FontAwesomeIcon icon={faBellSlash} /></button>
+        <button title={t('socialMuted.muteUser')} onClick={muteUser}> <FontAwesomeIcon icon={faBellSlash} /></button>
       )}
     </div>
 

@@ -76,7 +76,7 @@ export default function RoleChangeLog({ isNavOpen }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
-        <h2>User role change log</h2>
+        <h2>{t('roleChangeLog.title')}</h2>
         {error && error !== "No role change logs found" && (
           <p className="error-message">{error}</p>
         )}
@@ -91,11 +91,11 @@ export default function RoleChangeLog({ isNavOpen }) {
               <thead>
                 <tr>
 
-                  <th>Modifier</th>
-                  <th>Action performed</th>
-                  <th>Role</th>
-                  <th>Recipient</th>
-                  <th>Timestamp (DD/MM/YYYY)</th>
+                  <th>{t('roleChangeLog.modifier')}</th>
+                  <th>{t('roleChangeLog.actionPerformed')}</th>
+                  <th>{t('roleChangeLog.role')}</th>
+                  <th>{t('roleChangeLog.recipient')}</th>
+                  <th>{t('roleChangeLog.timestamp')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -197,8 +197,7 @@ export default function RoleChangeLog({ isNavOpen }) {
       <tr>
         <td colSpan={5} className="info-row">
           <p>
-            This role was reassigned because the original user who granted it no longer has SuperAdmin access.
-            Role management authority has been transferred to the SuperAdmin who removed their access.
+         {t('roleChangeLog.infoText')}
           </p>
         </td>
       </tr>
@@ -210,7 +209,7 @@ export default function RoleChangeLog({ isNavOpen }) {
             </table>
           </div>
         ) : (
-          <p>No role change logs found.</p>
+          <p>{t('roleChangeLog.noLogs')}</p>
         )}
 
       </div>

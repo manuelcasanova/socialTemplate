@@ -31,7 +31,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 
 export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }) {
-   const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { userId } = useParams();
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -220,17 +220,17 @@ export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }
           )}
           <h2>
             {users?.username?.includes("Deleted User")
-              ? "Chat with a user who deleted their account"
+              ? t('chat.chatWithDeleted')
               : users?.username?.includes("inactive")
-                ? `Chat with ${users.username.split('-').pop()} (inactive account)`
-                : `Chat with ${users?.username || 'Unknown User'}`}
+                ? t('chat.chatWithInactive', { username: users.username.split('-').pop() })
+                : t('chat.chatWith', { username: users?.username || t('chat.chatWith', { username: 'Unknown User' }) })}
           </h2>
 
 
           {superAdminSettings.allowSendMessages && adminSettings.allowSendMessages &&
             <div className="users-messaging-send">
               <input
-                placeholder="Aa"
+                placeholder={t('chat.placeholder')}
                 ref={inputRef}
 
                 onChange={(e) => {
@@ -248,12 +248,15 @@ export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }
                 onClick={handleSubmit}
                 className="button-white"
               >
-                {isLoading ? "Sending..." : "Send"}
+                {isLoading ? t('chat.sending') : t('chat.send')}
               </button>
 
               {newMessage.length > MAX_CHAR_LIMIT && (
                 <div className="char-count">
-                  {newMessage.length} / {MAX_CHAR_LIMIT} characters
+                     {t('chat.charCount', {
+                  count: newMessage.length,
+                  limit: MAX_CHAR_LIMIT
+                })}
                 </div>
               )}
 
@@ -266,7 +269,7 @@ export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }
             <FontAwesomeIcon
               icon={faRefresh}
               style={{ marginBottom: '5px' }}
-              title="Refresh messages"
+              title={t('chat.refreshMessages')}
               className="refresh-messages"
               onClick={() => fetchMessages(filters, setMessages, setIsLoading, setError, loggedInUser, userId, messages)}
             />
@@ -296,7 +299,7 @@ export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }
                                 }}
                               />
                             )}
-                            {message.is_deleted ? `This message was deleted` : message.content}
+                            {message.is_deleted ? t('chat.deletedMessage') : message.content}
                           </p>
                           {/* Display delete icon only if the logged-in user is the sender and the message is not deleted */}
                           {!message.is_deleted && isSender &&
@@ -320,14 +323,14 @@ export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }
                               setMessageToDelete(null);
                             }}
                           >
-                            Confirm delete
+                            {t('chat.confirmDelete')}
                           </p>
                           <p
                             className="button-white"
                             style={{ color: "black" }}
                             onClick={() => setMessageToDelete(null)}
                           >
-                            Cancel
+                                 {t('chat.cancel')}
                           </p>
                         </div>
                       )}
@@ -336,7 +339,7 @@ export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }
                     <div className="message-footer">
                       <span className="message-date">
 
-{formatDate(message.date, i18n.language || 'en-US', t)}
+                        {formatDate(message.date, i18n.language || 'en-US', t)}
 
 
                       </span>
@@ -345,7 +348,7 @@ export default function Chat({ isNavOpen, setHasNewMessages, profilePictureKey }
                 );
               })
             ) : (
-              <p>No messages yet.</p>
+              <p>{t('chat.noMessages')}</p>
             )}
 
 

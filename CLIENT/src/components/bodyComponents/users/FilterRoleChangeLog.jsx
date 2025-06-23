@@ -2,7 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 export default function FilterRoleChangeLog({ roles, setFilters }) {
+  const { t } = useTranslation();
   const [modifier, setModifier] = useState("");
   const [recipient, setRecipient] = useState("");
   const [modifierId, setModifierId] = useState(""); // New state for modifier ID
@@ -30,20 +35,20 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
     });
   };
 
-    // Handle the visibility toggle and clear filters when the panel is closed
-    const handleToggleFilter = () => {
-      if (isVisible) {
-        // Clear the filters when the panel is closing
-        setModifier("");
-        setRecipient("");
-        setModifierId("");
-        setRecipientId("");
-        setRole("");
-        setActionType("");
-      }
-      // Toggle the visibility
-      setIsVisible(prevState => !prevState);
-    };
+  // Handle the visibility toggle and clear filters when the panel is closed
+  const handleToggleFilter = () => {
+    if (isVisible) {
+      // Clear the filters when the panel is closing
+      setModifier("");
+      setRecipient("");
+      setModifierId("");
+      setRecipientId("");
+      setRole("");
+      setActionType("");
+    }
+    // Toggle the visibility
+    setIsVisible(prevState => !prevState);
+  };
 
   // Trigger the filter change whenever any input is updated
   useEffect(() => {
@@ -113,7 +118,7 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
           <input
             type="text"
             className="filter-container-input-modifier"
-            placeholder="Modifier Username"
+            placeholder={t('filterRoleChangeLog.modifierPlaceholder')}
             value={modifier}
             onChange={handleModifierChange}
           />
@@ -122,7 +127,7 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
           <input
             type="text"
             className="filter-container-input-modifier-id"
-            placeholder="Modifier ID"
+            placeholder={t('filterRoleChangeLog.modifierIdPlaceholder')}
             value={modifierId}
             onChange={handleModifierIdChange}
           />
@@ -131,7 +136,7 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
           <input
             type="text"
             className="filter-container-input-recipient"
-            placeholder="Recipient Username"
+            placeholder={t('filterRoleChangeLog.recipientPlaceholder')}
             value={recipient}
             onChange={handleRecipientChange}
           />
@@ -140,7 +145,7 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
           <input
             type="text"
             className="filter-container-input-recipient-id"
-            placeholder="Recipient ID"
+            placeholder={t('filterRoleChangeLog.recipientIdPlaceholder')}
             value={recipientId}
             onChange={handleRecipientIdChange}
           />
@@ -149,24 +154,24 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
           <div
             className="custom-dropdown"
             ref={roleDropdownRef}
-            onMouseLeave={() => setIsRoleOpen(false)} 
+            onMouseLeave={() => setIsRoleOpen(false)}
           >
             <div
               className="filter-container-select"
               onClick={toggleRoleDropdown}
             >
-              {role || "All Roles"}
+              {role || t('filterRoleChangeLog.allRoles')}
             </div>
             {isRoleOpen && roles.length > 0 && (
               <div className="custom-dropdown-menu">
                 <div
                   className="custom-dropdown-option"
                   onClick={() => {
-                    setRole(""); 
-                    setIsRoleOpen(false); 
+                    setRole("");
+                    setIsRoleOpen(false);
                   }}
                 >
-                  All Roles
+                  {t('filterRoleChangeLog.allRoles')}
                 </div>
 
                 {roles.map((r, idx) => (
@@ -174,8 +179,8 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
                     key={idx}
                     className="custom-dropdown-option"
                     onClick={() => {
-                      setRole(r); 
-                      setIsRoleOpen(false); 
+                      setRole(r);
+                      setIsRoleOpen(false);
                     }}
                   >
                     {r}
@@ -185,7 +190,7 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
             )}
             {isRoleOpen && roles.length === 0 && (
               <div className="custom-dropdown-menu">
-                <div className="custom-dropdown-option">No roles available</div>
+                <div className="custom-dropdown-option">{t('filterRoleChangeLog.noRoles')}</div>
               </div>
             )}
           </div>
@@ -194,42 +199,42 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
           <div
             className="custom-dropdown"
             ref={actionTypeDropdownRef}
-            onMouseLeave={() => setIsActionTypeOpen(false)}  
+            onMouseLeave={() => setIsActionTypeOpen(false)}
           >
             <div
               className="filter-container-select"
               onClick={toggleActionTypeDropdown}
             >
-              {actionType || "All Actions"}
+              {actionType || t('filterRoleChangeLog.allActions')}
             </div>
             {isActionTypeOpen && (
               <div className="custom-dropdown-menu">
                 <div
                   className="custom-dropdown-option"
                   onClick={() => {
-                    setActionType(""); 
-                    setIsActionTypeOpen(false); 
+                    setActionType("");
+                    setIsActionTypeOpen(false);
                   }}
                 >
-                  All Actions
+                  {t('filterRoleChangeLog.allActions')}
                 </div>
                 <div
                   className="custom-dropdown-option"
                   onClick={() => {
-                    setActionType("assigned");  
-                    setIsActionTypeOpen(false); 
+                    setActionType("assigned");
+                    setIsActionTypeOpen(false);
                   }}
                 >
-                  Assigned
+                  {t('filterRoleChangeLog.assigned')}
                 </div>
                 <div
                   className="custom-dropdown-option"
                   onClick={() => {
-                    setActionType("unassigned");  
-                    setIsActionTypeOpen(false); 
+                    setActionType("unassigned");
+                    setIsActionTypeOpen(false);
                   }}
                 >
-                  Unassigned
+                  {t('filterRoleChangeLog.unassigned')}
                 </div>
               </div>
             )}

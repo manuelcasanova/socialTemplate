@@ -7,8 +7,13 @@ import Error from "../Error";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 
+//Translation
+import { useTranslation } from 'react-i18next';
+
+
 export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }) {
 
+    const { t } = useTranslation();
   const {auth} = useAuth()
   const userId = auth.userId;
   const inputRef = useRef(null);
@@ -36,12 +41,12 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
     const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
 
     if (!trimmedName) {
-      setErrorMessage("Role name is required.");
+      setErrorMessage(t('adminRoles.roleNameRequired'));
       return;
     }
 
     if (!roleNameRegex.test(trimmedName)) {
-      setErrorMessage("Role name must be 1–25 characters and can only include letters, numbers, spaces, hyphens, and underscores.");
+      setErrorMessage(t('adminRoles.roleNameRegex'));
       return;
     }
 
@@ -112,7 +117,7 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
               opacity: !newRoleName.trim() ? 0.5 : 1,
               cursor: !newRoleName.trim() ? "not-allowed" : "pointer"
             }}
-          >Create</button>
+          >{t('adminRoles.create')}</button>
           <button
             className="button-red button-smaller"
             onClick={handleShowInput}

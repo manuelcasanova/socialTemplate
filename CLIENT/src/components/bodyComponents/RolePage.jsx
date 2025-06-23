@@ -1,18 +1,23 @@
+//Translation
+import { useTranslation } from 'react-i18next';
+
 export default function RolePage({ isNavOpen, role }) {
+
+  const { t } = useTranslation();
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="centered-container">
-        <h2>Access restricted: Only users with the <em>{role.role_name}</em> role can view this page.</h2>
+        <h2>{t('rolePage.title', { role: role.role_name })}</h2>
 
 
         <div className="interaction-box">
           <li>
             <ul>
-              <li><strong>Explore admin scenarios:</strong></li>
-              <li>- Modify a user's allowed roles.</li>
-              <li>- From the Admin section, create, edit, and delete roles. Then test access behavior with various role permissions.</li>
-              
+              <li><strong>{t('rolePage.exploreAdminScenarios')}</strong></li>
+              <li>{t('rolePage.scenarioModifyRoles')}</li>
+              <li>{t('rolePage.scenarioManageRoles')}</li>
+
             </ul>
 
           </li>

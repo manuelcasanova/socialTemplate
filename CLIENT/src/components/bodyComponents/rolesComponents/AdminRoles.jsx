@@ -206,7 +206,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-roles">
-        <h2>Admin Roles</h2>
+        <h2>{t('adminRoles.title')}</h2>
         {isLoading && <LoadingSpinner />}
 
         {(superAdminSettings.allowAdminCreateCustomRole || isSuperAdmin) &&
@@ -214,7 +214,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
         }
 
         <div className="custom-roles-title">
-          <h3>Custom Roles</h3>
+          <h3>{t('adminRoles.customRoles')}</h3>
           <FontAwesomeIcon
             className="fa-info"
             icon={faInfo}
@@ -225,15 +225,15 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
         </div>
         {showCustomRolesInfo &&
           <h4>
-            These roles are associated with a protected route (accessible through the navbar) and can be accessed by SuperAdmins, Admins, Moderators, and any users assigned to them. Only the role creators or higher-tier administrators can edit or delete these custom roles.
+            {t('adminRoles.customRolesInfo')}
           </h4>
         }
 
 
         {(customRoles === null || customRoles.length === 0) && (
           <div>
-            There are no custom roles yet.{' '}
-            {superAdminSettings.allowAdminCreateCustomRole && 'Create one.'}
+            {t('adminRoles.noCustomRoles')}{' '}
+            {superAdminSettings.allowAdminCreateCustomRole && t('adminRoles.createOne')}
           </div>
         )}
 
@@ -284,7 +284,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                             className="button-white button-smaller"
                             onClick={() => setEditRoleId(role.role_id)}
                           >
-                            Edit
+                            {t('adminRoles.button.edit')}
                           </button>
                         )}
 
@@ -311,7 +311,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                               className="button-white button-smaller"
                               disabled={!roleName.trim()}
                             >
-                              OK
+                              {t('adminRoles.button.ok')}
                             </button>
                             <button
                               onClick={() => {
@@ -343,7 +343,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                             className="button-red button-smaller"
                             onClick={() => setConfirmDeleteId(role.role_id)}
                           >
-                            Delete
+                            {t('adminRoles.button.delete')}
                           </button>
                         )}
 
@@ -357,15 +357,13 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
                               style={{ marginLeft: '1em' }}
                             />
                             <div>
-                              Warning: Depending on your app configuration, this action may not be possible.
-                              For example: "Cannot delete this role because there are items linked to it," or
-                              "Warning: Deleting this role will also remove all associated items."
+                              {t('adminRoles.warning')}
                             </div>
                             <button
                               className="button-red button-smaller"
                               onClick={handleDeleteRole}
                             >
-                              Confirm delete
+                              {t('adminRoles.button.confirmDelete')}
                             </button>
                             <button
                               className="button-white button-smaller"
@@ -391,7 +389,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
           <p style={{ color: 'red', marginTop: '0.5em' }}>{regexError}</p>
         )}
 
-        <h3>System Roles</h3>
+        <h3>{t('adminRoles.systemRoles')}</h3>
         {!isLoading && !error && systemRoles && (
           <ul>
             {systemRoles

@@ -50,7 +50,7 @@ export default function LoginHistory({ isNavOpen }) {
   return (
     <div className={`body ${isNavOpen ? "body-squeezed" : ""}`}>
       <div className="admin-users">
-        <h2>Login History</h2>
+        <h2>{t('loginHistory.title')}</h2>
         {error && (
           <p className="error-message">{error}</p>
         )}
@@ -64,10 +64,10 @@ export default function LoginHistory({ isNavOpen }) {
               <thead>
                 <tr>
 
-                  <th>User ID</th>
-                  <th>Username</th>
-                  <th>E-mail</th>
-                  <th>Login Time</th>
+                  <th>{t('loginHistory.userId')}</th>
+                  <th>{t('loginHistory.username')}</th>
+                  <th>{t('loginHistory.email')}</th>
+                  <th>{t('loginHistory.loginTime')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -76,7 +76,7 @@ export default function LoginHistory({ isNavOpen }) {
                   
                   <tr key={`${login.login_time}-${login.user_id}`}>
                     <td>{login.user_id}</td>
-                    <td>     {login.username.startsWith('inactive') ? 'Inactive User' : login.username}</td>
+                    <td>     {login.username.startsWith('inactive') ? t('loginHistory.inactiveUser') : login.username}</td>
                     <td>{login.email}</td>
                     
                     <td>{new Date(login.login_time).toLocaleString('en-GB', {
@@ -96,7 +96,7 @@ export default function LoginHistory({ isNavOpen }) {
             </table>
           </div>
         ) : (
-          <p>No login history found.</p>
+          <p>{t('loginHistory.noHistory')}</p>
         )}
       </div>
 

@@ -2,8 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 import '../../../css/FilterAdminUsers.css';
+//Translation
+import { useTranslation } from 'react-i18next';
 
 export default function FilterLoginHistory({ setFilters }) {
+  const { t } = useTranslation();
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
@@ -87,7 +90,7 @@ export default function FilterLoginHistory({ setFilters }) {
           <input
             type="number"
             className="filter-container-input-userid"
-            placeholder="User ID"
+            placeholder={t('filterLoginHistory.userId')}
             value={userId}
             onChange={handleUserIdChange}
           />
@@ -96,18 +99,18 @@ export default function FilterLoginHistory({ setFilters }) {
           <input
             type="text"
             className="filter-container-input-username"
-            placeholder="Username"
+            placeholder={t('filterLoginHistory.username')}
             value={username}
             onChange={handleUsernameChange}
             pattern="[a-zA-Z0-9-_^\s]+" // Optional, prevents invalid submission
-            title="Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+            title={t('filterLoginHistory.invalidUsername')}
           />
 
           {/* Email filter */}
           <input
             type="email"
             className="filter-container-input-email"
-            placeholder="Email"
+            placeholder={t('filterLoginHistory.email')}
             value={email}
             onChange={handleEmailChange}
           />

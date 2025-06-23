@@ -88,7 +88,7 @@
     "settings": "Configuración",
     "adminSettings": "Configuración de Administrador",
     "adminUsers": "Administración de usuarios",
-    "adminRoles": "Roles de administrador",
+    "adminRoles": "Administrar roles",
     "roleChangeLog": "Registro de cambios de roles",
     "loginHistory": "Historial de inicio de sesión"
   },
@@ -338,7 +338,8 @@
     "inactiveUser": "Usuario Inactivo",
     "profileAlt": "Foto de perfil",
     "largeProfileAlt": "Foto de perfil grande",
-    "noUsersFound": "No se encontraron usuarios silenciados"
+    "noUsersFound": "No se encontraron usuarios silenciados",
+     "muteUser": "Silencia a este usuario"
   },
   "followUserButton": {
     "follow": "Seguir",
@@ -469,5 +470,103 @@
     "inactive": "Inactivo",
     "allRoles": "Todos los roles",
     "noRoles": "No hay roles disponibles"
+  },
+    "adminRoles": {
+    "title": "Administrar Roles",
+    "customRoles": "Roles Personalizados",
+    "customRolesInfo": "Estos roles están asociados a una ruta protegida (accesible desde la barra de navegación) y pueden ser usados por SuperAdministradores, Administradores, Moderadores y cualquier usuario asignado. Solo los creadores del rol o administradores de nivel superior pueden editar o eliminar estos roles personalizados.",
+    "noCustomRoles": "Aún no hay roles personalizados.",
+    "createOne": "Crea uno.",
+    "editRoleName": "Editar nombre del rol",
+    "button": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "confirmDelete": "Confirmar eliminación",
+      "cancel": "Cancelar",
+      "ok": "OK"
+    },
+    "warning": "Advertencia: Dependiendo de la configuración de tu aplicación, esta acción puede no ser posible. Por ejemplo: “No se puede eliminar este rol porque hay elementos vinculados a él” o “Eliminar este rol también eliminará todos los elementos asociados.”",
+    "systemRoles": "Roles del Sistema",
+    "create": "Crear",
+     "roleNameRequired": "El nombre del rol es obligatorio",
+    "roleNameRegex": "El nombre del rol debe tener entre 1 y 25 caracteres y solo puede incluir letras, números, espacios, guiones y guiones bajos."
+  },  "roleChangeLog": {
+    "title": "Registro de cambios de roles de usuario",
+    "noLogs": "No se encontraron registros de cambios de roles.",
+    "modifier": "Modificador",
+    "actionPerformed": "Acción realizada",
+    "role": "Rol",
+    "recipient": "Destinatario",
+    "timestamp": "Fecha y hora",
+    "infoText": "Este rol se reasignó porque el usuario que lo otorgó originalmente ya no tiene acceso de SuperAdmin. La autoridad para gestionar roles ha sido transferida al SuperAdmin que revocó su acceso.",
+    "actionTransferred": "transferido",
+    "infoButtonTitle": "Mostrar detalles"
+  },
+    "filterRoleChangeLog": {
+    "modifierPlaceholder": "Usuario que realiza la modificación",
+    "modifierIdPlaceholder": "ID del usuario que realiza la modificación",
+    "recipientPlaceholder": "Nombre de usuario del destinatario",
+    "recipientIdPlaceholder": "ID del destinatario",
+    "allRoles": "Todos los roles",
+    "noRoles": "No hay roles disponibles",
+    "allActions": "Todas las acciones",
+    "assigned": "Asignado",
+    "unassigned": "Desasignado",
+    "noActions": "No hay acciones disponibles",
+    "toggleFilter": "Mostrar/ocultar filtros"
+  },
+    "loginHistory": {
+    "title": "Historial de accesos",
+    "userId": "ID de usuario",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "loginTime": "Hora de acceso",
+    "noHistory": "No se encontró historial de accesos.",
+    "inactiveUser": "Usuario inactivo"
+  },
+  "filterLoginHistory": {
+    "toggle": {
+      "show": "Mostrar filtros",
+      "hide": "Ocultar filtros"
+    },
+    "userId": "ID de usuario",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "fromDate": "Fecha desde",
+    "toDate": "Fecha hasta",
+    "fromTime": "Hora desde",
+    "toTime": "Hora hasta",
+    "invalidUsername": "Solo se permiten letras, números, guiones, guiones bajos, carets y espacios."
+  },
+  "usersWithMessages": {
+    "title": "Chats",
+    "infoMessage": "La función de conexiones sociales ha sido desactivada por un administrador de nivel superior. Aún puedes enviar mensajes a usuarios con los que ya estabas conectado, pero ya no puedes iniciar nuevos mensajes.",
+    "filter": {
+      "placeholder": "Buscar por nombre de usuario"
+    },
+    "hideMuted": "Ocultar silenciados",
+    "noUsers": "No se encontraron usuarios con mensajes o están silenciados."
+  },
+    "rolePage": {
+    "title": "Acceso restringido: Solo los usuarios con el rol “{{role}}” pueden ver esta página.",
+    "exploreAdminScenarios": "Explora escenarios de administrador:",
+    "scenarioModifyRoles": "Modifica los roles permitidos de un usuario.",
+    "scenarioManageRoles": "Desde la sección de Administrador, crea, edita y elimina roles. Luego prueba el comportamiento de acceso con varios permisos de rol."
+  },
+    "chat": {
+    "close": "Cerrar",
+    "chatWithDeleted": "Chat con un usuario que eliminó su cuenta",
+    "chatWithInactive": "Chat con {{username}} (cuenta inactiva)",
+    "chatWith": "Chat con {{username}}",
+    "placeholder": "Aa",
+    "sending": "Enviando...",
+    "send": "Enviar",
+    "charCount": "{{count}} / {{limit}} caracteres",
+    "deletedMessage": "Este mensaje fue eliminado",
+    "refreshMessages": "Actualizar mensajes",
+    "confirmDelete": "Confirmar eliminación",
+    "cancel": "Cancelar",
+    "noMessages": "Aún no hay mensajes.",
+    "emptyWarning": "Por favor completa el campo de mensaje."
   }
 }

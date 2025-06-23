@@ -348,7 +348,8 @@
     "inactiveUser": "Inactive User",
     "profileAlt": "Profile",
     "largeProfileAlt": "Large Profile",
-    "noUsersFound": "No muted users found"
+    "noUsersFound": "No muted users found",
+    "muteUser": "Mute User"
   },
   "followUserButton": {
     "follow": "Follow",
@@ -400,10 +401,9 @@
     "testRevokeSelf": "- As an administrator, attempt to revoke your own Admin role or modify another Admin's roles.",
     "manageRoles": "- Create, edit, and delete roles. Then test access behavior with various role permissions."
   },
-   "appSetup": {
+  "appSetup": {
     "appSettings": "App Settings",
-    "note":
-      "Note: Super Admins can modify both Super Admin and Admin settings. However, if a Super Admin setting is disabled, the corresponding Admin setting cannot be enabled or modified. To allow changes, the Super Admin setting must first be enabled in the Super Admin configuration section.",
+    "note": "Note: Super Admins can modify both Super Admin and Admin settings. However, if a Super Admin setting is disabled, the corresponding Admin setting cannot be enabled or modified. To allow changes, the Super Admin setting must first be enabled in the Super Admin configuration section.",
     "sectionPosts": "POSTS",
     "disablePosts": "Disable Posts",
     "enablePosts": "Enable Posts",
@@ -436,8 +436,7 @@
     "usersCanEditUsername": "Users Can Edit their Username",
     "usersCanEditEmail": "Users Can Edit their Email",
     "showEmailInfo": "i",
-    "emailInfoMessage":
-      "If active, users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.",
+    "emailInfoMessage": "If active, users are allowed to change their email address and must verify the new email to complete the process. However, once changed, access via the original email will be disabled. This creates a risk where a malicious user could take over an account by changing the email. To enhance security and prevent unauthorized access, it's strongly recommended to block email changes.",
     "usersCanEditPassword": "Users Can Edit their Password",
     "usersCanChangeProfileImage": "Users Can Change their Profile Image",
     "usersCanDeleteAccount": "Users Can Delete their Account",
@@ -451,7 +450,7 @@
     "adminsCanEditCustomRole": "Admins Can Edit a Custom Role",
     "adminsCanDeleteCustomRole": "Admins Can Delete a Custom Role"
   },
-    "adminUsers": {
+  "adminUsers": {
     "title": "Admin Users",
     "errorFetching": "Failed to fetch users.",
     "inactiveUser": "Inactive User",
@@ -471,7 +470,7 @@
     "showDetails": "+",
     "hideDetails": "−"
   },
-    "filterAdmin": {
+  "filterAdmin": {
     "toggleLabel": "Filter",
     "userIdPlaceholder": "User ID",
     "usernamePlaceholder": "Username",
@@ -481,5 +480,101 @@
     "inactive": "Inactive",
     "allRoles": "All Roles",
     "noRoles": "No roles available"
+  },
+  "adminRoles": {
+    "title": "Admin Roles",
+    "customRoles": "Custom Roles",
+    "customRolesInfo": "These roles are associated with a protected route (accessible through the navbar) and can be accessed by SuperAdmins, Admins, Moderators, and any users assigned to them. Only the role creators or higher-tier administrators can edit or delete these custom roles.",
+    "noCustomRoles": "There are no custom roles yet.",
+    "createOne": "Create one.",
+    "editRoleName": "Edit role name",
+    "button": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Confirm delete",
+      "cancel": "Cancel",
+      "ok": "OK"
+    },
+    "warning": "Warning: Depending on your app configuration, this action may not be possible. For example: “Cannot delete this role because there are items linked to it,” or “Deleting this role will also remove all associated items.”",
+    "systemRoles": "System Roles",
+    "create": "Create",
+    "roleNameRequired": "Role name is required",
+    "roleNameRegex": "Role name must be 1–25 characters and can only include letters, numbers, spaces, hyphens, and underscores."
+  },
+  "roleChangeLog": {
+    "title": "User role change log",
+    "noLogs": "No role change logs found.",
+    "modifier": "Modifier",
+    "actionPerformed": "Action performed",
+    "role": "Role",
+    "recipient": "Recipient",
+    "timestamp": "Timestamp (DD/MM/YYYY)",
+    "infoText": "This role was reassigned because the original user who granted it no longer has SuperAdmin access. Role management authority has been transferred to the SuperAdmin who removed their access.",
+    "actionTransferred": "transferred",
+    "infoButtonTitle": "Show details"
+  },
+  "filterRoleChangeLog": {
+    "modifierPlaceholder": "Modifier Username",
+    "modifierIdPlaceholder": "Modifier ID",
+    "recipientPlaceholder": "Recipient Username",
+    "recipientIdPlaceholder": "Recipient ID",
+    "allRoles": "All Roles",
+    "noRoles": "No roles available",
+    "allActions": "All Actions",
+    "assigned": "Assigned",
+    "unassigned": "Unassigned",
+    "noActions": "No actions available",
+    "toggleFilter": "Toggle filters"
+  },
+  "loginHistory": {
+    "title": "Login History",
+    "userId": "User ID",
+    "username": "Username",
+    "email": "E-mail",
+    "loginTime": "Login Time",
+    "noHistory": "No login history found.",
+    "inactiveUser": "Inactive User"
+  },
+  "filterLoginHistory": {
+    "toggle": {
+      "show": "Show filters",
+      "hide": "Hide filters"
+    },
+    "userId": "User ID",
+    "username": "Username",
+    "email": "Email",
+    "fromDate": "From date",
+    "toDate": "To date",
+    "fromTime": "From time",
+    "toTime": "To time",
+    "invalidUsername": "Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."
+  },
+    "usersWithMessages": {
+    "title": "Chats",
+    "infoMessage": "The social connections feature has been disabled by a higher-tier administrator. You can still message users you previously connected with, but messaging new users is no longer available.",
+    "hideMuted": "Hide muted",
+    "noUsers": "No users with messages found or users are muted."
+  },
+    "rolePage": {
+    "title": "Access restricted: Only users with the “{{role}}” role can view this page.",
+    "exploreAdminScenarios": "Explore admin scenarios:",
+    "scenarioModifyRoles": "- Modify a user's allowed roles.",
+    "scenarioManageRoles": "- From the Admin section, create, edit, and delete roles. Then test access behavior with various role permissions."
+  },
+    "chat": {
+    "close": "Close",
+    "chatWithDeleted": "Chat with a user who deleted their account",
+    "chatWithInactive": "Chat with {{username}} (inactive account)",
+    "chatWith": "Chat with {{username}}",
+    "placeholder": "Aa",
+    "sending": "Sending...",
+    "send": "Send",
+    "charCount": "{{count}} / {{limit}} characters",
+    "deletedMessage": "This message was deleted",
+    "refreshMessages": "Refresh messages",
+    "confirmDelete": "Confirm delete",
+    "cancel": "Cancel",
+    "noMessages": "No messages yet.",
+    "emptyWarning": "Please fill out the message field."
   }
 }
