@@ -24,8 +24,9 @@ export default function FilterLoginHistory({ setFilters }) {
       email: email || undefined,
       from_date: fromDate || undefined,
       to_date: toDate || undefined,
-      from_time: fromTime || undefined,
-      to_time: toTime || undefined
+      from_time: fromTime || "00:00",
+      to_time: toTime || "23:59",
+      user_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
     });
   };
 

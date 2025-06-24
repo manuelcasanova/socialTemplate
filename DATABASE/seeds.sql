@@ -13,6 +13,20 @@ INSERT INTO users (username, email, password, is_verified, is_active) VALUES
   ('Manuel Casanova Spanish', 'info@casanovaspanish.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
   ;
   
+ /*
+
+-- Insert 50 rows for user_id = 1
+INSERT INTO login_history (user_id, login_time)
+SELECT 1, NOW() - INTERVAL '1 day' * (RANDOM() * 100) 
+FROM generate_series(1, 50);
+
+-- Insert 50 rows for user_id = 2
+INSERT INTO login_history (user_id, login_time)
+SELECT 2, NOW() - INTERVAL '1 day' * (RANDOM() * 100) 
+FROM generate_series(1, 50);
+
+*/
+
 -- Insert roles with hierarchical structure
 INSERT INTO roles (role_name, created_by) VALUES 
   ('SuperAdmin', 1),
