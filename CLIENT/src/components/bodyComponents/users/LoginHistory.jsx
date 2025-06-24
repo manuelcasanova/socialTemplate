@@ -59,6 +59,7 @@ export default function LoginHistory({ isNavOpen }) {
         <FilterLoginHistory setFilters={setFilters} />
 
         {loginHistory.length > 0 ? (
+     
           <div className="table-wrapper">
             <table>
               <thead>

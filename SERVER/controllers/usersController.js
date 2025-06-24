@@ -983,8 +983,6 @@ const updateRoles = async (req, res) => {
 const getSubscriptionStatus = async (req, res) => {
     const userId = req.params.user_id;
 
-    console.log('hit')
-
     const today = new Date();
 
     try {

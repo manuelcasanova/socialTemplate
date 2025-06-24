@@ -1,32 +1,69 @@
-const pool = require('../config/db')
 
-// Controller to get all login history
+
+
+const pool = require('../config/db');
+
+// Helper to convert local date+time string with fixed offset to ISO UTC string
+function localDateTimeToUTCISO(localDate, localTime, offsetMinutes) {
+  if (!localDate) {
+    throw new Error("localDate is required");
+  }
+
+  let timeStr = '00:00:00';
+
+  if (localTime) {
+    if (/^\d{2}:\d{2}(:\d{2})?$/.test(localTime)) {
+      timeStr = localTime.length === 5 ? `${localTime}:00` : localTime;
+    } else {
+      throw new Error(`Invalid time format: ${localTime}`);
+    }
+  }
+
+  const [year, month, day] = localDate.split('-').map(Number);
+  const [hour, minute, second] = timeStr.split(':').map(Number);
+
+  if (
+    !year || !month || !day ||
+    isNaN(year) || isNaN(month) || isNaN(day) ||
+    hour === undefined || minute === undefined || second === undefined ||
+    isNaN(hour) || isNaN(minute) || isNaN(second)
+  ) {
+    throw new Error(`Invalid date/time parts: ${localDate} ${timeStr}`);
+  }
+
+  const dateUtc = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  dateUtc.setMinutes(dateUtc.getMinutes() - offsetMinutes);
+
+  return dateUtc.toISOString();
+}
+
 const getLoginHistory = async (req, res) => {
   try {
-    const { user_id, username, email, from_date, to_date, from_time, to_time } = req.query;
+    const {
+      user_id,
+      username,
+      email,
+      from_date,
+      to_date,
+      from_time,
+      to_time,
+    } = req.query;
 
-   // Set the time zone to UTC to ensure timestamps are returned in UTC
-   await pool.query('SET TIMEZONE TO \'UTC\'');
-
-       // Get login history
+    const localOffsetMinutes = -7 * 60; // Fixed offset
 
     let query = `
-      SELECT 
-        lh.user_id, 
-        COALESCE(u.username, '') AS username,  
+      SELECT
+        lh.user_id,
+        COALESCE(u.username, '') AS username,
         COALESCE(u.email, '') AS email,
         lh.login_time
-      FROM 
-        login_history lh
-      LEFT JOIN 
-        users u ON lh.user_id = u.user_id  
-      WHERE 
-        1=1
-    `;  // 1=1 is used to simplify adding conditions dynamically
+      FROM login_history lh
+      LEFT JOIN users u ON lh.user_id = u.user_id
+      WHERE 1=1
+    `;
 
     const queryParams = [];
 
-    // Check and add filters if they are provided
     if (user_id) {
       if (isNaN(user_id)) {
         return res.status(400).json({ error: 'Invalid user_id format' });
@@ -45,45 +82,64 @@ const getLoginHistory = async (req, res) => {
       queryParams.push(`%${email}%`);
     }
 
-
+    // Handle date + time filtering (converted to UTC)
     if (from_date) {
-      query += ` AND lh.login_time >= $${queryParams.length + 1}`;
-      queryParams.push(`${from_date} 00:00:00`); // Assuming time starts from midnight for the from_date
+      try {
+        const fromTime = from_time || '00:00:00';
+        const fromUTC = localDateTimeToUTCISO(from_date, fromTime, localOffsetMinutes);
+        query += ` AND lh.login_time >= $${queryParams.length + 1}`;
+        queryParams.push(fromUTC);
+        // console.log(`From filter local: ${from_date} ${fromTime} offset ${localOffsetMinutes}min → UTC ${fromUTC}`);
+      } catch (err) {
+        return res.status(400).json({ error: `Invalid from_date or from_time: ${err.message}` });
+      }
     }
 
     if (to_date) {
-      query += ` AND lh.login_time <= $${queryParams.length + 1}`;
-      queryParams.push(`${to_date} 23:59:59`); // Assuming time ends at 11:59:59 PM for the to_date
+      try {
+        const toTime = to_time || '23:59:59';
+        const toUTC = localDateTimeToUTCISO(to_date, toTime, localOffsetMinutes);
+        query += ` AND lh.login_time <= $${queryParams.length + 1}`;
+        queryParams.push(toUTC);
+        // console.log(`To filter local: ${to_date} ${toTime} offset ${localOffsetMinutes}min → UTC ${toUTC}`);
+      } catch (err) {
+        return res.status(400).json({ error: `Invalid to_date or to_time: ${err.message}` });
+      }
     }
 
-
-    if (from_time) {
-      query += ` AND TO_CHAR(lh.login_time, 'HH24:MI') >= $${queryParams.length + 1}`;
-      queryParams.push(from_time);
+    // Handle time-only filtering when no date provided
+    if (!from_date && from_time) {
+      if (!/^\d{2}:\d{2}(:\d{2})?$/.test(from_time)) {
+        return res.status(400).json({ error: 'Invalid from_time format' });
+      }
+      const fromTimeFixed = from_time.length === 5 ? `${from_time}:00` : from_time;
+      query += ` AND lh.login_time::time >= $${queryParams.length + 1}::time`;
+      queryParams.push(fromTimeFixed);
+      // console.log(`From time-only filter: ${fromTimeFixed}`);
     }
 
-
-    if (to_time) {
-      query += ` AND TO_CHAR(lh.login_time, 'HH24:MI') <= $${queryParams.length + 1}`;
-      queryParams.push(to_time);
+    if (!to_date && to_time) {
+      if (!/^\d{2}:\d{2}(:\d{2})?$/.test(to_time)) {
+        return res.status(400).json({ error: 'Invalid to_time format' });
+      }
+      const toTimeFixed = to_time.length === 5 ? `${to_time}:00` : to_time;
+      query += ` AND lh.login_time::time <= $${queryParams.length + 1}::time`;
+      queryParams.push(toTimeFixed);
+      // console.log(`To time-only filter: ${toTimeFixed}`);
     }
 
-    // Add ORDER BY clause to sort by login time (descending order)
     query += ` ORDER BY lh.login_time DESC`;
 
-    // Execute the query with parameters
+    // console.log('Final SQL:', query);
+    // console.log('Query params:', queryParams);
+
     const result = await pool.query(query, queryParams);
 
-// console.log("loginHistory controller result.rows", result.rows[0])
-
-    // Return the results
-    res.status(200).json(result.rows);
+    return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error fetching login history:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-module.exports = {
-  getLoginHistory,
-};
+module.exports = { getLoginHistory };
