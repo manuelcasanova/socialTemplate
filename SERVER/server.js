@@ -88,6 +88,7 @@ app.use('/custom-roles-private', require('./routes/api/customRolesPrivate'));
 //   });
 
 app.use('/login-history', require('./routes/api/login-history'));
+app.use('/role-admin-history', require('./routes/api/role-admin-history'));
 
 
 

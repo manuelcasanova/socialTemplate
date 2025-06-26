@@ -83,6 +83,8 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       // Make the DELETE request
       const response = await axiosPrivate.delete(`/custom-roles-private/${confirmDeleteId}?userId=${userId}`);
 
+          // Check if response status is 204 (No Content)
+      if (response.status === 204) {
       // After successful deletion, update the state and handle the error message
       setCustomRoles(prevRoles =>
         prevRoles.filter(role => role.role_id !== confirmDeleteId)
@@ -94,6 +96,10 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
       // Clear error when deletion is successful
       setError(null);  // Reset error state in case it was used elsewhere
+     } else {
+        // Handle unexpected responses
+        setError("Failed to delete role.");
+      }
     } catch (error) {
       console.error("Error deleting role:", error);
 

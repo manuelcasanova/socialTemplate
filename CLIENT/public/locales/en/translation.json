@@ -98,7 +98,8 @@
     "adminUsers": "Admin users",
     "adminRoles": "Admin roles",
     "roleChangeLog": "Role change log",
-    "loginHistory": "Login history"
+    "loginHistory": "Login history",
+    "adminRolesHistory": "Admin roles history"
   },
   "user": {
     "welcome": "Welcome! You're now a registered user!",
@@ -502,6 +503,19 @@
     "create": "Create",
     "roleNameRequired": "Role name is required",
     "roleNameRegex": "Role name must be 1–25 characters and can only include letters, numbers, spaces, hyphens, and underscores."
+  },
+  "rolesAdminHistory": {
+    "roleId": "Role ID",
+    "oldRoleName": "Old Role Name",
+    "newRoleName": "New Role Name",
+    "action": "Action",
+    "performedBy": "Performed By",
+    "performedAt": "Performed At",
+    "noRole": "No Role",
+    "noHistory": "No history available",
+    "title": "Role Admin History",
+    "roleDeleted": "Deleted role",
+    "oldRoleId": "Former role Id"
   },
   "roleChangeLog": {
     "title": "User role change log",

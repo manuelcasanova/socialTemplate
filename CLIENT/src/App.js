@@ -67,6 +67,7 @@ import SuperAdminSetup from './components/bodyComponents/adminComponents/SuperAd
 import AdminSetup from './components/bodyComponents/adminComponents/AdminSetup';
 import AdminRoles from './components/bodyComponents/rolesComponents/AdminRoles';
 import RolePage from './components/bodyComponents/RolePage';
+import RoleAdminHistory from './components/bodyComponents/rolesComponents/RoleAdminHistory';
 
 
 function App() {
@@ -106,7 +107,7 @@ function App() {
   }, []);
 
   const [isNavOpen, setIsNavOpen] = useState(false);
- const [profilePictureKey, setProfilePictureKey] = useState(Date.now());
+  const [profilePictureKey, setProfilePictureKey] = useState(Date.now());
   // console.log(profilePictureKey, 'profilePictureKey')
 
   const toggleNav = () => {
@@ -126,14 +127,14 @@ function App() {
     fetchCustomRoles();
   }, []);
 
-const { superAdminSettings, isLoading: loadingPostFeatures } = useGlobalSuperAdminSettings();
-const { adminSettings, isLoading: loadingAdminSettings } = useGlobalAdminSettings();
+  const { superAdminSettings, isLoading: loadingPostFeatures } = useGlobalSuperAdminSettings();
+  const { adminSettings, isLoading: loadingAdminSettings } = useGlobalAdminSettings();
 
-if (loadingPostFeatures || loadingAdminSettings) {
-  return <LoadingSpinner />;
-}
+  if (loadingPostFeatures || loadingAdminSettings) {
+    return <LoadingSpinner />;
+  }
 
-  
+
   return (
 
     <div className="app">
@@ -145,7 +146,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
       <Routes>
         {/* Public routes */}
-        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports}/>} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} />} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
         <Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
@@ -183,7 +184,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
                 <Route path="/moderator" element={<Moderator isNavOpen={isNavOpen} />} />
               </Route>
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
-                <Route path="/moderator/posts" element={<ModeratorPosts isNavOpen={isNavOpen} setHasPostReports={setHasPostReports}/>} />
+                <Route path="/moderator/posts" element={<ModeratorPosts isNavOpen={isNavOpen} setHasPostReports={setHasPostReports} />} />
               </Route>
               <Route element={<RequireAuth allowedRoles={['Moderator']} />}>
                 <Route path="/moderator/posts/history" element={<ModeratorPostsHistory isNavOpen={isNavOpen} />} />
@@ -213,7 +214,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey}  />} />
+              <Route path="social/allusers" element={<SocialAllUsers isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
@@ -237,7 +238,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification}  profilePictureKey={profilePictureKey} />} />
+              <Route path="social/pending" element={<SocialPendingRequests isNavOpen={isNavOpen} screenWidth={screenWidth} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
@@ -249,7 +250,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey}  />} />
+              <Route path="messages" element={<UsersWithMessages isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
@@ -278,7 +279,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
               {!loadingRoles && (
                 <Route element={<RequireAuth allowedRoles={allRoles} />}>
-                  <Route path="posts/comments/reactions/:param" element={<PostCommentReactions isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey}/>} />
+                  <Route path="posts/comments/reactions/:param" element={<PostCommentReactions isNavOpen={isNavOpen} screenWidth={screenWidth} profilePictureKey={profilePictureKey} />} />
                 </Route>
               )}
             </>
@@ -286,7 +287,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
           {!loadingRoles && (
             <Route element={<RequireAuth allowedRoles={allRoles} />}>
-              <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages} profilePictureKey={profilePictureKey}  />} />
+              <Route exact path="messages/:userId" element={<Chat isNavOpen={isNavOpen} setHasNewMessages={setHasNewMessages} profilePictureKey={profilePictureKey} />} />
             </Route>
           )}
 
@@ -298,7 +299,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
 
           {/* Admin-specific routes */}
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
-            <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} customRoles={customRoles} setCustomRoles={setCustomRoles} profilePictureKey={profilePictureKey}  />} />
+            <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} customRoles={customRoles} setCustomRoles={setCustomRoles} profilePictureKey={profilePictureKey} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
@@ -318,6 +319,10 @@ if (loadingPostFeatures || loadingAdminSettings) {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+            <Route path="/admin/superadmin/roleadminhistory" element={<RoleAdminHistory isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
             <Route path="/admin/superadmin/loginhistory" element={<LoginHistory isNavOpen={isNavOpen} allowedRoles={['SuperAdmin']} />} />
           </Route>
 
@@ -325,7 +330,7 @@ if (loadingPostFeatures || loadingAdminSettings) {
         <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
       </Routes>
       <Footer isNavOpen={isNavOpen} />
-      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} setHasNewMessages={setHasNewMessages} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} profilePictureKey={profilePictureKey}/>
+      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} setHasNewMessages={setHasNewMessages} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} profilePictureKey={profilePictureKey} />
 
     </div>
 

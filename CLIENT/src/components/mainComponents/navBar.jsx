@@ -210,37 +210,37 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
 
       {/* {customRoles && customRoles.length > 0 && */}
-        <div className={`nav-item-with-dropdown ${showSections.protectedRoutes ? 'nav-item-with-dropdown-open' : ''}`}>
-          <div className='nav-item' onClick={() => toggleSection('protected_routes')}>{t('navbar.protected')}
-            {showSections.protectedRoutes ? '▲' : '▼'
-            }
-          </div>
-          {showSections.protectedRoutes && (
-
-
-            <>
-
-              <ul
-                onClick={() => handleNavigate('/user')}
-
-                className='subitem'
-              >{t('navbar.accessibleToAll')}</ul>
-
-
-              {customRoles && customRoles.length > 0 && customRoles.map(role => (
-                <div
-                  key={role.role_id}
-                  className="subitem"
-                  onClick={() => handleNavigateProtected(role.role_name)}
-                >
-                  {role.role_name}
-                </div>
-              ))}
-
-
-            </>
-          )}
+      <div className={`nav-item-with-dropdown ${showSections.protectedRoutes ? 'nav-item-with-dropdown-open' : ''}`}>
+        <div className='nav-item' onClick={() => toggleSection('protected_routes')}>{t('navbar.protected')}
+          {showSections.protectedRoutes ? '▲' : '▼'
+          }
         </div>
+        {showSections.protectedRoutes && (
+
+
+          <>
+
+            <ul
+              onClick={() => handleNavigate('/user')}
+
+              className='subitem'
+            >{t('navbar.accessibleToAll')}</ul>
+
+
+            {customRoles && customRoles.length > 0 && customRoles.map(role => (
+              <div
+                key={role.role_id}
+                className="subitem"
+                onClick={() => handleNavigateProtected(role.role_name)}
+              >
+                {role.role_name}
+              </div>
+            ))}
+
+
+          </>
+        )}
+      </div>
       {/* } */}
 
       {
@@ -404,12 +404,17 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
               <div className='subitem' onClick={() => handleNavigate('/admin/roles')}>{t('navbar.adminRoles')}</div>
 
+              <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/roleadminhistory')}>
+                {t('navbar.adminRolesHistory')}
+              </div>
+
+
               <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/rolechangelog')}>
                 {t('navbar.roleChangeLog')}
               </div>
 
               <div className="subitem" onClick={() => handleNavigate('/admin/superadmin/loginhistory')}>
-                 {t('navbar.loginHistory')}
+                {t('navbar.loginHistory')}
               </div>
 
             </>

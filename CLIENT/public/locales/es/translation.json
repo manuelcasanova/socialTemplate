@@ -90,7 +90,8 @@
     "adminUsers": "Administración de usuarios",
     "adminRoles": "Administrar roles",
     "roleChangeLog": "Registro de cambios de roles",
-    "loginHistory": "Historial de inicio de sesión"
+    "loginHistory": "Historial de inicio de sesión",
+    "adminRolesHistory": "Historial de administración de roles"
   },
   "user": {
     "welcome": "¡Bienvenido! ¡Ahora eres un usuario registrado!",
@@ -492,6 +493,19 @@
     "create": "Crear",
     "roleNameRequired": "El nombre del rol es obligatorio",
     "roleNameRegex": "El nombre del rol debe tener entre 1 y 25 caracteres y solo puede incluir letras, números, espacios, guiones y guiones bajos."
+  },
+  "rolesAdminHistory": {
+    "roleId": "ID de rol",
+    "oldRoleName": "Nombre antiguo del rol",
+    "newRoleName": "Nuevo nombre del rol",
+    "action": "Acción",
+    "performedBy": "Realizado por",
+    "performedAt": "Realizado en",
+    "noRole": "Sin rol",
+    "noHistory": "No hay historial disponible",
+    "title": "Historial de Administración de Roles",
+    "roleDeleted": "Rol eliminado",
+     "oldRoleId": "Antiguo ID del rol"
   },
   "roleChangeLog": {
     "title": "Registro de cambios de roles de usuario",

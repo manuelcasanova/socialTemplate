@@ -124,6 +124,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
             { label: 'Admin Settings', path: '/admin/admin/setup' },
             { label: 'Admin Users', path: '/admin/users' },
             { label: 'Admin Roles', path: '/admin/roles' },
+            { label: 'Admin Roles History', path: '/admin/superadmin/roleadminhistory' },
             { label: 'Role change log', path: '/admin/superadmin/rolechangelog' },
             { label: 'Login History', path: '/admin/superadmin/loginhistory' }
           );

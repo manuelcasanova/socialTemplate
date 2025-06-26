@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS followers CASCADE;
 DROP TABLE IF EXISTS muted CASCADE;
 DROP TABLE IF EXISTS login_history CASCADE;
 DROP TABLE IF EXISTS user_roles CASCADE;
+DROP TABLE IF EXISTS role_admin_logs CASCADE;
 DROP TABLE IF EXISTS role_change_logs CASCADE;
 DROP TABLE IF EXISTS subscriptions CASCADE;
 DROP TABLE IF EXISTS user_messages CASCADE;
@@ -74,6 +75,18 @@ CREATE TABLE user_roles (
   assigned_by_user_id INT,
   PRIMARY KEY (user_id, role_id),
   CONSTRAINT fk_assigned_by_user FOREIGN KEY (assigned_by_user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE role_admin_logs (
+  id SERIAL PRIMARY KEY,
+  role_id INTEGER,
+  old_role_id INTEGER,
+  old_role_name VARCHAR(25),
+  new_role_name VARCHAR(25),
+  action_type VARCHAR(10) CHECK (action_type IN ('created', 'updated', 'deleted')) NOT NULL,
+  performed_by INTEGER REFERENCES users(user_id) ON DELETE SET NULL,
+  timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE SET NULL
 );
 
 CREATE TABLE role_change_logs (
@@ -255,51 +268,51 @@ CREATE TABLE admin_settings (
 
 );
 
--- =======================
--- Grants to udokm633_manuelcasanova
--- =======================
+-- -- =======================
+-- -- Grants to udokm633_manuelcasanova
+-- -- =======================
 
--- Allow connecting to the database
-GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633_manuelcasanova;
+-- -- Allow connecting to the database
+-- GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633_manuelcasanova;
 
--- Allow usage of the public schema
-GRANT USAGE ON SCHEMA public TO udokm633_manuelcasanova;
+-- -- Allow usage of the public schema
+-- GRANT USAGE ON SCHEMA public TO udokm633_manuelcasanova;
 
--- Grant all privileges on all existing tables with grant option
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633_manuelcasanova WITH GRANT OPTION;
+-- -- Grant all privileges on all existing tables with grant option
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633_manuelcasanova WITH GRANT OPTION;
 
--- Ensure all new tables in the schema grant all privileges by default with grant option
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT ALL PRIVILEGES ON TABLES TO udokm633_manuelcasanova WITH GRANT OPTION;
+-- -- Ensure all new tables in the schema grant all privileges by default with grant option
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA public
+-- GRANT ALL PRIVILEGES ON TABLES TO udokm633_manuelcasanova WITH GRANT OPTION;
 
--- Grant all privileges on all existing sequences
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633_manuelcasanova;
+-- -- Grant all privileges on all existing sequences
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633_manuelcasanova;
 
--- Ensure all new sequences grant all privileges by default
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633_manuelcasanova;
+-- -- Ensure all new sequences grant all privileges by default
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA public
+-- GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633_manuelcasanova;
 
 
--- =======================
--- Grants to udokm633
--- =======================
+-- -- =======================
+-- -- Grants to udokm633
+-- -- =======================
 
--- Allow connecting to the database
-GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633;
+-- -- Allow connecting to the database
+-- GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633;
 
--- Allow usage of the public schema
-GRANT USAGE ON SCHEMA public TO udokm633;
+-- -- Allow usage of the public schema
+-- GRANT USAGE ON SCHEMA public TO udokm633;
 
--- Grant all privileges on all existing tables with grant option
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633 WITH GRANT OPTION;
+-- -- Grant all privileges on all existing tables with grant option
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633 WITH GRANT OPTION;
 
--- Ensure all new tables in the schema grant all privileges by default with grant option
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT ALL PRIVILEGES ON TABLES TO udokm633 WITH GRANT OPTION;
+-- -- Ensure all new tables in the schema grant all privileges by default with grant option
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA public
+-- GRANT ALL PRIVILEGES ON TABLES TO udokm633 WITH GRANT OPTION;
 
--- Grant all privileges on all existing sequences
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633;
+-- -- Grant all privileges on all existing sequences
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633;
 
--- Ensure all new sequences grant all privileges by default
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633;
+-- -- Ensure all new sequences grant all privileges by default
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA public
+-- GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633;
