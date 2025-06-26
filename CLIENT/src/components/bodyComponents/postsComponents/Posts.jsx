@@ -52,6 +52,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
   const [inappropriatePosts, setInappropriatePosts] = useState(new Set());
   const [users, setUsers] = useState([])
   const [showMyPosts, setShowMyPosts] = useState(false);
+  const [checksDone, setChecksDone] = useState(false);
 
   const filteredPosts = posts.filter(post => {
     if (showMyPosts) {
@@ -75,60 +76,49 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
 
 
 
+useEffect(() => {
+  const runChecks = async () => {
+    setChecksDone(false);  // Reset before starting checks
+    try {
+      const reportedPosts = new Set();
+      const hiddenPosts = new Set();
 
-  useEffect(() => {
-    const checkReports = async () => {
-      try {
-        const reportedPosts = new Set();
+      for (const post of posts) {
+        const [reportRes, hiddenRes] = await Promise.all([
+          axiosPrivate.get("/reports/has-reported", {
+            params: { post_id: post.id, user_id: loggedInUser },
+          }),
+          axiosPrivate.get("/reports/has-hidden", {
+            params: { post_id: post.id, user_id: loggedInUser },
+          }),
+        ]);
 
-        for (const post of posts) {
-          const res = await axiosPrivate.get("/reports/has-reported", {
-            params: {
-              post_id: post.id,
-              user_id: loggedInUser,
-            },
-          });
-
-          if (res.data?.hasReported) {
-            reportedPosts.add(post.id);
-          }
+        if (reportRes.data?.hasReported) {
+          reportedPosts.add(post.id);
         }
 
-        setFlaggedPosts(reportedPosts);
-      } catch (err) {
-        console.error("Error checking report status:", err);
-      }
-    };
-
-    checkReports();
-  }, [posts, loggedInUser]);
-
-  useEffect(() => {
-    const checkInappropriate = async () => {
-      try {
-        const hiddenPosts = new Set();
-
-        for (const post of posts) {
-          const res = await axiosPrivate.get("/reports/has-hidden", {
-            params: {
-              post_id: post.id,
-              user_id: loggedInUser,
-            },
-          });
-
-          if (res.data?.hasHidden) {
-            hiddenPosts.add(post.id);
-          }
+        if (hiddenRes.data?.hasHidden) {
+          hiddenPosts.add(post.id);
         }
-
-        setInappropriatePosts(hiddenPosts);
-      } catch (err) {
-        console.error("Error checking inappropriate status:", err);
       }
-    };
 
-    checkInappropriate();
-  }, [posts, loggedInUser]);
+      setFlaggedPosts(reportedPosts);
+      setInappropriatePosts(hiddenPosts);
+    } catch (err) {
+      console.error("Error checking post statuses:", err);
+    } finally {
+      setChecksDone(true);  // Indicate both checks are done
+    }
+  };
+
+  if (posts.length > 0) {
+    runChecks();
+  } else {
+    // If no posts, immediately mark as done to avoid blocking render
+    setChecksDone(true);
+  }
+}, [posts, loggedInUser, axiosPrivate]);
+
 
 
   useEffect(() => {
@@ -217,7 +207,7 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
   };
 
 
-  if (isLoading) {
+  if (isLoading || !checksDone ) {
     return <LoadingSpinner />;
   }
 

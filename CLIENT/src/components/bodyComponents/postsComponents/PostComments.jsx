@@ -33,7 +33,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function PostComments({ isNavOpen, profilePictureKey }) {
 
-   const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
@@ -61,6 +61,8 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
   const [errMsg, setErrMsg] = useState('');
   const [flaggedComments, setFlaggedComments] = useState(new Set());
   const [inappropriateComments, setInappropriateComments] = useState(new Set());
+  const [checksDone, setChecksDone] = useState(false);
+  const [commentChecksDone, setCommentChecksDone] = useState(false);
 
   // console.log("post", post)
   // console.log("postId", postId)
@@ -77,63 +79,75 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
   const errRef = useRef();
 
   useEffect(() => {
-    const checkFlaggedComments = async () => {
+    const checkPostFlags = async () => {
+      setChecksDone(false);
       try {
-        const flagged = new Set();
+        const [reportRes, hiddenRes] = await Promise.all([
+          axiosPrivate.get("/reports/has-reported", {
+            params: { post_id: postId, user_id: loggedInUserId },
+          }),
+          axiosPrivate.get("/reports/has-hidden", {
+            params: { post_id: postId, user_id: loggedInUserId },
+          }),
+        ]);
 
-        for (const comment of postComments) {
-          const res = await axiosPrivate.get("/reports-comments/has-reported", {
-            params: {
-              comment_id: comment.id,
-              user_id: loggedInUserId,
-            },
-          });
-
-          if (res.data?.hasReported) {
-            flagged.add(comment.id);
-          }
-        }
-
-        setFlaggedComments(flagged);
+        setIsFlagged(reportRes.data?.hasReported || false);
+        setIsInappropriate(hiddenRes.data?.hasHidden || false);
       } catch (err) {
-        console.error("Error checking flagged comments:", err);
+        console.error("Error checking post report/hidden status:", err);
+      } finally {
+        setChecksDone(true);
       }
     };
 
-    if (postComments.length > 0 && loggedInUserId) {
-      checkFlaggedComments();
+    if (postId && loggedInUserId) {
+      checkPostFlags();
     }
-  }, [postComments, loggedInUserId]);
-
+  }, [postId, loggedInUserId, axiosPrivate]);
 
   useEffect(() => {
-    const checkHiddenComments = async () => {
+    const checkCommentFlags = async () => {
+      setCommentChecksDone(false);
       try {
+        const flagged = new Set();
         const hidden = new Set();
 
-        for (const comment of postComments) {
-          const res = await axiosPrivate.get("/reports-comments/has-hidden", {
-            params: {
-              comment_id: comment.id,
-              user_id: loggedInUserId,
-            },
-          });
+        await Promise.all(postComments.map(async (comment) => {
+          const [reportRes, hiddenRes] = await Promise.all([
+            axiosPrivate.get("/reports-comments/has-reported", {
+              params: { comment_id: comment.id, user_id: loggedInUserId },
+            }),
+            axiosPrivate.get("/reports-comments/has-hidden", {
+              params: { comment_id: comment.id, user_id: loggedInUserId },
+            }),
+          ]);
 
-          if (res.data?.hasHidden) {
+          if (reportRes.data?.hasReported) {
+            flagged.add(comment.id);
+          }
+          if (hiddenRes.data?.hasHidden) {
             hidden.add(comment.id);
           }
-        }
+        }));
 
+        setFlaggedComments(flagged);
         setInappropriateComments(hidden);
       } catch (err) {
-        console.error("Error checking inappropriate comments:", err);
+        console.error("Error checking comment flags:", err);
+      } finally {
+        setCommentChecksDone(true);
       }
     };
 
     if (postComments.length > 0 && loggedInUserId) {
-      checkHiddenComments();
+      checkCommentFlags();
+    } else {
+      setCommentChecksDone(true);
     }
-  }, [postComments, loggedInUserId]);
+  }, [postComments, loggedInUserId, axiosPrivate]);
+
+
+
 
 
   const handleSubmit = async (e) => {
@@ -207,56 +221,6 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
     }, 100);
   }, []);
 
-  const handleImageClick = (userId) => {
-    setShowLargePicture(userId);
-  };
-
-  useEffect(() => {
-    const checkIfPostIsFlagged = async () => {
-      try {
-        const res = await axiosPrivate.get("/reports/has-reported", {
-          params: {
-            post_id: postId,
-            user_id: loggedInUserId,
-          },
-        });
-
-        if (res.data?.hasReported) {
-          setIsFlagged(true);
-        }
-      } catch (err) {
-        console.error("Error checking report status:", err);
-      }
-    };
-
-    if (postId && loggedInUserId) {
-      checkIfPostIsFlagged();
-    }
-  }, [postId, loggedInUserId, axiosPrivate]);
-
-  useEffect(() => {
-    const checkIfPostIsInappropriate = async () => {
-      try {
-        const res = await axiosPrivate.get("/reports/has-hidden", {
-          params: {
-            post_id: postId,
-            user_id: loggedInUserId,
-          },
-        });
-
-        if (res.data?.hasHidden) {
-          setIsInappropriate(true);
-        }
-      } catch (err) {
-        console.error("Error checking hidden status:", err);
-      }
-    };
-
-    if (postId && loggedInUserId) {
-      checkIfPostIsInappropriate();
-    }
-  }, [postId, loggedInUserId]);
-
 
   const getVisibilityIcon = (visibility) => {
     switch (visibility) {
@@ -285,9 +249,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
     }
   };
 
-
-
-  if (isLoading) {
+  if (isLoading || !checksDone || !commentChecksDone) {
     return <LoadingSpinner />;
   }
 
@@ -354,7 +316,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
                   />
                 </div>
                 <p className="post-header-date">
-          
+
 
                   {formatDate(postDate, i18n.language || 'en-US', t)}
                 </p>
@@ -391,7 +353,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
             ) : post?.[0]?.is_deleted ? (
               <>
                 <p>*** DELETED POST ***</p>
-                <p style={{textDecoration: 'line-through'}}>{postContent}</p>
+                <p style={{ textDecoration: 'line-through' }}>{postContent}</p>
               </>
             ) : (
               <p>{postContent}</p>
