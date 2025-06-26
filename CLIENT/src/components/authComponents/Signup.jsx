@@ -368,7 +368,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
               <form className="signup-form" onSubmit={handleSubmit}>
                 {renderInput("user", t('signup.name'), "text", "name")}
                 {renderInput("email", t('signup.email'), "text", "email")}
-                {renderInput("pwd", "Password", t('signup.password'), "pwd")}
+                {renderInput("pwd", t('signup.password'), "Password", "pwd")}
                 {renderInput("matchPwd", t('signup.confirmPassword'), "password", "match")}
 
                 <button className='button-auth' disabled={!Object.values(validity).every(Boolean) || isSubmitting}>

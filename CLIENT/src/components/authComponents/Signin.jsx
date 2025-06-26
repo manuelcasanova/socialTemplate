@@ -168,22 +168,34 @@ useEffect(() => {
         });
     };
 
-    const handleError = (err) => {
-        const errorMessage = err?.response?.data?.error || 'Login Failed';
+    const mapErrorKey = (message) => {
+    switch (message) {
+        case "Please verify your email before logging in. Check your spam folder":
+            return "verifyEmail";
+        case "Login Failed":
+            return "loginFailed";
+        case "No Server Response":
+            return "noServerResponse";
+        default:
+            return "loginFailed"; // fallback
+    }
+};
 
-        if (err?.response?.data?.error) {
-            setErrMsg(errorMessage);
+const handleError = (err) => {
+    const errorMessage = err?.response?.data?.error || t('signin.errors.loginFailed');
 
-            // If the error message is related to email verification, set isVerified to false
-            if (errorMessage === "Please verify your email before logging in. Check your spam folder") {
-                setIsVerified(false);
-            }
-        } else {
-            setErrMsg('No Server Response');
+    if (err?.response?.data?.error) {
+        setErrMsg(t(`signin.errors.${mapErrorKey(errorMessage)}`));
+
+        if (errorMessage === "Please verify your email before logging in. Check your spam folder") {
+            setIsVerified(false);
         }
+    } else {
+        setErrMsg(t('signin.errors.noServerResponse'));
+    }
 
-        errRef.current.focus();
-    };
+    errRef.current.focus();
+};
 
 
     const handleSubmit = async (e) => {
@@ -227,7 +239,7 @@ useEffect(() => {
                 withCredentials: true,
             });
             // You can show a success message here if needed
-            setSuccessMsg('The verification email has been successfully resent. It usually arrives within a few seconds, but depending on traffic, it may take up to several minutes—up to 30 minutes in some cases.');
+            setSuccessMsg(t('signin.verificationResent'));
             setErrMsg('');
         } catch (error) {
             // Handle error (e.g., invalid user, email mismatch, etc.)
@@ -265,7 +277,7 @@ useEffect(() => {
                         onClick={handleResendVerification}
                         disabled={isLoading}
                     >
-                        {isLoading ? <LoadingSpinner /> : 'Resend Verification Email'}
+                        {isLoading ? <LoadingSpinner /> : t('signin.resendVerification')}
                     </button>
 
                 )}

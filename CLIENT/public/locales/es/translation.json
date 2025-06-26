@@ -140,7 +140,8 @@
       "serverUnreachable": "El servidor no responde. Revisa tu conexión o inténtalo más tarde.",
       "googleFailed": "No se pudo iniciar sesión con Google.",
       "loginFailed": "Inicio de sesión fallido",
-      "noServerResponse": "Sin respuesta del servidor"
+      "noServerResponse": "Sin respuesta del servidor",
+      "verifyEmail": "Por favor, verifica tu email antes de acceder. Revisa tu carpeta de correo no deseado."
     }
   },
   "resetPassword": {

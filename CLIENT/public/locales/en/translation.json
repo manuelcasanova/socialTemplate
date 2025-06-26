@@ -148,7 +148,8 @@
       "serverUnreachable": "Server is unreachable. Please check your connection or try again later.",
       "googleFailed": "Failed to sign in with Google.",
       "loginFailed": "Login Failed",
-      "noServerResponse": "No Server Response"
+      "noServerResponse": "No Server Response",
+      "verifyEmail": "Please verify your email before logging in. Check your spam folder"
     }
   },
   "resetPassword": {
