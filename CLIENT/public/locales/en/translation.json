@@ -490,6 +490,7 @@
     "customRolesInfo": "These roles are associated with a protected route (accessible through the navbar) and can be accessed by SuperAdmins, Admins, Moderators, and any users assigned to them. Only the role creators or higher-tier administrators can edit or delete these custom roles.",
     "noCustomRoles": "There are no custom roles yet.",
     "createOne": "Create one.",
+    "accessRoleAdministrationHistory": "Access role administration history",
     "editRoleName": "Edit role name",
     "button": {
       "edit": "Edit",

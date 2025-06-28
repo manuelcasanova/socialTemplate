@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 //Hooks
 import { axiosPrivate } from "../../../api/axios";
@@ -27,6 +28,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { auth } = useAuth();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -83,20 +85,20 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       // Make the DELETE request
       const response = await axiosPrivate.delete(`/custom-roles-private/${confirmDeleteId}?userId=${userId}`);
 
-          // Check if response status is 204 (No Content)
+      // Check if response status is 204 (No Content)
       if (response.status === 204) {
-      // After successful deletion, update the state and handle the error message
-      setCustomRoles(prevRoles =>
-        prevRoles.filter(role => role.role_id !== confirmDeleteId)
-      );
+        // After successful deletion, update the state and handle the error message
+        setCustomRoles(prevRoles =>
+          prevRoles.filter(role => role.role_id !== confirmDeleteId)
+        );
 
-      // Reset the confirmation and active menu
-      setConfirmDeleteId(null);
-      setActiveMenuId(null);
+        // Reset the confirmation and active menu
+        setConfirmDeleteId(null);
+        setActiveMenuId(null);
 
-      // Clear error when deletion is successful
-      setError(null);  // Reset error state in case it was used elsewhere
-     } else {
+        // Clear error when deletion is successful
+        setError(null);  // Reset error state in case it was used elsewhere
+      } else {
         // Handle unexpected responses
         setError("Failed to delete role.");
       }
@@ -237,11 +239,17 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
 
         {(customRoles === null || customRoles.length === 0) && (
-          <div>
+          <div style={{ marginTop: '0.5em', marginBottom: '0.5em' }}>
             {t('adminRoles.noCustomRoles')}{' '}
             {superAdminSettings.allowAdminCreateCustomRole && t('adminRoles.createOne')}
           </div>
         )}
+
+        <button
+          className="button-white"
+          style={{ alignSelf: 'start', marginTop: '1em' }}
+          onClick={() => navigate(`/admin/superadmin/roleadminhistory`)}
+        >{t('adminRoles.accessRoleAdministrationHistory')}</button>
 
 
         {!isLoading && !error && customRoles && (

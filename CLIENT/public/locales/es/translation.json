@@ -480,6 +480,7 @@
     "customRolesInfo": "Estos roles están asociados a una ruta protegida (accesible desde la barra de navegación) y pueden ser usados por SuperAdministradores, Administradores, Moderadores y cualquier usuario asignado. Solo los creadores del rol o administradores de nivel superior pueden editar o eliminar estos roles personalizados.",
     "noCustomRoles": "Aún no hay roles personalizados.",
     "createOne": "Crea uno.",
+    "accessRoleAdministrationHistory": "Acceder al historial de administración de roles",
     "editRoleName": "Editar nombre del rol",
     "button": {
       "edit": "Editar",

@@ -268,51 +268,51 @@ CREATE TABLE admin_settings (
 
 );
 
--- -- =======================
--- -- Grants to udokm633_manuelcasanova
--- -- =======================
+-- =======================
+-- Grants to udokm633_manuelcasanova
+-- =======================
 
--- -- Allow connecting to the database
--- GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633_manuelcasanova;
+-- Allow connecting to the database
+GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633_manuelcasanova;
 
--- -- Allow usage of the public schema
--- GRANT USAGE ON SCHEMA public TO udokm633_manuelcasanova;
+-- Allow usage of the public schema
+GRANT USAGE ON SCHEMA public TO udokm633_manuelcasanova;
 
--- -- Grant all privileges on all existing tables with grant option
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633_manuelcasanova WITH GRANT OPTION;
+-- Grant all privileges on all existing tables with grant option
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633_manuelcasanova WITH GRANT OPTION;
 
--- -- Ensure all new tables in the schema grant all privileges by default with grant option
--- ALTER DEFAULT PRIVILEGES IN SCHEMA public
--- GRANT ALL PRIVILEGES ON TABLES TO udokm633_manuelcasanova WITH GRANT OPTION;
+-- Ensure all new tables in the schema grant all privileges by default with grant option
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL PRIVILEGES ON TABLES TO udokm633_manuelcasanova WITH GRANT OPTION;
 
--- -- Grant all privileges on all existing sequences
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633_manuelcasanova;
+-- Grant all privileges on all existing sequences
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633_manuelcasanova;
 
--- -- Ensure all new sequences grant all privileges by default
--- ALTER DEFAULT PRIVILEGES IN SCHEMA public
--- GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633_manuelcasanova;
+-- Ensure all new sequences grant all privileges by default
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633_manuelcasanova;
 
 
--- -- =======================
--- -- Grants to udokm633
--- -- =======================
+-- =======================
+-- Grants to udokm633
+-- =======================
 
--- -- Allow connecting to the database
--- GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633;
+-- Allow connecting to the database
+GRANT CONNECT ON DATABASE udokm633_fullstack_social_template_database TO udokm633;
 
--- -- Allow usage of the public schema
--- GRANT USAGE ON SCHEMA public TO udokm633;
+-- Allow usage of the public schema
+GRANT USAGE ON SCHEMA public TO udokm633;
 
--- -- Grant all privileges on all existing tables with grant option
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633 WITH GRANT OPTION;
+-- Grant all privileges on all existing tables with grant option
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO udokm633 WITH GRANT OPTION;
 
--- -- Ensure all new tables in the schema grant all privileges by default with grant option
--- ALTER DEFAULT PRIVILEGES IN SCHEMA public
--- GRANT ALL PRIVILEGES ON TABLES TO udokm633 WITH GRANT OPTION;
+-- Ensure all new tables in the schema grant all privileges by default with grant option
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL PRIVILEGES ON TABLES TO udokm633 WITH GRANT OPTION;
 
--- -- Grant all privileges on all existing sequences
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633;
+-- Grant all privileges on all existing sequences
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633;
 
--- -- Ensure all new sequences grant all privileges by default
--- ALTER DEFAULT PRIVILEGES IN SCHEMA public
--- GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633;
+-- Ensure all new sequences grant all privileges by default
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633;
