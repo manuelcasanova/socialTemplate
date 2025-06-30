@@ -93,6 +93,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
   const handleViewMore = (userId) => {
     setExpandedUserId((prevId) => (prevId === userId ? null : userId));
     setError('')
+    setShowConfirmDelete(false);
   };
 
   const handleShowDelete = () => {
