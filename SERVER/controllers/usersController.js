@@ -480,8 +480,17 @@ const adminVersionSoftDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
     const requestingUserId = req.body.loggedInUser
 
+    console.log(userId, requestingUserId)
+
     try {
-        if (userId === 2) {
+
+        // Prevent users from deleting their own account
+        if (userId == requestingUserId) {
+            return res.status(400).json({ error: 'You cannot delete your own account.' });
+        }
+
+        if (userId == 2) {
+            console.log("case")
             return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
         }
 
