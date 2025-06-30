@@ -505,6 +505,8 @@
     "noRole": "Sin rol",
     "noHistory": "No hay historial disponible",
     "title": "Historial de Administración de Roles",
+    "roleCreated": "Rol creado",
+    "roleUpdated": "Role editado",
     "roleDeleted": "Rol eliminado",
      "oldRoleId": "Antiguo ID del rol"
   },

@@ -2,7 +2,19 @@ const pool = require('../config/db');
 
 const getAdminRolesHistory = async (req, res) => {
   try {
-    const query = `
+    const {
+      performed_by,
+      action,
+      old_role_name,
+      new_role_name,
+      from_date,
+      to_date,
+      from_time,
+      to_time,
+      user_timezone
+    } = req.query;
+
+    let query = `
       SELECT
         ral.id,
         ral.role_id,
@@ -15,10 +27,62 @@ const getAdminRolesHistory = async (req, res) => {
         ral.timestamp
       FROM role_admin_logs ral
       LEFT JOIN users u ON ral.performed_by = u.user_id
-      ORDER BY ral.timestamp DESC;
+      WHERE 1=1
     `;
 
-    const result = await pool.query(query);
+    const params = [];
+
+    if (performed_by) {
+      params.push(`%${performed_by}%`);
+      query += ` AND u.username ILIKE $${params.length}`;
+    }
+
+    if (action) {
+      params.push(action);
+      query += ` AND ral.action_type = $${params.length}`;
+    }
+
+    if (old_role_name) {
+      params.push(`%${old_role_name}%`);
+      query += ` AND ral.old_role_name ILIKE $${params.length}`;
+    }
+
+    if (new_role_name) {
+      params.push(`%${new_role_name}%`);
+      query += ` AND ral.new_role_name ILIKE $${params.length}`;
+    }
+
+    // Date range filtering
+    if (from_date) {
+      params.push(`${from_date} 00:00:00`);
+      query += ` AND ral.timestamp >= $${params.length}`;
+    }
+    if (to_date) {
+      params.push(`${to_date} 23:59:59`);
+      query += ` AND ral.timestamp <= $${params.length}`;
+    }
+
+    // Time-only filtering with timezone awareness
+    if (from_time) {
+      params.push(user_timezone, from_time);
+      query += `
+        AND (ral.timestamp AT TIME ZONE $${params.length - 1})::time >= $${params.length}
+      `;
+    }
+    if (to_time) {
+      params.push(user_timezone, to_time);
+      query += `
+        AND (ral.timestamp AT TIME ZONE $${params.length - 1})::time <= $${params.length}
+      `;
+    }
+
+    query += ` ORDER BY ral.timestamp DESC`;
+
+    // Optional: debug logs
+    // console.log('Final Query:', query);
+    // console.log('Params:', params);
+
+    const result = await pool.query(query, params);
 
     return res.json(result.rows);
   } catch (err) {

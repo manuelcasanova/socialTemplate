@@ -515,6 +515,8 @@
     "noRole": "No Role",
     "noHistory": "No history available",
     "title": "Role Admin History",
+    "roleCreated": "Role created",
+    "roleUpdated": "Role edited",
     "roleDeleted": "Deleted role",
     "oldRoleId": "Former role Id"
   },

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 import { fetchRoleAdminHistory } from "../../../util/fetchRoleAdminHistory";
+import RoleAdminHistoryFilter from "./RoleAdminHistoryFilter";
 
 import '../../../css/RoleChangeLog.css'
 
@@ -12,11 +13,11 @@ import { useTranslation } from 'react-i18next';
 export default function RoleAdminHistory({ isNavOpen }) {
   const { t } = useTranslation();
   const axiosPrivate = useAxiosPrivate();
-  const [rolesAdminHistory, setRolesAdminHistory] = useState([]);
-  console.log('rolesAdminHistory', rolesAdminHistory)
-  const [error, setError] = useState(null);
   const { auth } = useAuth();
-  const loggedInUser = auth.userId
+
+  const [rolesAdminHistory, setRolesAdminHistory] = useState([]);
+  const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({});
 
   // console.log('rolesAdminHistory', rolesAdminHistory)
 
@@ -25,7 +26,7 @@ export default function RoleAdminHistory({ isNavOpen }) {
 
     const loadData = async () => {
       try {
-        const data = await fetchRoleAdminHistory(axiosPrivate);
+        const data = await fetchRoleAdminHistory(axiosPrivate, filters);
 
         if (data && Array.isArray(data)) {
           if (data.length === 0) {
@@ -43,12 +44,15 @@ export default function RoleAdminHistory({ isNavOpen }) {
     };
 
     loadData();
-  }, [axiosPrivate]);
+  }, [axiosPrivate, filters]);
 
   return (
     <div className={`body ${isNavOpen ? "body-squeezed" : ""}`}>
       <div className="admin-users">
         <h2>{t('rolesAdminHistory.title')}</h2>
+
+        <RoleAdminHistoryFilter setFilters={setFilters} />
+
         {error && (
           <p className="error-message">{error}</p>
         )}
