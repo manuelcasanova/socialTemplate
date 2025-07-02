@@ -503,7 +503,7 @@
     "systemRoles": "System Roles",
     "create": "Create",
     "roleNameRequired": "Role name is required",
-    "roleNameRegex": "Role name must be 1–25 characters and can only include letters, numbers, spaces, hyphens, and underscores."
+    "roleNameRegex": "Role name must be 1–25 characters and can only include letters, numbers, spaces, hyphens, dots, and underscores."
   },
   "rolesAdminHistory": {
     "roleId": "Role ID",

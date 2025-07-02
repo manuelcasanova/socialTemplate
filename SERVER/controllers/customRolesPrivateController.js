@@ -7,7 +7,7 @@ const updateCustomRole = async (req, res) => {
 
   const trimmedName = role_name.trim();
 
-  if (!role_name || !/^[A-Za-z0-9 _-]{1,25}$/.test(trimmedName)) {
+  if (!role_name || !/^[A-Za-z0-9 _.-]{1,25}$/.test(trimmedName)) {
     return res.status(400).json({ message: 'Invalid role name.' });
   }
 
@@ -154,11 +154,12 @@ const createCustomRole = async (req, res) => {
   }
 
   const trimmedName = role_name.trim();
-  const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
+  const roleNameRegex = /^[A-Za-z0-9 _.-]{1,25}$/;
+
 
   if (!roleNameRegex.test(trimmedName)) {
     return res.status(400).json({
-      message: 'Role name must be 1–25 characters long and contain only letters, numbers, spaces, hyphens, or underscores.'
+      message: 'Role name must be 1–25 characters long and contain only letters, numbers, spaces, hyphens, dots or underscores.'
     });
   }
 

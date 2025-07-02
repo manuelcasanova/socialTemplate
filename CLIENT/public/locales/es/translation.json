@@ -493,7 +493,7 @@
     "systemRoles": "Roles del Sistema",
     "create": "Crear",
     "roleNameRequired": "El nombre del rol es obligatorio",
-    "roleNameRegex": "El nombre del rol debe tener entre 1 y 25 caracteres y solo puede incluir letras, números, espacios, guiones y guiones bajos."
+    "roleNameRegex": "El nombre del rol debe tener entre 1 y 25 caracteres y solo puede incluir letras, números, espacios, guiones, puntos y guiones bajos."
   },
   "rolesAdminHistory": {
     "roleId": "ID de rol",

@@ -38,7 +38,8 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
   const handleCreateRole = async () => {
 
     const trimmedName = newRoleName.trim();
-    const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
+    const roleNameRegex = /^[A-Za-z0-9 _.-]{1,25}$/;
+
 
     if (!trimmedName) {
       setErrorMessage(t('adminRoles.roleNameRequired'));

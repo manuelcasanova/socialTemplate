@@ -45,7 +45,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const inputRef = useRef(null);
   const [showInput, setShowInput] = useState(false)
-  const roleNameRegex = /^[A-Za-z0-9 _-]{1,25}$/;
+  const roleNameRegex = /^[A-Za-z0-9 _.-]{1,25}$/;
   const [showCustomRolesInfo, setCustomRolesInfo] = useState(false);
 
   const handleShowCustomRolesInfo = () => {
