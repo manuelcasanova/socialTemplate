@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function Signup({ isNavOpen, screenWidth }) {
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const regexPatterns = {
     //username: /^[A-z][A-z0-9-_]{3,23}$/,
@@ -129,7 +129,11 @@ export default function Signup({ isNavOpen, screenWidth }) {
     try {
       const response = await axios.post(
         '/signup',
-        JSON.stringify(formData),
+        JSON.stringify({
+          formData,
+          language: i18n.language
+        }
+        ),
         {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true
@@ -166,12 +170,12 @@ export default function Signup({ isNavOpen, screenWidth }) {
             setErrMsg(err.response.data.message || 'An error occurred during signup.');
           }
         } else if (status === 409) {
-            setErrMsg(t('signup.errors.usernameOrEmailTaken'));
+          setErrMsg(t('signup.errors.usernameOrEmailTaken'));
         } else {
-            setErrMsg(t('signup.errors.noServerResponse'));
+          setErrMsg(t('signup.errors.noServerResponse'));
         }
       } else {
-          setErrMsg(t('signup.errors.noServerResponse'));
+        setErrMsg(t('signup.errors.noServerResponse'));
       }
       errRef.current.focus();
     } finally {
@@ -209,9 +213,9 @@ export default function Signup({ isNavOpen, screenWidth }) {
       console.error('Google Sign-Up Error:', err);
 
       if (err?.response?.status === 409) {
-         setErrMsg(t('signup.errors.userEmailExists'));
+        setErrMsg(t('signup.errors.userEmailExists'));
       } else {
-          setErrMsg(t('signup.errors.googleSignupFailed'));
+        setErrMsg(t('signup.errors.googleSignupFailed'));
       }
 
       errRef.current?.focus();
@@ -239,7 +243,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
         setSuccess(true);
       }
     } catch (err) {
-        setErrMsg(t('signup.errors.errorRestoringAccount'));
+      setErrMsg(t('signup.errors.errorRestoringAccount'));
       errRef.current.focus();
     } finally {
       setLoading(false); // Stop the spinner after process is complete
@@ -377,7 +381,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
                       <div className="spinner__circle"></div>
                     </div>
                   ) : (
-                   t('signup.signUpTitle')
+                    t('signup.signUpTitle')
                   )}
                 </button>
               </form>

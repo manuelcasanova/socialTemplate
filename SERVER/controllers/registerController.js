@@ -17,7 +17,8 @@ let forceCreateNew = false;
 
 const handleNewUser = async (req, res) => {
     validateEmailConfig();
-    let { user, pwd, email, role, restoreAction } = req.body;
+    let { user, pwd, email, role, restoreAction } = req.body.formData;
+    let {language} = req.body
 
     if (!user || !pwd || !email) {
         return res.status(400).json({ 'message': 'Username, email, and password are required.' });
@@ -82,8 +83,8 @@ const handleNewUser = async (req, res) => {
         }
 
         // Step 3: If no soft-deleted account, proceed with creating a new user
-        const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified) VALUES ($1, $2, $3, false) RETURNING user_id';
-        const userInsertResult = await pool.query(insertUserQuery, [user, email, hashedPwd]);
+        const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified, language) VALUES ($1, $2, $3, false, $4) RETURNING user_id';
+        const userInsertResult = await pool.query(insertUserQuery, [user, email, hashedPwd, language]);
 
         // Get the user_id of the newly inserted user
         const newUserId = userInsertResult.rows[0].user_id;
@@ -288,8 +289,8 @@ const handleGoogleSignUp = async (req, res) => {
       }
   
       // Proceed to create a new user with the decoded token details
-      const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified) VALUES ($1, $2, $3, true) RETURNING user_id';
-      const userInsertResult = await pool.query(insertUserQuery, [username, email, 'google_auth_token']); // Store 'google_auth_token' as a placeholder password
+      const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified, language) VALUES ($1, $2, $3, true, $4) RETURNING user_id';
+      const userInsertResult = await pool.query(insertUserQuery, [username, email, 'google_auth_token', language]); // Store 'google_auth_token' as a placeholder password
       const newUserId = userInsertResult.rows[0].user_id;
   
       // Handle user roles and verification (can be skipped or modified as needed)

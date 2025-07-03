@@ -35,7 +35,8 @@ CREATE TABLE users (
   is_active BOOLEAN DEFAULT true,
   refresh_token VARCHAR(255),
   profile_picture VARCHAR(255),
-  location VARCHAR(255)
+  location VARCHAR(255),
+  language VARCHAR(10) DEFAULT 'en'
 );
 
 CREATE TABLE roles (
@@ -268,6 +269,8 @@ CREATE TABLE admin_settings (
 
 );
 
+/*
+
 -- =======================
 -- Grants to udokm633_manuelcasanova
 -- =======================
@@ -316,3 +319,5 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633;
 -- Ensure all new sequences grant all privileges by default
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633;
+
+*/
