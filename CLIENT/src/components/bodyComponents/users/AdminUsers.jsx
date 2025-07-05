@@ -29,6 +29,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
+
   const [error, setError] = useState('');
   const prevError = useRef(null);
   const [filters, setFilters] = useState({ is_active: true });
@@ -38,7 +39,6 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
   const [isLoading, setIsLoading] = useState(false);
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
-
   const loggedInUser = auth.userId
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -236,7 +236,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                             <ul>
 
                               {[...new Set([
-                                ...roles,
+                                  ...roles.filter(role => isSuperAdmin || role !== 'SuperAdmin'), 
                                 ...(customRoles?.map(r => r.role_name) || []),
                                 ...(isSuperAdmin ? ['SuperAdmin'] : []),  // Only include SuperAdmin if the user is a SuperAdmin
                               ])].map((role, index) => (

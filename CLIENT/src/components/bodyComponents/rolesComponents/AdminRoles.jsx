@@ -245,13 +245,6 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
           </div>
         )}
 
-        <button
-          className="button-white"
-          style={{ alignSelf: 'start', marginTop: '1em' }}
-          onClick={() => navigate(`/admin/superadmin/roleadminhistory`)}
-        >{t('adminRoles.accessRoleAdministrationHistory')}</button>
-
-
         {!isLoading && !error && customRoles && (
           <ul>
             {customRoles
@@ -403,10 +396,17 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
           <p style={{ color: 'red', marginTop: '0.5em' }}>{regexError}</p>
         )}
 
+        <button
+          className="button-white"
+          style={{ alignSelf: 'start', marginTop: '1em' }}
+          onClick={() => navigate(`/admin/superadmin/roleadminhistory`)}
+        >{t('adminRoles.accessRoleAdministrationHistory')}</button>
+
         <h3>{t('adminRoles.systemRoles')}</h3>
         {!isLoading && !error && systemRoles && (
           <ul>
             {systemRoles
+              .filter(role => role !== 'SuperAdmin' || isSuperAdmin)
               .map(role => (
                 <li className="admin-roles-line" key={role}>{role}</li>
               ))}

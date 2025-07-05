@@ -269,7 +269,7 @@ CREATE TABLE admin_settings (
 
 );
 
-/*
+
 
 -- =======================
 -- Grants to udokm633_manuelcasanova
@@ -320,4 +320,3 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO udokm633;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT ALL PRIVILEGES ON SEQUENCES TO udokm633;
 
-*/
