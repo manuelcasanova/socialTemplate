@@ -80,8 +80,8 @@
 .profile-actions-button {
   margin: 0em 0.5em 0.5em 0.5em;
   padding: 0.5em;
-  min-width: 200px;
-
+  min-width: 300px;
+max-width: 300px;
 }
 
 .profile-info p{

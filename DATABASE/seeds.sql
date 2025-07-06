@@ -148,17 +148,17 @@ INSERT INTO admin_settings (
 
 INSERT INTO posts (sender, content, date, visibility, is_deleted)
 VALUES
-  (1, 'Hi! Welcome to the app. Play with this post. Flag it as inappropriate, log in as an administrator or a moderator and approve it or hide it!', CURRENT_TIMESTAMP - INTERVAL '25 hours', 'public', false),
+  (2, 'Hi! Welcome to the app. Play with this post. Flag it as inappropriate, log in as an administrator or a moderator and approve it or hide it!', CURRENT_TIMESTAMP - INTERVAL '25 hours', 'public', false),
 
-  (1, 'You can write your own posts, privately, for followers only or open to the public!', CURRENT_TIMESTAMP - INTERVAL '24 hours', 'public', false),
+  (2, 'You can write your own posts, privately, for followers only or open to the public!', CURRENT_TIMESTAMP - INTERVAL '24 hours', 'public', false),
 
-  (1, 'Try commenting one of the posts, flag the comment as inappropriate and manage it as a moderator.', CURRENT_TIMESTAMP - INTERVAL '23 hours', 'public', false),
+  (2, 'Try commenting one of the posts, flag the comment as inappropriate and manage it as a moderator.', CURRENT_TIMESTAMP - INTERVAL '23 hours', 'public', false),
 
-  (1, 'React to a post or comment, thumbs up, smile, laugh…', CURRENT_TIMESTAMP - INTERVAL '22 hours', 'public', false),
+  (2, 'React to a post or comment, thumbs up, smile, laugh…', CURRENT_TIMESTAMP - INTERVAL '22 hours', 'public', false),
 
-  (1, 'Login as an administrator and play with all the features. Modify your own user’s roles, for example.', CURRENT_TIMESTAMP - INTERVAL '21 hours', 'public', false),
+  (2, 'Login as an administrator and play with all the features. Modify your own user’s roles, for example.', CURRENT_TIMESTAMP - INTERVAL '21 hours', 'public', false),
 
-  (1, 'Follow a user, send private messages, mute a user so they cannot interact with you (you won’t be able to see their posts or comments either).', CURRENT_TIMESTAMP - INTERVAL '20 hours', 'public', false);
+  (2, 'Follow a user, send private messages, mute a user so they cannot interact with you (you won’t be able to see their posts or comments either).', CURRENT_TIMESTAMP - INTERVAL '20 hours', 'public', false);
 
   
 

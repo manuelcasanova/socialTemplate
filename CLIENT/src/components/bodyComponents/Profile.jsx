@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { axiosPrivate } from "../../api/axios";
 import imageCompression from 'browser-image-compression';
 import { useTranslation } from 'react-i18next';
+import i18next from "i18next";
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../context/SuperAdminSettingsProvider";
@@ -27,11 +28,9 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 const MAX_FILE_SIZE_MB = 0.1; // 100KB target
 const MAX_DIMENSION = 1024;   // Resize down to this if larger
 
-
-
 const validateInput = (t, editMode, value, confirmPwd = "") => {
   let regex, errorMessage;
-  
+
 
   if (editMode === "username") {
     regex = /^[A-z][A-z0-9-_ ]{3,23}$/
@@ -82,6 +81,19 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const logout = useLogout();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const languages = [
+    { code: "en", name: "English" },
+    { code: "es", name: "Español" },
+    { code: "fr", name: "Français" },
+  ];
+  const [selectedLanguage, setSelectedLanguage] = useState(i18next.language);
+
+  console.log('selectedLanguage', selectedLanguage)
+
+  const handleLanguageChange = (language) => {
+    i18next.changeLanguage(language);
+    setSelectedLanguage(language);
+  };
 
   const signOut = async () => {
     await logout();
@@ -90,14 +102,14 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
   const inputRef = useRef(null);
 
-useEffect(() => {
-  // Reset inputs whenever editMode changes
-  setInputValue("");
-  setConfirmPwd("");
-  setConfirmEmail("");
-  setIsInputValid(false);
-  setError("");
-}, [editMode]);
+  useEffect(() => {
+    // Reset inputs whenever editMode changes
+    setInputValue("");
+    setConfirmPwd("");
+    setConfirmEmail("");
+    setIsInputValid(false);
+    setError("");
+  }, [editMode]);
 
   useEffect(() => {
     // Focus the input when the editMode changes
@@ -153,7 +165,7 @@ useEffect(() => {
       };
 
       const compressedFile = await imageCompression(selectedFile, options);
- 
+
       selectedFile = compressedFile;
       setFileName(selectedFile.name || t('profile.noFileChosen'));
 
@@ -220,7 +232,6 @@ useEffect(() => {
     }
   };
 
-
   const placeholderText = {
     username: t('profile.enterNewUsername'),
     email: t('profile.enterNewEmail'),
@@ -237,8 +248,8 @@ useEffect(() => {
     setInputValue(value);
 
     if (editMode === "email") {
-    const emailValidation = validateInput(t, "email", value);
-     const matchEmailValidation = validateInput(t, "matchEmail", value, confirmEmail);
+      const emailValidation = validateInput(t, "email", value);
+      const matchEmailValidation = validateInput(t, "matchEmail", value, confirmEmail);
 
       setIsInputValid(emailValidation.valid && matchEmailValidation.valid);
       setError(emailValidation.valid ? matchEmailValidation.message : emailValidation.message);
@@ -381,7 +392,7 @@ useEffect(() => {
                   />
 
                   {/* Text for chosen file */}
-                  <span className="file-name">{fileName ||  t('profile.noFileChosen')}</span>
+                  <span className="file-name">{fileName || t('profile.noFileChosen')}</span>
 
                   <div
                     onDrop={(e) => {
@@ -408,7 +419,7 @@ useEffect(() => {
                       id="file-upload"
                     />
                     <label htmlFor="file-upload" style={{ cursor: 'pointer', color: '#007bff' }}>
-                     { t('profile.clickToChoose')}
+                      {t('profile.clickToChoose')}
                     </label>
                   </div>
 
@@ -460,6 +471,23 @@ useEffect(() => {
                   {t('profile.editPassword')}
                 </button>
               }
+
+              <>
+                <select
+                  style={{ width: '300px', minHeight: '35px', margin: 'auto', marginBottom: '0.5em' }}
+                  value={selectedLanguage}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  ref={inputRef}
+                >
+               
+                  {languages.map(({ code, name }) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </>
+
               {
                 !showConfirmDelete &&
                 ((superAdminSettings.allowDeleteMyUser && adminSettings.allowDeleteMyUser) || isSuperAdmin) &&
@@ -467,7 +495,7 @@ useEffect(() => {
                   className="profile-actions-button button-red"
                   onClick={handleDeleteClick}
                 >
-                 {t('profile.deleteAccount')}
+                  {t('profile.deleteAccount')}
                 </button>
               }
               {showConfirmDelete &&
@@ -535,14 +563,14 @@ useEffect(() => {
                   {error && <div className="profile-input-instructions">{error}</div>}
 
                   {/* Update button */}
-                  <button
-                    onClick={handleUpdate}
-                    className="button-white"
-                    disabled={!isInputValid || inputValue.trim() === ""}
-                  >
-                     {t('profile.update')}
-                  </button>
 
+                    <button
+                      onClick={handleUpdate}
+                      className="button-white"
+                      disabled={!isInputValid || inputValue.trim() === ""}
+                    >
+                      {t('profile.update')}
+                    </button>
 
                 </>
               )}
