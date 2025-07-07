@@ -29,6 +29,8 @@ const LanguageSelector = ({ userId, setError }) => {
       // Send the selected language to the backend
       const response = await axiosPrivate.put('/users/update-language', { language, userId });
 
+          setIsDropdownOpen(false);
+
     } catch (error) {
       console.error('Error saving language:', error);
       setError(t('profile.errorSavingLanguage'));
@@ -36,6 +38,8 @@ const LanguageSelector = ({ userId, setError }) => {
   };
   // Find the selected language name based on the code
   const selectedLanguageName = languages.find(lang => lang.code === selectedLanguage)?.name || 'Select Language';
+
+      console.log(t('profile.language'));
 
   return (
     <div className="language-selector">
@@ -45,6 +49,8 @@ const LanguageSelector = ({ userId, setError }) => {
         onClick={toggleDropdown}
       >
       {`${t('profile.language')}: ${selectedLanguageName}`}
+
+
 
 
       </button>
