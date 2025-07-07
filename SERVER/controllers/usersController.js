@@ -480,8 +480,6 @@ const adminVersionSoftDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
     const requestingUserId = req.body.loggedInUser
 
-    console.log(userId, requestingUserId)
-
     try {
 
         // Prevent users from deleting their own account

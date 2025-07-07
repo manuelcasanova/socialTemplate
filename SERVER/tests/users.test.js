@@ -27,7 +27,7 @@ it('should return an empty array when there are no users', (done) => {
       .expect('Content-Type', /json/)
       .end((err, res) => {
         if (err) return done(err);
-        console.log('Response body:', res.body); // Log the response body
+        // console.log('Response body:', res.body); // Log the response body
         expect(res.body).to.deep.equal([]); // Expect an empty array
         done();
       });

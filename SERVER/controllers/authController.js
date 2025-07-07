@@ -45,6 +45,8 @@ const handleLogin = async (req, res) => {
 
                 const roles = roleData.rows.map(role => role.role_name);
 
+                const preferredLanguage = foundEmail[0].language || 'en'; // Default to 'en' if not set
+
                 // Check if the user has any unread messages (status = 'sent')
                 const unreadMessages = await pool.query(
                     'SELECT * FROM user_messages WHERE receiver = $1 AND status = $2',
@@ -76,7 +78,7 @@ const handleLogin = async (req, res) => {
 
                 // Create JWTs
                 const accessToken = jwt.sign(
-                    { "UserInfo": { "email": foundEmail[0].email, "roles": roles } },
+                    { "UserInfo": { "email": foundEmail[0].email, "roles": roles, "preferred_language": preferredLanguage } },
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '5m' } //5m
                 );
@@ -95,7 +97,7 @@ const handleLogin = async (req, res) => {
                 });
                 // console.log(`Does User ID ${userId} have new messages? ${hasNewMessages}`)
                 // Return the response with the access token, user ID, and roles
-                res.json({ userId, roles, accessToken, hasNewMessages, hasPostReports, hasCommentsReports });
+                res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports });
 
             } else {
                 res.status(401).json({ error: "Wrong email or password" });
@@ -277,13 +279,15 @@ const handleFirebaseLogin = async (req, res) => {
             return res.status(404).json({ error: 'User not registered.' });
         }
 
+            const preferredLanguage = user.language || 'en'; // Get preferred language
+
         // Generate JWT tokens
         const userId = user.user_id;
         const roleData = await pool.query('SELECT r.role_name FROM roles r JOIN user_roles ur ON ur.role_id = r.role_id WHERE ur.user_id = $1', [userId]);
         const roles = roleData.rows.map(role => role.role_name);
 
         const accessToken = jwt.sign(
-            { "UserInfo": { "email": email, "roles": roles } },
+            { "UserInfo": { "email": email, "roles": roles, "preferred_language": preferredLanguage } },
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: '5m' } //5m
         );
@@ -332,7 +336,7 @@ const handleFirebaseLogin = async (req, res) => {
         });
 
         // Send the response with the generated tokens
-        res.json({ userId, roles, accessToken, hasNewMessages, hasPostReports, hasCommentsReports });
+        res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports });
     } catch (error) {
         console.error('Error during Firebase login:', error);
         res.status(500).json({ error: 'Internal Server Error' });

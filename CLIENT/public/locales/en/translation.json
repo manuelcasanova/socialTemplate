@@ -167,6 +167,7 @@
     "unexpectedStatus": "Unexpected response status: "
   },
   "profile": {
+    "language": "Language",
     "myAccount": "My account",
     "signIn": "Sign in",
     "signOut": "Sign out",

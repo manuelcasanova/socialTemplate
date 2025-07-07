@@ -97,8 +97,6 @@ router.route('/')
     }
   );
 
-
-
 // Update user profile
 router.route('/update')
   .put(
@@ -164,6 +162,56 @@ router.route('/update')
     usersController.updateUser
   );
 
+// Update user language preference
+router.route('/update-language')
+  .put(
+    async (req, res, next) => {
+      try {
+        const { language, userId } = req.body;  // Destructure language and userId from request body
+
+        if (!language) {
+          return res.status(400).json({ message: 'Language is required.' });
+        }
+
+        // Validate language (example, only accepting certain languages)
+        const validLanguages = ['en', 'es', 'fr']; // Add all allowed languages here
+        if (!validLanguages.includes(language)) {
+          return res.status(400).json({ message: 'Invalid language selected.' });
+        }
+
+        // Fetch roles and verify permissions (you can adjust these roles according to your need)
+        const rolesList = await fetchRoles();
+
+        // Verify if the roles are allowed to proceed
+        const verifyResult = await new Promise((resolve, reject) => {
+          verifyRoles(...rolesList)(req, res, (err) => {
+            if (err) reject(err);  // If there's an error, reject the promise
+            resolve();  // If no error, resolve the promise
+          });
+        });
+
+        // Now, update the user's language in the database
+        const result = await pool.query(`
+          UPDATE users 
+          SET language = $1 
+          WHERE user_id = $2
+          RETURNING *;
+        `, [language, userId]);
+
+        if (result.rowCount > 0) {
+          return res.status(200).json({
+            message: 'Language updated successfully.',
+            user: result.rows[0] // Optionally return updated user data
+          });
+        } else {
+          return res.status(404).json({ message: 'User not found.' });
+        }
+
+      } catch (err) {
+        next(err);  // Pass the error to the next middleware (error handler)
+      }
+    }
+  );
 
 
 

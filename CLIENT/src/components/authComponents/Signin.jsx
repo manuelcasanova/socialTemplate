@@ -36,7 +36,7 @@ const DEFAULT_PASSWORD = 'G7m!pLz@92aT';  // Hardcoded default password for deve
 
 const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsReports, setHasPostReports }) => {
 
-  const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const { adminSettings } = useGlobalAdminSettings();
 
@@ -68,15 +68,15 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
     // Password ref to access password value directly without state
     const passwordRef = useRef();
 
-useEffect(() => {
-    if (passwordRef.current) {
-        if (email.trim().toLowerCase() === 'admin@socialtemplate.manucasanova.com') {
-            passwordRef.current.value = DEFAULT_PASSWORD;
-        } else {
-            passwordRef.current.value = '';
+    useEffect(() => {
+        if (passwordRef.current) {
+            if (email.trim().toLowerCase() === 'admin@socialtemplate.manucasanova.com') {
+                passwordRef.current.value = DEFAULT_PASSWORD;
+            } else {
+                passwordRef.current.value = '';
+            }
         }
-    }
-}, [email]);
+    }, [email]);
 
     useEffect(() => {
         userRef.current?.focus();
@@ -122,23 +122,26 @@ useEffect(() => {
             // Now you can send the Firebase user data to your backend for further processing, like storing tokens
             const response = await axios.post('/auth/firebase-login', { email, displayName, uid }, { withCredentials: true });
 
-            const { userId, roles, accessToken, hasNewMessages, hasPostReports, hasCommentsReports } = response?.data;
+            const { userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports } = response?.data;
 
             setHasNewMessages(hasNewMessages);
             setHasPostReports(hasPostReports);
             setHasCommentsReports(hasCommentsReports);
+
+            // Set the user's preferred language
+            i18n.changeLanguage(preferredLanguage);
 
             setAuth({ userId, displayName, email, roles, accessToken });
 
             navigate(from, { replace: true });
         } catch (error) {
             console.error("Google Sign-In Error", error);
-        
+
             const errorCode = error?.code;
             const status = error?.response?.status;
             const serverError = error?.response?.data?.error;
             const message = error?.message;
-        
+
             if (errorCode === 'auth/popup-closed-by-user') {
                 setErrMsg(t('signin.popupClosed'));
 
@@ -153,7 +156,7 @@ useEffect(() => {
             } else {
                 setErrMsg(serverError || message || t('signin.errors.serverUnreachable'));
             }
-        
+
         } finally {
             setIsLoading(false);
         }
@@ -169,33 +172,33 @@ useEffect(() => {
     };
 
     const mapErrorKey = (message) => {
-    switch (message) {
-        case "Please verify your email before logging in. Check your spam folder":
-            return "verifyEmail";
-        case "Login Failed":
-            return "loginFailed";
-        case "No Server Response":
-            return "noServerResponse";
-        default:
-            return "loginFailed"; // fallback
-    }
-};
-
-const handleError = (err) => {
-    const errorMessage = err?.response?.data?.error || t('signin.errors.loginFailed');
-
-    if (err?.response?.data?.error) {
-        setErrMsg(t(`signin.errors.${mapErrorKey(errorMessage)}`));
-
-        if (errorMessage === "Please verify your email before logging in. Check your spam folder") {
-            setIsVerified(false);
+        switch (message) {
+            case "Please verify your email before logging in. Check your spam folder":
+                return "verifyEmail";
+            case "Login Failed":
+                return "loginFailed";
+            case "No Server Response":
+                return "noServerResponse";
+            default:
+                return "loginFailed"; // fallback
         }
-    } else {
-        setErrMsg(t('signin.errors.noServerResponse'));
-    }
+    };
 
-    errRef.current.focus();
-};
+    const handleError = (err) => {
+        const errorMessage = err?.response?.data?.error || t('signin.errors.loginFailed');
+
+        if (err?.response?.data?.error) {
+            setErrMsg(t(`signin.errors.${mapErrorKey(errorMessage)}`));
+
+            if (errorMessage === "Please verify your email before logging in. Check your spam folder") {
+                setIsVerified(false);
+            }
+        } else {
+            setErrMsg(t('signin.errors.noServerResponse'));
+        }
+
+        errRef.current.focus();
+    };
 
 
     const handleSubmit = async (e) => {
@@ -207,7 +210,7 @@ const handleError = (err) => {
 
         try {
             const response = await authenticateUser(password);
-            const { accessToken, userId, roles, hasNewMessages, hasPostReports, hasCommentsReports } = response?.data || {};
+            const { accessToken, userId, roles, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports } = response?.data || {};
 
             // console.log('response.data', response.data)
 
@@ -215,6 +218,8 @@ const handleError = (err) => {
             setHasPostReports(hasPostReports);
             setHasCommentsReports(hasCommentsReports);
             setAuth({ userId, user, email, roles, accessToken });
+            // Set the user's preferred language
+            i18n.changeLanguage(preferredLanguage);
             resetUser();
             passwordRef.current.value = '';
             navigate(from, { replace: true });
@@ -349,7 +354,7 @@ const handleError = (err) => {
                                     onClick={handleShowSignUpWithEmail}
                                     disabled={isLoading}>
                                     <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
-                                   {t('signin.signInWithEmail')}
+                                    {t('signin.signInWithEmail')}
                                 </button>
 
 
@@ -373,11 +378,11 @@ const handleError = (err) => {
                     <Link to="/signup">{t('signin.signUp')}</Link>
                 </div>
 
-                    <div className="have-an-account">
-                        <p>{t('signin.forgotPassword')}</p>
-                        <Link to="/resetpassword">{t('signin.reset')}</Link>
-                    </div>
-                
+                <div className="have-an-account">
+                    <p>{t('signin.forgotPassword')}</p>
+                    <Link to="/resetpassword">{t('signin.reset')}</Link>
+                </div>
+
 
             </div>
         </div >

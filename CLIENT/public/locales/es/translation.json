@@ -159,6 +159,7 @@
     "unexpectedStatus": "Estado de respuesta inesperado: "
   },
   "profile": {
+    "language": "Idioma",
     "myAccount": "Mi cuenta",
     "signIn": "Iniciar sesión",
     "signOut": "Cerrar sesión",

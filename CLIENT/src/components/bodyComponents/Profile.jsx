@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { axiosPrivate } from "../../api/axios";
 import imageCompression from 'browser-image-compression';
 import { useTranslation } from 'react-i18next';
-import i18next from "i18next";
+
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../context/SuperAdminSettingsProvider";
@@ -19,6 +19,7 @@ import '../../css/Profile.css';
 
 
 //Components
+import ProfileLanguageSelector from "./ProfileLanguageSelector";
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Error from "./Error";
 
@@ -81,19 +82,6 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const logout = useLogout();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "es", name: "Español" },
-    { code: "fr", name: "Français" },
-  ];
-  const [selectedLanguage, setSelectedLanguage] = useState(i18next.language);
-
-  console.log('selectedLanguage', selectedLanguage)
-
-  const handleLanguageChange = (language) => {
-    i18next.changeLanguage(language);
-    setSelectedLanguage(language);
-  };
 
   const signOut = async () => {
     await logout();
@@ -472,21 +460,12 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 </button>
               }
 
-              <>
-                <select
-                  style={{ width: '300px', minHeight: '35px', margin: 'auto', marginBottom: '0.5em' }}
-                  value={selectedLanguage}
-                  onChange={(e) => handleLanguageChange(e.target.value)}
-                  ref={inputRef}
-                >
-               
-                  {languages.map(({ code, name }) => (
-                    <option key={code} value={code}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </>
+     
+
+  <ProfileLanguageSelector userId={userId} setError={setError}/>
+
+
+       
 
               {
                 !showConfirmDelete &&
