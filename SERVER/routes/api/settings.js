@@ -288,4 +288,30 @@ router.route('/global-provider/toggleAllowAdminDeleteCustomRole')
   settingsController.toggleAllowAdminDeleteCustomRole
 );
 
+//Superadmin visibility
+router.route('/global-provider/toggleShowSuperAdminInUsersAdmin')
+  .put(
+    async (req, res, next) => {
+      try {
+        verifyRoles('SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    settingsController.toggleShowSuperAdminInUsersAdmin
+  );
+
+  router.route('/global-provider/toggleShowSuperAdminInSocial')
+  .put(
+    async (req, res, next) => {
+      try {
+        verifyRoles('SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    settingsController.toggleShowSuperAdminInSocial
+  );
+
+
 module.exports = router;

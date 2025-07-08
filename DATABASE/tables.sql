@@ -232,7 +232,10 @@ CREATE TABLE global_provider_settings (
   show_manage_roles_feature BOOLEAN NOT NULL DEFAULT TRUE,
   allow_admin_create_custom_role BOOLEAN NOT NULL DEFAULT TRUE,
   allow_admin_edit_custom_role BOOLEAN NOT NULL DEFAULT TRUE,
-  allow_admin_delete_custom_role BOOLEAN NOT NULL DEFAULT TRUE
+  allow_admin_delete_custom_role BOOLEAN NOT NULL DEFAULT TRUE,
+
+  show_superadmin_in_users_admin BOOLEAN NOT NULL DEFAULT TRUE,
+  show_superadmin_in_social BOOLEAN NOT NULL DEFAULT TRUE
 
 );
 

@@ -44,6 +44,9 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_admin_edit_custom_role,
         allow_admin_delete_custom_role
 
+        show_superadmin_in_users_admin,
+        show_superadmin_in_social
+
       FROM global_provider_settings
     `);
 
@@ -1224,6 +1227,66 @@ const toggleAllowAdminDeleteCustomRole = async (req, res) => {
   }
 };
 
+const toggleShowSuperAdminInUsersAdmin = async (req, res) => {
+  try {
+    const { show_superadmin_in_users_admin } = req.body;
+
+    if (typeof show_superadmin_in_users_admin !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for show_superadmin_in_users_admin . Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET show_superadmin_in_users_admin = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [show_superadmin_in_users_admin ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const toggleShowSuperAdminInSocial= async (req, res) => {
+  try {
+    const { show_superadmin_in_social } = req.body;
+
+    if (typeof show_superadmin_in_social !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for show_superadmin_in_social . Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET show_superadmin_in_social = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [show_superadmin_in_social ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
 
 module.exports = {
   getGlobalProviderSettings,
@@ -1265,7 +1328,10 @@ module.exports = {
   toggleShowCustomRolesFeature,
   toggleAllowAdminCreateCustomRole,
   toggleAllowAdminEditCustomRole,
-  toggleAllowAdminDeleteCustomRole
+  toggleAllowAdminDeleteCustomRole,
+
+  toggleShowSuperAdminInUsersAdmin,
+  toggleShowSuperAdminInSocial
 
 };
 

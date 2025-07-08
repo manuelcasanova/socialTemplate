@@ -49,6 +49,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
           setAllowFlagPosts(settings?.allow_flag_posts ?? false);
           setAllowDeleteComments(settings?.allow_delete_comments ?? false);
           setAllowFlagComments(settings?.allow_flag_comments ?? false);
+          setShowSuperAdminInUsersAdmin(settings?.show_superadmin_in_users_admin ?? false);
         }
       } catch (err) {
         setError(err); // set error to be consumed by components
@@ -72,6 +73,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
   const [allowFlagPosts, setAllowFlagPosts] = useState(false);
   const [allowDeleteComments, setAllowDeleteComments] = useState(false);
   const [allowFlagComments, setAllowFlagComments] = useState(false);
+
 
   // Toggle functions
 
@@ -931,7 +933,59 @@ export const SuperAdminSettingsProvider = ({ children }) => {
 
   // ------- END CUSTOM ROLES SETTINGS ------- //
 
+  // ------- BEGIN SUPER ADMIN VISIBILITY SETTINGS ------- //
 
+  const [showSuperAdminInUsersAdmin, setShowSuperAdminInUsersAdmin] = useState(false);
+  const [showSuperAdminInSocial, setShowSuperAdminInSocial] = useState(false)
+
+
+  useEffect(() => {
+    if (!auth?.accessToken) return;
+    const fetchSettings = async () => {
+      const settings = await getGlobalProviderSettings();
+
+      if (settings) {
+        setShowSuperAdminInUsersAdmin(settings?.show_superadmin_in_users_admin ?? false);
+        setShowSuperAdminInSocial(settings?.show_superadmin_in_social ?? false);
+      }
+    };
+    fetchSettings();
+  }, [auth?.accessToken]);
+
+
+  const toggleShowSuperAdminInUsersAdmin = async () => {
+
+    const newValue = !showSuperAdminInUsersAdmin;
+
+    setShowSuperAdminInUsersAdmin(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleShowSuperAdminInUsersAdmin', {
+        show_superadmin_in_users_admin: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update setting:', err);
+      setShowSuperAdminInUsersAdmin(prev => !prev);
+      setError(err.message)
+    }
+  };
+
+  const toggleShowSuperAdminInSocial = async () => {
+
+    const newValue = !showSuperAdminInSocial;
+
+    setShowSuperAdminInSocial(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleShowSuperAdminInSocial', {
+        show_superadmin_in_social: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update setting:', err);
+      setShowSuperAdminInSocial(prev => !prev);
+      setError(err.message)
+    }
+  };
+
+  // ------- END SUPER ADMIN VISIBILITY SETTINGS ------- //
 
   const superAdminSettings = {
 
@@ -974,6 +1028,9 @@ export const SuperAdminSettingsProvider = ({ children }) => {
     allowAdminEditCustomRole,
     allowAdminDeleteCustomRole,
 
+    showSuperAdminInUsersAdmin,
+    showSuperAdminInSocial,
+
     setShowPostsFeature,
 
     setAllowUserPost,
@@ -1013,6 +1070,9 @@ export const SuperAdminSettingsProvider = ({ children }) => {
     setAllowAdminEditCustomRole,
     setAllowAdminDeleteCustomRole,
 
+    setShowSuperAdminInUsersAdmin,
+    setShowSuperAdminInSocial,
+
     toggleShowPostsFeature,
     toggleAllowUserPost,
     toggleAllowAdminPost,
@@ -1049,7 +1109,10 @@ export const SuperAdminSettingsProvider = ({ children }) => {
     toggleShowCustomRolesFeature,
     toggleAllowAdminCreateCustomRole,
     toggleAllowAdminEditCustomRole,
-    toggleAllowAdminDeleteCustomRole
+    toggleAllowAdminDeleteCustomRole,
+
+    toggleShowSuperAdminInUsersAdmin,
+    toggleShowSuperAdminInSocial
   };
 
   // console.log("superAdminSettings in Global Provider", superAdminSettings)

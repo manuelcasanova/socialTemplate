@@ -493,13 +493,13 @@ export default function SuperAdminSetup({ isNavOpen }) {
               </div>
             </div>
             <div className='admin-setup-line-text'>{t('appSetup.usersCanEditEmail')}</div>
-           
+
             <div
               onClick={handleShowInfoMessage}
               className='info-button'>i</div>
           </div>
 
-          {showInfoMessage && <div className='info-message' style={{marginBottom: '1em'}}>{t('appSetup.emailInfoMessage')}</div>}
+          {showInfoMessage && <div className='info-message' style={{ marginBottom: '1em' }}>{t('appSetup.emailInfoMessage')}</div>}
 
           <div className='admin-setup-line'>
             <div className="toggle-container">
@@ -598,7 +598,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
             </label>
           </div>
         </div>
-              {superAdminSettings.showCustomRolesFeature ?
+        {superAdminSettings.showCustomRolesFeature ?
           <div className='admin-setup-line-text'>{t('appSetup.enableCustomRoles')}</div>
           :
           <div className='admin-setup-line-text'>{t('appSetup.disableCustomRoles')}</div>
@@ -659,7 +659,48 @@ export default function SuperAdminSetup({ isNavOpen }) {
         <div className='admin-setup-line-text'>{t('appSetup.adminsCanDeleteCustomRole')}</div>
       </div>
 
+      <h4 className='admin-setup-subtitle'>{t('appSetup.sectionVisibility')}</h4>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="showSuperAdminInUsersAdmin"
+              className="toggle-checkbox"
+              checked={superAdminSettings.showSuperAdminInUsersAdmin}
+              onChange={superAdminSettings.toggleShowSuperAdminInUsersAdmin}
+            />
+            <label htmlFor="showSuperAdminInUsersAdmin" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>{t('appSetup.showSuperAdminInUsersAdmin')}</div>
+      </div>
+
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="showSuperAdminInSocial"
+              className="toggle-checkbox"
+              checked={superAdminSettings.showSuperAdminInSocial}
+              onChange={superAdminSettings.toggleShowSuperAdminInSocial}
+            />
+            <label htmlFor="showSuperAdminInSocial" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>{t('appSetup.showSuperAdminInSocial')}</div>
+      </div>
+
+
     </div>
+
+
 
   )
 }

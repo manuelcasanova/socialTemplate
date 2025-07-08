@@ -452,7 +452,10 @@
     "disableCustomRoles": "Disable Custom Roles Feature",
     "adminsCanCreateCustomRole": "Admins Can Create a Custom Role",
     "adminsCanEditCustomRole": "Admins Can Edit a Custom Role",
-    "adminsCanDeleteCustomRole": "Admins Can Delete a Custom Role"
+    "adminsCanDeleteCustomRole": "Admins Can Delete a Custom Role",
+    "sectionVisibility": "SUPER ADMIN VISIBILITY",
+    "showSuperAdminInUsersAdmin": "Show Super Admins in Users Admin Section",
+    "showSuperAdminInSocial": "Show Super Admins in Social"
   },
   "adminUsers": {
     "title": "Admin Users",
