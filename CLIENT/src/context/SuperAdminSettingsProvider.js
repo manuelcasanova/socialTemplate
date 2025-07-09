@@ -959,6 +959,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
 
     setShowSuperAdminInUsersAdmin(newValue);
     try {
+
       await axiosPrivate.put('/settings/global-provider/toggleShowSuperAdminInUsersAdmin', {
         show_superadmin_in_users_admin: newValue
       });

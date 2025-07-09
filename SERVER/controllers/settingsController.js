@@ -42,7 +42,7 @@ const getGlobalProviderSettings = async (req, res) => {
         show_manage_roles_feature,
         allow_admin_create_custom_role,
         allow_admin_edit_custom_role,
-        allow_admin_delete_custom_role
+        allow_admin_delete_custom_role,
 
         show_superadmin_in_users_admin,
         show_superadmin_in_social
@@ -53,6 +53,8 @@ const getGlobalProviderSettings = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'No global provider settings found' });
     }
+
+    console.log(result.rows)
 
     res.status(200).json(result.rows[0]);
   } catch (error) {

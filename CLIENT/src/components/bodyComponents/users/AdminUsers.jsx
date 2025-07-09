@@ -17,7 +17,7 @@ import FilterAdminUsers from "./FilterAdminUsers";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 //Util functions
-import {formatDate } from '../../bodyComponents/postsComponents/util_functions/formatDate'
+import { formatDate } from '../../bodyComponents/postsComponents/util_functions/formatDate'
 
 //Translation
 import { useTranslation } from 'react-i18next';
@@ -30,10 +30,11 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
 
+
   const [error, setError] = useState('');
   const prevError = useRef(null);
   const [filters, setFilters] = useState({ is_active: true });
-  // console.log('filters', filters)
+
   const [expandedUserId, setExpandedUserId] = useState(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -172,7 +173,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
-      <div className="admin-users" style={{minHeight: '500px'}}>
+      <div className="admin-users" style={{ minHeight: '500px' }}>
         <h2>{t('adminUsers.title')}</h2>
         {error && <p className="error-message">{error}</p>}
         <FilterAdminUsers
@@ -184,154 +185,170 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
           <LoadingSpinner />
         ) :
           <div className="users-container">
+        
             {users.length > 0 ? (
-              users.map((user) =>
-                expandedUserId === null || expandedUserId === user.user_id ? (
-                  <div className="user-row" key={user.user_id}>
-                    <div className="user-info">
-                      {expandedUserId !== user.user_id && <p>
-                        {user.username.startsWith('inactive') ? t('adminUsers.inactiveUser') : user.username}
-                      </p>}
-                      <button onClick={() => handleViewMore(user.user_id)}
-                        className={expandedUserId === user.user_id ? "user-info-expanded" : ""}
-                      >
-                        {expandedUserId === user.user_id ? "-" : "+"}
-                      </button>
-                    </div>
 
-                    {expandedUserId === user.user_id && (
+              users
 
-                      <div className="user-details">
-                        <div className="admin-profile-image-container">
-                          <img
-                            src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
-                            alt={user.username.startsWith('inactive') ? 'Inactive User profile image' : `${user.username}'s profile image`}
+                .filter(user => {
+                  const isUserSuperAdmin = user.roles.includes('SuperAdmin');
+                  if (isUserSuperAdmin && !superAdminSettings.showSuperAdminInUsersAdmin && !isSuperAdmin) {
+                    return false;
+                  }
+                  return true;
+                })
 
-                            className="admin-profile-image"
-                            onError={(e) => {
-                              e.target.style.display = "none";  // Hide broken image
-                              // You could also show the fallback icon in the next line if needed
-                              e.target.nextSibling.style.display = "inline-block";  // Show icon
-                            }}
-                          />
-                          {/* Display FontAwesome icon if image is not found */}
+                .map((user) =>
 
-                          <img
-                            className="user-row-social-small-img"
-                            src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
-                            alt="Profile"
-                            style={{ display: 'none' }}  // Initially hidden
-                          />
-                        </div>
-                        <p>
-                          <strong>{t('adminUsers.usernameLabel')}</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
-                        </p>
-                        <p><strong>{t('adminUsers.emailLabel')}</strong> {user.email}</p>
-                        <p><strong>{t('adminUsers.verifiedLabel')}</strong> {user.is_verified ? t('adminUsers.yes') : t('adminUsers.no')}</p>
-                        <p><strong>{t('adminUsers.activeLabel')}</strong> {user.is_active ? t('adminUsers.yes') : t('adminUsers.no')}</p> 
-                        {
-                          (superAdminSettings.allowManageRoles || isSuperAdmin) &&
-                          <>
-                            <h4>{t('adminUsers.rolesHeading')}</h4>
-                            <ul>
-
-                              {[...new Set([
-                                  ...roles.filter(role => isSuperAdmin || role !== 'SuperAdmin'), 
-                                ...(customRoles?.map(r => r.role_name) || []),
-                                ...(isSuperAdmin ? ['SuperAdmin'] : []),  // Only include SuperAdmin if the user is a SuperAdmin
-                              ])].map((role, index) => (
-                                <li key={index} className={role === 'SuperAdmin' || role === 'Admin' || role === 'User_registered' ? 'disabled-role' : ''}>
-                                  <input
-                                    type="checkbox"
-                                    className="checkbox"
-                                    checked={user.roles.includes(role)}
-                                    disabled={
-                                      role === 'User_registered' || 
-                                      !(isSuperAdmin || role !== 'SuperAdmin' && role !== 'Admin'
-                                      )} 
-                                    onChange={(e) => {
-                                      if (isSuperAdmin || (role !== 'SuperAdmin' && role !== 'Admin')) {
-                                        setError("");  // Clear any previous error when the checkbox is clicked
-                                        handleRoleChange(user, role, e.target.checked); // Handle the role change
-                                      }
-                                    }}
-                                  />
-                                  <span className={role === 'SuperAdmin' || role === 'Admin' ? 'disabled-role-text' : ''}>
-                                    {role}
-                                  </span>
-                                </li>
-                              ))}
-
-
-
-                            </ul>
-
-                          </>
-                        }
-
-
-                        <h4>{t('adminUsers.lastLoginHeading')}</h4>
-                       {user.login_history.length > 0 ? (
-  <ul>
-    <li>
-      {(() => {
-        const lastLogin = new Date(
-          user.login_history[user.login_history.length - 1]
-        );
-        // Build an Intl.DateTimeFormat with the current locale:
-        return new Intl.DateTimeFormat(i18n.language, {
-          weekday: 'long',     // e.g. “Monday” / “lunes”
-          month:   'long',     // e.g. “December” / “diciembre”
-          day:     'numeric',  // e.g. “9”
-          year:    'numeric',  // e.g. “2024”
-          hour:    '2-digit',  // e.g. “05”
-          minute:  '2-digit',  // e.g. “42”
-          hour12:  !i18n.language.startsWith('es')
-        }).format(lastLogin);
-      })()}
-    </li>
-  </ul>
-) : (
-  <p>{t('adminUsers.noLoginHistory')}</p>
-)}
-
-
-                        {
-                          (superAdminSettings.allowDeleteUsers || isSuperAdmin) &&
-                          <>
-                            {
-                              !showConfirmDelete && !user.email.startsWith('deleted-') && (
-                                <div className="delete-user">
-                                  <button
-                                    className="button-red"
-                                    onClick={handleShowDelete}
-                                  >{t('adminUsers.deleteUser')}</button>
-                                </div>
-                              )
-                            }
-
-                            {
-                              showConfirmDelete && !user.email.startsWith('deleted-') && (
-                                <div className="delete-confirmation">
-                                  <p>{t('adminUsers.deleteConfirmation')}</p>
-                                  <button className="button-white" onClick={handleShowDelete}>x</button>
-                                  <button
-                                    className="button-red"
-                                    disabled={isLoading}
-                                    onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
-                                  >{isLoading ? <LoadingSpinner /> : t('adminUsers.confirmDelete')}</button>
-
-                                </div>
-                              )
-                            }
-                          </>}
-
-
+                  expandedUserId === null || expandedUserId === user.user_id ? (
+                    <div className="user-row" key={user.user_id}>
+                      <div className="user-info">
+                        {expandedUserId !== user.user_id && <p>
+                          {user.username.startsWith('inactive') ? t('adminUsers.inactiveUser') : user.username}
+                        </p>}
+                        <button onClick={() => handleViewMore(user.user_id)}
+                          className={expandedUserId === user.user_id ? "user-info-expanded" : ""}
+                        >
+                          {expandedUserId === user.user_id ? "-" : "+"}
+                        </button>
                       </div>
-                    )}
-                  </div>
-                ) : null
-              )
+
+                      {expandedUserId === user.user_id && (
+
+                        <div className="user-details">
+                          <div className="admin-profile-image-container">
+                            <img
+                              src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                              alt={user.username.startsWith('inactive') ? 'Inactive User profile image' : `${user.username}'s profile image`}
+
+                              className="admin-profile-image"
+                              onError={(e) => {
+                                e.target.style.display = "none";  // Hide broken image
+                                // You could also show the fallback icon in the next line if needed
+                                e.target.nextSibling.style.display = "inline-block";  // Show icon
+                              }}
+                            />
+                            {/* Display FontAwesome icon if image is not found */}
+
+                            <img
+                              className="user-row-social-small-img"
+                              src={`${BACKEND}/media/profile_pictures/profilePicture.jpg`}
+                              alt="Profile"
+                              style={{ display: 'none' }}  // Initially hidden
+                            />
+                          </div>
+                          <p>
+                            <strong>{t('adminUsers.usernameLabel')}</strong> {user.username.startsWith('inactive') ? 'Inactive User' : user.username}
+                          </p>
+                          <p><strong>{t('adminUsers.emailLabel')}</strong> {user.email}</p>
+                          <p><strong>{t('adminUsers.verifiedLabel')}</strong> {user.is_verified ? t('adminUsers.yes') : t('adminUsers.no')}</p>
+                          <p><strong>{t('adminUsers.activeLabel')}</strong> {user.is_active ? t('adminUsers.yes') : t('adminUsers.no')}</p>
+                          {
+                            (superAdminSettings.allowManageRoles || isSuperAdmin) &&
+                            <>
+                              <h4>{t('adminUsers.rolesHeading')}</h4>
+                              <ul>
+
+                                {[...new Set([
+                                  ...roles.filter(role => isSuperAdmin || role !== 'SuperAdmin'),
+                                  ...(customRoles?.map(r => r.role_name) || []),
+                                  ...(isSuperAdmin ? ['SuperAdmin'] : []),  // Only include SuperAdmin if the user is a SuperAdmin
+                                ])].map((role, index) => (
+                                  <li key={index} className={role === 'SuperAdmin' || role === 'Admin' || role === 'User_registered' ? 'disabled-role' : ''}>
+                                    <input
+                                      type="checkbox"
+                                      className="checkbox"
+                                      checked={user.roles.includes(role)}
+                                      disabled={
+                                        role === 'User_registered' ||
+                                        !(isSuperAdmin || role !== 'SuperAdmin' && role !== 'Admin'
+                                        )}
+                                      onChange={(e) => {
+                                        if (isSuperAdmin || (role !== 'SuperAdmin' && role !== 'Admin')) {
+                                          setError("");  // Clear any previous error when the checkbox is clicked
+                                          handleRoleChange(user, role, e.target.checked); // Handle the role change
+                                        }
+                                      }}
+                                    />
+                                    <span className={role === 'SuperAdmin' || role === 'Admin' ? 'disabled-role-text' : ''}>
+                                      {role}
+                                    </span>
+                                  </li>
+                                ))}
+
+
+
+                              </ul>
+
+                            </>
+                          }
+
+
+                          <h4>{t('adminUsers.lastLoginHeading')}</h4>
+                          {user.login_history.length > 0 ? (
+                            <ul>
+                              <li>
+                                {(() => {
+                                  const lastLogin = new Date(
+                                    user.login_history[user.login_history.length - 1]
+                                  );
+                                  // Build an Intl.DateTimeFormat with the current locale:
+                                  return new Intl.DateTimeFormat(i18n.language, {
+                                    weekday: 'long',     // e.g. “Monday” / “lunes”
+                                    month: 'long',     // e.g. “December” / “diciembre”
+                                    day: 'numeric',  // e.g. “9”
+                                    year: 'numeric',  // e.g. “2024”
+                                    hour: '2-digit',  // e.g. “05”
+                                    minute: '2-digit',  // e.g. “42”
+                                    hour12: !i18n.language.startsWith('es')
+                                  }).format(lastLogin);
+                                })()}
+                              </li>
+                            </ul>
+                          ) : (
+                            <p>{t('adminUsers.noLoginHistory')}</p>
+                          )}
+
+
+                          {
+                            (superAdminSettings.allowDeleteUsers || isSuperAdmin) &&
+                            <>
+                              {
+                                !showConfirmDelete && !user.email.startsWith('deleted-') && (
+                                  <div className="delete-user">
+                                    <button
+                                      className="button-red"
+                                      onClick={handleShowDelete}
+                                    >{t('adminUsers.deleteUser')}</button>
+                                  </div>
+                                )
+                              }
+
+                              {
+                                showConfirmDelete && !user.email.startsWith('deleted-') && (
+                                  <div className="delete-confirmation">
+                                    <p>{t('adminUsers.deleteConfirmation')}</p>
+                                    <button className="button-white" onClick={handleShowDelete}>x</button>
+                                    <button
+                                      className="button-red"
+                                      disabled={isLoading}
+                                      onClick={() => handleDeleteUser(user.user_id, loggedInUser)}
+                                    >{isLoading ? <LoadingSpinner /> : t('adminUsers.confirmDelete')}</button>
+
+                                  </div>
+                                )
+                              }
+                            </>}
+
+
+                        </div>
+                      )}
+                    </div>
+                  ) : null
+                )
+
+
+
             ) : (
               <p>{t('adminUsers.noUsersFound')}</p>
             )}
