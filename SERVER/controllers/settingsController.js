@@ -54,7 +54,7 @@ const getGlobalProviderSettings = async (req, res) => {
       return res.status(404).json({ error: 'No global provider settings found' });
     }
 
-    console.log(result.rows)
+    // console.log(result.rows)
 
     res.status(200).json(result.rows[0]);
   } catch (error) {

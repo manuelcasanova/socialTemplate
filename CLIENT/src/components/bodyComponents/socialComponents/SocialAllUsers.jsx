@@ -38,7 +38,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
 
- const { t } = useTranslation();
+  const { t } = useTranslation();
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
@@ -141,100 +141,113 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
           <p>{t('socialAllUsers.noUsersOrMuted')}</p>
         ) : (
           <div className="users-container">
+
             {usersExceptMe.length > 0 ? (
 
+              usersExceptMe
 
-              usersExceptMe.map((user) =>
+      
 
-                <div className="user-row-social" key={user.user_id}>
-                  <div className="user-info">
-
-                    <img
-                      className="user-row-social-small-img"
-                      onClick={() => handleImageClick(user.user_id)}
-
-                      src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = '/images/profilePicture.jpg';
-                      }}
-                      alt="Profile"
-                    />
+                .filter(user => {
+                  const isUserSuperAdmin = user.roles.includes('SuperAdmin');
+                  if (isUserSuperAdmin && !superAdminSettings.showSuperAdminInSocial && !isSuperAdmin) {
+                    return false;
+                  }
+                  return true;
+                })
 
 
+                .map((user) =>
 
-                    {showLargePicture === user.user_id && (
-                      <div
-                        className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
-                        onClick={() => closeModal()}
-                      >
-                        <img
-                          className="users-all-picture-large"
-                          src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = '/images/profilePicture.jpg';
-                          }}
-                          alt="Large Profile"
-                        />
-                      </div>
-                    )}
+                  <div className="user-row-social" key={user.user_id}>
+                    <div className="user-info">
+
+                      <img
+                        className="user-row-social-small-img"
+                        onClick={() => handleImageClick(user.user_id)}
+
+                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/images/profilePicture.jpg';
+                        }}
+                        alt="Profile"
+                      />
 
 
-                    <p>
-                      {user.username.startsWith('inactive') ? t('socialAllUsers.inactiveUser') : user.username}
-                    </p>
+
+                      {showLargePicture === user.user_id && (
+                        <div
+                          className={`${isNavOpen && isTablet ? 'large-picture-squeezed' : 'large-picture'}`}
+                          onClick={() => closeModal()}
+                        >
+                          <img
+                            className="users-all-picture-large"
+                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/images/profilePicture.jpg';
+                            }}
+                            alt="Large Profile"
+                          />
+                        </div>
+                      )}
+
+
+                      <p>
+                        {user.username.startsWith('inactive') ? t('socialAllUsers.inactiveUser') : user.username}
+                      </p>
+
+                    </div>
+                    {loggedInUser !== user.user_id &&
+                      <>
+                        <div className="user-info-buttons">
+                          {
+                            followersAndFollowee.some(f => f.follower_id === user.user_id && f.status === "accepted") &&
+                            followersAndFollowee.some(f => f.followee_id === user.user_id && f.status === "accepted") &&
+                            superAdminSettings.showMessagesFeature &&
+                            adminSettings.showMessagesFeature && (
+                              <button onClick={() => navigate(`/messages/${user.user_id}`)}>
+                                <FontAwesomeIcon
+                                  icon={faEnvelope}
+                                  style={{ cursor: "pointer" }}
+                                  title={t('socialAllUsers.messagesButtonTitle')}
+                                />
+                              </button>
+                            )
+                          }
+
+
+
+
+                          <FollowUserButton
+
+                            followeeId={user.user_id}
+                            followerId={loggedInUser}
+                            followersAndFollowee={followersAndFollowee}
+                            setFollowersAndFollowee={setFollowersAndFollowee}
+                            userLoggedInObject={auth}
+                            setError={setError}
+                            isSuperAdmin={isSuperAdmin}
+                          />
+
+                          <MuteUserButton
+                            userId={user.user_id}
+                            userLoggedin={loggedInUser}
+                            // isMuted={isMuted} 
+                            setMutedUsers={setMutedUsers}
+                            onMutedChange={handleMutedChanges}
+                            setError={setError}
+                            isSuperAdmin={isSuperAdmin}
+                          />
+                        </div>
+                      </>
+
+                    }
 
                   </div>
-                  {loggedInUser !== user.user_id &&
-                    <>
-                      <div className="user-info-buttons">
-                        {
-                          followersAndFollowee.some(f => f.follower_id === user.user_id && f.status === "accepted") &&
-                          followersAndFollowee.some(f => f.followee_id === user.user_id && f.status === "accepted") &&
-                          superAdminSettings.showMessagesFeature &&
-                          adminSettings.showMessagesFeature && (
-                            <button onClick={() => navigate(`/messages/${user.user_id}`)}>
-                              <FontAwesomeIcon
-                                icon={faEnvelope}
-                                style={{ cursor: "pointer" }}
-                                title={t('socialAllUsers.messagesButtonTitle')}
-                              />
-                            </button>
-                          )
-                        }
 
-
-
-
-                        <FollowUserButton
-
-                          followeeId={user.user_id}
-                          followerId={loggedInUser}
-                          followersAndFollowee={followersAndFollowee}
-                          setFollowersAndFollowee={setFollowersAndFollowee}
-                          userLoggedInObject={auth}
-                          setError={setError}
-                          isSuperAdmin={isSuperAdmin}
-                        />
-
-                        <MuteUserButton
-                          userId={user.user_id}
-                          userLoggedin={loggedInUser}
-                          // isMuted={isMuted} 
-                          setMutedUsers={setMutedUsers}
-                          onMutedChange={handleMutedChanges}
-                          setError={setError}
-                          isSuperAdmin={isSuperAdmin}
-                        />
-                      </div>
-                    </>
-
-                  }
-
-                </div>
-
-              )
+                )
             ) : (
               <p>{t('socialAllUsers.noUsersFound')}</p>
             )}

@@ -488,7 +488,7 @@ const adminVersionSoftDeleteUser = async (req, res) => {
         }
 
         if (userId == 2) {
-            console.log("case")
+            // console.log("case")
             return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
         }
 

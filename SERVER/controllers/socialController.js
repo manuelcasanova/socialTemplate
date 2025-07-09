@@ -6,40 +6,47 @@ const getAllUsers = async (req, res) => {
   try {
     const { username } = req.query;
 
-    // Start the base query
+    // Start building the base query
     let query = `
-            SELECT u.user_id, u.username, u.is_active
-            FROM users u
-            WHERE u.is_active = true 
-        `;
+      SELECT 
+          u.user_id, 
+          u.username, 
+          u.is_active,
+          string_agg(r.role_name, ', ') AS roles
+      FROM users u
+      JOIN user_roles ur ON u.user_id = ur.user_id
+      JOIN roles r ON ur.role_id = r.role_id
+      WHERE u.is_active = true
+    `;
+
     const params = [];
 
-    // Add filters to the query based on the req.query parameters
+    // Add optional username filter
     if (username) {
       query += ` AND u.username ILIKE $${params.length + 1}`;
-      params.push(`%${username}%`);  // Use ILIKE for case-insensitive matching
+      params.push(`%${username}%`);
     }
 
-    // Add the GROUP BY and execute the query
+    // Finalize query with GROUP BY
     query += `
-            GROUP BY u.username, u.user_id
-        `;
+      GROUP BY u.user_id, u.username, u.is_active
+    `;
 
     // Execute the query
     const result = await pool.query(query, params);
 
-    // If no users found, log a message
+    // Handle empty result
     if (result.rows.length === 0) {
       console.log('No users found');
     }
 
-    // Return the result
     res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error retrieving users:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 // Function to get user by id
 

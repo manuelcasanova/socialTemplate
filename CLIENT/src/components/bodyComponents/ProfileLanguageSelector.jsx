@@ -39,7 +39,7 @@ const LanguageSelector = ({ userId, setError }) => {
   // Find the selected language name based on the code
   const selectedLanguageName = languages.find(lang => lang.code === selectedLanguage)?.name || 'Select Language';
 
-      console.log(t('profile.language'));
+      // console.log(t('profile.language'));
 
   return (
     <div className="language-selector">
