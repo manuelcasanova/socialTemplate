@@ -177,20 +177,46 @@ const getFolloweeData = async (req, res, next) => {
   try {
     // Query to fetch the users the logged-in user is following (followees)
     const followees = await pool.query(
-      `SELECT 
-         f.followee_id,
-         f.status,
-         f.lastmodification,
-         u.is_active
-       FROM followers f
-       JOIN users u ON f.followee_id = u.user_id
-       WHERE f.follower_id = $1 
-         AND f.status = 'accepted' 
-         AND u.is_active = true
-       ORDER BY f.lastmodification DESC`,
+      // `SELECT 
+      //    f.followee_id,
+      //    f.status,
+      //    f.lastmodification,
+      //    u.is_active
+      //  FROM followers f
+      //  JOIN users u ON f.followee_id = u.user_id
+      //  WHERE f.follower_id = $1 
+      //    AND f.status = 'accepted' 
+      //    AND u.is_active = true
+      //  ORDER BY f.lastmodification DESC`,
+
+// HERE fol
+`
+SELECT 
+  f.followee_id,
+  f.status,
+  f.lastmodification,
+  u.is_active,
+  COALESCE(
+    array_agg(DISTINCT r.role_name) FILTER (WHERE r.role_name IS NOT NULL),
+    '{}'
+  ) AS roles
+FROM followers f
+JOIN users u ON f.followee_id = u.user_id
+LEFT JOIN user_roles ur ON ur.user_id = u.user_id
+LEFT JOIN roles r ON r.role_id = ur.role_id
+WHERE f.follower_id = $1
+  AND f.status = 'accepted'
+  AND u.is_active = true
+GROUP BY f.followee_id, f.status, f.lastmodification, u.is_active
+ORDER BY f.lastmodification DESC;`,
+
+
+
+
       [userId]
     );
 
+    // console.log(followees.rows)
     // Return the list of followees
     return res.status(200).json(followees.rows);
 
@@ -206,17 +232,39 @@ const getFollowersData = async (req, res, next) => {
 
   try {
     const followers = await pool.query(
-      `SELECT 
-      f.follower_id,
-      f.status,
-      f.lastmodification,
-      u.is_active
-    FROM followers f
-    JOIN users u ON f.follower_id = u.user_id
-    WHERE f.followee_id = $1 
-      AND f.status = 'accepted'
-      AND u.is_active = true
-    ORDER BY f.lastmodification DESC`,
+    //   `SELECT 
+    //   f.follower_id,
+    //   f.status,
+    //   f.lastmodification,
+    //   u.is_active
+    // FROM followers f
+    // JOIN users u ON f.follower_id = u.user_id
+    // WHERE f.followee_id = $1 
+    //   AND f.status = 'accepted'
+    //   AND u.is_active = true
+    // ORDER BY f.lastmodification DESC`,
+
+
+//HERE fol
+
+`SELECT 
+  f.follower_id,
+  f.status,
+  f.lastmodification,
+  u.is_active,
+  array_agg(r.role_name) AS role_names
+FROM followers f
+JOIN users u ON f.follower_id = u.user_id
+LEFT JOIN user_roles ur ON ur.user_id = f.follower_id
+LEFT JOIN roles r ON r.role_id = ur.role_id
+WHERE f.followee_id = $1 
+  AND f.status = 'accepted'
+  AND u.is_active = true
+GROUP BY f.follower_id, f.status, f.lastmodification, u.is_active
+ORDER BY f.lastmodification DESC;`,
+
+
+
       [userId]
     );
 

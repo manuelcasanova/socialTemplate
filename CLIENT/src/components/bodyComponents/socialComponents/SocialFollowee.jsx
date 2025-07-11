@@ -42,6 +42,7 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
+  // console.log(superAdminSettings)
   const { adminSettings } = useGlobalAdminSettings();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -51,7 +52,7 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
   const [filters, setFilters] = useState({});
   const loggedInUser = auth.userId;
   const [users, setUsers] = useState([]);
-  const [followee, setFollowee] = useState([]); // Replaced followersAndFollowee with followee
+  const [followee, setFollowee] = useState([]);
   const [followersAndFollowee, setFollowersAndFollowee] = useState([])
   const [mutedUsers, setMutedUsers] = useState([]);
   const userIDsExceptMe = followee.map(user => user.user_id);
@@ -109,6 +110,11 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
     return !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === follow.followee_id && mute.mute));
   });
 
+  const visibleFollowee = filteredFollowee.filter(follow => {
+    const isFolloweeSuperAdmin = follow.roles.includes("SuperAdmin");
+    return !(isFolloweeSuperAdmin && !(isSuperAdmin || superAdminSettings.showSuperAdminInSocial));
+  });
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
@@ -116,11 +122,13 @@ export default function SocialFollowee({ isNavOpen, profilePictureKey }) {
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
-        {filteredFollowee.length === 0 ? (
+        {visibleFollowee.length === 0 ? (
           <p>{t('socialFollowee.noUsers')}</p>
         ) : (
           <div className="users-container">
-            {filteredFollowee.map((follow) => {
+
+            {visibleFollowee.map((follow) => {
+
               // Find the user details for the followee
               const user = users.find((u) => u.user_id === follow.followee_id);
 

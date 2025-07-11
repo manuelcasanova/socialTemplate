@@ -196,11 +196,6 @@ export default function UsersWithMessages({ isNavOpen, profilePictureKey }) {
                     </div>
                   )}
 
-                  {/* 
-{console.log("user user id", user.user_id)}
-{console.log("usersWithNewMessages", usersWithNewMessages)} */}
-
-
                   <p
                     className="cursor-pointer"
                     onClick={() => navigate(`/messages/${user.user_id}`)}>
