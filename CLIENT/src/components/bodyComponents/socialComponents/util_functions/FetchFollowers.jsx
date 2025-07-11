@@ -10,7 +10,7 @@ const fetchFollowers = async (filters, setFollowers, setIsLoading, setError, log
       axiosPrivate.get(`/social/users/followers`, { params: {...filters, userId: loggedInUser} })
 
     ]);
-       console.log("usersResponse.data", usersResponse.data)
+      //  console.log("usersResponse.data", usersResponse.data)
     setFollowers(usersResponse.data); // Set user data
 
   } catch (err) {

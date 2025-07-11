@@ -118,6 +118,12 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
     return !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === follow.follower_id && mute.mute));
   });
 
+    const visibleFollowee = filteredFollowee.filter(follow => {
+    const isFolloweeSuperAdmin = follow.role_names.includes("SuperAdmin");
+    return !(isFolloweeSuperAdmin && !(isSuperAdmin || superAdminSettings.showSuperAdminInSocial));
+  });
+
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">
@@ -125,11 +131,11 @@ export default function SocialFollowers({ isNavOpen, profilePictureKey }) {
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
-        {filteredFollowee.length === 0 ? (
+        {visibleFollowee.length === 0 ? (
           <p>{t('socialFollowers.noUsers')}</p>
         ) : (
           <div className="users-container">
-            {filteredFollowee.map((follow) => {
+            {visibleFollowee.map((follow) => {
               // Find the user details for the followers
               const user = users.find((u) => u.user_id === follow.follower_id);
 
