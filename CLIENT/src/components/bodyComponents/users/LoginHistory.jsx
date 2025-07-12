@@ -64,7 +64,7 @@ export default function LoginHistory({ isNavOpen }) {
 
         <FilterLoginHistory setFilters={setFilters} />
 
-        {console.log(loginHistory)}
+        {/* {console.log(loginHistory)} */}
 
         {visibleLoginHistory.length > 0 ? (
 

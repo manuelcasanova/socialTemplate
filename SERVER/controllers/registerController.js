@@ -5,6 +5,7 @@ let nodemailer = require('nodemailer');
 const { response } = require('express');
 const admin = require('../firebaseAdmin');
 const validateEmailConfig = require('../middleware/validateEnv')
+const disallowedUsernames = require('../config/disallowedUsernames');
 
 const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
@@ -37,6 +38,9 @@ const handleNewUser = async (req, res) => {
         return res.status(400).json({ 'message': 'Invalid email format.' });
     }
 
+    if (disallowedUsernames.includes(user.toLowerCase())) {
+    return res.status(400).json({ 'message': 'This username is not allowed. Please choose another one.' });
+}
 
     // Normalize username: Capitalize the first letter of each word in the username
     user = user.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
