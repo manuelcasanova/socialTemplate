@@ -455,7 +455,8 @@
     "adminsCanDeleteCustomRole": "Admins Can Delete a Custom Role",
     "sectionVisibility": "SUPER ADMIN VISIBILITY",
     "showSuperAdminInUsersAdmin": "Show Super Admins in Users Admin Section",
-    "showSuperAdminInSocial": "Show Super Admins in Social"
+    "showSuperAdminInSocial": "Show Super Admins in Social",
+    "showSuperAdminInLoginHistory": "Show Super Admins in Login History"
   },
   "adminUsers": {
     "title": "Admin Users",

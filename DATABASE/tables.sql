@@ -235,7 +235,8 @@ CREATE TABLE global_provider_settings (
   allow_admin_delete_custom_role BOOLEAN NOT NULL DEFAULT TRUE,
 
   show_superadmin_in_users_admin BOOLEAN NOT NULL DEFAULT TRUE,
-  show_superadmin_in_social BOOLEAN NOT NULL DEFAULT TRUE
+  show_superadmin_in_social BOOLEAN NOT NULL DEFAULT TRUE,
+  show_superadmin_in_login_history BOOLEAN NOT NULL DEFAULT TRUE
 
 );
 

@@ -59,19 +59,26 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
   const [filterUsername, setFilterUsername] = useState("");
   const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
   const inputRef = useRef(null);
-  const usersExceptMe = users.filter(user => {
-    // Filter out muted users
-    const isMuted = mutedUsers.some(mute =>
-      (mute.muter === loggedInUser && mute.mutee === user.user_id && mute.mute) ||
-      (mute.muter === user.user_id && mute.mutee === loggedInUser && mute.mute)
-    );
-    return user.user_id !== loggedInUser && user.is_active && !isMuted;
-  });
 
-  const userIDsExceptMe = usersExceptMe.map(user => user.user_id);
-  const allUsersMutedOrMe = userIDsExceptMe.every(userId =>
-    mutedUsers.some(mute => (mute.muter === userId || mute.mutee === userId) && mute.mute)
+  const usersExceptMe = users.filter(user => {
+  const isMuted = mutedUsers.some(mute =>
+    (mute.muter === loggedInUser && mute.mutee === user.user_id && mute.mute) ||
+    (mute.muter === user.user_id && mute.mutee === loggedInUser && mute.mute)
   );
+
+  const isUserSuperAdmin = user.roles.includes('SuperAdmin');
+
+  const shouldHideUser =
+    user.user_id === loggedInUser ||
+    !user.is_active ||
+    isMuted ||
+    (isUserSuperAdmin && !superAdminSettings.showSuperAdminInSocial && !isSuperAdmin);
+
+  return !shouldHideUser;
+});
+
+const allUsersMutedOrMe = usersExceptMe.length === 0;
+
 
   // console.log("users", users)
   // console.log("usersExceptMe", usersExceptMe)
@@ -144,20 +151,7 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
 
             {usersExceptMe.length > 0 ? (
 
-              usersExceptMe
-
-      
-
-                .filter(user => {
-                  const isUserSuperAdmin = user.roles.includes('SuperAdmin');
-                  if (isUserSuperAdmin && !superAdminSettings.showSuperAdminInSocial && !isSuperAdmin) {
-                    return false;
-                  }
-                  return true;
-                })
-
-
-                .map((user) =>
+              usersExceptMe.map((user) =>
 
                   <div className="user-row-social" key={user.user_id}>
                     <div className="user-info">

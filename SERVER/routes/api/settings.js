@@ -313,5 +313,17 @@ router.route('/global-provider/toggleShowSuperAdminInUsersAdmin')
     settingsController.toggleShowSuperAdminInSocial
   );
 
+  router.route('/global-provider/toggleShowSuperAdminInLoginHistory')
+  .put(
+    async (req, res, next) => {
+      try {
+        verifyRoles('SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    settingsController.toggleShowSuperAdminInLoginHistory
+  );
+
 
 module.exports = router;

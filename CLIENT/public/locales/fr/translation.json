@@ -452,7 +452,11 @@
     "disableCustomRoles": "Désactiver la fonctionnalité Rôles personnalisés",
     "adminsCanCreateCustomRole": "Les admins peuvent créer un rôle personnalisé",
     "adminsCanEditCustomRole": "Les admins peuvent modifier un rôle personnalisé",
-    "adminsCanDeleteCustomRole": "Les admins peuvent supprimer un rôle personnalisé"
+    "adminsCanDeleteCustomRole": "Les admins peuvent supprimer un rôle personnalisé",
+    "sectionVisibility": "VISIBILITÉ DU SUPER ADMIN",
+    "showSuperAdminInUsersAdmin": "Afficher les Super Admins dans la section administration des utilisateurs",
+    "showSuperAdminInSocial": "Afficher les Super Admins dans Social",
+    "showSuperAdminInLoginHistory": "Afficher les Super Admins dans l’historique des connexions"
   },
   "adminUsers": {
     "title": "Utilisateurs Admin",

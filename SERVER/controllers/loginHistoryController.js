@@ -19,9 +19,12 @@ const getLoginHistory = async (req, res) => {
         lh.user_id,
         COALESCE(u.username, '') AS username,
         COALESCE(u.email, '') AS email,
-        lh.login_time
+        lh.login_time,
+        COALESCE(ARRAY_AGG(DISTINCT r.role_name ORDER BY r.role_name), ARRAY[]::text[]) AS roles
       FROM login_history lh
       LEFT JOIN users u ON lh.user_id = u.user_id
+      LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+      LEFT JOIN roles r ON ur.role_id = r.role_id
       WHERE 1=1
     `;
     const params = [];
@@ -67,7 +70,8 @@ const getLoginHistory = async (req, res) => {
       `;
     }
 
-    query += ` ORDER BY lh.login_time DESC`;
+    query += ` GROUP BY lh.user_id, lh.login_time, u.username, u.email`;
+    query += ` ORDER BY lh.login_time DESC`;    
 
 // console.log('from_date', from_date)
 // console.log('to_date', to_date)
@@ -78,7 +82,7 @@ const getLoginHistory = async (req, res) => {
 
     const result = await pool.query(query, params);
 
-
+// console.log('result.rows', result.rows)
     return res.json(result.rows);
   } catch (err) {
     console.error('Error fetching login history:', err);

@@ -937,6 +937,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
 
   const [showSuperAdminInUsersAdmin, setShowSuperAdminInUsersAdmin] = useState(false);
   const [showSuperAdminInSocial, setShowSuperAdminInSocial] = useState(false)
+  const [showSuperAdminInLoginHistory, setShowSuperAdminInLoginHistory] = useState(false)
 
 
   useEffect(() => {
@@ -986,6 +987,24 @@ export const SuperAdminSettingsProvider = ({ children }) => {
     }
   };
 
+  const toggleShowSuperAdminInLoginHistory = async () => {
+
+    const newValue = !showSuperAdminInLoginHistory;
+
+    setShowSuperAdminInLoginHistory(newValue);
+    try {
+      await axiosPrivate.put('/settings/global-provider/toggleShowSuperAdminInLoginHistory', {
+        show_superadmin_in_login_history: newValue
+      });
+    } catch (err) {
+      console.error('Failed to update setting:', err);
+      setShowSuperAdminInLoginHistory(prev => !prev);
+      setError(err.message)
+    }
+  };
+
+
+
   // ------- END SUPER ADMIN VISIBILITY SETTINGS ------- //
 
   const superAdminSettings = {
@@ -1031,6 +1050,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
 
     showSuperAdminInUsersAdmin,
     showSuperAdminInSocial,
+    showSuperAdminInLoginHistory,
 
     setShowPostsFeature,
 
@@ -1073,6 +1093,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
 
     setShowSuperAdminInUsersAdmin,
     setShowSuperAdminInSocial,
+    setShowSuperAdminInLoginHistory,
 
     toggleShowPostsFeature,
     toggleAllowUserPost,
@@ -1113,7 +1134,8 @@ export const SuperAdminSettingsProvider = ({ children }) => {
     toggleAllowAdminDeleteCustomRole,
 
     toggleShowSuperAdminInUsersAdmin,
-    toggleShowSuperAdminInSocial
+    toggleShowSuperAdminInSocial,
+    toggleShowSuperAdminInLoginHistory
   };
 
   // console.log("superAdminSettings in Global Provider", superAdminSettings)

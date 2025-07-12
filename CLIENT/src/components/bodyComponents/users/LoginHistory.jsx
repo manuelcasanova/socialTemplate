@@ -4,6 +4,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 import { fetchLoginHistory } from "../../../util/fetchLoginHistory";
 import FilterLoginHistory from "./FilterLoginHistory";
+import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider"
 
 import '../../../css/RoleChangeLog.css'
 
@@ -18,7 +19,9 @@ export default function LoginHistory({ isNavOpen }) {
   const [filters, setFilters] = useState({});
   const [error, setError] = useState(null);
   const { auth } = useAuth();
-  const loggedInUser = auth.userId
+  const { superAdminSettings } = useGlobalSuperAdminSettings(); 
+  const loggedInUser = auth.userId;
+  const isSuperAdmin = auth.roles.includes('SuperAdmin');
 
   useEffect(() => {
     setError(null);  // Reset the error message
@@ -45,7 +48,10 @@ export default function LoginHistory({ isNavOpen }) {
     loadData();
   }, [axiosPrivate, filters]);
 
-
+ const visibleLoginHistory = loginHistory.filter(login => {
+    const isLoginUserSuperAdmin = login.roles?.includes("SuperAdmin");
+    return !isLoginUserSuperAdmin || isSuperAdmin || superAdminSettings.showSuperAdminInLoginHistory;
+  });
 
   return (
     <div className={`body ${isNavOpen ? "body-squeezed" : ""}`}>
@@ -58,8 +64,10 @@ export default function LoginHistory({ isNavOpen }) {
 
         <FilterLoginHistory setFilters={setFilters} />
 
-        {loginHistory.length > 0 ? (
-     
+        {console.log(loginHistory)}
+
+        {visibleLoginHistory.length > 0 ? (
+
           <div className="table-wrapper">
             <table>
               <thead>
@@ -72,14 +80,14 @@ export default function LoginHistory({ isNavOpen }) {
                 </tr>
               </thead>
               <tbody>
-              {/* {console.log(loginHistory)} */}
-                {loginHistory.map((login) => (
-                  
+                {/* {console.log(loginHistory)} */}
+                {visibleLoginHistory.map((login) => (
+
                   <tr key={`${login.login_time}-${login.user_id}`}>
                     <td>{login.user_id}</td>
                     <td>     {login.username.startsWith('inactive') ? t('loginHistory.inactiveUser') : login.username}</td>
                     <td>{login.email}</td>
-                    
+
                     <td>{new Date(login.login_time).toLocaleString('en-GB', {
                       day: '2-digit',
                       month: '2-digit',

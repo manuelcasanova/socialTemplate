@@ -697,6 +697,24 @@ export default function SuperAdminSetup({ isNavOpen }) {
         <div className='admin-setup-line-text'>{t('appSetup.showSuperAdminInSocial')}</div>
       </div>
 
+      <div className='admin-setup-line'>
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="showSuperAdminInLoginHistory"
+              className="toggle-checkbox"
+              checked={superAdminSettings.showSuperAdminInLoginHistory}
+              onChange={superAdminSettings.toggleShowSuperAdminInLoginHistory}
+            />
+            <label htmlFor="showSuperAdminInLoginHistory" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>{t('appSetup.showSuperAdminInLoginHistory')}</div>
+      </div>
+
 
     </div>
 

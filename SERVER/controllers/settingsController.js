@@ -45,7 +45,8 @@ const getGlobalProviderSettings = async (req, res) => {
         allow_admin_delete_custom_role,
 
         show_superadmin_in_users_admin,
-        show_superadmin_in_social
+        show_superadmin_in_social,
+        show_superadmin_in_login_history
 
       FROM global_provider_settings
     `);
@@ -1287,6 +1288,35 @@ const toggleShowSuperAdminInSocial= async (req, res) => {
   }
 };
 
+const toggleShowSuperAdminInLoginHistory= async (req, res) => {
+  try {
+    const { show_superadmin_in_login_history } = req.body;
+
+    if (typeof show_superadmin_in_login_history !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid value for show_superadmin_in_login_history . Must be a boolean.' });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE global_provider_settings
+      SET show_superadmin_in_login_history = $1
+      WHERE id = 1
+      RETURNING *;
+      `,
+      [show_superadmin_in_login_history ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Global provider settings not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 
 
@@ -1333,7 +1363,8 @@ module.exports = {
   toggleAllowAdminDeleteCustomRole,
 
   toggleShowSuperAdminInUsersAdmin,
-  toggleShowSuperAdminInSocial
+  toggleShowSuperAdminInSocial,
+  toggleShowSuperAdminInLoginHistory
 
 };
 

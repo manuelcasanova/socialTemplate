@@ -442,7 +442,11 @@
     "disableCustomRoles": "Desactivar función de roles personalizados",
     "adminsCanCreateCustomRole": "Los admins pueden crear un rol personalizado",
     "adminsCanEditCustomRole": "Los admins pueden editar un rol personalizado",
-    "adminsCanDeleteCustomRole": "Los admins pueden eliminar un rol personalizado"
+    "adminsCanDeleteCustomRole": "Los admins pueden eliminar un rol personalizado",
+    "sectionVisibility": "VISIBILIDAD DEL SUPERADMIN",
+    "showSuperAdminInUsersAdmin": "Mostrar Superadmins en la sección de administración de usuarios",
+    "showSuperAdminInSocial": "Mostrar Superadmins en Social",
+    "showSuperAdminInLoginHistory": "Mostrar Superadmins en el historial de inicio de sesión"
   },
   "adminUsers": {
     "title": "Administrar usuarios",
@@ -509,7 +513,7 @@
     "roleCreated": "Rol creado",
     "roleUpdated": "Role editado",
     "roleDeleted": "Rol eliminado",
-     "oldRoleId": "Antiguo ID del rol"
+    "oldRoleId": "Antiguo ID del rol"
   },
   "roleChangeLog": {
     "title": "Registro de cambios de roles de usuario",
