@@ -37,6 +37,7 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes("SuperAdmin");
   const axiosPrivate = useAxiosPrivate();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +56,13 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
     username: user.username
   }));
 
+  const visibleMutedUsers = mutedUsersWithName.filter(user => {
+  const fullUser = users.find(u => u.user_id === user.user_id);
+  if (!fullUser) return false;
+
+  const isMutedSuperAdmin = fullUser.roles?.includes("SuperAdmin");
+  return !(isMutedSuperAdmin && !(isSuperAdmin || superAdminSettings.showSuperAdminInSocial));
+});
 
   const [hasMutedChanges, setHasMutedChanges] = useState(false);
 
@@ -88,6 +96,8 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
   const handleShowInfo = () => {
     setShowInfo(prev => !prev)
   }
+
+  
 
   if (!superAdminSettings || !adminSettings) {
     return <LoadingSpinner />;
@@ -126,10 +136,10 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
         <div className="users-container">
-          {mutedUsersWithName.length > 0 ? (
+          {visibleMutedUsers.length > 0 ? (
 
 
-            mutedUsersWithName.map((user) =>
+            visibleMutedUsers.map((user) =>
 
               <div className="user-row-social" key={user.user_id} style={{ flexDirection: 'row' }}>
                 <div className="user-info">
