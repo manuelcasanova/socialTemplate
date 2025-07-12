@@ -119,7 +119,7 @@
     "privatePage": "Cette page est privée et accessible uniquement aux administrateurs.",
     "exploreTitle": "Explorez les scénarios admin :",
     "scenario": {
-      "modifyRoles": "- Modifiez les rôles autorisés d’un utilisateur.",
+      "modifyRoles": "- Créer, modifier ou supprimer des rôles. Modifiez les rôles autorisés d’un utilisateur.",
       "deleteUser": "- Supprimez un compte utilisateur.",
       "viewHistory": "- Consultez l’historique des connexions et les journaux d’audit des changements de rôle.",
       "adjustSettings": "- Ajustez les paramètres et observez comment les fonctionnalités sont activées ou désactivées. Certaines peuvent être restreintes par des admins de niveau supérieur."

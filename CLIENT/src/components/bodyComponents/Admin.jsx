@@ -13,8 +13,8 @@ export default function Admin({ isNavOpen }) {
           <li>
             <ul>
               <li><strong>{t('admin.exploreTitle')}</strong></li>
-              <li>{t('admin.scenario.modifyRoles')}</li>
               <li>{t('admin.scenario.deleteUser')}</li>
+              <li>{t('admin.scenario.modifyRoles')}</li>
               <li>{t('admin.scenario.viewHistory')}</li>
               <li>{t('admin.scenario.adjustSettings')}</li>
             </ul>

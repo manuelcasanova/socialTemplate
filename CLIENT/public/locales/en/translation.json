@@ -119,7 +119,7 @@
     "privatePage": "This page is private and accessible only to Administrators.",
     "exploreTitle": "Explore admin scenarios:",
     "scenario": {
-      "modifyRoles": "- Modify a user's allowed roles.",
+      "modifyRoles": "- Create, edit or delete roles. Modify a user's allowed roles.",
       "deleteUser": "- Delete a user account.",
       "viewHistory": "- View the Login History and audit logs for role changes.",
       "adjustSettings": "- Adjust settings and observe how features are enabled or disabled. Some features may be restricted by higher-tier administrators."

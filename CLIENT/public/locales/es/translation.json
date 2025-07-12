@@ -111,7 +111,7 @@
     "privatePage": "Esta página es privada y accesible solo para administradores.",
     "exploreTitle": "Explora escenarios de administrador:",
     "scenario": {
-      "modifyRoles": "- Modifica los roles permitidos de un usuario.",
+      "modifyRoles": "- Crea, edita o elimina un rol. Modifica los roles permitidos de un usuario.",
       "deleteUser": "- Elimina una cuenta de usuario.",
       "viewHistory": "- Consulta el historial de inicio de sesión y los registros de cambios de roles.",
       "adjustSettings": "- Ajusta la configuración y observa cómo se activan o desactivan las funciones. Algunas funciones pueden estar restringidas por administradores de nivel superior."
