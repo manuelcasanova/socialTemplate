@@ -1,21 +1,46 @@
+// import axios from "../api/axios";
+// import useAuth from "./useAuth";
+
+// const useLogout = () => {
+//     const { setAuth } = useAuth();
+
+//     const logout = async () => {
+//         setAuth({});
+//         try {
+//             const response = await axios('/logout', {
+//                 withCredentials: true
+//             });
+//         } catch (err) {
+//             console.error(err);
+//         }
+//     }
+
+//     return logout;
+// }
+
+// export default useLogout
+
 import axios from "../api/axios";
 import useAuth from "./useAuth";
+
+let isLoggingOut = false;
 
 const useLogout = () => {
     const { setAuth } = useAuth();
 
     const logout = async () => {
+        isLoggingOut = true; // 🧠 Set the logout flag
         setAuth({});
         try {
-            const response = await axios('/logout', {
-                withCredentials: true
-            });
+            await axios('/logout', { withCredentials: true });
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
     return logout;
-}
+};
 
-export default useLogout
+export const getIsLoggingOut = () => isLoggingOut; // 👈 helper function
+
+export default useLogout;
