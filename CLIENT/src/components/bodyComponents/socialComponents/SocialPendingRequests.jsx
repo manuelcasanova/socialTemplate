@@ -34,8 +34,9 @@ import { useTranslation } from 'react-i18next';
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
 export default function SocialPendingRequests({ isNavOpen, isFollowingNotification, setIsFollowNotification, profilePictureKey }) {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const { auth } = useAuth();
+  const isSuperAdmin = auth.roles.includes("SuperAdmin");
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const { adminSettings } = useGlobalAdminSettings();
@@ -59,7 +60,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
   const [showLargePicture, setShowLargePicture] = useState(null);
 
   const [filterUsername, setFilterUsername] = useState("");
-    const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
+  const [submittedFilterUsername, setSubmittedFilterUsername] = useState('');
 
   const inputRef = useRef(null);
 
@@ -121,6 +122,14 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
     return isUserActive && !mutedUsers.some(mute => (mute.muter === loggedInUser && mute.mutee === pending.follower_id && mute.mute));
   });
 
+  const visiblePending = filteredPending.filter(pending => {
+    const user = users.find(u => u.user_id === pending.follower_id);
+    if (!user) return false;
+
+    const isFolloweeSuperAdmin = user.roles?.includes("SuperAdmin");
+    return !(isFolloweeSuperAdmin && !(isSuperAdmin || superAdminSettings.showSuperAdminInSocial));
+  });
+
   //   console.log("mutedUSers", mutedUsers)
   //   console.log("users", users)
   // console.log("filteredPending", filteredPending)
@@ -133,11 +142,11 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
 
         <FilterUsername filterUsername={filterUsername} setFilterUsername={setFilterUsername} inputRef={inputRef} onSearch={() => setSubmittedFilterUsername(filterUsername)} />
 
-        {(filteredPending.length === 0 || !superAdminSettings.allowFollow) ? (
+        {(visiblePending.length === 0 || !superAdminSettings.allowFollow) ? (
           <p>{t('socialPending.noRequests')}</p>
         ) : (
           <div className="users-container">
-            {filteredPending.map((pending) => {
+            {visiblePending.map((pending) => {
               // Find the user details for the pendingRequests
               const user = users.find((u) => u.user_id === pending.follower_id);
 
@@ -148,7 +157,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                       <img
                         className="user-row-social-small-img"
                         onClick={() => setShowLargePicture(user.user_id)}
-                        src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                        src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/images/profilePicture.jpg';
@@ -163,7 +172,7 @@ export default function SocialPendingRequests({ isNavOpen, isFollowingNotificati
                         >
                           <img
                             className="users-all-picture-large"
-                            src={ `${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
+                            src={`${BACKEND}/media/profile_pictures/${user.user_id}/profilePicture.jpg?v=${profilePictureKey}`}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = '/images/profilePicture.jpg';
