@@ -623,5 +623,14 @@
   "notFound": {
     "title": "404 - Page non trouvée",
     "message": "La page que vous recherchez n’existe pas."
+  },
+  "registerControllerEmail": {
+    "subject": "Vérification de l'adresse e-mail - Fullstack Template",
+    "header": "Vérification de l'adresse e-mail - Fullstack Template",
+    "greeting": "Bonjour {{user}},",
+    "instruction": "Merci de vous être inscrit chez nous ! Pour finaliser votre inscription, veuillez vérifier votre adresse e-mail en cliquant sur le bouton ci-dessous.",
+    "button": "Vérifier l'adresse e-mail",
+    "disclaimer": "Si vous n'avez pas créé de compte chez nous, veuillez ignorer cet e-mail. Votre adresse e-mail est en sécurité.",
+    "thanks": "Merci !"
   }
 }

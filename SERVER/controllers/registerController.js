@@ -6,6 +6,8 @@ const { response } = require('express');
 const admin = require('../firebaseAdmin');
 const validateEmailConfig = require('../middleware/validateEnv')
 const disallowedUsernames = require('../config/disallowedUsernames');
+const i18next = require('../config/i18n');
+
 
 const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
@@ -19,7 +21,10 @@ let forceCreateNew = false;
 const handleNewUser = async (req, res) => {
     validateEmailConfig();
     let { user, pwd, email, role, restoreAction } = req.body.formData;
-    let {language} = req.body
+    let { language } = req.body
+    const t = i18next.getFixedT(language);
+
+    console.log('req.body', req.body, 'req.body.language', req.body.language, 't', t)
 
     if (!user || !pwd || !email) {
         return res.status(400).json({ 'message': 'Username, email, and password are required.' });
@@ -39,8 +44,8 @@ const handleNewUser = async (req, res) => {
     }
 
     if (disallowedUsernames.includes(user.toLowerCase())) {
-    return res.status(400).json({ 'message': 'This username is not allowed. Please choose another one.' });
-}
+        return res.status(400).json({ 'message': 'This username is not allowed. Please choose another one.' });
+    }
 
     // Normalize username: Capitalize the first letter of each word in the username
     user = user.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
@@ -122,15 +127,15 @@ const handleNewUser = async (req, res) => {
         let mailOptions = {
             from: process.env.RESET_EMAIL,
             to: email,
-            subject: 'Email Verification - Fullstack Template',
+            subject: t('registerControllerEmail.subject'),
             html: `
             <!DOCTYPE html>
-            <html lang="en">
+              <html lang="${language}">
                 <head>
                     <meta charset="UTF-8" />
                     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-                    <title>Email Verification</title>
+                    <title>${t('registerControllerEmail.subject')}</title>
                     <style>
                                               body {
                           font-family: Arial, sans-serif;
@@ -187,21 +192,21 @@ const handleNewUser = async (req, res) => {
                 <body>
                     <div class="email-container">
                         <div class="email-header">
-                            Email Verification - Fullstack Template
+                           ${t('registerControllerEmail.header')}
                         </div>
                         <div class="email-body">
                             <p>
-                                Hi ${user},
+                               ${t('registerControllerEmail.greeting', { user })}
                             </p>
                             <p>
-                                Thank you for registering with us! To complete your registration, please verify your email address by clicking the button below.
+                                ${t('registerControllerEmail.instruction')}
                             </p>
-                            <a href="${verificationLink}" class="verify-link">Verify Email</a>
+                            <a href="${verificationLink}" class="verify-link">${t('registerControllerEmail.button')}</a>
                             <p>
-                                If you did not create an account with us, please ignore this email. Your email is safe.
+                               ${t('registerControllerEmail.disclaimer')}
                             </p>
                             <p>
-                                Thank you!
+                                ${t('registerControllerEmail.thanks')}
                             </p>
                         </div>
                     </div>
@@ -235,10 +240,10 @@ const handleNewUser = async (req, res) => {
 // Function to return the role_ids for a given role
 const getRoleAssignments = (role) => {
     const roleAssignments = {
-        user_registered: [5], 
-        user_subscribed: [4],     
-        moderator: [3],                  
-        admin: [2],                  
+        user_registered: [5],
+        user_subscribed: [4],
+        moderator: [3],
+        admin: [2],
         superadmin: [1]
     };
 
@@ -250,73 +255,73 @@ const getRoleAssignments = (role) => {
 // New Google Sign-Up Handler
 const handleGoogleSignUp = async (req, res) => {
     const { token } = req.body;  // The token will be sent from the frontend
-  
+
     try {
-      // Verify the Firebase ID token using Firebase Admin SDK
-      const decodedToken = await admin.auth().verifyIdToken(token);
-      const { email, uid, name } = decodedToken;
-  
-      // Check if the user already exists (based on email or UID)
-      const duplicateCheckQuery = 'SELECT * FROM users WHERE email = $1 AND is_active = true';
-      const result = await pool.query(duplicateCheckQuery, [email]);
-  
-      if (result.rows.length > 0) {
-        return res.status(409).json({ message: 'User with this email already exists.' });
-      }
-  
-      // Capitalize the username (first letter of each word)
-      let username = name.trim().toLowerCase(); // Normalize to lowercase first
-      let words = username.split(" ");  // Split by spaces to separate words
-      words = words.map(word => {
-        // Capitalize the first letter of each word and make the rest lowercase
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      });
-      username = words.join(" "); // Join the words back together with a single space
-  
-      let originalUsername = username;  // Keep the properly capitalized base username
-      let usernameExists = true;
-      let suffix = 2;
-  
-      // Check for uniqueness by querying the database using lowercase comparison
-      while (usernameExists) {
-        // Check if the username already exists, using a case-insensitive query
-        const usernameCheckQuery = 'SELECT * FROM users WHERE LOWER(username) = $1 AND is_active = true'; 
-        const usernameCheckResult = await pool.query(usernameCheckQuery, [username.toLowerCase()]); // Case-insensitive check
-  
-        if (usernameCheckResult.rows.length === 0) {
-          usernameExists = false; // No duplicate, proceed with this username
-        } else {
-          // If the username exists, append a suffix and keep the capitalization intact
-          username = `${originalUsername}_${suffix}`; // Append suffix to the capitalized base username
-          suffix++;
+        // Verify the Firebase ID token using Firebase Admin SDK
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        const { email, uid, name } = decodedToken;
+
+        // Check if the user already exists (based on email or UID)
+        const duplicateCheckQuery = 'SELECT * FROM users WHERE email = $1 AND is_active = true';
+        const result = await pool.query(duplicateCheckQuery, [email]);
+
+        if (result.rows.length > 0) {
+            return res.status(409).json({ message: 'User with this email already exists.' });
         }
-      }
-  
-      // Proceed to create a new user with the decoded token details
-      const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified, language) VALUES ($1, $2, $3, true, $4) RETURNING user_id';
-      const userInsertResult = await pool.query(insertUserQuery, [username, email, 'google_auth_token', language]); // Store 'google_auth_token' as a placeholder password
-      const newUserId = userInsertResult.rows[0].user_id;
-  
-      // Handle user roles and verification (can be skipped or modified as needed)
-      const roleAssignments = getRoleAssignments('user_registered');
-      const roleQueries = roleAssignments.map(role_id => {
-        return pool.query('INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES ($1, $2, $3)', [newUserId, role_id, newUserId]);
-      });
-  
-      await Promise.all(roleQueries);
-  
-      res.status(201).json({ message: 'Google sign-up successful. User created.' });
-  
+
+        // Capitalize the username (first letter of each word)
+        let username = name.trim().toLowerCase(); // Normalize to lowercase first
+        let words = username.split(" ");  // Split by spaces to separate words
+        words = words.map(word => {
+            // Capitalize the first letter of each word and make the rest lowercase
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        });
+        username = words.join(" "); // Join the words back together with a single space
+
+        let originalUsername = username;  // Keep the properly capitalized base username
+        let usernameExists = true;
+        let suffix = 2;
+
+        // Check for uniqueness by querying the database using lowercase comparison
+        while (usernameExists) {
+            // Check if the username already exists, using a case-insensitive query
+            const usernameCheckQuery = 'SELECT * FROM users WHERE LOWER(username) = $1 AND is_active = true';
+            const usernameCheckResult = await pool.query(usernameCheckQuery, [username.toLowerCase()]); // Case-insensitive check
+
+            if (usernameCheckResult.rows.length === 0) {
+                usernameExists = false; // No duplicate, proceed with this username
+            } else {
+                // If the username exists, append a suffix and keep the capitalization intact
+                username = `${originalUsername}_${suffix}`; // Append suffix to the capitalized base username
+                suffix++;
+            }
+        }
+
+        // Proceed to create a new user with the decoded token details
+        const insertUserQuery = 'INSERT INTO users (username, email, password, is_verified, language) VALUES ($1, $2, $3, true, $4) RETURNING user_id';
+        const userInsertResult = await pool.query(insertUserQuery, [username, email, 'google_auth_token', language]); // Store 'google_auth_token' as a placeholder password
+        const newUserId = userInsertResult.rows[0].user_id;
+
+        // Handle user roles and verification (can be skipped or modified as needed)
+        const roleAssignments = getRoleAssignments('user_registered');
+        const roleQueries = roleAssignments.map(role_id => {
+            return pool.query('INSERT INTO user_roles (user_id, role_id, assigned_by_user_id) VALUES ($1, $2, $3)', [newUserId, role_id, newUserId]);
+        });
+
+        await Promise.all(roleQueries);
+
+        res.status(201).json({ message: 'Google sign-up successful. User created.' });
+
     } catch (err) {
-      console.error('Error verifying Firebase token:', err);
-      res.status(500).json({ message: 'Error during Google sign-up.' });
+        console.error('Error verifying Firebase token:', err);
+        res.status(500).json({ message: 'Error during Google sign-up.' });
     }
-  };
-  
-  
-  
-  
-  
+};
+
+
+
+
+
 
 
 module.exports = { handleNewUser, handleGoogleSignUp };

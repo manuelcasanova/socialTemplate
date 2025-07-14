@@ -616,5 +616,14 @@
   "notFound": {
     "title": "404 - Página no encontrada",
     "message": "La página que buscas no existe."
+  },
+    "registerControllerEmail": {
+    "subject": "Verificación de correo electrónico - Fullstack Template",
+    "header": "Verificación de correo electrónico - Fullstack Template",
+    "greeting": "Hola {{user}},",
+    "instruction": "¡Gracias por registrarte con nosotros! Para completar tu registro, por favor verifica tu correo electrónico haciendo clic en el botón de abajo.",
+    "button": "Verificar correo electrónico",
+    "disclaimer": "Si no creaste una cuenta con nosotros, ignora este correo. Tu dirección de correo está segura.",
+    "thanks": "¡Gracias!"
   }
 }

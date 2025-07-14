@@ -274,7 +274,6 @@ CREATE TABLE admin_settings (
 );
 
 
-
 -- =======================
 -- Grants to udokm633_manuelcasanova
 -- =======================

@@ -8,8 +8,8 @@ INSERT INTO users (username, email, password, is_verified, is_active) VALUES
  ,
   -- ('Manuel Casanova Hotmail', 'manucasanova@hotmail.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
   --   ,
-  ('Manuel Casanova Yahoo', 'manuelcasanovafernandez@yahoo.es', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
-    ,
+  -- ('Manuel Casanova Yahoo', 'manuelcasanovafernandez@yahoo.es', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
+  --   ,
   ('Manuel Casanova Spanish', 'info@casanovaspanish.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true)
   ;
   
@@ -69,10 +69,11 @@ VALUES
 ,
 
 (3, 1, 1),
-(3, 5, 3),
+(3, 5, 3)
+-- ,
 
-(4, 1, 3),
-(4, 5, 4)
+-- (4, 1, 3),
+-- (4, 5, 4)
 
 ;
 

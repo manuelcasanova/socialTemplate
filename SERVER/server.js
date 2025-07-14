@@ -11,6 +11,13 @@ const cookieParser = require('cookie-parser');
 const customJsonParser = require('./middleware/customJsonParser');
 const verifyJWT = require('./middleware/verifyJWT')
 
+const i18next = require('./config/i18n');
+const i18nextMiddleware = require('i18next-http-middleware');
+const setLanguage = require('./middleware/setLanguage')
+
+// const fs = require('fs');
+// const i18nPath = path.join(__dirname, 'config/i18n.js');
+
 const app = express();
 app.set('trust proxy', 1); // Trust only the first proxy
 const PORT = process.env.PORT || 3500;
@@ -50,8 +57,21 @@ app.get('/ping', (req, res) => {
     res.status(200).send('pong! The server is running!');
 });
 
+
 //Triggers at midnight every day to update subscription status to is_active false if due_date is in the past.
 scheduleSubscriptionUpdates();
+
+app.use(i18nextMiddleware.handle(i18next));
+
+app.get('/lang-check', (req, res) => {
+  res.json({
+    detected: req.language,
+    fallbackList: req.languages,
+    i18nCurrent: req.i18n.language
+  });
+});
+
+
 
 app.use('/signup', require('./routes/auth/signup'));
 
@@ -64,15 +84,17 @@ app.use('/forgot-password', require('./routes/auth/forgot-password'));
 app.use('/verify-email', require('./routes/auth/verify-email'));
 app.use('/resend-verification-email', require('./routes/auth/auth'));
 
-app.use('/custom-roles-public', require('./routes/public/customRoles')); 
-app.use('/all-roles-public', require('./routes/public/allRoles')); 
+app.use('/custom-roles-public', require('./routes/public/customRoles'));
+app.use('/all-roles-public', require('./routes/public/allRoles'));
 
 app.use(verifyJWT);
 
-app.use('/users', require('./routes/api/users'));  
-app.use('/social', require('./routes/api/social')); 
-app.use('/messages', require('./routes/api/messages')); 
-app.use('/posts', require('./routes/api/posts')); 
+app.use(setLanguage);   
+
+app.use('/users', require('./routes/api/users'));
+app.use('/social', require('./routes/api/social'));
+app.use('/messages', require('./routes/api/messages'));
+app.use('/posts', require('./routes/api/posts'));
 app.use('/reports', require('./routes/api/reports'));
 app.use('/reports-comments', require('./routes/api/reports-comments'));
 app.use('/roles', require('./routes/api/roles'));
