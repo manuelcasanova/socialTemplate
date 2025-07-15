@@ -24,7 +24,7 @@ const handleNewUser = async (req, res) => {
     let { language } = req.body
     const t = i18next.getFixedT(language);
 
-    console.log('req.body', req.body, 'req.body.language', req.body.language, 't', t)
+    // console.log('req.body', req.body, 'req.body.language', req.body.language, 't', t)
 
     if (!user || !pwd || !email) {
         return res.status(400).json({ 'message': 'Username, email, and password are required.' });

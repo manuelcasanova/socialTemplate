@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const { REMOTE_CLIENT_APP, RESET_EMAIL_CLIENT, RESET_EMAIL_PORT, RESET_EMAIL, RESET_EMAIL_PASSWORD, ACCESS_TOKEN_SECRET } = process.env;
 const validateEmailConfig = require('../middleware/validateEnv')
+const i18next = require('../config/i18n');
 
 
 const handleLogin = async (req, res) => {
@@ -113,14 +114,16 @@ const handleLogin = async (req, res) => {
 
 
 const resendVerificationEmail = async (req, res) => {
-    const { email } = req.body;
-
+    const { email, language } = req.body;
+    const t = i18next.getFixedT(language);
     const client = await pool.connect();  // Get a client from the pool
 
     try {
         // Query the database to find the user
         const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
         const user = result.rows[0];
+
+        console.log('user', user)
 
         if (!user) {
             return res.status(400).json({ error: 'User not found or email mismatch' });
@@ -149,19 +152,19 @@ const resendVerificationEmail = async (req, res) => {
 
         // Email content
         let mailOptions = {
-            from: RESET_EMAIL,
+            from: process.env.RESET_EMAIL,
             to: email,
-            subject: 'Email Verification - Fullstack Template',
+            subject: t('registerControllerEmail.subject'),
             html: `
-          <!DOCTYPE html>
-          <html lang="en">
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+            <!DOCTYPE html>
+              <html lang="${language}">
+                <head>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-                  <title>Email Verification</title>
-                  <style>
-                      body {
+                    <title>${t('registerControllerEmail.subject')}</title>
+                    <style>
+                                              body {
                           font-family: Arial, sans-serif;
                           margin: 0;
                           padding: 0;
@@ -211,32 +214,32 @@ const resendVerificationEmail = async (req, res) => {
                       .email-body a {
                           margin: 5px 0 10px 0;
                       }
-                  </style>
-              </head>
-              <body>
-                  <div class="email-container">
-                      <div class="email-header">
-                          Email Verification - Fullstack Template
-                      </div>
-                      <div class="email-body">
-                          <p>
-                              Hi ${user.username},
-                          </p>
-                          <p>
-                              Thank you for registering with us! To complete your registration, please verify your email address by clicking the button below.
-                          </p>
-                          <a href="${verificationLink}" class="verify-link">Verify Email</a>
-                          <p>
-                              If you did not create an account with us, please ignore this email. Your email is safe.
-                          </p>
-                          <p>
-                              Thank you!
-                          </p>
-                      </div>
-                  </div>
-              </body>
-          </html>
-          `
+                    </style>
+                </head>
+                <body>
+                    <div class="email-container">
+                        <div class="email-header">
+                           ${t('registerControllerEmail.header')}
+                        </div>
+                        <div class="email-body">
+                            <p>
+                               ${t('registerControllerEmail.greeting', { user: user.username })}
+                            </p>
+                            <p>
+                                ${t('registerControllerEmail.instruction')}
+                            </p>
+                            <a href="${verificationLink}" class="verify-link">${t('registerControllerEmail.button')}</a>
+                            <p>
+                               ${t('registerControllerEmail.disclaimer')}
+                            </p>
+                            <p>
+                                ${t('registerControllerEmail.thanks')}
+                            </p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+            `
         };
 
 
@@ -279,7 +282,7 @@ const handleFirebaseLogin = async (req, res) => {
             return res.status(404).json({ error: 'User not registered.' });
         }
 
-            const preferredLanguage = user.language || 'en'; // Get preferred language
+        const preferredLanguage = user.language || 'en'; // Get preferred language
 
         // Generate JWT tokens
         const userId = user.user_id;

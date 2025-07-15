@@ -71,8 +71,6 @@ app.get('/lang-check', (req, res) => {
   });
 });
 
-
-
 app.use('/signup', require('./routes/auth/signup'));
 
 app.use('/restore-account', require('./routes/auth/restore-account'));

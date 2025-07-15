@@ -237,6 +237,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
             const csrfToken = getCsrfToken();
             await axios.post('/auth/resend-verification-email', {
                 email: email.trim().toLowerCase(),
+                language: i18n.language
             }, {
                 headers: {
                     'X-CSRF-Token': csrfToken,  // Include CSRF token in the request headers
