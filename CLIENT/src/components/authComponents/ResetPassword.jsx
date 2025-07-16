@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function ResetPassword({isNavOpen}) {
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [email, setEmail] = useState()
   const axiosPrivate = useAxiosPrivate()
@@ -43,7 +43,7 @@ export default function ResetPassword({isNavOpen}) {
 
     try {
       const response = await axiosPrivate.post(`/forgot-password`,
-        JSON.stringify({ email }),
+        JSON.stringify({ email,  language: i18n.language }),
         {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true

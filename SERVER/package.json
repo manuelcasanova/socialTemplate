@@ -23,6 +23,7 @@
     "i18next": "^25.3.2",
     "i18next-express-middleware": "^2.0.0",
     "i18next-fs-backend": "^2.6.0",
+    "i18next-http-backend": "^3.0.2",
     "i18next-http-middleware": "^3.7.4",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",

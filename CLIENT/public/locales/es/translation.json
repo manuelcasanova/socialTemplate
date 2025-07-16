@@ -625,5 +625,14 @@
     "button": "Verificar correo electrónico",
     "disclaimer": "Si no creaste una cuenta con nosotros, ignora este correo. Tu dirección de correo está segura.",
     "thanks": "¡Gracias!"
+  },
+   "passwordResetEmail": {
+    "subject": "Restablecimiento de Contraseña - Plantilla Fullstack",
+    "header": "Restablecimiento de Contraseña - Plantilla Fullstack",
+    "greeting": "Hola,",
+    "instruction": "Hemos recibido una solicitud para restablecer tu contraseña. Este enlace es válido por 1 hora. Haz clic en el botón de abajo para establecer una nueva contraseña.",
+    "button": "Restablecer Contraseña",
+    "disclaimer": "Si no solicitaste el restablecimiento de tu contraseña, por favor ignora este correo. Tu cuenta sigue estando segura.",
+    "thanks": "¡Gracias!"
   }
 }

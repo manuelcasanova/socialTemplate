@@ -4,11 +4,14 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 let nodemailer = require('nodemailer');
 // const { checkout } = require('../routes/root');
+const i18next = require('../config/i18n');
 
 const BASE_URL = process.env.REMOTE_CLIENT_APP;
 
 const handlePost = async (req, res) => {
   const { email } = req.body;
+  let { language } = req.body
+  const t = i18next.getFixedT(language);
   try {
 
     const data = await pool.query('SELECT * FROM users WHERE email = $1', [email])
@@ -43,10 +46,10 @@ const handlePost = async (req, res) => {
       let mailOptions = {
         from: process.env.RESET_EMAIL,
         to: email,
-        subject: 'Password Reset - Fullstack Template',
+        subject: t('passwordResetEmail.subject'),
         html: `
           <!DOCTYPE html>
-          <html lang="en">
+              <html lang="${language}">
             <head>
               <meta charset="UTF-8" />
               <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -108,21 +111,21 @@ const handlePost = async (req, res) => {
             <body>
               <div class="email-container">
                 <div class="email-header">
-                  Password Reset Request - Fullstack Template
+                           ${t('passwordResetEmail.header')}
                 </div>
                 <div class="email-body">
                   <p>
-                    Hi there,
+                       ${t('passwordResetEmail.greeting')}
                   </p>
                   <p>
-                    We received a request to reset your password. This link is valid for 1 hour. Please click the button below to set a new password.
+                               ${t('passwordResetEmail.instruction')}
                   </p>
-                  <a href="${link}" class="reset-link">Reset Password</a>
+                  <a href="${link}" class="reset-link">${t('passwordResetEmail.button')}</a>
                   <p>
-                    If you did not request a password reset, please ignore this email. Your account is still secure.
+           ${t('passwordResetEmail.disclaimer')}
                   </p>
                   <p>
-                Thank you!
+                   ${t('passwordResetEmail.thanks')}
                   </p>
                 </div>
               </div>

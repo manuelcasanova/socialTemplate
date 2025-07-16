@@ -632,5 +632,14 @@
     "button": "Vérifier l'adresse e-mail",
     "disclaimer": "Si vous n'avez pas créé de compte chez nous, veuillez ignorer cet e-mail. Votre adresse e-mail est en sécurité.",
     "thanks": "Merci !"
+  },
+  "passwordResetEmail": {
+    "subject": "Réinitialisation du Mot de Passe - Modèle Fullstack",
+    "header": "Réinitialisation du Mot de Passe - Modèle Fullstack",
+    "greeting": "Bonjour",
+    "instruction": "Nous avons reçu une demande pour réinitialiser votre mot de passe. Ce lien est valable pendant 1 heure. Veuillez cliquer sur le bouton ci-dessous pour définir un nouveau mot de passe.",
+    "button": "Réinitialiser le Mot de Passe",
+    "disclaimer": "Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet e-mail. Votre compte reste sécurisé.",
+    "thanks": "Merci !"
   }
 }

@@ -632,5 +632,14 @@
     "button": "Verify Email",
     "disclaimer": "If you did not create an account with us, please ignore this email. Your email is safe.",
     "thanks": "Thank you!"
+  },
+  "passwordResetEmail": {
+    "subject": "Password Reset - Fullstack Template",
+    "header": "Password Reset - Fullstack Template",
+    "greeting": "Hi there",
+    "instruction": "We received a request to reset your password. This link is valid for 1 hour. Please click the button below to set a new password.",
+    "button": "Reset Password",
+    "disclaimer": "If you did not request a password reset, please ignore this email. Your account is still secure.",
+    "thanks": "Thank you!"
   }
 }
