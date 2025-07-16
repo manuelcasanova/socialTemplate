@@ -179,14 +179,17 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
                 return "verifyEmail";
             case "Login Failed":
                 return "loginFailed";
+            case "Wrong email or password":
+                return "wrongEmailOrPassword";
             case "No Server Response":
                 return "noServerResponse";
             default:
-                return "loginFailed"; // fallback
+                return "loginFailed"; 
         }
     };
 
     const handleError = (err) => {
+
         const errorMessage = err?.response?.data?.error || t('signin.errors.loginFailed');
 
         if (err?.response?.data?.error) {

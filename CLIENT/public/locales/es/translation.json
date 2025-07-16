@@ -142,7 +142,8 @@
       "googleFailed": "No se pudo iniciar sesión con Google.",
       "loginFailed": "Inicio de sesión fallido",
       "noServerResponse": "Sin respuesta del servidor",
-      "verifyEmail": "Por favor, verifica tu email antes de acceder. Revisa tu carpeta de correo no deseado."
+      "verifyEmail": "Por favor, verifica tu email antes de acceder. Revisa tu carpeta de correo no deseado.",
+      "wrongEmailOrPassword": "Correo electrónico o contraseña incorrectos, o la cuenta no existe."
     }
   },
   "resetPassword": {
@@ -151,7 +152,7 @@
     "submit": "Enviar",
     "signUpLink": "Regístrate",
     "loadingMessage": "Por favor, espera. Puede tardar hasta un minuto.",
-    "successMessage": "Se ha enviado un correo con instrucciones para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada o carpeta de spam.",
+    "successMessage": "Si esta cuenta está registrada en nuestro sistema, se ha enviado un correo con instrucciones para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada o carpeta de spam.",
     "noServerResponse": "Sin respuesta del servidor",
     "emailNotFound": "Este correo no fue encontrado en nuestra base de datos",
     "unauthorized": "No autorizado",

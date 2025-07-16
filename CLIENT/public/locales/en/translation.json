@@ -150,7 +150,8 @@
       "googleFailed": "Failed to sign in with Google.",
       "loginFailed": "Login Failed",
       "noServerResponse": "No Server Response",
-      "verifyEmail": "Please verify your email before logging in. Check your spam folder"
+      "verifyEmail": "Please verify your email before logging in. Check your spam folder",
+"wrongEmailOrPassword": "Incorrect email or password, or account does not exist."
     }
   },
   "resetPassword": {
@@ -159,7 +160,7 @@
     "submit": "Submit",
     "signUpLink": "Sign Up",
     "loadingMessage": "Please, wait. It may take up to a minute.",
-    "successMessage": "An email with instructions to reset your password has been sent. Please check your inbox or spam folder.",
+    "successMessage": "If this account is registered in our system, an email with instructions to reset your password has been sent. Please check your inbox or spam folder.",
     "noServerResponse": "No Server Response",
     "emailNotFound": "This email was not found in our database",
     "unauthorized": "Unauthorized",

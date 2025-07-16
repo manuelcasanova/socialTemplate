@@ -150,7 +150,8 @@
       "googleFailed": "Échec de la connexion avec Google.",
       "loginFailed": "Échec de la connexion",
       "noServerResponse": "Pas de réponse du serveur",
-      "verifyEmail": "Veuillez vérifier votre e‑mail avant de vous connecter. Consultez votre dossier spam"
+      "verifyEmail": "Veuillez vérifier votre e‑mail avant de vous connecter. Consultez votre dossier spam",
+      "wrongEmailOrPassword": "Email ou mot de passe incorrect, ou compte inexistant."
     }
   },
   "resetPassword": {
@@ -159,7 +160,7 @@
     "submit": "Soumettre",
     "signUpLink": "Inscription",
     "loadingMessage": "Veuillez patienter. Cela peut prendre jusqu’à une minute.",
-    "successMessage": "Un e‑mail contenant les instructions pour réinitialiser votre mot de passe a été envoyé. Veuillez vérifier votre boîte de réception ou spam.",
+    "successMessage": "Si ce compte est enregistré dans notre système, un e‑mail contenant les instructions pour réinitialiser votre mot de passe a été envoyé. Veuillez vérifier votre boîte de réception ou spam.",
     "noServerResponse": "Pas de réponse du serveur",
     "emailNotFound": "Cet e‑mail n’a pas été trouvé dans notre base de données",
     "unauthorized": "Non autorisé",
