@@ -179,8 +179,6 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
 
         setError('Server is unreachable. Please try again later.');
         setErrMsg('No Server Response');
-      } else if (err.response?.status === 403) {
-        setErrMsg('This email was not found in our database');
       } else if (err.response?.status === 401) {
         setErrMsg('Unauthorized');
       } else {

@@ -63,7 +63,8 @@ export default function ResetPassword({isNavOpen}) {
       if (!err?.response) {
         setErrMsg(t('resetPassword.noServerResponse'));
       } else if (err.response?.status === 403) {
-        setErrMsg('This email was not found in our database');
+        setMsg(t('resetPassword.successMessage'));
+        //Option: setErrMsg(t('resetPassword.emailNotFound')); 
       } else if (err.response?.status === 401) {
         setErrMsg(t('resetPassword.unauthorized'));
       } else {
