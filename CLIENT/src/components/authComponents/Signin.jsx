@@ -64,6 +64,10 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
     const [isVerified, setIsVerified] = useState(true);
     const [showSignUpWithEmail, setShowSignUpWithEmail] = useState(false);
     const handleShowSignUpWithEmail = () => setShowSignUpWithEmail(prev => !prev)
+    const handleClose = () => {
+        setShowSignUpWithEmail(prev => !prev)
+        setErrMsg('')
+    }
 
     // Password ref to access password value directly without state
     const passwordRef = useRef();
@@ -267,7 +271,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
 
                 {showSignUpWithEmail &&
                     <div className='close-button-container'>
-                        <button className="close-button-2" onClick={handleShowSignUpWithEmail}>✖</button>
+                        <button className="close-button-2" onClick={handleClose}>✖</button>
                     </div>
                 }
 
@@ -300,7 +304,9 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
 
                         {/* Remove on production */}
 
-                        <div className="trust-device">
+                        <div className="trust-device"
+                        style={{marginTop: '1em'}}
+                        >
                             <input
                                 type="checkbox"
                                 id="persist"

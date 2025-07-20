@@ -15,28 +15,29 @@ There are five distinct roles in the system:
 SuperAdmin: The highest-level role, with access to all administrative functionalities.
 Admin: A role with significant permissions, but limited in terms of managing SuperAdmin roles.
 Moderator: A role typically used for managing content or user interactions, but with fewer privileges than Admins.
-Subscribed: A role for users who are subscribed (e.g., via a paid option).
-NotSubscribed: A role for registered users who have not subscribed.
+User_subscribed: A role for users who are subscribed (e.g., via a paid option).
+User_registered: A role for registered users who have not subscribed.
 
 SuperAdmin permissions:
 
-SuperAdmins can grant or revoke any role, including Admin, Moderator, Subscribed, and NotSubscribed.
+SuperAdmins can grant or revoke any role, including Admin, Moderator, User_subscribed, and User_registered.
 SuperAdmins cannot revoke their own SuperAdmin role.
 A SuperAdmin can only revoke the SuperAdmin role if they were the one who assigned it. They cannot revoke it if another SuperAdmin granted the role. The only exception is the SuperAdmin with userId 1, ensuring that there is always someone with the authority to make this change.
 
 Admin permissions:
 
-Admins can assign and revoke roles for Moderator, Subscribed, and NotSubscribed users.
+Admins can assign and revoke roles for Moderator, User_subscribed, and User_registered users.
 Admins cannot assign or revoke the SuperAdmin or Admin roles. Only SuperAdmins can manage Admin roles.
 
   *** Role Logs ***
 
 Whenever a role is assigned or revoked, a log is created detailing who performed the modification, to whom it was applied, the type of modification (assignment or revocation), and the timestamp. This log is accessible to SuperAdmins in the admin section of the app. Typically, only Admins and SuperAdmins can modify roles, with one exception: when a user subscribes to the app. After the payment is processed, the "User_subscribed" role is automatically added on behalf of the user, and this is recorded in the log accordingly.
 
+If a user who originally granted specific roles loses their permissions—either through revocation by a higher-tier admin or account deletion—the authority to manage the roles they assigned transfers to the higher-tier admin. This ensures that role-based control remains uninterrupted and properly delegated within the system.
+
  *** Other Logs ***
 
 SuperAdmins have the ability to view the login history for all users. They can filter the history based on user ID, username, email, date, and time.
-
 
   *** Protected routes ***
 
@@ -44,7 +45,6 @@ The system includes protected routes, and roles are not hierarchical. This means
 
 A user with the Admin role does not automatically have access to routes assigned to lower roles like Moderator or Subscribed.
 For access to protected routes associated with these roles, the user must have the specific role assigned to them in addition to their Admin privileges.
-
 
 *** Registration ***
 
@@ -106,7 +106,7 @@ The app includes a social posting feature similar to a Facebook wall, where user
 
 *** App Settings ***
 
-The app includes an App Settings section designed exclusively for SuperAdmins, giving them centralized control over various features of the platform. This allows for quick and flexible customization of the app’s functionality without altering the codebase. SuperAdmins can toggle entire features on or off — such as private messaging, posting, profile editing, social connections, or the subscriber section — depending on the desired complexity of the app. This is especially useful for tailoring the app to different use cases, whether it be a lightweight community or a fully featured social platform. Additionally, this system is ideal for managing premium features: SuperAdmins can easily unlock access to specific features for paying subscribers.
+The app includes an App Settings section designed exclusively for Admins and SuperAdmins, giving them centralized control over various features of the platform. This allows for quick and flexible customization of the app’s functionality without altering the codebase. Admins and SuperAdmins can toggle entire features on or off — such as private messaging, posting, profile editing, social connections, or the subscriber section — depending on the desired complexity of the app. This is especially useful for tailoring the app to different use cases, whether it be a lightweight community or a fully featured social platform. Additionally, this system is ideal for managing premium features: Admins and SuperAdmins can easily unlock access to specific features for paying subscribers.
 
 Beyond global toggles, App Settings offers fine-grained control over individual permissions. For instance, the Posts feature can be active while restricting posting to Admins only, disabling comments or reactions, or allowing users to report content but not delete it. Below is a breakdown of the configurable options:
 
@@ -114,7 +114,7 @@ POSTS
 
 Disable Posts
 
-Admins Can Post
+Admins Can Post (Available for Super Admins only)
 
 Users Can Post
 
@@ -152,9 +152,9 @@ Enable Muting
 
 ADMINISTRATORS
 
-Admins Can Manage Roles
+Admins Can Manage Roles (Available for Super Admins only)
 
-Admins Can Delete Users
+Admins Can Delete Users (Available for Super Admins only)
 
 PROFILE
 
@@ -174,6 +174,24 @@ SUBSCRIBER
 
 Disable Subscriber Feature
 
+CUSTOM ROLES
+
+Enable custom roles (Available for Super Admins only)
+
+Admins can create a custom role (Available for Super Admins only)
+
+Admins can edit a custom roles (Available for Super Admins only)
+
+Admins can delete a custom role (Available for Super Admins only)
+
+SUPER ADMIN VISIBILITY
+
+Show Super Admins in Users Admin Section (Available for Super Admins only)
+
+Show Super Admins in Social (Available for Super Admins only)
+
+Show Super Admins in Login History (Available for Super Admins only)
+
 These settings give SuperAdmins powerful tools to shape the user experience and enforce the app's policies or subscription structure as needed.
 
 
@@ -181,16 +199,18 @@ These settings give SuperAdmins powerful tools to shape the user experience and 
 
   *** Backend ***
 
-NODE_ENV=development
-
-  #PORT
-PORT=
-
 #BACKEND URL
-REMOTE_CLIENT_APP = http://...
+REMOTE_CLIENT_APP =
+
+BASE_URL=
 
 #ALLOWED ORIGINS, FOR CORS
-ALLOWED_ORIGINS=http://...
+ALLOWED_ORIGINS=
+
+NODE_ENV=development
+
+#PORT
+PORT=3500
 
 #POSTGRESQL
 DB_USER=
@@ -202,6 +222,7 @@ DB_PORT=
 # JWT Secrets 
 ACCESS_TOKEN_SECRET=
 REFRESH_TOKEN_SECRET=
+VERIFICATION_TOKEN_SECRET = 
 
 # RESET PASSWORD
 RESET_EMAIL_PASSWORD=
