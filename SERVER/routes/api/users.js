@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const usersController = require('../../controllers/usersController');
-const {fetchRoles} = require('../../config/fetchRoles');
+const { fetchRoles } = require('../../config/fetchRoles');
 const verifyRoles = require('../../middleware/verifyRoles');
 const multer = require('multer');
 const pool = require('../../config/db')
@@ -68,13 +68,13 @@ router.route('/')
   );
 
 
-  router.route('/:userId')
+router.route('/:userId')
   .get(
     async (req, res, next) => {
       try {
         verifyRoles(
-        'Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_registered'
-        // 'ForceError'
+          'Admin', 'SuperAdmin', 'Moderator', 'User_subscribed', 'User_registered'
+          // 'ForceError'
         )(req, res, next);
       } catch (err) {
         next(err);
@@ -83,7 +83,7 @@ router.route('/')
     usersController.getUserById
   );
 
-  router.route('/subscriptions/status/:user_id')
+router.route('/subscriptions/status/:user_id')
   .get(
     async (req, res, next) => {
       try {
@@ -240,10 +240,10 @@ router.route('/softdelete/:userId')
 
         return verifyRoles(...allowedRoles)(req, res, next);
       } catch (err) {
-        next(err); 
+        next(err);
       }
     },
-    usersController.softDeleteUser 
+    usersController.softDeleteUser
   );
 
 
@@ -304,6 +304,48 @@ router.route('/subscribe')
       }
     },
     usersController.subscribeUser
+  );
+
+router.route('/:userId/social-visibility')
+
+  .put(
+    async (req, res, next) => {
+      try {
+
+        // Fetch roles and verify permissions
+        const rolesList = await fetchRoles();
+        verifyRoles(...rolesList)(req, res, next);
+
+      } catch (err) {
+        next(err);
+      }
+    },
+    async (req, res) => {
+      const { userId } = req.params;
+      const { socialVisibility } = req.body;
+
+
+      try {
+
+        const result = await pool.query(`
+          UPDATE users 
+          SET social_visibility = $1
+          WHERE user_id = $2
+          RETURNING user_id, social_visibility;
+        `, [socialVisibility, userId]);
+
+        if (result.rowCount > 0) {
+          return res.status(200).json({
+            message: 'Social visibility updated successfully.',
+            user: result.rows[0]
+          });
+        } else {
+          return res.status(404).json({ message: 'User not found.' });
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
   );
 
 

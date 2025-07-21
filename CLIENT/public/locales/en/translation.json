@@ -151,7 +151,7 @@
       "loginFailed": "Login Failed",
       "noServerResponse": "No Server Response",
       "verifyEmail": "Please verify your email before logging in. Check your spam folder",
-"wrongEmailOrPassword": "Incorrect email or password, or account does not exist."
+      "wrongEmailOrPassword": "Incorrect email or password, or account does not exist."
     }
   },
   "resetPassword": {
@@ -202,7 +202,9 @@
     "criticalErrorUploadFailed": "Critical Error: Upload failed: ",
     "criticalErrorDeletionFailed": "Critical Error: Deletion failed: ",
     "criticalErrorUpdateFailed": "Critical Error: Update failed: ",
-    "testPurposesCannotModifyAccount": "For test purposes, this account cannot be modified or deleted"
+    "testPurposesCannotModifyAccount": "For test purposes, this account cannot be modified or deleted",
+    "socialVisibilityOn": "Disable visibility so others cannot connect with you",
+    "socialVisibilityOff": "Enable visibility so others can connect with you"
   },
   "signup": {
     "allSet": "All Set!",

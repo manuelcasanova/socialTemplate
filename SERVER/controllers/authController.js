@@ -19,7 +19,6 @@ const handleLogin = async (req, res) => {
         const data = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         const foundEmail = data.rows;
 
-
         if (foundEmail.length === 0) {
             return res.status(400).json({ error: "Wrong email or password" });
         }
@@ -47,6 +46,7 @@ const handleLogin = async (req, res) => {
                 const roles = roleData.rows.map(role => role.role_name);
 
                 const preferredLanguage = foundEmail[0].language || 'en'; // Default to 'en' if not set
+                const socialVisibility = foundEmail[0].social_visibility 
 
                 // Check if the user has any unread messages (status = 'sent')
                 const unreadMessages = await pool.query(
@@ -79,7 +79,7 @@ const handleLogin = async (req, res) => {
 
                 // Create JWTs
                 const accessToken = jwt.sign(
-                    { "UserInfo": { "email": foundEmail[0].email, "roles": roles, "preferred_language": preferredLanguage } },
+                    { "UserInfo": { "email": foundEmail[0].email, "roles": roles, "preferred_language": preferredLanguage, "social_visibility": socialVisibility } },
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '5m' } //5m
                 );
@@ -98,7 +98,7 @@ const handleLogin = async (req, res) => {
                 });
                 // console.log(`Does User ID ${userId} have new messages? ${hasNewMessages}`)
                 // Return the response with the access token, user ID, and roles
-                res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports });
+                res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility });
 
             } else {
                 res.status(401).json({ error: "Wrong email or password" });
@@ -122,8 +122,6 @@ const resendVerificationEmail = async (req, res) => {
         // Query the database to find the user
         const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
         const user = result.rows[0];
-
-        console.log('user', user)
 
         if (!user) {
             return res.status(400).json({ error: 'User not found or email mismatch' });
@@ -277,12 +275,14 @@ const handleFirebaseLogin = async (req, res) => {
         let data = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         let user = data.rows[0];
 
+
         if (!user) {
             // If user is not found, return the specific error message
             return res.status(404).json({ error: 'User not registered.' });
         }
 
         const preferredLanguage = user.language || 'en'; // Get preferred language
+        const socialVisibility = user.social_visibility;
 
         // Generate JWT tokens
         const userId = user.user_id;
@@ -339,7 +339,7 @@ const handleFirebaseLogin = async (req, res) => {
         });
 
         // Send the response with the generated tokens
-        res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports });
+        res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility });
     } catch (error) {
         console.error('Error during Firebase login:', error);
         res.status(500).json({ error: 'Internal Server Error' });

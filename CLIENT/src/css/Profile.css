@@ -6,7 +6,7 @@
   text-align: center;
   padding-top: 3em;
   width: 100%;
-  max-width: 100vw; 
+  max-width: 100vw;
   box-sizing: border-box;
 }
 
@@ -51,7 +51,7 @@
   padding: 1em;
 }
 
-.picture-modal > * {
+.picture-modal>* {
   margin-bottom: 1em;
 }
 
@@ -60,7 +60,8 @@
 }
 
 .picture-modal input[type="file"] {
-  display: none; /* Hide the native file input */
+  display: none;
+  /* Hide the native file input */
 }
 
 .custom-file-label:hover {
@@ -82,11 +83,10 @@
 
   margin: 0.5em auto;
   padding: 0.5em;
-  min-width: 300px;
-max-width: 300px;
+  width: 200px;
 }
 
-.profile-info p{
+.profile-info p {
   padding-top: 1em;
   text-align: left;
   font-size: x-large;
@@ -156,7 +156,8 @@ max-width: 300px;
 /* Password input field styling */
 .password-container input {
   width: 100%;
-  padding: 10px 40px 10px 10px; /* Add space for the icon */
+  padding: 10px 40px 10px 10px;
+  /* Add space for the icon */
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -166,13 +167,15 @@ max-width: 300px;
 }
 
 .password-container input:focus {
-  border-color: #007bff; /* Highlight color on focus */
+  border-color: #007bff;
+  /* Highlight color on focus */
 }
 
 /* Toggle password visibility icon */
 .toggle-password-icon {
   position: absolute;
-  right: 10px; /* Aligns icon to the right */
+  right: 10px;
+  /* Aligns icon to the right */
   font-size: 18px;
   color: #666;
   cursor: pointer;
@@ -180,11 +183,12 @@ max-width: 300px;
 }
 
 .toggle-password-icon:hover {
-  color: #007bff; /* Highlight icon on hover */
+  color: #007bff;
+  /* Highlight icon on hover */
 }
 
 .edit-input-container input {
-width: 100%;
+  width: 100%;
 
 }
 
@@ -213,24 +217,24 @@ width: 100%;
 /* Dropdown container */
 .dropdown-options {
   background-color: var(--color1);
-  color: #333; 
-  border: 1px solid #ccc; 
-  border-radius: 4px; 
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin: auto;
   width: 300px;
-  margin-top: -7px; 
-  z-index: 10; 
+  margin-top: -7px;
+  z-index: 10;
   padding: 0;
   max-height: 300px;
-  overflow-y: auto; 
+  overflow-y: auto;
   transition: all 0.3s ease;
 }
 
 .dropdown-options li {
   padding: 10px;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s; 
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .dropdown-options li:hover {
@@ -239,8 +243,18 @@ width: 100%;
   font-weight: 600;
 }
 
-
 /* Dropdown ends */
+
+.format-like-white-button {
+  font-size: 15px !important;
+  font-weight: bold;
+  max-width: 300px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 0.5em;
+  margin: 0.5em auto;
+
+}
 
 @media (max-width: 580px) {
   .profile-actions {
@@ -251,9 +265,13 @@ width: 100%;
   }
 
   .profile-actions-button {
-      margin: auto;
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
+    margin: auto;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  .format-like-white-button {
+    width: 200px;
   }
 
 }
@@ -265,6 +283,11 @@ width: 100%;
 
   }
 
-  .profile-actions-button {}
+}
+
+@media (min-width: 581px) {
+  .profile-actions-button {
+    width: 300px;
+  }
 
 }

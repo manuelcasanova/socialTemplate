@@ -22,7 +22,7 @@ import '../../css/Profile.css';
 import ProfileLanguageSelector from "./ProfileLanguageSelector";
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Error from "./Error";
-
+import ProfileSocialVisibilityToggle from "./ProfileSocialVisibilityToggle";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -460,12 +460,9 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 </button>
               }
 
-     
+              <ProfileLanguageSelector userId={userId} setError={setError} />
 
-  <ProfileLanguageSelector userId={userId} setError={setError}/>
-
-
-       
+              <ProfileSocialVisibilityToggle auth={auth} setError={setError}/>
 
               {
                 !showConfirmDelete &&
@@ -473,6 +470,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                 <button
                   className="profile-actions-button button-red"
                   onClick={handleDeleteClick}
+                  style={{ marginTop: '5em' }}
                 >
                   {t('profile.deleteAccount')}
                 </button>
@@ -543,13 +541,13 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
                   {/* Update button */}
 
-                    <button
-                      onClick={handleUpdate}
-                      className="button-white"
-                      disabled={!isInputValid || inputValue.trim() === ""}
-                    >
-                      {t('profile.update')}
-                    </button>
+                  <button
+                    onClick={handleUpdate}
+                    className="button-white"
+                    disabled={!isInputValid || inputValue.trim() === ""}
+                  >
+                    {t('profile.update')}
+                  </button>
 
                 </>
               )}

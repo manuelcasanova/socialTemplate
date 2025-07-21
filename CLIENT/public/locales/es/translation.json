@@ -194,7 +194,9 @@
     "criticalErrorUploadFailed": "Error crítico: Falló la subida: ",
     "criticalErrorDeletionFailed": "Error crítico: Falló la eliminación: ",
     "criticalErrorUpdateFailed": "Error crítico: Falló la actualización: ",
-    "testPurposesCannotModifyAccount": "Para fines de demostración, esta cuenta no se puede modificar ni eliminar"
+    "testPurposesCannotModifyAccount": "Para fines de demostración, esta cuenta no se puede modificar ni eliminar",
+    "socialVisibilityOn": "Desactivar visibilidad para que otros no puedan conectarse contigo",
+    "socialVisibilityOff": "Activar visibilidad para que otros puedan conectarse contigo"
   },
   "signup": {
     "allSet": "¡Listo!",
@@ -618,7 +620,7 @@
     "title": "404 - Página no encontrada",
     "message": "La página que buscas no existe."
   },
-    "registerControllerEmail": {
+  "registerControllerEmail": {
     "subject": "Verificación de correo electrónico - Fullstack Template",
     "header": "Verificación de correo electrónico - Fullstack Template",
     "greeting": "Hola {{user}},",
@@ -627,7 +629,7 @@
     "disclaimer": "Si no creaste una cuenta con nosotros, ignora este correo. Tu dirección de correo está segura.",
     "thanks": "¡Gracias!"
   },
-   "passwordResetEmail": {
+  "passwordResetEmail": {
     "subject": "Restablecimiento de Contraseña - Plantilla Fullstack",
     "header": "Restablecimiento de Contraseña - Plantilla Fullstack",
     "greeting": "Hola,",

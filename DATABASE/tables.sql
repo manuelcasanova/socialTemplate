@@ -36,7 +36,8 @@ CREATE TABLE users (
   refresh_token VARCHAR(255),
   profile_picture VARCHAR(255),
   location VARCHAR(255),
-  language VARCHAR(10) DEFAULT 'en'
+  language VARCHAR(10) DEFAULT 'en',
+  social_visibility BOOLEAN default true
 );
 
 CREATE TABLE roles (

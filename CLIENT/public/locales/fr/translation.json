@@ -202,7 +202,9 @@
     "criticalErrorUploadFailed": "Erreur critique : échec du téléversement : ",
     "criticalErrorDeletionFailed": "Erreur critique : échec de la suppression : ",
     "criticalErrorUpdateFailed": "Erreur critique : échec de la mise à jour : ",
-    "testPurposesCannotModifyAccount": "À des fins de test, ce compte ne peut pas être modifié ou supprimé"
+    "testPurposesCannotModifyAccount": "À des fins de test, ce compte ne peut pas être modifié ou supprimé",
+    "socialVisibilityOn": "Désactiver la visibilité pour que les autres ne puissent pas se connecter avec vous",
+    "socialVisibilityOff": "Activer la visibilité pour que les autres puissent se connecter avec vous"
   },
   "signup": {
     "allSet": "Tout est prêt !",
