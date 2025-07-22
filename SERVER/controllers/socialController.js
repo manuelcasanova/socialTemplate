@@ -12,11 +12,13 @@ const getAllUsers = async (req, res) => {
           u.user_id, 
           u.username, 
           u.is_active,
+          u.social_visibility,
           string_agg(r.role_name, ', ') AS roles
       FROM users u
       JOIN user_roles ur ON u.user_id = ur.user_id
       JOIN roles r ON ur.role_id = r.role_id
       WHERE u.is_active = true
+      AND u.social_visibility = true
     `;
 
     const params = [];

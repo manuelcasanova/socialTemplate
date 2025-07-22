@@ -4,7 +4,7 @@ const setLanguage = async (req, res, next) => {
   try {
     const userId = req.user?.id;
     if (!userId) {
-      console.log('No user ID, skipping language change');
+      // console.log('No user ID, skipping language change');
       return next();
     }
 
@@ -14,7 +14,7 @@ const setLanguage = async (req, res, next) => {
     );
 
     const lang = result.rows[0]?.preferred_language;
-    console.log('User preferred language:', lang);
+    // console.log('User preferred language:', lang);
 
     if (lang && req.i18n) {
       req.language = lang;

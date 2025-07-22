@@ -61,23 +61,23 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
   const inputRef = useRef(null);
 
   const usersExceptMe = users.filter(user => {
-  const isMuted = mutedUsers.some(mute =>
-    (mute.muter === loggedInUser && mute.mutee === user.user_id && mute.mute) ||
-    (mute.muter === user.user_id && mute.mutee === loggedInUser && mute.mute)
-  );
+    const isMuted = mutedUsers.some(mute =>
+      (mute.muter === loggedInUser && mute.mutee === user.user_id && mute.mute) ||
+      (mute.muter === user.user_id && mute.mutee === loggedInUser && mute.mute)
+    );
 
-  const isUserSuperAdmin = user.roles.includes('SuperAdmin');
+    const isUserSuperAdmin = user.roles.includes('SuperAdmin');
 
-  const shouldHideUser =
-    user.user_id === loggedInUser ||
-    !user.is_active ||
-    isMuted ||
-    (isUserSuperAdmin && !superAdminSettings.showSuperAdminInSocial && !isSuperAdmin);
+    const shouldHideUser =
+      user.user_id === loggedInUser ||
+      !user.is_active ||
+      isMuted ||
+      (isUserSuperAdmin && !superAdminSettings.showSuperAdminInSocial && !isSuperAdmin);
 
-  return !shouldHideUser;
-});
+    return !shouldHideUser;
+  });
 
-const allUsersMutedOrMe = usersExceptMe.length === 0;
+  const allUsersMutedOrMe = usersExceptMe.length === 0;
 
 
   // console.log("users", users)
@@ -151,7 +151,9 @@ const allUsersMutedOrMe = usersExceptMe.length === 0;
 
             {usersExceptMe.length > 0 ? (
 
-              usersExceptMe.map((user) =>
+              usersExceptMe
+                .filter(user => user.social_visibility !== false)
+                .map((user) =>
 
                   <div className="user-row-social" key={user.user_id}>
                     <div className="user-info">
