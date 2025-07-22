@@ -12,6 +12,53 @@ const getAllUsers = async (req, res) => {
           u.user_id, 
           u.username, 
           u.is_active,
+          string_agg(r.role_name, ', ') AS roles
+      FROM users u
+      JOIN user_roles ur ON u.user_id = ur.user_id
+      JOIN roles r ON ur.role_id = r.role_id
+      WHERE u.is_active = true
+    `;
+
+    const params = [];
+
+    // Add optional username filter
+    if (username) {
+      query += ` AND u.username ILIKE $${params.length + 1}`;
+      params.push(`%${username}%`);
+    }
+
+    // Finalize query with GROUP BY
+    query += `
+      GROUP BY u.user_id, u.username, u.is_active
+    `;
+
+    // Execute the query
+    const result = await pool.query(query, params);
+
+    // Handle empty result
+    if (result.rows.length === 0) {
+      console.log('No users found');
+    }
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error retrieving users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Function to get all visible users
+
+const getVisibleUsers = async (req, res) => {
+  try {
+    const { username } = req.query;
+
+    // Start building the base query
+    let query = `
+      SELECT 
+          u.user_id, 
+          u.username, 
+          u.is_active,
           u.social_visibility,
           string_agg(r.role_name, ', ') AS roles
       FROM users u
@@ -655,6 +702,7 @@ const getUsersWithMessages = async (req, res) => {
 
 module.exports = {
   getAllUsers,
+  getVisibleUsers,
   getUsernameByUserId,
   getMutedUsers,
   muteUser,

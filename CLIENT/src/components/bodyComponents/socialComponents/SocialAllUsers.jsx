@@ -27,7 +27,7 @@ import Error from "../Error";
 import FilterUsername from "./FilterUsername";
 
 //Util functions
-import fetchUsers from "./util_functions/FetchUsers";
+import fetchVisibleUsers from "./util_functions/FetchVisibleUsers";
 import fetchMutedUsers from "./util_functions/FetchMutedUsers";
 import fetchFollowersAndFollowee from "./util_functions/FetchFollowersAndFollowee";
 
@@ -97,7 +97,7 @@ export default function SocialAllUsers({ isNavOpen, profilePictureKey }) {
     if (!superAdminSettings || !adminSettings) return;
 
     if (superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) {
-      fetchUsers(filters, setUsers, setIsLoading, setError, submittedFilterUsername)
+      fetchVisibleUsers(filters, setUsers, setIsLoading, setError, submittedFilterUsername)
     }
 
     if (superAdminSettings.allowMute && adminSettings.allowMute) {

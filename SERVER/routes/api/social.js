@@ -94,6 +94,7 @@ const checkSocialAccess = (action) => {
   // Define routes with corresponding access requirement
   const routes = [
     { path: '/users/all', method: 'get', handler: socialController.getAllUsers, access: 'default' },
+        { path: '/users/visible', method: 'get', handler: socialController.getVisibleUsers, access: 'default' },
     { path: '/users/username', method: 'get', handler: socialController.getUsernameByUserId, access: 'default' },
     //For users/muted change access: 'mute' if prefer to not show the list of muted users if settings allowMute is false
     { path: '/users/muted', method: 'get', handler: socialController.getMutedUsers, access: 'default' },
