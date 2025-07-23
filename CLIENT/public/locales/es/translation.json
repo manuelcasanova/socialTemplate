@@ -196,7 +196,8 @@
     "criticalErrorUpdateFailed": "Error crítico: Falló la actualización: ",
     "testPurposesCannotModifyAccount": "Para fines de demostración, esta cuenta no se puede modificar ni eliminar",
     "socialVisibilityOn": "Desactivar visibilidad para que otros no puedan conectarse contigo",
-    "socialVisibilityOff": "Activar visibilidad para que otros puedan conectarse contigo"
+    "socialVisibilityOff": "Activar visibilidad para que otros puedan conectarse contigo",
+    "socialVisibilityInfo": "Seguirás siendo visible en las listas de Seguidores y Siguiendo, en los mensajes privados si estás conectado con otros usuarios, y en la sección de Publicaciones si tienes contenido publicado."
   },
   "signup": {
     "allSet": "¡Listo!",

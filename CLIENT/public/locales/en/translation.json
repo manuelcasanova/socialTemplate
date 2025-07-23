@@ -204,7 +204,8 @@
     "criticalErrorUpdateFailed": "Critical Error: Update failed: ",
     "testPurposesCannotModifyAccount": "For test purposes, this account cannot be modified or deleted",
     "socialVisibilityOn": "Disable visibility so others cannot connect with you",
-    "socialVisibilityOff": "Enable visibility so others can connect with you"
+    "socialVisibilityOff": "Enable visibility so others can connect with you",
+    "socialVisibilityInfo": "You will remain visible in the Followers and Following lists, in private messages if you're connected with other users, and in the Posts section if you have any published content."
   },
   "signup": {
     "allSet": "All Set!",

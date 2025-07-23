@@ -216,7 +216,8 @@ export default function SocialOneUser({ isNavOpen, profilePictureKey }) {
               <p>{user.username.startsWith('inactive') ? 'Inactive User' : user.username}</p>
             </div>
 
-            {loggedInUser !== user.user_id && (
+            {loggedInUser !== user.user_id && user?.social_visibility && (
+          
               <div className="user-info-buttons">
                 {followersAndFollowee.some(f => f.follower_id === user.user_id && f.status === "accepted") &&
                   followersAndFollowee.some(f => f.followee_id === user.user_id && f.status === "accepted") &&

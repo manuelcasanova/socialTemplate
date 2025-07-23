@@ -116,7 +116,7 @@ const getUserById = async (req, res) => {
         }
 
         // Query to get username and email
-        const userQuery = 'SELECT user_id, username, email FROM users WHERE user_id = $1';
+        const userQuery = 'SELECT user_id, username, email, social_visibility FROM users WHERE user_id = $1';
         const userParams = [userId];
         const userResult = await pool.query(userQuery, userParams);
 
@@ -124,7 +124,7 @@ const getUserById = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        const { username, email, user_id } = userResult.rows[0];
+        const { username, email, user_id, social_visibility } = userResult.rows[0];
 
         // Query to get roles
         const rolesQuery = `
@@ -140,7 +140,7 @@ const getUserById = async (req, res) => {
             role_name: row.role_name
         }));
 
-        res.status(200).json({ username, email, roles, user_id });
+        res.status(200).json({ username, email, roles, user_id, social_visibility });
     } catch (error) {
         console.error('Error retrieving user:', error);
         res.status(500).json({ error: 'Internal server error' });

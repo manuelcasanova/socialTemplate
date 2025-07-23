@@ -204,7 +204,8 @@
     "criticalErrorUpdateFailed": "Erreur critique : échec de la mise à jour : ",
     "testPurposesCannotModifyAccount": "À des fins de test, ce compte ne peut pas être modifié ou supprimé",
     "socialVisibilityOn": "Désactiver la visibilité pour que les autres ne puissent pas se connecter avec vous",
-    "socialVisibilityOff": "Activer la visibilité pour que les autres puissent se connecter avec vous"
+    "socialVisibilityOff": "Activer la visibilité pour que les autres puissent se connecter avec vous",
+    "socialVisibilityInfo": "Vous resterez visible dans les listes d’Abonnés et d’Abonnements, dans les messages privés si vous êtes connecté à d’autres utilisateurs, et dans la section Publications si vous avez du contenu publié."
   },
   "signup": {
     "allSet": "Tout est prêt !",

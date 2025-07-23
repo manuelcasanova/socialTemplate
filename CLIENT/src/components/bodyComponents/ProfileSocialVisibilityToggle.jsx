@@ -4,14 +4,20 @@ import { axiosPrivate } from "../../api/axios";
 
 const ProfileSocialVisibilityToggle = ({ auth, setError }) => {
   const { t } = useTranslation();
-  
-  const [isVisible, setIsVisible] = useState(auth.socialVisibility ?? false); 
+
+
+  const [isVisible, setIsVisible] = useState(auth.socialVisibility ?? false);
   const userId = auth.userId;
 
+  const [showInfo, setShowInfo] = useState(false)
+  const handleShowInfo = () => {
+    setShowInfo(prev => !prev)
+  }
 
   const handleToggle = async () => {
     const newVisibility = !isVisible;
-    setIsVisible(newVisibility); 
+    setIsVisible(newVisibility);
+    setShowInfo(false);
 
     try {
       const response = await axiosPrivate.put(`/users/${userId}/social-visibility`, {
@@ -29,30 +35,48 @@ const ProfileSocialVisibilityToggle = ({ auth, setError }) => {
   }, [auth.socialVisibility]);
 
   return (
-    <div
-      className='admin-setup-line format-like-white-button'
-      style={{ justifyContent: 'center' }}
-    >
-      <div className="toggle-container">
-        <div className="toggle-wrapper">
-          <input
-            type="checkbox"
-            id="socialVisibility"
-            className="toggle-checkbox"
-            checked={isVisible}
-            onChange={handleToggle}
-          />
-          <label htmlFor="socialVisibility" className="toggle-label">
-            <span className="toggle-circle"></span>
-          </label>
+    <>
+      <div
+        className='admin-setup-line format-like-white-button'
+        style={{ justifyContent: 'center' }}
+      >
+        <div className="toggle-container">
+          <div className="toggle-wrapper">
+            <input
+              type="checkbox"
+              id="socialVisibility"
+              className="toggle-checkbox"
+              checked={isVisible}
+              onChange={handleToggle}
+            />
+            <label htmlFor="socialVisibility" className="toggle-label">
+              <span className="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <div className='admin-setup-line-text'>
+          {isVisible
+            ?
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {t('profile.socialVisibilityOn')}
+              <button
+                className='info-button'
+              onClick={handleShowInfo}
+              >{t('socialMuted.infoButton')}</button>
+            </div>
+            :
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {t('profile.socialVisibilityOff')}
+              <button
+                className='info-button'
+              onClick={handleShowInfo}
+              >{t('socialMuted.infoButton')}</button>
+            </div>
+          }
         </div>
       </div>
-      <div className='admin-setup-line-text'>
-        {isVisible
-          ? t('profile.socialVisibilityOn')
-          : t('profile.socialVisibilityOff')}
-      </div>
-    </div>
+      {showInfo && <>   {t('profile.socialVisibilityInfo')}</>}
+    </>
   );
 };
 
