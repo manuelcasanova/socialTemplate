@@ -43,6 +43,7 @@ const getAllUsers = async (req, res) => {
                 u.is_active, 
                 u.is_verified, 
                 u.location, 
+                u.admin_visibility,
                 COALESCE(array_agg(DISTINCT r.role_name) FILTER (WHERE r.role_name IS NOT NULL), '{}') AS roles,
                 COALESCE(array_agg(DISTINCT lh.login_time) FILTER (WHERE lh.login_time IS NOT NULL), '{}') AS login_history
             FROM 
@@ -92,7 +93,7 @@ const getAllUsers = async (req, res) => {
         // Add the GROUP BY and execute the query
         query += `
             GROUP BY 
-                u.user_id, u.username, u.email, u.is_active, u.is_verified, u.location;
+                u.user_id, u.username, u.email, u.is_active, u.is_verified, u.location, u.admin_visibility;
         `;
 
         const result = await pool.query(query, params);

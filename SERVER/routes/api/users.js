@@ -348,6 +348,48 @@ router.route('/:userId/social-visibility')
     }
   );
 
+  router.route('/:userId/admin-visibility')
+
+  .put(
+    async (req, res, next) => {
+      try {
+
+        // Fetch roles and verify permissions
+        const rolesList = await fetchRoles();
+   verifyRoles('SuperAdmin')(req, res, next);
+
+      } catch (err) {
+        next(err);
+      }
+    },
+    async (req, res) => {
+      const { userId } = req.params;
+      const { adminVisibility } = req.body;
+
+
+      try {
+
+        const result = await pool.query(`
+          UPDATE users 
+          SET admin_visibility = $1
+          WHERE user_id = $2
+          RETURNING user_id, admin_visibility;
+        `, [adminVisibility, userId]);
+
+        if (result.rowCount > 0) {
+          return res.status(200).json({
+            message: 'Admin visibility updated successfully.',
+            user: result.rows[0]
+          });
+        } else {
+          return res.status(404).json({ message: 'User not found.' });
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
 
 
 module.exports = router;
