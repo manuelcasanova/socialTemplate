@@ -126,8 +126,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
             // Now you can send the Firebase user data to your backend for further processing, like storing tokens
             const response = await axios.post('/auth/firebase-login', { email, displayName, uid }, { withCredentials: true });
 
-            const { userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility } = response?.data;
-
+            const { userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility } = response?.data;
 
             setHasNewMessages(hasNewMessages);
             setHasPostReports(hasPostReports);
@@ -136,7 +135,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
             // Set the user's preferred language
             i18n.changeLanguage(preferredLanguage);
 
-            setAuth({ userId, displayName, email, roles, accessToken, socialVisibility });
+            setAuth({ userId, displayName, email, roles, accessToken, socialVisibility, adminVisibility });
 
             navigate(from, { replace: true });
         } catch (error) {
@@ -218,12 +217,12 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
 
         try {
             const response = await authenticateUser(password);
-            const { accessToken, userId, roles, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility } = response?.data || {};
+            const { accessToken, userId, roles, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility } = response?.data || {};
 
             setHasNewMessages(hasNewMessages)
             setHasPostReports(hasPostReports);
             setHasCommentsReports(hasCommentsReports);
-            setAuth({ userId, user, email, roles, accessToken, socialVisibility });
+            setAuth({ userId, user, email, roles, accessToken, socialVisibility, adminVisibility });
             // Set the user's preferred language
             i18n.changeLanguage(preferredLanguage);
             resetUser();

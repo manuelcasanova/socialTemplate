@@ -30,7 +30,6 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
 
-
   const [error, setError] = useState('');
   const prevError = useRef(null);
   const [filters, setFilters] = useState({ is_active: true });
@@ -185,7 +184,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
           <LoadingSpinner />
         ) :
           <div className="users-container">
-        
+
             {users.length > 0 ? (
 
               users
@@ -193,6 +192,9 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                 .filter(user => {
                   const isUserSuperAdmin = user.roles.includes('SuperAdmin');
                   if (isUserSuperAdmin && !superAdminSettings.showSuperAdminInUsersAdmin && !isSuperAdmin) {
+                    return false;
+                  }
+                  if (!user.admin_visibility && user.user_id !== loggedInUser) {
                     return false;
                   }
                   return true;

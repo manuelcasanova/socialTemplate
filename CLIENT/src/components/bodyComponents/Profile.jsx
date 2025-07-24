@@ -23,6 +23,7 @@ import ProfileLanguageSelector from "./ProfileLanguageSelector";
 import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Error from "./Error";
 import ProfileSocialVisibilityToggle from "./ProfileSocialVisibilityToggle";
+import ProfileAdminVisibilityToggle from "./ProfileAdminVisibilityToggle";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -462,7 +463,11 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
               <ProfileLanguageSelector userId={userId} setError={setError} />
 
-              <ProfileSocialVisibilityToggle auth={auth} setError={setError}/>
+              <ProfileSocialVisibilityToggle auth={auth} setError={setError} />
+
+              {isSuperAdmin &&
+                <ProfileAdminVisibilityToggle auth={auth} setError={setError} />
+              }
 
               {
                 !showConfirmDelete &&

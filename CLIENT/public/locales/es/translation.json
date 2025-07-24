@@ -197,7 +197,9 @@
     "testPurposesCannotModifyAccount": "Para fines de demostración, esta cuenta no se puede modificar ni eliminar",
     "socialVisibilityOn": "Desactivar visibilidad para que otros no puedan conectarse contigo",
     "socialVisibilityOff": "Activar visibilidad para que otros puedan conectarse contigo",
-    "socialVisibilityInfo": "Seguirás siendo visible en las listas de Seguidores y Siguiendo, en los mensajes privados si estás conectado con otros usuarios, y en la sección de Publicaciones si tienes contenido publicado."
+    "socialVisibilityInfo": "Seguirás siendo visible en las listas de Seguidores y Siguiendo, en los mensajes privados si estás conectado con otros usuarios, y en la sección de Publicaciones si tienes contenido publicado.",
+    "adminVisibilityOn": "Desactivar visibilidad para que los administradores no puedan ver tu perfil en la sección de Administración de Usuarios.",
+    "adminVisibilityOff": "Activar visibilidad para que los administradores puedan ver tu perfil en la sección de Administración de Usuarios."
   },
   "signup": {
     "allSet": "¡Listo!",
