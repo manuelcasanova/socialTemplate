@@ -38,7 +38,8 @@ CREATE TABLE users (
   location VARCHAR(255),
   language VARCHAR(10) DEFAULT 'en',
   social_visibility BOOLEAN default true,
-  admin_visibility BOOLEAN default true
+  admin_visibility BOOLEAN default true,
+  login_history_visibility BOOLEAN default true
 );
 
 CREATE TABLE roles (

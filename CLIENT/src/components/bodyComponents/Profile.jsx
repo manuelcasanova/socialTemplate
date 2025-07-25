@@ -24,6 +24,7 @@ import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
 import Error from "./Error";
 import ProfileSocialVisibilityToggle from "./ProfileSocialVisibilityToggle";
 import ProfileAdminVisibilityToggle from "./ProfileAdminVisibilityToggle";
+import ProfileLoginHistoryVisibilityToggle from "./ProfileLoginHistoryVisibilityToggle";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -466,7 +467,10 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
               <ProfileSocialVisibilityToggle auth={auth} setError={setError} />
 
               {isSuperAdmin &&
-                <ProfileAdminVisibilityToggle auth={auth} setError={setError} />
+                <>
+                  <ProfileAdminVisibilityToggle auth={auth} setError={setError} />
+                  <ProfileLoginHistoryVisibilityToggle auth={auth} setError={setError} />
+                </>
               }
 
               {

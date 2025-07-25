@@ -22,7 +22,7 @@ export default function LoginHistory({ isNavOpen }) {
   const { superAdminSettings } = useGlobalSuperAdminSettings(); 
   const loggedInUser = auth.userId;
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
-
+console.log('superAdmonSettongs', superAdminSettings)
   useEffect(() => {
     setError(null);  // Reset the error message
 
@@ -48,10 +48,26 @@ export default function LoginHistory({ isNavOpen }) {
     loadData();
   }, [axiosPrivate, filters]);
 
- const visibleLoginHistory = loginHistory.filter(login => {
-    const isLoginUserSuperAdmin = login.roles?.includes("SuperAdmin");
-    return !isLoginUserSuperAdmin || isSuperAdmin || superAdminSettings.showSuperAdminInLoginHistory;
-  });
+const visibleLoginHistory = loginHistory.filter(login => {
+
+  const isLoggedInUser = login.user_id === loggedInUser;
+  const isLoginUserSuperAdmin = login.roles?.includes("SuperAdmin");
+  const hasLoginHistoryVisibility = login.login_history_visibility !== false;
+
+  if (isLoggedInUser) {
+    return true;
+  }
+
+  if (isLoginUserSuperAdmin) {
+    // Only show SuperAdmins if the global setting is true and they opted in
+    return superAdminSettings.showSuperAdminInLoginHistory && hasLoginHistoryVisibility;
+  }
+
+  // Non-SuperAdmin users
+  return hasLoginHistoryVisibility;
+});
+
+
 
   return (
     <div className={`body ${isNavOpen ? "body-squeezed" : ""}`}>

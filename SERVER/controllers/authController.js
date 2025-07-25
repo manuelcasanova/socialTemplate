@@ -48,6 +48,7 @@ const handleLogin = async (req, res) => {
                 const preferredLanguage = foundEmail[0].language || 'en'; // Default to 'en' if not set
                 const socialVisibility = foundEmail[0].social_visibility
                 const adminVisibility = foundEmail[0].admin_visibility
+                const loginHistoryVisibility = foundEmail[0].login_history_visibility
 
                 // Check if the user has any unread messages (status = 'sent')
                 const unreadMessages = await pool.query(
@@ -80,7 +81,7 @@ const handleLogin = async (req, res) => {
 
                 // Create JWTs
                 const accessToken = jwt.sign(
-                    { "UserInfo": { "email": foundEmail[0].email, "roles": roles, "preferred_language": preferredLanguage, "social_visibility": socialVisibility, "admin_visibility": adminVisibility } },
+                    { "UserInfo": { "email": foundEmail[0].email, "roles": roles, "preferred_language": preferredLanguage, "social_visibility": socialVisibility, "admin_visibility": adminVisibility, "login_history_visibility": loginHistoryVisibility } },
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '5m' } //5m
                 );
@@ -99,7 +100,7 @@ const handleLogin = async (req, res) => {
                 });
                 // console.log(`Does User ID ${userId} have new messages? ${hasNewMessages}`)
                 // Return the response with the access token, user ID, and roles
-                res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility });
+                res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility});
 
             } else {
                 res.status(401).json({ error: "Wrong email or password" });
@@ -284,6 +285,7 @@ const handleFirebaseLogin = async (req, res) => {
         const preferredLanguage = user.language || 'en'; // Get preferred language
         const socialVisibility = user.social_visibility;
         const adminVisibility = user.admin_visibility;
+        const loginHistoryVisibility = user.login_history_visibility;
 
         // Generate JWT tokens
         const userId = user.user_id;
@@ -340,7 +342,7 @@ const handleFirebaseLogin = async (req, res) => {
         });
 
         // Send the response with the generated tokens
-        res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility });
+        res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility });
     } catch (error) {
         console.error('Error during Firebase login:', error);
         res.status(500).json({ error: 'Internal Server Error' });

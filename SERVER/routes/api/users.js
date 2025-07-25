@@ -390,6 +390,48 @@ router.route('/:userId/social-visibility')
     }
   );
 
+    router.route('/:userId/login-history-visibility')
+
+  .put(
+    async (req, res, next) => {
+      try {
+
+        // Fetch roles and verify permissions
+        const rolesList = await fetchRoles();
+   verifyRoles('SuperAdmin')(req, res, next);
+
+      } catch (err) {
+        next(err);
+      }
+    },
+    async (req, res) => {
+      const { userId } = req.params;
+      const { loginHistoryVisibility } = req.body;
+
+
+      try {
+
+        const result = await pool.query(`
+          UPDATE users 
+          SET login_history_visibility = $1
+          WHERE user_id = $2
+          RETURNING user_id, login_history_visibility;
+        `, [loginHistoryVisibility, userId]);
+
+        if (result.rowCount > 0) {
+          return res.status(200).json({
+            message: 'Login History visibility updated successfully.',
+            user: result.rows[0]
+          });
+        } else {
+          return res.status(404).json({ message: 'User not found.' });
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
 
 
 module.exports = router;

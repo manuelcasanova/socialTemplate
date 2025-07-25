@@ -20,7 +20,8 @@ const getLoginHistory = async (req, res) => {
         COALESCE(u.username, '') AS username,
         COALESCE(u.email, '') AS email,
         lh.login_time,
-        COALESCE(ARRAY_AGG(DISTINCT r.role_name ORDER BY r.role_name), ARRAY[]::text[]) AS roles
+        COALESCE(ARRAY_AGG(DISTINCT r.role_name ORDER BY r.role_name), ARRAY[]::text[]) AS roles,
+         u.login_history_visibility 
       FROM login_history lh
       LEFT JOIN users u ON lh.user_id = u.user_id
       LEFT JOIN user_roles ur ON u.user_id = ur.user_id
@@ -70,7 +71,7 @@ const getLoginHistory = async (req, res) => {
       `;
     }
 
-    query += ` GROUP BY lh.user_id, lh.login_time, u.username, u.email`;
+    query += ` GROUP BY lh.user_id, lh.login_time, u.username, u.email, u.login_history_visibility`;
     query += ` ORDER BY lh.login_time DESC`;    
 
 // console.log('from_date', from_date)
