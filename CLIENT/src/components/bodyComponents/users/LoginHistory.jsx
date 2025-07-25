@@ -22,7 +22,7 @@ export default function LoginHistory({ isNavOpen }) {
   const { superAdminSettings } = useGlobalSuperAdminSettings(); 
   const loggedInUser = auth.userId;
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
-console.log('superAdmonSettongs', superAdminSettings)
+
   useEffect(() => {
     setError(null);  // Reset the error message
 

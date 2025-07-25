@@ -203,11 +203,18 @@
     "criticalErrorDeletionFailed": "Critical Error: Deletion failed: ",
     "criticalErrorUpdateFailed": "Critical Error: Update failed: ",
     "testPurposesCannotModifyAccount": "For test purposes, this account cannot be modified or deleted",
-    "socialVisibilityOn": "Disable visibility so others cannot connect with you",
-    "socialVisibilityOff": "Enable visibility so others can connect with you",
-    "socialVisibilityInfo": "You will remain visible in the Followers and Following lists, in private messages if you're connected with other users, and in the Posts section if you have any published content.",
-    "adminVisibilityOn": "Disable visibility so admins cannot view your profile in the Admin Users section.",
-    "adminVisibilityOff": "Enable visibility so admins can view your profile in the Admin Users section."
+   "socialVisibilityOn": "Social visibility enabled",
+"socialVisibilityOff": "Social visibility disabled",
+"socialVisibilityInfo": "Turn this on or off to control whether others can find and connect with you. You will still appear in Followers and Following lists, private messages (if connected), and in the Posts section if you have published content.",
+
+"adminVisibilityOn": "Visible to admins",
+"adminVisibilityOff": "Hidden from admins",
+"adminVisibilityInfo": "Toggle to allow or prevent administrators from viewing your profile in the Admin Users section.",
+
+"loginHistoryVisibilityOn": "Login history visible",
+"loginHistoryVisibilityOff": "Login history hidden",
+"loginHistoryVisibilityInfo": "Toggle to allow or prevent administrators from seeing your profile in the Login History section."
+
   },
   "signup": {
     "allSet": "All Set!",

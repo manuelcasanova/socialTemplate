@@ -203,11 +203,15 @@
     "criticalErrorDeletionFailed": "Erreur critique : échec de la suppression : ",
     "criticalErrorUpdateFailed": "Erreur critique : échec de la mise à jour : ",
     "testPurposesCannotModifyAccount": "À des fins de test, ce compte ne peut pas être modifié ou supprimé",
-    "socialVisibilityOn": "Désactiver la visibilité pour que les autres ne puissent pas se connecter avec vous",
-    "socialVisibilityOff": "Activer la visibilité pour que les autres puissent se connecter avec vous",
-    "socialVisibilityInfo": "Vous resterez visible dans les listes d’Abonnés et d’Abonnements, dans les messages privés si vous êtes connecté à d’autres utilisateurs, et dans la section Publications si vous avez du contenu publié.",
-    "adminVisibilityOn": "Désactivez la visibilité pour que les administrateurs ne puissent pas voir votre profil dans la section 'Utilisateurs Admin'.",
-    "adminVisibilityOff": "Activez la visibilité pour que les administrateurs puissent voir votre profil dans la section 'Utilisateurs Admin'."
+    "socialVisibilityOn": "Visibilité sociale activée",
+    "socialVisibilityOff": "Visibilité sociale désactivée",
+    "socialVisibilityInfo": "Activez ou désactivez cette option pour permettre ou empêcher les autres de vous trouver et de se connecter avec vous. Vous resterez visible dans les listes d’abonnés et d’abonnements, dans les messages privés (si vous êtes connecté avec d’autres utilisateurs), et dans la section Publications si vous avez du contenu publié.",
+    "adminVisibilityOn": "Visible par les administrateurs",
+    "adminVisibilityOff": "Invisible pour les administrateurs",
+    "adminVisibilityInfo": "Activez ou désactivez cette option pour autoriser ou empêcher les administrateurs de voir votre profil dans la section Utilisateurs Admin.",
+    "loginHistoryVisibilityOn": "Historique de connexion visible",
+    "loginHistoryVisibilityOff": "Historique de connexion caché",
+    "loginHistoryVisibilityInfo": "Activez ou désactivez cette option pour autoriser ou empêcher les administrateurs de voir votre profil dans la section Historique de connexion."
   },
   "signup": {
     "allSet": "Tout est prêt !",

@@ -36,7 +36,7 @@ const ProfileAdminVisibilityToggle = ({ auth, setError }) => {
   return (
     <>
       <div
-        className='admin-setup-line format-like-white-button'
+        className='profile-actions-button admin-setup-line format-like-white-button'
         style={{ justifyContent: 'center' }}
       >
         <div className="toggle-container">
@@ -58,23 +58,23 @@ const ProfileAdminVisibilityToggle = ({ auth, setError }) => {
             ?
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {t('profile.adminVisibilityOn')}
-              {/* <button
-                className='info-button'
+              <button
+                className='profile-info-button'
               onClick={handleShowInfo}
-              >{t('socialMuted.infoButton')}</button> */}
+              >{t('socialMuted.infoButton')}</button>
             </div>
             :
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {t('profile.adminVisibilityOff')}
-              {/* <button
-                className='info-button'
+              <button
+                className='profile-info-button'
               onClick={handleShowInfo}
-              >{t('socialMuted.infoButton')}</button> */}
+              >{t('socialMuted.infoButton')}</button>
             </div>
           }
         </div>
       </div>
-      {/* {showInfo && <>   {t('profile.adminVisibilityInfo')}</>} */}
+      {showInfo && <>   {t('profile.adminVisibilityInfo')}</>}
     </>
   );
 };

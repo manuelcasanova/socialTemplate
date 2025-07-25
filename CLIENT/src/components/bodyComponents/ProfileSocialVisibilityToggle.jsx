@@ -36,7 +36,7 @@ const ProfileSocialVisibilityToggle = ({ auth, setError }) => {
   return (
     <>
       <div
-        className='admin-setup-line format-like-white-button'
+        className='profile-actions-button admin-setup-line format-like-white-button'
         style={{ justifyContent: 'center' }}
       >
         <div className="toggle-container">
@@ -59,7 +59,7 @@ const ProfileSocialVisibilityToggle = ({ auth, setError }) => {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {t('profile.socialVisibilityOn')}
               <button
-                className='info-button'
+                className='profile-info-button'
               onClick={handleShowInfo}
               >{t('socialMuted.infoButton')}</button>
             </div>
@@ -67,7 +67,7 @@ const ProfileSocialVisibilityToggle = ({ auth, setError }) => {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {t('profile.socialVisibilityOff')}
               <button
-                className='info-button'
+                className='profile-info-button'
               onClick={handleShowInfo}
               >{t('socialMuted.infoButton')}</button>
             </div>

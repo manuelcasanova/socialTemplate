@@ -36,7 +36,7 @@ const ProfileLoginHistoryVisibilityToggle = ({ auth, setError }) => {
   return (
     <>
       <div
-        className='admin-setup-line format-like-white-button'
+        className='profile-actions-button admin-setup-line format-like-white-button'
         style={{ justifyContent: 'center' }}
       >
         <div className="toggle-container">
@@ -58,23 +58,23 @@ const ProfileLoginHistoryVisibilityToggle = ({ auth, setError }) => {
             ?
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {t('profile.loginHistoryVisibilityOn')}
-              {/* <button
-                className='info-button'
+              <button
+                className='profile-info-button'
               onClick={handleShowInfo}
-              >{t('socialMuted.infoButton')}</button> */}
+              >{t('socialMuted.infoButton')}</button>
             </div>
             :
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {t('profile.loginHistoryVisibilityOff')}
-              {/* <button
-                className='info-button'
+              <button
+                className='profile-info-button'
               onClick={handleShowInfo}
-              >{t('socialMuted.infoButton')}</button> */}
+              >{t('socialMuted.infoButton')}</button>
             </div>
           }
         </div>
       </div>
-      {/* {showInfo && <>   {t('profile.loginHistoryVisibilityInfo')}</>} */}
+      {showInfo && <>   {t('profile.loginHistoryVisibilityInfo')}</>}
     </>
   );
 };
