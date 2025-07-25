@@ -74,6 +74,16 @@ Modifying their username, email, and password.
 Uploading or updating their profile picture.
 Deleting their account entirely.
 
+  *** Profile Management - SuperAdmin Privacy Settings *** 
+
+SuperAdmins have control over the visibility of their profile and activity within the app. They can:
+
+Choose whether their profile appears in the Social All Users section (i.e., whether they can be found and followed by other users).
+
+Control whether their profile is visible to Admins in the Admin Users section.
+
+Decide whether their login history is visible.
+
   *** Deleting an account - Soft Deletion (User) ***
 
 Users can delete their accounts, but the process involves a soft deletion. When an account is deleted, its status is set to inactive, the email is modified to inactive-TIMESTAMP-email@email.com and the username is modified to inactive-TIMESTAMP-username. If the user attempts to sign up again with the same email address, they will see a prompt offering two options:
