@@ -43,6 +43,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
   const [selectedReaction, setSelectedReaction] = useState(null);
   const [showEllipsisMenu, setShowEllipsisMenu] = useState(false);
   const errRef = useRef();
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
   const handleShowReactOptions = () => {
     setReactOption(prevState => !prevState);
@@ -102,17 +103,22 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
 
 
   return (
-    <div className="post-comment-interactions">
-      <div className="post-comment-date">
+    <div
+      className="post-comment-interactions"
+      style={!showConfirmDelete ? { gap: "3em" } : {}}
+    >
+      {!showConfirmDelete &&
+        <div className="post-comment-date">
+          {formatDate(commentDate, i18n.language || 'en-US', t)}
+        </div>
+      }
 
-        {formatDate(commentDate, i18n.language || 'en-US', t)}
-      </div>
-
-      {((superAdminSettings.allowCommentReactions && adminSettings.allowCommentReactions) || isSuperAdmin) && <>
+      {((superAdminSettings.allowCommentReactions && adminSettings.allowCommentReactions && !showConfirmDelete) || isSuperAdmin) && <>
         <div className="post-comment-react"
           onClick={handleShowReactOptions}>
-          {!reactOption && (
+          {!reactOption && !showConfirmDelete && (
             <>
+
               <div className='post-interactions-text'>
                 {t("postsInteractions.react")}
               </div>
@@ -149,18 +155,16 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
 
         </div>
 
-
-
-        <div className='post-interactions-top-left-reaction'
-          onClick={() => navigate(`/posts/comments/reactions/${commentId}`)}
-        >
-
-
-          <div className='post-interactions-text'>
-            {isLoading ? <LoadingSpinner /> : `${reactionsCount ?? 0}`}
+        {!showConfirmDelete &&
+          <div className='post-interactions-top-left-reaction'
+            onClick={() => navigate(`/posts/comments/reactions/${commentId}`)}
+          >
+            <div className='post-interactions-text'>
+              {isLoading ? <LoadingSpinner /> : `${reactionsCount ?? 0}`}
+            </div>
+            <FontAwesomeIcon icon={faSmile} />
           </div>
-          <FontAwesomeIcon icon={faSmile} />
-        </div>
+        }
       </>}
 
 
@@ -188,6 +192,7 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
                   commentCommenter={commentCommenter}
                   setError={setError}
                   setPostComments={setPostComments}
+                  setShowConfirmDelete={setShowConfirmDelete}
                 />
               }
 
@@ -201,10 +206,11 @@ export default function PostCommentsInteractions({ commentId, commentDate, comme
                   setError={setError}
                 />
               }
-
-              <FontAwesomeIcon icon={faXmark}
-                onClick={() => setShowEllipsisMenu(prev => !prev)}
-              />
+              {!showConfirmDelete &&
+                <FontAwesomeIcon icon={faXmark}
+                  onClick={() => setShowEllipsisMenu(prev => !prev)}
+                />
+              }
             </div>
           )}
         </>

@@ -10,7 +10,7 @@ import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
 
-export default function CommentDelete({commentId, loggedInUserId, commentCommenter, setError, setPostComments}) {
+export default function CommentDelete({ commentId, loggedInUserId, commentCommenter, setError, setPostComments, setShowConfirmDelete }) {
 
   const [commentIdToDelete, setCommentIdToDelete] = useState(null);
 
@@ -18,13 +18,13 @@ export default function CommentDelete({commentId, loggedInUserId, commentComment
     // Function to delete a post (soft delete)
     const deleteComment = async () => {
       try {
-        await axiosPrivate.put(`/posts/comments/delete/${commentId}`, { loggedInUserId, commentCommenter});
-      
+        await axiosPrivate.put(`/posts/comments/delete/${commentId}`, { loggedInUserId, commentCommenter });
+
         setPostComments(prevComments =>
           prevComments.filter(comment => comment.id !== commentId)
         );
 
-        setCommentIdToDelete(null); 
+        setCommentIdToDelete(null);
       } catch (err) {
         console.error("Error deleting comment:", err);
         setError("Failed to delete comment.");
@@ -35,45 +35,55 @@ export default function CommentDelete({commentId, loggedInUserId, commentComment
   };
 
   return (
- <>
+    <>
 
- {loggedInUserId === commentCommenter && (
+      {loggedInUserId === commentCommenter && (
 
-<div className="post-actions">
-        {commentIdToDelete === commentId && (
-          <div className="confirm-delete-chat">
-            <p
-              className="button-red"
-              onClick={() => {
-                handleCommentDelete(commentId);
-              }}
+        <div className="post-actions">
+          {commentIdToDelete === commentId && (
+            <div className="confirm-delete-chat">
+              <p
+                className="button-red"
+                onClick={() => {
+                  handleCommentDelete(commentId);
+                }}
+              >
+                Confirm delete
+              </p>
+              <p
+                className="button-white"
+                style={{ color: "black" }}
+                onClick={() => {
+                  setCommentIdToDelete(null)
+                  setShowConfirmDelete(false)
+                }
+                }
+              >
+                Cancel
+              </p>
+            </div>
+          )}
+
+          {commentIdToDelete !== commentId && (
+            <button
+              onClick={
+                () => {
+                  setCommentIdToDelete(commentId)
+                  setShowConfirmDelete(true)
+                }
+              }
+              title="Delete Comment"
             >
-              Confirm delete
-            </p>
-            <p
-              className="button-white"
-              style={{ color: "black" }}
-              onClick={() => setCommentIdToDelete(null)} 
-            >
-              Cancel
-            </p>
-          </div>
-        )}
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </button>
+          )}
 
-        {commentIdToDelete !== commentId && (
-          <button
-            onClick={() => setCommentIdToDelete(commentId)} 
-            title="Delete Comment"
-          >
-            <FontAwesomeIcon icon={faTrashAlt} />
-          </button>
-        )}
+        </div >
 
-      </div>
+      )
+      }
 
- )}
 
- 
- </>
+    </>
   )
 }
