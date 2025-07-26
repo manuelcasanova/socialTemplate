@@ -35,11 +35,8 @@ const ProfileSocialVisibilityToggle = ({ auth, setError }) => {
 
   return (
     <>
-      <div
-        className='profile-actions-button admin-setup-line format-like-white-button'
-        style={{ justifyContent: 'center' }}
-      >
-        <div className="toggle-container">
+      <div className='format-like-white-button'>
+        <div>
           <div className="toggle-wrapper">
             <input
               type="checkbox"

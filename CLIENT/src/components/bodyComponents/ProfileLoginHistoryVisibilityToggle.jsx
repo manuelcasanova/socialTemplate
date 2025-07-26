@@ -35,11 +35,8 @@ const ProfileLoginHistoryVisibilityToggle = ({ auth, setError }) => {
 
   return (
     <>
-      <div
-        className='profile-actions-button admin-setup-line format-like-white-button'
-        style={{ justifyContent: 'center' }}
-      >
-        <div className="toggle-container">
+      <div className='format-like-white-button'>
+        <div>
           <div className="toggle-wrapper">
             <input
               type="checkbox"
@@ -60,7 +57,8 @@ const ProfileLoginHistoryVisibilityToggle = ({ auth, setError }) => {
               {t('profile.loginHistoryVisibilityOn')}
               <button
                 className='profile-info-button'
-              onClick={handleShowInfo}
+
+                onClick={handleShowInfo}
               >{t('socialMuted.infoButton')}</button>
             </div>
             :
@@ -68,7 +66,8 @@ const ProfileLoginHistoryVisibilityToggle = ({ auth, setError }) => {
               {t('profile.loginHistoryVisibilityOff')}
               <button
                 className='profile-info-button'
-              onClick={handleShowInfo}
+
+                onClick={handleShowInfo}
               >{t('socialMuted.infoButton')}</button>
             </div>
           }
