@@ -496,7 +496,7 @@ export default function SuperAdminSetup({ isNavOpen }) {
 
             <div
               onClick={handleShowInfoMessage}
-              className='info-button'></div>
+              className='info-button'>i</div>
           </div>
 
           {showInfoMessage && <div className='info-message' style={{ marginBottom: '1em' }}>{t('appSetup.emailInfoMessage')}</div>}
