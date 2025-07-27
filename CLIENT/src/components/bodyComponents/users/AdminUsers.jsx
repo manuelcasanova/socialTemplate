@@ -143,7 +143,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
 
           setError(null)
           const response = await axiosPrivate.delete(`/users/harddelete/${userId}`, {
-            data: { loggedInUser },
+            data: { loggedInUser, language: i18n.language  },
           });
 
           // Forget any expanded user details and re-render the list normally." This resolves the issue where the list would remain empty after deleting a user. UI doesn't look for the expanded details of a non-existing user. 

@@ -1,6 +1,6 @@
 {
   "home": {
-    "welcome": "Bienvenido a la página pública",
+    "welcome": "Bieeeeenvenido a la página pública",
     "intro": "Esta plantilla proporciona una base sólida para cualquier proyecto de desarrollo web full-stack:",
     "secureLogin": "Funcionalidad segura de inicio/cierre de sesión — Protege el acceso mediante autenticación de usuarios.",
     "userMgmt": "Gestión de usuarios con base de datos — Maneja datos y roles de usuarios con PostgreSQL.",
@@ -644,5 +644,8 @@
     "button": "Restablecer Contraseña",
     "disclaimer": "Si no solicitaste el restablecimiento de tu contraseña, por favor ignora este correo. Tu cuenta sigue estando segura.",
     "thanks": "¡Gracias!"
+  },
+  "usersController": {
+    "cannotDeleteHere": "Permiso denegado: no puedes eliminar tu propia cuenta aquí. Hazlo desde 'Mi cuenta'."
   }
 }

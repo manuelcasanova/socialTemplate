@@ -3,12 +3,17 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path');
 const validateEmailConfig = require('../middleware/validateEnv')
+const i18next = require('../config/i18n');
 
 const usernameRegex = /^[A-z][A-z0-9-_ ]{3,23}$/
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/;
 const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
+const translations = require('../../CLIENT/public/locales/es/translation.json')
 
+console.log("esp direct", translations.home.welcome);
+
+console.log('Loaded translations:', i18next.getResourceBundle('es', 'translation'));
 // Function to get all users
 
 const getAllUsers = async (req, res) => {
@@ -434,7 +439,8 @@ const hardDeleteUser = async (req, res) => {
 
         // Permission denied if Deleter and Deletee are the same user.
         if (Number(userId) === loggedInUser) {
-            return res.status(403).json({ error: 'Permission denied: You cannot delete your own account here. Do it from "My account"' });
+            return res.status(403)
+                .json({ error: 'Permission denied: You cannot delete your own account here. Do it from "My account"' });
         }
 
         // Permission denied if Deleter is not a SuperAdmin and Deletee is a Superadmin.
@@ -480,13 +486,27 @@ const hardDeleteUser = async (req, res) => {
 const adminVersionSoftDeleteUser = async (req, res) => {
     const { userId } = req.params; // Extract user_id from request parameters
     const requestingUserId = req.body.loggedInUser
+    const language = req.body.language
+    const t = i18next.getFixedT(language);
+
+    console.log('t', t)
+
+    console.log('language', language)
+  
+    console.log('t type of should be function', typeof t); // should be 'function'
+
+    console.log(t('usersController.cannotDeleteHere'));
+
+    console.log(t('home.welcome'));
 
     try {
 
         // Prevent users from deleting their own account
         if (userId == requestingUserId) {
-            return res.status(400).json({ error: 'You cannot delete your own account.' });
+            return res.status(400).json({ error: t('usersController.cannotDeleteHere') });
         }
+
+
 
         if (userId == 2) {
             // console.log("case")

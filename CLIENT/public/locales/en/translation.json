@@ -654,5 +654,8 @@
     "button": "Reset Password",
     "disclaimer": "If you did not request a password reset, please ignore this email. Your account is still secure.",
     "thanks": "Thank you!"
+  },
+  "usersController": {
+    "cannotDeleteHere": "Permission denied: You cannot delete your own account here. Do it from 'My account'" 
   }
 }

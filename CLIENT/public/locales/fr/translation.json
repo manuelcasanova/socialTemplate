@@ -651,5 +651,8 @@
     "button": "Réinitialiser le Mot de Passe",
     "disclaimer": "Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet e-mail. Votre compte reste sécurisé.",
     "thanks": "Merci !"
+  },
+  "usersController": {
+    "cannotDeleteHere": "Permission refusée : vous ne pouvez pas supprimer votre propre compte ici. Faites-le depuis 'Mon compte'."
   }
 }
