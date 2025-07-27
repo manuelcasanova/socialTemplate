@@ -18,6 +18,11 @@
   justify-content: space-between;
 }
 
+.post-interactions-center {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .post-interactions-top-left-reaction {
   display: flex;
   flex-direction: row;

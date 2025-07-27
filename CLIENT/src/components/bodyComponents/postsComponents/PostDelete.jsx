@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 
 
-export default function PostDelete({ setPosts, postId, postSender, loggedInUser, isNavOpen, setError }) {
+export default function PostDelete({ setPosts, postId, postSender, loggedInUser, isNavOpen, setError, setShowConfirmDelete }) {
 
   const { t } = useTranslation();
 
@@ -58,7 +58,11 @@ export default function PostDelete({ setPosts, postId, postSender, loggedInUser,
             <p
               className="button-white"
               style={{ color: "black" }}
-              onClick={() => setPostIdToDelete(null)} // Close confirmation modal
+              onClick={() => {
+                setPostIdToDelete(null)
+                setShowConfirmDelete(false)
+              }
+              }
             >
               {t('postDelete.cancel')}
             </p>
@@ -67,7 +71,11 @@ export default function PostDelete({ setPosts, postId, postSender, loggedInUser,
 
         {postIdToDelete !== postId && (
           <button
-            onClick={() => setPostIdToDelete(postId)} // Show confirmation modal for this post
+            onClick={() => {
+              setPostIdToDelete(postId)
+              setShowConfirmDelete(true)
+            }
+            } // Show confirmation modal for this post
             title={t('postDelete.title')}
           >
             <FontAwesomeIcon icon={faTrashAlt} />

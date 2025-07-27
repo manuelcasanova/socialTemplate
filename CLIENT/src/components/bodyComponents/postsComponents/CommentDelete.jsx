@@ -9,8 +9,12 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 import Error from "../Error";
 
+//Translation
+import { useTranslation } from 'react-i18next';
 
 export default function CommentDelete({ commentId, loggedInUserId, commentCommenter, setError, setPostComments, setShowConfirmDelete }) {
+
+  const { t } = useTranslation();
 
   const [commentIdToDelete, setCommentIdToDelete] = useState(null);
 
@@ -48,7 +52,7 @@ export default function CommentDelete({ commentId, loggedInUserId, commentCommen
                   handleCommentDelete(commentId);
                 }}
               >
-                Confirm delete
+                {t('postDelete.confirmDelete')}
               </p>
               <p
                 className="button-white"
@@ -59,7 +63,7 @@ export default function CommentDelete({ commentId, loggedInUserId, commentCommen
                 }
                 }
               >
-                Cancel
+                {t('postDelete.cancel')}
               </p>
             </div>
           )}

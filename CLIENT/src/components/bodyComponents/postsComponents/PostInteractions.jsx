@@ -52,6 +52,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const [selectedReaction, setSelectedReaction] = useState(null);
   const [showEllipsisMenu, setShowEllipsisMenu] = useState(false);
   const errRef = useRef();
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
   const canDelete = adminSettings.allowDeletePosts && loggedInUserId === postSender;
   const canFlag = adminSettings.allowFlagPosts && loggedInUserId !== postSender;
@@ -138,6 +139,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             <div className='post-interactions-top-left-reaction'
               onClick={() => navigate(`/posts/reactions/${postId}`)}>
               <FontAwesomeIcon icon={faSmile} />
+
               <div className='post-interactions-text'>
                 {reactionsCount}
               </div>
@@ -146,6 +148,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
           {((superAdminSettings.allowComments && adminSettings.allowComments) || isSuperAdmin) &&
             <div className='post-interactions-top-right-comments'
               onClick={() => navigate(`/posts/${postId}`)}>
+
               <div className='post-interactions-text'
               >
                 {commentsCount}
@@ -157,7 +160,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
         </div>
 
-        <div className="post-interactions-bottom">
+<div className={showConfirmDelete ? 'post-interactions-center' : 'post-interactions-bottom'}>
 
           {
             ((superAdminSettings.allowPostReactions && adminSettings.allowPostReactions) || isSuperAdmin) &&
@@ -167,10 +170,17 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
 
               {!reactOption && (
                 <>
-                  <FontAwesomeIcon icon={faSmile} />
-                  <div className='post-interactions-text'>
-                    {t("postsInteractions.react")}
-                  </div>
+
+                  {!showConfirmDelete &&
+                    <FontAwesomeIcon icon={faSmile} />
+                  }
+
+                  {!showConfirmDelete &&
+                    <div className='post-interactions-text'>
+                      {t("postsInteractions.react")}
+                    </div>
+                  }
+
                 </>
               )}
 
@@ -210,6 +220,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
             adminSettings.allowDeletePosts || adminSettings.allowFlagPosts || isSuperAdmin
           ) && (
               <>
+
                 <div className='post-interactions-bottom-left-reaction'>
                   {!showEllipsisMenu && (
                     <FontAwesomeIcon
@@ -231,6 +242,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
                           postSender={postSender}
                           loggedInUser={loggedInUser}
                           setError={setError}
+                          setShowConfirmDelete={setShowConfirmDelete}
                         />
                       }
 
@@ -244,10 +256,12 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
                           setError={setError}
                         />
                       }
-                      <FontAwesomeIcon
-                        icon={faXmark}
-                        onClick={() => setShowEllipsisMenu(prev => !prev)}
-                      />
+                      {!showConfirmDelete &&
+                        <FontAwesomeIcon
+                          icon={faXmark}
+                          onClick={() => setShowEllipsisMenu(prev => !prev)}
+                        />
+                      }
                     </div>
                   )}
                 </div>

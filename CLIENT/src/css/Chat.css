@@ -202,7 +202,7 @@ margin-left: 90%;
 
 .confirm-delete-chat {
   display: flex;
-  justify-content: center;  /* Center horizontally */
+  /* justify-content: center;  */
   align-items: center;      /* Center vertically (if you want) */
   gap: 20px;      
   width: 100%;                  
