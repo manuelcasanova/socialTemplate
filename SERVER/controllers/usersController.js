@@ -11,11 +11,6 @@ const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
 const translations = require('../../CLIENT/public/locales/es/translation.json')
 
-console.log("esp direct", translations.home.welcome);
-
-console.log('Loaded translations:', i18next.getResourceBundle('es', 'translation'));
-// Function to get all users
-
 const getAllUsers = async (req, res) => {
     try {
         const { username, email, role, user_id } = req.query;
@@ -489,15 +484,15 @@ const adminVersionSoftDeleteUser = async (req, res) => {
     const language = req.body.language
     const t = i18next.getFixedT(language);
 
-    console.log('t', t)
+    // console.log('t', t)
 
-    console.log('language', language)
-  
-    console.log('t type of should be function', typeof t); // should be 'function'
+    // console.log('language', language)
 
-    console.log(t('usersController.cannotDeleteHere'));
+    // console.log('t type of should be function', typeof t); // should be 'function'
 
-    console.log(t('home.welcome'));
+    // console.log(t('usersController.cannotDeleteHere'));
+
+    // console.log(t('home.welcome'));
 
     try {
 
@@ -510,7 +505,7 @@ const adminVersionSoftDeleteUser = async (req, res) => {
 
         if (userId == 2) {
             // console.log("case")
-            return res.status(400).json({ error: 'This account cannot be modified, as it ensures at least one SuperAdmin remains.' });
+            return res.status(400).json({ error: t('usersController.accountCannotBeModified') });
         }
 
         // Step 0: Check if the user to be deleted is a SuperAdmin
@@ -523,9 +518,7 @@ const adminVersionSoftDeleteUser = async (req, res) => {
             const assignedBy = superAdminCheck.rows[0].assigned_by_user_id;
 
             if (parseInt(assignedBy) !== parseInt(requestingUserId)) {
-                return res.status(403).json({
-                    error: 'You are not authorized to delete this SuperAdmin because you did not assign their role.'
-                });
+                return res.status(403).json({ error: t('usersController.cannotDeleteThisSuperadmin') });
             }
 
             // Transfer ownership of any role assignments made by this SuperAdmin (for SuperAdmin or Admin roles)
@@ -804,9 +797,7 @@ const updateRoles = async (req, res) => {
 
             // If both loggedInUser and the user being modified are Admins, prevent the modification
             if (userRoles.includes('Admin') && loggedInUser !== userId) {
-                return res.status(403).json({
-                    error: 'Admins cannot modify other Admins\' roles'
-                });
+                return res.status(403).json({ error: t('usersController.cannotModifyOtherAdmins') });
             }
         }
 
@@ -863,14 +854,16 @@ const updateRoles = async (req, res) => {
             // Prevent self-revocation of SuperAdmin role
             if (loggedInUser === userId) {
                 if (rolesToAdd.includes('SuperAdmin') || rolesToRemove.includes('SuperAdmin')) {
-                    return res.status(403).json({ error: 'You cannot revoke your own SuperAdmin role' });
+                    return res.status(403).json({ error: t('usersController.cannotRevokeYourSuperAdminRole') });
+
+
                 }
             }
 
 
             // Allow only the user who assigned the SuperAdmin role to revoke it, allow superadmins to modify their own roles, except revoke SuperAdmin role.
             if (assignedByUser !== loggedInUser && loggedInUser !== userId) {
-                return res.status(403).json({ error: 'SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.' });
+                return res.status(403).json({ error: t('usersController.superAdminsCanModifySuperAdminsIf') });
             }
 
 
@@ -887,7 +880,7 @@ const updateRoles = async (req, res) => {
         if (rolesToRemove.includes('Admin') && loggedInUser === userId) {
             // Check if logged-in user is not a SuperAdmin
             if (!loggedInUserRoles.includes('SuperAdmin')) {
-                return res.status(403).json({ error: 'You cannot revoke your own Admin role' });
+                return res.status(403).json({ error: t('usersController.cannotRevokeYourAdminRole') });
             }
         }
 

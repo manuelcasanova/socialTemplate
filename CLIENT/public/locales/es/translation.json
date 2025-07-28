@@ -1,6 +1,6 @@
 {
   "home": {
-    "welcome": "Bieeeeenvenido a la página pública",
+    "welcome": "Bienvenido a la página pública",
     "intro": "Esta plantilla proporciona una base sólida para cualquier proyecto de desarrollo web full-stack:",
     "secureLogin": "Funcionalidad segura de inicio/cierre de sesión — Protege el acceso mediante autenticación de usuarios.",
     "userMgmt": "Gestión de usuarios con base de datos — Maneja datos y roles de usuarios con PostgreSQL.",
@@ -646,6 +646,12 @@
     "thanks": "¡Gracias!"
   },
   "usersController": {
-    "cannotDeleteHere": "Permiso denegado: no puedes eliminar tu propia cuenta aquí. Hazlo desde 'Mi cuenta'."
+    "cannotDeleteHere": "Permiso denegado: no puedes eliminar tu propia cuenta aquí. Hazlo desde 'Mi cuenta'.",
+    "accountCannotBeModified": "Esta cuenta no se puede modificar, ya que garantiza que al menos un SuperAdmin permanezca.",
+    "cannotDeleteThisSuperadmin": "No estás autorizado para eliminar este SuperAdmin porque no fuiste quien le asignó ese rol.",
+    "cannotModifyOtherAdmins": "Los administradores no pueden modificar los roles de otros administradores.",
+    "superAdminsCanModifySuperAdminsIf": "Los SuperAdmins solo pueden modificar los roles de otros SuperAdmins si ellos mismos les asignaron ese rol.",
+    "cannotRevokeYourSuperAdminRole": "No puedes revocar tu propio rol de SuperAdmin.",
+    "cannotRevokeYourAdminRole": "No puedes revocar tu propio rol de administrador."
   }
 }
