@@ -9,8 +9,6 @@ const usernameRegex = /^[A-z][A-z0-9-_ ]{3,23}$/
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{8,24}$/;
 const emailRegex = /^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
-const translations = require('../../CLIENT/public/locales/es/translation.json')
-
 const getAllUsers = async (req, res) => {
     try {
         const { username, email, role, user_id } = req.query;
@@ -819,7 +817,7 @@ const updateRoles = async (req, res) => {
         // Step 10: Prevent Admins from assigning "SuperAdmin"
         if (roles.includes('SuperAdmin')) {
             if (!loggedInUserRoles.includes('SuperAdmin')) {
-                return res.status(403).json({ error: 'Only SuperAdmin can assign SuperAdmin role' });
+                return res.status(403).json({ error: t('usersController.cannotModifyThisUserRoles') });
             }
         }
 
@@ -829,7 +827,7 @@ const updateRoles = async (req, res) => {
             // Allow the logged-in user to modify their own roles
             if (loggedInUser !== userId) {
                 if (!loggedInUserRoles.includes('SuperAdmin')) {
-                    return res.status(403).json({ error: 'Only SuperAdmin can assign Admin role to others' });
+                    return res.status(403).json({ error: t('usersController.cannotModifyThisUserRoles') });
                 }
             }
         }

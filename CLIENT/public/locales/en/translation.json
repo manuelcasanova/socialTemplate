@@ -203,18 +203,15 @@
     "criticalErrorDeletionFailed": "Critical Error: Deletion failed: ",
     "criticalErrorUpdateFailed": "Critical Error: Update failed: ",
     "testPurposesCannotModifyAccount": "For test purposes, this account cannot be modified or deleted",
-   "socialVisibilityOn": "Social visibility enabled",
-"socialVisibilityOff": "Social visibility disabled",
-"socialVisibilityInfo": "Turn this on or off to control whether others can find and connect with you. You will still appear in Followers and Following lists, private messages (if connected), and in the Posts section if you have published content.",
-
-"adminVisibilityOn": "Visible to admins",
-"adminVisibilityOff": "Hidden from admins",
-"adminVisibilityInfo": "Toggle to allow or prevent administrators from viewing your profile in the Admin Users section.",
-
-"loginHistoryVisibilityOn": "Login history visible",
-"loginHistoryVisibilityOff": "Login history hidden",
-"loginHistoryVisibilityInfo": "Toggle to allow or prevent administrators from seeing your profile in the Login History section."
-
+    "socialVisibilityOn": "Social visibility enabled",
+    "socialVisibilityOff": "Social visibility disabled",
+    "socialVisibilityInfo": "Turn this on or off to control whether others can find and connect with you. You will still appear in Followers and Following lists, private messages (if connected), and in the Posts section if you have published content.",
+    "adminVisibilityOn": "Visible to admins",
+    "adminVisibilityOff": "Hidden from admins",
+    "adminVisibilityInfo": "Toggle to allow or prevent administrators from viewing your profile in the Admin Users section.",
+    "loginHistoryVisibilityOn": "Login history visible",
+    "loginHistoryVisibilityOff": "Login history hidden",
+    "loginHistoryVisibilityInfo": "Toggle to allow or prevent administrators from seeing your profile in the Login History section."
   },
   "signup": {
     "allSet": "All Set!",
@@ -660,8 +657,9 @@
     "accountCannotBeModified": "This account cannot be modified, as it ensures at least one SuperAdmin remains.",
     "cannotDeleteThisSuperadmin": "You are not authorized to delete this SuperAdmin because you did not assign their role.",
     "cannotModifyOtherAdmins": "Admins cannot modify other Admins' roles",
-     "superAdminsCanModifySuperAdminsIf": "SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.",
+    "superAdminsCanModifySuperAdminsIf": "SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.",
     "cannotRevokeYourSuperAdminRole": "You cannot revoke your own SuperAdmin role",
-     "cannotRevokeYourAdminRole": "You cannot revoke your own Admin role"
+    "cannotRevokeYourAdminRole": "You cannot revoke your own Admin role",
+    "cannotModifyThisUserRoles": "You are not allowed to modify this user's roles"
   }
 }

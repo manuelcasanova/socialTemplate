@@ -660,5 +660,6 @@
   "cannotModifyOtherAdmins": "Les administrateurs ne peuvent pas modifier les rôles des autres administrateurs.",
   "superAdminsCanModifySuperAdminsIf": "Les SuperAdmins ne peuvent modifier les rôles d'autres SuperAdmins que s'ils leur ont attribué le rôle.",
   "cannotRevokeYourSuperAdminRole": "Vous ne pouvez pas révoquer votre propre rôle de SuperAdmin.",
-  "cannotRevokeYourAdminRole": "Vous ne pouvez pas révoquer votre propre rôle d'administrateur."
+  "cannotRevokeYourAdminRole": "Vous ne pouvez pas révoquer votre propre rôle d'administrateur.",
+  "cannotModifyThisUserRoles": "Vous n'êtes pas autorisé à modifier les rôles de cet utilisateur"
 }
