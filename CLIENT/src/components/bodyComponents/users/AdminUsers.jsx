@@ -105,7 +105,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
     try {
       await axiosPrivate.put(`/users/${user.user_id}/roles`, {
         roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
-        loggedInUser
+        loggedInUser, language: i18n.language
       });
 
       // Update state only if needed

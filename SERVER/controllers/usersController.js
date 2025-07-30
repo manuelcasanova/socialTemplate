@@ -710,7 +710,8 @@ const transferAssignedRoles = async (demotedUserId, revokerUserId, client = pool
 
 const updateRoles = async (req, res) => {
     const userId = parseInt(req.params.user_id); // Extract the user ID from the request parameters
-    const { roles, loggedInUser } = req.body;
+    const { roles, loggedInUser, language } = req.body;
+    const t = i18next.getFixedT(language);
 
     try {
         // Step 1: Ensure logged-in user exists in the request body
@@ -819,9 +820,8 @@ const updateRoles = async (req, res) => {
             if (!loggedInUserRoles.includes('SuperAdmin')) {
                 return res.status(403).json({ error: t('usersController.cannotModifyThisUserRoles') });
             }
-        }
-
-
+        } 
+        
         // Step 11: Prevent Admins from assigning "Admin" role to others (but allow self-modification of roles, except admin)
         if (roles.includes('Admin')) {
             // Allow the logged-in user to modify their own roles
