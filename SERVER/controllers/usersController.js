@@ -820,8 +820,8 @@ const updateRoles = async (req, res) => {
             if (!loggedInUserRoles.includes('SuperAdmin')) {
                 return res.status(403).json({ error: t('usersController.cannotModifyThisUserRoles') });
             }
-        } 
-        
+        }
+
         // Step 11: Prevent Admins from assigning "Admin" role to others (but allow self-modification of roles, except admin)
         if (roles.includes('Admin')) {
             // Allow the logged-in user to modify their own roles
@@ -911,6 +911,15 @@ const updateRoles = async (req, res) => {
             // Execute all deletions for roles that need to be removed
             await Promise.all(deletePromises);
         }
+
+        // Step 15. Ensure Admin is also assigned if SuperAdmin is being added
+        if (rolesToAdd.includes('SuperAdmin') && !roles.includes('Admin')) {
+            roles.push('Admin'); // Ensure it's in the overall roles list
+            if (!userCurrentRoles.includes('Admin')) {
+                rolesToAdd.push('Admin'); // Ensure it's in the to-add list
+            }
+        }
+
 
         // Step 16: Assign new roles to the user, including the tracking of who assigned the role
         const rolePromises = rolesToAdd.map(role => {

@@ -660,6 +660,7 @@
     "superAdminsCanModifySuperAdminsIf": "SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.",
     "cannotRevokeYourSuperAdminRole": "You cannot revoke your own SuperAdmin role",
     "cannotRevokeYourAdminRole": "You cannot revoke your own Admin role",
-    "cannotModifyThisUserRoles": "You are not allowed to modify this user's roles"
+    "cannotModifyThisUserRoles": "You are not allowed to modify this user's roles",
+    "cannotRemoveAdminWhileSuperadmin": "Cannot remove Admin while SuperAdmin is still assigned."
   }
 }

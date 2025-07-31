@@ -25,6 +25,9 @@ import { useTranslation } from 'react-i18next';
 
 export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, profilePictureKey }) {
   const { t, i18n } = useTranslation();
+
+console.log('i18n', i18n.language)
+
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const [users, setUsers] = useState([]);
@@ -100,36 +103,118 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
     setShowConfirmDelete(prev => !prev)
   }
 
-  const handleRoleChange = useCallback(async (user, role, checked) => {
+  //   const handleRoleChange = useCallback(async (user, role, checked) => {
 
+  //     try {
+
+  //       //If we don't want SuperAdmin assignation to add Admin automatically:
+  //       // await axiosPrivate.put(`/users/${user.user_id}/roles`, {
+  //       //   roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
+  //       //   loggedInUser, language: i18n.language
+  //       // });
+
+  //       //If we do (check backend as well):
+  //       let updatedRoles;
+  //       if (checked) {
+  //         // Add SuperAdmin AND Admin if SuperAdmin is being checked
+  //         if (role === 'SuperAdmin') {
+  //           updatedRoles = [...new Set([...user.roles, 'SuperAdmin', 'Admin'])];
+  //         } else {
+  //           updatedRoles = [...new Set([...user.roles, role])];
+  //         }
+  //       } else {
+  //         // Remove role (only that role; don't auto-remove Admin if SuperAdmin is removed)
+  //         updatedRoles = user.roles.filter(r => r !== role);
+  //       }
+
+  //       await axiosPrivate.put(`/users/${user.user_id}/roles`, {
+  //         roles: updatedRoles,
+  //         loggedInUser,
+  //         language: i18n.language
+  //       });
+
+
+  //       // Update state only if needed
+  //       // setUsers((prevUsers) =>
+  //       //   prevUsers.map((u) =>
+  //       //     u.user_id === user.user_id
+  //       //       ? { ...u, roles: checked ? [...u.roles, role] : u.roles.filter((r) => r !== role) }
+  //       //       : u
+  //       //   )
+  //       // );
+
+  //       setUsers((prevUsers) =>
+  //   prevUsers.map((u) =>
+  //     u.user_id === user.user_id
+  //       ? { ...u, roles: updatedRoles }
+  //       : u
+  //   )
+  // );
+
+
+
+
+
+  //       prevError.current = null;
+  //     } catch (error) {
+  //       // console.log("Caught error status:", error?.response?.status);
+  //       console.error("Error updating roles", error);
+  //       const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
+  //       // console.log('errorMsg', errorMsg)
+  //       // if (errorMsg !== prevError.current) {
+  //       //   prevError.current = errorMsg; // Store the error in the ref
+  //       //   setError(errorMsg);  // Update the state to show the error message
+  //       // }
+  //       setError(errorMsg);
+  //       prevError.current = errorMsg;
+  //     }
+  //   }, [isSuperAdmin]);
+
+
+  const handleRoleChange = useCallback(async (user, role, checked) => {
     try {
+      let updatedRoles;
+
+      if (checked) {
+        // Assigning roles
+        if (role === 'SuperAdmin') {
+          // Make sure Admin is also added
+          updatedRoles = [...new Set([...user.roles, 'SuperAdmin', 'Admin'])];
+        } else {
+          updatedRoles = [...new Set([...user.roles, role])];
+        }
+      } else {
+        // Unassigning roles
+        if (role === 'Admin' && user.roles.includes('SuperAdmin')) {
+          // Cannot remove Admin if SuperAdmin is still present
+          setError(t('usersController.cannotRemoveAdminWhileSuperadmin'));
+          return;
+        }
+        updatedRoles = user.roles.filter(r => r !== role);
+      }
+
       await axiosPrivate.put(`/users/${user.user_id}/roles`, {
-        roles: checked ? [...user.roles, role] : user.roles.filter((r) => r !== role),
-        loggedInUser, language: i18n.language
+        roles: updatedRoles,
+        loggedInUser,
+        language: i18n.language
       });
 
-      // Update state only if needed
+      // Update UI state
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
           u.user_id === user.user_id
-            ? { ...u, roles: checked ? [...u.roles, role] : u.roles.filter((r) => r !== role) }
+            ? { ...u, roles: updatedRoles }
             : u
         )
       );
       prevError.current = null;
     } catch (error) {
-      // console.log("Caught error status:", error?.response?.status);
       console.error("Error updating roles", error);
       const errorMsg = error?.response?.data?.error || error?.message || "Failed to update roles.";
-      // console.log('errorMsg', errorMsg)
-      // if (errorMsg !== prevError.current) {
-      //   prevError.current = errorMsg; // Store the error in the ref
-      //   setError(errorMsg);  // Update the state to show the error message
-      // }
       setError(errorMsg);
       prevError.current = errorMsg;
     }
-  }, [isSuperAdmin]);
+  }, [loggedInUser, i18n.language, axiosPrivate]);
 
 
   const handleDeleteUser = async (userId, loggedInUser) => {
@@ -143,7 +228,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
 
           setError(null)
           const response = await axiosPrivate.delete(`/users/harddelete/${userId}`, {
-            data: { loggedInUser, language: i18n.language  },
+            data: { loggedInUser, language: i18n.language },
           });
 
           // Forget any expanded user details and re-render the list normally." This resolves the issue where the list would remain empty after deleting a user. UI doesn't look for the expanded details of a non-existing user. 

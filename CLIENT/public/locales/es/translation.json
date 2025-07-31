@@ -653,6 +653,8 @@
     "superAdminsCanModifySuperAdminsIf": "Los SuperAdmins solo pueden modificar los roles de otros SuperAdmins si ellos mismos les asignaron ese rol.",
     "cannotRevokeYourSuperAdminRole": "No puedes revocar tu propio rol de SuperAdmin.",
     "cannotRevokeYourAdminRole": "No puedes revocar tu propio rol de administrador.",
-    "cannotModifyThisUserRoles": "No tienes permitido modificar los roles de este usuario"
+    "cannotModifyThisUserRoles": "No tienes permitido modificar los roles de este usuario",
+    "cannotRemoveAdminWhileSuperadmin": "No se puede quitar el rol de Admin mientras el rol de SuperAdmin siga asignado."
+
   }
 }
