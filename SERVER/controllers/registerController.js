@@ -254,7 +254,7 @@ const getRoleAssignments = (role) => {
 
 // New Google Sign-Up Handler
 const handleGoogleSignUp = async (req, res) => {
-    const { token } = req.body;  // The token will be sent from the frontend
+    const { token, language } = req.body;  // The token will be sent from the frontend
 
     try {
         // Verify the Firebase ID token using Firebase Admin SDK

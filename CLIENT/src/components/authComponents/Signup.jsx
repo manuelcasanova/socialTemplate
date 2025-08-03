@@ -202,7 +202,7 @@ export default function Signup({ isNavOpen, screenWidth }) {
 
       const idToken = await user.getIdToken();
 
-      const response = await axios.post('/signup/google', { token: idToken });
+      const response = await axios.post('/signup/google', { token: idToken, language: i18n.language });
 
       // console.log("response google status", response.status)
 

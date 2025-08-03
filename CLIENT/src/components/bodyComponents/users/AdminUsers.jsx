@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, profilePictureKey }) {
   const { t, i18n } = useTranslation();
 
-console.log('i18n', i18n.language)
+// console.log('i18n', i18n.language)
 
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();

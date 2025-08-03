@@ -6,11 +6,11 @@ INSERT INTO users (username, email, password, is_verified, is_active, admin_visi
  ,
    ('Administrator', 'admin@socialtemplate.manucasanova.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, true)
  ,
-  -- ('Manuel Casanova Hotmail', 'manucasanova@hotmail.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true, true)
+  ('Manuel Casanova Hotmail', 'manucasanova@hotmail.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true, true)
   --   ,
   -- ('Manuel Casanova Yahoo', 'manuelcasanovafernandez@yahoo.es', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true, true)
   --   ,
-  ('Manuel Casanova Spanish', 'info@casanovaspanish.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true, true)
+  -- ('Manuel Casanova Spanish', 'info@casanovaspanish.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true, true)
   ;
   
  /*
