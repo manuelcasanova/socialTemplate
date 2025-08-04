@@ -655,6 +655,7 @@
   "usersController": {
     "cannotDeleteHere": "Permission refusée : vous ne pouvez pas supprimer votre propre compte ici. Faites-le depuis 'Mon compte'.",
     "accountCannotBeModified": "Ce compte ne peut pas être modifié, car il garantit qu'au moins un Admin reste.",
+    "accountCannotBeDeleted": "Ce compte ne peut pas être supprimé, car il garantit qu'au moins un administrateur reste.",
     "cannotDeleteThisSuperadmin": "Vous n'êtes pas autorisé à supprimer ce SuperAdmin car vous ne lui avez pas attribué ce rôle.",
     "cannotModifyOtherAdmins": "Les administrateurs ne peuvent pas modifier les rôles des autres administrateurs.",
     "superAdminsCanModifySuperAdminsIf": "Les SuperAdmins ne peuvent modifier les rôles d'autres SuperAdmins que s'ils leur ont attribué le rôle.",

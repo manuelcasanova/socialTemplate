@@ -648,6 +648,7 @@
   "usersController": {
     "cannotDeleteHere": "Permiso denegado: no puedes eliminar tu propia cuenta aquí. Hazlo desde 'Mi cuenta'.",
     "accountCannotBeModified": "Esta cuenta no se puede modificar, ya que garantiza que al menos un Admin permanezca.",
+    "accountCannotBeDeleted": "Esta cuenta no se puede eliminar, ya que garantiza que al menos un administrador permanezca.",
     "cannotDeleteThisSuperadmin": "No estás autorizado para eliminar este SuperAdmin porque no fuiste quien le asignó ese rol.",
     "cannotModifyOtherAdmins": "Los administradores no pueden modificar los roles de otros administradores.",
     "superAdminsCanModifySuperAdminsIf": "Los SuperAdmins solo pueden modificar los roles de otros SuperAdmins si ellos mismos les asignaron ese rol.",

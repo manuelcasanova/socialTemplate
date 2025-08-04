@@ -78,11 +78,12 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
   const [criticalError, setCriticalError] = useState(false);
   const [isInputValid, setIsInputValid] = useState(false);
   const [fileName, setFileName] = useState("");
+  const { t, i18n } = useTranslation();
   const { userData, refetchUserData } = useUserApi(auth.userId || t('profile.guest'));
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
   const [successMessage, setSuccessMessage] = useState('');
   const logout = useLogout();
-  const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const signOut = async () => {
@@ -201,6 +202,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
     try {
       // Make the DELETE request to the server
       const response = await axiosPrivate.put(`/users/softdelete/${userId}`, {
+        language: i18n.language
       });
 
       if (response?.data?.success) {
@@ -215,7 +217,11 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       }
     } catch (error) {
       console.error(t('profile.criticalErrorDeletionFailed'), error);
-      setCriticalError(true);
+      if (error.response.status === 400) {
+        setError(error.response.data.error)
+      } else {
+        setCriticalError(true);
+      }
 
     } finally {
       setIsLoading(false); // Hide the loading spinner
@@ -489,7 +495,11 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
                   <p> {t('profile.deleteConfirmationMessage')}</p>
                   <button
                     className="button-white"
-                    onClick={() => setShowConfirmDelete(false)}
+                    onClick={() => {
+                      setShowConfirmDelete(false)
+                      setError('')
+                    }
+                    }
                   >
                     {t('profile.keepAccount')}
                   </button>
@@ -568,10 +578,11 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
 
 
-
+      {error && <p className='error-message'>{error}</p>}
         </div>
       }
       {successMessage && <div className="profile-delete-success-message">{successMessage}</div>}
+
 
 
     </div>
