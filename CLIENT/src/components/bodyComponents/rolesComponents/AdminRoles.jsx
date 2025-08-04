@@ -195,12 +195,25 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
     getRoles();
   }, []);
 
-  const handleRoleCreated = (newRole) => {
-    setCustomRoles((prevRoles) =>
-      [...prevRoles, newRole].sort((a, b) => a.role_name.localeCompare(b.role_name))
-    );
-  };
+const handleRoleCreated = (newRole) => {
+  setCustomRoles((prevRoles) =>
+    [...prevRoles, newRole].sort((a, b) => {
+      const getSortValue = (name) => {
+        if (/^\d+$/.test(name)) {
+          return parseInt(name);
+        }
+        const digits = name.replace(/\D/g, '');
+        return digits ? parseInt(digits) : Infinity;
+      };
 
+      const aVal = getSortValue(a.role_name);
+      const bVal = getSortValue(b.role_name);
+
+      if (aVal !== bVal) return aVal - bVal;
+      return a.role_name.localeCompare(b.role_name); // fallback
+    })
+  );
+};
 
 
   if (isLoading) {
