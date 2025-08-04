@@ -654,7 +654,7 @@
   },
   "usersController": {
     "cannotDeleteHere": "Permission denied: You cannot delete your own account here. Do it from 'My account'",
-    "accountCannotBeModified": "This account cannot be modified, as it ensures at least one SuperAdmin remains.",
+    "accountCannotBeModified": "This account cannot be modified, as it ensures at least one Admin remains.",
     "cannotDeleteThisSuperadmin": "You are not authorized to delete this SuperAdmin because you did not assign their role.",
     "cannotModifyOtherAdmins": "Admins cannot modify other Admins' roles",
     "superAdminsCanModifySuperAdminsIf": "SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.",

@@ -287,7 +287,7 @@ const softDeleteUser = async (req, res) => {
     try {
 
         if (userId === 2) {
-            return res.status(400).json({ error: 'This account cannot be deleted, as it ensures at least one SuperAdmin remains.' });
+            return res.status(400).json({ error: 'This account cannot be deleted, as it ensures at least one Admin remains.' });
         }
 
         // Step 0: Check if the user is SuperAdmin, to reassign control over other SuperAdmins or Admins to another SuperAdmin.
@@ -501,7 +501,7 @@ const adminVersionSoftDeleteUser = async (req, res) => {
 
 
 
-        if (userId == 2) {
+        if (userId == 2 || userId == 1) {
             // console.log("case")
             return res.status(400).json({ error: t('usersController.accountCannotBeModified') });
         }
