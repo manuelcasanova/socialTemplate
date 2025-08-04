@@ -17,7 +17,7 @@ i18next
   .use(middleware.LanguageDetector)
   .init({
     fallbackLng: 'en',
-    preload: ['en', 'es'],
+    preload: ['en', 'es', 'fr'],
     backend: {
       loadPath: loadPath  // Dynamically set the loadPath using the environment variable
     }
