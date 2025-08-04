@@ -29,7 +29,7 @@ const useLogout = () => {
     const { setAuth } = useAuth();
 
     const logout = async () => {
-        isLoggingOut = true; // 🧠 Set the logout flag
+        isLoggingOut = true;
         setAuth({});
         try {
             await axios('/logout', { withCredentials: true });
@@ -41,6 +41,6 @@ const useLogout = () => {
     return logout;
 };
 
-export const getIsLoggingOut = () => isLoggingOut; // 👈 helper function
+export const getIsLoggingOut = () => isLoggingOut;
 
 export default useLogout;

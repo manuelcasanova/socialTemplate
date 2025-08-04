@@ -661,6 +661,7 @@
     "cannotRevokeYourSuperAdminRole": "You cannot revoke your own SuperAdmin role",
     "cannotRevokeYourAdminRole": "You cannot revoke your own Admin role",
     "cannotModifyThisUserRoles": "You are not allowed to modify this user's roles",
-    "cannotRemoveAdminWhileSuperadmin": "Cannot remove Admin while SuperAdmin is still assigned."
+    "cannotRemoveAdminWhileSuperadmin": "Cannot remove Admin while SuperAdmin is still assigned",
+    "cannotRemoveRoleWhileAdmin": "Cannot remove this role while Admin is still assigned."
   }
 }

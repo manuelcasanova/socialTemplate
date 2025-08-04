@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, profilePictureKey }) {
   const { t, i18n } = useTranslation();
 
-// console.log('i18n', i18n.language)
+  // console.log('i18n', i18n.language)
 
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -179,17 +179,32 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
         // Assigning roles
         if (role === 'SuperAdmin') {
           // Make sure Admin is also added
-          updatedRoles = [...new Set([...user.roles, 'SuperAdmin', 'Admin'])];
+          updatedRoles = [...new Set([...user.roles, 'SuperAdmin', 'Admin', 'Moderator', 'User_subscribed'])];
+        } else if (role === 'Admin') {
+          updatedRoles = [...new Set([...user.roles, 'Admin', 'Moderator', 'User_subscribed'])];
         } else {
           updatedRoles = [...new Set([...user.roles, role])];
         }
       } else {
-        // Unassigning roles
-        if (role === 'Admin' && user.roles.includes('SuperAdmin')) {
-          // Cannot remove Admin if SuperAdmin is still present
+        // Unassigning roles with dependency checks
+        const stillHas = (r) => user.roles.includes(r);
+
+        if (role === 'Admin' && stillHas('SuperAdmin')) {
           setError(t('usersController.cannotRemoveAdminWhileSuperadmin'));
           return;
         }
+
+        if (role === 'Moderator' && (stillHas('Admin'))) {
+          setError(t('usersController.cannotRemoveRoleWhileAdmin'));
+          return;
+        }
+
+        if (role === 'User_subscribed' && (stillHas('Admin'))) {
+          setError(t('usersController.cannotRemoveRoleWhileAdmin'));
+          return;
+        }
+
+        // Proceed to remove the role
         updatedRoles = user.roles.filter(r => r !== role);
       }
 
