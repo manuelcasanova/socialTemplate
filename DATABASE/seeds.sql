@@ -109,12 +109,13 @@ INSERT INTO global_provider_settings (
   allow_admin_edit_custom_role,
   allow_admin_delete_custom_role,
   show_superadmin_in_users_admin,
-  show_superadmin_in_social
+  show_superadmin_in_social,
+  show_superadmin_in_login_history
 
 ) VALUES (
   true, true, true, true, true, true, true, true, true, true, true,
   true, true, true, true, true, true, true, true, true, true, false,
-  true, true, true, true, true, true, true, true, true, true
+  true, true, true, true, true, true, true, true, true, true, true
 );
 
 INSERT INTO admin_settings (

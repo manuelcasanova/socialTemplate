@@ -948,6 +948,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
       if (settings) {
         setShowSuperAdminInUsersAdmin(settings?.show_superadmin_in_users_admin ?? false);
         setShowSuperAdminInSocial(settings?.show_superadmin_in_social ?? false);
+        setShowSuperAdminInLoginHistory(settings?.show_superadmin_in_login_history ?? false);
       }
     };
     fetchSettings();
@@ -990,7 +991,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
   const toggleShowSuperAdminInLoginHistory = async () => {
 
     const newValue = !showSuperAdminInLoginHistory;
-
+// console.log('newValue', newValue)
     setShowSuperAdminInLoginHistory(newValue);
     try {
       await axiosPrivate.put('/settings/global-provider/toggleShowSuperAdminInLoginHistory', {
@@ -1138,7 +1139,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
     toggleShowSuperAdminInLoginHistory
   };
 
-  // console.log("superAdminSettings in Global Provider", superAdminSettings)
+  console.log("superAdminSettings in Global Provider", superAdminSettings)
   // console.log("allowManageRoles", allowManageRoles)
   // console.log("allowModifyProfilePicture", allowModifyProfilePicture)
   // console.log("showProfileFeature", showProfileFeature)
