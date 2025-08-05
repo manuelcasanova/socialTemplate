@@ -147,7 +147,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
             const message = error?.message;
 
             if (errorCode === 'auth/popup-closed-by-user') {
-                setErrMsg(t('signin.popupClosed'));
+                setErrMsg(t('signin.errors.popupClosed'));
 
             } else if (errorCode === 'auth/cancelled-popup-request') {
                 setErrMsg(t('signin.errors.popupRequest'));
