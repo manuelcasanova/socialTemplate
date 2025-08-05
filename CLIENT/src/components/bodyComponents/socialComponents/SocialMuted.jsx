@@ -188,6 +188,7 @@ export default function SocialMuted({ isNavOpen, profilePictureKey }) {
                   )}
                   setMutedUsers={setMutedUsers}
                   onMutedChange={handleMutedChanges}
+                  setError={setError}
                 />
 
 

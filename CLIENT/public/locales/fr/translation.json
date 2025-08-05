@@ -211,7 +211,8 @@
     "adminVisibilityInfo": "Activez ou désactivez cette option pour autoriser ou empêcher les administrateurs de voir votre profil dans la section Utilisateurs Admin.",
     "loginHistoryVisibilityOn": "Historique de connexion visible",
     "loginHistoryVisibilityOff": "Historique de connexion caché",
-    "loginHistoryVisibilityInfo": "Activez ou désactivez cette option pour autoriser ou empêcher les administrateurs de voir votre profil dans la section Historique de connexion."
+    "loginHistoryVisibilityInfo": "Activez ou désactivez cette option pour autoriser ou empêcher les administrateurs de voir votre profil dans la section Historique de connexion.",
+    "failedToUpdateVisibility": "Échec de la mise à jour de la visibilité."
   },
   "signup": {
     "allSet": "Tout est prêt !",

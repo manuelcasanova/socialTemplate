@@ -211,7 +211,8 @@
     "adminVisibilityInfo": "Toggle to allow or prevent administrators from viewing your profile in the Admin Users section.",
     "loginHistoryVisibilityOn": "Login history visible",
     "loginHistoryVisibilityOff": "Login history hidden",
-    "loginHistoryVisibilityInfo": "Toggle to allow or prevent administrators from seeing your profile in the Login History section."
+    "loginHistoryVisibilityInfo": "Toggle to allow or prevent administrators from seeing your profile in the Login History section.",
+    "failedToUpdateVisibility": "Failed to update visibility."
   },
   "signup": {
     "allSet": "All Set!",

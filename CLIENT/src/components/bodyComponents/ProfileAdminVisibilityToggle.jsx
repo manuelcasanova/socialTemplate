@@ -24,7 +24,7 @@ const ProfileAdminVisibilityToggle = ({ auth, setError }) => {
       });
     } catch (error) {
       console.error('Error updating admin visibility:', error);
-      setError(t('error.failedToUpdateVisibility')); // 
+      setError(t('profile.failedToUpdateVisibility')); // 
     }
   };
 

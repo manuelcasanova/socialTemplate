@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { axiosPrivate } from "../../api/axios";
 
-const ProfileSocialVisibilityToggle = ({ auth, setError }) => {
+const ProfileSocialVisibilityToggle = ({ auth, setError, setCriticalError}) => {
   const { t } = useTranslation();
   
   const [isVisible, setIsVisible] = useState(auth.socialVisibility ?? false);
@@ -23,6 +23,9 @@ const ProfileSocialVisibilityToggle = ({ auth, setError }) => {
         socialVisibility: newVisibility,
       });
     } catch (error) {
+      if (error.code === 'ERR_NETWORK') {
+        setCriticalError(true)
+      }
       console.error('Error updating social visibility:', error);
       setError(t('error.failedToUpdateVisibility')); // 
     }

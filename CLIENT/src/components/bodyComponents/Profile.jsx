@@ -217,7 +217,8 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
       }
     } catch (error) {
       console.error(t('profile.criticalErrorDeletionFailed'), error);
-      if (error.response.status === 400) {
+      console.log(error)
+      if (error?.response?.status === 400) {
         setError(error.response.data.error)
       } else {
         setCriticalError(true);
@@ -470,7 +471,7 @@ export default function Profile({ isNavOpen, profilePictureKey, setProfilePictur
 
               <ProfileLanguageSelector userId={userId} setError={setError} />
 
-              <ProfileSocialVisibilityToggle auth={auth} setError={setError} />
+              <ProfileSocialVisibilityToggle auth={auth} setError={setError} setCriticalError={setCriticalError} />
 
               {isSuperAdmin &&
                 <>
