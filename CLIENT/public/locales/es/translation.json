@@ -302,6 +302,15 @@
     "errorFailed": "No se pudo crear la publicación. Inténtalo de nuevo.",
     "charCount": "{{count}} / {{limit}} caracteres"
   },
+  "postsSeeds": {
+    "post1": "¡Bienvenido a la aplicación! Siéntete libre de interactuar con esta publicación: comentarla, marcarla como inapropiada o iniciar sesión como administrador o moderador para aprobarla o ocultarla.",
+    "post2": "¡Puedes crear tus propias publicaciones! Elige compartirlas de manera privada, solo con seguidores o hacerlas públicas.",
+    "post3": "¡Interactúa con publicaciones o comentarios reaccionando—pulgar arriba, sonrisa, risa y más!",
+    "post4": "Sigue a usuarios, envía mensajes privados o silencia a alguien para dejar de ver sus publicaciones o comentarios (ellos tampoco podrán interactuar contigo).",
+    "post5": "Inicia sesión como administrador y explora todas las funciones. Puedes modificar tus propios roles o gestionar los de otros también.",
+    "post6": "Como administrador, puedes gestionar roles, crear nuevos y probarlos accediendo a ellos a través de tu usuario. Puedes otorgar acceso desde la sección de Usuarios Administradores si es necesario.",
+    "post7": "Revisa registros como el historial de inicio de sesión, el historial de gestión de roles y los cambios en los roles de usuario."
+  },
   "filterUsername": {
     "placeholder": "Buscar por nombre de usuario",
     "title": "Solo se permiten letras, números, guiones, guiones bajos, acentos circunflejos y espacios."

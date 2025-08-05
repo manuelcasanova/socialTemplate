@@ -312,6 +312,15 @@
     "errorFailed": "Failed to create the post. Please try again.",
     "charCount": "{{count}} / {{limit}} characters"
   },
+  "postsSeeds": {
+    "post1": "Welcome to the app! Feel free to interact with this post—comment on it, flag it as inappropriate, or log in as an admin or moderator to approve or hide it.",
+    "post2": "You can create your own posts! Choose to share them privately, with followers only, or make them public.",
+    "post3": "Engage with posts or comments by reacting—thumbs up, smile, laugh, and more!",
+    "post4": "Follow users, send private messages, or mute someone to stop seeing their posts or comments (they won’t be able to interact with you either).",
+    "post5": "Log in as an admin and explore all features. You can modify your own roles or manage others as well.",
+    "post6": "As an admin, you can manage roles, create new ones, and test them out by accessing them through your user. You can grant access from the Admin Users section if needed.",
+    "post7": "Review records such as login history, role management history, and changes in user roles."
+  },
   "filterUsername": {
     "placeholder": "Search by username",
     "title": "Only letters, numbers, hyphens, underscores, carets, and spaces are allowed."

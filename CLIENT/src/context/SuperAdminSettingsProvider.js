@@ -1139,7 +1139,7 @@ export const SuperAdminSettingsProvider = ({ children }) => {
     toggleShowSuperAdminInLoginHistory
   };
 
-  console.log("superAdminSettings in Global Provider", superAdminSettings)
+  // console.log("superAdminSettings in Global Provider", superAdminSettings)
   // console.log("allowManageRoles", allowManageRoles)
   // console.log("allowModifyProfilePicture", allowModifyProfilePicture)
   // console.log("showProfileFeature", showProfileFeature)

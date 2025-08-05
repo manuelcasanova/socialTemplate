@@ -312,6 +312,15 @@
     "errorFailed": "Échec de la création du post. Veuillez réessayer.",
     "charCount": "{{count}} / {{limit}} caractères"
   },
+  "postsSeeds": {
+    "post1": "Bienvenue dans l'application ! N'hésitez pas à interagir avec cette publication—la commenter, la signaler comme inappropriée, ou vous connecter en tant qu'administrateur ou modérateur pour l'approuver ou la masquer.",
+    "post2": "Vous pouvez créer vos propres publications ! Choisissez de les partager en privé, uniquement avec vos abonnés, ou de les rendre publiques.",
+    "post3": "Interagissez avec des publications ou des commentaires en réagissant—pouce en l'air, sourire, rire, et plus encore !",
+    "post4": "Suivez des utilisateurs, envoyez des messages privés ou mettez quelqu'un en sourdine pour ne plus voir ses publications ou commentaires (ils ne pourront pas non plus interagir avec vous).",
+    "post5": "Connectez-vous en tant qu'administrateur et explorez toutes les fonctionnalités. Vous pouvez modifier vos propres rôles ou gérer ceux des autres également.",
+    "post6": "En tant qu'administrateur, vous pouvez gérer des rôles, en créer de nouveaux, et les tester en y accédant via votre utilisateur. Vous pouvez accorder l'accès depuis la section Utilisateurs Admin si nécessaire.",
+    "post7": "Consultez les historiques tels que l'historique des connexions, l'historique de gestion des rôles et les modifications des rôles des utilisateurs."
+  },
   "filterUsername": {
     "placeholder": "Rechercher par nom d’utilisateur",
     "title": "Seuls lettres, chiffres, tirets, underscores, carets et espaces sont autorisés."
