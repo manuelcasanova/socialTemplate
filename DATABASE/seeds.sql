@@ -5,8 +5,8 @@ INSERT INTO users (username, email, password, is_verified, is_active, admin_visi
  ('Manuel Casanova', 'manuelcasanovafernandez@gmail.com', 'google_auth_token', true, true, false)
  ,
    ('Administrator', 'admin@socialtemplate.manucasanova.com', '$2b$10$QKnW747LmWgpESSPtJLAGe1ASCXJlEIOthMceP8g7eZzTxU7r32SS', true, true, true)
- ,
-  ('Manuel Casanova Hotmail', 'manucasanova@hotmail.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true, true)
+--  ,
+--   ('Manuel Casanova Hotmail', 'manucasanova@hotmail.com', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true, true)
   --   ,
   -- ('Manuel Casanova Yahoo', 'manuelcasanovafernandez@yahoo.es', '$2b$10$Nw6PNvixTqtDhtZWaqmsGOHEi3R/mgo1bxiLdR08KQMr7WLclSNJe', true, true, true)
   --   ,
@@ -66,10 +66,10 @@ VALUES
 (2, 3, 1),
 (2, 5, 1)
 
-,
+-- ,
 
-(3, 1, 1),
-(3, 5, 3)
+-- (3, 1, 1),
+-- (3, 5, 3)
 -- ,
 
 -- (4, 1, 3),
@@ -152,19 +152,20 @@ INSERT INTO admin_settings (
 
 INSERT INTO posts (sender, content, date, visibility, is_deleted)
 VALUES
-  (2, 'Hi! Welcome to the app. Play with this post. Flag it as inappropriate, log in as an administrator or a moderator and approve it or hide it!', CURRENT_TIMESTAMP - INTERVAL '25 hours', 'public', false),
-
-  (2, 'You can write your own posts, privately, for followers only or open to the public!', CURRENT_TIMESTAMP - INTERVAL '24 hours', 'public', false),
-
-  (2, 'Try commenting one of the posts, flag the comment as inappropriate and manage it as a moderator.', CURRENT_TIMESTAMP - INTERVAL '23 hours', 'public', false),
-
-  (2, 'React to a post or comment, thumbs up, smile, laugh…', CURRENT_TIMESTAMP - INTERVAL '22 hours', 'public', false),
-
-  (2, 'Login as an administrator and play with all the features. Modify your own user’s roles, for example.', CURRENT_TIMESTAMP - INTERVAL '21 hours', 'public', false),
-
-  (2, 'Follow a user, send private messages, mute a user so they cannot interact with you (you won’t be able to see their posts or comments either).', CURRENT_TIMESTAMP - INTERVAL '20 hours', 'public', false);
-
+  (2, 'Welcome to the app! Feel free to interact with this post—comment on it, flag it as inappropriate, or log in as an admin or moderator to approve or hide it.', CURRENT_TIMESTAMP - INTERVAL '25 hours', 'public', false),
   
+  (2, 'You can create your own posts! Choose to share them privately, with followers only, or make them public.', CURRENT_TIMESTAMP - INTERVAL '24 hours', 'public', false),
+  
+  (2, 'Engage with posts or comments by reacting—thumbs up, smile, laugh, and more!', CURRENT_TIMESTAMP - INTERVAL '23 hours', 'public', false),
+  
+  (2, 'Follow users, send private messages, or mute someone to stop seeing their posts or comments (they won’t be able to interact with you either).', CURRENT_TIMESTAMP - INTERVAL '22 hours', 'public', false),
+  
+  (2, 'Log in as an admin and explore all features. You can modify your own roles or manage others as well.', CURRENT_TIMESTAMP - INTERVAL '21 hours', 'public', false),
+  
+  (2, 'As an admin, you can manage roles, create new ones, and test them out by accessing them through your user. You can grant access from the Admin Users section if needed.', CURRENT_TIMESTAMP - INTERVAL '20 hours', 'public', false),
+  
+  (2, 'Review records such as login history, role management history, and changes in user roles.', CURRENT_TIMESTAMP - INTERVAL '19 hours', 'public', false);
+
 
 -- INSERT INTO posts_comments (post_id, commenter, content, date)
 -- VALUES
