@@ -54,7 +54,7 @@ export default function PostInteractions({ postId, isNavOpen, postContent, postS
   const errRef = useRef();
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
-  const canDelete = adminSettings.allowDeletePosts && loggedInUserId === postSender;
+  const canDelete = adminSettings.allowDeletePosts && loggedInUserId === postSender && postId > 7;
   const canFlag = adminSettings.allowFlagPosts && loggedInUserId !== postSender;
   const shouldShowEllipsis = (canDelete || canFlag) && (!hideFlag || loggedInUserId === postSender);
 
