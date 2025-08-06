@@ -416,7 +416,7 @@
     "renewalUnavailable": "Subscription renewal date is unavailable.",
     "exploreTitle": "Would you like to keep exploring the app?",
     "adminSignin": "Sign In as an Administrator:",
-    "adminSigninDesc": "Log in with the email \"admin@socialtemplate.manucasanova.com\" and password G7m!pLz@92aT.",
+    "adminSigninDesc": "Log in with the email \"administrator@socialtemplate.manucasanova.com\" and password G7m!pLz@92aT.",
     "checkAdminFeatures": "Check out the admin features:",
     "modifyRoles": "- Modify user roles in the 'Admin Users' section and use the filter to search by username or ID.",
     "viewHistory": "- View the login history and audit logs to track changes to user roles.",

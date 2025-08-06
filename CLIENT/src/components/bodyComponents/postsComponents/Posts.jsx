@@ -344,7 +344,9 @@ useEffect(() => {
                       </button>
                     </div>
                   ) : (
-                    <p>{post.content}</p>
+                    <p>
+                      {post.content}
+                      </p>
                   )}
 
                   {
