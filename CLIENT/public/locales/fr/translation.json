@@ -130,7 +130,7 @@
     "signInWithEmail": "Connexion par e‑mail",
     "signInWithGoogle": "Connexion avec Google",
     "trustDevice": "Se souvenir de cet appareil",
-    "loginAsAdmin": "Connexion en tant qu’admin",
+    "loginAsAdministrator": "Connexion en tant qu’administrateur",
     "email": "E‑mail:",
     "password": "Mot de passe:",
     "signInButton": "Se connecter",

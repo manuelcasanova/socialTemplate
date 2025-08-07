@@ -130,7 +130,7 @@
     "signInWithEmail": "Sign In with Email",
     "signInWithGoogle": "Sign in with Google",
     "trustDevice": "Trust This Device",
-    "loginAsAdmin": "Login as Admin",
+    "loginAsAdministrator": "Login as Administrator",
     "email": "Email:",
     "password": "Password:",
     "signInButton": "Sign In",

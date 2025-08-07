@@ -76,48 +76,48 @@ export default function Posts({ isNavOpen, profilePictureKey }) {
 
 
 
-useEffect(() => {
-  const runChecks = async () => {
-    setChecksDone(false);  // Reset before starting checks
-    try {
-      const reportedPosts = new Set();
-      const hiddenPosts = new Set();
+  useEffect(() => {
+    const runChecks = async () => {
+      setChecksDone(false);  // Reset before starting checks
+      try {
+        const reportedPosts = new Set();
+        const hiddenPosts = new Set();
 
-      for (const post of posts) {
-        const [reportRes, hiddenRes] = await Promise.all([
-          axiosPrivate.get("/reports/has-reported", {
-            params: { post_id: post.id, user_id: loggedInUser },
-          }),
-          axiosPrivate.get("/reports/has-hidden", {
-            params: { post_id: post.id, user_id: loggedInUser },
-          }),
-        ]);
+        for (const post of posts) {
+          const [reportRes, hiddenRes] = await Promise.all([
+            axiosPrivate.get("/reports/has-reported", {
+              params: { post_id: post.id, user_id: loggedInUser },
+            }),
+            axiosPrivate.get("/reports/has-hidden", {
+              params: { post_id: post.id, user_id: loggedInUser },
+            }),
+          ]);
 
-        if (reportRes.data?.hasReported) {
-          reportedPosts.add(post.id);
+          if (reportRes.data?.hasReported) {
+            reportedPosts.add(post.id);
+          }
+
+          if (hiddenRes.data?.hasHidden) {
+            hiddenPosts.add(post.id);
+          }
         }
 
-        if (hiddenRes.data?.hasHidden) {
-          hiddenPosts.add(post.id);
-        }
+        setFlaggedPosts(reportedPosts);
+        setInappropriatePosts(hiddenPosts);
+      } catch (err) {
+        console.error("Error checking post statuses:", err);
+      } finally {
+        setChecksDone(true);  // Indicate both checks are done
       }
+    };
 
-      setFlaggedPosts(reportedPosts);
-      setInappropriatePosts(hiddenPosts);
-    } catch (err) {
-      console.error("Error checking post statuses:", err);
-    } finally {
-      setChecksDone(true);  // Indicate both checks are done
+    if (posts.length > 0) {
+      runChecks();
+    } else {
+      // If no posts, immediately mark as done to avoid blocking render
+      setChecksDone(true);
     }
-  };
-
-  if (posts.length > 0) {
-    runChecks();
-  } else {
-    // If no posts, immediately mark as done to avoid blocking render
-    setChecksDone(true);
-  }
-}, [posts, loggedInUser, axiosPrivate]);
+  }, [posts, loggedInUser, axiosPrivate]);
 
 
 
@@ -207,7 +207,7 @@ useEffect(() => {
   };
 
 
-  if (isLoading || !checksDone ) {
+  if (isLoading || !checksDone) {
     return <LoadingSpinner />;
   }
 
@@ -318,20 +318,34 @@ useEffect(() => {
                   {inappropriatePosts.has(post.id) ? (
                     <div>
                       <p style={{ fontStyle: 'italic', color: 'darkred' }}>
-                       {t('posts.hiddenByModerator')}
+                        {t('posts.hiddenByModerator')}
                       </p>
 
                       {auth?.roles?.includes("Moderator") && (
                         <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
                           <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>{t('posts.originalForModerators')}</strong></p>
-                          <p style={{ color: 'black' }}>{post.content}</p>
+                          <p style={{ color: 'black' }}>
+                            
+
+                                   {/* REAL APP */}
+                      {/* {post.content} */}
+                      {/* REAL APP END */}
+
+                      {/* SAMPLE */}
+                      {post.id <= 7
+                        ? t(`postsSeeds.post${post.id}`)
+                        : post.content}
+                      {/* SAMPLE END */}
+                            
+                            
+                            </p>
                         </div>
                       )}
                     </div>
                   ) : flaggedPosts.has(post.id) ? (
                     <div>
                       <p style={{ fontStyle: 'italic' }}>
-                     {t('posts.reportedPendingReview')}
+                        {t('posts.reportedPendingReview')}
                       </p>
                       <button
                         className="button-white white button-smaller"
@@ -345,12 +359,20 @@ useEffect(() => {
                     </div>
                   ) : (
                     <p>
-                      {post.content}
-                      </p>
+                      {/* REAL APP */}
+                      {/* {post.content} */}
+                      {/* REAL APP END */}
+
+                      {/* SAMPLE */}
+                      {post.id <= 7
+                        ? t(`postsSeeds.post${post.id}`)
+                        : post.content}
+                      {/* SAMPLE END */}
+
+                    </p>
                   )}
 
                   {
-                    // HERE superAdminSettings.allowPostInteractions &&
                     <PostInteractions setPosts={setPosts} postId={post.id} isNavOpen={isNavOpen} postContent={post.content} postSender={post.sender} loggedInUser={loggedInUser} hideFlag={inappropriatePosts.has(post.id)} setError={setError} />
                   }
 

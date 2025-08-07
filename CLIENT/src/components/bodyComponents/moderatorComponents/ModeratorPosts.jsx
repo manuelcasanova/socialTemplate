@@ -123,7 +123,24 @@ export default function ModeratorPosts({ isNavOpen, setHasPostReports }) {
                       style={{ cursor: 'pointer' }}
                       onClick={() => navigate(`/posts/${log.post_id}`)}
                     >{log.post_id}</td>
-                    <td>{log.content}</td>
+                    <td>
+
+
+
+                             {/* REAL APP */}
+                      {/* {log.content} */}
+                      {/* REAL APP END */}
+
+                      {/* SAMPLE */}
+                      {log.post_id <= 7
+                        ? t(`postsSeeds.post${log.post_id}`)
+                        : log.content}
+                      {/* SAMPLE END */}
+
+
+
+
+                    </td>
                     <td>{log.status}</td>
                     <td>{log.reason}</td>
                     <td

@@ -316,7 +316,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
                                     }
                                 }}
                             />
-                            <label htmlFor="persist">{t('signin.loginAsAdmin')}</label>
+                            <label htmlFor="persist">{t('signin.loginAsAdministrator')}</label>
                         </div>
 
                         {/* End remove on production */}

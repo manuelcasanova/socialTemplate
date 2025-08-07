@@ -73,7 +73,19 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
   // console.log('postSender', postSender)
   const postDate = post?.[0]?.date;
   const postVisibility = post?.[0]?.visibility;
-  const postContent = post?.[0]?.content;
+
+  //Real App
+  // const postContent = post?.[0]?.content;
+  //En Real App
+
+  //Test App
+  const postContent = post?.[0]?.id <= 7
+    ? t(`postsSeeds.post${post[0].id}`)
+    : post?.[0]?.content;
+  //End Test App
+
+
+
   const userId = postSender;
   const inputRef = useRef(null);
   const errRef = useRef();
@@ -331,7 +343,9 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
                 {auth?.roles?.includes("Moderator") && (
                   <div style={{ backgroundColor: "#fbe9e9", padding: "10px", borderRadius: "5px", marginTop: "0.5em" }}>
                     <p style={{ fontStyle: 'italic', color: 'darkslategray' }}><strong>Original message visible for moderators:</strong></p>
-                    <p style={{ color: 'black' }}>{postContent}</p>
+                    <p style={{ color: 'black' }}>
+                      {postContent}
+                    </p>
                   </div>
                 )}
               </div>
@@ -354,7 +368,9 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
                 <p style={{ textDecoration: 'line-through' }}>{postContent}</p>
               </>
             ) : (
-              <p>{postContent}</p>
+              <p>
+                {postContent}
+              </p>
             )}
 
 
