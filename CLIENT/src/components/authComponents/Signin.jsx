@@ -300,7 +300,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
                 {showSignUpWithEmail &&
                     <form className="signup-form" onSubmit={handleSubmit}>
 
-                        {/* Remove on production */}
+                        {/*Test App*/}
 
                         <div className="trust-device"
                         style={{marginTop: '1em'}}
@@ -319,7 +319,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
                             <label htmlFor="persist">{t('signin.loginAsAdministrator')}</label>
                         </div>
 
-                        {/* End remove on production */}
+                        {/* End Test App */}
 
                         <label htmlFor="email">Email:</label>
                         <input

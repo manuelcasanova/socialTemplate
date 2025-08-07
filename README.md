@@ -39,12 +39,15 @@ If a user who originally granted specific roles loses their permissions—either
 
 SuperAdmins have the ability to view the login history for all users. They can filter the history based on user ID, username, email, date, and time.
 
-  *** Protected routes ***
+*** Protected routes ***
 
-The system includes protected routes, and roles are not hierarchical. This means that:
+The system includes protected routes and a partially hierarchical role structure. 
 
-A user with the Admin role does not automatically have access to routes assigned to lower roles like Moderator or Subscribed.
-For access to protected routes associated with these roles, the user must have the specific role assigned to them in addition to their Admin privileges.
+Specifically:
+
+Super Admins are automatically granted the roles of Admin, Moderator, and Subscribed, but they do not automatically receive access to any custom roles. 
+
+To access custom routes associated with these roles, the user must be explicitly assigned each role individually, even if they already have higher-level privileges.
 
 *** Registration ***
 
@@ -60,13 +63,13 @@ Additionally, users can sign up using their Google account, providing a convenie
 
 If the user forgets their password, they can easily recover it by requesting a password reset email.
 
-  *** Subscriptions ***
+*** Subscriptions ***
 
 Users may subscribe to gain access to specific routes. The "User_subscribed" role is assigned to all subscribed users and serves to bypass the RequireAuth middleware. However, additional safeguards are in place. A user may temporarily (see "Scheduled Subscription Updates" on this README.md file for details) retain the "User_subscribed" role even if their subscription has expired or become inactive. In such cases, access to these routes is denied through mechanisms outside of RequireAuth.
 
 Administrators also have the authority to revoke a user's subscription status. While revoking an active subscription—especially one a user has paid for—may seem unfair, this capability is necessary to address situations such as policy violations or fraudulent activity. To ensure accountability, all role changes, including subscription revocations, are logged as previously described.
 
-  *** Profile Management ***
+*** Profile Management ***
 
 Users have the ability to manage their profiles, including:
 
@@ -74,7 +77,7 @@ Modifying their username, email, and password.
 Uploading or updating their profile picture.
 Deleting their account entirely.
 
-  *** Profile Management - SuperAdmin Privacy Settings *** 
+*** Profile Management - SuperAdmin Privacy Settings *** 
 
 SuperAdmins have control over the visibility of their profile and activity within the app. They can:
 
@@ -113,6 +116,10 @@ The app supports private messaging, allowing users to send direct messages to on
 *** Posts Feature ***
 
 The app includes a social posting feature similar to a Facebook wall, where users can create posts to share with others. These posts can be reacted to (e.g., likes) and commented on by other users. Comments themselves can also receive reactions. To maintain a respectful environment, both posts and comments can be reported as inappropriate. Moderators have the ability to review reported content and determine whether it violates community guidelines. Importantly, moderators do not delete posts or comments — instead, a warning message is displayed to inform viewers that the content has been flagged, allowing them to proceed with discretion. Users retain full control over their content and may delete their own posts or comments at any time. All moderation actions are logged, including who reviewed the report, what decision was made, and when. Admins can access this moderation history, including a list of reported content and its status.
+
+*** Translations ***
+
+The app supports internationalization (i18n) to provide a multilingual experience for users. It automatically detects the user's preferred language from the browser settings and adjusts the interface accordingly. In addition, users can manually select and modify their preferred language from the profile section, independent of their browser's default language. Currently, the app offers translations in English, Spanish, and French, with English used as the fallback language when no match is found. This localization functionality ensures a more accessible and personalized user experience across different regions and language preferences.
 
 *** App Settings ***
 

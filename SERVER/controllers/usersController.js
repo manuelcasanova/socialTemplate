@@ -181,10 +181,11 @@ const updateUser = async (req, res) => {
     validateEmailConfig();
     let { username, email, password, userId } = req.body; // Destructure fields from the request body
 
-    //Remove for production of a real application. Keep for testing.
+    //Test app
     if (userId === 2) {
         return res.status(400).json({ error: 'For test purposes, this account cannot be modified.' });
     }
+    //End test app
 
     // Validate input fields
     if (!username && !email && !password) {

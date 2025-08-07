@@ -76,7 +76,7 @@ export default function PostComments({ isNavOpen, profilePictureKey }) {
 
   //Real App
   // const postContent = post?.[0]?.content;
-  //En Real App
+  //End Real App
 
   //Test App
   const postContent = post?.[0]?.id <= 7
