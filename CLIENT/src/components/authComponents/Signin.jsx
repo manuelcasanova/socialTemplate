@@ -219,7 +219,7 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasMessagesAtAll
             const response = await authenticateUser(password);
             const { accessToken, userId, roles, preferredLanguage, hasNewMessages, hasMessagesAtAll, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility } = response?.data || {};
 
-            console.log('response.data', response.data)
+            // console.log('response.data', response.data)
 
             setHasNewMessages(hasNewMessages)
             setHasMessagesAtAll(hasMessagesAtAll)
