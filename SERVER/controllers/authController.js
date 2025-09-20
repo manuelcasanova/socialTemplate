@@ -58,6 +58,17 @@ const handleLogin = async (req, res) => {
 
                 const hasNewMessages = unreadMessages.rows.length > 0;
 
+                const result = await pool.query(
+                    `SELECT 1
+     FROM user_messages 
+     WHERE sender = $1 OR receiver = $1
+     LIMIT 1`,
+                    [userId]
+                );
+
+                const hasMessagesAtAll = result.rows.length > 0;
+
+
                 const postReports = await pool.query(
                     'SELECT 1 FROM post_reports WHERE status = $1 LIMIT 1',
                     ['Reported']
@@ -100,7 +111,7 @@ const handleLogin = async (req, res) => {
                 });
                 // console.log(`Does User ID ${userId} have new messages? ${hasNewMessages}`)
                 // Return the response with the access token, user ID, and roles
-                res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility});
+                res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasMessagesAtAll, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility });
 
             } else {
                 res.status(401).json({ error: "Wrong email or password" });
@@ -276,7 +287,7 @@ const handleFirebaseLogin = async (req, res) => {
         // Check if the user exists in the database
         let data = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         let user = data.rows[0];
-        
+
         if (!user) {
             // If user is not found, return the specific error message
             return res.status(404).json({ error: 'User not registered.' });
@@ -313,6 +324,17 @@ const handleFirebaseLogin = async (req, res) => {
 
         const hasNewMessages = unreadMessages.rows.length > 0;
 
+                        const result = await pool.query(
+                    `SELECT 1
+     FROM user_messages 
+     WHERE sender = $1 OR receiver = $1
+     LIMIT 1`,
+                    [userId]
+                );
+
+                const hasMessagesAtAll = result.rows.length > 0;
+
+
         const postReports = await pool.query(
             'SELECT 1 FROM post_reports WHERE status = $1 LIMIT 1',
             ['Reported']
@@ -342,7 +364,7 @@ const handleFirebaseLogin = async (req, res) => {
         });
 
         // Send the response with the generated tokens
-        res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility });
+        res.json({ userId, roles, accessToken, preferredLanguage, hasNewMessages, hasMessagesAtAll, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility });
     } catch (error) {
         console.error('Error during Firebase login:', error);
         res.status(500).json({ error: 'Internal Server Error' });

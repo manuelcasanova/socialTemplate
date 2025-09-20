@@ -25,7 +25,7 @@ import RedNotification from '../navbarComponents/RedNotification';
 //Util functions
 import useLogout from '../../hooks/useLogout';
 
-const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification, hasNewMessages, hasPostReports, setHasPostReports, hasCommentsReports, setHasCommentsReports, profilePictureKey }) => {
+const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification, hasNewMessages, hasMessagesAtAll, hasPostReports, setHasPostReports, hasCommentsReports, setHasCommentsReports, profilePictureKey }) => {
 
   // console.log(hasPostReports, hasCommentsReports)
 
@@ -38,6 +38,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
   const isAdminNotSuperAdmin = auth?.roles?.includes('Admin') && !auth.roles.includes('SuperAdmin');
   const isAdminAndSuperAdmin = auth?.roles?.includes('Admin') && auth.roles.includes('SuperAdmin');
   const isModerator = auth?.roles?.includes('Moderator');
+  // const hasMessagesAtAll =
 
   const { adminSettings, isLoading } = useGlobalAdminSettings();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
@@ -167,20 +168,43 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
             handleNavigate('/posts')
           }}>   <FontAwesomeIcon icon={faNewspaper} /></div>}
 
-          {adminSettings.showMessagesFeature && !hasNewMessages && <div onClick={() => {
-            setActiveSheet(null)
-            handleNavigate('/messages')
-          }}>   <FontAwesomeIcon icon={faEnvelope} /></div>}
 
-          {adminSettings.showMessagesFeature && hasNewMessages && <div className="new-message-bell-container" onClick={() => {
-            setActiveSheet(null)
-            handleNavigate('/messages')
-          }}>
-            <FontAwesomeIcon
-              className="faBell-new-message"
-              icon={faEnvelope} />
-            <span className="new-message-notification-dot"></span>
-          </div>}
+
+          {superAdminSettings.showMessagesFeature &&
+            adminSettings.showMessagesFeature &&
+            !hasNewMessages &&
+            (
+              (superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) ||
+              hasMessagesAtAll
+            ) && (
+
+              <div onClick={() => {
+                setActiveSheet(null)
+                handleNavigate('/messages')
+              }}>   <FontAwesomeIcon icon={faEnvelope} /></div>
+            )}
+
+
+          {superAdminSettings.showMessagesFeature &&
+            adminSettings.showMessagesFeature &&
+            hasNewMessages &&
+            (
+              (superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) ||
+              hasMessagesAtAll
+            ) && (
+
+
+              // hasMessagesAtAll &&
+              <div className="new-message-bell-container" onClick={() => {
+                setActiveSheet(null)
+                handleNavigate('/messages')
+              }}>
+                <FontAwesomeIcon
+                  className="faBell-new-message"
+                  icon={faEnvelope} />
+                <span className="new-message-notification-dot"></span>
+              </div>
+            )}
 
 
           {/* HERE IS FOLLOW NOTIFICATION CONDITIONAL DISPLAY */}

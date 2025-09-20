@@ -24,7 +24,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faEnvelope, faCog } from '@fortawesome/free-solid-svg-icons';
 
 
-const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages, customRoles, hasPostReports, hasCommentsReports, setHasPostReports, setHasCommentsReports }) => {
+const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey, isFollowNotification, setIsFollowNotification, hasNewMessages, hasMessagesAtAll, customRoles, hasPostReports, hasCommentsReports, setHasPostReports, setHasCommentsReports }) => {
+
+  // console.log('hasMessagesAtAll in navBar', hasMessagesAtAll)
 
   const { t } = useTranslation();
 
@@ -422,36 +424,43 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
         </div>
       }
+      
       {
-        superAdminSettings.showMessagesFeature && adminSettings.showMessagesFeature &&
-        <>
-          {auth.roles && !hasNewMessages &&
-            < div className="nav-item" onClick={() => handleNavigate('/messages')}>
-              <FontAwesomeIcon icon={faEnvelope} />
-            </div>
-          }
+        superAdminSettings.showMessagesFeature &&
+        adminSettings.showMessagesFeature &&
+        (
+          (superAdminSettings.showSocialFeature && adminSettings.showSocialFeature) ||
+          hasMessagesAtAll
+        ) && (
 
-          {auth.roles && hasNewMessages &&
-            <div className='nav-item'
-              onClick={() => {
-                handleNavigate(`/messages/`);
-              }}
-            >
-              <div className="new-message-bell-container"
+          <>
+            {auth.roles && !hasNewMessages &&
+              < div className="nav-item" onClick={() => handleNavigate('/messages')}>
+                <FontAwesomeIcon icon={faEnvelope} />
+              </div>
+            }
+
+            {auth.roles && hasNewMessages &&
+              <div className='nav-item'
                 onClick={() => {
                   handleNavigate(`/messages/`);
                 }}
               >
+                <div className="new-message-bell-container"
+                  onClick={() => {
+                    handleNavigate(`/messages/`);
+                  }}
+                >
 
-                <FontAwesomeIcon
-                  className="faBell-new-message"
-                  icon={faEnvelope} />
-                <span className="new-message-notification-dot"></span>
+                  <FontAwesomeIcon
+                    className="faBell-new-message"
+                    icon={faEnvelope} />
+                  <span className="new-message-notification-dot"></span>
+                </div>
               </div>
-            </div>
-          }
-        </>
-      }
+            }
+          </>
+        )}
 
       {
         !isLargeScreen && Object.keys(auth).length > 0 && (

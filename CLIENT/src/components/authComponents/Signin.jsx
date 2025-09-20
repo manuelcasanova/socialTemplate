@@ -25,7 +25,6 @@ import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebas
 import { auth } from '../../firebase'
 
 
-
 const SIGNIN_URL = '/auth';
 // const DEFAULT_EMAIL = '@example.com';
 const DEFAULT_EMAIL = '';
@@ -34,7 +33,7 @@ const DEFAULT_PASSWORD = 'G7m!pLz@92aT';  // Hardcoded default password for deve
 // const DEFAULT_PASSWORD = '';
 
 
-const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsReports, setHasPostReports }) => {
+const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasMessagesAtAll, setHasCommentsReports, setHasPostReports }) => {
 
     const { t, i18n } = useTranslation();
 
@@ -126,9 +125,10 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
             // Now you can send the Firebase user data to your backend for further processing, like storing tokens
             const response = await axios.post('/auth/firebase-login', { email, displayName, uid }, { withCredentials: true });
 
-            const { userId, roles, accessToken, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility } = response?.data;
+            const { userId, roles, accessToken, preferredLanguage, hasNewMessages, hasMessagesAtAll, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility } = response?.data;
 
             setHasNewMessages(hasNewMessages);
+            setHasMessagesAtAll(hasMessagesAtAll)
             setHasPostReports(hasPostReports);
             setHasCommentsReports(hasCommentsReports);
 
@@ -217,9 +217,12 @@ const Signin = ({ isNavOpen, screenWidth, setHasNewMessages, setHasCommentsRepor
 
         try {
             const response = await authenticateUser(password);
-            const { accessToken, userId, roles, preferredLanguage, hasNewMessages, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility } = response?.data || {};
+            const { accessToken, userId, roles, preferredLanguage, hasNewMessages, hasMessagesAtAll, hasPostReports, hasCommentsReports, socialVisibility, adminVisibility, loginHistoryVisibility } = response?.data || {};
+
+            console.log('response.data', response.data)
 
             setHasNewMessages(hasNewMessages)
+            setHasMessagesAtAll(hasMessagesAtAll)
             setHasPostReports(hasPostReports);
             setHasCommentsReports(hasCommentsReports);
             setAuth({ userId, user, email, roles, accessToken, socialVisibility, adminVisibility, loginHistoryVisibility });

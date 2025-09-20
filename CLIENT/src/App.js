@@ -75,6 +75,7 @@ function App() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [isFollowNotification, setIsFollowNotification] = useState(false);
   const [hasNewMessages, setHasNewMessages] = useState(false)
+  const [hasMessagesAtAll, setHasMessagesAtAll] = useState(false)
   const [hasPostReports, setHasPostReports] = useState(false);
   const [hasCommentsReports, setHasCommentsReports] = useState(false);
   const [customRoles, setCustomRoles] = useState([]);
@@ -139,14 +140,14 @@ function App() {
 
     <div className="app">
 
-      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} customRoles={customRoles} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} />
+      <Navbar isNavOpen={isNavOpen} toggleNav={toggleNav} profilePictureKey={profilePictureKey} setProfilePictureKey={setProfilePictureKey} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} hasMessagesAtAll={hasMessagesAtAll} setHasMessagesAtAll={setHasMessagesAtAll} customRoles={customRoles} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} />
 
       <Hamburger isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
 
       <Routes>
         {/* Public routes */}
-        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} />} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} setHasMessagesAtAll={setHasMessagesAtAll}  setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} />} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
         <Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
@@ -330,7 +331,7 @@ function App() {
         <Route path="*" element={<NotFound isNavOpen={isNavOpen} />} />
       </Routes>
       <Footer isNavOpen={isNavOpen} />
-      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} setHasNewMessages={setHasNewMessages} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} profilePictureKey={profilePictureKey} />
+      <NavBarBottom isNavOpen={isNavOpen} toggleNav={toggleNav} isFollowNotification={isFollowNotification} setIsFollowNotification={setIsFollowNotification} hasNewMessages={hasNewMessages} hasMessagesAtAll={hasMessagesAtAll} setHasMessagesAtAll={setHasMessagesAtAll} setHasNewMessages={setHasNewMessages} hasPostReports={hasPostReports} hasCommentsReports={hasCommentsReports} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} profilePictureKey={profilePictureKey} />
 
     </div>
 
