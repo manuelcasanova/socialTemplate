@@ -34,6 +34,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
   const { adminSettings } = useGlobalAdminSettings();
 
   const { auth } = useAuth();
+
   const isSuperAdmin = auth?.roles?.includes('SuperAdmin');
   const isAdminNotSuperAdmin = auth?.roles?.includes('Admin') && !auth.roles.includes('SuperAdmin');
   const isAdminAndSuperAdmin = auth?.roles?.includes('Admin') && auth.roles.includes('SuperAdmin');
@@ -228,16 +229,28 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
               className='subitem'
             >{t('navbar.accessibleToAll')}</ul>
 
+            {/* {console.log(customRoles, 'customRoles')} */}
 
-            {customRoles && customRoles.length > 0 && customRoles.map(role => (
-              <div
-                key={role.role_id}
-                className="subitem"
-                onClick={() => handleNavigateProtected(role.role_name)}
-              >
-                {role.role_name}
-              </div>
-            ))}
+            {
+              customRoles && customRoles.length > 0 && customRoles.map(role => {
+                const userHasAccess = auth?.roles?.includes(role.role_name);
+
+                if (!role.listed_for_all && !userHasAccess) {
+                  return null; // Skip rendering this role
+                }
+
+                return (
+                  <div
+                    key={role.role_id}
+                    className="subitem"
+                    onClick={() => handleNavigateProtected(role.role_name)}
+                  >
+                    {role.role_name}
+                  </div>
+                );
+              })
+            }
+
 
 
           </>
@@ -424,7 +437,7 @@ const Navbar = ({ isNavOpen, toggleNav, profilePictureKey, setProfilePictureKey,
 
         </div>
       }
-      
+
       {
         superAdminSettings.showMessagesFeature &&
         adminSettings.showMessagesFeature &&

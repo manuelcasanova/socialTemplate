@@ -278,19 +278,29 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
         <ul
           onClick={() => handleNavigate('/user')}
           style={{ cursor: 'pointer', paddingBottom: '10px', marginTop: '2em', borderBottom: '1px solid #eee' }}
-        >Accessible to all registered users</ul>
+        >Accessible to all registered useeers</ul>
 
-        <ul>
-          {customRoles?.map((role, index) => (
-            <li
-              key={role.role_id}
-              style={{ padding: '10px 0px', borderBottom: '1px solid #eee', cursor: 'pointer' }}
-              onClick={() => handleNavigate(`/protected-routes/${role.role_name.toLowerCase()}`)}
-            >
-              {role.role_name}
-            </li>
-          ))}
-        </ul>
+
+<ul>
+  {customRoles?.map((role) => {
+    const userHasAccess = auth?.roles?.includes(role.role_name);
+
+    if (!role.listed_for_all && !userHasAccess) {
+      return null; 
+    }
+
+    return (
+      <li
+        key={role.role_id}
+        style={{ padding: '10px 0px', borderBottom: '1px solid #eee', cursor: 'pointer' }}
+        onClick={() => handleNavigate(`/protected-routes/${role.role_name.toLowerCase()}`)}
+      >
+        {role.role_name}
+      </li>
+    );
+  })}
+</ul>
+
       </BottomSheet>
 
 
