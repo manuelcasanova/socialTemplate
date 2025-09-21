@@ -92,6 +92,7 @@ li {
   flex-direction: row;
   max-width: 50%;
   margin-bottom: 2em;
+  align-items: center;
 }
 
 .create-role-row input {

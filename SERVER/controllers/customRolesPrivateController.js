@@ -147,7 +147,9 @@ const deleteCustomRole = async (req, res) => {
 
 // Create a new custom role
 const createCustomRole = async (req, res) => {
-  const { role_name, userId } = req.body;
+  const { role_name, userId, listedForAll } = req.body;
+
+// console.log('listedForAll in controller', listedForAll)
 
   if (!role_name || !role_name.trim()) {
     return res.status(400).json({ message: 'Role name is required.' });
@@ -183,8 +185,8 @@ const createCustomRole = async (req, res) => {
 
     // Insert the new role
     const result = await client.query(
-      'INSERT INTO roles (role_name, is_system_role, created_by) VALUES ($1, $2, $3) RETURNING *',
-      [trimmedName, false, userId]
+      'INSERT INTO roles (role_name, is_system_role, created_by, listed_for_all) VALUES ($1, $2, $3, $4) RETURNING *',
+      [trimmedName, false, userId, listedForAll]
     );
 
     const newRole = result.rows[0];

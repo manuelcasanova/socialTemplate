@@ -13,14 +13,21 @@ import { useTranslation } from 'react-i18next';
 
 export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }) {
 
-    const { t } = useTranslation();
-  const {auth} = useAuth()
+  const { t } = useTranslation();
+  const { auth } = useAuth()
   const userId = auth.userId;
   const inputRef = useRef(null);
   const [newRoleName, setNewRoleName] = useState("")
+  const [listedForAll, setListedForAll] = useState(false);
+  // console.log('listedForAll', listedForAll)
   const [showInput, setShowInput] = useState(false)
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showInfoMessage, setShowInfoMessage] = useState(false)
+
+  const handleShowInfoMessage = () => {
+    setShowInfoMessage(prev => !prev)
+  }
 
   useEffect(() => {
     if (showInput && inputRef.current) {
@@ -52,7 +59,7 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
     }
 
     try {
-      const response = await axiosPrivate.post("/custom-roles-private", { role_name: trimmedName, userId: userId  });
+      const response = await axiosPrivate.post("/custom-roles-private", { role_name: trimmedName, userId: userId, listedForAll: listedForAll });
 
       // Call the callback to update the parent state
       if (onRoleCreated) {
@@ -73,13 +80,13 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
     }
   };
 
-    if (isLoading) {
-      return <LoadingSpinner />;
-    }
-  
-    if (error) {
-      return <Error isNavOpen={isNavOpen} error={error} />
-    }
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <Error isNavOpen={isNavOpen} error={error} />
+  }
 
   return (
     <>
@@ -93,7 +100,7 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
         </button>}
       {showInput &&
         <div className="create-role-row"
-        style={{marginTop: '2em', marginBottom: '0px'}}
+          style={{ marginTop: '2em', marginBottom: '0px' }}
         >
           <input
             className="input-field"
@@ -110,6 +117,32 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
             placeholder='Aa'
             required
           />
+          <div className="trust-device"
+            style={{ marginTop: '1em', marginLeft: '1em', display: 'flex', flexDirection: 'row', alignItems: "center" }}
+          >
+            <input
+              type="checkbox"
+              id="persist"
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setListedForAll(true);
+                } else {
+                  setListedForAll(false);
+                }
+              }}
+            />
+            <label htmlFor="persist">{t('adminRoles.button.setListedForAll')}</label>
+            <div
+              onClick={handleShowInfoMessage}
+              className='info-button'>i</div>
+          </div>
+
+          {showInfoMessage &&
+            // <div className='info-message' style={{ marginBottom: '1em' }}>
+            <div className="admin-setup-note"
+              style={{ color: 'gray', fontSize: '0.85em', marginLeft: '1em', display: 'flex', alignItems: 'center' }}>
+              {t('adminRoles.button.setListedForAllInfo')}</div>}
+
           <button
             className="button-white button-smaller"
             onClick={handleCreateRole}
@@ -118,11 +151,15 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
               opacity: !newRoleName.trim() ? 0.5 : 1,
               cursor: !newRoleName.trim() ? "not-allowed" : "pointer"
             }}
-          >{t('adminRoles.create')}</button>
+          >
+            {t('adminRoles.create')}
+          </button>
           <button
             className="button-red button-smaller"
             onClick={handleShowInput}
           >X</button>
+
+
         </div>
       }
 

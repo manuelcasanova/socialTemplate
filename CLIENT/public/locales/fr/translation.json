@@ -522,7 +522,9 @@
       "delete": "Supprimer",
       "confirmDelete": "Confirmer la suppression",
       "cancel": "Annuler",
-      "ok": "OK"
+      "ok": "OK",
+      "setListedForAll": "Visible",
+      "setListedForAllInfo": "Afficher le rôle dans la barre de navigation à tous les utilisateurs ou seulement à ceux qui ont ce rôle attribué."
     },
     "warning": "Attention : selon la configuration de votre application, cette action peut être impossible. Par exemple : « Impossible de supprimer ce rôle car des éléments y sont liés » ou « Supprimer ce rôle supprimera également tous les éléments associés ».",
     "systemRoles": "Rôles système",

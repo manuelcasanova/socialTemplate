@@ -292,7 +292,6 @@ const handleRoleCreated = (newRole) => {
                     <div style={{ marginRight: '5px' }}>{role.role_name}</div>
                   )}
 
-
                   {activeMenuId === role.role_id && (
                     <>
 
@@ -347,6 +346,8 @@ const handleRoleCreated = (newRole) => {
                               x
                             </button>
 
+                   
+
                             {errorMessage && (
                               <p style={{ color: 'red' }}>{errorMessage}</p>
 
@@ -366,6 +367,11 @@ const handleRoleCreated = (newRole) => {
                             {t('adminRoles.button.delete')}
                           </button>
                         )}
+
+                        {/* HERE */}
+
+                                 <>{String(role.listed_for_all)}</>
+                      
 
                       {
                         (superAdminSettings.allowAdminDeleteCustomRole || isSuperAdmin) &&
@@ -394,6 +400,7 @@ const handleRoleCreated = (newRole) => {
                             >
                               x
                             </button>
+                            
                           </div>
                         )}
                     </>
@@ -403,6 +410,8 @@ const handleRoleCreated = (newRole) => {
               ))}
           </ul>
         )}
+
+
 
 
         {regexError && (

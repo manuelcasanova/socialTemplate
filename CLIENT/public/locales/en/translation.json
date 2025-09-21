@@ -522,7 +522,9 @@
       "delete": "Delete",
       "confirmDelete": "Confirm delete",
       "cancel": "Cancel",
-      "ok": "OK"
+      "ok": "OK",
+      "setListedForAll": "Visible",
+      "setListedForAllInfo": "Show the role in the navigation bar to all users or only to those who have that role assigned."
     },
     "warning": "Warning: Depending on your app configuration, this action may not be possible. For example: “Cannot delete this role because there are items linked to it,” or “Deleting this role will also remove all associated items.”",
     "systemRoles": "System Roles",

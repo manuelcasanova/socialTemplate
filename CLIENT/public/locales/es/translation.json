@@ -512,7 +512,9 @@
       "delete": "Eliminar",
       "confirmDelete": "Confirmar eliminación",
       "cancel": "Cancelar",
-      "ok": "OK"
+      "ok": "OK",
+      "setListedForAll": "Visible",
+      "setListedForAllInfo": "Mostrar el rol en la barra de navegación a todos los usuarios o solo a quienes tengan ese rol asignado.."
     },
     "warning": "Advertencia: Dependiendo de la configuración de tu aplicación, esta acción puede no ser posible. Por ejemplo: “No se puede eliminar este rol porque hay elementos vinculados a él” o “Eliminar este rol también eliminará todos los elementos asociados.”",
     "systemRoles": "Roles del Sistema",
