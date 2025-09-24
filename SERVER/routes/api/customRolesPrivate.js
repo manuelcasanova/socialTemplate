@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createCustomRole, updateCustomRole, deleteCustomRole } = require('../../controllers/customRolesPrivateController');
+const { createCustomRole, updateCustomRole, deleteCustomRole, updateRoleVisibility } = require('../../controllers/customRolesPrivateController');
 const verifyRoles = require('../../middleware/verifyRoles');
 
 const pool = require('../../config/db')
@@ -47,6 +47,16 @@ router.put('/:id', async (req, res, next) => {
     next(err); 
   }
 }, updateCustomRole);
+
+// Route to update a custom role's visibility
+router.put('/:id/visibility', async (req, res, next) => {
+  try {
+    const allowedRoles = await getConditionalAllowedRoles('edit');
+    verifyRoles(...allowedRoles)(req, res, next);
+  } catch (err) {
+    next(err); 
+  }
+}, updateRoleVisibility);
 
 // Route to delete a custom role
 router.delete('/:id', async (req, res, next) => {

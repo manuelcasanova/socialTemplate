@@ -209,10 +209,59 @@ const createCustomRole = async (req, res) => {
   }
 };
 
+// PUT /custom-roles-private/:id/visibility
+const updateRoleVisibility = async (req, res) => {
+  const { id } = req.params;
+  const { listedForAll, userId } = req.body;
+
+  if (typeof listedForAll !== 'boolean') {
+    return res.status(400).json({ message: '`listedForAll` must be a boolean.' });
+  }
+
+  try {
+    // Step 1: Fetch the role
+    const { rows } = await pool.query(
+      'SELECT listed_for_all, created_by FROM roles WHERE role_id = $1',
+      [id]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Role not found.' });
+    }
+
+    const { listed_for_all: oldVisibility, created_by } = rows[0];
+
+    // Step 2: Check if the user is the creator or a SuperAdmin
+    const { rowCount: superAdminCount } = await pool.query(
+      'SELECT 1 FROM user_roles WHERE user_id = $1 AND role_id = (SELECT role_id FROM roles WHERE role_name = $2)',
+      [userId, 'SuperAdmin']
+    );
+
+    if (created_by !== userId && superAdminCount === 0) {
+      return res.status(403).json({ message: 'Only the creator or a SuperAdmin can update visibility.' });
+    }
+
+    // Step 3: Update visibility
+    const { rows: updatedRows } = await pool.query(
+      'UPDATE roles SET listed_for_all = $1 WHERE role_id = $2 RETURNING *',
+      [listedForAll, id]
+    );
+
+    const updatedRole = updatedRows[0];
+
+
+    res.status(200).json(updatedRole);
+  } catch (err) {
+    console.error('Error updating visibility:', err);
+    res.status(500).json({ message: 'Server error while updating visibility.' });
+  }
+};
+
 
 
 module.exports = {
   updateCustomRole,
   deleteCustomRole,
-  createCustomRole
+  createCustomRole,
+  updateRoleVisibility
 };

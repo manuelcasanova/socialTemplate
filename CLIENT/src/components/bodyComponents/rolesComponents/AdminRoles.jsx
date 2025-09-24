@@ -47,7 +47,11 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   const [showInput, setShowInput] = useState(false)
   const roleNameRegex = /^[A-Za-z0-9 _.-]{1,25}$/;
   const [showCustomRolesInfo, setCustomRolesInfo] = useState(false);
+  const [showInfoMessage, setShowInfoMessage] = useState(false)
 
+  const handleShowInfoMessage = () => {
+    setShowInfoMessage(prev => !prev)
+  }
   const handleShowCustomRolesInfo = () => {
     setCustomRolesInfo(prev => !prev)
   }
@@ -119,13 +123,6 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
   };
 
 
-
-
-
-
-
-
-
   const handleEditRole = async () => {
     const trimmedName = roleName.trim();
 
@@ -177,6 +174,42 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
     }
   };
 
+  const handleToggleVisibility = async (roleId, newVisibility) => {
+    try {
+      setIsLoading(true);
+
+      const response = await axiosPrivate.put(`/custom-roles-private/${roleId}/visibility`, {
+        listedForAll: newVisibility,
+        userId: userId,
+      });
+
+      const updatedRole = response.data;
+
+      // Update local state with the updated role
+      setCustomRoles(prevRoles =>
+        prevRoles.map(role =>
+          role.role_id === updatedRole.role_id ? updatedRole : role
+        )
+      );
+
+      setError(null);
+      setErrorMessage('');
+    } catch (error) {
+      console.error("Error updating role visibility:", error);
+
+      if (error.response?.data?.message) {
+        setErrorMessage(error.response.data.message);
+      } else if (error.message === 'Network Error') {
+        setError("Network Error");
+      } else {
+        setErrorMessage("An unexpected error occurred.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
   useEffect(() => {
     const getRoles = async () => {
       try {
@@ -195,25 +228,25 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
     getRoles();
   }, []);
 
-const handleRoleCreated = (newRole) => {
-  setCustomRoles((prevRoles) =>
-    [...prevRoles, newRole].sort((a, b) => {
-      const getSortValue = (name) => {
-        if (/^\d+$/.test(name)) {
-          return parseInt(name);
-        }
-        const digits = name.replace(/\D/g, '');
-        return digits ? parseInt(digits) : Infinity;
-      };
+  const handleRoleCreated = (newRole) => {
+    setCustomRoles((prevRoles) =>
+      [...prevRoles, newRole].sort((a, b) => {
+        const getSortValue = (name) => {
+          if (/^\d+$/.test(name)) {
+            return parseInt(name);
+          }
+          const digits = name.replace(/\D/g, '');
+          return digits ? parseInt(digits) : Infinity;
+        };
 
-      const aVal = getSortValue(a.role_name);
-      const bVal = getSortValue(b.role_name);
+        const aVal = getSortValue(a.role_name);
+        const bVal = getSortValue(b.role_name);
 
-      if (aVal !== bVal) return aVal - bVal;
-      return a.role_name.localeCompare(b.role_name); // fallback
-    })
-  );
-};
+        if (aVal !== bVal) return aVal - bVal;
+        return a.role_name.localeCompare(b.role_name); // fallback
+      })
+    );
+  };
 
 
   if (isLoading) {
@@ -346,7 +379,7 @@ const handleRoleCreated = (newRole) => {
                               x
                             </button>
 
-                   
+
 
                             {errorMessage && (
                               <p style={{ color: 'red' }}>{errorMessage}</p>
@@ -368,10 +401,34 @@ const handleRoleCreated = (newRole) => {
                           </button>
                         )}
 
-                        {/* HERE */}
+                      {/* HERE */}
 
-                                 <>{String(role.listed_for_all)}</>
-                      
+                      <div>
+                        <input
+                          style={{ marginLeft: '1em', marginRight: '0.5em' }}
+                          type="checkbox"
+                          id="setListedForAll"
+                          onChange={() =>
+                            handleToggleVisibility(role.role_id, !role.listed_for_all)
+                          }
+                          checked={role.listed_for_all}
+                        />
+                        <label htmlFor="setListedForAll">
+                          {t('adminRoles.button.setListedForAll')}
+                        </label>
+                      </div>
+
+                      <div
+                        onClick={handleShowInfoMessage}
+                        className='info-button'>i</div>
+
+                      {showInfoMessage &&
+                        <div className="admin-setup-note"
+                          style={{ color: 'gray', fontSize: '0.85em', marginLeft: '1em', display: 'flex', alignItems: 'center' }}>
+                          {t('adminRoles.button.setListedForAllInfo')}</div>
+                      }
+
+
 
                       {
                         (superAdminSettings.allowAdminDeleteCustomRole || isSuperAdmin) &&
@@ -400,7 +457,7 @@ const handleRoleCreated = (newRole) => {
                             >
                               x
                             </button>
-                            
+
                           </div>
                         )}
                     </>
