@@ -87,11 +87,12 @@
     "superAdminSettings": "Configuración de Super Administrador",
     "settings": "Configuración",
     "adminSettings": "Configuración de Administrador",
-    "adminUsers": "Administración de usuarios",
-    "adminRoles": "Administrar roles",
+    "adminUsers": "Usuarios",
+    "adminRoles": "Roles",
     "roleChangeLog": "Registro de cambios de roles",
     "loginHistory": "Historial de inicio de sesión",
-    "adminRolesHistory": "Historial de administración de roles"
+    "adminRolesHistory": "Historial de administración de roles",
+    "back": "Regresar"
   },
   "user": {
     "welcome": "¡Bienvenido! ¡Ahora eres un usuario registrado!",
@@ -109,7 +110,7 @@
   },
   "admin": {
     "privatePage": "Esta página es privada y accesible solo para administradores.",
-    "exploreTitle": "Explora escenarios de administrador:",
+    "exploreTitle": "Explora escenarios de administrador",
     "scenario": {
       "modifyRoles": "- Crea, edita o elimina un rol. Modifica los roles permitidos de un usuario.",
       "deleteUser": "- Elimina una cuenta de usuario.",

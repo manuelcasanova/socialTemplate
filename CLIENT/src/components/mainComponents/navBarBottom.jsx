@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from '../../api/axios';
-
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 //Context
 
@@ -28,6 +28,8 @@ import useLogout from '../../hooks/useLogout';
 const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowNotification, hasNewMessages, hasMessagesAtAll, hasPostReports, setHasPostReports, hasCommentsReports, setHasCommentsReports, profilePictureKey }) => {
 
   // console.log(hasPostReports, hasCommentsReports)
+
+  const { t } = useTranslation();
 
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
   const FRONTEND = process.env.REACT_APP_FRONTEND_URL;
@@ -77,13 +79,13 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
     switch (section) {
       case 'moderator':
         return [
-          { label: 'Moderator', path: '/moderator' },
-          { label: 'Moderate posts', path: '/moderator/posts', showDot: hasPostReports },
-          { label: 'Moderate comments', path: '/moderator/comments', showDot: hasCommentsReports },
-          { label: 'Hidden posts', path: '/moderator/hidden/posts' },
-          { label: 'Hidden comments', path: '/moderator/hidden/comments' },
-          { label: 'Post moderation history', path: '/moderator/posts/history' },
-          { label: 'Comment moderation history', path: '/moderator/comments/history' },
+          { label: t('navbar.moderator'), path: '/moderator' },
+          { label: t('navbar.moderatePosts'), path: '/moderator/posts', showDot: hasPostReports },
+          { label: t('navbar.moderateComments'), path: '/moderator/comments', showDot: hasCommentsReports },
+          { label: t('navbar.hiddenPosts'), path: '/moderator/hidden/posts' },
+          { label: t('navbar.hiddenComments'), path: '/moderator/hidden/comments' },
+          { label: t('navbar.moderationHistoryPosts'), path: '/moderator/posts/history' },
+          { label: t('navbar.moderationHistoryComments'), path: '/moderator/comments/history' },
         ];
 
       case 'users':
@@ -92,42 +94,42 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
         // Conditionally add following, followers, and pending requests based on adminSettings.allowFollow
         if (adminSettings.showSocialFeature) {
           userItems.push(
-            { label: 'All users', path: '/social/allusers' }
+            { label: t('navbar.allUsers'), path: '/social/allusers' }
           );
         }
 
 
         if (adminSettings.allowFollow) {
           userItems.push(
-            { label: 'Following', path: '/social/following' },
-            { label: 'Followers', path: '/social/followers' },
+            { label: t('navbar.following'), path: '/social/following' },
+            { label: t('navbar.followers'), path: '/social/followers' },
             // HERE? Pending Requests notification
-            { label: 'Pending requests', path: '/social/pending' }
+            { label: t('navbar.pendingRequests'), path: '/social/pending' }
           );
         }
 
         if (adminSettings.showSocialFeature) {
           userItems.push(
-            { label: 'Muted', path: '/social/muted' }
+            { label: t('navbar.muted'), path: '/social/muted' }
           );
         }
 
         return userItems;
       case 'admin':
-        const adminItems = [{ label: 'Explore admin scenerios', path: '/admin/admin' }];
+        const adminItems = [{ label: t('admin.exploreTitle'), path: '/admin/admin' }];
 
         if (isSuperAdmin) {
-          adminItems.push({ label: 'Super Admin Settings', path: '/admin/superadmin/setup' });
+          adminItems.push({ label: t('navbar.superAdminSettings'), path: '/admin/superadmin/setup' });
         }
 
         if (isAdminNotSuperAdmin || isAdminAndSuperAdmin || isSuperAdmin) {
           adminItems.push(
-            { label: 'Admin Settings', path: '/admin/admin/setup' },
-            { label: 'Admin Users', path: '/admin/users' },
-            { label: 'Admin Roles', path: '/admin/roles' },
-            { label: 'Admin Roles History', path: '/admin/superadmin/roleadminhistory' },
-            { label: 'Role change log', path: '/admin/superadmin/rolechangelog' },
-            { label: 'Login History', path: '/admin/superadmin/loginhistory' }
+            { label: t('navbar.adminSettings'), path: '/admin/admin/setup' },
+            { label: t('navbar.adminUsers'), path: '/admin/users' },
+            { label: t('navbar.adminRoles'), path: '/admin/roles' },
+            { label: t('navbar.adminRolesHistory'), path: '/admin/superadmin/roleadminhistory' },
+            { label: t('navbar.roleChangeLog'), path: '/admin/superadmin/rolechangelog' },
+            { label: t('navbar.loginHistory'), path: '/admin/superadmin/loginhistory' }
           );
         }
 
@@ -278,28 +280,28 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
         <ul
           onClick={() => handleNavigate('/user')}
           style={{ cursor: 'pointer', paddingBottom: '10px', marginTop: '2em', borderBottom: '1px solid #eee' }}
-        >Accessible to all registered useeers</ul>
+        >Accessible to all registered users</ul>
 
 
-<ul>
-  {customRoles?.map((role) => {
-    const userHasAccess = auth?.roles?.includes(role.role_name);
+        <ul>
+          {customRoles?.map((role) => {
+            const userHasAccess = auth?.roles?.includes(role.role_name);
 
-    if (!role.listed_for_all && !userHasAccess) {
-      return null; 
-    }
+            if (!role.listed_for_all && !userHasAccess) {
+              return null;
+            }
 
-    return (
-      <li
-        key={role.role_id}
-        style={{ padding: '10px 0px', borderBottom: '1px solid #eee', cursor: 'pointer' }}
-        onClick={() => handleNavigate(`/protected-routes/${role.role_name.toLowerCase()}`)}
-      >
-        {role.role_name}
-      </li>
-    );
-  })}
-</ul>
+            return (
+              <li
+                key={role.role_id}
+                style={{ padding: '10px 0px', borderBottom: '1px solid #eee', cursor: 'pointer' }}
+                onClick={() => handleNavigate(`/protected-routes/${role.role_name.toLowerCase()}`)}
+              >
+                {role.role_name}
+              </li>
+            );
+          })}
+        </ul>
 
       </BottomSheet>
 
@@ -341,17 +343,17 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
               }
 
               if (isModerator && adminSettings?.showPostsFeature) {
-                ellipsisItems.push({ label: 'Moderator', icon: null });
+                ellipsisItems.push({ label: t('navbar.moderator'), icon: null });
               }
 
               if (isAdminNotSuperAdmin || isAdminAndSuperAdmin || isSuperAdmin) {
-                ellipsisItems.push({ label: 'Admin', icon: null });
+                ellipsisItems.push({ label: t('navbar.admin'), icon: null });
               }
 
               if (auth && Object.keys(auth).length > 0) {
-                ellipsisItems.push({ label: 'Logout', icon: faSignOutAlt });
+                ellipsisItems.push({ label: t('profile.signOut'), icon: faSignOutAlt });
               } else {
-                ellipsisItems.push({ label: 'Sign In', icon: faSignInAlt });
+                ellipsisItems.push({ label: t('profile.signIn'), icon: faSignInAlt });
               }
 
               return ellipsisItems.map((item, index) => (
@@ -369,10 +371,20 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
                   onClick={() => {
                     const label = item.label;
 
-                    if (['Moderator', 'Users', 'Admin'].includes(label)) {
-                      setSubSection(label.toLowerCase());
-                    }
-                    else if (label === 'Logout') {
+                    const signOutLabel = t('profile.signOut');
+                    const signInLabel = t('profile.signIn');
+                    const subscriberLabel = t('navbar.subscriber');
+                    const moderatorLabel = t('navbar.moderator');
+                    const adminLabel = t('navbar.admin');
+
+                    if (label === moderatorLabel) {
+                      setSubSection('moderator');
+                    } else if (label === adminLabel) {
+                      setSubSection('admin');
+                    } else if (label === subscriberLabel) {
+                      handleNavigate('/subscriber');
+                      setActiveSheet(null);
+                    } else if (label === signOutLabel) {
                       setIsFollowNotification(false);
                       setHasCommentsReports(false);
                       setHasPostReports(false);
@@ -382,8 +394,8 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
                       setTimeout(() => {
                         logout();
                         handleNavigate('/');
-                      }, 50); // ~1 frame
-                    } else if (label === 'Sign In') {
+                      }, 50);
+                    } else if (label === signInLabel) {
                       setActiveSheet(null);
                       handleNavigate('/signin');
                     } else {
@@ -391,6 +403,7 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
                       setActiveSheet(null);
                     }
                   }}
+
 
 
                 >
@@ -412,9 +425,10 @@ const NavBarBottom = ({ isNavOpen, toggleNav, isFollowNotification, setIsFollowN
         {subSection && (
           <div>
             <button onClick={() => setSubSection(null)} className='back-button button-white button-smaller'>
-              ← Back
+              ← {t('navbar.back')}
             </button>
-            <h4 style={{ textTransform: 'capitalize' }}>{subSection}</h4>
+            <h4 style={{ textTransform: 'capitalize' }}>{t(`navbar.${subSection}`)}</h4>
+
             <ul>
               {getSubItemsForSection(subSection).map((item, idx) => (
                 <li

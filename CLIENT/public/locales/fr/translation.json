@@ -95,11 +95,12 @@
     "superAdminSettings": "Paramètres Super Admin",
     "settings": "Paramètres",
     "adminSettings": "Paramètres Admin",
-    "adminUsers": "Utilisateurs Admin",
-    "adminRoles": "Rôles Admin",
+    "adminUsers": "Utilisateurs",
+    "adminRoles": "Rôles",
     "roleChangeLog": "Historique des changements de rôle",
     "loginHistory": "Historique des connexions",
-    "adminRolesHistory": "Historique des rôles Admin"
+    "adminRolesHistory": "Historique des rôles",
+    "back": "Retour"
   },
   "user": {
     "welcome": "Bienvenue ! Vous êtes maintenant un utilisateur enregistré !",

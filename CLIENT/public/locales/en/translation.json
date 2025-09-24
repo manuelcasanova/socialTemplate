@@ -95,11 +95,12 @@
     "superAdminSettings": "Super Admin Settings",
     "settings": "Settings",
     "adminSettings": "Admin Settings",
-    "adminUsers": "Admin users",
-    "adminRoles": "Admin roles",
+    "adminUsers": "Users",
+    "adminRoles": "Roles",
     "roleChangeLog": "Role change log",
     "loginHistory": "Login history",
-    "adminRolesHistory": "Admin roles history"
+    "adminRolesHistory": "Roles history",
+    "back": "Back"
   },
   "user": {
     "welcome": "Welcome! You're now a registered user!",
@@ -117,7 +118,7 @@
   },
   "admin": {
     "privatePage": "This page is private and accessible only to Administrators.",
-    "exploreTitle": "Explore admin scenarios:",
+    "exploreTitle": "Explore admin scenarios",
     "scenario": {
       "modifyRoles": "- Create, edit or delete roles. Modify a user's allowed roles.",
       "deleteUser": "- Delete a user account.",
