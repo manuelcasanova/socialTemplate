@@ -666,6 +666,7 @@
     "accountCannotBeModified": "Esta cuenta no se puede modificar, ya que garantiza que al menos un Admin permanezca.",
     "accountCannotBeDeleted": "Esta cuenta no se puede eliminar, ya que garantiza que al menos un administrador permanezca.",
     "cannotDeleteThisSuperadmin": "No estás autorizado para eliminar este SuperAdmin porque no fuiste quien le asignó ese rol.",
+    "cannotRevokeRegistered": "No puede revocar el rol Usuario_registrado ya que deshabilitaría el acceso del usuario. Para desactivar un usuario, por favor elimine su cuenta.",
     "cannotModifyOtherAdmins": "Los administradores no pueden modificar los roles de otros administradores.",
     "superAdminsCanModifySuperAdminsIf": "Los SuperAdmins solo pueden modificar los roles de otros SuperAdmins si ellos mismos les asignaron ese rol.",
     "cannotRevokeYourSuperAdminRole": "No puedes revocar tu propio rol de SuperAdmin.",

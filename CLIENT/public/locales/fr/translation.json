@@ -673,6 +673,7 @@
     "accountCannotBeModified": "Ce compte ne peut pas être modifié, car il garantit qu'au moins un Admin reste.",
     "accountCannotBeDeleted": "Ce compte ne peut pas être supprimé, car il garantit qu'au moins un administrateur reste.",
     "cannotDeleteThisSuperadmin": "Vous n'êtes pas autorisé à supprimer ce SuperAdmin car vous ne lui avez pas attribué ce rôle.",
+    "cannotRevokeRegistered": "Vous ne pouvez pas révoquer le rôle Utilisateur_enregistré car cela désactiverait l’accès de l’utilisateur. Pour désactiver un utilisateur, veuillez supprimer son compte à la place.",
     "cannotModifyOtherAdmins": "Les administrateurs ne peuvent pas modifier les rôles des autres administrateurs.",
     "superAdminsCanModifySuperAdminsIf": "Les SuperAdmins ne peuvent modifier les rôles d'autres SuperAdmins que s'ils leur ont attribué le rôle.",
     "cannotRevokeYourSuperAdminRole": "Vous ne pouvez pas révoquer votre propre rôle de SuperAdmin.",

@@ -673,6 +673,7 @@
     "accountCannotBeModified": "This account cannot be modified, as it ensures at least one Admin remains.",
     "accountCannotBeDeleted": "This account cannot be deleted, as it ensures at least one Admin remains.",
     "cannotDeleteThisSuperadmin": "You are not authorized to delete this SuperAdmin because you did not assign their role.",
+    "cannotRevokeRegistered": "You cannot revoke the User_registered role as it would disable user access. To disable a user, please delete their account instead.",
     "cannotModifyOtherAdmins": "Admins cannot modify other Admins' roles",
     "superAdminsCanModifySuperAdminsIf": "SuperAdmins can only modify other Superadmin roles if they assigned the SuperAdmin role to that user.",
     "cannotRevokeYourSuperAdminRole": "You cannot revoke your own SuperAdmin role",

@@ -774,7 +774,7 @@ const updateRoles = async (req, res) => {
 
         if (hasProtectedRole && rolesToRemoveIds.includes(PROTECTED_ROLE_ID)) {
             return res.status(403).json({
-                error: 'You cannot revoke the User_registered role as it would disable user access. To disable a user, please delete their account instead.'
+                error: t('usersController.cannotRevokeRegistered')
             });
         }
 
