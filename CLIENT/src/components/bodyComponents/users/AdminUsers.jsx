@@ -276,7 +276,9 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
         <h2>{t('adminUsers.title')}</h2>
         {error && <p className="error-message">{error}</p>}
         <FilterAdminUsers
+          isSuperAdmin={isSuperAdmin}
           roles={roles}
+          customRoles={customRoles}
           setFilters={setFilters}
           setExpandedUserId={setExpandedUserId}
         />

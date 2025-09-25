@@ -5,8 +5,8 @@ import '../../../css/FilterAdminUsers.css'
 //Translation
 import { useTranslation } from 'react-i18next';
 
-export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId }) {
-    const { t, i18n } = useTranslation();
+export default function FilterAdminUsers({ roles, customRoles, setFilters, setExpandedUserId, isSuperAdmin }) {
+  const { t, i18n } = useTranslation();
   const [username, setUsername] = useState("");
   const [role, setRole] = useState(""); // Role filter
   const [isActive, setIsActive] = useState(true); // Active status filter
@@ -15,6 +15,13 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
   const [isVisible, setIsVisible] = useState(false);
   const [isRoleOpen, setIsRoleOpen] = useState(false);
   const [isActiveOpen, setIsActiveOpen] = useState(false);
+
+  // Combine both into one array of role names
+  const allRoles = [...roles, ...customRoles.map(role => role.role_name)];
+
+  console.log(allRoles);
+
+
 
   // Refs to track dropdowns
   const roleDropdownRef = useRef(null);
@@ -32,9 +39,9 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
   };
 
   const toggleVisibility = () => {
-        setExpandedUserId(null);
-        setIsVisible(prevState => !prevState)
-   
+    setExpandedUserId(null);
+    setIsVisible(prevState => !prevState)
+
   };
 
   // Handle the visibility toggle and clear filters when the panel is closed
@@ -236,18 +243,21 @@ export default function FilterAdminUsers({ roles, setFilters, setExpandedUserId 
                   {t('filterAdmin.allRoles')}
                 </div>
 
-                {roles.map((r, idx) => (
-                  <div
-                    key={idx}
-                    className="custom-dropdown-option"
-                    onClick={() => {
-                      setRole(r); // Set selected role
-                      setIsRoleOpen(false); // Close the dropdown
-                    }}
-                  >
-                    {r}
-                  </div>
-                ))}
+                {allRoles
+                  .filter(role => role !== 'SuperAdmin' || isSuperAdmin) // Only include 'SuperAdmin' if isSuperAdmin is true
+                  .map((r, idx) => (
+                    <div
+                      key={idx}
+                      className="custom-dropdown-option"
+                      onClick={() => {
+                        setRole(r); // Set selected role
+                        setIsRoleOpen(false); // Close the dropdown
+                      }}
+                    >
+                      {r}
+                    </div>
+                  ))}
+
               </div>
             )}
             {isRoleOpen && roles.length === 0 && (
