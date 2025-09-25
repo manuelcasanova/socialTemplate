@@ -497,7 +497,10 @@
     "confirmDelete": "Confirmer la suppression",
     "noUsersFound": "Aucun utilisateur trouvé",
     "showDetails": "+",
-    "hideDetails": "−"
+    "hideDetails": "−",
+    "bulkRoleEdit": "Edition multiple rôles",
+    "username": "Nom",
+    "email": "E‑mail"
   },
   "filterAdmin": {
     "toggleLabel": "Filtrer",
@@ -675,6 +678,7 @@
     "cannotRevokeYourSuperAdminRole": "Vous ne pouvez pas révoquer votre propre rôle de SuperAdmin.",
     "cannotRevokeYourAdminRole": "Vous ne pouvez pas révoquer votre propre rôle d'administrateur.",
     "cannotModifyThisUserRoles": "Vous n'êtes pas autorisé à modifier les rôles de cet utilisateur",
+    "cannotModifyThisRole": "Vous n'êtes pas autorisé à modifier cet rôle.",
     "cannotRemoveAdminWhileSuperadmin": "Impossible de retirer le rôle Admin tant que le rôle SuperAdmin est encore attribué.",
     "cannotRemoveRoleWhileAdmin": "Impossible de supprimer ce rôle tant que le rôle d’administrateur est encore attribué."
   }

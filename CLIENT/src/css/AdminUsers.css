@@ -296,6 +296,33 @@ button:hover {
 }
 
 
+/* Bulk role edit */
+
+.table-container {
+  overflow-x: auto;
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-users-table th,
+.admin-users-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.admin-users-table th {
+  background-color: #f4f4f4;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Bulk role edit end */
+
 
 @media (max-width: 580px) {
 

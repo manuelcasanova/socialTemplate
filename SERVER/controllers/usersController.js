@@ -828,7 +828,7 @@ const updateRoles = async (req, res) => {
             // Allow the logged-in user to modify their own roles
             if (loggedInUser !== userId) {
                 if (!loggedInUserRoles.includes('SuperAdmin')) {
-                    return res.status(403).json({ error: t('usersController.cannotModifyThisUserRoles') });
+                    return res.status(403).json({ error: t('usersController.cannotModifyThisRole') });
                 }
             }
         }

@@ -281,7 +281,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
           className="button-white button-smaller"
           style={{ margin: 'auto', marginTop: '1em' }}
           onClick={() => navigate(`/admin/users/bulk`)}
-        >Bulk role edit</button>
+        >{t('adminUsers.bulkRoleEdit')}</button>
         <FilterAdminUsers
           isSuperAdmin={isSuperAdmin}
           roles={roles}

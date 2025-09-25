@@ -497,7 +497,10 @@
     "confirmDelete": "Confirm delete",
     "noUsersFound": "No users found",
     "showDetails": "+",
-    "hideDetails": "−"
+    "hideDetails": "−",
+    "bulkRoleEdit": "Bulk Role Edit",
+    "username": "Name",
+    "email": "E‑mail"
   },
   "filterAdmin": {
     "toggleLabel": "Filter",
@@ -675,6 +678,7 @@
     "cannotRevokeYourSuperAdminRole": "You cannot revoke your own SuperAdmin role",
     "cannotRevokeYourAdminRole": "You cannot revoke your own Admin role",
     "cannotModifyThisUserRoles": "You are not allowed to modify this user's roles",
+    "cannotModifyThisRole": "You are not allowed to modify this role",
     "cannotRemoveAdminWhileSuperadmin": "Cannot remove Admin while SuperAdmin is still assigned",
     "cannotRemoveRoleWhileAdmin": "Cannot remove this role while Admin is still assigned."
   }
