@@ -33,6 +33,7 @@ import ResetPassword from './components/authComponents/ResetPassword';
 
 import Profile from './components/bodyComponents/Profile';
 import AdminUsers from './components/bodyComponents/users/AdminUsers';
+import AdminUsersBulk from "./components/bodyComponents/users/AdminUsersBulk";
 
 import RoleChangeLog from './components/bodyComponents/users/RoleChangeLog';
 import SubscribeForm from './components/bodyComponents/SubscribeForm';
@@ -147,7 +148,7 @@ function App() {
 
       <Routes>
         {/* Public routes */}
-        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} setHasMessagesAtAll={setHasMessagesAtAll}  setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} />} />
+        <Route path="/signin" element={<Signin isNavOpen={isNavOpen} screenWidth={screenWidth} setHasNewMessages={setHasNewMessages} setHasMessagesAtAll={setHasMessagesAtAll} setHasCommentsReports={setHasCommentsReports} setHasPostReports={setHasPostReports} />} />
         <Route path="/signup" element={<Signup isNavOpen={isNavOpen} screenWidth={screenWidth} />} />
         <Route path="/" element={<Home isNavOpen={isNavOpen} />} />
         <Route path="resetpassword" element={<ResetPassword isNavOpen={isNavOpen} />} />
@@ -301,6 +302,10 @@ function App() {
           {/* Admin-specific routes */}
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
             <Route path="/admin/users" element={<AdminUsers isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} customRoles={customRoles} setCustomRoles={setCustomRoles} profilePictureKey={profilePictureKey} />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>
+            <Route path="/admin/users/bulk" element={<AdminUsersBulk isNavOpen={isNavOpen} allowedRoles={['Admin', 'SuperAdmin']} customRoles={customRoles} setCustomRoles={setCustomRoles} profilePictureKey={profilePictureKey} />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['Admin', 'SuperAdmin']} />}>

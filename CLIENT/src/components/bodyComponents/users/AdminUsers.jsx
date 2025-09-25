@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 
 //Context
 import { useGlobalSuperAdminSettings } from "../../../context/SuperAdminSettingsProvider";
@@ -32,6 +33,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
   const { superAdminSettings } = useGlobalSuperAdminSettings();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
+  const navigate = useNavigate();
 
   const [error, setError] = useState('');
   const prevError = useRef(null);
@@ -275,6 +277,11 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
       <div className="admin-users" style={{ minHeight: '500px' }}>
         <h2>{t('adminUsers.title')}</h2>
         {error && <p className="error-message">{error}</p>}
+        <button
+          className="button-white button-smaller"
+          style={{ margin: 'auto', marginTop: '1em' }}
+          onClick={() => navigate(`/admin/users/bulk`)}
+        >Bulk role edit</button>
         <FilterAdminUsers
           isSuperAdmin={isSuperAdmin}
           roles={roles}
