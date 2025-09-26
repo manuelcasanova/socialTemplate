@@ -14,6 +14,7 @@ import '../../../css/AdminUsers.css';
 //Components
 
 import FilterAdminUsers from "./FilterAdminUsers";
+import FilterAdminUsersBulk from "./FilterAdminUsersBulk";
 import LoadingSpinner from "../../loadingSpinner/LoadingSpinner";
 
 //Util functions
@@ -41,6 +42,7 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
   const [error, setError] = useState('');
   const prevError = useRef(null);
   const [filters, setFilters] = useState({ is_active: true });
+  const [expandedUserId, setExpandedUserId] = useState(null);
 
   const [showSystemRoles, setShowSystemRoles] = useState(false);
 
@@ -155,7 +157,14 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
 
         <h2>{t('adminUsers.bulkRoleEdit')}</h2>
 
+        <FilterAdminUsersBulk
+          isSuperAdmin={isSuperAdmin}
+          roles={roles}
+          customRoles={customRoles}
+          setFilters={setFilters}
+          setExpandedUserId={setExpandedUserId}
 
+        />
 
         {isLoading && <LoadingSpinner />}
 
