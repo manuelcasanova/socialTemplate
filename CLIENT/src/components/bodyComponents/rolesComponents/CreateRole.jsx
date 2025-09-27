@@ -96,7 +96,7 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
           style={{ alignSelf: 'start', marginTop: '1em' }}
           onClick={handleShowInput}
         >
-          Create role
+          {t('adminRoles.createRole')}
         </button>}
       {showInput &&
         <div className="create-role-row"

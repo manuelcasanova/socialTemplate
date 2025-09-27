@@ -45,6 +45,7 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
   const [expandedUserId, setExpandedUserId] = useState(null);
 
   const [showSystemRoles, setShowSystemRoles] = useState(false);
+  const [showEmail, setShowEmail] = useState(false);
 
   // Reset the error message whenever filters change
   useEffect(() => {
@@ -176,12 +177,32 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
           <table className="admin-users-table">
             <thead>
               <tr>
-                <th>{t('adminUsers.username')}</th>
-                <th>{t('adminUsers.email')}</th>
+                <th>{t('adminUsers.username')}
+
+                  <button
+                    className="button-green button-smaller"
+                    style={{marginLeft: '1em'}}
+                    onClick={() => setShowEmail(prev => !prev)}
+                    aria-label={showEmail ? "Hide email column" : "Show email column"}
+                  >
+                     {showEmail ? '-' : '+'}
+                  </button>
+
+                </th>
+                {showEmail && <th>{t('adminUsers.email')}</th>}
 
                 {/* Always show custom roles */}
                 {customRoles.map(custom => (
-                  <th key={custom.role_id}>{custom.role_name}</th>
+                  <th key={custom.role_id}
+                    style={{
+                      writingMode: 'vertical-rl',
+                      transform: 'rotate(-180deg)',
+                      whiteSpace: 'nowrap',
+                      textAlign: 'left',
+                      verticalAlign: 'middle',
+                      paddingBottom: '10px',
+                    }}
+                  >{custom.role_name}</th>
                 ))}
 
                 {/* Show system roles only when toggled */}
@@ -189,7 +210,16 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
                   roles
                     .filter(role => isSuperAdmin || role !== 'SuperAdmin')
                     .map(role => (
-                      <th key={role}>{role}</th>
+                      <th key={role}
+                        style={{
+                          writingMode: 'vertical-rl',
+                          transform: 'rotate(-180deg)',
+                          whiteSpace: 'nowrap',
+                          textAlign: 'left',
+                          verticalAlign: 'middle',
+                          paddingBottom: '10px',
+                        }}
+                      >{role}</th>
                     ))}
               </tr>
             </thead>
@@ -211,7 +241,7 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
                 .map(user => (
                   <tr key={user.user_id}>
                     <td>{user.username}</td>
-                    <td>{user.email}</td>
+                    {showEmail && <td>{user.email}</td>}
 
                     {/* Always show custom roles */}
                     {customRoles.map(custom => (
