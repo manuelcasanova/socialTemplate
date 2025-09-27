@@ -19,7 +19,7 @@ export default function FilterAdminUsers({ roles, customRoles, setFilters, setEx
   // Combine both into one array of role names
   const allRoles = [...roles, ...customRoles.map(role => role.role_name)];
 
-  console.log(allRoles);
+  // console.log(allRoles);
 
 
 
