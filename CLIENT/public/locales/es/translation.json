@@ -387,6 +387,7 @@
     "premiumFeatureB": "Funcionalidad exclusiva B",
     "subscribeNow": "Suscribirse ahora",
     "enterCardDetails": "Introduce los datos de la tarjeta",
+    "simulateCardDetails": "Pulsa 'Confirmar pago' para simular el proceso de pago y suscribirte",
     "cardNumber": "Número de tarjeta",
     "expMonth": "Mes de expiración",
     "expYear": "Año de expiración",

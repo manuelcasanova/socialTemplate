@@ -67,6 +67,18 @@ router.route('/')
     usersController.getAllUsers
   );
 
+  router.route('/with-full-roles')
+  .get(
+    async (req, res, next) => {
+      try {
+        verifyRoles('Admin', 'SuperAdmin')(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    },
+    usersController.getAllUsersForBulkRoleEdit
+  );
+
 
 router.route('/:userId')
   .get(

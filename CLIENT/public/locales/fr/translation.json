@@ -397,6 +397,7 @@
     "premiumFeatureB": "Fonctionnalité exclusive B",
     "subscribeNow": "S’abonner maintenant",
     "enterCardDetails": "Entrer les détails de la carte",
+    "simulateCardDetails": "Appuie sur « Confirmer le paiement » pour simuler le processus de paiement et t’abonner.",
     "cardNumber": "Numéro de carte",
     "expMonth": "Mois d’expiration",
     "expYear": "Année d’expiration",

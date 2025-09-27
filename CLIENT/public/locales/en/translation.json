@@ -397,6 +397,7 @@
     "premiumFeatureB": "Exclusive Feature B",
     "subscribeNow": "Subscribe Now",
     "enterCardDetails": "Enter Credit Card Details",
+    "simulateCardDetails": "'Confirm Payment' to simulate the payment process and subscribe",
     "cardNumber": "Card Number",
     "expMonth": "Expiration Month",
     "expYear": "Expiration Year",

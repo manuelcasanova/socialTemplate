@@ -103,6 +103,95 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+//Function, similar to getAllUSers, but provides all roles (this is used for the role bulk edit component)
+
+const getAllUsersForBulkRoleEdit = async (req, res) => {
+  try {
+    const { username, email, role, user_id } = req.query;
+    let { is_active } = req.query;
+
+    const params = [];
+    let paramIndex = 1;
+
+    let query = `
+      SELECT 
+        u.user_id, 
+        u.username, 
+        u.email, 
+        u.is_active, 
+        u.is_verified, 
+        u.location, 
+        u.admin_visibility,
+        COALESCE(array_agg(DISTINCT r.role_name) FILTER (WHERE r.role_name IS NOT NULL), '{}') AS roles,
+        COALESCE(array_agg(DISTINCT lh.login_time) FILTER (WHERE lh.login_time IS NOT NULL), '{}') AS login_history
+      FROM users u
+      LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+      LEFT JOIN roles r ON ur.role_id = r.role_id
+      LEFT JOIN login_history lh ON u.user_id = lh.user_id
+      WHERE 1=1
+    `;
+
+    // Filters
+    if (username) {
+      query += ` AND u.username ILIKE $${paramIndex}`;
+      params.push(`%${username}%`);
+      paramIndex++;
+    }
+
+    if (email) {
+      query += ` AND u.email ILIKE $${paramIndex}`;
+      params.push(`%${email}%`);
+      paramIndex++;
+    }
+
+    if (user_id) {
+      if (isNaN(user_id)) {
+        return res.status(400).json({ error: 'Invalid user_id format' });
+      }
+      query += ` AND u.user_id = $${paramIndex}`;
+      params.push(user_id);
+      paramIndex++;
+    }
+
+    if (is_active !== undefined) {
+      if (!['true', 'false'].includes(is_active)) {
+        return res.status(400).json({ error: 'Invalid is_active value. Expected "true" or "false".' });
+      }
+      query += ` AND u.is_active = $${paramIndex}`;
+      params.push(is_active === 'true');
+      paramIndex++;
+    }
+
+    // ✅ Role filter: only *filter* users who have it, but return all roles
+    if (role) {
+      query += `
+        AND u.user_id IN (
+          SELECT ur2.user_id
+          FROM user_roles ur2
+          JOIN roles r2 ON ur2.role_id = r2.role_id
+          WHERE r2.role_name = $${paramIndex}
+        )
+      `;
+      params.push(role);
+      paramIndex++;
+    }
+
+    // Finalize the query
+    query += `
+      GROUP BY 
+        u.user_id, u.username, u.email, u.is_active, u.is_verified, u.location, u.admin_visibility
+    `;
+
+    const result = await pool.query(query, params);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error retrieving users for bulk role edit:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
 //Function to get user by id
 
 const getUserById = async (req, res) => {
@@ -1167,6 +1256,7 @@ const processPayment = async ({ amount, currency }) => {
 module.exports = {
     getUserById,
     getAllUsers,
+    getAllUsersForBulkRoleEdit,
     updateUser,
     softDeleteUser,
     uploadProfilePicture,

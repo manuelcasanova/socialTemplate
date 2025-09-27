@@ -58,7 +58,7 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
       try {
         // Fetch users and roles
         const [usersResponse, rolesResponse] = await Promise.all([
-          axiosPrivate.get(`/users/`, { params: filters }),
+          axiosPrivate.get(`/users/with-full-roles`, { params: filters }),
           axiosPrivate.get(`/roles/`) // Fetch roles via the server route
         ]);
 

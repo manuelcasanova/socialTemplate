@@ -203,7 +203,9 @@ const SubscribeForm = ({ isNavOpen }) => {
                 {/* Show the payment form if the button is clicked */}
                 {showPaymentForm && (
                     <div className="credit-card-form">
-                        <h3>{t('subscribeForm.enterCardDetails')}</h3>
+                        {/* <h3>{t('subscribeForm.enterCardDetails')}</h3> */}
+                        <h3>{t('subscribeForm.simulateCardDetails')}</h3>
+
 
                         <button
                             className="close-button"
