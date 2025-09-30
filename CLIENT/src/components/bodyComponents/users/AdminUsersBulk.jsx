@@ -25,6 +25,14 @@ import { useTranslation } from 'react-i18next';
 
 export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, profilePictureKey }) {
 
+
+  //To conditional render style transform on th
+  const isIOS = () => {
+    if (typeof navigator === 'undefined') return false;
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  };
+
+
   const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
   const { auth } = useAuth();
@@ -181,11 +189,11 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
 
                   <button
                     className="button-green button-smaller"
-                    style={{marginLeft: '1em'}}
+                    style={{ marginLeft: '1em' }}
                     onClick={() => setShowEmail(prev => !prev)}
                     aria-label={showEmail ? "Hide email column" : "Show email column"}
                   >
-                     {showEmail ? '-' : '+'}
+                    {showEmail ? '-' : '+'}
                   </button>
 
                 </th>
@@ -196,7 +204,8 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
                   <th key={custom.role_id}
                     style={{
                       writingMode: 'vertical-rl',
-                      transform: 'rotate(-180deg)',
+                      transform: isIOS() ? 'none' : 'rotate(-180deg)',
+                      direction: 'ltr',
                       whiteSpace: 'nowrap',
                       textAlign: 'left',
                       verticalAlign: 'middle',
@@ -213,7 +222,8 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
                       <th key={role}
                         style={{
                           writingMode: 'vertical-rl',
-                          transform: 'rotate(-180deg)',
+                          transform: isIOS() ? 'none' : 'rotate(-180deg)',
+                          direction: 'ltr',
                           whiteSpace: 'nowrap',
                           textAlign: 'left',
                           verticalAlign: 'middle',
