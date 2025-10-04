@@ -18,7 +18,7 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
   const userId = auth.userId;
   const inputRef = useRef(null);
   const [newRoleName, setNewRoleName] = useState("")
-  const [listedForAll, setListedForAll] = useState(false);
+  const [listedForAll, setListedForAll] = useState(true);
   // console.log('listedForAll', listedForAll)
   const [showInput, setShowInput] = useState(false)
   const [errorMessage, setErrorMessage] = useState("");
@@ -123,6 +123,7 @@ export default function CreateRole({ onRoleCreated, isNavOpen, error, setError }
             <input
               type="checkbox"
               id="persist"
+              checked={listedForAll}
               onChange={(e) => {
                 if (e.target.checked) {
                   setListedForAll(true);

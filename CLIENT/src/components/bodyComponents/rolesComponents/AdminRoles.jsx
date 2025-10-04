@@ -67,7 +67,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       try {
         setIsLoading(true);
         const response = await axios.get('/custom-roles-public');
-        setCustomRoles(response.data);
+        setCustomRoles(sortRoles(response.data));
         setError(null);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch customRoles');
@@ -79,6 +79,23 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
 
     getRoles();
   }, []);
+
+  function sortRoles(roles) {
+    return roles.sort((a, b) => {
+      const getSortValue = (name) => {
+        if (/^\d+$/.test(name)) return parseInt(name);
+        const digits = name.replace(/\D/g, '');
+        return digits ? parseInt(digits) : Infinity;
+      };
+
+      const aVal = getSortValue(a.role_name);
+      const bVal = getSortValue(b.role_name);
+
+      if (aVal !== bVal) return aVal - bVal;
+      return a.role_name.localeCompare(b.role_name);
+    });
+  }
+
 
   const handleDeleteRole = async () => {
     if (!confirmDeleteId) return;
@@ -93,7 +110,7 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       if (response.status === 204) {
         // After successful deletion, update the state and handle the error message
         setCustomRoles(prevRoles =>
-          prevRoles.filter(role => role.role_id !== confirmDeleteId)
+          sortRoles(prevRoles.filter(role => role.role_id !== confirmDeleteId))
         );
 
         // Reset the confirmation and active menu
@@ -148,11 +165,11 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       const updatedRole = response.data;
 
       // Update local state
-      setCustomRoles(prevRoles =>
+      setCustomRoles(prevRoles => sortRoles(
         prevRoles.map(role =>
           role.role_id === updatedRole.role_id ? updatedRole : role
         )
-      );
+      ));
 
       setEditRoleId(null);
       setActiveMenuId(null);
@@ -186,11 +203,11 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
       const updatedRole = response.data;
 
       // Update local state with the updated role
-      setCustomRoles(prevRoles =>
+      setCustomRoles(prevRoles => sortRoles(
         prevRoles.map(role =>
           role.role_id === updatedRole.role_id ? updatedRole : role
         )
-      );
+      ));
 
       setError(null);
       setErrorMessage('');
@@ -228,24 +245,28 @@ export default function AdminRoles({ isNavOpen, customRoles, setCustomRoles }) {
     getRoles();
   }, []);
 
+  function extractLeadingNumber(name) {
+    // Match one or more digits at the start of the string (ignoring leading spaces)
+    const match = name.match(/^\s*(\d+)/);
+    return match ? parseInt(match[1], 10) : Infinity; // Infinity means "no number" — comes last
+  }
+
+  function sortRoles(roles) {
+    return [...roles].sort((a, b) => {
+      const aNum = extractLeadingNumber(a.role_name);
+      const bNum = extractLeadingNumber(b.role_name);
+
+      if (aNum !== bNum) {
+        return aNum - bNum;
+      }
+      // If numbers are equal, fallback to alphabetical
+      return a.role_name.localeCompare(b.role_name);
+    });
+  }
+
+
   const handleRoleCreated = (newRole) => {
-    setCustomRoles((prevRoles) =>
-      [...prevRoles, newRole].sort((a, b) => {
-        const getSortValue = (name) => {
-          if (/^\d+$/.test(name)) {
-            return parseInt(name);
-          }
-          const digits = name.replace(/\D/g, '');
-          return digits ? parseInt(digits) : Infinity;
-        };
-
-        const aVal = getSortValue(a.role_name);
-        const bVal = getSortValue(b.role_name);
-
-        if (aVal !== bVal) return aVal - bVal;
-        return a.role_name.localeCompare(b.role_name); // fallback
-      })
-    );
+    setCustomRoles((prevRoles) => sortRoles([...prevRoles, newRole]));
   };
 
 
