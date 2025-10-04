@@ -107,9 +107,9 @@ const getAllPosts = async (req, res) => {
 // Function to get posts by a specific user (is_deleted false)
 const getPostsById = async (req, res) => {
   try {
-// console.log("req.params", req.params)
+    // console.log("req.params", req.params)
     const postId = req.params.postId;
-   
+
     // console.log("postId", postId)
 
     // Query to get posts from a specific user, excluding deleted posts
@@ -234,7 +234,7 @@ const getPostReactionsCount = async (req, res) => {
 
     // Execute the query
     const result = await pool.query(query, params);
-    
+
 
     // Return the posts if found
     res.status(200).json(result.rows.length);
@@ -267,8 +267,8 @@ const getPostCommentsReactionsCount = async (req, res) => {
 
     // Execute the query
     const result = await pool.query(query, params);
-    
-// console.log("result.rows", result.rows)
+
+    // console.log("result.rows", result.rows)
     // Return the posts if found
     res.status(200).json(result.rows.length);
   } catch (error) {
@@ -286,13 +286,16 @@ const getPostCommentsCount = async (req, res) => {
 
 
     const query = `
-      SELECT *
-      FROM posts_comments pc
-      JOIN users u ON u.user_id = pc.commenter
-      LEFT JOIN muted m ON m.muter = $2 AND m.mutee = u.user_id
-      WHERE pc.post_id = $1
-      AND pc.is_deleted = FALSE
-        AND (m.mute IS NULL OR m.mute = FALSE);
+SELECT *
+FROM posts_comments pc
+JOIN users u ON u.user_id = pc.commenter
+LEFT JOIN muted m1 ON m1.muter = $2 AND m1.mutee = u.user_id     
+LEFT JOIN muted m2 ON m2.muter = u.user_id AND m2.mutee = $2 
+WHERE pc.post_id = $1
+  AND pc.is_deleted = FALSE
+  AND (m1.mute IS NULL OR m1.mute = FALSE)
+  AND (m2.mute IS NULL OR m2.mute = FALSE);
+
     `;
 
     const params = [postId, loggedInUserId];
@@ -311,30 +314,32 @@ const getPostCommentsCount = async (req, res) => {
 const getPostComments = async (req, res) => {
   try {
     // console.log("hit controller getPostCommentsCount")
-// console.log("req.query", req.query)
-  
-const postId = Number(req.query.postId);
-const currentUserId = req.query.loggedInUserId;
+    // console.log("req.query", req.query)
+
+    const postId = Number(req.query.postId);
+    const currentUserId = req.query.loggedInUserId;
 
 
-const query = `
+    const query = `
   SELECT 
     pc.*, 
     u.username 
   FROM posts_comments pc
   JOIN users u ON u.user_id = pc.commenter
   LEFT JOIN muted m1 ON m1.muter = $2 AND m1.mutee = u.user_id
+  LEFT JOIN muted m2 ON m2.muter = pc.commenter AND m2.mutee = $2
   WHERE pc.post_id = $1
   AND pc.is_deleted = FALSE
     AND (m1.mute IS NULL OR m1.mute = FALSE)
+    AND (m2.mute IS NULL OR m2.mute = FALSE)
   ORDER BY pc.date DESC;
 `;
 
-const result = await pool.query(query, [postId, currentUserId]);
+    const result = await pool.query(query, [postId, currentUserId]);
 
     // Execute the query
 
-// console.log("result", result.rows)
+    // console.log("result", result.rows)
     // Return the posts if found
     res.status(200).json(result.rows);
   } catch (error) {
@@ -385,7 +390,7 @@ const writePostComment = async (req, res) => {
 const getPostReactionsData = async (req, res) => {
   try {
     // console.log("hit controller getPostCommentsCount")
-// console.log("req.query", req.query)
+    // console.log("req.query", req.query)
     const postId = Number(req.query.postId)
     const currentUserId = req.query.loggedInUserId;
 
@@ -417,12 +422,12 @@ const getPostReactionsData = async (req, res) => {
 getPostCommentsReactionsData = async (req, res) => {
   try {
     // console.log("hit controller getPostCommentsReactionsData")
-// console.log("req.query", req.query)
+    // console.log("req.query", req.query)
     const commentId = Number(req.query.commentId)
     const currentUserId = Number(req.query.loggedInUserId);
 
-// console.log("commentId", commentId)
-// console.log("currentUserId", currentUserId)
+    // console.log("commentId", commentId)
+    // console.log("currentUserId", currentUserId)
 
     const query = `
       SELECT 
@@ -440,7 +445,7 @@ getPostCommentsReactionsData = async (req, res) => {
 
     // Execute the query
     const result = await pool.query(query, params);
-// console.log("result.rows", result.rows)
+    // console.log("result.rows", result.rows)
     // Return the posts if found
     res.status(200).json(result.rows);
   } catch (error) {
@@ -450,7 +455,7 @@ getPostCommentsReactionsData = async (req, res) => {
 };
 
 const sendReaction = async (req, res) => {
-  const { loggedInUserId, postId, reactionType } = req.body; 
+  const { loggedInUserId, postId, reactionType } = req.body;
 
   try {
     // Step 1: Validate the input data
@@ -538,7 +543,7 @@ const sendReaction = async (req, res) => {
 };
 
 const sendCommentReaction = async (req, res) => {
-  const { loggedInUserId, commentId, reactionType } = req.body; 
+  const { loggedInUserId, commentId, reactionType } = req.body;
 
   try {
     // Step 1: Validate the input data
@@ -631,7 +636,7 @@ const markCommentAsDeleted = async (req, res) => {
   const { id } = req.params;
   const { loggedInUserId } = req.body; // Logged-in user ID from the request body
 
-// console.log("req.body", req.body)
+  // console.log("req.body", req.body)
 
   try {
     // First, fetch the sender of the post
@@ -646,7 +651,7 @@ const markCommentAsDeleted = async (req, res) => {
 
     const comment = commentResult.rows[0];
 
-// console.log("comment", comment)
+    // console.log("comment", comment)
 
     // Ensure that the logged-in user is the sender of the post
     if (comment.commenter !== loggedInUserId) {
