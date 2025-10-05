@@ -31,7 +31,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
 
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
-  console.log(superAdminSettings)
+
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
