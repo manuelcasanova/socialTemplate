@@ -160,6 +160,10 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
     }
   }, [loggedInUser, i18n.language, axiosPrivate]);
 
+if (!superAdminSettings.allowManageRoles || isSuperAdmin) {
+  return null;
+}
+
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
       <div className="admin-users">

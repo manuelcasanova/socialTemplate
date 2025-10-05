@@ -31,6 +31,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
 
   const axiosPrivate = useAxiosPrivate();
   const { superAdminSettings } = useGlobalSuperAdminSettings();
+  console.log(superAdminSettings)
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
@@ -277,11 +278,13 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
       <div className="admin-users" style={{ minHeight: '500px' }}>
         <h2>{t('adminUsers.title')}</h2>
         {error && <p className="error-message">{error}</p>}
-        <button
-          className="button-white button-smaller"
-          style={{ margin: 'auto', marginTop: '1em' }}
-          onClick={() => navigate(`/admin/users/bulk`)}
-        >{t('adminUsers.bulkRoleEdit')}</button>
+        {(superAdminSettings.allowManageRoles || isSuperAdmin) &&
+          <button
+            className="button-white button-smaller"
+            style={{ margin: 'auto', marginTop: '1em' }}
+            onClick={() => navigate(`/admin/users/bulk`)}
+          >{t('adminUsers.bulkRoleEdit')}</button>
+        }
         <FilterAdminUsers
           isSuperAdmin={isSuperAdmin}
           roles={roles}
@@ -289,6 +292,7 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
           setFilters={setFilters}
           setExpandedUserId={setExpandedUserId}
         />
+
         {isLoading ? (
           <LoadingSpinner />
         ) :
