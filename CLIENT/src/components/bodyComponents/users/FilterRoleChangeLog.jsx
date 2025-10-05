@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 
@@ -6,7 +6,7 @@ import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from 'react-i18next';
 
 
-export default function FilterRoleChangeLog({ roles, setFilters }) {
+export default function FilterRoleChangeLog({ roles, setFilters, customRoles }) {
   const { t } = useTranslation();
   const [modifier, setModifier] = useState("");
   const [recipient, setRecipient] = useState("");
@@ -18,6 +18,11 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
   const [isRoleOpen, setIsRoleOpen] = useState(false);
   const [isActionTypeOpen, setIsActionTypeOpen] = useState(false);
 
+const mergedRoles = useMemo(() => {
+  const customRoleNames = customRoles?.map((cr) => cr.role_name) || [];
+  const allRoles = [...new Set([...roles, ...customRoleNames])]; // remove duplicates
+  return allRoles;
+}, [roles, customRoles]);
 
   // Refs to track dropdowns
   const roleDropdownRef = useRef(null);
@@ -174,7 +179,7 @@ export default function FilterRoleChangeLog({ roles, setFilters }) {
                   {t('filterRoleChangeLog.allRoles')}
                 </div>
 
-                {roles.map((r, idx) => (
+                {mergedRoles.map((r, idx) => (
                   <div
                     key={idx}
                     className="custom-dropdown-option"

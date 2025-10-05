@@ -17,7 +17,7 @@ import '../../../css/RoleChangeLog.css'
 import { useTranslation } from 'react-i18next';
 
 
-export default function RoleChangeLog({ isNavOpen }) {
+export default function RoleChangeLog({ isNavOpen, customRoles }) {
   const { t } = useTranslation();
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState([]);
@@ -83,7 +83,7 @@ export default function RoleChangeLog({ isNavOpen }) {
 
 
         {/* Filter Component */}
-        <FilterRoleChangeLog roles={roles} setFilters={setFilters} />
+        <FilterRoleChangeLog roles={roles} setFilters={setFilters} customRoles={customRoles} />
 
         {logs.length > 0 ? (
           <div className="table-wrapper">
