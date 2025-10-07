@@ -37,6 +37,7 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
 
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
+    const isAdmin = auth.roles.includes('Admin');
   const loggedInUser = auth.userId
 
   const { t, i18n } = useTranslation();
@@ -160,9 +161,18 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
     }
   }, [loggedInUser, i18n.language, axiosPrivate]);
 
-if (!superAdminSettings.allowManageRoles || isSuperAdmin) {
+// Wait for roles or settings to be defined
+if (!auth?.roles || superAdminSettings === undefined) {
+  return null; // or <LoadingSpinner />
+}
+
+
+// Only block access if neither isSuperAdmin nor isAdmin,
+// AND role management is not allowed
+if (!superAdminSettings.allowManageRoles && !isSuperAdmin && !isAdmin) {
   return null;
 }
+
 
   return (
     <div className={`${isNavOpen ? 'body-squeezed' : 'body'}`}>
