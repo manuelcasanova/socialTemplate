@@ -363,10 +363,10 @@ export default function AdminUsers({ isNavOpen, customRoles, setCustomRoles, pro
                             <>
                               <h4>{t('adminUsers.rolesHeading')}</h4>
                               <ul>
-                                
+
                                 {[...new Set([
-                                  ...roles.filter(role => 
-                                    (isSuperAdmin || role !== 'SuperAdmin') 
+                                  ...roles.filter(role =>
+                                    (isSuperAdmin || role !== 'SuperAdmin')
                                     &&
                                     (superAdminSettings.showSubscriberFeature || role !== 'User_subscribed')
                                   ),
