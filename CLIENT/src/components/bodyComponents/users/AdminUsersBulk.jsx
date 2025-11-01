@@ -37,7 +37,7 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
 
   const { auth } = useAuth();
   const isSuperAdmin = auth.roles.includes('SuperAdmin');
-    const isAdmin = auth.roles.includes('Admin');
+  const isAdmin = auth.roles.includes('Admin');
   const loggedInUser = auth.userId
 
   const { t, i18n } = useTranslation();
@@ -161,17 +161,17 @@ export default function AdminUsersBulk({ isNavOpen, allowedRoles, customRoles, p
     }
   }, [loggedInUser, i18n.language, axiosPrivate]);
 
-// Wait for roles or settings to be defined
-if (!auth?.roles || superAdminSettings === undefined) {
-  return null; // or <LoadingSpinner />
-}
+  // Wait for roles or settings to be defined
+  if (!auth?.roles || superAdminSettings === undefined) {
+    return null; // or <LoadingSpinner />
+  }
 
 
-// Only block access if neither isSuperAdmin nor isAdmin,
-// AND role management is not allowed
-if (!superAdminSettings.allowManageRoles && !isSuperAdmin && !isAdmin) {
-  return null;
-}
+  // Only block access if neither isSuperAdmin nor isAdmin,
+  // AND role management is not allowed
+  if (!superAdminSettings.allowManageRoles && !isSuperAdmin && !isAdmin) {
+    return null;
+  }
 
 
   return (
@@ -231,7 +231,11 @@ if (!superAdminSettings.allowManageRoles && !isSuperAdmin && !isAdmin) {
                 {/* Show system roles only when toggled */}
                 {showSystemRoles &&
                   roles
-                    .filter(role => isSuperAdmin || role !== 'SuperAdmin')
+                    .filter(
+                      (role) =>
+                        (isSuperAdmin || role !== 'SuperAdmin') &&
+                        (superAdminSettings.showSubscriberFeature || role !== 'User_subscribed')
+                    )
                     .map(role => (
                       <th key={role}
                         style={{
@@ -283,8 +287,11 @@ if (!superAdminSettings.allowManageRoles && !isSuperAdmin && !isAdmin) {
 
                     {/* Conditionally show system roles */}
                     {showSystemRoles &&
-                      roles
-                        .filter(role => isSuperAdmin || role !== 'SuperAdmin')
+                      roles.filter(
+                        (role) =>
+                          (isSuperAdmin || role !== 'SuperAdmin') &&
+                          (superAdminSettings.showSubscriberFeature || role !== 'User_subscribed')
+                      )
                         .map(role => (
                           <td key={`${user.user_id}-${role}`}>
                             <input
